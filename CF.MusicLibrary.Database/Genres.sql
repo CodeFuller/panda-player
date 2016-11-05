@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[Genres]
+(
+	[Id] INT IDENTITY(1, 1) NOT NULL PRIMARY KEY, 
+    [Name] NVARCHAR(MAX) NOT NULL
+)

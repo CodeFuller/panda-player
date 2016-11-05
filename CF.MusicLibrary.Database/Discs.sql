@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[Discs]
+(
+	[Id] INT IDENTITY(1, 1) NOT NULL PRIMARY KEY, 
+    [Title] NVARCHAR(MAX) NOT NULL, 
+    [Uri] NVARCHAR(MAX) NOT NULL
+)

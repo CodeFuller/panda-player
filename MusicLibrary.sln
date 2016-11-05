@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CF.MusicLibrary.Database", "CF.MusicLibrary.Database\CF.MusicLibrary.Database.sqlproj", "{AE53785C-FF8A-4C25-BD01-431BC9BCF6F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.Dal.MediaMonkey", "CF.MusicLibrary.Dal.MediaMonkey\CF.MusicLibrary.Dal.MediaMonkey.csproj", "{733319E0-D824-4FCF-99A8-2F1592A6D26C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.Dal", "CF.MusicLibrary.Dal\CF.MusicLibrary.Dal.csproj", "{DAFF54E9-85DA-4E05-8AD3-24CAFC8FCCD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.BL", "CF.MusicLibrary.BL\CF.MusicLibrary.BL.csproj", "{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.MigrateMediaMonkey", "CF.MusicLibrary.MigrateMediaMonkey\CF.MusicLibrary.MigrateMediaMonkey.csproj", "{63A50D4A-DFB5-408A-9304-97733F4A1CD7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE53785C-FF8A-4C25-BD01-431BC9BCF6F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE53785C-FF8A-4C25-BD01-431BC9BCF6F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE53785C-FF8A-4C25-BD01-431BC9BCF6F2}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{AE53785C-FF8A-4C25-BD01-431BC9BCF6F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE53785C-FF8A-4C25-BD01-431BC9BCF6F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE53785C-FF8A-4C25-BD01-431BC9BCF6F2}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{733319E0-D824-4FCF-99A8-2F1592A6D26C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{733319E0-D824-4FCF-99A8-2F1592A6D26C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{733319E0-D824-4FCF-99A8-2F1592A6D26C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{733319E0-D824-4FCF-99A8-2F1592A6D26C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAFF54E9-85DA-4E05-8AD3-24CAFC8FCCD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAFF54E9-85DA-4E05-8AD3-24CAFC8FCCD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAFF54E9-85DA-4E05-8AD3-24CAFC8FCCD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAFF54E9-85DA-4E05-8AD3-24CAFC8FCCD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63A50D4A-DFB5-408A-9304-97733F4A1CD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63A50D4A-DFB5-408A-9304-97733F4A1CD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63A50D4A-DFB5-408A-9304-97733F4A1CD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63A50D4A-DFB5-408A-9304-97733F4A1CD7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
