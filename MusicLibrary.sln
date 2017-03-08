@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.BL", "CF.Mu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.MigrateMediaMonkey", "CF.MusicLibrary.MigrateMediaMonkey\CF.MusicLibrary.MigrateMediaMonkey.csproj", "{63A50D4A-DFB5-408A-9304-97733F4A1CD7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.AlbumPreprocessor", "CF.MusicLibrary.AlbumPreprocessor\CF.MusicLibrary.AlbumPreprocessor.csproj", "{B977EA7B-85A2-429A-B98F-E76023589321}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.UnitTests", "CF.MusicLibrary.UnitTests\CF.MusicLibrary.UnitTests.csproj", "{917EE041-0D0D-4468-A08E-23E8A4D4D648}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +45,14 @@ Global
 		{63A50D4A-DFB5-408A-9304-97733F4A1CD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63A50D4A-DFB5-408A-9304-97733F4A1CD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63A50D4A-DFB5-408A-9304-97733F4A1CD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B977EA7B-85A2-429A-B98F-E76023589321}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B977EA7B-85A2-429A-B98F-E76023589321}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B977EA7B-85A2-429A-B98F-E76023589321}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B977EA7B-85A2-429A-B98F-E76023589321}.Release|Any CPU.Build.0 = Release|Any CPU
+		{917EE041-0D0D-4468-A08E-23E8A4D4D648}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{917EE041-0D0D-4468-A08E-23E8A4D4D648}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{917EE041-0D0D-4468-A08E-23E8A4D4D648}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{917EE041-0D0D-4468-A08E-23E8A4D4D648}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

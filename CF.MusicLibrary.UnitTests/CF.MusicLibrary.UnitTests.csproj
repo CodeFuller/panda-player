@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{733319E0-D824-4FCF-99A8-2F1592A6D26C}</ProjectGuid>
+    <ProjectGuid>{917EE041-0D0D-4468-A08E-23E8A4D4D648}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CF.MusicLibrary.Dal.MediaMonkey</RootNamespace>
-    <AssemblyName>CF.MusicLibrary.Dal.MediaMonkey</AssemblyName>
+    <RootNamespace>CF.MusicLibrary.UnitTests</RootNamespace>
+    <AssemblyName>CF.MusicLibrary.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -20,10 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
-    <WarningsAsErrors>CS1591</WarningsAsErrors>
-    <DocumentationFile>bin\Debug\CF.MusicLibrary.Dal.MediaMonkey.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,14 +28,18 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
-    <WarningsAsErrors>CS1591</WarningsAsErrors>
-    <DocumentationFile>bin\Release\CF.MusicLibrary.Dal.MediaMonkey.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CF.Library.Core, Version=0.1.6276.15728, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CF.Library.Core.0.1.6276.15728\lib\net462\CF.Library.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NSubstitute, Version=1.10.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSubstitute.1.10.0.0\lib\net45\NSubstitute.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.6.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -52,21 +52,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Global\GlobalAssemblyInfo.cs">
-      <Link>Properties\GlobalAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="LibraryBuilder.cs" />
-    <Compile Include="MusicLibraryRepository.cs" />
+    <Compile Include="CF.MusicLibrary.AlbumPreprocessor\AlbumContentParserTests.cs" />
+    <Compile Include="CF.MusicLibrary.AlbumPreprocessor\EthalonAlbumParserTests.cs" />
+    <Compile Include="CF.MusicLibrary.AlbumPreprocessor\InputContentSplitterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CF.MusicLibrary.BL\CF.MusicLibrary.BL.csproj">
-      <Project>{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}</Project>
-      <Name>CF.MusicLibrary.BL</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\CF.MusicLibrary.AlbumPreprocessor\CF.MusicLibrary.AlbumPreprocessor.csproj">
+      <Project>{B977EA7B-85A2-429A-B98F-E76023589321}</Project>
+      <Name>CF.MusicLibrary.AlbumPreprocessor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
