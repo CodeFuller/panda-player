@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using CF.Library.Core.Exceptions;
-using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
+using CF.MusicLibrary.AlbumPreprocessor.ParsingSong;
 
-namespace CF.MusicLibrary.AlbumPreprocessor
+namespace CF.MusicLibrary.AlbumPreprocessor.ParsingContent
 {
 	public class EthalonAlbumParser : IEthalonAlbumParser
 	{
@@ -23,8 +23,8 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 		public AlbumContent Parse(IEnumerable<string> albumContent)
 		{
 			var content = albumContent.ToList();
-			// Album content should contain at least album directory and one song
-			if (content.Count < 2)
+			// Album content should contain at least album directory
+			if (content.Count < 1)
 			{
 				throw new InvalidInputDataException("Invalid ethalon album content", String.Join("\n", content));
 			}

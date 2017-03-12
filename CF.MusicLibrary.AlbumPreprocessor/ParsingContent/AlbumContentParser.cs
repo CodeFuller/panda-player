@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
 
-namespace CF.MusicLibrary.AlbumPreprocessor
+namespace CF.MusicLibrary.AlbumPreprocessor.ParsingContent
 {
 	public class AlbumContentParser : IAlbumContentParser
 	{
@@ -27,7 +26,12 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 
 		public IEnumerable<AlbumContent> Parse(string content)
 		{
-			return Parse(content.Split(new[] { Environment.NewLine }, StringSplitOptions.None));
+			if (content == null)
+			{
+				throw new ArgumentNullException(nameof(content));
+			}
+
+			return Parse(content.Split(new [] { "\r\n", "\n" }, StringSplitOptions.None));
 		}
 
 		private IEnumerable<AlbumContent> Parse(IEnumerable<string> content)

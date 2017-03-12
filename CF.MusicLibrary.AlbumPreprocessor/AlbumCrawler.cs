@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
+using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.AlbumPreprocessor
 {
@@ -40,7 +41,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 
 				if (songFiles.Any() && nestedAlbums.Any())
 				{
-					throw new InvalidOperationException($"Directory '{directoryInfo.FullName}' has both songs and albums. It's and invalid album structure.");
+					throw new InvalidOperationException(Current($"Directory '{directoryInfo.FullName}' has both songs and albums. It's and invalid album structure."));
 				}
 			}
 

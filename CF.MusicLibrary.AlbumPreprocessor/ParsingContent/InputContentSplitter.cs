@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
 
-namespace CF.MusicLibrary.AlbumPreprocessor
+namespace CF.MusicLibrary.AlbumPreprocessor.ParsingContent
 {
 	public class InputContentSplitter : IInputContentSplitter
 	{

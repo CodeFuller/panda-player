@@ -1,14 +1,12 @@
 ﻿using System;
-using CF.MusicLibrary.AlbumPreprocessor;
-using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
+using CF.MusicLibrary.AlbumPreprocessor.ParsingContent;
 using NSubstitute;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
-namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor
+namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ParsingContent
 {
 	[TestFixture]
-	class AlbumContentParserTests
+	public class AlbumContentParserTests
 	{
 		[Test]
 		public void Constructor_WhenInputContentSplitterIsNull_ThrowsArgumentNullException()

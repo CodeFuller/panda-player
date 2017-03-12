@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using CF.Library.Core.Exceptions;
 using CF.MusicLibrary.AlbumPreprocessor;
-using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
+using CF.MusicLibrary.AlbumPreprocessor.ParsingContent;
+using CF.MusicLibrary.AlbumPreprocessor.ParsingSong;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor
+namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ParsingContent
 {
 	[TestFixture]
 	public class EthalonAlbumParserTests
@@ -17,14 +17,6 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor
 			EthalonAlbumParser target = new EthalonAlbumParser(Substitute.For<IEthalonSongParser>());
 
 			Assert.Throws<InvalidInputDataException>(() => target.Parse(Enumerable.Empty<string>()));
-		}
-
-		[Test]
-		public void Parse_ForContentWithOneLine_ThrowsInvalidInputDataException()
-		{
-			EthalonAlbumParser target = new EthalonAlbumParser(Substitute.For<IEthalonSongParser>());
-
-			Assert.Throws<InvalidInputDataException>(() => target.Parse(Enumerable.Repeat("Test", 1)));
 		}
 
 		[Test]

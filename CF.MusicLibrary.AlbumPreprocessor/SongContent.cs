@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace CF.MusicLibrary.AlbumPreprocessor
+﻿namespace CF.MusicLibrary.AlbumPreprocessor
 {
 	public class SongContent
 	{

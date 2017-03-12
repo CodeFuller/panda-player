@@ -1,13 +1,11 @@
-﻿using System;
-using System.Linq;
-using CF.MusicLibrary.AlbumPreprocessor;
-using NSubstitute;
+﻿using System.Linq;
+using CF.MusicLibrary.AlbumPreprocessor.ParsingContent;
 using NUnit.Framework;
 
-namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor
+namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ParsingContent
 {
 	[TestFixture]
-	class InputContentSplitterTests
+	public class InputContentSplitterTests
 	{
 		[Test]
 		public void Split_ForEmptyInput_ReturnsNoContent()

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CF.MusicLibrary.AlbumPreprocessor.Interfaces
+namespace CF.MusicLibrary.AlbumPreprocessor.ParsingContent
 {
 	public interface IEthalonAlbumParser
 	{

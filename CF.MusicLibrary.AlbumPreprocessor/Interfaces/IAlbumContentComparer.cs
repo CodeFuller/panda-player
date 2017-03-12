@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using CF.MusicLibrary.AlbumPreprocessor.ViewModels;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.Interfaces
 {
-	interface IAlbumContentComparer
+	public interface IAlbumContentComparer
 	{
+		void SetAlbumsCorrectness(Collection<AlbumContent> ethalonAlbums, Collection<AlbumTreeViewItem> currentAlbums);
 	}
 }
