@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.ViewModels"
-        xmlns:self="clr-namespace:CF.MusicLibrary.AlbumPreprocessor"
-        xmlns:Behaviors="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.Behaviors"
+        xmlns:behaviors="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.Behaviors"
+        xmlns:views="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.Views"
         mc:Ignorable="d"
-        Height="361.072" Width="1624">
+        Width="1560" Height="790">
     <Window.Resources>
         <viewModels:MainWindowModel x:Key="ViewModel" />
     </Window.Resources>
@@ -15,74 +15,30 @@
         <Binding Source="{StaticResource ViewModel}" Path="Title" />
     </Window.Title>
     <Grid DataContext="{StaticResource ViewModel}">
-        <TextBox x:Name="TextBoxRawEthalonAlbums" HorizontalAlignment="Left" Width="500" Height="264" Margin="10,50,0,0" TextWrapping="NoWrap" AcceptsReturn="True"
+        <TextBox x:Name="TextBoxRawEthalonAlbums" HorizontalAlignment="Left" Width="500" Height="700" Margin="10,40,0,0" TextWrapping="NoWrap" AcceptsReturn="True"
                  Text="{Binding RawEthalonAlbumsContent, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" ScrollViewer.ScrollChanged="ScrollChanged" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
-        <TextBox x:Name="TextBoxParsedEthalonAlbums" IsReadOnly="True" HorizontalAlignment="Left" Width="500" Height="264" Margin="520,50,0,0" TextWrapping="NoWrap" AcceptsReturn="True"
-                 Text="{Binding ParsedEthalonAlbumsContent}" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.ScrollChanged="ScrollChanged" />
-
-        <TreeView x:Name="TreeViewCurrentAlbumsContent" HorizontalAlignment="Left" Width="500" Height="264" Margin="1040,50,0,0" VerticalAlignment="Top"
-                    ItemsSource="{Binding CurrentAlbums}" Behaviors:TreeViewInPlaceEditBehavior.IsEditable="True">
-
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="IsExpanded" Value="True" />
-                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+        <views:AlbumTreeView x:Name="TreeViewEthalonAlbumsContent" Width="500" Height="700" Margin="520,40,0,0" ScrollViewer.ScrollChanged="ScrollChanged"
+                 ItemsSource="{Binding EthalonAlbums.Albums}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="False">
+        </views:AlbumTreeView>
+        <views:AlbumTreeView x:Name="TreeViewCurrentAlbumsContent" Width="500" Height="700" Margin="1040,40,0,0" ScrollViewer.ScrollChanged="ScrollChanged"
+                 ItemsSource="{Binding CurrentAlbums.Albums}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="True">
+        </views:AlbumTreeView>
+        <TextBlock x:Name="TextBlockStatus" HorizontalAlignment="Left" Margin="1244,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="34" Width="259"
+                   FontSize="14">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ContentIsIncorrect}" Value="True">
+                            <Setter Property="Text" Value="INCORRECT"/>
+                            <Setter Property="Foreground" Value="Red"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ContentIsIncorrect}" Value="False">
+                            <Setter Property="Text" Value="CORRECT"/>
+                            <Setter Property="Foreground" Value="Green"/>
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
-            </TreeView.ItemContainerStyle>
-            
-            <TreeView.Resources>
-
-                <HierarchicalDataTemplate DataType="{x:Type viewModels:AlbumTreeViewItem}" ItemsSource="{Binding Songs}">
-                    <StackPanel>
-                        <TextBlock Text="{Binding Album.AlbumDirectory}" />
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-                
-                <HierarchicalDataTemplate DataType="{x:Type viewModels:SongTreeViewItem}">
-                    <Grid>
-                        <TextBlock Text="{Binding Title}">
-                            <TextBlock.Style>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ContentIsIncorrect}" Value="True">
-                                            <Setter Property="Foreground" Value="Red"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding ContentIsIncorrect}" Value="False">
-                                            <Setter Property="Foreground" Value="Green"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                        <TextBox Text="{Binding Title, UpdateSourceTrigger=Explicit}" Visibility="Collapsed" x:Name="TextBox"/>
-                    </Grid>
-                    <HierarchicalDataTemplate.Triggers>
-                        <MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding IsSelected}" Value="True"/>
-                                <Condition Binding="{Binding Path=(Behaviors:TreeViewInPlaceEditBehavior.IsEditing), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}}" Value="True"/>
-                            </MultiDataTrigger.Conditions>
-                            <Setter TargetName="TextBox" Property="Visibility" Value="Visible"/>
-                            <Setter TargetName="TextBox" Property="Behaviors:TreeViewInPlaceEditBoxBehavior.IsEditing">
-                                <Setter.Value>
-                                    <Binding Path="(Behaviors:TreeViewInPlaceEditBehavior.IsEditing)" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}"/>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter TargetName="TextBox" Property="Behaviors:TreeViewInPlaceEditBoxBehavior.IsEditConfirmed">
-                                <Setter.Value>
-                                    <Binding Path="(Behaviors:TreeViewInPlaceEditBehavior.IsEditConfirmed)" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}"/>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter TargetName="TextBox" Property="Behaviors:TreeViewInPlaceEditBoxBehavior.IsEditCanceled">
-                                <Setter.Value>
-                                    <Binding Path="(Behaviors:TreeViewInPlaceEditBehavior.IsEditCanceled)" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}"/>
-                                </Setter.Value>
-                            </Setter>
-                        </MultiDataTrigger>
-                    </HierarchicalDataTemplate.Triggers>
-                </HierarchicalDataTemplate>
-                
-            </TreeView.Resources>
-        </TreeView>
+            </TextBlock.Style>
+        </TextBlock>
     </Grid>
 </Window>

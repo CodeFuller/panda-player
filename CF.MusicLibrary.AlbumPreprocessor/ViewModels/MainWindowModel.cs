@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
 using System.Text;
-using CF.Library.Core.Extensions;
 using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
 using CF.MusicLibrary.AlbumPreprocessor.ParsingContent;
 using CF.MusicLibrary.AlbumPreprocessor.ParsingSong;
@@ -18,11 +16,19 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 		public static string Title => "Album Preprocessor";
 
 		private string rawEthalonAlbumsContent;
-		private string parsedEthalonAlbumsContent;
-		private List<AlbumContent> parsedEthalonAlbums;
 
 		private readonly IAlbumContentParser albumContentParser;
 		private readonly IAlbumContentComparer albumContentComparer;
+
+		private bool contentIsIncorrect;
+		public bool ContentIsIncorrect
+		{
+			get { return contentIsIncorrect; }
+			set
+			{
+				Set(ref contentIsIncorrect, value);
+			}
+		}
 
 		public string RawEthalonAlbumsContent
 		{
@@ -30,51 +36,22 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			set
 			{
 				Set(ref rawEthalonAlbumsContent, value);
-				UpdateParsedEthalonAlbums();
+				UpdateAlbums(EthalonAlbums, albumContentParser.Parse(RawEthalonAlbumsContent));
 			}
 		}
 
-		public string ParsedEthalonAlbumsContent
-		{
-			get { return parsedEthalonAlbumsContent; }
-			set
-			{
-				Set(ref parsedEthalonAlbumsContent, value);
-			}
-		}
+		public AlbumTreeViewModel EthalonAlbums { get; }
 
-		private Collection<AlbumTreeViewItem> currentAlbums;
-		public Collection<AlbumTreeViewItem> CurrentAlbums
-		{
-			get { return currentAlbums; }
-			set
-			{
-				Set(ref currentAlbums, value);
-			}
-		}
+		public AlbumTreeViewModel CurrentAlbums { get; }
 
 		public MainWindowModel()
 		{
 			//	CF TEMP: Use DI
 			albumContentParser = new AlbumContentParser(new InputContentSplitter(), new EthalonAlbumParser(new EthalonSongParser()));
 			albumContentComparer = new AlbumContentComparer();
-		}
 
-		private void UpdateParsedEthalonAlbums()
-		{
-			parsedEthalonAlbums = albumContentParser.Parse(RawEthalonAlbumsContent).ToList();
-			var parsedAlbumsContent = parsedEthalonAlbums.
-				SelectMany(album =>
-				{
-					List<string> parsedAlbumContent = new List<string>();
-					parsedAlbumContent.Add(album.AlbumDirectory);
-					parsedAlbumContent.AddRange(album.Songs.Select(s => s.Title));
-					parsedAlbumContent.Add(String.Empty);
-					return parsedAlbumContent;
-				});
-			ParsedEthalonAlbumsContent = String.Join("\n", parsedAlbumsContent);
-
-			SetContentCorrectness();
+			EthalonAlbums = new AlbumTreeViewModel(this);
+			CurrentAlbums = new AlbumTreeViewModel(this);
 		}
 
 		public void LoadCurrentAlbums()
@@ -94,9 +71,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 				RawEthalonAlbumsContent = rawEthalonAlbumsBuilder.ToString();
 			}
 
-			CurrentAlbums = albums.Select(a => new AlbumTreeViewItem(this, a)).ToCollection();
-
-			SetContentCorrectness();
+			UpdateAlbums(CurrentAlbums, albums);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Justification = "Parameter use makes sense in method semantics.")]
@@ -105,12 +80,16 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			LoadCurrentAlbums();
 		}
 
+		private void UpdateAlbums(AlbumTreeViewModel albums, IEnumerable<AlbumContent> newAlbums)
+		{
+			albums.SetAlbums(newAlbums);
+			SetContentCorrectness();
+			ContentIsIncorrect = EthalonAlbums.ContentIsIncorrect || CurrentAlbums.ContentIsIncorrect;
+		}
+
 		private void SetContentCorrectness()
 		{
-			if (CurrentAlbums != null)
-			{
-				albumContentComparer.SetAlbumsCorrectness(parsedEthalonAlbums.ToCollection(), CurrentAlbums.ToCollection());
-			}
+			albumContentComparer.SetAlbumsCorrectness(EthalonAlbums, CurrentAlbums);
 		}
 	}
 }

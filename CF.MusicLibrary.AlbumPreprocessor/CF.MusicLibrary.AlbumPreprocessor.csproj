@@ -107,6 +107,10 @@
     <Compile Include="ParsingSong\SongTitlePattern.cs" />
     <Compile Include="SongContent.cs" />
     <Compile Include="SongFileFilter.cs" />
+    <Page Include="Views\AlbumTreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -118,9 +122,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModels\AlbumTreeViewItem.cs" />
+    <Compile Include="ViewModels\AlbumTreeViewModel.cs" />
     <Compile Include="ViewModels\EditableTreeViewItem.cs" />
     <Compile Include="ViewModels\MainWindowModel.cs" />
     <Compile Include="ViewModels\SongTreeViewItem.cs" />
+    <Compile Include="Views\AlbumTreeView.xaml.cs">
+      <DependentUpon>AlbumTreeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
