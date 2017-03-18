@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
@@ -68,7 +67,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			var contentBuilder = new StringBuilder();
 			foreach (var album in CurrentAlbums.Albums)
 			{
-				contentBuilder.Append(Invariant($"{album.Album.AlbumDirectory}\n\n"));
+				contentBuilder.Append(Invariant($"# {album.AlbumDirectory}\n\n"));
 			}
 
 			RawEthalonAlbums.Content = contentBuilder.ToString();

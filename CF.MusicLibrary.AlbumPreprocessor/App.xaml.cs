@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Threading;
-using CF.MusicLibrary.AlbumPreprocessor.Views;
 
 namespace CF.MusicLibrary.AlbumPreprocessor
 {

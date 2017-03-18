@@ -52,6 +52,16 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 					var currentSong = i < currentSongs.Count ? currentSongs[i] : null;
 					SetSongsCorrectness(i + 1, ethalonSong, currentSong);
 				}
+
+				if (ethalonSongs.Count != currentSongs.Count || ethalonAlbum.AlbumDirectory != currentAlbum.AlbumDirectory)
+				{
+					ethalonAlbum.ContentIsIncorrect = currentAlbum.ContentIsIncorrect = true;
+				}
+				else
+				{
+					ethalonAlbum.ContentIsIncorrect = ethalonSongs.Any(s => s.ContentIsIncorrect);
+					currentAlbum.ContentIsIncorrect = currentSongs.Any(s => s.ContentIsIncorrect);
+				}
 			}
 		}
 
@@ -87,6 +97,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 			{
 				song.ContentIsIncorrect = true;
 			}
+			album.ContentIsIncorrect = true;
 		}
 	}
 }

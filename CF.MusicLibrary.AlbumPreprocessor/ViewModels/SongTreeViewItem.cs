@@ -52,7 +52,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			}
 
 			Title = song.Title;
-			AlbumPath = parentAlbum.Album.AlbumDirectory;
+			AlbumPath = parentAlbum.AlbumDirectory;
 
 			this.parentAlbum = parentAlbum;
 		}
