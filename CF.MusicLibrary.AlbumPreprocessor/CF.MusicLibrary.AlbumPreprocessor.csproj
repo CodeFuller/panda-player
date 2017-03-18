@@ -124,6 +124,7 @@
     <Compile Include="ViewModels\AlbumTreeViewItem.cs" />
     <Compile Include="ViewModels\AlbumTreeViewModel.cs" />
     <Compile Include="ViewModels\EditableTreeViewItem.cs" />
+    <Compile Include="ViewModels\EthalonContentViewModel.cs" />
     <Compile Include="ViewModels\MainWindowModel.cs" />
     <Compile Include="ViewModels\SongTreeViewItem.cs" />
     <Compile Include="Views\AlbumTreeView.xaml.cs">

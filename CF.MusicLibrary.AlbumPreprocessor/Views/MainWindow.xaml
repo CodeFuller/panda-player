@@ -16,7 +16,7 @@
     </Window.Title>
     <Grid DataContext="{StaticResource ViewModel}">
         <TextBox x:Name="TextBoxRawEthalonAlbums" HorizontalAlignment="Left" Width="500" Height="700" Margin="10,40,0,0" TextWrapping="NoWrap" AcceptsReturn="True"
-                 Text="{Binding RawEthalonAlbumsContent, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" ScrollViewer.ScrollChanged="ScrollChanged" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+                 Text="{Binding RawEthalonAlbums.Content, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" ScrollViewer.ScrollChanged="ScrollChanged" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
         <views:AlbumTreeView x:Name="TreeViewEthalonAlbumsContent" Width="500" Height="700" Margin="520,40,0,0" ScrollViewer.ScrollChanged="ScrollChanged"
                  ItemsSource="{Binding EthalonAlbums.Albums}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="False">
         </views:AlbumTreeView>
@@ -40,5 +40,6 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
+        <Button x:Name="ButtonReloadRawContent" Content="Reload" Command="{Binding ReloadRawContentCommand}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
     </Grid>
 </Window>

@@ -12,11 +12,6 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 	{
 		private bool initialized;
 
-		private MainWindow GetMainWindow()
-		{
-			return (MainWindow)MainWindow;
-		}
-
 		protected override void OnStartup(StartupEventArgs e)
 		{
 			base.OnStartup(e);
@@ -32,8 +27,6 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 			if (!initialized)
 			{
 				initialized = true;
-
-				GetMainWindow().Model.LoadCurrentAlbums();
 			}
 		}
 

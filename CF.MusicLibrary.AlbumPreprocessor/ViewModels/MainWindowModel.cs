@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Text;
+using System.Windows.Input;
+using CF.Library.Core.Facades;
 using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
 using CF.MusicLibrary.AlbumPreprocessor.ParsingContent;
 using CF.MusicLibrary.AlbumPreprocessor.ParsingSong;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using static System.FormattableString;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
@@ -15,8 +19,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 	{
 		public static string Title => "Album Preprocessor";
 
-		private string rawEthalonAlbumsContent;
-
+		private readonly IFileSystemFacade fileSystemFacade;
 		private readonly IAlbumContentParser albumContentParser;
 		private readonly IAlbumContentComparer albumContentComparer;
 
@@ -30,28 +33,50 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			}
 		}
 
-		public string RawEthalonAlbumsContent
-		{
-			get { return rawEthalonAlbumsContent; }
-			set
-			{
-				Set(ref rawEthalonAlbumsContent, value);
-				UpdateAlbums(EthalonAlbums, albumContentParser.Parse(RawEthalonAlbumsContent));
-			}
-		}
+		public EthalonContentViewModel RawEthalonAlbums { get; }
 
 		public AlbumTreeViewModel EthalonAlbums { get; }
 
 		public AlbumTreeViewModel CurrentAlbums { get; }
 
+		public ICommand ReloadRawContentCommand { get; }
+
 		public MainWindowModel()
 		{
 			//	CF TEMP: Use DI
+			fileSystemFacade = new FileSystemFacade();
 			albumContentParser = new AlbumContentParser(new InputContentSplitter(), new EthalonAlbumParser(new EthalonSongParser()));
 			albumContentComparer = new AlbumContentComparer();
 
 			EthalonAlbums = new AlbumTreeViewModel(this);
 			CurrentAlbums = new AlbumTreeViewModel(this);
+
+			//	CF TEMP: Use DI
+			RawEthalonAlbums = new EthalonContentViewModel(fileSystemFacade);
+			RawEthalonAlbums.PropertyChanged += OnRawEthalonAlbumsPropertyChanged;
+			//	Should be called after creation of RawEthalonAlbums because
+			//	loading raw ethalong albums triggers OnRawEthalonAlbumsPropertyChanged() that updates EthalonAlbums.
+			RawEthalonAlbums.LoadRawEthalonAlbumsContent();
+
+			LoadCurrentAlbums();
+
+			ReloadRawContentCommand = new RelayCommand(ReloadRawContent);
+		}
+
+		private void ReloadRawContent()
+		{
+			var contentBuilder = new StringBuilder();
+			foreach (var album in CurrentAlbums.Albums)
+			{
+				contentBuilder.Append(Invariant($"{album.Album.AlbumDirectory}\n\n"));
+			}
+
+			RawEthalonAlbums.Content = contentBuilder.ToString();
+		}
+
+		private void OnRawEthalonAlbumsPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			UpdateAlbums(EthalonAlbums, albumContentParser.Parse(RawEthalonAlbums.Content));
 		}
 
 		public void LoadCurrentAlbums()
@@ -60,24 +85,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			AlbumCrawler crawler = new AlbumCrawler(new SongFileFilter());
 			var albums = crawler.LoadAlbums(albumsDirectory).ToList();
 
-			if (String.IsNullOrEmpty(RawEthalonAlbumsContent))
-			{
-				var rawEthalonAlbumsBuilder = new StringBuilder();
-				foreach (AlbumContent album in albums)
-				{
-					rawEthalonAlbumsBuilder.Append(Invariant($"{album.AlbumDirectory}\n\n"));
-				}
-
-				RawEthalonAlbumsContent = rawEthalonAlbumsBuilder.ToString();
-			}
-
 			UpdateAlbums(CurrentAlbums, albums);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Justification = "Parameter use makes sense in method semantics.")]
-		public void ReloadAlbum(AlbumTreeViewItem album)
-		{
-			LoadCurrentAlbums();
 		}
 
 		private void UpdateAlbums(AlbumTreeViewModel albums, IEnumerable<AlbumContent> newAlbums)
