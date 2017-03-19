@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
@@ -7,7 +8,6 @@ using System.Windows.Input;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
 using CF.MusicLibrary.AlbumPreprocessor.ParsingContent;
-using CF.MusicLibrary.AlbumPreprocessor.ParsingSong;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using static System.FormattableString;
@@ -18,7 +18,6 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 	{
 		public static string Title => "Album Preprocessor";
 
-		private readonly IFileSystemFacade fileSystemFacade;
 		private readonly IAlbumContentParser albumContentParser;
 		private readonly IAlbumContentComparer albumContentComparer;
 
@@ -40,26 +39,38 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 		public ICommand ReloadRawContentCommand { get; }
 
-		public MainWindowModel()
+		public MainWindowModel(IFileSystemFacade fileSystemFacade, IAlbumContentParser albumContentParser, IAlbumContentComparer albumContentComparer)
 		{
-			//	CF TEMP: Use DI
-			fileSystemFacade = new FileSystemFacade();
-			albumContentParser = new AlbumContentParser(new InputContentSplitter(), new EthalonAlbumParser(new EthalonSongParser()));
-			albumContentComparer = new AlbumContentComparer();
+			if (fileSystemFacade == null)
+			{
+				throw new ArgumentNullException(nameof(fileSystemFacade));
+			}
+			if (albumContentParser == null)
+			{
+				throw new ArgumentNullException(nameof(albumContentParser));
+			}
+			if (albumContentComparer == null)
+			{
+				throw new ArgumentNullException(nameof(albumContentComparer));
+			}
+
+			this.albumContentParser = albumContentParser;
+			this.albumContentComparer = albumContentComparer;
 
 			EthalonAlbums = new AlbumTreeViewModel(this);
 			CurrentAlbums = new AlbumTreeViewModel(this);
 
-			//	CF TEMP: Use DI
 			RawEthalonAlbums = new EthalonContentViewModel(fileSystemFacade);
 			RawEthalonAlbums.PropertyChanged += OnRawEthalonAlbumsPropertyChanged;
-			//	Should be called after creation of RawEthalonAlbums because
-			//	loading raw ethalong albums triggers OnRawEthalonAlbumsPropertyChanged() that updates EthalonAlbums.
+
+			ReloadRawContentCommand = new RelayCommand(ReloadRawContent);
+		}
+
+		public void LoadDefaultContent()
+		{
 			RawEthalonAlbums.LoadRawEthalonAlbumsContent();
 
 			LoadCurrentAlbums();
-
-			ReloadRawContentCommand = new RelayCommand(ReloadRawContent);
 		}
 
 		private void ReloadRawContent()

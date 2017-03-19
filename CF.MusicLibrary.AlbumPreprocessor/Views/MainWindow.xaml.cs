@@ -30,11 +30,12 @@ namespace CF.MusicLibrary.AlbumPreprocessor.Views
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		public MainWindowModel Model => (MainWindowModel)Resources["ViewModel"];
+		public MainWindowModel Model { get; }
 
-		public MainWindow()
+		public MainWindow(MainWindowModel model)
 		{
 			InitializeComponent();
+			DataContext = Model = model;
 		}
 
 		private void ScrollChanged(object sender, ScrollChangedEventArgs e)

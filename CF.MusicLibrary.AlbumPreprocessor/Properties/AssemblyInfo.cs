@@ -32,3 +32,4 @@ using System.Windows;
 )]
 
 [assembly: InternalsVisibleTo("CF.MusicLibrary.UnitTests")]
+[assembly: InternalsVisibleTo("CF.MusicLibrary.IntegrationTests")]

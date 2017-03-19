@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.AlbumPrepro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.UnitTests", "CF.MusicLibrary.UnitTests\CF.MusicLibrary.UnitTests.csproj", "{917EE041-0D0D-4468-A08E-23E8A4D4D648}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.IntegrationTests", "CF.MusicLibrary.IntegrationTests\CF.MusicLibrary.IntegrationTests.csproj", "{E850CC4C-3865-4C07-8B6C-AA22061BDD9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{917EE041-0D0D-4468-A08E-23E8A4D4D648}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{917EE041-0D0D-4468-A08E-23E8A4D4D648}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{917EE041-0D0D-4468-A08E-23E8A4D4D648}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E850CC4C-3865-4C07-8B6C-AA22061BDD9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E850CC4C-3865-4C07-8B6C-AA22061BDD9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E850CC4C-3865-4C07-8B6C-AA22061BDD9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E850CC4C-3865-4C07-8B6C-AA22061BDD9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

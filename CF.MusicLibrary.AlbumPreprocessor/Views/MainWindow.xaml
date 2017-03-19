@@ -3,18 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModels="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.ViewModels"
         xmlns:behaviors="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.Behaviors"
         xmlns:views="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.Views"
         mc:Ignorable="d"
         Width="1560" Height="790">
-    <Window.Resources>
-        <viewModels:MainWindowModel x:Key="ViewModel" />
-    </Window.Resources>
     <Window.Title>
-        <Binding Source="{StaticResource ViewModel}" Path="Title" />
+        <Binding Path="Title" />
     </Window.Title>
-    <Grid DataContext="{StaticResource ViewModel}">
+    <Grid>
         <TextBox x:Name="TextBoxRawEthalonAlbums" HorizontalAlignment="Left" Width="500" Height="700" Margin="10,40,0,0" TextWrapping="NoWrap" AcceptsReturn="True"
                  Text="{Binding RawEthalonAlbums.Content, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" ScrollViewer.ScrollChanged="ScrollChanged" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
         <views:AlbumTreeView x:Name="TreeViewEthalonAlbumsContent" Width="500" Height="700" Margin="520,40,0,0" ScrollViewer.ScrollChanged="ScrollChanged"
