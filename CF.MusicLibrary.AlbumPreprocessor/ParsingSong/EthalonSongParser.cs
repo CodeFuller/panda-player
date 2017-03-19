@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
+using CF.Library.Core.Exceptions;
+using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.ParsingSong
 {
@@ -77,8 +79,8 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ParsingSong
 				}
 			}
 
-			//	If all paterns failed, we just return the raw title itself.
-			return rawSongTitle;
+			//	We shouldn't get here, any possible title should be covered by TitlePatterns
+			throw new InternalErrorException(Current($"Title {rawSongTitle} is not covered by any pattern"));
 		}
 
 		private static string ParseSongPayload(string rawSongPayload)

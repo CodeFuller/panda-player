@@ -31,22 +31,17 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ParsingSong
 		public SongTitleMatch Match(string rawTitle, Func<string, string> parsePayload)
 		{
 			var match = regex.Match(rawTitle);
-			SongTitleMatch result = new SongTitleMatch();
 			if (match.Success)
 			{
-				result.Success = true;
-				result.RawTitle = match.Groups[1].Value;
-				if (match.Groups.Count > 2 && !String.IsNullOrEmpty(match.Groups[2].Value))
-				{
-					result.Payload = parsePayload(match.Groups[2].Value);
-				}
+				string matchedTitle = match.Groups[1].Value;
+				return match.Groups.Count > 2 && !String.IsNullOrEmpty(match.Groups[2].Value)
+					? new SongTitleMatch(matchedTitle, parsePayload(match.Groups[2].Value))
+					: new SongTitleMatch(matchedTitle);
 			}
 			else
 			{
-				result.Success = false;
+				return SongTitleMatch.FailedMatch;
 			}
-
-			return result;
 		}
 	}
 }

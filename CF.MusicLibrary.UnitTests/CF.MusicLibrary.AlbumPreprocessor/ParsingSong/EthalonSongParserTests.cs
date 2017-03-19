@@ -43,5 +43,15 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ParsingSon
 
 			Assert.AreEqual(expectedTitle, resultTitle);
 		}
+
+		[TestCase("Don’t Say A Word", "Don't Say A Word")]
+		public void ParseSongTitle_UnifiesApostropheSymbols(string rawTitle, string expectedTitle)
+		{
+			EthalonSongParser target = new EthalonSongParser();
+
+			string resultTitle = target.ParseSongTitle(rawTitle);
+
+			Assert.AreEqual(expectedTitle, resultTitle);
+		}
 	}
 }
