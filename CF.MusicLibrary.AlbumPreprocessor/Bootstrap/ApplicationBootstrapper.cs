@@ -26,9 +26,9 @@ namespace CF.MusicLibrary.AlbumPreprocessor.Bootstrap
 			DiContainer.RegisterType<MainWindowModel>();
 		}
 
-		public TRootViewModel GetRootViewModel<TRootViewModel>()
+		public TRootViewModel GetRootViewModel<TRootViewModel>(string appDataPath)
 		{
-			return DiContainer.Resolve<TRootViewModel>();
+			return DiContainer.Resolve<TRootViewModel>(new ParameterOverride(nameof(appDataPath), appDataPath));
 		}
 
 		/// <summary>

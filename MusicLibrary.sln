@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.UnitTests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.IntegrationTests", "CF.MusicLibrary.IntegrationTests\CF.MusicLibrary.IntegrationTests.csproj", "{E850CC4C-3865-4C07-8B6C-AA22061BDD9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deploy", "Deploy\Deploy.csproj", "{DAD016BF-AD20-44A1-9017-194A9D18538C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{E850CC4C-3865-4C07-8B6C-AA22061BDD9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E850CC4C-3865-4C07-8B6C-AA22061BDD9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E850CC4C-3865-4C07-8B6C-AA22061BDD9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAD016BF-AD20-44A1-9017-194A9D18538C}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{DAD016BF-AD20-44A1-9017-194A9D18538C}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{DAD016BF-AD20-44A1-9017-194A9D18538C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAD016BF-AD20-44A1-9017-194A9D18538C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

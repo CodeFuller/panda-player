@@ -39,7 +39,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 		public ICommand ReloadRawContentCommand { get; }
 
-		public MainWindowModel(IFileSystemFacade fileSystemFacade, IAlbumContentParser albumContentParser, IAlbumContentComparer albumContentComparer)
+		public MainWindowModel(IFileSystemFacade fileSystemFacade, IAlbumContentParser albumContentParser, IAlbumContentComparer albumContentComparer, string appDataPath)
 		{
 			if (fileSystemFacade == null)
 			{
@@ -60,7 +60,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			EthalonAlbums = new AlbumTreeViewModel(this);
 			CurrentAlbums = new AlbumTreeViewModel(this);
 
-			RawEthalonAlbums = new EthalonContentViewModel(fileSystemFacade);
+			RawEthalonAlbums = new EthalonContentViewModel(fileSystemFacade, appDataPath);
 			RawEthalonAlbums.PropertyChanged += OnRawEthalonAlbumsPropertyChanged;
 
 			ReloadRawContentCommand = new RelayCommand(ReloadRawContent);

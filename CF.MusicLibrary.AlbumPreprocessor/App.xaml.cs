@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Windows;
 using System.Windows.Threading;
 using CF.MusicLibrary.AlbumPreprocessor.Bootstrap;
@@ -30,7 +31,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 			AppDomain.CurrentDomain.UnhandledException += App_CatchedUnhandledAppException;
 
 			Bootstrapper.Run();
-			MainWindowModel rootViewModel = Bootstrapper.GetRootViewModel<MainWindowModel>();
+			MainWindowModel rootViewModel = Bootstrapper.GetRootViewModel<MainWindowModel>(ConfigurationManager.AppSettings["AppDataPath"]);
 			rootViewModel.LoadDefaultContent();
 			MainWindow mainWindow = new MainWindow(rootViewModel);
 			mainWindow.Show();

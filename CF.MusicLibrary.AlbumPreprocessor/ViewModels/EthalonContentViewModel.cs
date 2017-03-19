@@ -14,7 +14,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 		private readonly IFileSystemFacade fileSystemFacade;
 		private readonly string contentSaveFilePath;
 
-		public EthalonContentViewModel(IFileSystemFacade fileSystemFacade)
+		public EthalonContentViewModel(IFileSystemFacade fileSystemFacade, string appDataPath)
 		{
 			if (fileSystemFacade == null)
 			{
@@ -22,7 +22,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			}
 
 			this.fileSystemFacade = fileSystemFacade;
-			contentSaveFilePath = Path.Combine(fileSystemFacade.GetProcessDirectory(), ContentSaveFilename);
+			contentSaveFilePath = Path.Combine(appDataPath, ContentSaveFilename);
 		}
 
 		public string Content
