@@ -34,14 +34,22 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ParsingSon
 			Assert.AreEqual(expectedTitle, resultTitle);
 		}
 
-		[TestCase("this is the life", "This Is The Life")]
-		public void ParseSongTitle_CapitalizesFirstLetters(string rawTitle, string expectedTitle)
+		public void ParseSongTitle_ForTitleInLatin_CapitalizesFirstLetters()
 		{
 			EthalonSongParser target = new EthalonSongParser();
 
-			string resultTitle = target.ParseSongTitle(rawTitle);
+			string resultTitle = target.ParseSongTitle("this is the life");
 
-			Assert.AreEqual(expectedTitle, resultTitle);
+			Assert.AreEqual("This Is The Life", resultTitle);
+		}
+
+		public void ParseSongTitle_ForTitleInCyrillic_DoesNotCapitalizeFirstLetters()
+		{
+			EthalonSongParser target = new EthalonSongParser();
+
+			string resultTitle = target.ParseSongTitle("Пачка сигарет");
+
+			Assert.AreEqual("Пачка сигарет", resultTitle);
 		}
 
 		[TestCase("Don’t Say A Word", "Don't Say A Word")]

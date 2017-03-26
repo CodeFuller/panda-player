@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.ParsingSong
 {
@@ -8,11 +9,6 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ParsingSong
 		public bool Success { get; }
 
 		public string SongTitle { get; }
-
-		public static string CapitalizeTitle(string rawTitle)
-		{
-			return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rawTitle);
-		}
 
 		/// <summary>
 		/// Constructs not-matched SongTitleMatch.
@@ -48,6 +44,16 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ParsingSong
 		private static string AdjustTitle(string title)
 		{
 			return title.Replace('’', '\'');
+		}
+
+		private static string CapitalizeTitle(string rawTitle)
+		{
+			return TextHasCyrillic(rawTitle) ? rawTitle : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rawTitle);
+		}
+
+		private static bool TextHasCyrillic(string text)
+		{
+			return Regex.IsMatch(text, @"\p{IsCyrillic}");
 		}
 	}
 }

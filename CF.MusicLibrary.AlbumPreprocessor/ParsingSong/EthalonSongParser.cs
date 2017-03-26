@@ -11,10 +11,10 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ParsingSong
 		internal static ReadOnlyCollection<SongTitlePattern> TitlePatterns { get; } = new ReadOnlyCollection<SongTitlePattern>(
 			new SongTitlePattern[]
 			{
-				new SongTitlePattern()
+				new SongTitlePattern
 				{
 					Description = "Wikipedia: track, title, payload, length",
-					Source = "https://en.wikipedia.org/wiki/The_Human_Contradiction",
+					Source = @"https://en.wikipedia.org/wiki/The_Human_Contradiction",
 					Pattern = @"^\d+\.\s+""(.+?)""\s+\((.+?)\)\s+\d+:\d+$",
 					Tests = new Collection<SongParsingTest>
 					{
@@ -22,10 +22,10 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ParsingSong
 					}
 				},
 
-				new SongTitlePattern()
+				new SongTitlePattern
 				{
 					Description = "Wikipedia: track, title, payload (optional), authors, length (optional)",
-					Source = "https://en.wikipedia.org/wiki/We_Are_the_Others",
+					Source = @"https://en.wikipedia.org/wiki/We_Are_the_Others",
 					Pattern = @"^\d+\.\s+""(.+?)""\s+(?:\((.+?)\)\s+)?.+?(\s+\d+:\d+)?$",
 					Tests = new Collection<SongParsingTest>
 					{
@@ -35,10 +35,10 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ParsingSong
 					}
 				},
 
-				new SongTitlePattern()
+				new SongTitlePattern
 				{
-					Description = "Wikipedia: track, title, length",
-					Source = "https://en.wikipedia.org/wiki/The_Human_Contradiction",
+					Description = "Wikipedia: track, \"title\", length",
+					Source = @"https://en.wikipedia.org/wiki/The_Human_Contradiction",
 					Pattern = @"^\d+\.\s+""(.+?)""\s+\d+:\d+$",
 					Tests = new Collection<SongParsingTest>
 					{
@@ -46,7 +46,51 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ParsingSong
 					}
 				},
 
-				new SongTitlePattern()
+				new SongTitlePattern
+				{
+					Description = "Wikipedia: \"title\" – length",
+					Source = @"https://en.wikipedia.org/wiki/Beast_Within",
+					Pattern = @"^""(.+?)""\s+–\s+\d+:\d+$",
+					Tests = new Collection<SongParsingTest>
+					{
+						new SongParsingTest("\"Forgotten Bride\" – 4:22", "Forgotten Bride"),
+					}
+				},
+
+				new SongTitlePattern
+				{
+					Description = "Wikipedia: title - length",
+					Source = @"https://en.wikipedia.org/wiki/Out_of_the_Ashes_(Katra_album)",
+					Pattern = @"^(.+?)\s+-\s+\d+:\d+$",
+					Tests = new Collection<SongParsingTest>
+					{
+						new SongParsingTest("One Wish Away - 4:09", "One Wish Away"),
+					}
+				},
+
+				new SongTitlePattern
+				{
+					Description = "ru.wikipedia: track, «title», length",
+					Source = @"https://ru.wikipedia.org/wiki/Штормовое_предупреждение_(альбом)",
+					Pattern = @"^\d+\.\s+«(.+?)»\s+\d+:\d+$",
+					Tests = new Collection<SongParsingTest>
+					{
+						new SongParsingTest("1.	«Интро»	0:16", "Интро"),
+					}
+				},
+
+				new SongTitlePattern
+				{
+					Description = "Discogs: track, title, length",
+					Source = @"https://www.discogs.com/Elysion-Someplace-Better/release/5489046",
+					Pattern = @"^\d+\s+(.+?)\s+\d+:\d+$",
+					Tests = new Collection<SongParsingTest>
+					{
+						new SongParsingTest("1	Made Of Lies	3:19", "Made Of Lies"),
+					}
+				},
+
+				new SongTitlePattern
 				{
 					Description = "Title followed by tab and payload data",
 					Pattern = @"^(.+?)\t+(.*)$",
@@ -56,7 +100,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ParsingSong
 					}
 				},
 
-				new SongTitlePattern()
+				new SongTitlePattern
 				{
 					Description = "Trimmed raw title",
 					Pattern = @"^\s*(.+?)\s*$",
