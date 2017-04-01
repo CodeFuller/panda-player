@@ -92,6 +92,16 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ParsingSong
 
 				new SongTitlePattern
 				{
+					Description = "metal-archives.com: track, title, length, 'Show lyrics' link",
+					Pattern = @"^\d+\.\s+(.+?)\s+\d+:\d+\s+Show lyrics$",
+					Tests = new Collection<SongParsingTest>
+					{
+						new SongParsingTest("1.	Schnee & Rosen	03:53	  Show lyrics", "Schnee & Rosen"),
+					}
+				},
+
+				new SongTitlePattern
+				{
 					Description = "Title followed by tab and payload data",
 					Pattern = @"^(.+?)\t+(.*)$",
 					Tests = new Collection<SongParsingTest>
