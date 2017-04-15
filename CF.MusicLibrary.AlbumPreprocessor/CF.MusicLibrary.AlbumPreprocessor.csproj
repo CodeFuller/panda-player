@@ -41,8 +41,16 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6276.15728, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6276.15728\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6314.31518, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6314.31518\lib\net462\CF.Library.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CF.Library.Unity, Version=0.1.6314.31523, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Unity.0.1.6314.31523\lib\net462\CF.Library.Unity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CF.Library.Wpf, Version=0.1.6314.33699, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Wpf.0.1.6314.33699\lib\net462\CF.Library.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
@@ -101,8 +109,7 @@
     <Compile Include="..\Global\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Bootstrap\ApplicationBootstrapper.cs" />
-    <Compile Include="Bootstrap\IApplicationBootstrapper.cs" />
+    <Compile Include="Bootstrapper.cs" />
     <Compile Include="ParsingContent\AlbumContentParser.cs" />
     <Compile Include="Behaviors\TreeViewInPlaceEditBehavior.cs" />
     <Compile Include="Behaviors\TreeViewInPlaceEditBoxBehavior.cs" />

@@ -1,7 +1,7 @@
-﻿<Application x:Class="CF.MusicLibrary.AlbumPreprocessor.App"
+﻿<cfwpf:WpfApplication x:TypeArguments="vm:MainWindowModel"
+             x:Class="CF.MusicLibrary.AlbumPreprocessor.App"
+             xmlns:cfwpf="clr-namespace:CF.Library.Wpf;assembly=CF.Library.Wpf"
+             xmlns:vm="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.ViewModels"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Activated="App_Activated">
-    <Application.Resources>
-    </Application.Resources>
-</Application>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+</cfwpf:WpfApplication>
