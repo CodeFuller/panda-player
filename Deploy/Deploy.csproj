@@ -6,18 +6,23 @@
     <OutputType>Library</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>d:\Dropbox\bin\AlbumPreprocessor\</OutputPath>
+    <!-- OutputPath is required. Otherwise error 'The OutputPath property is not set for project' will be thrown.
+         This path isn't actually used by msbuild because no project is built. -->
+    <OutputPath>d:\Dropbox\bin</OutputPath>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="Deploy">
-    <Exec Command="xcopy /Q /Y &quot;..\CF.MusicLibrary.AlbumPreprocessor\bin\Release&quot; &quot;$(OutputPath)&quot;" />
+    <Exec Command="xcopy /Q /Y &quot;..\CF.MusicLibrary.AlbumPreprocessor\bin\Release&quot; &quot;$(OutputPath)\AlbumPreprocessor\&quot;" />
+    <Exec Command="xcopy /Q /Y &quot;..\CF.MusicLibrary.AlbumAdviser\bin\Release&quot; &quot;$(OutputPath)\AlbumAdviser\&quot;" />
   </Target>
-
   <ItemGroup>
+    <ProjectReference Include="..\CF.MusicLibrary.AlbumAdviser\CF.MusicLibrary.AlbumAdviser.csproj">
+      <Project>{600befab-9d92-455d-a6f2-e7dda2dba557}</Project>
+      <Name>CF.MusicLibrary.AlbumAdviser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.AlbumPreprocessor\CF.MusicLibrary.AlbumPreprocessor.csproj">
       <Project>{B977EA7B-85A2-429A-B98F-E76023589321}</Project>
-        <Name>CF.MusicLibrary.AlbumPreprocessor</Name>
-     </ProjectReference>
+      <Name>CF.MusicLibrary.AlbumPreprocessor</Name>
+    </ProjectReference>
   </ItemGroup>
-
 </Project>
