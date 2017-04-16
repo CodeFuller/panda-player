@@ -56,18 +56,18 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 		/// </summary>
 		public DiscLibrary Build()
 		{
-			var discs = BuildDiscs();
+			var discsDictionary = BuildDiscs();
 
-			DiscLibrary library = new DiscLibrary();
+			List<Disc> discs = new List<Disc>();
 			int discId = 1;
-			foreach (var disc in discs.Values.OrderBy(d => d.Uri.ToString()))
+			foreach (var disc in discsDictionary.Values.OrderBy(d => d.Uri.ToString()))
 			{
 				OrderDicsSongs(disc);
 				disc.Id = discId++;
-				library.Discs.Add(disc);
+				discs.Add(disc);
 			}
 
-			return library;
+			return new DiscLibrary(discs);
 		}
 
 		private Dictionary<string, Disc> BuildDiscs()
@@ -79,7 +79,7 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 				Disc disc;
 				if (!discs.TryGetValue(discPath, out disc))
 				{
-					disc = new Disc()
+					disc = new Disc
 					{
 						Title = BuildDiscTitle(discPath),
 						Uri = new Uri(discPath),
@@ -117,11 +117,11 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 		private static string BuildDiscTitle(string discPath)
 		{
 			string[] dirs = discPath.Split(Path.DirectorySeparatorChar);
-			if (dirs.Length < 2)
+			if (dirs.Length < 1)
 			{
 				throw new InvalidOperationException(Invariant($"Bad disc path: '{discPath}'"));
 			}
-			return Invariant($"{dirs[dirs.Length - 2]} / {dirs[dirs.Length - 1]}");
+			return dirs[dirs.Length - 1];
 		}
 	}
 }

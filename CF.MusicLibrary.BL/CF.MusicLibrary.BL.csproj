@@ -22,8 +22,10 @@
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
-    <WarningsAsErrors>CS1591</WarningsAsErrors>
-    <DocumentationFile>bin\Debug\CF.MusicLibrary.BL.XML</DocumentationFile>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,10 +36,16 @@
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\Release\CF.MusicLibrary.BL.XML</DocumentationFile>
-    <WarningsAsErrors>CS1591</WarningsAsErrors>
+    <DocumentationFile>
+    </DocumentationFile>
+    <WarningsAsErrors>
+    </WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CF.Library.Core, Version=0.1.6314.31518, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6314.31518\lib\net462\CF.Library.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -52,16 +60,34 @@
     <Compile Include="..\Global\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ArtistLibraryBuilder.cs" />
+    <Compile Include="IArtistLibraryBuilder.cs" />
+    <Compile Include="MyLocalLibrary\DiscPathParts.cs" />
+    <Compile Include="MyLocalLibrary\MyLocalLibraryArtistGroupper.cs" />
+    <Compile Include="IDiscArtistGroupper.cs" />
+    <Compile Include="DiscAdviser\RankBasedDiscAdviser.cs" />
+    <Compile Include="DiscAdviser\IRankCalculator.cs" />
+    <Compile Include="DiscAdviser\IDiscAdviser.cs" />
+    <Compile Include="DiscAdviser\RankCalculator.cs" />
+    <Compile Include="DiscAdviser\RankedDisc.cs" />
+    <Compile Include="ICompilationDiscGroupper.cs" />
     <Compile Include="ILibraryBuilder.cs" />
     <Compile Include="IMusicLibraryRepository.cs" />
+    <Compile Include="MyLocalLibrary\MyLocalLibraryNames.cs" />
     <Compile Include="Objects\Artist.cs" />
+    <Compile Include="Objects\ArtistLibrary.cs" />
     <Compile Include="Objects\Disc.cs" />
     <Compile Include="Objects\Genre.cs" />
     <Compile Include="Objects\DiscLibrary.cs" />
+    <Compile Include="Objects\LibraryArtist.cs" />
+    <Compile Include="Objects\LibraryDisc.cs" />
     <Compile Include="Objects\Playback.cs" />
     <Compile Include="Objects\Rating.cs" />
     <Compile Include="Objects\Song.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
