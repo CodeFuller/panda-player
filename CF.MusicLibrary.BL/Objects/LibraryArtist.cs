@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace CF.MusicLibrary.BL.Objects
@@ -13,27 +12,27 @@ namespace CF.MusicLibrary.BL.Objects
 
 		public string Name { get; }
 
+		/// <remarks>
+		/// Is filled only for regular artists.
+		/// </remarks>>
+		public Uri StorageUri { get; }
+
 		public IReadOnlyCollection<LibraryDisc> Discs => discs;
 
 		public int PlaybacksPassed => Discs.Select(d => d.PlaybacksPassed).Min();
 
 		public DateTime? LastPlaybackTime => Discs.Select(d => d.LastPlaybackTime).Max();
 
-		public LibraryArtist(Artist artist)
+		public LibraryArtist(string id, string name) :
+			this(id, name, null)
 		{
-			if (artist == null)
-			{
-				throw new ArgumentNullException(nameof(artist));
-			}
-
-			Id = artist.Id.ToString(CultureInfo.InvariantCulture);
-			Name = artist.Name;
 		}
 
-		public LibraryArtist(string id, string name)
+		public LibraryArtist(string id, string name, Uri storageUri)
 		{
 			Id = id;
 			Name = name;
+			StorageUri = storageUri;
 		}
 
 		public void AddDisc(LibraryDisc disc)

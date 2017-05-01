@@ -1,4 +1,6 @@
-﻿using CF.MusicLibrary.BL.Objects;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using CF.MusicLibrary.BL.Objects;
 
 namespace CF.MusicLibrary.BL
 {
@@ -8,13 +10,10 @@ namespace CF.MusicLibrary.BL
 	public interface IMusicLibraryRepository
 	{
 		/// <summary>
-		/// Loads the library from the repository.
+		/// Loads disc library from the repository.
 		/// </summary>
-		DiscLibrary LoadLibrary();
+		Task<DiscLibrary> GetDiscLibraryAsync();
 
-		/// <summary>
-		/// Stores the library in the repository.
-		/// </summary>
-		void Store(DiscLibrary library);
+		Task<IEnumerable<Genre>> GetGenresAsync();
 	}
 }

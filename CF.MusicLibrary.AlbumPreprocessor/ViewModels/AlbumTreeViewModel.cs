@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CF.Library.Core.Extensions;
@@ -6,7 +7,7 @@ using GalaSoft.MvvmLight;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 {
-	public class AlbumTreeViewModel : ViewModelBase
+	public class AlbumTreeViewModel : ViewModelBase, IEnumerable<AlbumTreeViewItem>
 	{
 		private readonly MainWindowModel host;
 
@@ -37,6 +38,16 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 		public void ReloadAlbum(AlbumTreeViewItem album)
 		{
 			host.LoadCurrentAlbums();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+
+		public IEnumerator<AlbumTreeViewItem> GetEnumerator()
+		{
+			return Albums.GetEnumerator();
 		}
 	}
 }

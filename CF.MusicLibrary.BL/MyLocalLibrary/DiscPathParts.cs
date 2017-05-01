@@ -1,34 +1,57 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using CF.MusicLibrary.BL.Objects;
+using CF.Library.Core.Extensions;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.BL.MyLocalLibrary
 {
-	internal class DiscPathParts
+	public class DiscPathParts
 	{
-		private readonly List<string> pathParts;
+		private readonly string[] parts;
 
-		public DiscPathParts(Disc disc, string libraryRootDirectory)
+		public int Count => parts.Length;
+
+		public string this[int i] => parts[i];
+
+		public string PathWithinLibrary => Path.Combine(parts.ToArray());
+
+		public DiscPathParts(string discPath, string libraryRootDirectory)
 		{
-			string albumFullPath = disc.Uri.LocalPath;
-			if (!albumFullPath.StartsWith(libraryRootDirectory, StringComparison.OrdinalIgnoreCase))
+			if (discPath == null)
 			{
-				throw new InvalidOperationException(Current($"Album path '{albumFullPath}' is not within library root directory {libraryRootDirectory}"));
+				throw new ArgumentNullException(nameof(discPath));
 			}
-			string albumSubPath = albumFullPath.Substring(libraryRootDirectory.Length);
+			if (libraryRootDirectory == null)
+			{
+				throw new ArgumentNullException(nameof(libraryRootDirectory));
+			}
 
-			pathParts = albumSubPath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).ToList();
-			if (pathParts.Count < 2)
+			libraryRootDirectory = libraryRootDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+			libraryRootDirectory += Path.DirectorySeparatorChar;
+
+			if (!discPath.StartsWith(libraryRootDirectory, StringComparison.OrdinalIgnoreCase))
 			{
-				throw new InvalidOperationException(Current($"Could not extract category and nested directory from disc path {albumFullPath}"));
+				throw new InvalidOperationException(Current($"Disc path '{discPath}' is not within library root directory {libraryRootDirectory}"));
 			}
+			string albumSubPath = discPath.Substring(libraryRootDirectory.Length);
+
+			parts = albumSubPath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 		}
 
-		public string Category => pathParts[0];
+		public DiscPathParts(Uri discUri)
+		{
+			if (discUri == null)
+			{
+				throw new ArgumentNullException(nameof(discUri));
+			}
 
-		public string NestedDirectory => pathParts[1];
+			if (discUri.IsAbsoluteUri || !discUri.ToString().StartsWith("/", StringComparison.OrdinalIgnoreCase))
+			{
+				throw new ArgumentException(Current($"Invalid disc URI: '{discUri}'. Disc URI should be relative and should start from '/'."));
+			}
+			
+			parts = discUri.SegmentsEx().Skip(1).ToArray();
+		}
 	}
 }

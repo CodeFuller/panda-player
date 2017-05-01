@@ -3,8 +3,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using CF.Library.Core.Bootstrap;
-using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.DiscAdviser;
+using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
@@ -15,27 +15,21 @@ namespace CF.MusicLibrary.AlbumAdviser
 	{
 		private const int AdvisedDiscsNumber = 30;
 
-		private readonly IMusicLibraryRepository libraryRepository;
-		private readonly IArtistLibraryBuilder artistLibraryBuilder;
+		private readonly IMusicLibrary library;
 		private readonly IDiscAdviser discAdviser;
 
-		public AlbumAdviserApplicationLogic(IMusicLibraryRepository libraryRepository, IArtistLibraryBuilder artistLibraryBuilder, IDiscAdviser discAdviser)
+		public AlbumAdviserApplicationLogic(IMusicLibrary library, IDiscAdviser discAdviser)
 		{
-			if (libraryRepository == null)
+			if (library == null)
 			{
-				throw new ArgumentNullException(nameof(libraryRepository));
-			}
-			if (artistLibraryBuilder == null)
-			{
-				throw new ArgumentNullException(nameof(artistLibraryBuilder));
+				throw new ArgumentNullException(nameof(library));
 			}
 			if (discAdviser == null)
 			{
 				throw new ArgumentNullException(nameof(discAdviser));
 			}
 
-			this.libraryRepository = libraryRepository;
-			this.artistLibraryBuilder = artistLibraryBuilder;
+			this.library = library;
 			this.discAdviser = discAdviser;
 		}
 
@@ -44,14 +38,14 @@ namespace CF.MusicLibrary.AlbumAdviser
 			while (true)
 			{
 				Console.WriteLine("Loading library...");
-				DiscLibrary discLibrary = libraryRepository.LoadLibrary();
-				ArtistLibrary artistLibrary = artistLibraryBuilder.Build(discLibrary);
+				library.LoadAsync().Wait();
+				ArtistLibrary artistLibrary = library.ArtistLibrary;
 
 				StringBuilder dbStatistics = new StringBuilder();
 				dbStatistics.AppendLine("DB statistics:");
 				dbStatistics.AppendLine();
 				dbStatistics.AppendLine(Current($"\tArtists totally:\t{artistLibrary.Artists.Count}"));
-				dbStatistics.AppendLine(Current($"\tArtists totally:\t{artistLibrary.Discs.Count()}"));
+				dbStatistics.AppendLine(Current($"\tAlbums totally:\t\t{artistLibrary.Discs.Count()}"));
 				dbStatistics.AppendLine(Current($"\tSongs totally:\t\t{artistLibrary.Songs.Count()}"));
 				Console.WriteLine(dbStatistics.ToString());
 

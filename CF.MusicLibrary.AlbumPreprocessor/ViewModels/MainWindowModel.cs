@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using CF.Library.Core.Facades;
+using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
 using CF.MusicLibrary.AlbumPreprocessor.ParsingContent;
 using GalaSoft.MvvmLight;
@@ -20,6 +21,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 		private readonly IAlbumContentParser albumContentParser;
 		private readonly IAlbumContentComparer albumContentComparer;
+		private readonly IObjectFactory<AddToLibraryViewModel> addToLibraryViewModelFactory;
 
 		private bool contentIsIncorrect;
 		public bool ContentIsIncorrect
@@ -39,7 +41,13 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 		public ICommand ReloadRawContentCommand { get; }
 
-		public MainWindowModel(IFileSystemFacade fileSystemFacade, IAlbumContentParser albumContentParser, IAlbumContentComparer albumContentComparer, string appDataPath)
+		public ICommand AddToLibraryCommand { get; }
+
+		public MainWindowModel(
+			IFileSystemFacade fileSystemFacade,
+			IAlbumContentParser albumContentParser,
+			IAlbumContentComparer albumContentComparer,
+			IObjectFactory<AddToLibraryViewModel> addToLibraryViewModelFactory)
 		{
 			if (fileSystemFacade == null)
 			{
@@ -53,17 +61,24 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			{
 				throw new ArgumentNullException(nameof(albumContentComparer));
 			}
+			if (addToLibraryViewModelFactory == null)
+			{
+				throw new ArgumentNullException(nameof(addToLibraryViewModelFactory));
+			}
 
 			this.albumContentParser = albumContentParser;
 			this.albumContentComparer = albumContentComparer;
+			this.addToLibraryViewModelFactory = addToLibraryViewModelFactory;
 
 			EthalonAlbums = new AlbumTreeViewModel(this);
 			CurrentAlbums = new AlbumTreeViewModel(this);
 
+			string appDataPath = ConfigurationManager.AppSettings["AppDataPath"];
 			RawEthalonAlbums = new EthalonContentViewModel(fileSystemFacade, appDataPath);
 			RawEthalonAlbums.PropertyChanged += OnRawEthalonAlbumsPropertyChanged;
 
 			ReloadRawContentCommand = new RelayCommand(ReloadRawContent);
+			AddToLibraryCommand = new RelayCommand(AddToLibrary);
 		}
 
 		public void LoadDefaultContent()
@@ -84,6 +99,12 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			RawEthalonAlbums.Content = contentBuilder.ToString();
 		}
 
+		private async void AddToLibrary()
+		{
+			AddToLibraryViewModel addToLibraryViewModel = addToLibraryViewModelFactory.CreateInstance();
+			await addToLibraryViewModel.AddAlbumsToLibrary(CurrentAlbums);
+		}
+
 		private void OnRawEthalonAlbumsPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			UpdateAlbums(EthalonAlbums, albumContentParser.Parse(RawEthalonAlbums.Content));
@@ -91,7 +112,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 		public void LoadCurrentAlbums()
 		{
-			string albumsDirectory = ConfigurationManager.AppSettings["DefaultContentDirectory"];
+			string albumsDirectory = ConfigurationManager.AppSettings["WorkshopDirectory"];
 			AlbumCrawler crawler = new AlbumCrawler(new SongFileFilter());
 			var albums = crawler.LoadAlbums(albumsDirectory).ToList();
 

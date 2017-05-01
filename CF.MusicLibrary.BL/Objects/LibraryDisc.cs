@@ -15,6 +15,24 @@ namespace CF.MusicLibrary.BL.Objects
 
 		public LibraryArtist Artist { get; }
 
+		public int? Year
+		{
+			get
+			{
+				List<int?> songYears = Songs.Select(s => (int?)s.Year).Distinct().ToList();
+				return songYears.Count > 1 ? null : songYears.FirstOrDefault();
+			}
+		}
+
+		public Genre Genre
+		{
+			get
+			{
+				List<Genre> songGenres = Songs.Select(s => s.Genre).Distinct().ToList();
+				return songGenres.Count > 1 ? null : songGenres.FirstOrDefault();
+			}
+		}
+
 		private Disc Disc { get; }
 
 		public IEnumerable<Song> Songs => Disc.Songs;
@@ -45,6 +63,8 @@ namespace CF.MusicLibrary.BL.Objects
 
 			set { playbacksPassed = value; }
 		}
+
+		public Uri Uri => Disc.Uri;
 
 		public LibraryDisc(LibraryArtist artist, Disc disc)
 		{

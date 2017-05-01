@@ -32,5 +32,22 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.AlbumPreprocessor.Boo
 
 			Assert.DoesNotThrow(() => diContainer.Resolve<MainWindowModel>());
 		}
+
+		[Test]
+		public void Run_RegistersAllDependenciesForAddToLibraryViewModel()
+		{
+			//	Arrange
+
+			IUnityContainer diContainer = new UnityContainer();
+			var target = new TestBootstrapper();
+
+			//	Act
+
+			target.InvokeRegisterDependencies(diContainer);
+
+			//	Assert
+
+			Assert.DoesNotThrow(() => diContainer.Resolve<AddToLibraryViewModel>());
+		}
 	}
 }

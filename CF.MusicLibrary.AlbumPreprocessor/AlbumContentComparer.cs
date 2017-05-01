@@ -82,7 +82,9 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 			}
 			else
 			{
-				currentSong.ContentIsIncorrect = ethalonSong.ContentIsIncorrect = (currentSong.Title != Invariant($"{songNumber:D2} - {ethalonSong.Title}.mp3"));
+				bool matchesTitleWithTrack = currentSong.Title == Invariant($"{songNumber:D2} - {ethalonSong.Title}.mp3");
+				bool matchesTitleWithoutTrack = currentSong.Title == Invariant($"{ethalonSong.Title}.mp3");
+				currentSong.ContentIsIncorrect = ethalonSong.ContentIsIncorrect = !(matchesTitleWithTrack || matchesTitleWithoutTrack);
 			}
 		}
 

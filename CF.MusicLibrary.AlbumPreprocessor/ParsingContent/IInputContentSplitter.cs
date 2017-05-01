@@ -7,7 +7,6 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ParsingContent
 	/// </summary>
 	public interface IInputContentSplitter
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Such return type is required for the method.")]
 		IEnumerable<IEnumerable<string>> Split(IEnumerable<string> content);
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using CF.MusicLibrary.BL.Objects;
 using static System.FormattableString;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
@@ -8,75 +7,69 @@ namespace CF.MusicLibrary.BL.MyLocalLibrary
 {
 	public class MyLocalLibraryArtistGroupper : IDiscArtistGroupper, ICompilationDiscGroupper
 	{
-		private readonly string libraryRootDirectory;
+		private readonly IStorageUrlBuilder storageUrlBuilder;
 
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		/// <param name="libraryRootDirectory">Path to root library directory (e.g. "d:\music")</param>
-		public MyLocalLibraryArtistGroupper(string libraryRootDirectory)
+		public MyLocalLibraryArtistGroupper(IStorageUrlBuilder storageUrlBuilder)
 		{
-			if (libraryRootDirectory == null)
+			if (storageUrlBuilder == null)
 			{
-				throw new ArgumentNullException(nameof(libraryRootDirectory));
+				throw new ArgumentNullException(nameof(storageUrlBuilder));
 			}
 
-			this.libraryRootDirectory = libraryRootDirectory;
-			this.libraryRootDirectory = this.libraryRootDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-			this.libraryRootDirectory += Path.DirectorySeparatorChar;
+			this.storageUrlBuilder = storageUrlBuilder;
 		}
 
 		public LibraryArtist GetDiscArtist(Disc disc)
 		{
-			DiscPathParts discPathParts = new DiscPathParts(disc, libraryRootDirectory);
+			LocalLibraryDiscPath localLibraryDiscPath = new LocalLibraryDiscPath(disc);
 
 			//	Any album under "Belarussian", "Foreign" or "Russian" directories is resolved as single-artist album
 			//	This covers cases when Artist directory contains side-project albums (e.g. Гражданская Оборона/Егор Летов)
 
-			if (MyLocalLibraryNames.IsArtistCategory(discPathParts.Category))
+			if (MyLocalLibraryNames.IsArtistCategory(localLibraryDiscPath.Category))
 			{
-				return GetArtistForCategory(discPathParts.Category, discPathParts.NestedDirectory);
+				return GetArtistForCategory(localLibraryDiscPath.Category, localLibraryDiscPath.NestedDirectory);
 			}
 
 			//	Any album under "Soundtracks" or "Сборники" directories is resolved through ICompilationDiscGroupper
-			if (discPathParts.Category == MyLocalLibraryNames.Soundtracks || discPathParts.Category == MyLocalLibraryNames.Collections)
+			if (localLibraryDiscPath.Category == MyLocalLibraryNames.Soundtracks || localLibraryDiscPath.Category == MyLocalLibraryNames.Collections)
 			{
 				return GetCompilationDiscArtist(disc);
 			}
 
-			throw new InvalidOperationException(Current($"Disc category '{discPathParts.Category}' is not recognized"));
+			throw new InvalidOperationException(Current($"Disc category '{localLibraryDiscPath.Category}' is not recognized"));
 		}
 
 		public LibraryArtist GetCompilationDiscArtist(Disc disc)
 		{
-			DiscPathParts discPathParts = new DiscPathParts(disc, libraryRootDirectory);
+			LocalLibraryDiscPath localLibraryDiscPath = new LocalLibraryDiscPath(disc);
 
-			if (discPathParts.Category == MyLocalLibraryNames.Soundtracks)
+			if (localLibraryDiscPath.Category == MyLocalLibraryNames.Soundtracks)
 			{
-				return GetArtistForCategory(discPathParts.Category);
+				return GetArtistForCategory(localLibraryDiscPath.Category);
 			}
 
-			if (discPathParts.Category == MyLocalLibraryNames.Collections)
+			if (localLibraryDiscPath.Category == MyLocalLibraryNames.Collections)
 			{
-				return GetCollectionArtist(discPathParts);
+				return GetCollectionArtist(localLibraryDiscPath);
 			}
 
-			throw new InvalidOperationException(Current($"Disc category '{discPathParts.Category}' is not a compilation category"));
+			throw new InvalidOperationException(Current($"Disc category '{localLibraryDiscPath.Category}' is not a compilation category"));
 		}
 
-		private static LibraryArtist GetCollectionArtist(DiscPathParts discPathParts)
+		private static LibraryArtist GetCollectionArtist(LocalLibraryDiscPath localLibraryDiscPath)
 		{
-			if (MyLocalLibraryNames.IsRussianRockCollectionDirectory(discPathParts.NestedDirectory))
+			if (MyLocalLibraryNames.IsRussianRockCollectionDirectory(localLibraryDiscPath.NestedDirectory))
 			{
 				return GetArtistForCategory("Collections / Russian Rock");
 			}
 
-			if (MyLocalLibraryNames.IsBestCollectionDirectory(discPathParts.NestedDirectory))
+			if (MyLocalLibraryNames.IsBestCollectionDirectory(localLibraryDiscPath.NestedDirectory))
 			{
 				return GetArtistForCategory("Collections / Best");
 			}
 
-			if (MyLocalLibraryNames.IsEurovisionDirectory(discPathParts.NestedDirectory))
+			if (MyLocalLibraryNames.IsEurovisionDirectory(localLibraryDiscPath.NestedDirectory))
 			{
 				return GetArtistForCategory("Collections / Eurovision");
 			}
@@ -84,9 +77,9 @@ namespace CF.MusicLibrary.BL.MyLocalLibrary
 			return GetArtistForCategory("Collections / Different");
 		}
 
-		private static LibraryArtist GetArtistForCategory(string category, string artistName)
+		private LibraryArtist GetArtistForCategory(string category, string artistName)
 		{
-			return new LibraryArtist(Invariant($"{category} / {artistName}"), artistName);
+			return new LibraryArtist(Invariant($"{category} / {artistName}"), artistName, storageUrlBuilder.BuildArtistStorageUrl(category, artistName));
 		}
 
 		private static LibraryArtist GetArtistForCategory(string category)

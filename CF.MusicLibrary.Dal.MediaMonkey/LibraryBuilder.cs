@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using CF.Library.Core.Extensions;
 using CF.MusicLibrary.BL;
@@ -70,21 +69,21 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 			return new DiscLibrary(discs);
 		}
 
-		private Dictionary<string, Disc> BuildDiscs()
+		private Dictionary<Uri, Disc> BuildDiscs()
 		{
-			var discs = new Dictionary<string, Disc>();
+			var discs = new Dictionary<Uri, Disc>();
 			foreach (var song in songs)
 			{
-				var discPath = Path.GetDirectoryName(song.Uri.LocalPath);
+				var discUri = song.Uri.RemoveLastSegment();
 				Disc disc;
-				if (!discs.TryGetValue(discPath, out disc))
+				if (!discs.TryGetValue(discUri, out disc))
 				{
 					disc = new Disc
 					{
-						Title = BuildDiscTitle(discPath),
-						Uri = new Uri(discPath),
+						Title = BuildDiscTitle(discUri),
+						Uri = discUri,
 					};
-					discs.Add(discPath, disc);
+					discs.Add(discUri, disc);
 				}
 				disc.Songs.Add(song);
 			}
@@ -114,14 +113,15 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 			}
 		}
 
-		private static string BuildDiscTitle(string discPath)
+		private static string BuildDiscTitle(Uri discUri)
 		{
-			string[] dirs = discPath.Split(Path.DirectorySeparatorChar);
-			if (dirs.Length < 1)
+			var title = discUri.ToString().Split('/').LastOrDefault();
+			if (title == null)
 			{
-				throw new InvalidOperationException(Invariant($"Bad disc path: '{discPath}'"));
+				throw new InvalidOperationException(Invariant($"Bad disc URI: '{discUri}'"));
 			}
-			return dirs[dirs.Length - 1];
+
+			return title;
 		}
 	}
 }

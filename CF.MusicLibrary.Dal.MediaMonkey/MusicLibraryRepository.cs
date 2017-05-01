@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Globalization;
+using System.Threading.Tasks;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Objects;
 using static System.FormattableString;
+using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.Dal.MediaMonkey
 {
@@ -22,11 +24,12 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 		private readonly DbProviderFactory dbProviderFactory;
 		private readonly ILibraryBuilder libraryBuilder;
 		private readonly string connectionString;
+		private readonly string libraryRootDirectory;
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		public MusicLibraryRepository(DbProviderFactory dbProviderFactory, ILibraryBuilder libraryBuilder, string connectionString)
+		public MusicLibraryRepository(DbProviderFactory dbProviderFactory, ILibraryBuilder libraryBuilder, string connectionString, string libraryRootDirectory)
 		{
 			if (dbProviderFactory == null)
 			{
@@ -40,14 +43,15 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 			this.dbProviderFactory = dbProviderFactory;
 			this.libraryBuilder = libraryBuilder;
 			this.connectionString = connectionString;
+			this.libraryRootDirectory = libraryRootDirectory;
 		}
 
 		/// <summary>
 		/// Implementation of IMusicLibraryRepository.LoadLibrary().
 		/// </summary>
-		public DiscLibrary LoadLibrary()
+		public async Task<DiscLibrary> GetDiscLibraryAsync()
 		{
-			using (DataSet ds = LoadData())
+			using (DataSet ds = await LoadData())
 			{
 				Dictionary<int, Artist> artists = ObjectifyArtists(ds);
 				Dictionary<int, Genre> genres = ObjectifyGenres(ds);
@@ -66,7 +70,7 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 						Genre = genres[row.GetParentRow(ds.Relations["SongGenre"]).Field<int>("IDGenre")],
 						Duration = TimeSpan.FromMilliseconds(row.Field<int>("SongLength")),
 						Rating = CastRating(row.Field<short>("Rating")),
-						Uri = new Uri(row.Field<string>("SongPath")),
+						Uri = GetSongUri(row.Field<string>("SongPath")),
 						FileSize = row.Field<int>("FileLength"),
 						Bitrate = row.Field<int>("Bitrate"),
 						LastPlaybackTime = CheckForNull(row.Field<DateTime>("LastTimePlayed"), d => d.Year <= 1900),
@@ -88,26 +92,28 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 			}
 		}
 
-		/// <summary>
-		/// Implementation of IMusicLibraryRepository.Store().
-		/// </summary>
-		public void Store(DiscLibrary library)
+		public async Task<IEnumerable<Genre>> GetGenresAsync()
 		{
-			throw new NotImplementedException();
+			using (DataSet ds = new DataSet { Locale = CultureInfo.InvariantCulture })
+			{
+				await LoadTableAsync(ds, Genres);
+				Dictionary<int, Genre> genres = ObjectifyGenres(ds);
+				return genres.Values;
+			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope", Justification = "Object is disposed by the caller.")]
-		private DataSet LoadData()
+		private async Task<DataSet> LoadData()
 		{
 			DataSet ds = new DataSet
 			{
 				Locale = CultureInfo.InvariantCulture
 			};
 
-			LoadTable(ds, Artists);
-			LoadTable(ds, Songs);
-			LoadTable(ds, Genres);
-			LoadTable(ds, Played);
+			await LoadTableAsync(ds, Artists);
+			await LoadTableAsync(ds, Songs);
+			await LoadTableAsync(ds, Genres);
+			await LoadTableAsync(ds, Played);
 
 			ds.Relations.Add(new DataRelation("SongArtist",
 				ds.Tables[Artists].Columns["ID"],
@@ -167,6 +173,11 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 			CreateAdapter(tableName).Fill(ds, tableName);
 		}
 
+		private async Task LoadTableAsync(DataSet ds, string tableName)
+		{
+			await Task.Run(() => { LoadTable(ds, tableName); });
+		}
+
 		private DbConnection CreateConnection()
 		{
 			DbConnection connection = dbProviderFactory.CreateConnection();
@@ -202,6 +213,19 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 		private static Rating? CastRating(short rating)
 		{
 			return rating == -1 ? null : (Rating?)(rating / 10);
+		}
+
+		private Uri GetSongUri(string songPath)
+		{
+			if (!songPath.StartsWith(libraryRootDirectory, StringComparison.OrdinalIgnoreCase))
+			{
+				throw new InvalidOperationException(Current($"Song path '{songPath}' is not within library root directory {libraryRootDirectory}"));
+			}
+
+			var relativePath = songPath.Substring(libraryRootDirectory.Length);
+			relativePath = relativePath.Replace('\\', '/');
+
+			return new Uri(relativePath, UriKind.Relative);
 		}
 	}
 }

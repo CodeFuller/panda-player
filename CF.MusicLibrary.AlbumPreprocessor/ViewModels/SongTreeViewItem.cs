@@ -9,6 +9,8 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 		private readonly AlbumTreeViewItem parentAlbum;
 
+		public string SongFileName => GetSongFileName(Title);
+
 		private string title;
 		public string Title
 		{
@@ -57,7 +59,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			this.parentAlbum = parentAlbum;
 		}
 
-		public string GetSongFileName(string songTitle)
+		private string GetSongFileName(string songTitle)
 		{
 			return Path.Combine(AlbumPath, songTitle);
 		}

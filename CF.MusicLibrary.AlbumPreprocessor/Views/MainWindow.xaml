@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:behaviors="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.Behaviors"
         xmlns:views="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.Views"
+        xmlns:valueConverters="clr-namespace:CF.Library.Wpf.ValueConverters;assembly=CF.Library.Wpf"
         mc:Ignorable="d"
         Width="1560" Height="790">
+    <Window.Resources>
+        <valueConverters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+    </Window.Resources>
     <Window.Title>
         <Binding Path="Title" />
     </Window.Title>
@@ -37,5 +41,7 @@
             </TextBlock.Style>
         </TextBlock>
         <Button x:Name="ButtonReloadRawContent" Content="Reload" Command="{Binding ReloadRawContentCommand}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="ButtonAddToLibrary" Content="Add to Library..." Command="{Binding AddToLibraryCommand}" IsEnabled="{Binding Path=ContentIsIncorrect, Converter={StaticResource InverseBooleanConverter}}"
+                HorizontalAlignment="Left" Margin="100,10,0,0" VerticalAlignment="Top" Width="75"/>
     </Grid>
 </Window>

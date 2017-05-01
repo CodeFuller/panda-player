@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using CF.Library.Core.Extensions;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 {
@@ -13,7 +12,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 		public ReadOnlyCollection<SongTreeViewItem> SongItems { get; }
 
-		public IEnumerable<SongTreeViewItem> Songs => SongItems.Take(SongItems.Count - 1).ToCollection();
+		public IEnumerable<SongTreeViewItem> Songs => SongItems.Take(SongItems.Count - 1);
 
 		private string albumDirectory;
 		public string AlbumDirectory

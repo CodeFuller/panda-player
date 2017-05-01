@@ -8,11 +8,9 @@ namespace CF.MusicLibrary.BL.Objects
 	/// <summary>
 	/// Collection of Music Discs with groupping by Artist.
 	/// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Suffix 'Library' is suitable in this context")]
 	public class ArtistLibrary : IEnumerable<LibraryArtist>
 	{
 		private readonly List<LibraryArtist> artists;
-
 		public IReadOnlyCollection<LibraryArtist> Artists => artists;
 
 		public IEnumerable<LibraryDisc> Discs => Artists.SelectMany(a => a.Discs);
@@ -32,6 +30,16 @@ namespace CF.MusicLibrary.BL.Objects
 			{
 				disc.PlaybacksPassed = disc.WasPlayedEver ? playbacksPassed++ : Int32.MaxValue;
 			}
+		}
+
+		public LibraryArtist GetArtist(string artist)
+		{
+			return Artists.SingleOrDefault(a => a.Name == artist);
+		}
+
+		public IEnumerable<LibraryDisc> GetArtistDiscs(string artist)
+		{
+			return GetArtist(artist)?.Discs;
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
