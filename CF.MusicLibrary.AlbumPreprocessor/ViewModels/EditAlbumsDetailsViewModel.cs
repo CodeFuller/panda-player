@@ -54,8 +54,8 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 					{
 						yield return new TaggedSongData
 						{
-							SourceFileName = song.SourceFileName,
-							StorageUri = storageUrlBuilder.BuildSongStorageUrl(album.DestinationUri, Path.GetFileName(song.SourceFileName)),
+							SourceFileName = song.SourcePath,
+							StorageUri = storageUrlBuilder.BuildSongStorageUrl(album.DestinationUri, song.SourceFileName),
 
 							Artist = album.GetSongArtist(song),
 							Album = album.Title,

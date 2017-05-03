@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
@@ -63,10 +64,12 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 				return;
 			}
 
-			await SetTags(editSongsDetailsViewModel.Songs);
+			List<TaggedSongData> songsTagData = editSongsDetailsViewModel.Songs.Select(s => s.TagData).ToList();
+
+			await SetTags(songsTagData);
 			windowService.ShowMessageBox($"Successfully tagged {editSongsDetailsViewModel.Songs.Count} songs", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-			await StoreAlbumsInLibrary(editSongsDetailsViewModel.Songs, editAlbumsDetailsViewModel.AlbumCoverImages);
+			await StoreAlbumsInLibrary(songsTagData, editAlbumsDetailsViewModel.AlbumCoverImages);
 			windowService.ShowMessageBox("Successfully added songs to the library. Don't forget to reindex in MediaMonkey", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 		}
 
