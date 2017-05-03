@@ -6,9 +6,15 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 {
 	internal class WpfWindowService : IWindowService
 	{
-		public bool ShowAddToLibraryWindow(AddToLibraryViewModel viewModel)
+		public bool ShowEditAlbumsDetailsWindow(EditAlbumsDetailsViewModel viewModel)
 		{
-			var window = new AddToLibraryWindow(viewModel);
+			var window = new EditAlbumsDetailsWindow(viewModel);
+			return window.ShowDialog() ?? false;
+		}
+
+		public bool ShowEditSongsDetailsWindow(EditSongsDetailsViewModel viewModel)
+		{
+			var window = new EditSongsDetailsWindow(viewModel);
 			return window.ShowDialog() ?? false;
 		}
 

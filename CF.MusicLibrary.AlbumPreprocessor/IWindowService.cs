@@ -5,7 +5,9 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 {
 	public interface IWindowService
 	{
-		bool ShowAddToLibraryWindow(AddToLibraryViewModel viewModel);
+		bool ShowEditAlbumsDetailsWindow(EditAlbumsDetailsViewModel viewModel);
+
+		bool ShowEditSongsDetailsWindow(EditSongsDetailsViewModel viewModel);
 
 		MessageBoxResult ShowMessageBox(string messageBoxText, string caption, MessageBoxButton button, MessageBoxImage icon);
 	}

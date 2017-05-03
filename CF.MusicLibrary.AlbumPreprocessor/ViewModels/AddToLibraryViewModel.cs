@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
-using CF.Library.Core.Facades;
 using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
-using CF.MusicLibrary.AlbumPreprocessor.MusicStorage;
-using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
 using GalaSoft.MvvmLight;
@@ -17,55 +11,37 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 {
 	public class AddToLibraryViewModel : ViewModelBase
 	{
-		private const string coverImageFileName = "cover.jpg";
-
-		private readonly IMusicLibrary musicLibrary;
-		private readonly IWorkshopMusicStorage workshopStorage;
-		private readonly IStorageUrlBuilder storageUrlBuilder;
-		private readonly IWindowService windowService;
+		private readonly EditAlbumsDetailsViewModel editAlbumsDetailsViewModel;
+		private readonly EditSongsDetailsViewModel editSongsDetailsViewModel;
 		private readonly ISongTagger songTagger;
-		private readonly IFileSystemFacade fileSystemFacade;
+		private readonly IWindowService windowService;
+		private readonly IMusicLibrary musicLibrary;
 
-		private AddedContent addedContent;
-
-		public ObservableCollection<AddedAlbum> AddedAlbums => addedContent.Albums;
-
-		public bool RequiredDataIsFilled => addedContent.RequiredDataIsFilled;
-
-		public AddToLibraryViewModel(IMusicLibrary musicLibrary, IWorkshopMusicStorage workshopStorage, IStorageUrlBuilder storageUrlBuilder,
-			ISongTagger songTagger, IWindowService windowService, IFileSystemFacade fileSystemFacade)
+		public AddToLibraryViewModel(EditAlbumsDetailsViewModel editAlbumsDetailsViewModel, EditSongsDetailsViewModel editSongsDetailsViewModel,
+			ISongTagger songTagger, IWindowService windowService, IMusicLibrary musicLibrary)
 		{
-			if (musicLibrary == null)
+			if (editAlbumsDetailsViewModel == null)
 			{
-				throw new ArgumentNullException(nameof(musicLibrary));
-			}
-			if (workshopStorage == null)
-			{
-				throw new ArgumentNullException(nameof(workshopStorage));
-			}
-			if (storageUrlBuilder == null)
-			{
-				throw new ArgumentNullException(nameof(storageUrlBuilder));
-			}
-			if (windowService == null)
-			{
-				throw new ArgumentNullException(nameof(windowService));
+				throw new ArgumentNullException(nameof(editAlbumsDetailsViewModel));
 			}
 			if (songTagger == null)
 			{
 				throw new ArgumentNullException(nameof(songTagger));
 			}
-			if (fileSystemFacade == null)
+			if (windowService == null)
 			{
-				throw new ArgumentNullException(nameof(fileSystemFacade));
+				throw new ArgumentNullException(nameof(windowService));
+			}
+			if (musicLibrary == null)
+			{
+				throw new ArgumentNullException(nameof(musicLibrary));
 			}
 
-			this.musicLibrary = musicLibrary;
-			this.workshopStorage = workshopStorage;
-			this.storageUrlBuilder = storageUrlBuilder;
-			this.windowService = windowService;
+			this.editAlbumsDetailsViewModel = editAlbumsDetailsViewModel;
+			this.editSongsDetailsViewModel = editSongsDetailsViewModel;
 			this.songTagger = songTagger;
-			this.fileSystemFacade = fileSystemFacade;
+			this.windowService = windowService;
+			this.musicLibrary = musicLibrary;
 		}
 
 		public async Task AddAlbumsToLibrary(IEnumerable<AlbumTreeViewItem> albums)
@@ -75,74 +51,51 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 				throw new ArgumentNullException(nameof(albums));
 			}
 
-			addedContent = new AddedContent(musicLibrary, workshopStorage, storageUrlBuilder);
-			addedContent.PropertyChanged += Property_Changed;
-
-			await addedContent.SetAlbums(albums);
-			if (windowService.ShowAddToLibraryWindow(this))
+			await editAlbumsDetailsViewModel.SetAlbums(albums);
+			if (!windowService.ShowEditAlbumsDetailsWindow(editAlbumsDetailsViewModel))
 			{
-				await SetTags();
-				windowService.ShowMessageBox($"Successfully tagged {addedContent.SongsNumber} songs", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-
-				await StoreAlbumsInLibrary();
-				windowService.ShowMessageBox($"Successfully added songs to library. Don't forget to reindex in MediaMonkey", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+				return;
 			}
+
+			editSongsDetailsViewModel.SetSongs(editAlbumsDetailsViewModel.Songs);
+			if (!windowService.ShowEditSongsDetailsWindow(editSongsDetailsViewModel))
+			{
+				return;
+			}
+
+			await SetTags(editSongsDetailsViewModel.Songs);
+			windowService.ShowMessageBox($"Successfully tagged {editSongsDetailsViewModel.Songs.Count} songs", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+			await StoreAlbumsInLibrary(editSongsDetailsViewModel.Songs, editAlbumsDetailsViewModel.AlbumCoverImages);
+			windowService.ShowMessageBox("Successfully added songs to the library. Don't forget to reindex in MediaMonkey", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 		}
 
-		private async Task SetTags()
+		private async Task SetTags(IEnumerable<TaggedSongData> songs)
 		{
-			foreach (AddedAlbum album in addedContent.Albums)
+			foreach (TaggedSongData song in songs)
 			{
-				foreach (SongInfo song in album.Songs)
-				{
-					SongTagData songTagData = new SongTagData
-					{
-						Artist = album.GetSongArtist(song),
-						Album = album.Title,
-						Year = album.Year,
-						Genre = album.Genre.Name,
-
-						Track = song.Track,
-						Title = song.Title,
-					};
-
-					await songTagger.SetTagData(song.SourcePath, songTagData);
-				}
+				await songTagger.SetTagData(song);
 			}
 		}
 
-		private async Task StoreAlbumsInLibrary()
+		private async Task StoreAlbumsInLibrary(IEnumerable<TaggedSongData> songs, IEnumerable<AddedAlbumCoverImage> albumCoverImages)
 		{
-			foreach (AddedAlbum album in addedContent.Albums)
+			foreach (TaggedSongData song in songs)
 			{
-				foreach (SongInfo song in album.Songs)
+				//	Currently we don't add song to IMusicCatalog, only to IMusicStorage.
+				//	If this is changed we should fill all other Song fields like Artist, Title, FileSize, Bitrate, ...
+				Song addedSong = new Song
 				{
-					//	Currently we don't add song to IMusicCatalog, only to IMusicStorage.
-					//	If this is changed we should fill all other Song fields like Artist, Title, FileSize, Bitrate, ...
-					Song addedSong = new Song
-					{
-						Uri = storageUrlBuilder.BuildSongStorageUrl(album.DestinationUri, song.SourceFileName)
-					};
+					Uri = song.StorageUri
+				};
 
-					await musicLibrary.AddSong(addedSong, song.SourcePath);
-				}
+				await musicLibrary.AddSong(addedSong, song.SourceFileName);
+			}
 
-				//	Copying cover image
-				var coverImagePath = Path.Combine(album.SourcePath, coverImageFileName);
-				if (fileSystemFacade.FileExists(coverImagePath))
-				{
-					await musicLibrary.SetAlbumCoverImage(album.DestinationUri, coverImagePath);
-				}
+			foreach (AddedAlbumCoverImage coverImage in albumCoverImages)
+			{
+				await musicLibrary.SetAlbumCoverImage(coverImage.AlbumStorageUri, coverImage.CoverImageFileName);
 			}
 		}
-
-		private void Property_Changed(object sender, PropertyChangedEventArgs e)
-		{
-			if (e.PropertyName == nameof(AddedAlbum.RequiredDataIsFilled))
-			{
-				RaisePropertyChanged(nameof(RequiredDataIsFilled));
-			}
-		}
-
 	}
 }

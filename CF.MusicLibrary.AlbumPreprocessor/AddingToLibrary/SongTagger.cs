@@ -7,9 +7,9 @@ namespace CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary
 {
 	public class SongTagger : ISongTagger
 	{
-		public async Task SetTagData(string songPath, SongTagData tagData)
+		public async Task SetTagData(TaggedSongData tagData)
 		{
-			string extension = Path.GetExtension(songPath);
+			string extension = Path.GetExtension(tagData.SourceFileName);
 			if (extension != ".mp3")
 			{
 				throw new InvalidOperationException("Only setting of mp3 tags is supported");
@@ -17,7 +17,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary
 
 			await Task.Run(() =>
 			{
-				TagLib.File f = TagLib.File.Create(songPath);
+				TagLib.File f = TagLib.File.Create(tagData.SourceFileName);
 				f.RemoveTags(TagTypes.Id3v1);
 				f.RemoveTags(TagTypes.Id3v2);
 
@@ -32,7 +32,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary
 			});
 		}
 
-		static void FillTag(Tag tag, SongTagData tagData)
+		static void FillTag(Tag tag, TaggedSongData tagData)
 		{
 			if (!String.IsNullOrEmpty(tagData.Artist))
 			{

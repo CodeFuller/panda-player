@@ -4,17 +4,17 @@ using CF.MusicLibrary.AlbumPreprocessor.ViewModels;
 namespace CF.MusicLibrary.AlbumPreprocessor.Views
 {
 	/// <summary>
-	/// Interaction logic for AddToLibraryWindow.xaml
+	/// Interaction logic for EditAlbumsDetailsWindow.xaml
 	/// </summary>
-	public partial class AddToLibraryWindow : Window
+	public partial class EditAlbumsDetailsWindow : Window
 	{
-		public AddToLibraryWindow(AddToLibraryViewModel model)
+		public EditAlbumsDetailsWindow(EditAlbumsDetailsViewModel model)
 		{
 			InitializeComponent();
 			DataContext = model;
 		}
 
-		private void ButtonAddToLibrary_Click(object sender, RoutedEventArgs e)
+		private void ButtonOk_Click(object sender, RoutedEventArgs e)
 		{
 			DialogResult = true;
 		}

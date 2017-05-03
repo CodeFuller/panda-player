@@ -2,31 +2,76 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CF.Library.Core.Exceptions;
+using CF.Library.Core.Facades;
+using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.AlbumPreprocessor.MusicStorage;
-using CF.MusicLibrary.AlbumPreprocessor.ViewModels;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
 using GalaSoft.MvvmLight;
 
-namespace CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary
+namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 {
-	public class AddedContent : ViewModelBase
+	public class EditAlbumsDetailsViewModel : ViewModelBase
 	{
+		private const string CoverImageFileName = "cover.jpg";
+
 		private readonly IMusicLibrary musicLibrary;
 		private readonly IWorkshopMusicStorage workshopStorage;
 		private readonly IStorageUrlBuilder storageUrlBuilder;
+		private readonly IFileSystemFacade fileSystemFacade;
 
 		public ObservableCollection<AddedAlbum> Albums { get; private set; }
 
-		public int SongsNumber => Albums.Sum(a => a.Songs.Count);
+		public IEnumerable<AddedAlbumCoverImage> AlbumCoverImages
+		{
+			get
+			{
+				foreach (AddedAlbum album in Albums)
+				{
+					var coverImagePath = Path.Combine(album.SourcePath, CoverImageFileName);
+					if (fileSystemFacade.FileExists(coverImagePath))
+					{
+						yield return new AddedAlbumCoverImage(album.DestinationUri, coverImagePath);
+					}
+				}
+			}
+		}
 
 		public bool RequiredDataIsFilled => Albums.All(a => a.RequiredDataIsFilled);
 
-		public AddedContent(IMusicLibrary musicLibrary, IWorkshopMusicStorage workshopStorage, IStorageUrlBuilder storageUrlBuilder)
+		public IEnumerable<TaggedSongData> Songs
+		{
+			get
+			{
+				foreach (AddedAlbum album in Albums)
+				{
+					foreach (SongInfo song in album.Songs)
+					{
+						yield return new TaggedSongData
+						{
+							SourceFileName = song.SourceFileName,
+							StorageUri = storageUrlBuilder.BuildSongStorageUrl(album.DestinationUri, Path.GetFileName(song.SourceFileName)),
+
+							Artist = album.GetSongArtist(song),
+							Album = album.Title,
+							Year = album.Year,
+							Genre = album.Genre.Name,
+
+							Track = song.Track,
+							Title = song.Title,
+						};
+					}
+				}
+			}
+		}
+
+		public EditAlbumsDetailsViewModel(IMusicLibrary musicLibrary, IWorkshopMusicStorage workshopStorage,
+			IStorageUrlBuilder storageUrlBuilder, IFileSystemFacade fileSystemFacade)
 		{
 			if (musicLibrary == null)
 			{
@@ -40,10 +85,15 @@ namespace CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary
 			{
 				throw new ArgumentNullException(nameof(storageUrlBuilder));
 			}
+			if (fileSystemFacade == null)
+			{
+				throw new ArgumentNullException(nameof(fileSystemFacade));
+			}
 
 			this.musicLibrary = musicLibrary;
 			this.workshopStorage = workshopStorage;
 			this.storageUrlBuilder = storageUrlBuilder;
+			this.fileSystemFacade = fileSystemFacade;
 		}
 
 		public async Task SetAlbums(IEnumerable<AlbumTreeViewItem> albums)

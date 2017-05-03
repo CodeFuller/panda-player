@@ -118,13 +118,13 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AddingToLibrary\AddedAlbum.cs" />
+    <Compile Include="AddingToLibrary\AddedAlbumCoverImage.cs" />
     <Compile Include="AddingToLibrary\AddedArtistAlbum.cs" />
     <Compile Include="AddingToLibrary\AddedCompilationAlbum.cs" />
     <Compile Include="AddingToLibrary\AddedCompilationAlbumWithArtistInfo.cs" />
     <Compile Include="AddingToLibrary\AddedCompilationAlbumWithoutArtistInfo.cs" />
-    <Compile Include="AddingToLibrary\AddedContent.cs" />
     <Compile Include="AddingToLibrary\SongTagger.cs" />
-    <Compile Include="AddingToLibrary\SongTagData.cs" />
+    <Compile Include="AddingToLibrary\TaggedSongData.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="AddingToLibrary\ISongTagger.cs" />
     <Compile Include="IWindowService.cs" />
@@ -153,15 +153,24 @@
     <Compile Include="ParsingSong\SongTitlePattern.cs" />
     <Compile Include="SongContent.cs" />
     <Compile Include="SongFileFilter.cs" />
-    <Compile Include="Views\AddToLibraryWindow.xaml.cs">
-      <DependentUpon>AddToLibraryWindow.xaml</DependentUpon>
+    <Compile Include="ViewModels\EditAlbumsDetailsViewModel.cs" />
+    <Compile Include="ViewModels\EditSongsDetailsViewModel.cs" />
+    <Compile Include="Views\EditAlbumsDetailsWindow.xaml.cs">
+      <DependentUpon>EditAlbumsDetailsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditSongsDetailsWindow.xaml.cs">
+      <DependentUpon>EditSongsDetailsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WpfWindowService.cs" />
-    <Page Include="Views\AddToLibraryWindow.xaml">
+    <Page Include="Views\EditAlbumsDetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AlbumTreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditSongsDetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
