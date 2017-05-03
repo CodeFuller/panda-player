@@ -53,11 +53,30 @@ namespace CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary
 			Genre = genre;
 			this.availableDestinationUris = availableDestinationUris.ToList();
 			DestinationUri = destinationUri;
+
+			//	Should we keep Artist parsed from songs or should we clear it?
+			//	Currently artist is parsed from the song filename by following regex: (.+) - (.+)
+			//	It works for titles like 'Aerosmith - I Don't Want To Miss A Thing.mp3' but doesn't
+			//	work for '09 - Lappi - I. Eramaajarvi.mp3'
+			//	Here we determine whether major part of album songs has artist in title.
+			//	If not then we clear Artist in all songs that have it.
+			if (Songs.Count(s => String.IsNullOrEmpty(s.Artist)) > Songs.Count(s => !String.IsNullOrEmpty(s.Artist)))
+			{
+				foreach (var song in Songs)
+				{
+					song.DismissArtistInfo();
+				}
+			}
 		}
 
 		public override string GetSongArtist(SongInfo song)
 		{
-			return Artist;
+			if (song == null)
+			{
+				throw new ArgumentNullException(nameof(song));
+			}
+
+			return String.IsNullOrEmpty(song.Artist) ? Artist : song.Artist;
 		}
 	}
 }

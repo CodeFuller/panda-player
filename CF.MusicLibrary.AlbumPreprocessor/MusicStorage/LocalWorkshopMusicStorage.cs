@@ -16,9 +16,9 @@ namespace CF.MusicLibrary.AlbumPreprocessor.MusicStorage
 	internal class LocalWorkshopMusicStorage : IWorkshopMusicStorage
 	{
 		private static readonly Regex AlbumDataRegex = new Regex(@"^(\d{4}) - (.+)$", RegexOptions.Compiled);
-		private static readonly Regex SongWithTrackAndArtistRegex = new Regex(@"^(\d{2}) - (.+) - (.+)$", RegexOptions.Compiled);
+		private static readonly Regex SongWithTrackAndArtistRegex = new Regex(@"^(\d{2}) - ((.+) - (.+))$", RegexOptions.Compiled);
 		private static readonly Regex SongWithTrackRegex = new Regex(@"^(\d{2}) - (.+)$", RegexOptions.Compiled);
-		private static readonly Regex SongWithArtistRegex = new Regex(@"^(.+) - (.+)$", RegexOptions.Compiled);
+		private static readonly Regex SongWithArtistRegex = new Regex(@"^((.+) - (.+))$", RegexOptions.Compiled);
 
 		private readonly string workshopRootPath;
 
@@ -98,8 +98,9 @@ namespace CF.MusicLibrary.AlbumPreprocessor.MusicStorage
 				return new SongInfo(songPath)
 				{
 					Track = Int32.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture),
-					Artist = match.Groups[2].Value,
-					Title = match.Groups[3].Value,
+					Artist = match.Groups[3].Value,
+					Title = match.Groups[4].Value,
+					FullTitle = match.Groups[2].Value,
 				};
 			}
 
@@ -111,6 +112,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.MusicStorage
 					Track = Int32.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture),
 					Artist = null,
 					Title = match.Groups[2].Value,
+					FullTitle = match.Groups[2].Value,
 				};
 			}
 
@@ -120,8 +122,9 @@ namespace CF.MusicLibrary.AlbumPreprocessor.MusicStorage
 				return new SongInfo(songPath)
 				{
 					Track = null,
-					Artist = match.Groups[1].Value,
-					Title = match.Groups[2].Value,
+					Artist = match.Groups[2].Value,
+					Title = match.Groups[3].Value,
+					FullTitle = match.Groups[1].Value,
 				};
 			}
 
