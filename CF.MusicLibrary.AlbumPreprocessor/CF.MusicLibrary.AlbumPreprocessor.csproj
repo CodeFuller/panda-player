@@ -127,6 +127,10 @@
     <Compile Include="AddingToLibrary\TaggedSongData.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="AddingToLibrary\ISongTagger.cs" />
+    <Compile Include="Events\AlbumContentChangedEventArgs.cs" />
+    <Compile Include="Events\SongTitleChangedEventArgs.cs" />
+    <Compile Include="Events\SongTitleChangeEventArgs.cs" />
+    <Compile Include="Events\SongTitleChangingEventArgs.cs" />
     <Compile Include="IWindowService.cs" />
     <Compile Include="MusicStorage\AlbumInfo.cs" />
     <Compile Include="MusicStorage\AlbumType.cs" />

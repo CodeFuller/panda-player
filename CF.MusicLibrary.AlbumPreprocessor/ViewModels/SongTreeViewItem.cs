@@ -1,15 +1,12 @@
 ﻿using System;
-using System.IO;
+using CF.MusicLibrary.AlbumPreprocessor.Events;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 {
 	public class SongTreeViewItem : EditableTreeViewItem
 	{
-		private string AlbumPath { get; set; }
-
-		private readonly AlbumTreeViewItem parentAlbum;
-
-		public string SongFileName => GetSongFileName(Title);
+		public event EventHandler<SongTitleChangingEventArgs> SongTitleChanging;
+		public event EventHandler<SongTitleChangedEventArgs> SongTitleChanged;
 
 		private string title;
 		public string Title
@@ -17,18 +14,17 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			get { return title; }
 			set
 			{
-				if (title != null)
-				{
-					//	Exception, thrown at this point, won't blow up,
-					//	because exceptions thrown from binding properties are treated as validation failures.
-					//	http://stackoverflow.com/questions/12658220/exceptions-thrown-during-a-set-operation-in-a-property-are-not-being-caught
-					//	http://stackoverflow.com/questions/1488472/best-practices-throwing-exceptions-from-properties
-					//	It's not a big problem because song title will not be updated and still will be marked as incorrect.
-					File.Move(GetSongFileName(title), GetSongFileName(value));
-					parentAlbum.ReloadContent();
-				}
+				string prevValue = title;
 
+				//	Exception, thrown during file renaming, won't blow up,
+				//	because exceptions thrown from binding properties are treated as validation failures.
+				//	http://stackoverflow.com/questions/12658220/exceptions-thrown-during-a-set-operation-in-a-property-are-not-being-caught
+				//	http://stackoverflow.com/questions/1488472/best-practices-throwing-exceptions-from-properties
+				//	It's not a big problem because song title will not be updated and still will be marked as incorrect.
+
+				SongTitleChanging?.Invoke(this, new SongTitleChangingEventArgs(prevValue, value));
 				Set(ref title, value);
+				SongTitleChanged?.Invoke(this, new SongTitleChangedEventArgs(prevValue, value));
 			}
 		}
 
@@ -42,26 +38,14 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			}
 		}
 
-		public SongTreeViewItem(AlbumTreeViewItem parentAlbum, SongContent song)
+		public SongTreeViewItem(SongContent song)
 		{
-			if (parentAlbum == null)
-			{
-				throw new ArgumentNullException(nameof(parentAlbum));
-			}
 			if (song == null)
 			{
 				throw new ArgumentNullException(nameof(song));
 			}
 
 			Title = song.Title;
-			AlbumPath = parentAlbum.AlbumDirectory;
-
-			this.parentAlbum = parentAlbum;
-		}
-
-		private string GetSongFileName(string songTitle)
-		{
-			return Path.Combine(AlbumPath, songTitle);
 		}
 	}
 }

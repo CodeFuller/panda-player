@@ -7,10 +7,12 @@ using System.Text;
 using System.Windows.Input;
 using CF.Library.Core.Facades;
 using CF.Library.Core.Interfaces;
+using CF.MusicLibrary.AlbumPreprocessor.Events;
 using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
 using CF.MusicLibrary.AlbumPreprocessor.ParsingContent;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using static System.FormattableString;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
@@ -70,8 +72,8 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			this.albumContentComparer = albumContentComparer;
 			this.addToLibraryViewModelFactory = addToLibraryViewModelFactory;
 
-			EthalonAlbums = new AlbumTreeViewModel(this);
-			CurrentAlbums = new AlbumTreeViewModel(this);
+			EthalonAlbums = new AlbumTreeViewModel();
+			CurrentAlbums = new AlbumTreeViewModel();
 
 			string appDataPath = ConfigurationManager.AppSettings["AppDataPath"];
 			RawEthalonAlbums = new EthalonContentViewModel(fileSystemFacade, appDataPath);
@@ -79,6 +81,13 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 			ReloadRawContentCommand = new RelayCommand(ReloadRawContent);
 			AddToLibraryCommand = new RelayCommand(AddToLibrary);
+
+			Messenger.Default.Register<AlbumContentChangedEventArgs>(this, OnAlbumContentChanged);
+		}
+
+		private void OnAlbumContentChanged(AlbumContentChangedEventArgs message)
+		{
+			UpdateContentCorrectness();
 		}
 
 		public void LoadDefaultContent()
@@ -122,13 +131,18 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 		private void UpdateAlbums(AlbumTreeViewModel albums, IEnumerable<AlbumContent> newAlbums)
 		{
 			albums.SetAlbums(newAlbums);
-			SetContentCorrectness();
-			ContentIsIncorrect = EthalonAlbums.ContentIsIncorrect || CurrentAlbums.ContentIsIncorrect;
+			UpdateContentCorrectness();
 		}
 
 		private void SetContentCorrectness()
 		{
 			albumContentComparer.SetAlbumsCorrectness(EthalonAlbums, CurrentAlbums);
+		}
+
+		private void UpdateContentCorrectness()
+		{
+			SetContentCorrectness();
+			ContentIsIncorrect = EthalonAlbums.ContentIsIncorrect || CurrentAlbums.ContentIsIncorrect;
 		}
 	}
 }

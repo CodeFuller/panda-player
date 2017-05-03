@@ -110,7 +110,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 			foreach (var album in albums)
 			{
-				AlbumInfo albumInfo = workshopStorage.GetAlbumInfo(album.AlbumDirectory, album.Songs.Select(s => s.SongFileName));
+				AlbumInfo albumInfo = workshopStorage.GetAlbumInfo(album.AlbumDirectory, album.SongFileNames);
 
 				if (albumInfo.Songs.Count != album.Songs.Count())
 				{

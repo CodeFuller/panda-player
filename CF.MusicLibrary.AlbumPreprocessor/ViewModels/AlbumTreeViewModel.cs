@@ -9,8 +9,6 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 {
 	public class AlbumTreeViewModel : ViewModelBase, IEnumerable<AlbumTreeViewItem>
 	{
-		private readonly MainWindowModel host;
-
 		private Collection<AlbumTreeViewItem> albums;
 		public Collection<AlbumTreeViewItem> Albums
 		{
@@ -23,21 +21,14 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 		public bool ContentIsIncorrect => Albums.Any(s => s.ContentIsIncorrect);
 
-		public AlbumTreeViewModel(MainWindowModel host)
+		public AlbumTreeViewModel()
 		{
-			this.host = host;
 			Albums = new Collection<AlbumTreeViewItem>();
 		}
 
 		public void SetAlbums(IEnumerable<AlbumContent> newAlbums)
 		{
-			Albums = newAlbums.Select(a => new AlbumTreeViewItem(this, a)).ToCollection();
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Justification = "Parameter use makes sense in method semantics.")]
-		public void ReloadAlbum(AlbumTreeViewItem album)
-		{
-			host.LoadCurrentAlbums();
+			Albums = newAlbums.Select(a => new AlbumTreeViewItem(a)).ToCollection();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
