@@ -105,7 +105,6 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 			Albums = new ObservableCollection<AddedAlbum>();
 
-			await musicLibrary.LoadAsync();
 			List<Genre> libraryGenres = (await musicLibrary.GetGenresAsync()).ToList();
 
 			foreach (var album in albums)

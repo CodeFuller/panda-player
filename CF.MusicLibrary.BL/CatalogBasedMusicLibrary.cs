@@ -17,7 +17,7 @@ namespace CF.MusicLibrary.BL
 		private readonly IArtistLibraryBuilder artistLibraryBuilder;
 		private readonly IStorageUrlBuilder storageUrlBuilder;
 
-		public ArtistLibrary ArtistLibrary { get; private set; }
+		public ArtistLibrary ArtistLibrary { get; internal set; }
 
 		public CatalogBasedMusicLibrary(IMusicCatalog musicCatalog, IMusicStorage musicStorage, IArtistLibraryBuilder artistLibraryBuilder, IStorageUrlBuilder storageUrlBuilder)
 		{

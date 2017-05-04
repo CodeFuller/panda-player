@@ -24,6 +24,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 	internal class Bootstrapper : UnityBootstrapper<MainWindowModel>
 	{
 		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "It's ok for Composition Root")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope", Justification = "LifetimeManager is disposed by container.")]
 		protected override void RegisterDependencies(IUnityContainer container)
 		{
 			string workshopDirectory = ReadAppSetting("WorkshopDirectory");
@@ -52,7 +53,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 			container.RegisterType<ILibraryBuilder, LibraryBuilder>();
 			container.RegisterType<IMusicCatalog, MusicCatalog>();
 			container.RegisterType<IMusicStorage, FilesystemMusicStorage>(new InjectionConstructor(typeof(IFileSystemFacade), localStorageRoot, moveSongFilesToLibrary));
-			container.RegisterType<IMusicLibrary, CatalogBasedMusicLibrary>();
+			container.RegisterType<IMusicLibrary, CatalogBasedMusicLibrary>(new ContainerControlledLifetimeManager());
 			container.RegisterType<IArtistLibraryBuilder, ArtistLibraryBuilder>();
 			container.RegisterType<IDiscArtistGroupper, MyLocalLibraryArtistGroupper>();
 			container.RegisterType<IStorageUrlBuilder, StorageUrlBuilder>();

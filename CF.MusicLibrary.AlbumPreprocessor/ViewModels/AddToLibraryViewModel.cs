@@ -52,6 +52,8 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 				throw new ArgumentNullException(nameof(albums));
 			}
 
+			await musicLibrary.LoadAsync();
+
 			await editAlbumsDetailsViewModel.SetAlbums(albums);
 			if (!windowService.ShowEditAlbumsDetailsWindow(editAlbumsDetailsViewModel))
 			{

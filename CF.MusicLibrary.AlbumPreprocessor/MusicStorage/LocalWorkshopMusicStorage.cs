@@ -56,7 +56,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.MusicStorage
 			else
 			{
 				bool hasSongWithoutArtist = songs.Any(s => String.IsNullOrEmpty(s.Artist));
-				bool hasSongWithArtist = !songs.Any(s => String.IsNullOrEmpty(s.Artist));
+				bool hasSongWithArtist = songs.Any(s => !String.IsNullOrEmpty(s.Artist));
 				if (hasSongWithoutArtist && hasSongWithArtist)
 				{
 					throw new InvalidInputDataException(Current($"Album '{albumPath}' has songs with and without artist name. This mode currently is not supported"));
