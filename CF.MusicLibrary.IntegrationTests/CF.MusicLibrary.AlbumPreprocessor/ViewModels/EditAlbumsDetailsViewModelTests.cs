@@ -272,6 +272,9 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.AlbumPreprocessor.Vie
 
 			//	Assert
 
+			//	Sanity check
+			Assert.IsTrue(target.RequiredDataIsFilled);
+
 			Assert.AreEqual(4, songs.Count);
 
 			var song1 = songs[0];
