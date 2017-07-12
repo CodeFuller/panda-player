@@ -61,5 +61,15 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ParsingSon
 
 			Assert.AreEqual(expectedTitle, resultTitle);
 		}
+
+		[TestCase("The 12th Hour", "The 12th Hour")]
+		public void ParseSongTitle_ForOrdinalNumber_SetsCorrectCase(string rawTitle, string expectedTitle)
+		{
+			EthalonSongParser target = new EthalonSongParser();
+
+			string resultTitle = target.ParseSongTitle(rawTitle);
+
+			Assert.AreEqual(expectedTitle, resultTitle);
+		}
 	}
 }

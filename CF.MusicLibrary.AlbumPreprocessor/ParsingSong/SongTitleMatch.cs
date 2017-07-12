@@ -48,7 +48,15 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ParsingSong
 
 		private static string CapitalizeTitle(string rawTitle)
 		{
-			return TextHasCyrillic(rawTitle) ? rawTitle : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rawTitle);
+			if (TextHasCyrillic(rawTitle))
+			{
+				return rawTitle;
+			}
+
+			var title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rawTitle);
+			//	Handling numeric ordinals, 1st, 2nd, 12th
+			return Regex.Replace(title, "(1st)|(2nd)|(3rd)|([0-9]th)",
+				m => m.Captures[0].Value.ToLower(CultureInfo.CurrentCulture), RegexOptions.IgnoreCase);
 		}
 
 		private static bool TextHasCyrillic(string text)
