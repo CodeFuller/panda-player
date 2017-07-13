@@ -70,6 +70,17 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ParsingSong
 
 				new SongTitlePattern
 				{
+					Description = "ru.wikipedia: track, «title», authors, length",
+					Source = @"https://ru.wikipedia.org/wiki/Через_все_времена",
+					Pattern = @"^\d+\.\s+«(.+?)»\s+.+\s+\d+:\d+$",
+					Tests = new Collection<SongParsingTest>
+					{
+						new SongParsingTest("1.	«Через все времена»	Маргарита Пушкина	Виталий Дубинин	5:42", "Через все времена"),
+					}
+				},
+
+				new SongTitlePattern
+				{
 					Description = "ru.wikipedia: track, «title», length",
 					Source = @"https://ru.wikipedia.org/wiki/Штормовое_предупреждение_(альбом)",
 					Pattern = @"^\d+\.\s+«(.+?)»\s+\d+:\d+$",
@@ -109,6 +120,28 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ParsingSong
 					Tests = new Collection<SongParsingTest>
 					{
 						new SongParsingTest("1.	Schnee & Rosen	03:53	  Show lyrics", "Schnee & Rosen"),
+					}
+				},
+
+				new SongTitlePattern
+				{
+					Description = "Track. Title",
+					Source = @"http://xzona.su/alternative/36644-tracktor-bowling-2016-2016.html",
+					Pattern = @"^\d+\.\s+(.+?)\s*$",
+					Tests = new Collection<SongParsingTest>
+					{
+						new SongParsingTest("01. Напролом", "Напролом"),
+					}
+				},
+
+				new SongTitlePattern
+				{
+					Description = "Quoted Title followed by optional data",
+					Source = @"http://www.tracktorbowling.ru/discography/",
+					Pattern = @"^""(.+?)""(?: .+)?$",
+					Tests = new Collection<SongParsingTest>
+					{
+						new SongParsingTest("\"Смерти нет\" текст", "Смерти нет"),
 					}
 				},
 
