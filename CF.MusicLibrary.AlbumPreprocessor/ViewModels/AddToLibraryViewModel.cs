@@ -45,7 +45,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			this.musicLibrary = musicLibrary;
 		}
 
-		public async Task AddAlbumsToLibrary(IEnumerable<AlbumTreeViewItem> albums)
+		public virtual async Task AddAlbumsToLibrary(IEnumerable<AlbumTreeViewItem> albums)
 		{
 			if (albums == null)
 			{

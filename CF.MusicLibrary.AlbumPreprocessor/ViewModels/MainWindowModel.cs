@@ -90,7 +90,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			UpdateContentCorrectness();
 		}
 
-		public void LoadDefaultContent()
+		public virtual void LoadDefaultContent()
 		{
 			RawEthalonAlbums.LoadRawEthalonAlbumsContent();
 
@@ -119,7 +119,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			UpdateAlbums(EthalonAlbums, albumContentParser.Parse(RawEthalonAlbums.Content));
 		}
 
-		public void LoadCurrentAlbums()
+		public virtual void LoadCurrentAlbums()
 		{
 			string albumsDirectory = ConfigurationManager.AppSettings["WorkshopDirectory"];
 			AlbumCrawler crawler = new AlbumCrawler(new SongFileFilter());

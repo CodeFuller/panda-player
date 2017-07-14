@@ -10,7 +10,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 	{
 		public ObservableCollection<SongTagDataViewItem> Songs { get; private set; }
 
-		public void SetSongs(IEnumerable<TaggedSongData> songs)
+		public virtual void SetSongs(IEnumerable<TaggedSongData> songs)
 		{
 			Songs = new ObservableCollection<SongTagDataViewItem>(songs.Select(s => new SongTagDataViewItem(s)));
 		}

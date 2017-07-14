@@ -96,7 +96,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			this.fileSystemFacade = fileSystemFacade;
 		}
 
-		public async Task SetAlbums(IEnumerable<AlbumTreeViewItem> albums)
+		public virtual async Task SetAlbums(IEnumerable<AlbumTreeViewItem> albums)
 		{
 			if (albums == null)
 			{

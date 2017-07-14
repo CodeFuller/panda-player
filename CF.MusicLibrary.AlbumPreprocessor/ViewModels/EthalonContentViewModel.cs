@@ -35,7 +35,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			}
 		}
 
-		public void LoadRawEthalonAlbumsContent()
+		public virtual void LoadRawEthalonAlbumsContent()
 		{
 			if (fileSystemFacade.FileExists(contentSaveFilePath))
 			{
