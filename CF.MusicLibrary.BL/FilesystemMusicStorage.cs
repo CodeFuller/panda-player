@@ -46,6 +46,8 @@ namespace CF.MusicLibrary.BL
 				{
 					fileSystemFacade.CopyFile(sourceFileName, destFileName);
 				}
+
+				fileSystemFacade.SetReadOnlyAttribute(destFileName);
 			});
 		}
 

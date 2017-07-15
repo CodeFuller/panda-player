@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using CF.Library.Core.Facades;
 using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
@@ -17,9 +18,10 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 		private readonly ISongTagger songTagger;
 		private readonly IWindowService windowService;
 		private readonly IMusicLibrary musicLibrary;
+		private readonly IFileSystemFacade fileSystemFacade;
 
 		public AddToLibraryViewModel(EditAlbumsDetailsViewModel editAlbumsDetailsViewModel, EditSongsDetailsViewModel editSongsDetailsViewModel,
-			ISongTagger songTagger, IWindowService windowService, IMusicLibrary musicLibrary)
+			ISongTagger songTagger, IWindowService windowService, IMusicLibrary musicLibrary, IFileSystemFacade fileSystemFacade)
 		{
 			if (editAlbumsDetailsViewModel == null)
 			{
@@ -37,12 +39,17 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			{
 				throw new ArgumentNullException(nameof(musicLibrary));
 			}
+			if (fileSystemFacade == null)
+			{
+				throw new ArgumentNullException(nameof(fileSystemFacade));
+			}
 
 			this.editAlbumsDetailsViewModel = editAlbumsDetailsViewModel;
 			this.editSongsDetailsViewModel = editSongsDetailsViewModel;
 			this.songTagger = songTagger;
 			this.windowService = windowService;
 			this.musicLibrary = musicLibrary;
+			this.fileSystemFacade = fileSystemFacade;
 		}
 
 		public virtual async Task AddAlbumsToLibrary(IEnumerable<AlbumTreeViewItem> albums)
@@ -79,6 +86,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 		{
 			foreach (TaggedSongData song in songs)
 			{
+				fileSystemFacade.ClearReadOnlyAttribute(song.SourceFileName);
 				await songTagger.SetTagData(song);
 			}
 		}

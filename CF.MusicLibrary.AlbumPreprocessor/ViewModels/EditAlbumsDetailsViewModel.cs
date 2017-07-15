@@ -25,7 +25,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 		private readonly IStorageUrlBuilder storageUrlBuilder;
 		private readonly IFileSystemFacade fileSystemFacade;
 
-		public ObservableCollection<AddedAlbum> Albums { get; private set; }
+		public virtual ObservableCollection<AddedAlbum> Albums { get; private set; }
 
 		public IEnumerable<AddedAlbumCoverImage> AlbumCoverImages
 		{
@@ -44,7 +44,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 		public bool RequiredDataIsFilled => Albums.All(a => a.RequiredDataIsFilled);
 
-		public IEnumerable<TaggedSongData> Songs
+		public virtual IEnumerable<TaggedSongData> Songs
 		{
 			get
 			{

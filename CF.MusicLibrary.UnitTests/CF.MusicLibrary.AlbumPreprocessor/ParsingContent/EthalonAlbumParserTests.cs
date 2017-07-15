@@ -31,10 +31,10 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ParsingCon
 				"AlbumSongContent2",
 			};
 
-			IEthalonSongParser songParserMock = Substitute.For<IEthalonSongParser>();
-			songParserMock.ParseSongTitle("AlbumSongContent1").Returns("Song1");
-			songParserMock.ParseSongTitle("AlbumSongContent2").Returns("Song2");
-			EthalonAlbumParser target = new EthalonAlbumParser(songParserMock);
+			IEthalonSongParser songParserStub = Substitute.For<IEthalonSongParser>();
+			songParserStub.ParseSongTitle("AlbumSongContent1").Returns("Song1");
+			songParserStub.ParseSongTitle("AlbumSongContent2").Returns("Song2");
+			EthalonAlbumParser target = new EthalonAlbumParser(songParserStub);
 
 			//	Act
 
