@@ -7,6 +7,14 @@ namespace CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary
 {
 	public class SongTagger : ISongTagger
 	{
+		static SongTagger()
+		{
+			// Avoiding default usage of numeric genre code.
+			// Otherwise we can't reach exact genre requested by the user.
+			// For example 'Alternative Rock' will result in 'AlternRock' for numeric genres mode.
+			TagLib.Id3v2.Tag.UseNumericGenres = false;
+		}
+
 		public async Task SetTagData(TaggedSongData tagData)
 		{
 			string extension = Path.GetExtension(tagData.SourceFileName);
