@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
+using CF.Library.Core.Configuration;
 using CF.Library.Core.Facades;
 using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.AlbumPreprocessor.Events;
@@ -14,6 +14,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using static System.FormattableString;
+using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 {
@@ -21,6 +22,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 	{
 		public static string Title => "Album Preprocessor";
 
+		private readonly IFileSystemFacade fileSystemFacade;
 		private readonly IAlbumContentParser albumContentParser;
 		private readonly IAlbumContentComparer albumContentComparer;
 		private readonly IObjectFactory<AddToLibraryViewModel> addToLibraryViewModelFactory;
@@ -68,6 +70,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 				throw new ArgumentNullException(nameof(addToLibraryViewModelFactory));
 			}
 
+			this.fileSystemFacade = fileSystemFacade;
 			this.albumContentParser = albumContentParser;
 			this.albumContentComparer = albumContentComparer;
 			this.addToLibraryViewModelFactory = addToLibraryViewModelFactory;
@@ -75,7 +78,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			EthalonAlbums = new AlbumTreeViewModel();
 			CurrentAlbums = new AlbumTreeViewModel();
 
-			string appDataPath = ConfigurationManager.AppSettings["AppDataPath"];
+			string appDataPath = AppSettings.GetRequiredValue<string>("AppDataPath");
 			RawEthalonAlbums = new EthalonContentViewModel(fileSystemFacade, appDataPath);
 			RawEthalonAlbums.PropertyChanged += OnRawEthalonAlbumsPropertyChanged;
 
@@ -112,6 +115,40 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 		{
 			AddToLibraryViewModel addToLibraryViewModel = addToLibraryViewModelFactory.CreateInstance();
 			await addToLibraryViewModel.AddAlbumsToLibrary(CurrentAlbums);
+
+			if (AppSettings.GetRequiredValue<bool>("DeleteSourceContentAfterAdding"))
+			{
+				DeleteSourceDirTree();
+			}
+		}
+
+		private void DeleteSourceDirTree()
+		{
+			foreach (var subDirectory in fileSystemFacade.EnumerateDirectories(AppSettings.GetRequiredValue<string>("WorkshopDirectory")))
+			{
+				List<string> files = new List<string>();
+				FindDirectoryFiles(subDirectory, files);
+
+				if (files.Any())
+				{
+					throw new InvalidOperationException(Current($"Could not delete directory '{subDirectory}' that contains some files"));
+				}
+
+				fileSystemFacade.DeleteDirectory(subDirectory, true);
+			}
+		}
+
+		private void FindDirectoryFiles(string directoryPath, List<string> files)
+		{
+			foreach (string subDirectory in fileSystemFacade.EnumerateDirectories(directoryPath))
+			{
+				FindDirectoryFiles(subDirectory, files);
+			}
+
+			foreach (string file in fileSystemFacade.EnumerateFiles(directoryPath))
+			{
+				files.Add(file);
+			}
 		}
 
 		private void OnRawEthalonAlbumsPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -121,9 +158,8 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 		public virtual void LoadCurrentAlbums()
 		{
-			string albumsDirectory = ConfigurationManager.AppSettings["WorkshopDirectory"];
 			AlbumCrawler crawler = new AlbumCrawler(new SongFileFilter());
-			var albums = crawler.LoadAlbums(albumsDirectory).ToList();
+			var albums = crawler.LoadAlbums(AppSettings.GetRequiredValue<string>("WorkshopDirectory")).ToList();
 
 			UpdateAlbums(CurrentAlbums, albums);
 		}

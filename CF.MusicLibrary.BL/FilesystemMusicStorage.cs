@@ -38,16 +38,7 @@ namespace CF.MusicLibrary.BL
 				string destFileName = UriToFilesystemPath(songUri);
 				fileSystemFacade.CreateDirectory(Path.GetDirectoryName(destFileName));
 
-				if (moveSongFiles)
-				{
-					fileSystemFacade.MoveFile(sourceFileName, destFileName);
-				}
-				else
-				{
-					fileSystemFacade.CopyFile(sourceFileName, destFileName);
-				}
-
-				fileSystemFacade.SetReadOnlyAttribute(destFileName);
+				StoreFile(sourceFileName, destFileName);
 			});
 		}
 
@@ -56,7 +47,21 @@ namespace CF.MusicLibrary.BL
 			string albumDirectoryPath = UriToFilesystemPath(albumUri);
 			string destFileName = Path.Combine(albumDirectoryPath, Path.GetFileName(coverImagePath));
 
-			await Task.Run(() => fileSystemFacade.CopyFile(coverImagePath, destFileName));
+			await Task.Run(() => StoreFile(coverImagePath, destFileName));
+		}
+
+		private void StoreFile(string srcFileName, string dstFileName)
+		{
+			if (moveSongFiles)
+			{
+				fileSystemFacade.MoveFile(srcFileName, dstFileName);
+			}
+			else
+			{
+				fileSystemFacade.CopyFile(srcFileName, dstFileName);
+			}
+
+			fileSystemFacade.SetReadOnlyAttribute(dstFileName);
 		}
 
 		private string UriToFilesystemPath(Uri uri)

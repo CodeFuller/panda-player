@@ -1,4 +1,5 @@
-﻿using CF.MusicLibrary.AlbumPreprocessor;
+﻿using CF.Library.Core.Configuration;
+using CF.MusicLibrary.AlbumPreprocessor;
 using CF.MusicLibrary.AlbumPreprocessor.ViewModels;
 using Microsoft.Practices.Unity;
 using NUnit.Framework;
@@ -7,30 +8,35 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.AlbumPreprocessor.Boo
 {
 	internal class TestBootstrapper : Bootstrapper
 	{
-		public void InvokeRegisterDependencies(IUnityContainer container)
+		public T Resolve<T>()
 		{
-			RegisterDependencies(container);
+			return DIContainer.Resolve<T>();
 		}
 	}
 
 	[TestFixture]
 	public class BootstrapperTests
 	{
+		[TearDown]
+		public void TearDown()
+		{
+			AppSettings.ResetSettingsProvider();
+		}
+
 		[Test]
 		public void Run_RegistersAllDependenciesForRootViewModel()
 		{
 			//	Arrange
 
-			IUnityContainer diContainer = new UnityContainer();
 			var target = new TestBootstrapper();
 
 			//	Act
 
-			target.InvokeRegisterDependencies(diContainer);
+			target.Run();
 
 			//	Assert
 
-			Assert.DoesNotThrow(() => diContainer.Resolve<MainWindowModel>());
+			Assert.DoesNotThrow(() => target.Resolve<MainWindowModel>());
 		}
 
 		[Test]
@@ -38,16 +44,15 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.AlbumPreprocessor.Boo
 		{
 			//	Arrange
 
-			IUnityContainer diContainer = new UnityContainer();
 			var target = new TestBootstrapper();
 
 			//	Act
 
-			target.InvokeRegisterDependencies(diContainer);
+			target.Run();
 
 			//	Assert
 
-			Assert.DoesNotThrow(() => diContainer.Resolve<AddToLibraryViewModel>());
+			Assert.DoesNotThrow(() => target.Resolve<AddToLibraryViewModel>());
 		}
 	}
 }

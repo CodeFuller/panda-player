@@ -30,10 +30,10 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			};
 
 			EditAlbumsDetailsViewModel editAlbumsDetailsViewModelStub = Substitute.For<EditAlbumsDetailsViewModel>(
-			Substitute.For<IMusicLibrary>(), Substitute.For<IWorkshopMusicStorage>(),
-			Substitute.For<IStorageUrlBuilder>(), Substitute.For<IFileSystemFacade>());
-			editAlbumsDetailsViewModelStub.Albums.Returns(new ObservableCollection<AddedAlbum>());
-			editAlbumsDetailsViewModelStub.Songs.Returns(Enumerable.Repeat(songData, 1));
+				Substitute.For<IMusicLibrary>(), Substitute.For<IWorkshopMusicStorage>(),
+				Substitute.For<IStorageUrlBuilder>(), Substitute.For<IFileSystemFacade>());
+				editAlbumsDetailsViewModelStub.Albums.Returns(new ObservableCollection<AddedAlbum>());
+				editAlbumsDetailsViewModelStub.Songs.Returns(Enumerable.Repeat(songData, 1));
 
 			EditSongsDetailsViewModel editSongsDetailsViewModelStub = Substitute.For<EditSongsDetailsViewModel>();
 			editSongsDetailsViewModelStub.Songs.Returns(new ObservableCollection<SongTagDataViewItem>(Enumerable.Repeat(new SongTagDataViewItem(songData), 1)));

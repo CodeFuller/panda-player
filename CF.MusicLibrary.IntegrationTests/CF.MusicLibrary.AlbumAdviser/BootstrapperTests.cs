@@ -1,4 +1,5 @@
 ﻿using CF.Library.Core.Bootstrap;
+using CF.Library.Core.Configuration;
 using CF.MusicLibrary.AlbumAdviser;
 using Microsoft.Practices.Unity;
 using NUnit.Framework;
@@ -7,30 +8,35 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.AlbumAdviser
 {
 	internal class TestBootstrapper : Bootstrapper
 	{
-		public void InvokeRegisterDependencies(IUnityContainer container)
+		public T Resolve<T>()
 		{
-			RegisterDependencies(container);
+			return DIContainer.Resolve<T>();
 		}
 	}
 
 	[TestFixture]
 	public class BootstrapperTests
 	{
+		[TearDown]
+		public void TearDown()
+		{
+			AppSettings.ResetSettingsProvider();
+		}
+
 		[Test]
 		public void RegisterDependencies_RegistersAllDependenciesForApplicationLogic()
 		{
 			//	Arrange
 
-			IUnityContainer diContainer = new UnityContainer();
 			var target = new TestBootstrapper();
 
 			//	Act
 
-			target.InvokeRegisterDependencies(diContainer);
+			target.Run();
 
 			//	Assert
 
-			Assert.DoesNotThrow(() => diContainer.Resolve<IApplicationLogic>());
+			Assert.DoesNotThrow(() => target.Resolve<IApplicationLogic>());
 		}
 	}
 }
