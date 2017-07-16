@@ -2,15 +2,16 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
+using CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 {
-	public class EditSongsDetailsViewModel : ViewModelBase
+	public class EditSongsDetailsViewModel : ViewModelBase, IEditSongsDetailsViewModel
 	{
-		public virtual ObservableCollection<SongTagDataViewItem> Songs { get; private set; }
+		public ObservableCollection<SongTagDataViewItem> Songs { get; private set; }
 
-		public virtual void SetSongs(IEnumerable<TaggedSongData> songs)
+		public void SetSongs(IEnumerable<TaggedSongData> songs)
 		{
 			Songs = new ObservableCollection<SongTagDataViewItem>(songs.Select(s => new SongTagDataViewItem(s)));
 		}

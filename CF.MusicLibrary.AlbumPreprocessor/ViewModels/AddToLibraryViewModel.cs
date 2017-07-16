@@ -5,22 +5,23 @@ using System.Threading.Tasks;
 using System.Windows;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
+using CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
 using GalaSoft.MvvmLight;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 {
-	public class AddToLibraryViewModel : ViewModelBase
+	public class AddToLibraryViewModel : ViewModelBase, IAddToLibraryViewModel
 	{
-		private readonly EditAlbumsDetailsViewModel editAlbumsDetailsViewModel;
-		private readonly EditSongsDetailsViewModel editSongsDetailsViewModel;
+		private readonly IEditAlbumsDetailsViewModel editAlbumsDetailsViewModel;
+		private readonly IEditSongsDetailsViewModel editSongsDetailsViewModel;
 		private readonly ISongTagger songTagger;
 		private readonly IWindowService windowService;
 		private readonly IMusicLibrary musicLibrary;
 		private readonly IFileSystemFacade fileSystemFacade;
 
-		public AddToLibraryViewModel(EditAlbumsDetailsViewModel editAlbumsDetailsViewModel, EditSongsDetailsViewModel editSongsDetailsViewModel,
+		public AddToLibraryViewModel(IEditAlbumsDetailsViewModel editAlbumsDetailsViewModel, IEditSongsDetailsViewModel editSongsDetailsViewModel,
 			ISongTagger songTagger, IWindowService windowService, IMusicLibrary musicLibrary, IFileSystemFacade fileSystemFacade)
 		{
 			if (editAlbumsDetailsViewModel == null)
@@ -52,7 +53,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			this.fileSystemFacade = fileSystemFacade;
 		}
 
-		public virtual async Task AddAlbumsToLibrary(IEnumerable<AlbumTreeViewItem> albums)
+		public async Task AddAlbumsToLibrary(IEnumerable<AlbumTreeViewItem> albums)
 		{
 			if (albums == null)
 			{

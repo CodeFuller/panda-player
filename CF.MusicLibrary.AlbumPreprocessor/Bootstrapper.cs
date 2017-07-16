@@ -12,6 +12,7 @@ using CF.MusicLibrary.AlbumPreprocessor.MusicStorage;
 using CF.MusicLibrary.AlbumPreprocessor.ParsingContent;
 using CF.MusicLibrary.AlbumPreprocessor.ParsingSong;
 using CF.MusicLibrary.AlbumPreprocessor.ViewModels;
+using CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.MyLocalLibrary;
@@ -48,7 +49,11 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 			DIContainer.RegisterType<IAlbumContentComparer, AlbumContentComparer>();
 			DIContainer.RegisterType<IWorkshopMusicStorage, LocalWorkshopMusicStorage>(new InjectionConstructor(workshopDirectory));
 			DIContainer.RegisterType<IWindowService, WpfWindowService>();
-			DIContainer.RegisterType<IObjectFactory<AddToLibraryViewModel>, UnityBasedObjectFactory<AddToLibraryViewModel>>(new InjectionConstructor(DIContainer));
+			DIContainer.RegisterType<IAddToLibraryViewModel, AddToLibraryViewModel>();
+			DIContainer.RegisterType<IEditAlbumsDetailsViewModel, EditAlbumsDetailsViewModel>();
+			DIContainer.RegisterType<IEditSongsDetailsViewModel, EditSongsDetailsViewModel>();
+			DIContainer.RegisterType<MainWindowModel>();
+			DIContainer.RegisterType<IObjectFactory<IAddToLibraryViewModel>, UnityBasedObjectFactory<IAddToLibraryViewModel>>(new InjectionConstructor(DIContainer));
 			DIContainer.RegisterType<DbProviderFactory>(new InjectionFactory(context =>
 				DbProviderFactories.GetFactory(mediaMonkeyConnectionString.ProviderName)));
 			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepository>(
@@ -61,8 +66,6 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 			DIContainer.RegisterType<IDiscArtistGroupper, MyLocalLibraryArtistGroupper>();
 			DIContainer.RegisterType<IStorageUrlBuilder, StorageUrlBuilder>();
 			DIContainer.RegisterType<ISongTagger, SongTagger>();
-			DIContainer.RegisterType<MainWindowModel>(
-				new InjectionConstructor(typeof(IFileSystemFacade), typeof(IAlbumContentParser), typeof(IAlbumContentComparer), typeof(IObjectFactory<AddToLibraryViewModel>)));
 		}
 	}
 }

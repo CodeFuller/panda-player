@@ -1,14 +1,10 @@
 ﻿using CF.Library.Core.Configuration;
 using CF.Library.Core.Facades;
 using CF.Library.Core.Interfaces;
-using CF.MusicLibrary.AlbumPreprocessor;
-using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
-using CF.MusicLibrary.AlbumPreprocessor.MusicStorage;
 using CF.MusicLibrary.AlbumPreprocessor.ParsingContent;
 using CF.MusicLibrary.AlbumPreprocessor.ViewModels;
-using CF.MusicLibrary.BL;
-using CF.MusicLibrary.BL.Interfaces;
+using CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -36,15 +32,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.EnumerateDirectories("SomeWorkshopDirectory").Returns(new[] { @"SomeWorkshopDirectory\SubDir1", @"SomeWorkshopDirectory\SubDir2" });
 
-			EditAlbumsDetailsViewModel editAlbumsDetailsViewModelStub = Substitute.For<EditAlbumsDetailsViewModel>(
-				Substitute.For<IMusicLibrary>(), Substitute.For<IWorkshopMusicStorage>(),
-				Substitute.For<IStorageUrlBuilder>(), Substitute.For<IFileSystemFacade>());
-
-			AddToLibraryViewModel addToLibraryViewModelStub = Substitute.For<AddToLibraryViewModel>(editAlbumsDetailsViewModelStub, Substitute.For<EditSongsDetailsViewModel>(), 
-				Substitute.For<ISongTagger>(), Substitute.For<IWindowService>(), Substitute.For<IMusicLibrary>(), Substitute.For<IFileSystemFacade>());
-
-			IObjectFactory<AddToLibraryViewModel> addToLibraryViewModelFactory = Substitute.For<IObjectFactory<AddToLibraryViewModel>>();
-			addToLibraryViewModelFactory.CreateInstance().Returns(addToLibraryViewModelStub);
+			IObjectFactory<IAddToLibraryViewModel> addToLibraryViewModelFactory = Substitute.For<IObjectFactory<IAddToLibraryViewModel>>();
+			addToLibraryViewModelFactory.CreateInstance().Returns(Substitute.For<IAddToLibraryViewModel>());
 
 			MainWindowModel target = new MainWindowModel(fileSystemMock, Substitute.For<IAlbumContentParser>(), Substitute.For<IAlbumContentComparer>(),
 				addToLibraryViewModelFactory);
@@ -74,15 +63,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			fileSystemMock.EnumerateDirectories(@"SomeWorkshopDirectory\SubDir").Returns(new[] { @"SomeWorkshopDirectory\SubDir\DeeperDir" });
 			fileSystemMock.EnumerateFiles(@"SomeWorkshopDirectory\SubDir\DeeperDir").Returns(new[] { @"SomeWorkshopDirectory\SubDir\DeeperDir\SomeFile.mp3" });
 
-			EditAlbumsDetailsViewModel editAlbumsDetailsViewModelStub = Substitute.For<EditAlbumsDetailsViewModel>(
-				Substitute.For<IMusicLibrary>(), Substitute.For<IWorkshopMusicStorage>(),
-				Substitute.For<IStorageUrlBuilder>(), Substitute.For<IFileSystemFacade>());
-
-			AddToLibraryViewModel addToLibraryViewModelStub = Substitute.For<AddToLibraryViewModel>(editAlbumsDetailsViewModelStub, Substitute.For<EditSongsDetailsViewModel>(),
-				Substitute.For<ISongTagger>(), Substitute.For<IWindowService>(), Substitute.For<IMusicLibrary>(), Substitute.For<IFileSystemFacade>());
-
-			IObjectFactory<AddToLibraryViewModel> addToLibraryViewModelFactory = Substitute.For<IObjectFactory<AddToLibraryViewModel>>();
-			addToLibraryViewModelFactory.CreateInstance().Returns(addToLibraryViewModelStub);
+			IObjectFactory<IAddToLibraryViewModel> addToLibraryViewModelFactory = Substitute.For<IObjectFactory<IAddToLibraryViewModel>>();
+			addToLibraryViewModelFactory.CreateInstance().Returns(Substitute.For<IAddToLibraryViewModel>());
 
 			MainWindowModel target = new MainWindowModel(fileSystemMock, Substitute.For<IAlbumContentParser>(), Substitute.For<IAlbumContentComparer>(),
 				addToLibraryViewModelFactory);
@@ -109,15 +91,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.EnumerateDirectories("SomeWorkshopDirectory").Returns(new[] { @"SomeWorkshopDirectory\SubDir" });
 
-			EditAlbumsDetailsViewModel editAlbumsDetailsViewModelStub = Substitute.For<EditAlbumsDetailsViewModel>(
-				Substitute.For<IMusicLibrary>(), Substitute.For<IWorkshopMusicStorage>(),
-				Substitute.For<IStorageUrlBuilder>(), Substitute.For<IFileSystemFacade>());
-
-			AddToLibraryViewModel addToLibraryViewModelStub = Substitute.For<AddToLibraryViewModel>(editAlbumsDetailsViewModelStub, Substitute.For<EditSongsDetailsViewModel>(),
-				Substitute.For<ISongTagger>(), Substitute.For<IWindowService>(), Substitute.For<IMusicLibrary>(), Substitute.For<IFileSystemFacade>());
-
-			IObjectFactory<AddToLibraryViewModel> addToLibraryViewModelFactory = Substitute.For<IObjectFactory<AddToLibraryViewModel>>();
-			addToLibraryViewModelFactory.CreateInstance().Returns(addToLibraryViewModelStub);
+			IObjectFactory<IAddToLibraryViewModel> addToLibraryViewModelFactory = Substitute.For<IObjectFactory<IAddToLibraryViewModel>>();
+			addToLibraryViewModelFactory.CreateInstance().Returns(Substitute.For<IAddToLibraryViewModel>());
 
 			MainWindowModel target = new MainWindowModel(fileSystemMock, Substitute.For<IAlbumContentParser>(), Substitute.For<IAlbumContentComparer>(),
 				addToLibraryViewModelFactory);

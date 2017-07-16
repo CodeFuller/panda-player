@@ -9,6 +9,7 @@ using CF.Library.Core.Exceptions;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.AlbumPreprocessor.MusicStorage;
+using CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
@@ -16,7 +17,7 @@ using GalaSoft.MvvmLight;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 {
-	public class EditAlbumsDetailsViewModel : ViewModelBase
+	public class EditAlbumsDetailsViewModel : ViewModelBase, IEditAlbumsDetailsViewModel
 	{
 		private const string CoverImageFileName = "cover.jpg";
 
@@ -25,7 +26,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 		private readonly IStorageUrlBuilder storageUrlBuilder;
 		private readonly IFileSystemFacade fileSystemFacade;
 
-		public virtual ObservableCollection<AddedAlbum> Albums { get; private set; }
+		public ObservableCollection<AddedAlbum> Albums { get; private set; }
 
 		public IEnumerable<AddedAlbumCoverImage> AlbumCoverImages
 		{
@@ -44,7 +45,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 		public bool RequiredDataIsFilled => Albums.All(a => a.RequiredDataIsFilled);
 
-		public virtual IEnumerable<TaggedSongData> Songs
+		public IEnumerable<TaggedSongData> Songs
 		{
 			get
 			{
@@ -96,7 +97,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			this.fileSystemFacade = fileSystemFacade;
 		}
 
-		public virtual async Task SetAlbums(IEnumerable<AlbumTreeViewItem> albums)
+		public async Task SetAlbums(IEnumerable<AlbumTreeViewItem> albums)
 		{
 			if (albums == null)
 			{

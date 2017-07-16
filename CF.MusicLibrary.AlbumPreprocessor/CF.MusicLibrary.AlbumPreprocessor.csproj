@@ -159,6 +159,9 @@
     <Compile Include="SongFileFilter.cs" />
     <Compile Include="ViewModels\EditAlbumsDetailsViewModel.cs" />
     <Compile Include="ViewModels\EditSongsDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IAddToLibraryViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IEditAlbumsDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IEditSongsDetailsViewModel.cs" />
     <Compile Include="ViewModels\SongTagDataViewItem.cs" />
     <Compile Include="Views\EditAlbumsDetailsWindow.xaml.cs">
       <DependentUpon>EditAlbumsDetailsWindow.xaml</DependentUpon>

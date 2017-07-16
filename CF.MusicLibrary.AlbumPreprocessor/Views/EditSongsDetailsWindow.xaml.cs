@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using CF.MusicLibrary.AlbumPreprocessor.ViewModels;
+using CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.Views
 {
@@ -8,7 +8,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.Views
 	/// </summary>
 	public partial class EditSongsDetailsWindow : Window
 	{
-		public EditSongsDetailsWindow(EditSongsDetailsViewModel model)
+		public EditSongsDetailsWindow(IEditSongsDetailsViewModel model)
 		{
 			InitializeComponent();
 			DataContext = model;

@@ -26,7 +26,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			Albums = new Collection<AlbumTreeViewItem>();
 		}
 
-		public virtual void SetAlbums(IEnumerable<AlbumContent> newAlbums)
+		public void SetAlbums(IEnumerable<AlbumContent> newAlbums)
 		{
 			Albums = newAlbums.Select(a => new AlbumTreeViewItem(a)).ToCollection();
 		}

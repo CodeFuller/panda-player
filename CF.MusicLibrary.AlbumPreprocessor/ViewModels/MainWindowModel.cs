@@ -10,6 +10,7 @@ using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.AlbumPreprocessor.Events;
 using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
 using CF.MusicLibrary.AlbumPreprocessor.ParsingContent;
+using CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
@@ -25,7 +26,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 		private readonly IFileSystemFacade fileSystemFacade;
 		private readonly IAlbumContentParser albumContentParser;
 		private readonly IAlbumContentComparer albumContentComparer;
-		private readonly IObjectFactory<AddToLibraryViewModel> addToLibraryViewModelFactory;
+		private readonly IObjectFactory<IAddToLibraryViewModel> addToLibraryViewModelFactory;
 
 		private bool contentIsIncorrect;
 		public bool ContentIsIncorrect
@@ -51,7 +52,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			IFileSystemFacade fileSystemFacade,
 			IAlbumContentParser albumContentParser,
 			IAlbumContentComparer albumContentComparer,
-			IObjectFactory<AddToLibraryViewModel> addToLibraryViewModelFactory)
+			IObjectFactory<IAddToLibraryViewModel> addToLibraryViewModelFactory)
 		{
 			if (fileSystemFacade == null)
 			{
@@ -93,7 +94,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			UpdateContentCorrectness();
 		}
 
-		public virtual void LoadDefaultContent()
+		public void LoadDefaultContent()
 		{
 			RawEthalonAlbums.LoadRawEthalonAlbumsContent();
 
@@ -113,7 +114,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 		private async void AddToLibrary()
 		{
-			AddToLibraryViewModel addToLibraryViewModel = addToLibraryViewModelFactory.CreateInstance();
+			IAddToLibraryViewModel addToLibraryViewModel = addToLibraryViewModelFactory.CreateInstance();
 			await addToLibraryViewModel.AddAlbumsToLibrary(CurrentAlbums);
 
 			if (AppSettings.GetRequiredValue<bool>("DeleteSourceContentAfterAdding"))
@@ -156,7 +157,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			UpdateAlbums(EthalonAlbums, albumContentParser.Parse(RawEthalonAlbums.Content));
 		}
 
-		public virtual void LoadCurrentAlbums()
+		public void LoadCurrentAlbums()
 		{
 			AlbumCrawler crawler = new AlbumCrawler(new SongFileFilter());
 			var albums = crawler.LoadAlbums(AppSettings.GetRequiredValue<string>("WorkshopDirectory")).ToList();

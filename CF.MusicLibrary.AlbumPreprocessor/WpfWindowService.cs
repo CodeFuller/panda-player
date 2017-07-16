@@ -1,18 +1,18 @@
 ﻿using System.Windows;
-using CF.MusicLibrary.AlbumPreprocessor.ViewModels;
+using CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces;
 using CF.MusicLibrary.AlbumPreprocessor.Views;
 
 namespace CF.MusicLibrary.AlbumPreprocessor
 {
 	internal class WpfWindowService : IWindowService
 	{
-		public bool ShowEditAlbumsDetailsWindow(EditAlbumsDetailsViewModel viewModel)
+		public bool ShowEditAlbumsDetailsWindow(IEditAlbumsDetailsViewModel viewModel)
 		{
 			var window = new EditAlbumsDetailsWindow(viewModel);
 			return window.ShowDialog() ?? false;
 		}
 
-		public bool ShowEditSongsDetailsWindow(EditSongsDetailsViewModel viewModel)
+		public bool ShowEditSongsDetailsWindow(IEditSongsDetailsViewModel viewModel)
 		{
 			var window = new EditSongsDetailsWindow(viewModel);
 			return window.ShowDialog() ?? false;
