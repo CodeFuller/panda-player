@@ -40,6 +40,9 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>AlbumPreprocessor.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CF.Library.Core, Version=0.1.6406.20693, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CF.Library.Core.0.1.6406.20693\lib\net462\CF.Library.Core.dll</HintPath>
@@ -255,6 +258,9 @@
       <Project>{733319E0-D824-4FCF-99A8-2F1592A6D26C}</Project>
       <Name>CF.MusicLibrary.Dal.MediaMonkey</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="AlbumPreprocessor.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SlowCheetah.2.5.48\build\SlowCheetah.targets" Condition="Exists('..\packages\SlowCheetah.2.5.48\build\SlowCheetah.targets')" />
