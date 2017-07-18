@@ -53,7 +53,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			this.fileSystemFacade = fileSystemFacade;
 		}
 
-		public async Task AddAlbumsToLibrary(IEnumerable<AlbumTreeViewItem> albums)
+		public async Task<bool> AddAlbumsToLibrary(IEnumerable<AlbumTreeViewItem> albums)
 		{
 			if (albums == null)
 			{
@@ -65,13 +65,13 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			await editAlbumsDetailsViewModel.SetAlbums(albums);
 			if (!windowService.ShowEditAlbumsDetailsWindow(editAlbumsDetailsViewModel))
 			{
-				return;
+				return false;
 			}
 
 			editSongsDetailsViewModel.SetSongs(editAlbumsDetailsViewModel.Songs);
 			if (!windowService.ShowEditSongsDetailsWindow(editSongsDetailsViewModel))
 			{
-				return;
+				return false;
 			}
 
 			List<TaggedSongData> songsTagData = editSongsDetailsViewModel.Songs.Select(s => s.TagData).ToList();
@@ -81,6 +81,8 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 			await StoreAlbumsInLibrary(songsTagData, editAlbumsDetailsViewModel.AlbumCoverImages);
 			windowService.ShowMessageBox("Successfully added songs to the library. Don't forget to reindex in MediaMonkey", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+			return true;
 		}
 
 		private async Task SetTags(IEnumerable<TaggedSongData> songs)

@@ -5,6 +5,6 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces
 {
 	public interface IAddToLibraryViewModel
 	{
-		Task AddAlbumsToLibrary(IEnumerable<AlbumTreeViewItem> albums);
+		Task<bool> AddAlbumsToLibrary(IEnumerable<AlbumTreeViewItem> albums);
 	}
 }

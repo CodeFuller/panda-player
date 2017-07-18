@@ -115,9 +115,9 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 		private async void AddToLibrary()
 		{
 			IAddToLibraryViewModel addToLibraryViewModel = addToLibraryViewModelFactory.CreateInstance();
-			await addToLibraryViewModel.AddAlbumsToLibrary(CurrentAlbums);
+			bool added = await addToLibraryViewModel.AddAlbumsToLibrary(CurrentAlbums);
 
-			if (AppSettings.GetRequiredValue<bool>("DeleteSourceContentAfterAdding"))
+			if (added && AppSettings.GetRequiredValue<bool>("DeleteSourceContentAfterAdding"))
 			{
 				DeleteSourceDirTree();
 			}
