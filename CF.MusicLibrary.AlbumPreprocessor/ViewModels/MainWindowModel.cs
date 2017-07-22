@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Core.Configuration;
 using CF.Library.Core.Facades;
@@ -84,7 +85,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			RawEthalonAlbums.PropertyChanged += OnRawEthalonAlbumsPropertyChanged;
 
 			ReloadRawContentCommand = new RelayCommand(ReloadRawContent);
-			AddToLibraryCommand = new RelayCommand(AddToLibrary);
+			AddToLibraryCommand = new AsyncRelayCommand(AddToLibrary);
 
 			Messenger.Default.Register<AlbumContentChangedEventArgs>(this, OnAlbumContentChanged);
 		}
@@ -101,7 +102,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			LoadCurrentAlbums();
 		}
 
-		private void ReloadRawContent()
+		public void ReloadRawContent()
 		{
 			var contentBuilder = new StringBuilder();
 			foreach (var album in CurrentAlbums.Albums)
@@ -112,7 +113,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			RawEthalonAlbums.Content = contentBuilder.ToString();
 		}
 
-		private async void AddToLibrary()
+		public async Task AddToLibrary()
 		{
 			IAddToLibraryViewModel addToLibraryViewModel = addToLibraryViewModelFactory.CreateInstance();
 			bool added = await addToLibraryViewModel.AddAlbumsToLibrary(CurrentAlbums);
@@ -132,7 +133,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 				if (files.Any())
 				{
-					throw new InvalidOperationException(Current($"Could not delete directory '{subDirectory}' that contains some files"));
+					return;
 				}
 
 				fileSystemFacade.DeleteDirectory(subDirectory, true);

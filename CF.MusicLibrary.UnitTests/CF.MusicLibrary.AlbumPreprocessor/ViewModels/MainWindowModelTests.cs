@@ -43,7 +43,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 			//	Act
 
-			target.AddToLibraryCommand.Execute(null);
+			target.AddToLibrary().Wait();
 
 			//	Assert
 
@@ -74,7 +74,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 			//	Act
 
-			target.AddToLibraryCommand.Execute(null);
+			target.AddToLibrary().Wait();
 
 			//	Assert
 
@@ -104,7 +104,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 			//	Act
 
-			target.AddToLibraryCommand.Execute(null);
+			target.AddToLibrary().Wait();
 
 			//	Assert
 
@@ -136,7 +136,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 			//	Act
 
-			target.AddToLibraryCommand.Execute(null);
+			target.AddToLibrary().Wait();
 
 			//	Assert
 

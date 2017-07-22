@@ -128,6 +128,7 @@
     <Compile Include="AddingToLibrary\AddedCompilationAlbumWithoutArtistInfo.cs" />
     <Compile Include="AddingToLibrary\SongTagger.cs" />
     <Compile Include="AddingToLibrary\TaggedSongData.cs" />
+    <Compile Include="AsyncRelayCommand.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="AddingToLibrary\ISongTagger.cs" />
     <Compile Include="Events\AlbumContentChangedEventArgs.cs" />
