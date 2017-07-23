@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Linq;
+using CF.Library.Core.Configuration;
 using CF.Library.Core.Facades;
-using CF.MusicLibrary.AlbumPreprocessor;
 using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.AlbumPreprocessor.ViewModels;
-using CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces;
 using CF.MusicLibrary.BL.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
@@ -15,42 +12,116 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.ViewModels
 	[TestFixture]
 	public class AddToLibraryViewModelTests
 	{
+		[TearDown]
+		public void TearDown()
+		{
+			AppSettings.ResetSettingsProvider();
+		}
+
 		[Test]
 		public void AddAlbumsToLibrary_ClearsReadOnlyAttributeBeforeTagging()
 		{
 			//	Arrange
-
-			AlbumContent albumContent = new AlbumContent(String.Empty, Enumerable.Empty<string>());
-			AlbumTreeViewItem albumItem = new AlbumTreeViewItem(albumContent);
 
 			TaggedSongData songData = new TaggedSongData
 			{
 				SourceFileName = @"SomeSongPath\SomeSongFile.mp3"
 			};
 
-			IEditAlbumsDetailsViewModel editAlbumsDetailsViewModelStub = Substitute.For<IEditAlbumsDetailsViewModel>();
-			editAlbumsDetailsViewModelStub.Albums.Returns(new ObservableCollection<AddedAlbum>());
-			editAlbumsDetailsViewModelStub.Songs.Returns(Enumerable.Repeat(songData, 1));
+			ISettingsProvider settingsProvider = Substitute.For<ISettingsProvider>();
+			settingsProvider.GetRequiredValue<string>("WorkshopDirectory").Returns("SomeWorkshopDirectory");
+			AppSettings.SettingsProvider = settingsProvider;
 
-			IEditSongsDetailsViewModel editSongsDetailsViewModelStub = Substitute.For<IEditSongsDetailsViewModel>();
-			editSongsDetailsViewModelStub.Songs.Returns(new ObservableCollection<SongTagDataViewItem>(Enumerable.Repeat(new SongTagDataViewItem(songData), 1)));
-
-			IWindowService windowServiceStub = Substitute.For<IWindowService>();
-			windowServiceStub.ShowEditAlbumsDetailsWindow(editAlbumsDetailsViewModelStub).Returns(true);
-			windowServiceStub.ShowEditSongsDetailsWindow(Arg.Any<IEditSongsDetailsViewModel>()).Returns(true);
-				
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 
-			AddToLibraryViewModel target = new AddToLibraryViewModel(editAlbumsDetailsViewModelStub, editSongsDetailsViewModelStub,
-				Substitute.For<ISongTagger>(), windowServiceStub, Substitute.For<IMusicLibrary>(), fileSystemMock);
+			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<ISongTagger>(), Substitute.For<IMusicLibrary>(), fileSystemMock);
+			target.SetSongsTagData(Enumerable.Repeat(songData, 1));
 
 			//	Act
 
-			target.AddAlbumsToLibrary(Enumerable.Repeat(albumItem, 1)).Wait();
+			target.AddContentToLibrary().Wait();
 
 			//	Assert
 
 			fileSystemMock.Received(1).ClearReadOnlyAttribute(@"SomeSongPath\SomeSongFile.mp3");
+		}
+
+		[Test]
+		public void AddToLibraryCommand_AfterAddingAlbumsToLibrary_DeletesSourceDirTree()
+		{
+			//	Arrange
+
+			ISettingsProvider settingsProvider = Substitute.For<ISettingsProvider>();
+			settingsProvider.GetRequiredValue<string>("WorkshopDirectory").Returns("SomeWorkshopDirectory");
+			settingsProvider.GetRequiredValue<bool>("DeleteSourceContentAfterAdding").Returns(true);
+			AppSettings.SettingsProvider = settingsProvider;
+
+			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
+			fileSystemMock.EnumerateDirectories("SomeWorkshopDirectory").Returns(new[] { @"SomeWorkshopDirectory\SubDir1", @"SomeWorkshopDirectory\SubDir2" });
+
+			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<ISongTagger>(), Substitute.For<IMusicLibrary>(), fileSystemMock);
+			target.SetSongsTagData(Enumerable.Repeat(new TaggedSongData { SourceFileName = @"SomeSongPath\SomeSongFile.mp3" }, 1));
+
+			//	Act
+
+			target.AddContentToLibrary().Wait();
+
+			//	Assert
+
+			fileSystemMock.Received(1).DeleteDirectory(@"SomeWorkshopDirectory\SubDir1", true);
+			fileSystemMock.Received(1).DeleteDirectory(@"SomeWorkshopDirectory\SubDir2", true);
+		}
+
+		[Test]
+		public void AddToLibraryCommand_IfDeleteSourceContentAfterAddingIsFalse_DoesNotDeleteSourceDirTree()
+		{
+			//	Arrange
+
+			ISettingsProvider settingsProvider = Substitute.For<ISettingsProvider>();
+			settingsProvider.GetRequiredValue<string>("WorkshopDirectory").Returns("SomeWorkshopDirectory");
+			settingsProvider.GetRequiredValue<bool>("DeleteSourceContentAfterAdding").Returns(false);
+			AppSettings.SettingsProvider = settingsProvider;
+
+			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
+			fileSystemMock.EnumerateDirectories("SomeWorkshopDirectory").Returns(new[] { @"SomeWorkshopDirectory\SubDir1", @"SomeWorkshopDirectory\SubDir2" });
+
+			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<ISongTagger>(), Substitute.For<IMusicLibrary>(), fileSystemMock);
+			target.SetSongsTagData(Enumerable.Repeat(new TaggedSongData { SourceFileName = @"SomeSongPath\SomeSongFile.mp3" }, 1));
+
+			//	Act
+
+			target.AddContentToLibrary().Wait();
+
+			//	Assert
+
+			fileSystemMock.DidNotReceiveWithAnyArgs().DeleteDirectory(Arg.Any<string>(), Arg.Any<bool>());
+		}
+
+		[Test]
+		public void AddToLibraryCommand_IfSomeSubDirectoryContainsFiles_DoesNotDeleteSourceDirTree()
+		{
+			//	Arrange
+
+			ISettingsProvider settingsProvider = Substitute.For<ISettingsProvider>();
+			settingsProvider.GetRequiredValue<string>("WorkshopDirectory").Returns("SomeWorkshopDirectory");
+			settingsProvider.GetRequiredValue<bool>("DeleteSourceContentAfterAdding").Returns(true);
+			AppSettings.SettingsProvider = settingsProvider;
+
+			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
+			fileSystemMock.EnumerateDirectories("SomeWorkshopDirectory").Returns(new[] { @"SomeWorkshopDirectory\SubDir" });
+			fileSystemMock.EnumerateDirectories(@"SomeWorkshopDirectory\SubDir").Returns(new[] { @"SomeWorkshopDirectory\SubDir\DeeperDir" });
+			fileSystemMock.EnumerateFiles(@"SomeWorkshopDirectory\SubDir\DeeperDir").Returns(new[] { @"SomeWorkshopDirectory\SubDir\DeeperDir\SomeFile.mp3" });
+
+			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<ISongTagger>(), Substitute.For<IMusicLibrary>(), fileSystemMock);
+			target.SetSongsTagData(Enumerable.Repeat(new TaggedSongData { SourceFileName = @"SomeSongPath\SomeSongFile.mp3" }, 1));
+
+			//	Act
+
+			target.AddContentToLibrary().Wait();
+
+			//	Assert
+
+			fileSystemMock.DidNotReceive().DeleteDirectory(@"SomeWorkshopDirectory\SubDir", true);
 		}
 	}
 }

@@ -9,6 +9,10 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 {
 	public class EditSongsDetailsViewModel : ViewModelBase, IEditSongsDetailsViewModel
 	{
+		public string Name => "Edit Songs Details";
+
+		public bool DataIsReady => Songs.Any();
+
 		public ObservableCollection<SongTagDataViewItem> Songs { get; private set; }
 
 		public void SetSongs(IEnumerable<TaggedSongData> songs)

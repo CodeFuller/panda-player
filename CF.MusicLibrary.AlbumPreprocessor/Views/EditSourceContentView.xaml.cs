@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Controls;
-using CF.MusicLibrary.AlbumPreprocessor.ViewModels;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.Views
 {
@@ -26,14 +24,13 @@ namespace CF.MusicLibrary.AlbumPreprocessor.Views
 	}
 
 	/// <summary>
-	/// Interaction logic for MainWindow.xaml
+	/// Interaction logic for EditSourceContentView.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class EditSourceContentView : UserControl
 	{
-		public MainWindow(MainWindowModel model)
+		public EditSourceContentView()
 		{
 			InitializeComponent();
-			DataContext = model;
 		}
 
 		private void ScrollChanged(object sender, ScrollChangedEventArgs e)

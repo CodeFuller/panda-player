@@ -6,7 +6,7 @@ using System.Linq;
 using CF.MusicLibrary.AlbumPreprocessor.Events;
 using GalaSoft.MvvmLight.Messaging;
 
-namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
+namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels.SourceContent
 {
 	public class AlbumTreeViewItem : EditableTreeViewItem
 	{

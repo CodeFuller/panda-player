@@ -6,6 +6,7 @@ using CF.MusicLibrary.AlbumPreprocessor;
 using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.AlbumPreprocessor.MusicStorage;
 using CF.MusicLibrary.AlbumPreprocessor.ViewModels;
+using CF.MusicLibrary.AlbumPreprocessor.ViewModels.SourceContent;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
@@ -144,11 +145,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.AlbumPreprocessor.Vie
 			AlbumTreeViewItem album = new AlbumTreeViewItem(albumContent);
 
 			LibraryArtist artist = new LibraryArtist("SomeId", "Some Artist", new Uri("/SomeCategory/Some Artist", UriKind.Relative));
+			IArtistLibraryBuilder artistLibraryBuilder = Substitute.For<IArtistLibraryBuilder>();
+			artistLibraryBuilder.Build(Arg.Any<DiscLibrary>()).Returns(new ArtistLibrary(Enumerable.Repeat(artist, 1)));
+
 			var musicLibrary = new CatalogBasedMusicLibrary(Substitute.For<IMusicCatalog>(),
-				Substitute.For<IMusicStorage>(), Substitute.For<IArtistLibraryBuilder>(), Substitute.For<IStorageUrlBuilder>())
-			{
-				ArtistLibrary = new ArtistLibrary(Enumerable.Repeat(artist, 1))
-			};
+				Substitute.For<IMusicStorage>(), artistLibraryBuilder, Substitute.For<IStorageUrlBuilder>());
 
 			var target = new EditAlbumsDetailsViewModel(musicLibrary, new LocalWorkshopMusicStorage(TestWorkshopMusicStorage),
 				new StorageUrlBuilder(), Substitute.For<IFileSystemFacade>());
@@ -207,11 +208,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.AlbumPreprocessor.Vie
 				}
 			}));
 
+			IArtistLibraryBuilder artistLibraryBuilder = Substitute.For<IArtistLibraryBuilder>();
+			artistLibraryBuilder.Build(Arg.Any<DiscLibrary>()).Returns(new ArtistLibrary(Enumerable.Repeat(artist, 1)));
+
 			var musicLibrary = new CatalogBasedMusicLibrary(Substitute.For<IMusicCatalog>(),
-				Substitute.For<IMusicStorage>(), Substitute.For<IArtistLibraryBuilder>(), Substitute.For<IStorageUrlBuilder>())
-			{
-				ArtistLibrary = new ArtistLibrary(Enumerable.Repeat(artist, 1))
-			};
+				Substitute.For<IMusicStorage>(), artistLibraryBuilder, Substitute.For<IStorageUrlBuilder>());
 
 			var target = new EditAlbumsDetailsViewModel(musicLibrary, new LocalWorkshopMusicStorage(TestWorkshopMusicStorage),
 				new StorageUrlBuilder(), Substitute.For<IFileSystemFacade>());
@@ -273,7 +274,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.AlbumPreprocessor.Vie
 			//	Assert
 
 			//	Sanity check
-			Assert.IsTrue(target.RequiredDataIsFilled);
+			Assert.IsTrue(target.DataIsReady);
 
 			Assert.AreEqual(4, songs.Count);
 

@@ -96,7 +96,6 @@
     <Compile Include="CF.MusicLibrary.AlbumPreprocessor\ParsingSong\EthalonSongParserTests.cs" />
     <Compile Include="CF.MusicLibrary.AlbumPreprocessor\ParsingContent\InputContentSplitterTests.cs" />
     <Compile Include="CF.MusicLibrary.AlbumPreprocessor\ViewModels\AddToLibraryViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.AlbumPreprocessor\ViewModels\MainWindowModelTests.cs" />
     <Compile Include="CF.MusicLibrary.BL\FilesystemMusicStorageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

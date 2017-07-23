@@ -1,4 +1,4 @@
-﻿<cfwpf:WpfApplication x:TypeArguments="vm:MainWindowModel"
+﻿<cfwpf:WpfApplication x:TypeArguments="vm:ApplicationViewModel"
              x:Class="CF.MusicLibrary.AlbumPreprocessor.App"
              xmlns:cfwpf="clr-namespace:CF.Library.Wpf;assembly=CF.Library.Wpf"
              xmlns:vm="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.ViewModels"

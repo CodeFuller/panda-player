@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
-using CF.MusicLibrary.AlbumPreprocessor.ViewModels;
+using CF.MusicLibrary.AlbumPreprocessor.ViewModels.SourceContent;
 using static System.FormattableString;
 
 namespace CF.MusicLibrary.AlbumPreprocessor

@@ -4,7 +4,7 @@ using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces
 {
-	public interface IEditSongsDetailsViewModel
+	public interface IEditSongsDetailsViewModel : IPageViewModel
 	{
 		ObservableCollection<SongTagDataViewItem> Songs { get; }
 

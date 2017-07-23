@@ -36,23 +36,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.AlbumPreprocessor.Boo
 
 			//	Assert
 
-			Assert.DoesNotThrow(() => target.Resolve<MainWindowModel>());
-		}
-
-		[Test]
-		public void Run_RegistersAllDependenciesForAddToLibraryViewModel()
-		{
-			//	Arrange
-
-			var target = new TestBootstrapper();
-
-			//	Act
-
-			target.Run();
-
-			//	Assert
-
-			Assert.DoesNotThrow(() => target.Resolve<AddToLibraryViewModel>());
+			Assert.DoesNotThrow(() => target.Resolve<ApplicationViewModel>());
 		}
 	}
 }

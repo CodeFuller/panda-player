@@ -3,7 +3,7 @@ using System.IO;
 using CF.Library.Core.Facades;
 using GalaSoft.MvvmLight;
 
-namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
+namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels.SourceContent
 {
 	public class EthalonContentViewModel : ViewModelBase
 	{

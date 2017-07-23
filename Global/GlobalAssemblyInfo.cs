@@ -5,7 +5,7 @@ using System.Reflection;
 [assembly: AssemblyProduct("MusicLibrary")]
 
 [assembly: AssemblyCompany("CodeFuller")]
-[assembly: AssemblyCopyright("Copyright © 2016")]
+[assembly: AssemblyCopyright("Copyright © 2016-2017")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
@@ -13,4 +13,4 @@ using System.Reflection;
 [assembly: AssemblyConfiguration("Release")]
 #endif
 
-[assembly: AssemblyVersion("0.1.*")]
+[assembly: AssemblyVersion("1.0.*")]

@@ -1,4 +1,4 @@
-﻿using CF.MusicLibrary.AlbumPreprocessor.ViewModels;
+﻿using CF.MusicLibrary.AlbumPreprocessor.ViewModels.SourceContent;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.Interfaces
 {

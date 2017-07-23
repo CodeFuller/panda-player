@@ -1,0 +1,42 @@
+﻿<Window x:Class="CF.MusicLibrary.AlbumPreprocessor.Views.ApplicationView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.Views"
+        xmlns:viewModels="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.ViewModels"
+        mc:Ignorable="d"
+        Title="Album Preprocessor" Width="1600" Height="800">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModels:EditSourceContentViewModel}">
+            <local:EditSourceContentView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:EditAlbumsDetailsViewModel}">
+            <local:EditAlbumsDetailsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:EditSongsDetailsViewModel}">
+            <local:EditSongsDetailsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:AddToLibraryViewModel}">
+            <local:AddToLibraryView />
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
+            <Button x:Name="ButtonPrev" MinWidth="200" Margin="0,0,5,0"
+                        Content="{Binding PrevPageName}" 
+                        IsEnabled="{Binding CanSwitchToPrevPage}"
+                        Command="{Binding SwitchToPrevPageCommand}" />
+            <Button x:Name="ButtonNext" MinWidth="200" Content="{Binding NextPageName}" 
+                        IsEnabled="{Binding CanSwitchToNextPage}"
+                        Command="{Binding SwitchToNextPageCommand}" />
+        </StackPanel>
+        <ContentControl Grid.Row="1" Content="{Binding CurrPage}" Margin="5" />
+    </Grid>
+</Window>

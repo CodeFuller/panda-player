@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using CF.Library.Core.Configuration;
 using CF.Library.Core.Exceptions;
 using CF.Library.Core.Facades;
-using CF.Library.Core.Interfaces;
 using CF.Library.Unity;
 using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
@@ -22,7 +21,7 @@ using Microsoft.Practices.Unity.Configuration;
 
 namespace CF.MusicLibrary.AlbumPreprocessor
 {
-	internal class Bootstrapper : UnityBootstrapper<MainWindowModel>
+	internal class Bootstrapper : UnityBootstrapper<ApplicationViewModel>
 	{
 		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "It's ok for Composition Root")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope", Justification = "LifetimeManager is disposed by DIContainer.")]
@@ -48,12 +47,6 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 			DIContainer.RegisterType<IInputContentSplitter, InputContentSplitter>();
 			DIContainer.RegisterType<IAlbumContentComparer, AlbumContentComparer>();
 			DIContainer.RegisterType<IWorkshopMusicStorage, LocalWorkshopMusicStorage>(new InjectionConstructor(workshopDirectory));
-			DIContainer.RegisterType<IWindowService, WpfWindowService>();
-			DIContainer.RegisterType<IAddToLibraryViewModel, AddToLibraryViewModel>();
-			DIContainer.RegisterType<IEditAlbumsDetailsViewModel, EditAlbumsDetailsViewModel>();
-			DIContainer.RegisterType<IEditSongsDetailsViewModel, EditSongsDetailsViewModel>();
-			DIContainer.RegisterType<MainWindowModel>();
-			DIContainer.RegisterType<IObjectFactory<IAddToLibraryViewModel>, UnityBasedObjectFactory<IAddToLibraryViewModel>>(new InjectionConstructor(DIContainer));
 			DIContainer.RegisterType<DbProviderFactory>(new InjectionFactory(context =>
 				DbProviderFactories.GetFactory(mediaMonkeyConnectionString.ProviderName)));
 			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepository>(
@@ -66,6 +59,12 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 			DIContainer.RegisterType<IDiscArtistGroupper, MyLocalLibraryArtistGroupper>();
 			DIContainer.RegisterType<IStorageUrlBuilder, StorageUrlBuilder>();
 			DIContainer.RegisterType<ISongTagger, SongTagger>();
+
+			DIContainer.RegisterType<IEditSourceContentViewModel, EditSourceContentViewModel>();
+			DIContainer.RegisterType<IEditAlbumsDetailsViewModel, EditAlbumsDetailsViewModel>();
+			DIContainer.RegisterType<IEditSongsDetailsViewModel, EditSongsDetailsViewModel>();
+			DIContainer.RegisterType<IAddToLibraryViewModel, AddToLibraryViewModel>();
+			DIContainer.RegisterType<ApplicationViewModel>();
 		}
 	}
 }

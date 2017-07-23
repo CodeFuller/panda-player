@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 
-namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
+namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels.SourceContent
 {
 	public class EditableTreeViewItem : ViewModelBase
 	{

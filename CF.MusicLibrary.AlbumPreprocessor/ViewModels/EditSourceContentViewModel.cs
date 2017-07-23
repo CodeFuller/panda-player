@@ -3,41 +3,27 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Core.Configuration;
 using CF.Library.Core.Facades;
-using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.AlbumPreprocessor.Events;
 using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
 using CF.MusicLibrary.AlbumPreprocessor.ParsingContent;
 using CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces;
+using CF.MusicLibrary.AlbumPreprocessor.ViewModels.SourceContent;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using static System.FormattableString;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 {
-	public class MainWindowModel : ViewModelBase
+	public class EditSourceContentViewModel : ViewModelBase, IEditSourceContentViewModel
 	{
-		public static string Title => "Album Preprocessor";
+		public string Name => "Edit Source Content";
 
-		private readonly IFileSystemFacade fileSystemFacade;
 		private readonly IAlbumContentParser albumContentParser;
 		private readonly IAlbumContentComparer albumContentComparer;
-		private readonly IObjectFactory<IAddToLibraryViewModel> addToLibraryViewModelFactory;
-
-		private bool contentIsIncorrect;
-		public bool ContentIsIncorrect
-		{
-			get { return contentIsIncorrect; }
-			set
-			{
-				Set(ref contentIsIncorrect, value);
-			}
-		}
 
 		public EthalonContentViewModel RawEthalonAlbums { get; }
 
@@ -47,13 +33,14 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 
 		public ICommand ReloadRawContentCommand { get; }
 
-		public ICommand AddToLibraryCommand { get; }
+		private bool dataIsReady;
+		public bool DataIsReady
+		{
+			get { return dataIsReady; }
+			set { Set(ref dataIsReady, value); }
+		}
 
-		public MainWindowModel(
-			IFileSystemFacade fileSystemFacade,
-			IAlbumContentParser albumContentParser,
-			IAlbumContentComparer albumContentComparer,
-			IObjectFactory<IAddToLibraryViewModel> addToLibraryViewModelFactory)
+		public EditSourceContentViewModel(IAlbumContentParser albumContentParser, IAlbumContentComparer albumContentComparer, IFileSystemFacade fileSystemFacade)
 		{
 			if (fileSystemFacade == null)
 			{
@@ -67,15 +54,9 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			{
 				throw new ArgumentNullException(nameof(albumContentComparer));
 			}
-			if (addToLibraryViewModelFactory == null)
-			{
-				throw new ArgumentNullException(nameof(addToLibraryViewModelFactory));
-			}
 
-			this.fileSystemFacade = fileSystemFacade;
 			this.albumContentParser = albumContentParser;
 			this.albumContentComparer = albumContentComparer;
-			this.addToLibraryViewModelFactory = addToLibraryViewModelFactory;
 
 			EthalonAlbums = new AlbumTreeViewModel();
 			CurrentAlbums = new AlbumTreeViewModel();
@@ -85,14 +66,8 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			RawEthalonAlbums.PropertyChanged += OnRawEthalonAlbumsPropertyChanged;
 
 			ReloadRawContentCommand = new RelayCommand(ReloadRawContent);
-			AddToLibraryCommand = new AsyncRelayCommand(AddToLibrary);
 
 			Messenger.Default.Register<AlbumContentChangedEventArgs>(this, OnAlbumContentChanged);
-		}
-
-		private void OnAlbumContentChanged(AlbumContentChangedEventArgs message)
-		{
-			UpdateContentCorrectness();
 		}
 
 		public void LoadDefaultContent()
@@ -100,6 +75,11 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			RawEthalonAlbums.LoadRawEthalonAlbumsContent();
 
 			LoadCurrentAlbums();
+		}
+
+		private void OnAlbumContentChanged(AlbumContentChangedEventArgs message)
+		{
+			UpdateContentCorrectness();
 		}
 
 		public void ReloadRawContent()
@@ -111,46 +91,6 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 			}
 
 			RawEthalonAlbums.Content = contentBuilder.ToString();
-		}
-
-		public async Task AddToLibrary()
-		{
-			IAddToLibraryViewModel addToLibraryViewModel = addToLibraryViewModelFactory.CreateInstance();
-			bool added = await addToLibraryViewModel.AddAlbumsToLibrary(CurrentAlbums);
-
-			if (added && AppSettings.GetRequiredValue<bool>("DeleteSourceContentAfterAdding"))
-			{
-				DeleteSourceDirTree();
-			}
-		}
-
-		private void DeleteSourceDirTree()
-		{
-			foreach (var subDirectory in fileSystemFacade.EnumerateDirectories(AppSettings.GetRequiredValue<string>("WorkshopDirectory")))
-			{
-				List<string> files = new List<string>();
-				FindDirectoryFiles(subDirectory, files);
-
-				if (files.Any())
-				{
-					return;
-				}
-
-				fileSystemFacade.DeleteDirectory(subDirectory, true);
-			}
-		}
-
-		private void FindDirectoryFiles(string directoryPath, List<string> files)
-		{
-			foreach (string subDirectory in fileSystemFacade.EnumerateDirectories(directoryPath))
-			{
-				FindDirectoryFiles(subDirectory, files);
-			}
-
-			foreach (string file in fileSystemFacade.EnumerateFiles(directoryPath))
-			{
-				files.Add(file);
-			}
 		}
 
 		private void OnRawEthalonAlbumsPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -180,7 +120,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 		private void UpdateContentCorrectness()
 		{
 			SetContentCorrectness();
-			ContentIsIncorrect = EthalonAlbums.ContentIsIncorrect || CurrentAlbums.ContentIsIncorrect;
+			DataIsReady = !EthalonAlbums.ContentIsIncorrect && !CurrentAlbums.ContentIsIncorrect;
 		}
 	}
 }

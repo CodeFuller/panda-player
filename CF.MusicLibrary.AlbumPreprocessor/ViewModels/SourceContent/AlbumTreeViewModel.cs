@@ -5,7 +5,7 @@ using System.Linq;
 using CF.Library.Core.Extensions;
 using GalaSoft.MvvmLight;
 
-namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
+namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels.SourceContent
 {
 	public class AlbumTreeViewModel : ViewModelBase, IEnumerable<AlbumTreeViewItem>
 	{

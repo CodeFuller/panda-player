@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="CF.MusicLibrary.AlbumPreprocessor.Views.EditSourceContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.Views"
+             xmlns:behaviors="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.Behaviors"
+             mc:Ignorable="d" 
+             d:DesignWidth="800" d:DesignHeight="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0" x:Name="ButtonReloadRawContent" Content="Reload" Command="{Binding ReloadRawContentCommand}" HorizontalAlignment="Left" Width="75" Margin="0,0,0,5"/>
+        <Grid Grid.Row="1" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Row="0" Grid.Column="0" x:Name="TextBoxRawEthalonAlbums" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="NoWrap" AcceptsReturn="True"
+                 Text="{Binding RawEthalonAlbums.Content, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.ScrollChanged="ScrollChanged" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+            <local:AlbumTreeView Grid.Row="0" Grid.Column="1" x:Name="TreeViewEthalonAlbumsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.ScrollChanged="ScrollChanged"
+                 ItemsSource="{Binding EthalonAlbums.Albums}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="False">
+            </local:AlbumTreeView>
+            <local:AlbumTreeView Grid.Row="0" Grid.Column="2" x:Name="TreeViewCurrentAlbumsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.ScrollChanged="ScrollChanged"
+                 ItemsSource="{Binding CurrentAlbums.Albums}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="True">
+            </local:AlbumTreeView>
+        </Grid>
+    </Grid>
+</UserControl>

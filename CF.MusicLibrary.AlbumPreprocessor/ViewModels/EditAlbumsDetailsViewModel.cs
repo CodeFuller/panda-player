@@ -10,6 +10,7 @@ using CF.Library.Core.Facades;
 using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.AlbumPreprocessor.MusicStorage;
 using CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces;
+using CF.MusicLibrary.AlbumPreprocessor.ViewModels.SourceContent;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
@@ -25,6 +26,10 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 		private readonly IWorkshopMusicStorage workshopStorage;
 		private readonly IStorageUrlBuilder storageUrlBuilder;
 		private readonly IFileSystemFacade fileSystemFacade;
+
+		public string Name => "Edit Albums Details";
+
+		public bool DataIsReady => Albums.All(a => a.RequiredDataIsFilled);
 
 		public ObservableCollection<AddedAlbum> Albums { get; private set; }
 
@@ -42,8 +47,6 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 				}
 			}
 		}
-
-		public bool RequiredDataIsFilled => Albums.All(a => a.RequiredDataIsFilled);
 
 		public IEnumerable<TaggedSongData> Songs
 		{
@@ -104,6 +107,8 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 				throw new ArgumentNullException(nameof(albums));
 			}
 
+			await musicLibrary.LoadAsync();
+
 			Albums = new ObservableCollection<AddedAlbum>();
 
 			List<Genre> libraryGenres = (await musicLibrary.GetGenresAsync()).ToList();
@@ -157,7 +162,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 		{
 			if (e.PropertyName == nameof(AddedAlbum.RequiredDataIsFilled))
 			{
-				RaisePropertyChanged(nameof(RequiredDataIsFilled));
+				RaisePropertyChanged(nameof(DataIsReady));
 			}
 
 			AddedArtistAlbum changedAlbum = sender as AddedArtistAlbum;

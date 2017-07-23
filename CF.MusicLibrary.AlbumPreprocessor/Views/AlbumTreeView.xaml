@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:behaviors="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.Behaviors"
              xmlns:viewModels="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.ViewModels"
+             xmlns:sourceContent="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.ViewModels.SourceContent"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -20,7 +21,7 @@
 
         <!-- Remove this code duplication after learning WPF -->
         
-        <HierarchicalDataTemplate DataType="{x:Type viewModels:AlbumTreeViewItem}" ItemsSource="{Binding SongItems}">
+        <HierarchicalDataTemplate DataType="{x:Type sourceContent:AlbumTreeViewItem}" ItemsSource="{Binding SongItems}">
             <Grid>
                 <TextBlock Text="{Binding AlbumDirectory}">
                     <TextBlock.Style>
@@ -64,7 +65,7 @@
             </HierarchicalDataTemplate.Triggers>
         </HierarchicalDataTemplate>
 
-        <HierarchicalDataTemplate DataType="{x:Type viewModels:SongTreeViewItem}">
+        <HierarchicalDataTemplate DataType="{x:Type sourceContent:SongTreeViewItem}">
             <Grid>
                 <TextBlock Text="{Binding Title}">
                     <TextBlock.Style>

@@ -52,8 +52,8 @@
       <HintPath>..\packages\CF.Library.Unity.0.1.6406.22232\lib\net462\CF.Library.Unity.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CF.Library.Wpf, Version=0.1.6315.40443, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Wpf.0.1.6315.40443\lib\net462\CF.Library.Wpf.dll</HintPath>
+    <Reference Include="CF.Library.Wpf, Version=0.1.6413.28910, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Wpf.0.1.6413.28910\lib\net462\CF.Library.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
@@ -128,14 +128,12 @@
     <Compile Include="AddingToLibrary\AddedCompilationAlbumWithoutArtistInfo.cs" />
     <Compile Include="AddingToLibrary\SongTagger.cs" />
     <Compile Include="AddingToLibrary\TaggedSongData.cs" />
-    <Compile Include="AsyncRelayCommand.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="AddingToLibrary\ISongTagger.cs" />
     <Compile Include="Events\AlbumContentChangedEventArgs.cs" />
     <Compile Include="Events\SongTitleChangedEventArgs.cs" />
     <Compile Include="Events\SongTitleChangeEventArgs.cs" />
     <Compile Include="Events\SongTitleChangingEventArgs.cs" />
-    <Compile Include="IWindowService.cs" />
     <Compile Include="MusicStorage\AlbumInfo.cs" />
     <Compile Include="MusicStorage\AlbumType.cs" />
     <Compile Include="MusicStorage\LocalWorkshopMusicStorage.cs" />
@@ -161,20 +159,40 @@
     <Compile Include="ParsingSong\SongTitlePattern.cs" />
     <Compile Include="SongContent.cs" />
     <Compile Include="SongFileFilter.cs" />
+    <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\EditAlbumsDetailsViewModel.cs" />
     <Compile Include="ViewModels\EditSongsDetailsViewModel.cs" />
+    <Compile Include="ViewModels\EditSourceContentViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IAddToLibraryViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEditAlbumsDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IEditSourceContentViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEditSongsDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IPageViewModel.cs" />
     <Compile Include="ViewModels\SongTagDataViewItem.cs" />
-    <Compile Include="Views\EditAlbumsDetailsWindow.xaml.cs">
-      <DependentUpon>EditAlbumsDetailsWindow.xaml</DependentUpon>
+    <Compile Include="Views\AddToLibraryView.xaml.cs">
+      <DependentUpon>AddToLibraryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EditSongsDetailsWindow.xaml.cs">
-      <DependentUpon>EditSongsDetailsWindow.xaml</DependentUpon>
+    <Compile Include="Views\ApplicationView.xaml.cs">
+      <DependentUpon>ApplicationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WpfWindowService.cs" />
-    <Page Include="Views\EditAlbumsDetailsWindow.xaml">
+    <Compile Include="Views\EditAlbumsDetailsView.xaml.cs">
+      <DependentUpon>EditAlbumsDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditSongsDetailsView.xaml.cs">
+      <DependentUpon>EditSongsDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditSourceContentView.xaml.cs">
+      <DependentUpon>EditSourceContentView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\AddToLibraryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ApplicationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditAlbumsDetailsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -182,13 +200,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\EditSongsDetailsWindow.xaml">
+    <Page Include="Views\EditSongsDetailsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Views\EditSourceContentView.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="AlbumContent.cs" />
     <Compile Include="AlbumCrawler.cs" />
@@ -197,18 +215,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModels\AddToLibraryViewModel.cs" />
-    <Compile Include="ViewModels\AlbumTreeViewItem.cs" />
-    <Compile Include="ViewModels\AlbumTreeViewModel.cs" />
-    <Compile Include="ViewModels\EditableTreeViewItem.cs" />
-    <Compile Include="ViewModels\EthalonContentViewModel.cs" />
-    <Compile Include="ViewModels\MainWindowModel.cs" />
-    <Compile Include="ViewModels\SongTreeViewItem.cs" />
+    <Compile Include="ViewModels\SourceContent\AlbumTreeViewItem.cs" />
+    <Compile Include="ViewModels\SourceContent\AlbumTreeViewModel.cs" />
+    <Compile Include="ViewModels\SourceContent\EditableTreeViewItem.cs" />
+    <Compile Include="ViewModels\SourceContent\EthalonContentViewModel.cs" />
+    <Compile Include="ViewModels\SourceContent\SongTreeViewItem.cs" />
     <Compile Include="Views\AlbumTreeView.xaml.cs">
       <DependentUpon>AlbumTreeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
