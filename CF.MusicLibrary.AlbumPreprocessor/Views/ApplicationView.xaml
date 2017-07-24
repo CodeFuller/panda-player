@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.Views"
         xmlns:viewModels="clr-namespace:CF.MusicLibrary.AlbumPreprocessor.ViewModels"
         mc:Ignorable="d"
-        Title="Album Preprocessor" Width="1600" Height="800">
+        Title="Album Preprocessor" Width="1600" Height="800" WindowState="Maximized">
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModels:EditSourceContentViewModel}">
