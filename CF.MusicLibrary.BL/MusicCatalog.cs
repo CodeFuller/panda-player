@@ -29,5 +29,10 @@ namespace CF.MusicLibrary.BL
 		{
 			return await libraryRepository.GetGenresAsync();
 		}
+
+		public async Task AddSongPlayback(Song song, DateTime playbackTime)
+		{
+			await libraryRepository.AddSongPlayback(song, playbackTime);
+		}
 	}
 }

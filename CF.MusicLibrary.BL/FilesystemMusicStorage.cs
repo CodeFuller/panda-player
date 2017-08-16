@@ -50,6 +50,12 @@ namespace CF.MusicLibrary.BL
 			await Task.Run(() => StoreFile(coverImagePath, destFileName));
 		}
 
+		public FileInfo GetSongFile(Uri songUri)
+		{
+			var songFileName = UriToFilesystemPath(songUri);
+			return new FileInfo(songFileName);
+		}
+
 		private void StoreFile(string srcFileName, string dstFileName)
 		{
 			if (moveSongFiles)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CF.MusicLibrary.BL.Objects;
 
@@ -15,5 +16,7 @@ namespace CF.MusicLibrary.BL
 		Task<DiscLibrary> GetDiscLibraryAsync();
 
 		Task<IEnumerable<Genre>> GetGenresAsync();
+
+		Task AddSongPlayback(Song song, DateTime playbackTime);
 	}
 }

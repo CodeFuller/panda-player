@@ -21,12 +21,17 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 				throw new ArgumentNullException(nameof(y));
 			}
 
+			if (ReferenceEquals(x, y))
+			{
+				return 0;
+			}
+
 			if (x.OrderNumber == 0 && y.OrderNumber == 0)
 			{
 				return String.Compare(x.Uri.ToString(), y.Uri.ToString(), StringComparison.OrdinalIgnoreCase);
 			}
 
-			if (x.OrderNumber != 0 && y.OrderNumber != 0)
+			if (x.OrderNumber != 0 && y.OrderNumber != 0 && x.OrderNumber != y.OrderNumber)
 			{
 				return x.OrderNumber.CompareTo(y.OrderNumber);
 			}
@@ -67,6 +72,11 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 			}
 
 			return new DiscLibrary(discs);
+		}
+
+		public void Clear()
+		{
+			songs.Clear();
 		}
 
 		private Dictionary<Uri, Disc> BuildDiscs()

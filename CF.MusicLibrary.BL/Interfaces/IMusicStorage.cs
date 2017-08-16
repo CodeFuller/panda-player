@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace CF.MusicLibrary.BL.Interfaces
@@ -8,5 +9,7 @@ namespace CF.MusicLibrary.BL.Interfaces
 		Task AddSongAsync(string sourceFileName, Uri songUri);
 
 		Task SetAlbumCoverImage(Uri albumUri, string coverImagePath);
+
+		FileInfo GetSongFile(Uri songUri);
 	}
 }

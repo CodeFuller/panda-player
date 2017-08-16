@@ -6,7 +6,7 @@ namespace CF.MusicLibrary.BL.MyLocalLibrary
 {
 	internal class LocalLibraryDiscPath
 	{
-		private readonly DiscPathParts pathParts;
+		private readonly ItemUriParts pathParts;
 
 		public LocalLibraryDiscPath(Disc disc) :
 			this(disc.Uri)
@@ -15,7 +15,7 @@ namespace CF.MusicLibrary.BL.MyLocalLibrary
 
 		public LocalLibraryDiscPath(Uri discUri)
 		{
-			pathParts = new DiscPathParts(discUri);
+			pathParts = new ItemUriParts(discUri);
 
 			if (pathParts.Count < 2)
 			{

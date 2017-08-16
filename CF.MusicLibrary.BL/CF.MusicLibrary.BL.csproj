@@ -42,11 +42,12 @@
     </WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6406.20693, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6406.20693\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6431.35443, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6431.35443\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
@@ -69,7 +70,7 @@
     <Compile Include="MusicCatalog.cs" />
     <Compile Include="CatalogBasedMusicLibrary.cs" />
     <Compile Include="FilesystemMusicStorage.cs" />
-    <Compile Include="MyLocalLibrary\DiscPathParts.cs" />
+    <Compile Include="MyLocalLibrary\ItemUriParts.cs" />
     <Compile Include="MyLocalLibrary\LocalLibraryDiscPath.cs" />
     <Compile Include="MyLocalLibrary\MyLocalLibraryArtistGroupper.cs" />
     <Compile Include="IDiscArtistGroupper.cs" />

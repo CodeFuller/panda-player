@@ -31,7 +31,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.MusicStorage
 		{
 			List<SongInfo> songs = songFiles.Select(GetSongInfo).ToList();
 
-			DiscPathParts pathParts = new DiscPathParts(albumPath, workshopRootPath);
+			ItemUriParts pathParts = new ItemUriParts(albumPath, workshopRootPath);
 			if (pathParts.Count == 0)
 			{
 				throw new InvalidInputDataException(Current($"Could not parse album data from '{pathParts[1]}'"));

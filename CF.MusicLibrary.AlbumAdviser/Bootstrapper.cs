@@ -32,7 +32,6 @@ namespace CF.MusicLibrary.AlbumAdviser
 			DIContainer.RegisterType<ILibraryBuilder, LibraryBuilder>();
 			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepository>(
 				new InjectionConstructor(typeof(DbProviderFactory), typeof(ILibraryBuilder), mediaMonkeyConnectionString.ConnectionString, mediaMonkeyStorageRoot));
-			DIContainer.RegisterType<ILibraryBuilder, LibraryBuilder>();
 			DIContainer.RegisterType<IMusicCatalog, MusicCatalog>();
 			DIContainer.RegisterType<IMusicStorage, FilesystemMusicStorage>(new InjectionConstructor(typeof(IFileSystemFacade), localStorageRoot, false));
 			DIContainer.RegisterType<IMusicLibrary, CatalogBasedMusicLibrary>();

@@ -16,5 +16,10 @@ namespace CF.MusicLibrary.BL
 		/// Builds library for added content.
 		/// </summary>
 		DiscLibrary Build();
+
+		/// <summary>
+		/// Clears the data that was added previously.
+		/// </summary>
+		void Clear();
 	}
 }

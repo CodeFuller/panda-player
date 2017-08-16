@@ -53,6 +53,8 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 		{
 			using (DataSet ds = await LoadData())
 			{
+				libraryBuilder.Clear();
+
 				Dictionary<int, Artist> artists = ObjectifyArtists(ds);
 				Dictionary<int, Genre> genres = ObjectifyGenres(ds);
 
@@ -79,10 +81,7 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 
 					foreach (var playbackRow in row.GetChildRows(ds.Relations["PlaybackSong"]))
 					{
-						song.Playbacks.Add(new Playback
-						{
-							PlaybackTime = playbackRow.Field<DateTime>("PlayDate"),
-						});
+						song.Playbacks.Add(new Playback(song, playbackRow.Field<DateTime>("PlayDate")));
 					}
 
 					libraryBuilder.AddSong(song);
@@ -100,6 +99,11 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 				Dictionary<int, Genre> genres = ObjectifyGenres(ds);
 				return genres.Values;
 			}
+		}
+
+		public Task AddSongPlayback(Song song, DateTime playbackTime)
+		{
+			throw new NotImplementedException();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope", Justification = "Object is disposed by the caller.")]
@@ -132,18 +136,40 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 
 		private static Dictionary<int, Artist> ObjectifyArtists(DataSet ds)
 		{
+			//	Artist with empty name is mapped to null.
+			//	Only one such artist could preset in database
+			bool nullArtistMapped = false;
+
 			DataTable artistsTable = ds.Tables[Artists];
 			var artists = new Dictionary<int, Artist>();
 			for (var i = 0; i < artistsTable.Rows.Count; ++i)
 			{
 				var row = artistsTable.Rows[i];
-				Artist artist = new Artist
-				{
-					Id = row.Field<int>("ID"),
-					Name = row.Field<string>("Artist"),
-				};
 
-				artists.Add(artist.Id, artist);
+				var artistId = row.Field<int>("ID");
+				var artistName = row.Field<string>("Artist");
+
+				Artist artist;
+				if (artistName.Length == 0)
+				{
+					if (nullArtistMapped)
+					{
+						throw new InvalidOperationException("Multiple artist with empty name present in the database");
+					}
+
+					artist = null;
+					nullArtistMapped = true;
+				}
+				else
+				{
+					artist = new Artist
+					{
+						 Id = artistId,
+						 Name = artistName,
+					};
+				}
+
+				artists.Add(artistId, artist);
 			}
 
 			return artists;
