@@ -41,8 +41,12 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6431.35443, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6431.35443\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6442.39224, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6442.39224\lib\net462\CF.Library.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CF.Library.Http, Version=0.1.6431.35450, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Http.0.1.6431.35450\lib\net462\CF.Library.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CF.Library.Unity, Version=0.1.6406.22232, Culture=neutral, processorArchitecture=MSIL">
@@ -89,6 +93,10 @@
       <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -105,6 +113,8 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.105.2\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -129,7 +139,30 @@
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Events\PlayDiscEventArgs.cs" />
+    <Compile Include="Scrobbler\BooleanJsonConverter.cs" />
+    <Compile Include="Scrobbler\DataContracts\CorrectableText.cs" />
+    <Compile Include="Scrobbler\DataContracts\GetSessionResponse.cs" />
+    <Compile Include="Scrobbler\DataContracts\GetTokenResponse.cs" />
+    <Compile Include="Scrobbler\DataContracts\LastFMSession.cs" />
+    <Compile Include="Scrobbler\DataContracts\NowPlayingTrack.cs" />
+    <Compile Include="Scrobbler\DataContracts\ScrobbleInfo.cs" />
+    <Compile Include="Scrobbler\DataContracts\ScrobblesInfo.cs" />
+    <Compile Include="Scrobbler\DataContracts\ScrobbleStatistics.cs" />
+    <Compile Include="Scrobbler\DataContracts\ScrobbleTrackResponse.cs" />
+    <Compile Include="Scrobbler\DataContracts\TrackIgnoredMessage.cs" />
+    <Compile Include="Scrobbler\DataContracts\UpdateNowPlayingTrackResponse.cs" />
+    <Compile Include="Scrobbler\DefaultBrowserTokenAuthorizer.cs" />
+    <Compile Include="Scrobbler\ILastFMApiClient.cs" />
+    <Compile Include="Scrobbler\IScrobbler.cs" />
+    <Compile Include="Scrobbler\ITokenAuthorizer.cs" />
+    <Compile Include="Scrobbler\LastFMApiCallFailedException.cs" />
+    <Compile Include="Scrobbler\LastFMApiClient.cs" />
+    <Compile Include="Scrobbler\PersistentScrobbler.cs" />
+    <Compile Include="Scrobbler\Track.cs" />
+    <Compile Include="Scrobbler\TrackScrobble.cs" />
+    <Compile Include="Scrobbler\UnauthorizedToken.cs" />
     <Compile Include="ViewModels\Interfaces\ILibraryExplorerViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ILoggerViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ISongListViewModel.cs" />
     <Compile Include="ViewModels\LibraryBrowser\FileSystemLibraryBrowser.cs" />
     <Compile Include="ViewModels\LibraryBrowser\FolderItemComparer.cs" />
@@ -143,6 +176,9 @@
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IMusicPlayerViewModel.cs" />
     <Compile Include="ViewModels\LibraryExplorerViewModel.cs" />
+    <Compile Include="ViewModels\LoggerViewModel.cs" />
+    <Compile Include="ViewModels\Logging\LogMessage.cs" />
+    <Compile Include="ViewModels\Logging\LogMessageLevel.cs" />
     <Compile Include="ViewModels\MusicPlayerViewModel.cs" />
     <Compile Include="ViewModels\SongListViewModel.cs" />
     <Compile Include="ViewModels\ValueConverters\SongBitrateValueConverter.cs" />
@@ -151,6 +187,9 @@
     <Compile Include="ViewModels\ValueConverters\SongLastPlaybackValueConverter.cs" />
     <Compile Include="Views\LibraryExplorerView.xaml.cs">
       <DependentUpon>LibraryExplorerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoggerView.xaml.cs">
+      <DependentUpon>LoggerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MusicPlayerView.xaml.cs">
       <DependentUpon>MusicPlayerView.xaml</DependentUpon>
@@ -174,6 +213,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\LibraryExplorerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoggerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

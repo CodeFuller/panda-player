@@ -19,6 +19,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public IMusicPlayerViewModel MusicPlayerViewModel { get; }
 
+		public ILoggerViewModel LoggerViewModel { get; }
+
 		private int selectedSongListIndex;
 		public int SelectedSongListIndex
 		{
@@ -27,7 +29,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		public ApplicationViewModel(ILibraryExplorerViewModel libraryExplorerViewModel, ISongListViewModel songListViewModel,
-			IMusicPlayerViewModel musicPlayerViewModel)
+			IMusicPlayerViewModel musicPlayerViewModel, ILoggerViewModel loggerViewModel)
 		{
 			if (libraryExplorerViewModel == null)
 			{
@@ -41,10 +43,15 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 				throw new ArgumentNullException(nameof(musicPlayerViewModel));
 			}
+			if (loggerViewModel == null)
+			{
+				throw new ArgumentNullException(nameof(loggerViewModel));
+			}
 
 			LibraryExplorerViewModel = libraryExplorerViewModel;
 			SongListViewModel = songListViewModel;
 			MusicPlayerViewModel = musicPlayerViewModel;
+			LoggerViewModel = loggerViewModel;
 
 			LibraryExplorerViewModel.PropertyChanged += OnLibraryExplorerFolderChanged;
 			Messenger.Default.Register<PlayDiscEventArgs>(this, OnPlayDiscLaunched);

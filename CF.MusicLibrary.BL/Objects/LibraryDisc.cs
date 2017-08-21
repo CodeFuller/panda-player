@@ -15,14 +15,7 @@ namespace CF.MusicLibrary.BL.Objects
 
 		public LibraryArtist Artist { get; }
 
-		public int? Year
-		{
-			get
-			{
-				List<int?> songYears = Songs.Select(s => (int?)s.Year).Distinct().ToList();
-				return songYears.Count > 1 ? null : songYears.FirstOrDefault();
-			}
-		}
+		public int? Year => Disc.Year;
 
 		public Genre Genre
 		{

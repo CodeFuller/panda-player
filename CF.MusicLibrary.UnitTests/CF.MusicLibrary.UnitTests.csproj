@@ -34,8 +34,8 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.Tests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6431.35443, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6431.35443\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6442.39224, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6442.39224\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
@@ -98,9 +98,11 @@
     <Compile Include="CF.MusicLibrary.AlbumPreprocessor\ViewModels\AddToLibraryViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.BL\FilesystemMusicStorageTests.cs" />
     <Compile Include="CF.MusicLibrary.BL\MyLocalLibrary\ItemUriPartsTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\Scrobbler\TrackTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +113,10 @@
     <ProjectReference Include="..\CF.MusicLibrary.BL\CF.MusicLibrary.BL.csproj">
       <Project>{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}</Project>
       <Name>CF.MusicLibrary.BL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.PandaPlayer\CF.MusicLibrary.PandaPlayer.csproj">
+      <Project>{502D59CA-7973-46C9-A2A4-9144C48CBEE4}</Project>
+      <Name>CF.MusicLibrary.PandaPlayer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

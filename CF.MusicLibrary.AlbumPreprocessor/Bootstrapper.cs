@@ -24,7 +24,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 	internal class Bootstrapper : UnityBootstrapper<ApplicationViewModel>
 	{
 		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "It's ok for Composition Root")]
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope", Justification = "LifetimeManager is disposed by DIContainer.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope", Justification = "LifetimeManager is disposed by DI Container.")]
 		protected override void RegisterDependencies()
 		{
 			DIContainer.LoadConfiguration();

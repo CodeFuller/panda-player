@@ -186,11 +186,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.AlbumPreprocessor.Vie
 			LibraryArtist artist = new LibraryArtist("SomeId", "Some Artist", new Uri("/SomeCategory/Some Artist", UriKind.Relative));
 			artist.AddDisc(new LibraryDisc(artist, new Disc
 			{
+				Year = 2000,
 				Songs = new Collection<Song>
 				{
 					new Song
 					{
-						Year = 2000,
 						Genre = genre1,
 					}
 				}
@@ -198,11 +198,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.AlbumPreprocessor.Vie
 
 			artist.AddDisc(new LibraryDisc(artist, new Disc
 			{
+				Year = 2005,
 				Songs = new Collection<Song>
 				{
 					new Song
 					{
-						Year = 2005,
 						Genre = genre2,
 					}
 				}

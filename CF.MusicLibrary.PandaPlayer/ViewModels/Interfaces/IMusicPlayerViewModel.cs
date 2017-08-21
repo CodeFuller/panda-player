@@ -1,4 +1,5 @@
-﻿using CF.MusicLibrary.PandaPlayer.Player;
+﻿using System.Threading.Tasks;
+using CF.MusicLibrary.PandaPlayer.Player;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
@@ -8,7 +9,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		double Volume { get; set; }
 
-		void Play();
+		Task Play();
 
 		void Pause();
 

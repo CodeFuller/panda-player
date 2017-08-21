@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using CF.Library.Core.Extensions;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Objects;
@@ -45,6 +47,8 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 	/// </summary>
 	public class LibraryBuilder : ILibraryBuilder
 	{
+		private static readonly Regex AlbumDataRegex = new Regex(@"^(\d{4}) - (.+)$", RegexOptions.Compiled);
+
 		private readonly List<Song> songs = new List<Song>();
 
 		/// <summary>
@@ -90,7 +94,8 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 				{
 					disc = new Disc
 					{
-						Title = BuildDiscTitle(discUri),
+						Year = GetDiscYear(discUri),
+						Title = GetDiscTitle(discUri),
 						Uri = discUri,
 					};
 					discs.Add(discUri, disc);
@@ -123,7 +128,7 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 			}
 		}
 
-		private static string BuildDiscTitle(Uri discUri)
+		private static string GetRawDiscTitle(Uri discUri)
 		{
 			var title = discUri.ToString().Split('/').LastOrDefault();
 			if (title == null)
@@ -132,6 +137,20 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 			}
 
 			return title;
+		}
+
+		private static int? GetDiscYear(Uri discUri)
+		{
+			var rawTitle = GetRawDiscTitle(discUri);
+			var match = AlbumDataRegex.Match(rawTitle);
+			return match.Success ? (int?)Int32.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture) : null;
+		}
+
+		private static string GetDiscTitle(Uri discUri)
+		{
+			var rawTitle = GetRawDiscTitle(discUri);
+			var match = AlbumDataRegex.Match(rawTitle);
+			return match.Success ? match.Groups[2].Value : rawTitle;
 		}
 	}
 }

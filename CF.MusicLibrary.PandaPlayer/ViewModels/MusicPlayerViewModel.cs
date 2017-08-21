@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
@@ -7,6 +8,7 @@ using CF.Library.Core.Facades;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.Player;
+using CF.MusicLibrary.PandaPlayer.Scrobbler;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -17,10 +19,10 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 	{
 		private readonly IMusicCatalog musicCatalog;
 		private readonly IMusicStorage musicStorage;
+		private readonly ITimerFacade timer;
+		private readonly IScrobbler scrobbler;
 
 		private readonly MediaPlayer mediaPlayer = new MediaPlayer();
-
-		private readonly ITimerFacade timer;
 
 		private bool isPlaying;
 		public bool IsPlaying
@@ -68,7 +70,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public ICommand PlayCommand { get; }
 		public ICommand PauseCommand { get; }
 
-		public MusicPlayerViewModel(ISongPlaylist playlist, IMusicCatalog musicCatalog, IMusicStorage musicStorage, ITimerFacade timer)
+		public MusicPlayerViewModel(ISongPlaylist playlist, IMusicCatalog musicCatalog, IMusicStorage musicStorage, ITimerFacade timer, IScrobbler scrobbler)
 		{
 			if (playlist == null)
 			{
@@ -86,6 +88,10 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 				throw new ArgumentNullException(nameof(timer));
 			}
+			if (scrobbler == null)
+			{
+				throw new ArgumentNullException(nameof(scrobbler));
+			}
 
 			Playlist = playlist;
 			this.musicCatalog = musicCatalog;
@@ -93,6 +99,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			this.timer = timer;
 			this.timer.Elapsed += Timer_Elapsed;
 			this.timer.Interval = 200;
+			this.scrobbler = scrobbler;
 
 			PlayCommand = new RelayCommand(Resume);
 			PauseCommand = new RelayCommand(Pause);
@@ -101,7 +108,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			mediaPlayer.MediaEnded += MediaPlayerOnMediaEnded;
 		}
 
-		public void Play()
+		public async Task Play()
 		{
 			Song currSong = Playlist.CurrentSong;
 			if (currSong == null)
@@ -110,7 +117,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				return;
 			}
 
-			SwitchToNewSong(currSong);
+			await SwitchToNewSong(currSong);
 			Resume();
 		}
 
@@ -160,16 +167,30 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				var playbackDateTime = DateTime.Now;
 				currSong.AddPlayback(playbackDateTime);
 				await musicCatalog.AddSongPlayback(currSong, playbackDateTime);
+				await scrobbler.Scrobble(new TrackScrobble(GetTrackFromSong(currSong), DateTime.Now - currSong.Duration));
 			}
 
 			Playlist.SwitchToNextSong();
-			Play();
+			await Play();
 		}
 
-		private void SwitchToNewSong(Song newSong)
+		private async Task SwitchToNewSong(Song newSong)
 		{
 			var songFile = musicStorage.GetSongFile(newSong.Uri);
 			mediaPlayer.Open(new Uri(songFile.FullName));
+			await scrobbler.UpdateNowPlaying(GetTrackFromSong(newSong));
+		}
+
+		private static Track GetTrackFromSong(Song song)
+		{
+			return new Track
+			{
+				Number = song.OrderNumber,
+				Title = song.Title,
+				Artist = song.Artist.Name,
+				Album = song.Disc.Title,
+				Duration = song.Duration,
+			};
 		}
 
 		private void StartPlayback()

@@ -10,6 +10,8 @@ namespace CF.MusicLibrary.BL.Objects
 		[Key]
 		public int Id { get; set; }
 
+		public int? Year { get; set; }
+
 		[Required]
 		public string Title { get; set; }
 
