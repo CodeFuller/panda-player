@@ -1,4 +1,6 @@
-﻿using CF.Library.Core.Configuration;
+﻿using System.IO;
+using CF.Library.Core.Configuration;
+using CF.Library.Core.Exceptions;
 using CF.Library.Core.Facades;
 using CF.Library.Core.Logging;
 using CF.Library.Unity;
@@ -13,6 +15,7 @@ using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
+using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.PandaPlayer
 {
@@ -27,6 +30,11 @@ namespace CF.MusicLibrary.PandaPlayer
 
 			string localStorageRoot = AppSettings.GetRequiredValue<string>("LocalStorageRoot");
 			string appDataDirectory = AppSettings.GetRequiredValue<string>("AppDataPath");
+			string lastFMApiKey = AppSettings.GetRequiredValue<string>("LastFMApiKey");
+
+			string lastFMSharedSecret;
+			string lastFMSessionKey;
+			LoadLastFMSessionInfo(appDataDirectory, out lastFMSharedSecret, out lastFMSessionKey);
 
 			DIContainer.RegisterType<ILibraryBrowser, FileSystemLibraryBrowser>();
 			DIContainer.RegisterType<ILibraryExplorerViewModel, LibraryExplorerViewModel>();
@@ -40,11 +48,23 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<IFileSystemFacade, FileSystemFacade>();
 			DIContainer.RegisterType<ITimerFacade, TimerFacade>(new InjectionConstructor());
 			DIContainer.RegisterType<ITokenAuthorizer, DefaultBrowserTokenAuthorizer>();
-			//	CF TEMP: Store session data in database
-			DIContainer.RegisterType<ILastFMApiClient, LastFMApiClient>(new InjectionConstructor(typeof(ITokenAuthorizer), @"66b7aec24069590c0d674448f7e0538d", @"2ba2f3f93caedbb3816aafefdbb4ebaa", @"qDaJ5D15454f2XPHSOytLE0yDLrUqmX2"));
+			DIContainer.RegisterType<ILastFMApiClient, LastFMApiClient>(new InjectionConstructor(typeof(ITokenAuthorizer), lastFMApiKey, lastFMSharedSecret, lastFMSessionKey));
 			DIContainer.RegisterType<IScrobbler, PersistentScrobbler>(new InjectionConstructor(typeof(ILastFMApiClient), appDataDirectory));
 			DIContainer.RegisterType<IMessageLogger, LoggerViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<ILoggerViewModel, LoggerViewModel>(new ContainerControlledLifetimeManager());
+		}
+
+		private static void LoadLastFMSessionInfo(string appDataDirectory, out string lastFMSharedSecret, out string lastFMSessionKey)
+		{
+			var sessionInfoFileName = Path.Combine(appDataDirectory, "LastFMSessionInfo.txt");
+			var lines = File.ReadAllLines(sessionInfoFileName);
+			if (lines.Length != 2)
+			{
+				throw new InvalidInputDataException(Current($"Exactly two lines expected in Last.fm session info file '{sessionInfoFileName}'"));
+			}
+
+			lastFMSharedSecret = lines[0];
+			lastFMSessionKey = lines[1];
 		}
 	}
 }
