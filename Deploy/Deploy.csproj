@@ -12,8 +12,9 @@
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="Deploy">
-    <Exec Command="xcopy /Q /Y &quot;..\CF.MusicLibrary.AlbumPreprocessor\bin\Release&quot; &quot;$(OutputPath)\AlbumPreprocessor\&quot;" />
-    <Exec Command="xcopy /Q /Y &quot;..\CF.MusicLibrary.AlbumAdviser\bin\Release&quot; &quot;$(OutputPath)\AlbumAdviser\&quot;" />
+    <Exec Command="xcopy /q /y /s /e &quot;..\CF.MusicLibrary.AlbumPreprocessor\bin\Release&quot; &quot;$(OutputPath)\AlbumPreprocessor\&quot;" />
+    <Exec Command="xcopy /q /y /s /e &quot;..\CF.MusicLibrary.AlbumAdviser\bin\Release&quot; &quot;$(OutputPath)\AlbumAdviser\&quot;" />
+    <Exec Command="xcopy /q /y /s /e &quot;..\CF.MusicLibrary.PandaPlayer\bin\Release&quot; &quot;$(OutputPath)\PandaPlayer\&quot;" />
   </Target>
   <ItemGroup>
     <ProjectReference Include="..\CF.MusicLibrary.AlbumAdviser\CF.MusicLibrary.AlbumAdviser.csproj">
@@ -23,6 +24,10 @@
     <ProjectReference Include="..\CF.MusicLibrary.AlbumPreprocessor\CF.MusicLibrary.AlbumPreprocessor.csproj">
       <Project>{B977EA7B-85A2-429A-B98F-E76023589321}</Project>
       <Name>CF.MusicLibrary.AlbumPreprocessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.PandaPlayer\CF.MusicLibrary.PandaPlayer.csproj">
+      <Project>{502d59ca-7973-46c9-a2a4-9144c48cbee4}</Project>
+      <Name>CF.MusicLibrary.PandaPlayer</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
