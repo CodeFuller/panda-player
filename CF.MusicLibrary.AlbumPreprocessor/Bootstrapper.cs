@@ -1,8 +1,5 @@
-﻿using System.Configuration;
-using System.Data.Common;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using CF.Library.Core.Configuration;
-using CF.Library.Core.Exceptions;
 using CF.Library.Core.Facades;
 using CF.Library.Unity;
 using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
@@ -14,7 +11,7 @@ using CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.MyLocalLibrary;
-using CF.MusicLibrary.Dal.MediaMonkey;
+using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.Tagger;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
@@ -31,13 +28,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 			AppSettings.SettingsProvider = DIContainer.Resolve<ISettingsProvider>();
 
 			string workshopDirectory = AppSettings.GetRequiredValue<string>("WorkshopDirectory");
-			string mediaMonkeyStorageRoot = AppSettings.GetRequiredValue<string>("MediaMonkeyStorageRoot");
 			string localStorageRoot = AppSettings.GetRequiredValue<string>("LocalStorageRoot");
-			var mediaMonkeyConnectionString = ConfigurationManager.ConnectionStrings["MediaMonkeyDB"];
-			if (mediaMonkeyConnectionString == null)
-			{
-				throw new RequiredSettingIsMissingException("MediaMonkeyDB");
-			}
 			bool deleteSourceContentAfterAdding = AppSettings.GetRequiredValue<bool>("DeleteSourceContentAfterAdding");
 
 			DIContainer.RegisterType<IFileSystemFacade, FileSystemFacade>();
@@ -47,11 +38,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor
 			DIContainer.RegisterType<IInputContentSplitter, InputContentSplitter>();
 			DIContainer.RegisterType<IAlbumContentComparer, AlbumContentComparer>();
 			DIContainer.RegisterType<IWorkshopMusicStorage, LocalWorkshopMusicStorage>(new InjectionConstructor(workshopDirectory));
-			DIContainer.RegisterType<DbProviderFactory>(new InjectionFactory(context =>
-				DbProviderFactories.GetFactory(mediaMonkeyConnectionString.ProviderName)));
-			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepository>(
-				new InjectionConstructor(typeof(DbProviderFactory), typeof(ILibraryBuilder), mediaMonkeyConnectionString.ConnectionString, mediaMonkeyStorageRoot));
-			DIContainer.RegisterType<ILibraryBuilder, LibraryBuilder>();
+			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepositoryEF>();
 			DIContainer.RegisterType<IMusicCatalog, MusicCatalog>();
 			DIContainer.RegisterType<IMusicStorage, FilesystemMusicStorage>(new InjectionConstructor(typeof(IFileSystemFacade), localStorageRoot, deleteSourceContentAfterAdding));
 			DIContainer.RegisterType<IMusicLibrary, CatalogBasedMusicLibrary>(new ContainerControlledLifetimeManager());
