@@ -15,6 +15,12 @@ namespace CF.MusicLibrary.BL
 		/// </summary>
 		Task<DiscLibrary> GetDiscLibraryAsync();
 
+		Task<IEnumerable<Artist>> GetArtistsAsync();
+
+		Task<IEnumerable<Disc>> GetDiscsAsync();
+
+		Task<IEnumerable<Song>> GetSongsAsync();
+
 		Task<IEnumerable<Genre>> GetGenresAsync();
 
 		Task AddSongPlayback(Song song, DateTime playbackTime);

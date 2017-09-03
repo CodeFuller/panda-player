@@ -19,7 +19,7 @@ namespace CF.MusicLibrary.BL.Objects
 
 		public Artist Artist { get; set; }
 
-		public short OrderNumber { get; set; }
+		public short? TrackNumber { get; set; }
 
 		public short? Year { get; set; }
 

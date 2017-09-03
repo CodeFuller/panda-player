@@ -1,4 +1,4 @@
-﻿using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
+﻿using CF.MusicLibrary.Tagger;
 using NUnit.Framework;
 
 namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary

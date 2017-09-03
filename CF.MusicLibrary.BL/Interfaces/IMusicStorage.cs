@@ -11,5 +11,7 @@ namespace CF.MusicLibrary.BL.Interfaces
 		Task SetAlbumCoverImage(Uri albumUri, string coverImagePath);
 
 		FileInfo GetSongFile(Uri songUri);
+
+		bool CheckSongContent(Uri songUri);
 	}
 }

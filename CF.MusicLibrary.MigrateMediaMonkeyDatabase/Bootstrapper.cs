@@ -22,12 +22,14 @@ namespace CF.MusicLibrary.MigrateMediaMonkeyDatabase
 			string mediaMonkeyStorageRoot = AppSettings.GetRequiredValue<string>("MediaMonkeyStorageRoot");
 			var mediaMonkeyConnectionString = ConfigurationManager.ConnectionStrings["MediaMonkeyDB"];
 
+			var targetDBSettings = ConfigurationManager.ConnectionStrings["MusicLibraryEntities"];
+
 			DIContainer.RegisterType<DbProviderFactory>(new InjectionFactory(context =>
 				DbProviderFactories.GetFactory(mediaMonkeyConnectionString.ProviderName)));
 			DIContainer.RegisterType<ILibraryBuilder, LibraryBuilder>();
 			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepository>(
 				new InjectionConstructor(typeof(DbProviderFactory), typeof(ILibraryBuilder), mediaMonkeyConnectionString.ConnectionString, mediaMonkeyStorageRoot));
-			DIContainer.RegisterType<IApplicationLogic, ApplicationLogic>();
+			DIContainer.RegisterType<IApplicationLogic, ApplicationLogic>(new InjectionConstructor(typeof(IMusicLibraryRepository), targetDBSettings));
 		}
 	}
 }

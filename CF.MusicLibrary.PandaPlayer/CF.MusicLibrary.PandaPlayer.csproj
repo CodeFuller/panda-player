@@ -41,16 +41,12 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6442.39224, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6442.39224\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6446.14101, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6446.14101\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CF.Library.Http, Version=0.1.6431.35450, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Http.0.1.6431.35450\lib\net462\CF.Library.Http.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="CF.Library.Unity, Version=0.1.6406.22232, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Unity.0.1.6406.22232\lib\net462\CF.Library.Unity.dll</HintPath>
+    <Reference Include="CF.Library.Unity, Version=0.1.6446.14811, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Unity.0.1.6446.14811\lib\net462\CF.Library.Unity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CF.Library.Wpf, Version=0.1.6413.28910, Culture=neutral, processorArchitecture=MSIL">
@@ -113,8 +109,6 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.105.2\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -124,7 +118,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -139,28 +132,8 @@
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Events\PlayDiscEventArgs.cs" />
-    <Compile Include="Scrobbler\BooleanJsonConverter.cs" />
-    <Compile Include="Scrobbler\DataContracts\CorrectableText.cs" />
-    <Compile Include="Scrobbler\DataContracts\GetSessionResponse.cs" />
-    <Compile Include="Scrobbler\DataContracts\GetTokenResponse.cs" />
-    <Compile Include="Scrobbler\DataContracts\LastFMSession.cs" />
-    <Compile Include="Scrobbler\DataContracts\NowPlayingTrack.cs" />
-    <Compile Include="Scrobbler\DataContracts\ScrobbleInfo.cs" />
-    <Compile Include="Scrobbler\DataContracts\ScrobblesInfo.cs" />
-    <Compile Include="Scrobbler\DataContracts\ScrobbleStatistics.cs" />
-    <Compile Include="Scrobbler\DataContracts\ScrobbleTrackResponse.cs" />
-    <Compile Include="Scrobbler\DataContracts\TrackIgnoredMessage.cs" />
-    <Compile Include="Scrobbler\DataContracts\UpdateNowPlayingTrackResponse.cs" />
-    <Compile Include="Scrobbler\DefaultBrowserTokenAuthorizer.cs" />
-    <Compile Include="Scrobbler\ILastFMApiClient.cs" />
     <Compile Include="Scrobbler\IScrobbler.cs" />
-    <Compile Include="Scrobbler\ITokenAuthorizer.cs" />
-    <Compile Include="Scrobbler\LastFMApiCallFailedException.cs" />
-    <Compile Include="Scrobbler\LastFMApiClient.cs" />
     <Compile Include="Scrobbler\PersistentScrobbler.cs" />
-    <Compile Include="Scrobbler\Track.cs" />
-    <Compile Include="Scrobbler\TrackScrobble.cs" />
-    <Compile Include="Scrobbler\UnauthorizedToken.cs" />
     <Compile Include="ViewModels\Interfaces\ILibraryExplorerViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ILoggerViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ISongListViewModel.cs" />
@@ -273,6 +246,10 @@
     <ProjectReference Include="..\CF.MusicLibrary.Dal\CF.MusicLibrary.Dal.csproj">
       <Project>{83AD3795-4E4A-4D32-BE5B-9D68287EF586}</Project>
       <Name>CF.MusicLibrary.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.LastFM\CF.MusicLibrary.LastFM.csproj">
+      <Project>{7F368759-572F-41D4-A7FF-1B3898AE3918}</Project>
+      <Name>CF.MusicLibrary.LastFM</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,7 @@ using System.Windows.Media;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.LastFM.Objects;
 using CF.MusicLibrary.PandaPlayer.Player;
 using CF.MusicLibrary.PandaPlayer.Scrobbler;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -185,10 +186,10 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			return new Track
 			{
-				Number = song.OrderNumber,
+				Number = song.TrackNumber,
 				Title = song.Title,
 				Artist = song.Artist.Name,
-				Album = song.Disc.Title,
+				Album = new Album(song.Artist.Name, song.Disc.AlbumTitle),
 				Duration = song.Duration,
 			};
 		}

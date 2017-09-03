@@ -56,6 +56,12 @@ namespace CF.MusicLibrary.BL
 			return new FileInfo(songFileName);
 		}
 
+		public bool CheckSongContent(Uri songUri)
+		{
+			var fileInfo = GetSongFile(songUri);
+			return File.Exists(fileInfo.FullName);
+		}
+		
 		private void StoreFile(string srcFileName, string dstFileName)
 		{
 			if (moveSongFiles)
@@ -72,7 +78,7 @@ namespace CF.MusicLibrary.BL
 
 		private string UriToFilesystemPath(Uri uri)
 		{
-			List<string> segments = new List<string>()
+			List<string> segments = new List<string>
 			{
 				libraryRootDirectory,
 			};

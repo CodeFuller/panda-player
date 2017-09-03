@@ -10,7 +10,7 @@ namespace CF.MusicLibrary.BL
 		/// <summary>
 		/// Adds song to the built library.
 		/// </summary>
-		void AddSong(Song song);
+		void AddSong(Song song, string albumTitle);
 
 		/// <summary>
 		/// Builds library for added content.

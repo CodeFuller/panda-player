@@ -44,12 +44,12 @@
     <ApplicationIcon>AlbumPreprocessor.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6442.39224, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6442.39224\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6446.14101, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6446.14101\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CF.Library.Unity, Version=0.1.6406.22232, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Unity.0.1.6406.22232\lib\net462\CF.Library.Unity.dll</HintPath>
+    <Reference Include="CF.Library.Unity, Version=0.1.6446.14811, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Unity.0.1.6446.14811\lib\net462\CF.Library.Unity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CF.Library.Wpf, Version=0.1.6413.28910, Culture=neutral, processorArchitecture=MSIL">
@@ -84,10 +84,6 @@
       <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="policy.2.0.taglib-sharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
-      <HintPath>..\packages\taglib.2.1.0.0\lib\policy.2.0.taglib-sharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -103,10 +99,6 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="taglib-sharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
-      <HintPath>..\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -126,10 +118,7 @@
     <Compile Include="AddingToLibrary\AddedCompilationAlbum.cs" />
     <Compile Include="AddingToLibrary\AddedCompilationAlbumWithArtistInfo.cs" />
     <Compile Include="AddingToLibrary\AddedCompilationAlbumWithoutArtistInfo.cs" />
-    <Compile Include="AddingToLibrary\SongTagger.cs" />
-    <Compile Include="AddingToLibrary\TaggedSongData.cs" />
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="AddingToLibrary\ISongTagger.cs" />
     <Compile Include="Events\AlbumContentChangedEventArgs.cs" />
     <Compile Include="Events\SongTitleChangedEventArgs.cs" />
     <Compile Include="Events\SongTitleChangeEventArgs.cs" />
@@ -159,6 +148,7 @@
     <Compile Include="ParsingSong\SongTitlePattern.cs" />
     <Compile Include="SongContent.cs" />
     <Compile Include="SongFileFilter.cs" />
+    <Compile Include="TaggedSongData.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\EditAlbumsDetailsViewModel.cs" />
     <Compile Include="ViewModels\EditSongsDetailsViewModel.cs" />
@@ -271,6 +261,10 @@
     <ProjectReference Include="..\CF.MusicLibrary.Dal.MediaMonkey\CF.MusicLibrary.Dal.MediaMonkey.csproj">
       <Project>{733319E0-D824-4FCF-99A8-2F1592A6D26C}</Project>
       <Name>CF.MusicLibrary.Dal.MediaMonkey</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.Tagger\CF.MusicLibrary.Tagger.csproj">
+      <Project>{931CDE55-D545-47AF-B525-06AB15E74C3E}</Project>
+      <Name>CF.MusicLibrary.Tagger</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

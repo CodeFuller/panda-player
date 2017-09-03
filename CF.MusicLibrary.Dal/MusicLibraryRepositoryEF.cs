@@ -12,12 +12,47 @@ namespace CF.MusicLibrary.Dal
 	{
 		public async Task<DiscLibrary> GetDiscLibraryAsync()
 		{
+			return new DiscLibrary(await GetDiscsAsync());
+		}
+
+		public async Task<IEnumerable<Artist>> GetArtistsAsync()
+		{
 			using (var ctx = new MusicLibraryEntities())
 			{
-				var discs = await ctx.Discs
-					.Include("Songs.Artist")
+				var artists = new List<Artist>();
+				foreach (IGrouping<Artist, Song> g in await ctx.Songs
+					.Where(s => s.Artist != null)
+					.GroupBy(s => s.Artist).ToArrayAsync())
+				{
+					var artist = g.Key;
+					artist.Songs = new HashSet<Song>(g);
+					artists.Add(artist);
+				}
+
+				return artists;
+			};
+		}
+
+		public async Task<IEnumerable<Disc>> GetDiscsAsync()
+		{
+			using (var ctx = new MusicLibraryEntities())
+			{
+				return await ctx.Discs
+					.Include(d => d.SongsUnordered.Select(s => s.Artist))
+					.Include(d => d.SongsUnordered.Select(s => s.Genre))
 					.ToArrayAsync();
-				return new DiscLibrary(discs);
+			}
+		}
+
+		public async Task<IEnumerable<Song>> GetSongsAsync()
+		{
+			using (var ctx = new MusicLibraryEntities())
+			{
+				return await ctx.Songs
+					.Include(s => s.Artist)
+					.Include(s => s.Disc)
+					.Include(s => s.Genre)
+					.ToArrayAsync();
 			};
 		}
 

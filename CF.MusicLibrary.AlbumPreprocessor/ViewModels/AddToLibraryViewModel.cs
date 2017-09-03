@@ -10,6 +10,7 @@ using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Tagger;
 using GalaSoft.MvvmLight;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
@@ -107,12 +108,12 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 		private async Task<int> StoreContentInLibrary(bool onlyCountProgressSize)
 		{
 			int taskProgressSize = 0;
-			taskProgressSize += await SetTags(onlyCountProgressSize);
+			taskProgressSize += SetTags(onlyCountProgressSize);
 			taskProgressSize += await StoreAlbumsInLibrary(onlyCountProgressSize);
 			return taskProgressSize;
 		}
 
-		private async Task<int> SetTags(bool onlyCountProgressSize)
+		private int SetTags(bool onlyCountProgressSize)
 		{
 			int taskProgressSize = 0;
 			foreach (TaggedSongData song in songsTagData)
@@ -122,7 +123,7 @@ namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels
 				{
 					ProgressMessages += Current($"Updating tags for '{song.SourceFileName}'...\n");
 					fileSystemFacade.ClearReadOnlyAttribute(song.SourceFileName);
-					await songTagger.SetTagData(song);
+					songTagger.SetTagData(song.SourceFileName, song);
 					CurrProgress += currProgressInc;
 				}
 

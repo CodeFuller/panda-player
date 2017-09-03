@@ -1,5 +1,4 @@
 ﻿using System;
-using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
 using GalaSoft.MvvmLight;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels

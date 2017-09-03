@@ -19,6 +19,7 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 		private const string Artists = "Artists";
 		private const string Songs = "Songs";
 		private const string Genres = "Genres";
+		private const string Albums = "Albums";
 		private const string Played = "Played";
 
 		private readonly DbProviderFactory dbProviderFactory;
@@ -62,11 +63,12 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 				for (var i = 0; i < songsTable.Rows.Count; ++i)
 				{
 					DataRow row = songsTable.Rows[i];
+
 					Song song = new Song
 					{
 						Id = row.Field<int>("ID"),
 						Artist = artists[row.GetParentRow(ds.Relations["SongArtist"]).Field<int>("ID")],
-						OrderNumber = (short)(row.Field<short>("SongOrder") + 1),
+						TrackNumber = CheckForNull((short)(row.Field<short>("SongOrder") + 1), n => n == 0),
 						Year = CheckForNull(row.Field<short>("Year"), (short)-1),
 						Title = row.Field<string>("SongTitle"),
 						Genre = genres[row.GetParentRow(ds.Relations["SongGenre"]).Field<int>("IDGenre")],
@@ -84,7 +86,12 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 						song.Playbacks.Add(new Playback(song, playbackRow.Field<DateTime>("PlayDate")));
 					}
 
-					libraryBuilder.AddSong(song);
+					var albumTitle = row.GetParentRow(ds.Relations["SongAlbum"]).Field<string>("Album");
+					if (albumTitle.Length == 0)
+					{
+						albumTitle = null;
+					}
+					libraryBuilder.AddSong(song, albumTitle);
 				}
 
 				return libraryBuilder.Build();
@@ -115,6 +122,7 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 			};
 
 			await LoadTableAsync(ds, Artists);
+			await LoadTableAsync(ds, Albums);
 			await LoadTableAsync(ds, Songs);
 			await LoadTableAsync(ds, Genres);
 			await LoadTableAsync(ds, Played);
@@ -130,6 +138,10 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 			ds.Relations.Add(new DataRelation("PlaybackSong",
 				ds.Tables[Songs].Columns["ID"],
 				ds.Tables[Played].Columns["IdSong"]));
+
+			ds.Relations.Add(new DataRelation("SongAlbum",
+				ds.Tables[Albums].Columns["ID"],
+				ds.Tables[Songs].Columns["IDAlbum"]));
 
 			return ds;
 		}
@@ -252,6 +264,21 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 			relativePath = relativePath.Replace('\\', '/');
 
 			return new Uri(relativePath, UriKind.Relative);
+		}
+
+		public Task<IEnumerable<Artist>> GetArtistsAsync()
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<IEnumerable<Disc>> GetDiscsAsync()
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<IEnumerable<Song>> GetSongsAsync()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

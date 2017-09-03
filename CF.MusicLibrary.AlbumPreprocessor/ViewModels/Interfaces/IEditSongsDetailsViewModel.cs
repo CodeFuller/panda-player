@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
 
 namespace CF.MusicLibrary.AlbumPreprocessor.ViewModels.Interfaces
 {

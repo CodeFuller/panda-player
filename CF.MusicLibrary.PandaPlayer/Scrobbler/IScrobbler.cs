@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using CF.MusicLibrary.LastFM.Objects;
 
 namespace CF.MusicLibrary.PandaPlayer.Scrobbler
 {

@@ -187,7 +187,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.AlbumPreprocessor.Vie
 			artist.AddDisc(new LibraryDisc(artist, new Disc
 			{
 				Year = 2000,
-				Songs = new Collection<Song>
+				SongsUnordered = new Collection<Song>
 				{
 					new Song
 					{
@@ -199,7 +199,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.AlbumPreprocessor.Vie
 			artist.AddDisc(new LibraryDisc(artist, new Disc
 			{
 				Year = 2005,
-				Songs = new Collection<Song>
+				SongsUnordered = new Collection<Song>
 				{
 					new Song
 					{

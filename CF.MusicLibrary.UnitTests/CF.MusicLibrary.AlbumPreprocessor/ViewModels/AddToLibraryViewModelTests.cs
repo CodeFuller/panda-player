@@ -1,9 +1,10 @@
 ﻿using System.Linq;
 using CF.Library.Core.Configuration;
 using CF.Library.Core.Facades;
-using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
+using CF.MusicLibrary.AlbumPreprocessor;
 using CF.MusicLibrary.AlbumPreprocessor.ViewModels;
 using CF.MusicLibrary.BL.Interfaces;
+using CF.MusicLibrary.Tagger;
 using NSubstitute;
 using NUnit.Framework;
 

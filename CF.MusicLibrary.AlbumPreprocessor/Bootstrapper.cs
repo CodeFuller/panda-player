@@ -5,7 +5,6 @@ using CF.Library.Core.Configuration;
 using CF.Library.Core.Exceptions;
 using CF.Library.Core.Facades;
 using CF.Library.Unity;
-using CF.MusicLibrary.AlbumPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.AlbumPreprocessor.Interfaces;
 using CF.MusicLibrary.AlbumPreprocessor.MusicStorage;
 using CF.MusicLibrary.AlbumPreprocessor.ParsingContent;
@@ -16,6 +15,7 @@ using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.MyLocalLibrary;
 using CF.MusicLibrary.Dal.MediaMonkey;
+using CF.MusicLibrary.Tagger;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
 

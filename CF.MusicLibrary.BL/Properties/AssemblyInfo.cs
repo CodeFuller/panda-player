@@ -10,3 +10,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("a7c549d0-0d6c-4b3b-82f6-23894ce00ca9")]
 
 [assembly: InternalsVisibleTo("CF.MusicLibrary.IntegrationTests")]
+[assembly: InternalsVisibleTo("CF.MusicLibrary.UnitTests")]

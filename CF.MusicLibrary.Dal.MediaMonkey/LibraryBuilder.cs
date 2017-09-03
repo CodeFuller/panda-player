@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using CF.Library.Core.Exceptions;
 using CF.Library.Core.Extensions;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Objects;
 using static System.FormattableString;
+using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.Dal.MediaMonkey
 {
@@ -28,17 +30,30 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 				return 0;
 			}
 
-			if (x.OrderNumber == 0 && y.OrderNumber == 0)
+			if (x.TrackNumber == null && y.TrackNumber == null)
 			{
 				return String.Compare(x.Uri.ToString(), y.Uri.ToString(), StringComparison.OrdinalIgnoreCase);
 			}
 
-			if (x.OrderNumber != 0 && y.OrderNumber != 0 && x.OrderNumber != y.OrderNumber)
+			if (x.TrackNumber != null && y.TrackNumber != null && x.TrackNumber != y.TrackNumber)
 			{
-				return x.OrderNumber.CompareTo(y.OrderNumber);
+				return x.TrackNumber.Value.CompareTo(y.TrackNumber.Value);
 			}
 
-			throw new InvalidOperationException(Invariant($"Inconsistency in songs ordering: [{x.OrderNumber}, {x.Uri}] vs [{y.OrderNumber}, {y.Uri}]"));
+			throw new InvalidOperationException(Invariant($"Inconsistency in songs ordering: [{x.TrackNumber}, {x.Uri}] vs [{y.TrackNumber}, {y.Uri}]"));
+		}
+	}
+
+	internal class SongWithAlbumTitle
+	{
+		public Song Song { get; set; }
+
+		public string AlbumTitle { get; set; }
+
+		public SongWithAlbumTitle(Song song, string albumTitle)
+		{
+			Song = song;
+			AlbumTitle = albumTitle;
 		}
 	}
 
@@ -49,14 +64,14 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 	{
 		private static readonly Regex AlbumDataRegex = new Regex(@"^(\d{4}) - (.+)$", RegexOptions.Compiled);
 
-		private readonly List<Song> songs = new List<Song>();
+		private readonly List<SongWithAlbumTitle> songs = new List<SongWithAlbumTitle>();
 
 		/// <summary>
 		/// Implementation for ILibraryBuilder.AddSong().
 		/// </summary>
-		public void AddSong(Song song)
+		public void AddSong(Song song, string albumTitle)
 		{
-			songs.Add(song);
+			songs.Add(new SongWithAlbumTitle(song, albumTitle));
 		}
 
 		/// <summary>
@@ -70,7 +85,7 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 			int discId = 1;
 			foreach (var disc in discsDictionary.Values.OrderBy(d => d.Uri.ToString()))
 			{
-				OrderDicsSongs(disc);
+				disc.SongsUnordered = disc.Songs.OrderBy(x => x, new SongOrderComparer()).ToCollection();
 				disc.Id = discId++;
 				discs.Add(disc);
 			}
@@ -88,7 +103,7 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 			var discs = new Dictionary<Uri, Disc>();
 			foreach (var song in songs)
 			{
-				var discUri = song.Uri.RemoveLastSegment();
+				var discUri = song.Song.Uri.RemoveLastSegment();
 				Disc disc;
 				if (!discs.TryGetValue(discUri, out disc))
 				{
@@ -96,36 +111,22 @@ namespace CF.MusicLibrary.Dal.MediaMonkey
 					{
 						Year = GetDiscYear(discUri),
 						Title = GetDiscTitle(discUri),
+						AlbumTitle = song.AlbumTitle,
 						Uri = discUri,
 					};
 					discs.Add(discUri, disc);
 				}
-				disc.Songs.Add(song);
+				else
+				{
+					if (disc.AlbumTitle != song.AlbumTitle)
+					{
+						throw new InvalidInputDataException(Current($"Album title differ within the same disc: '{disc.AlbumTitle}' != '{song.AlbumTitle}'"));
+					}
+				}
+				disc.Songs.Add(song.Song);
 			}
 
 			return discs;
-		}
-
-		private static void OrderDicsSongs(Disc disc)
-		{
-			//	Ordering songs
-			disc.Songs = disc.Songs.OrderBy(x => x, new SongOrderComparer()).ToCollection();
-
-			//	Settings songs order
-			short currOrderNumber = 1;
-			foreach (var song in disc.Songs)
-			{
-				if (song.OrderNumber == 0)
-				{
-					song.OrderNumber = currOrderNumber;
-				}
-				else
-				{
-					currOrderNumber = song.OrderNumber;
-				}
-
-				++currOrderNumber;
-			}
 		}
 
 		private static string GetRawDiscTitle(Uri discUri)
