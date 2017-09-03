@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using static System.FormattableString;
 
 namespace CF.MusicLibrary.BL.Objects
 {
@@ -11,7 +13,20 @@ namespace CF.MusicLibrary.BL.Objects
 		/// </remarks>
 		private int? playbacksPassed;
 
-		public string Title => Disc.Title;
+		public string Title
+		{
+			get
+			{
+				StringBuilder sb = new StringBuilder();
+				if (Year.HasValue)
+				{
+					sb.Append(Invariant($"{Year} - "));
+				}
+				sb.Append(Disc.Title);
+
+				return sb.ToString();
+			}
+		}
 
 		public LibraryArtist Artist { get; }
 

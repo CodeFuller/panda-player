@@ -1,6 +1,4 @@
-﻿using System.Configuration;
-using System.Data.Common;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using CF.Library.Core.Bootstrap;
 using CF.Library.Core.Configuration;
 using CF.Library.Core.Facades;
@@ -9,7 +7,7 @@ using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.DiscAdviser;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.MyLocalLibrary;
-using CF.MusicLibrary.Dal.MediaMonkey;
+using CF.MusicLibrary.Dal;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
 
@@ -23,15 +21,9 @@ namespace CF.MusicLibrary.AlbumAdviser
 			DIContainer.LoadConfiguration();
 			AppSettings.SettingsProvider = DIContainer.Resolve<ISettingsProvider>();
 
-			string mediaMonkeyStorageRoot = AppSettings.GetRequiredValue<string>("MediaMonkeyStorageRoot");
 			string localStorageRoot = AppSettings.GetRequiredValue<string>("LocalStorageRoot");
-			var mediaMonkeyConnectionString = ConfigurationManager.ConnectionStrings["MediaMonkeyDB"];
 
-			DIContainer.RegisterType<DbProviderFactory>(new InjectionFactory(context =>
-				DbProviderFactories.GetFactory(mediaMonkeyConnectionString.ProviderName)));
-			DIContainer.RegisterType<ILibraryBuilder, LibraryBuilder>();
-			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepository>(
-				new InjectionConstructor(typeof(DbProviderFactory), typeof(ILibraryBuilder), mediaMonkeyConnectionString.ConnectionString, mediaMonkeyStorageRoot));
+			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepositoryEF>();
 			DIContainer.RegisterType<IMusicCatalog, MusicCatalog>();
 			DIContainer.RegisterType<IMusicStorage, FilesystemMusicStorage>(new InjectionConstructor(typeof(IFileSystemFacade), localStorageRoot, false));
 			DIContainer.RegisterType<IMusicLibrary, CatalogBasedMusicLibrary>();
