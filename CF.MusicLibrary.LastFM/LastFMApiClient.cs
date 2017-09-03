@@ -58,7 +58,7 @@ namespace CF.MusicLibrary.LastFM
 		{
 			CheckSession();
 
-			Logger.WriteInfo($"Updating current track: [Title: {track.Title}][Artist: {track.Artist}][Album: {track.Album}]");
+			Logger.WriteInfo($"Updating current track: [Title: {track.Title}][Artist: {track.Artist}][Album: {track.Album.Title}]");
 
 			var requestParams = new NameValueCollection
 			{
@@ -81,7 +81,7 @@ namespace CF.MusicLibrary.LastFM
 		{
 			CheckSession();
 
-			Logger.WriteInfo($"Scrobbling track: [Title: {trackScrobble.Track.Title}][Artist: {trackScrobble.Track.Artist}][Album: {trackScrobble.Track.Album}]");
+			Logger.WriteInfo($"Scrobbling track: [Title: {trackScrobble.Track.Title}][Artist: {trackScrobble.Track.Artist}][Album: {trackScrobble.Track.Album.Title}]");
 
 			var requestParams = new NameValueCollection
 			{
