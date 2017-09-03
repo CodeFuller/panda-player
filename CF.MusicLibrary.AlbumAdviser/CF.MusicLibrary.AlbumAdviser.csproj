@@ -115,10 +115,6 @@
       <Project>{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}</Project>
       <Name>CF.MusicLibrary.BL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.Dal.MediaMonkey\CF.MusicLibrary.Dal.MediaMonkey.csproj">
-      <Project>{733319E0-D824-4FCF-99A8-2F1592A6D26C}</Project>
-      <Name>CF.MusicLibrary.Dal.MediaMonkey</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.Dal\CF.MusicLibrary.Dal.csproj">
       <Project>{83AD3795-4E4A-4D32-BE5B-9D68287EF586}</Project>
       <Name>CF.MusicLibrary.Dal</Name>
