@@ -18,8 +18,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 {
 	public class MusicPlayerViewModel : ViewModelBase, IMusicPlayerViewModel
 	{
-		private readonly IMusicCatalog musicCatalog;
-		private readonly IMusicStorage musicStorage;
+		private readonly IMusicLibrary musicLibrary;
 		private readonly ITimerFacade timer;
 		private readonly IScrobbler scrobbler;
 
@@ -71,19 +70,15 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public ICommand PlayCommand { get; }
 		public ICommand PauseCommand { get; }
 
-		public MusicPlayerViewModel(ISongPlaylist playlist, IMusicCatalog musicCatalog, IMusicStorage musicStorage, ITimerFacade timer, IScrobbler scrobbler)
+		public MusicPlayerViewModel(ISongPlaylist playlist, IMusicLibrary musicLibrary, ITimerFacade timer, IScrobbler scrobbler)
 		{
 			if (playlist == null)
 			{
 				throw new ArgumentNullException(nameof(playlist));
 			}
-			if (musicCatalog == null)
+			if (musicLibrary == null)
 			{
-				throw new ArgumentNullException(nameof(musicCatalog));
-			}
-			if (musicStorage == null)
-			{
-				throw new ArgumentNullException(nameof(musicStorage));
+				throw new ArgumentNullException(nameof(musicLibrary));
 			}
 			if (timer == null)
 			{
@@ -95,8 +90,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			}
 
 			Playlist = playlist;
-			this.musicCatalog = musicCatalog;
-			this.musicStorage = musicStorage;
+			this.musicLibrary = musicLibrary;
 			this.timer = timer;
 			this.timer.Elapsed += Timer_Elapsed;
 			this.timer.Interval = 200;
@@ -167,7 +161,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 				var playbackDateTime = DateTime.Now;
 				currSong.AddPlayback(playbackDateTime);
-				await musicCatalog.AddSongPlayback(currSong, playbackDateTime);
+				await musicLibrary.AddSongPlayback(currSong, playbackDateTime);
 				await scrobbler.Scrobble(new TrackScrobble(GetTrackFromSong(currSong), DateTime.Now - currSong.Duration));
 			}
 
@@ -177,7 +171,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		private async Task SwitchToNewSong(Song newSong)
 		{
-			var songFile = musicStorage.GetSongFile(newSong.Uri);
+			var songFile = await musicLibrary.GetSongFile(newSong);
 			mediaPlayer.Open(new Uri(songFile.FullName));
 			await scrobbler.UpdateNowPlaying(GetTrackFromSong(newSong));
 		}

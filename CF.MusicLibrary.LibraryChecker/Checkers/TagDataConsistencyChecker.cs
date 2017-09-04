@@ -1,56 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CF.Library.Core;
-using CF.Library.Core.Facades;
+using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
+using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.LibraryChecker.Registrators;
-using CF.MusicLibrary.Tagger;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.LibraryChecker.Checkers
 {
 	public class TagDataConsistencyChecker : ITagDataConsistencyChecker
 	{
-		private readonly IMusicStorage musicStorage;
-		private readonly ISongTagger songTagger;
-		private readonly IFileSystemFacade fileSystemFacade;
+		private readonly IMusicLibrary musicLibrary;
 		private readonly ILibraryInconsistencyRegistrator inconsistencyRegistrator;
 
-		public TagDataConsistencyChecker(IMusicStorage musicStorage, ISongTagger songTagger, IFileSystemFacade fileSystemFacade, ILibraryInconsistencyRegistrator inconsistencyRegistrator)
+		public TagDataConsistencyChecker(IMusicLibrary musicLibrary, ILibraryInconsistencyRegistrator inconsistencyRegistrator)
 		{
-			if (musicStorage == null)
+			if (musicLibrary == null)
 			{
-				throw new ArgumentNullException(nameof(musicStorage));
-			}
-			if (songTagger == null)
-			{
-				throw new ArgumentNullException(nameof(musicStorage));
-			}
-			if (fileSystemFacade == null)
-			{
-				throw new ArgumentNullException(nameof(fileSystemFacade));
+				throw new ArgumentNullException(nameof(musicLibrary));
 			}
 			if (inconsistencyRegistrator == null)
 			{
 				throw new ArgumentNullException(nameof(inconsistencyRegistrator));
 			}
 
-			this.musicStorage = musicStorage;
-			this.songTagger = songTagger;
-			this.fileSystemFacade = fileSystemFacade;
+			this.musicLibrary = musicLibrary;
 			this.inconsistencyRegistrator = inconsistencyRegistrator;
 		}
 
-		public void CheckTagData(IEnumerable<Song> songs)
+		public async Task CheckTagData(IEnumerable<Song> songs)
 		{
 			Application.Logger.WriteInfo("Checking tag data ...");
 
 			foreach (var song in songs)
 			{
-				var songFileName = musicStorage.GetSongFile(song.Uri).FullName;
-				var tagData = songTagger.GetTagData(songFileName);
+				var tagData = await musicLibrary.GetSongTagData(song);
 
 				if (tagData.Artist != song.Artist?.Name)
 				{
@@ -61,7 +49,7 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 				{
 					inconsistencyRegistrator.RegisterInconsistency_BadTagData(Current($"Album mismatch for {song.Uri + ":",-100} '{tagData.Album}' != '{song.Disc.AlbumTitle}'"));
 				}
-				if (AlbumTitleChecker.AlbumTitleIsSuspicious(tagData.Album))
+				if (DiscTitleToAlbumMapper.AlbumTitleIsSuspicious(tagData.Album))
 				{
 					inconsistencyRegistrator.RegisterInconsistency_BadTagData(Current($"Album title looks suspicious for {song.Uri + ":",-100}: '{tagData.Album}'"));
 				}
@@ -86,24 +74,20 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 					inconsistencyRegistrator.RegisterInconsistency_BadTagData(Current($"Title mismatch for {song.Uri + ":",-100} '{tagData.Title}' != '{song.Title}'"));
 				}
 
-				var tagTypes = songTagger.GetTagTypes(songFileName).ToList();
-				if (!tagTypes.SequenceEqual(new[] { AudioTagType.Id3V1, AudioTagType.Id3V2 }))
+				var tagTypes = (await musicLibrary.GetSongTagTypes(song)).ToList();
+				if (!tagTypes.SequenceEqual(new[] { SongTagType.Id3V1, SongTagType.Id3V2 }))
 				{
 					inconsistencyRegistrator.RegisterInconsistency_BadTagData(Current($"Bad tag types for {song.Uri + ":",-100}: [{String.Join(", ", tagTypes)}]"));
 				}
 			}
 		}
 
-		public void UnifyTags(IEnumerable<Song> songs)
+		public async Task UnifyTags(IEnumerable<Song> songs)
 		{
 			foreach (var song in songs)
 			{
-				var songFileName = musicStorage.GetSongFile(song.Uri).FullName;
-				Application.Logger.WriteInfo(Current($"Unifying tag data for song '{songFileName}'..."));
-
-				fileSystemFacade.ClearReadOnlyAttribute(songFileName);
-				songTagger.FixTagData(songFileName);
-				fileSystemFacade.SetReadOnlyAttribute(songFileName);
+				Application.Logger.WriteInfo(Current($"Unifying tag data for song '{song.Uri}'..."));
+				await musicLibrary.FixSongTagData(song);
 			}
 
 			Application.Logger.WriteInfo("Tags unification has finished successfully");

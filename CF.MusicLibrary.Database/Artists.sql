@@ -1,5 +1,0 @@
-﻿CREATE TABLE [dbo].[Artists]
-(
-	[Id] INT IDENTITY(1, 1) NOT NULL PRIMARY KEY, 
-    [Name] NVARCHAR(MAX) NOT NULL
-)

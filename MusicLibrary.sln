@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.BL", "CF.MusicLibrary.BL\CF.MusicLibrary.BL.csproj", "{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.AlbumPreprocessor", "CF.MusicLibrary.AlbumPreprocessor\CF.MusicLibrary.AlbumPreprocessor.csproj", "{B977EA7B-85A2-429A-B98F-E76023589321}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.DiscPreprocessor", "CF.MusicLibrary.DiscPreprocessor\CF.MusicLibrary.DiscPreprocessor.csproj", "{B977EA7B-85A2-429A-B98F-E76023589321}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.UnitTests", "CF.MusicLibrary.UnitTests\CF.MusicLibrary.UnitTests.csproj", "{917EE041-0D0D-4468-A08E-23E8A4D4D648}"
 EndProject
@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.Integration
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deploy", "Deploy\Deploy.csproj", "{DAD016BF-AD20-44A1-9017-194A9D18538C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.AlbumAdviser", "CF.MusicLibrary.AlbumAdviser\CF.MusicLibrary.AlbumAdviser.csproj", "{600BEFAB-9D92-455D-A6F2-E7DDA2DBA557}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.DiscAdviser", "CF.MusicLibrary.DiscAdviser\CF.MusicLibrary.DiscAdviser.csproj", "{600BEFAB-9D92-455D-A6F2-E7DDA2DBA557}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.PandaPlayer", "CF.MusicLibrary.PandaPlayer\CF.MusicLibrary.PandaPlayer.csproj", "{502D59CA-7973-46C9-A2A4-9144C48CBEE4}"
 EndProject
@@ -24,6 +24,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.LibraryChecker", "CF.MusicLibrary.LibraryChecker\CF.MusicLibrary.LibraryChecker.csproj", "{72458EFF-83E3-4907-8161-5401AA303D93}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.Tagger", "CF.MusicLibrary.Tagger\CF.MusicLibrary.Tagger.csproj", "{931CDE55-D545-47AF-B525-06AB15E74C3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.Local", "CF.MusicLibrary.Local\CF.MusicLibrary.Local.csproj", "{378157BA-2DA4-4E39-8AFD-59CED35B9B1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.Universal", "CF.MusicLibrary.Universal\CF.MusicLibrary.Universal.csproj", "{C82EEE4A-B797-40A5-B733-34DF2DA02A85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.LibraryToolkit", "CF.MusicLibrary.LibraryToolkit\CF.MusicLibrary.LibraryToolkit.csproj", "{59585C20-BE78-4A26-943F-5DE4F7C9E045}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +79,18 @@ Global
 		{931CDE55-D545-47AF-B525-06AB15E74C3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{931CDE55-D545-47AF-B525-06AB15E74C3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{931CDE55-D545-47AF-B525-06AB15E74C3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{378157BA-2DA4-4E39-8AFD-59CED35B9B1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{378157BA-2DA4-4E39-8AFD-59CED35B9B1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{378157BA-2DA4-4E39-8AFD-59CED35B9B1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{378157BA-2DA4-4E39-8AFD-59CED35B9B1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C82EEE4A-B797-40A5-B733-34DF2DA02A85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C82EEE4A-B797-40A5-B733-34DF2DA02A85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C82EEE4A-B797-40A5-B733-34DF2DA02A85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C82EEE4A-B797-40A5-B733-34DF2DA02A85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59585C20-BE78-4A26-943F-5DE4F7C9E045}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59585C20-BE78-4A26-943F-5DE4F7C9E045}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59585C20-BE78-4A26-943F-5DE4F7C9E045}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59585C20-BE78-4A26-943F-5DE4F7C9E045}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

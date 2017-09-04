@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.LibraryChecker.Registrators;
@@ -10,32 +12,32 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 {
 	public class DiscConsistencyChecker : IDiscConsistencyChecker
 	{
-		private readonly IMusicStorage musicStorage;
+		private readonly IMusicLibrary musicLibrary;
 		private readonly ILibraryInconsistencyRegistrator inconsistencyRegistrator;
 
-		public DiscConsistencyChecker(IMusicStorage musicStorage, ILibraryInconsistencyRegistrator inconsistencyRegistrator)
+		public DiscConsistencyChecker(IMusicLibrary musicLibrary, ILibraryInconsistencyRegistrator inconsistencyRegistrator)
 		{
-			if (musicStorage == null)
+			if (musicLibrary == null)
 			{
-				throw new ArgumentNullException(nameof(musicStorage));
+				throw new ArgumentNullException(nameof(musicLibrary));
 			}
 			if (inconsistencyRegistrator == null)
 			{
 				throw new ArgumentNullException(nameof(inconsistencyRegistrator));
 			}
 
-			this.musicStorage = musicStorage;
+			this.musicLibrary = musicLibrary;
 			this.inconsistencyRegistrator = inconsistencyRegistrator;
 		}
 
-		public void CheckDiscsConsistency(IEnumerable<Disc> discs)
+		public async Task CheckDiscsConsistency(IEnumerable<Disc> discs)
 		{
 			Logger.WriteInfo("Checking discs consistency ...");
 
 			foreach (var disc in discs)
 			{
 				//	Checking album title
-				if (AlbumTitleChecker.AlbumTitleIsSuspicious(disc.AlbumTitle))
+				if (DiscTitleToAlbumMapper.AlbumTitleIsSuspicious(disc.AlbumTitle))
 				{
 					inconsistencyRegistrator.RegisterInconsistency_SuspiciousAlbumTitle(disc);
 				}
@@ -50,7 +52,7 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 				//	Checking that all song files exist
 				foreach (var song in disc.Songs)
 				{
-					if (!musicStorage.CheckSongContent(song.Uri))
+					if (!await musicLibrary.CheckSongContent(song))
 					{
 						inconsistencyRegistrator.RegisterInconsistency_BadSongContent(song);
 					}

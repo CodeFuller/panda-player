@@ -34,8 +34,8 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.Tests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6446.14101, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6446.14101\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6462.25018, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6462.25018\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
@@ -87,18 +87,18 @@
     <Compile Include="..\Global\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CF.MusicLibrary.AlbumPreprocessor\AddingToLibrary\AddedArtistAlbumTests.cs" />
-    <Compile Include="CF.MusicLibrary.AlbumPreprocessor\AddingToLibrary\AddedCompilationAlbumWithArtistInfoTests.cs" />
-    <Compile Include="CF.MusicLibrary.AlbumPreprocessor\AddingToLibrary\AddedCompilationAlbumWithoutArtistInfoTests.cs" />
-    <Compile Include="CF.MusicLibrary.AlbumPreprocessor\AddingToLibrary\SongTaggerTests.cs" />
-    <Compile Include="CF.MusicLibrary.AlbumPreprocessor\ParsingContent\AlbumContentParserTests.cs" />
-    <Compile Include="CF.MusicLibrary.AlbumPreprocessor\ParsingContent\EthalonAlbumParserTests.cs" />
-    <Compile Include="CF.MusicLibrary.AlbumPreprocessor\ParsingSong\EthalonSongParserTests.cs" />
-    <Compile Include="CF.MusicLibrary.AlbumPreprocessor\ParsingContent\InputContentSplitterTests.cs" />
-    <Compile Include="CF.MusicLibrary.AlbumPreprocessor\ViewModels\AddToLibraryViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.LibraryChecker\AlbumTitleCheckerTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\ArtistDiscViewItemTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\CompilationDiscWithArtistInfoViewItemTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\CompilationDiscWithoutArtistInfoViewItemTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\SongTaggerTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ParsingContent\DiscContentParserTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ParsingContent\EthalonDiscParserTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ParsingSong\EthalonSongParserTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ParsingContent\InputContentSplitterTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\AddToLibraryViewModelTests.cs" />
+    <Compile Include="CF.MusicLibrary.BL\DiscTitleToAlbumMapperTests.cs" />
     <Compile Include="CF.MusicLibrary.BL\FilesystemMusicStorageTests.cs" />
-    <Compile Include="CF.MusicLibrary.BL\MyLocalLibrary\ItemUriPartsTests.cs" />
+    <Compile Include="CF.MusicLibrary.BL\ItemUriPartsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -106,9 +106,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CF.MusicLibrary.AlbumPreprocessor\CF.MusicLibrary.AlbumPreprocessor.csproj">
+    <ProjectReference Include="..\CF.MusicLibrary.DiscPreprocessor\CF.MusicLibrary.DiscPreprocessor.csproj">
       <Project>{B977EA7B-85A2-429A-B98F-E76023589321}</Project>
-      <Name>CF.MusicLibrary.AlbumPreprocessor</Name>
+      <Name>CF.MusicLibrary.DiscPreprocessor</Name>
     </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.BL\CF.MusicLibrary.BL.csproj">
       <Project>{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}</Project>

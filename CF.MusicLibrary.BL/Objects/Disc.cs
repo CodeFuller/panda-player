@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -19,6 +20,16 @@ namespace CF.MusicLibrary.BL.Objects
 			{
 				var artists = Songs.Select(s => s.Artist).Distinct().ToList();
 				return artists.Count == 1 ? artists.Single() : null;
+			}
+		}
+
+		[NotMapped]
+		public Genre Genre
+		{
+			get
+			{
+				var genres = Songs.Select(s => s.Genre).Distinct().ToList();
+				return genres.Count == 1 ? genres.Single() : null;
 			}
 		}
 
@@ -48,8 +59,14 @@ namespace CF.MusicLibrary.BL.Objects
 		}
 
 		[NotMapped]
-		public ICollection<Song> Songs => SongsUnordered?.OrderBy(s => s.TrackNumber).ThenBy(s => s.Title).ToCollection();
+		public DateTime? LastPlaybackTime => Songs.Select(s => s.LastPlaybackTime).Min();
 
-		public ICollection<Song> SongsUnordered { get; set; }
+		[NotMapped]
+		public int? PlaybacksPassed { get; set; }
+
+		[NotMapped]
+		public IReadOnlyCollection<Song> Songs => SongsUnordered?.OrderBy(s => s.TrackNumber).ThenBy(s => s.Title).ToCollection();
+
+		public ICollection<Song> SongsUnordered { get; set; } = new Collection<Song>();
 	}
 }

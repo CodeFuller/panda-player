@@ -34,12 +34,12 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.Tests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6446.14101, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6446.14101\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6462.25018, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6462.25018\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CF.Library.Unity, Version=0.1.6446.14811, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Unity.0.1.6446.14811\lib\net462\CF.Library.Unity.dll</HintPath>
+    <Reference Include="CF.Library.Unity, Version=0.1.6463.16912, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Unity.0.1.6463.16912\lib\net462\CF.Library.Unity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
@@ -95,27 +95,48 @@
     <Compile Include="..\Global\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CF.MusicLibrary.AlbumAdviser\BootstrapperTests.cs" />
-    <Compile Include="CF.MusicLibrary.AlbumPreprocessor\Bootstrap\BootstrapperTests.cs" />
-    <Compile Include="CF.MusicLibrary.AlbumPreprocessor\ViewModels\EditAlbumsDetailsViewModelTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscAdviser\BootstrapperTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\BootstrapperTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\EditDiscsDetailsViewModelTests.cs" />
+    <Compile Include="CF.MusicLibrary.LibraryChecker\BootstrapperTests.cs" />
+    <Compile Include="CF.MusicLibrary.LibraryToolkit\BootstrapperTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\BootstrapperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CF.MusicLibrary.AlbumAdviser\CF.MusicLibrary.AlbumAdviser.csproj">
+    <ProjectReference Include="..\CF.MusicLibrary.DiscAdviser\CF.MusicLibrary.DiscAdviser.csproj">
       <Project>{600BEFAB-9D92-455D-A6F2-E7DDA2DBA557}</Project>
-      <Name>CF.MusicLibrary.AlbumAdviser</Name>
+      <Name>CF.MusicLibrary.DiscAdviser</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.AlbumPreprocessor\CF.MusicLibrary.AlbumPreprocessor.csproj">
+    <ProjectReference Include="..\CF.MusicLibrary.DiscPreprocessor\CF.MusicLibrary.DiscPreprocessor.csproj">
       <Project>{B977EA7B-85A2-429A-B98F-E76023589321}</Project>
-      <Name>CF.MusicLibrary.AlbumPreprocessor</Name>
+      <Name>CF.MusicLibrary.DiscPreprocessor</Name>
     </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.BL\CF.MusicLibrary.BL.csproj">
       <Project>{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}</Project>
       <Name>CF.MusicLibrary.BL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.LibraryChecker\CF.MusicLibrary.LibraryChecker.csproj">
+      <Project>{72458EFF-83E3-4907-8161-5401AA303D93}</Project>
+      <Name>CF.MusicLibrary.LibraryChecker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.LibraryToolkit\CF.MusicLibrary.LibraryToolkit.csproj">
+      <Project>{59585C20-BE78-4A26-943F-5DE4F7C9E045}</Project>
+      <Name>CF.MusicLibrary.LibraryToolkit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.Local\CF.MusicLibrary.Local.csproj">
+      <Project>{378157BA-2DA4-4E39-8AFD-59CED35B9B1F}</Project>
+      <Name>CF.MusicLibrary.Local</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.PandaPlayer\CF.MusicLibrary.PandaPlayer.csproj">
+      <Project>{502D59CA-7973-46C9-A2A4-9144C48CBEE4}</Project>
+      <Name>CF.MusicLibrary.PandaPlayer</Name>
     </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.Tagger\CF.MusicLibrary.Tagger.csproj">
       <Project>{931cde55-d545-47af-b525-06ab15e74c3e}</Project>

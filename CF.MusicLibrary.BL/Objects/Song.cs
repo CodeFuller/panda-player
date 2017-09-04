@@ -11,6 +11,8 @@ namespace CF.MusicLibrary.BL.Objects
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
+		//	CF TEMP: Switch from annotations to fluent configuration
+
 		[Key]
 		public int Id { get; set; }
 

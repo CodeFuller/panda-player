@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CF.MusicLibrary.LastFM.DataContracts;
 using CF.MusicLibrary.LastFM.Objects;
+using static System.FormattableString;
 using static CF.Library.Core.Application;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
@@ -310,7 +311,7 @@ namespace CF.MusicLibrary.LastFM
 		{
 			var paramsValues = from key in requestParams.AllKeys
 							   from value in requestParams.GetValues(key)
-							   select FormattableString.Invariant($"{Uri.EscapeDataString(key)}={Uri.EscapeDataString(value)}");
+							   select Invariant($"{Uri.EscapeDataString(key)}={Uri.EscapeDataString(value)}");
 
 			return String.Join("&", paramsValues);
 		}
@@ -319,7 +320,7 @@ namespace CF.MusicLibrary.LastFM
 		{
 			var paramsValues = from key in requestParams.AllKeys orderby key
 							   from value in requestParams.GetValues(key)
-							   select FormattableString.Invariant($"{key}{value}");
+							   select Invariant($"{key}{value}");
 
 			var signedData = String.Join(String.Empty, paramsValues);
 			signedData += sharedSecret;

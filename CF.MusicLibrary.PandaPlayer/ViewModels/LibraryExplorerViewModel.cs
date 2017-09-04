@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using CF.Library.Wpf;
 using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
@@ -35,7 +33,6 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			set { Set(ref selectedItem, value); }
 		}
 
-		public ICommand LoadCommand { get; }
 		public ICommand ChangeFolderCommand { get; }
 		public ICommand PlayDiscCommand { get; }
 
@@ -48,15 +45,12 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 			this.libraryBrowser = libraryBrowser;
 
-			LoadCommand = new AsyncRelayCommand(Load);
 			ChangeFolderCommand = new RelayCommand(ChangeFolder);
 			PlayDiscCommand = new RelayCommand(PlayDisc);
 		}
 
-		private async Task Load()
+		public void Load()
 		{
-			await libraryBrowser.Load();
-
 			ChangeFolder(FolderExplorerItem.Root);
 		}
 

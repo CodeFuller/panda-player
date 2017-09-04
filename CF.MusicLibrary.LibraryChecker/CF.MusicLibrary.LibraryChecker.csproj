@@ -24,7 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -35,16 +35,16 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6446.14101, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6446.14101\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6462.25018, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6462.25018\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CF.Library.Unity, Version=0.1.6446.14811, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Unity.0.1.6446.14811\lib\net462\CF.Library.Unity.dll</HintPath>
+    <Reference Include="CF.Library.Unity, Version=0.1.6463.16912, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Unity.0.1.6463.16912\lib\net462\CF.Library.Unity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -103,7 +103,6 @@
     </Compile>
     <Compile Include="ApplicationLogic.cs" />
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="AlbumTitleChecker.cs" />
     <Compile Include="Checkers\DiscConsistencyChecker.cs" />
     <Compile Include="Checkers\IDiscConsistencyChecker.cs" />
     <Compile Include="GlobalSuppressions.cs" />

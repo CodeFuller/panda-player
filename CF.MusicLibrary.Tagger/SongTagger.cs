@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using CF.MusicLibrary.BL.Media;
 using TagLib;
 
 namespace CF.MusicLibrary.Tagger
@@ -50,20 +51,20 @@ namespace CF.MusicLibrary.Tagger
 			}
 		}
 
-		public IEnumerable<AudioTagType> GetTagTypes(string songFileName)
+		public IEnumerable<SongTagType> GetTagTypes(string songFileName)
 		{
-			Dictionary<TagTypes, AudioTagType> tagTypesMap = new Dictionary<TagTypes, AudioTagType>
+			Dictionary<TagTypes, SongTagType> tagTypesMap = new Dictionary<TagTypes, SongTagType>
 			{
-				{TagTypes.Xiph, AudioTagType.Xiph},
-				{TagTypes.Id3v1, AudioTagType.Id3V1},
-				{TagTypes.Id3v2, AudioTagType.Id3V2},
-				{TagTypes.Ape, AudioTagType.Ape},
-				{TagTypes.Apple, AudioTagType.Apple},
-				{TagTypes.Asf, AudioTagType.Asf},
-				{TagTypes.RiffInfo, AudioTagType.Riff},
-				{TagTypes.FlacMetadata, AudioTagType.Flac},
-				{TagTypes.AudibleMetadata, AudioTagType.Audible},
-				{TagTypes.XMP, AudioTagType.Xmp},
+				{TagTypes.Xiph, SongTagType.Xiph},
+				{TagTypes.Id3v1, SongTagType.Id3V1},
+				{TagTypes.Id3v2, SongTagType.Id3V2},
+				{TagTypes.Ape, SongTagType.Ape},
+				{TagTypes.Apple, SongTagType.Apple},
+				{TagTypes.Asf, SongTagType.Asf},
+				{TagTypes.RiffInfo, SongTagType.Riff},
+				{TagTypes.FlacMetadata, SongTagType.Flac},
+				{TagTypes.AudibleMetadata, SongTagType.Audible},
+				{TagTypes.XMP, SongTagType.Xmp},
 			};
 
 			using (TagLib.File file = TagLib.File.Create(songFileName))
@@ -80,7 +81,7 @@ namespace CF.MusicLibrary.Tagger
 
 				if (tagTypes != 0)
 				{
-					yield return AudioTagType.Unknown;
+					yield return SongTagType.Unknown;
 				}
 			}
 		}

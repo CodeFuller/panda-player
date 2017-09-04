@@ -9,5 +9,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 		ObservableCollection<FolderExplorerItem> Items { get; }
 
 		FolderExplorerItem SelectedItem { get; set; }
+
+		void Load();
 	}
 }

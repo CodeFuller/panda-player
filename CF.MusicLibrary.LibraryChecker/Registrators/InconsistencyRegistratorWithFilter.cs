@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
-using CF.MusicLibrary.Tagger;
 
 namespace CF.MusicLibrary.LibraryChecker.Registrators
 {
@@ -63,7 +63,7 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 			inconsistencyRegistrator.RegisterInconsistency_BadTagData(inconsistencyMessage);
 		}
 
-		public void RegisterInconsistency_BadTagData(Song song, IEnumerable<AudioTagType> tagTypes)
+		public void RegisterInconsistency_BadTagData(Song song, IEnumerable<SongTagType> tagTypes)
 		{
 			inconsistencyRegistrator.RegisterInconsistency_BadTagData(song, tagTypes);
 		}

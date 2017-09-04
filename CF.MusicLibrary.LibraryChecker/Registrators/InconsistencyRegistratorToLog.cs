@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
-using CF.MusicLibrary.Tagger;
 using static CF.Library.Core.Application;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
@@ -39,7 +39,7 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 			LogInconsistency(inconsistencyMessage);
 		}
 
-		public void RegisterInconsistency_BadTagData(Song song, IEnumerable<AudioTagType> tagTypes)
+		public void RegisterInconsistency_BadTagData(Song song, IEnumerable<SongTagType> tagTypes)
 		{
 			LogInconsistency(Current($"Bad tag types for {song.Uri + ":",-100}: [{String.Join(", ", tagTypes)}]"));
 		}

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using CF.Library.Core.Bootstrap;
 using CF.Library.Core.Exceptions;
-using CF.MusicLibrary.BL;
+using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.LibraryChecker.Checkers;
 using NDesk.Options;
+using static System.FormattableString;
 using static CF.Library.Core.Application;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
@@ -17,10 +17,10 @@ namespace CF.MusicLibrary.LibraryChecker
 		private readonly IDiscConsistencyChecker discConsistencyChecker;
 		private readonly ITagDataConsistencyChecker tagDataChecker;
 		private readonly ILastFMConsistencyChecker lastFmConsistencyChecker;
-		private readonly IMusicLibraryRepository libraryRepository;
+		private readonly IMusicLibrary musicLibrary;
 
 		public ApplicationLogic(IDiscConsistencyChecker discConsistencyChecker, ITagDataConsistencyChecker tagDataChecker,
-			ILastFMConsistencyChecker lastFMConsistencyChecker, IMusicLibraryRepository libraryRepository)
+			ILastFMConsistencyChecker lastFMConsistencyChecker, IMusicLibrary musicLibrary)
 		{
 			if (discConsistencyChecker == null)
 			{
@@ -34,15 +34,15 @@ namespace CF.MusicLibrary.LibraryChecker
 			{
 				throw new ArgumentNullException(nameof(lastFMConsistencyChecker));
 			}
-			if (libraryRepository == null)
+			if (musicLibrary == null)
 			{
-				throw new ArgumentNullException(nameof(libraryRepository));
+				throw new ArgumentNullException(nameof(musicLibrary));
 			}
 
 			this.discConsistencyChecker = discConsistencyChecker;
 			this.tagDataChecker = tagDataChecker;
 			this.lastFmConsistencyChecker = lastFMConsistencyChecker;
-			this.libraryRepository = libraryRepository;
+			this.musicLibrary = musicLibrary;
 		}
 
 		public int Run(string[] args)
@@ -61,7 +61,7 @@ namespace CF.MusicLibrary.LibraryChecker
 			var optionSet = new OptionSet();
 			foreach (var option in options)
 			{
-				optionSet.Add($"{option.Key}=", settingValue => checkFlags = UpdateCheckFlags(settingValue, checkFlags, option.Value));
+				optionSet.Add(Invariant($"{option.Key}="), settingValue => checkFlags = UpdateCheckFlags(settingValue, checkFlags, option.Value));
 			}
 
 			optionSet.Add("check", s => command = LaunchCommand.Check);
@@ -72,7 +72,7 @@ namespace CF.MusicLibrary.LibraryChecker
 			switch (command)
 			{
 				case LaunchCommand.ShowHelp:
-					ShowHelp(optionSet);
+					ShowHelp();
 					break;
 
 				case LaunchCommand.Check:
@@ -90,7 +90,7 @@ namespace CF.MusicLibrary.LibraryChecker
 			return 0;
 		}
 
-		private void ShowHelp(OptionSet optionSet)
+		private static void ShowHelp()
 		{
 			Console.Error.WriteLine();
 			Console.Error.WriteLine("Usage: LibraryChecker.exe <command> [command options]");
@@ -107,14 +107,14 @@ namespace CF.MusicLibrary.LibraryChecker
 			Console.Error.WriteLine("  --unify-tags     Rebuilds tags from the scratch");
 		}
 
-		private bool ParseSetFlag(string setValue)
+		private static bool ParseSetFlag(string setValue)
 		{
-			if (String.Equals(setValue, "yes", StringComparison.InvariantCultureIgnoreCase))
+			if (String.Equals(setValue, "yes", StringComparison.OrdinalIgnoreCase))
 			{
 				return true;
 			}
 
-			if (String.Equals(setValue, "no", StringComparison.InvariantCultureIgnoreCase))
+			if (String.Equals(setValue, "no", StringComparison.OrdinalIgnoreCase))
 			{
 				return false;
 			}
@@ -122,49 +122,39 @@ namespace CF.MusicLibrary.LibraryChecker
 			throw new InvalidInputDataException(Current($"Could not parse setting value '{setValue}'"));
 		}
 
-		private LibraryCheckFlags UpdateCheckFlags(string setValue, LibraryCheckFlags currlags, LibraryCheckFlags setFlag)
+		private static LibraryCheckFlags UpdateCheckFlags(string setValue, LibraryCheckFlags currlags, LibraryCheckFlags setFlag)
 		{
-			if (ParseSetFlag(setValue))
-			{
-				return currlags | setFlag;
-			}
-			else
-			{
-				return currlags & ~setFlag;
-			}
+			return ParseSetFlag(setValue) ? (currlags | setFlag) : (currlags & ~setFlag);
 		}
 
 		private async Task RunChecks(LibraryCheckFlags checkFlags)
 		{
 			Logger.WriteInfo("Loading library content...");
-
-			var artists = (await libraryRepository.GetArtistsAsync()).OrderBy(artist => artist.Name);
-			var discs = (await libraryRepository.GetDiscsAsync()).OrderBy(disc => disc.Uri.ToString());
-			var songs = (await libraryRepository.GetSongsAsync()).OrderBy(song => song.Uri.ToString());
+			var discLibrary = await musicLibrary.Load();
 
 			if ((checkFlags & LibraryCheckFlags.CheckDiscsConsistency) != 0)
 			{
-				discConsistencyChecker.CheckDiscsConsistency(discs);
+				await discConsistencyChecker.CheckDiscsConsistency(discLibrary);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckTagData) != 0)
 			{
-				tagDataChecker.CheckTagData(songs);
+				await tagDataChecker.CheckTagData(discLibrary.Songs);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckArtistsOnLastFM) != 0)
 			{
-				await lastFmConsistencyChecker.CheckArtists(artists);
+				await lastFmConsistencyChecker.CheckArtists(discLibrary.Artists);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckAlbumsOnLastFM) != 0)
 			{
-				await lastFmConsistencyChecker.CheckAlbums(discs);
+				await lastFmConsistencyChecker.CheckAlbums(discLibrary);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckSongsOnLastFM) != 0)
 			{
-				await lastFmConsistencyChecker.CheckSongs(songs);
+				await lastFmConsistencyChecker.CheckSongs(discLibrary.Songs);
 			}
 
 			Logger.WriteInfo("Library check has finished");
@@ -172,9 +162,10 @@ namespace CF.MusicLibrary.LibraryChecker
 
 		private async Task UnifyTags()
 		{
-			var songs = (await libraryRepository.GetSongsAsync()).OrderBy(song => song.Uri.ToString());
+			Logger.WriteInfo("Loading library content...");
+			var discLibrary = await musicLibrary.Load();
 
-			tagDataChecker.UnifyTags(songs);
+			await tagDataChecker.UnifyTags(discLibrary.Songs);
 		}
 	}
 }

@@ -1,5 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using CF.Library.Wpf;
+using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.Player;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -11,6 +15,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 {
 	public class ApplicationViewModel : ViewModelBase
 	{
+		private readonly DiscLibrary discLibrary;
+
 		public ILibraryExplorerViewModel LibraryExplorerViewModel { get; }
 
 		public ISongListViewModel SongListViewModel { get; }
@@ -28,9 +34,15 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			set { Set(ref selectedSongListIndex, value); }
 		}
 
-		public ApplicationViewModel(ILibraryExplorerViewModel libraryExplorerViewModel, ISongListViewModel songListViewModel,
+		public ICommand LoadCommand { get; }
+
+		public ApplicationViewModel(DiscLibrary discLibrary, ILibraryExplorerViewModel libraryExplorerViewModel, ISongListViewModel songListViewModel,
 			IMusicPlayerViewModel musicPlayerViewModel, ILoggerViewModel loggerViewModel)
 		{
+			if (discLibrary == null)
+			{
+				throw new ArgumentNullException(nameof(discLibrary));
+			}
 			if (libraryExplorerViewModel == null)
 			{
 				throw new ArgumentNullException(nameof(libraryExplorerViewModel));
@@ -48,13 +60,22 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				throw new ArgumentNullException(nameof(loggerViewModel));
 			}
 
+			this.discLibrary = discLibrary;
 			LibraryExplorerViewModel = libraryExplorerViewModel;
 			SongListViewModel = songListViewModel;
 			MusicPlayerViewModel = musicPlayerViewModel;
 			LoggerViewModel = loggerViewModel;
 
+			LoadCommand = new AsyncRelayCommand(Load);
+
 			LibraryExplorerViewModel.PropertyChanged += OnLibraryExplorerFolderChanged;
 			Messenger.Default.Register<PlayDiscEventArgs>(this, OnPlayDiscLaunched);
+		}
+
+		private async Task Load()
+		{
+			await discLibrary.Load();
+			LibraryExplorerViewModel.Load();
 		}
 
 		private void OnLibraryExplorerFolderChanged(object sender, PropertyChangedEventArgs e)

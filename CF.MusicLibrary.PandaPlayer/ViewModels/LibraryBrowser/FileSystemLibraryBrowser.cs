@@ -1,33 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using CF.MusicLibrary.BL.Interfaces;
-using CF.MusicLibrary.BL.MyLocalLibrary;
+using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Objects;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 {
 	public class FileSystemLibraryBrowser : ILibraryBrowser
 	{
-		private const char UriDelimiter = '/';
+		private readonly DiscLibrary discLibrary;
 
-		private readonly IMusicCatalog musicCatalog;
-		private DiscLibrary discLibrary;
-
-		public FileSystemLibraryBrowser(IMusicCatalog musicCatalog)
+		public FileSystemLibraryBrowser(DiscLibrary discLibrary)
 		{
-			if (musicCatalog == null)
+			if (discLibrary == null)
 			{
-				throw new ArgumentNullException(nameof(musicCatalog));
+				throw new ArgumentNullException(nameof(discLibrary));
 			}
 
-			this.musicCatalog = musicCatalog;
-		}
-
-		public async Task Load()
-		{
-			discLibrary = await musicCatalog.GetDiscsAsync();
+			this.discLibrary = discLibrary;
 		}
 
 		public IEnumerable<FolderExplorerItem> GetChildFolderItems(FolderExplorerItem folderItem)

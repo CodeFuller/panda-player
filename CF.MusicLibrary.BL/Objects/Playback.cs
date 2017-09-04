@@ -13,6 +13,10 @@ namespace CF.MusicLibrary.BL.Objects
 
 		public DateTime PlaybackTime { get; set; }
 
+		public Playback()
+		{
+		}
+
 		public Playback(Song song, DateTime playbackTime)
 		{
 			Song = song;
