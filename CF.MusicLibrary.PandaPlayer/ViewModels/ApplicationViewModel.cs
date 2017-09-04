@@ -55,6 +55,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 			LibraryExplorerViewModel.PropertyChanged += OnLibraryExplorerFolderChanged;
 			Messenger.Default.Register<PlayDiscEventArgs>(this, OnPlayDiscLaunched);
+			Messenger.Default.Register<PlayDiscFromSongEventArgs>(this, OnPlayDiscFromSongLaunched);
 		}
 
 		private void OnLibraryExplorerFolderChanged(object sender, PropertyChangedEventArgs e)
@@ -75,6 +76,15 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			var disc = message.Disc;
 			Playlist.SetSongs(disc.Songs);
 			Playlist.SwitchToNextSong();
+			MusicPlayerViewModel.Play();
+			SwitchToSongPlaylist();
+		}
+
+		private void OnPlayDiscFromSongLaunched(PlayDiscFromSongEventArgs message)
+		{
+			var disc = message.Song.Disc;
+			Playlist.SetSongs(disc.Songs);
+			Playlist.SwitchToSong(message.Song);
 			MusicPlayerViewModel.Play();
 			SwitchToSongPlaylist();
 		}

@@ -132,6 +132,7 @@
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Events\PlayDiscEventArgs.cs" />
+    <Compile Include="Events\PlayDiscFromSongEventArgs.cs" />
     <Compile Include="Scrobbler\IScrobbler.cs" />
     <Compile Include="Scrobbler\PersistentScrobbler.cs" />
     <Compile Include="ViewModels\Interfaces\ILibraryExplorerViewModel.cs" />

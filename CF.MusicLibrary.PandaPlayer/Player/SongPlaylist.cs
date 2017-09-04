@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CF.MusicLibrary.BL.Objects;
@@ -40,6 +41,34 @@ namespace CF.MusicLibrary.PandaPlayer.Player
 			{
 				CurrentItem.IsCurrentlyPlayed = true;
 			}
+		}
+
+		public void SwitchToSong(Song song)
+		{
+			if (CurrentItem != null)
+			{
+				CurrentItem.IsCurrentlyPlayed = false;
+			}
+
+			CurrentSongIndex = GetSongIndex(song);
+
+			if (CurrentItem != null)
+			{
+				CurrentItem.IsCurrentlyPlayed = true;
+			}
+		}
+
+		private int GetSongIndex(Song song)
+		{
+			for (var i = 0; i < Songs.Count; ++i)
+			{
+				if (Songs[i].Song == song)
+				{
+					return i;
+				}
+			}
+
+			throw new InvalidOperationException("Failed to find song in the list");
 		}
 	}
 }

@@ -13,5 +13,7 @@ namespace CF.MusicLibrary.PandaPlayer.Player
 		void SetSongs(IEnumerable<Song> newSongs);
 
 		void SwitchToNextSong();
+
+		void SwitchToSong(Song song);
 	}
 }
