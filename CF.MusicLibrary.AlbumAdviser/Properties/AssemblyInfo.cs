@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("CF.MusicLibrary.AlbumAdviser")]
+[assembly: AssemblyTitle("AlbumAdviser")]
 [assembly: AssemblyDescription("Adviser for next music albums to listen")]
 
 [assembly: ComVisible(false)]

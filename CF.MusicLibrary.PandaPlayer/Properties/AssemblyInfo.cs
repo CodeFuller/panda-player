@@ -3,7 +3,7 @@ using System.Resources;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle("CF.MusicLibrary.PandaPlayer")]
+[assembly: AssemblyTitle("PandaPlayer")]
 [assembly: AssemblyDescription("Audio Player for discs from Music Library")]
 
 [assembly: ComVisible(false)]
