@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CF.MusicLibrary.DiscAdviser</RootNamespace>
-    <AssemblyName>CF.MusicLibrary.DiscAdviser</AssemblyName>
+    <AssemblyName>DiscAdviser</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

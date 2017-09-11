@@ -70,6 +70,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 			LibraryExplorerViewModel.PropertyChanged += OnLibraryExplorerFolderChanged;
 			Messenger.Default.Register<PlayDiscEventArgs>(this, OnPlayDiscLaunched);
+			Messenger.Default.Register<PlayDiscFromSongEventArgs>(this, OnPlayDiscFromSongLaunched);
+			Messenger.Default.Register<ReversePlayingEventArgs>(this, OnReversePlaying);
 		}
 
 		private async Task Load()
@@ -98,6 +100,27 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			Playlist.SwitchToNextSong();
 			MusicPlayerViewModel.Play();
 			SwitchToSongPlaylist();
+		}
+
+		private void OnPlayDiscFromSongLaunched(PlayDiscFromSongEventArgs message)
+		{
+			var disc = message.Song.Disc;
+			Playlist.SetSongs(disc.Songs);
+			Playlist.SwitchToSong(message.Song);
+			MusicPlayerViewModel.Play();
+			SwitchToSongPlaylist();
+		}
+
+		private void OnReversePlaying(ReversePlayingEventArgs message)
+		{
+			if (MusicPlayerViewModel.IsPlaying)
+			{
+				MusicPlayerViewModel.Pause();
+			}
+			else
+			{
+				MusicPlayerViewModel.Resume();
+			}
 		}
 
 		private void SwitchToExplorerSongList()

@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle("CF.MusicLibrary.DiscPreprocessor")]
+[assembly: AssemblyTitle("DiscPreprocessor")]
 [assembly: AssemblyDescription("Tool for preprocessing music discs before adding to the collection")]
 
 [assembly: ComVisible(false)]

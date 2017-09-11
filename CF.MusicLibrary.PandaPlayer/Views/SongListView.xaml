@@ -19,7 +19,12 @@
               ColumnHeaderHeight="20"
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
               Background="#1B1B1B" RowBackground="#1B1B1B" Foreground="White"
-              ItemsSource="{Binding Songs}">
+              ItemsSource="{Binding Songs}" SelectedItem="{Binding SelectedSong}">
+
+        <DataGrid.InputBindings>
+            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding PlayDiscFromSongCommand}" />
+        </DataGrid.InputBindings>
+
         <DataGrid.ColumnHeaderStyle>
             <Style TargetType="{x:Type DataGridColumnHeader}">
                 <Setter Property="HorizontalContentAlignment" Value="Center" />

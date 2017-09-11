@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("CF.MusicLibrary.LibraryChecker")]
+[assembly: AssemblyTitle("LibraryChecker")]
 [assembly: AssemblyDescription("Utility for checking consistency of Music library content")]
 
 [assembly: ComVisible(false)]
