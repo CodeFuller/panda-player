@@ -28,7 +28,8 @@ namespace CF.MusicLibrary.DiscAdviser
 
 		public Collection<Disc> AdviseDiscs(DiscLibrary library)
 		{
-			var discGroups = discGroupper.GroupLibraryDiscs(library);
+			var discGroups = discGroupper.GroupLibraryDiscs(library)
+				.Where(dg => !dg.Discs.All(d => d.IsDeleted));
 
 			Collection<Disc> advisedDiscs = new Collection<Disc>();
 			foreach (var group in discGroupSorter.SortDiscGroups(discGroups))
