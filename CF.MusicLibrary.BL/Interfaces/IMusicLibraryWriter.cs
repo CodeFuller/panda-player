@@ -9,7 +9,7 @@ namespace CF.MusicLibrary.BL.Interfaces
 	{
 		Task AddSong(Song song, string songSourceFileName);
 
-		Task DeleteSong(Song song);
+		Task DeleteSong(Song song, DateTime deleteTime);
 
 		Task DeleteDisc(Disc disc);
 

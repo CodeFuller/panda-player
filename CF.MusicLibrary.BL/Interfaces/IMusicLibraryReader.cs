@@ -10,7 +10,11 @@ namespace CF.MusicLibrary.BL.Interfaces
 	{
 		Task<DiscLibrary> Load();
 
+		Task<DiscLibrary> Load(bool includeDeleted);
+
 		Task<IEnumerable<Disc>> GetDiscsAsync();
+
+		Task<IEnumerable<Disc>> GetDiscsAsync(bool includeDeleted);
 
 		Task<SongTagData> GetSongTagData(Song song);
 

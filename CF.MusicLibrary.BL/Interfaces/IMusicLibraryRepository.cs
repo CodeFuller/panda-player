@@ -12,10 +12,12 @@ namespace CF.MusicLibrary.BL.Interfaces
 	{
 		Task AddSong(Song song);
 
-		Task DeleteSong(Song song);
+		Task UpdateSong(Song song);
 
-		Task DeleteDisc(Disc disc);
-
+		/// <summary>
+		/// Returns all discs including deleted.
+		/// </summary>
+		/// <returns></returns>
 		Task<IEnumerable<Disc>> GetDiscsAsync();
 
 		Task AddSongPlayback(Song song, DateTime playbackTime);

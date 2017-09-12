@@ -46,15 +46,15 @@ namespace CF.MusicLibrary.DiscAdviser
 			{
 				Console.WriteLine("Loading library...");
 
-				DiscLibrary discLibrary = await library.Load();
+				DiscLibrary discLibrary = await library.Load(true);
 
 				StringBuilder dbStatistics = new StringBuilder();
 				dbStatistics.AppendLine("DB statistics:");
 				dbStatistics.AppendLine();
 				dbStatistics.AppendLine(Current($"\tArtists totally:\t{discLibrary.Artists.Count()}"));
-				dbStatistics.AppendLine(Current($"\tDisc artists:\t\t{discLibrary.Select(d => d.Artist).Where(a => a != null).Distinct().Count()}"));
-				dbStatistics.AppendLine(Current($"\tDiscs totally:\t\t{discLibrary.Count()}"));
-				dbStatistics.AppendLine(Current($"\tSongs totally:\t\t{discLibrary.Songs.Count()}"));
+				dbStatistics.AppendLine(Current($"\tDisc artists:\t\t{discLibrary.Where(d => !d.IsDeleted).Select(d => d.Artist).Where(a => a != null).Distinct().Count()}"));
+				dbStatistics.AppendLine(Current($"\tDiscs totally:\t\t{discLibrary.Count(d => !d.IsDeleted)}"));
+				dbStatistics.AppendLine(Current($"\tSongs totally:\t\t{discLibrary.Songs.Count(s => !s.IsDeleted)}"));
 				Console.WriteLine(dbStatistics.ToString());
 
 				foreach (var disc in discAdviser.AdviseDiscs(discLibrary).Take(AdvisedDiscsNumber))

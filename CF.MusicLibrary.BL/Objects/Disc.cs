@@ -56,5 +56,7 @@ namespace CF.MusicLibrary.BL.Objects
 		public IReadOnlyCollection<Song> Songs => SongsUnordered?.OrderBy(s => s.TrackNumber).ThenBy(s => s.Title).ToCollection();
 
 		public ICollection<Song> SongsUnordered { get; set; } = new Collection<Song>();
+
+		public bool IsDeleted => Songs.All(s => s.IsDeleted);
 	}
 }

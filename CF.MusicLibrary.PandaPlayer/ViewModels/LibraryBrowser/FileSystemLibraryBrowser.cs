@@ -65,5 +65,10 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 			Uri parentUri = ItemUriParts.Join(childParts.Take(childParts.Count - 1));
 			return new FolderExplorerItem(parentUri);
 		}
+
+		public void RemoveDiscItem(DiscExplorerItem discItem)
+		{
+			discLibrary.RemoveDisc(discItem.Disc);
+		}
 	}
 }

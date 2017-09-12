@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using CF.Library.Wpf;
 using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
@@ -14,6 +16,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 	public class LibraryExplorerViewModel : ViewModelBase, ILibraryExplorerViewModel
 	{
 		private readonly ILibraryBrowser libraryBrowser;
+
+		private readonly ILibraryContentUpdater libraryContentUpdater;
 
 		private FolderExplorerItem ParentFolder { get; set; }
 
@@ -35,18 +39,25 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand ChangeFolderCommand { get; }
 		public ICommand PlayDiscCommand { get; }
+		public ICommand DeleteDiscCommand { get; }
 
-		public LibraryExplorerViewModel(ILibraryBrowser libraryBrowser)
+		public LibraryExplorerViewModel(ILibraryBrowser libraryBrowser, ILibraryContentUpdater libraryContentUpdater)
 		{
 			if (libraryBrowser == null)
 			{
 				throw new ArgumentNullException(nameof(libraryBrowser));
 			}
+			if (libraryContentUpdater == null)
+			{
+				throw new ArgumentNullException(nameof(libraryContentUpdater));
+			}
 
 			this.libraryBrowser = libraryBrowser;
+			this.libraryContentUpdater = libraryContentUpdater;
 
 			ChangeFolderCommand = new RelayCommand(ChangeFolder);
 			PlayDiscCommand = new RelayCommand(PlayDisc);
+			DeleteDiscCommand = new AsyncRelayCommand(DeleteDisc);
 		}
 
 		public void Load()
@@ -68,6 +79,36 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			}
 
 			Messenger.Default.Send(new PlayDiscEventArgs(discItem.Disc));
+		}
+
+		private async Task DeleteDisc()
+		{
+			var discItem = SelectedItem as DiscExplorerItem;
+			if (discItem == null)
+			{
+				return;
+			}
+
+			await libraryContentUpdater.DeleteDisc(discItem.Disc);
+
+			libraryBrowser.RemoveDiscItem(discItem);
+			Items.Remove(discItem);
+
+			//	If only '..' item remains
+			if (Items.Count == 1)
+			{
+				FolderExplorerItem currFolder = discItem;
+				do
+				{
+					currFolder = libraryBrowser.GetParentFolder(currFolder);
+				}
+				while (currFolder != null && !libraryBrowser.GetChildFolderItems(currFolder).Any()) ;
+
+				if (currFolder != null)
+				{
+					ChangeFolder(currFolder);
+				}
+			}
 		}
 
 		private void ChangeFolder(FolderExplorerItem newFolder)

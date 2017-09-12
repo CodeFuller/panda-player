@@ -44,8 +44,8 @@
     <ApplicationIcon>PandaPlayer.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6462.25018, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6462.25018\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6464.31208, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6464.31208\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CF.Library.Unity, Version=0.1.6463.16912, Culture=neutral, processorArchitecture=MSIL">
@@ -144,6 +144,8 @@
     <Compile Include="Events\PlayDiscEventArgs.cs" />
     <Compile Include="Events\PlayDiscFromSongEventArgs.cs" />
     <Compile Include="Events\ReversePlayingEventArgs.cs" />
+    <Compile Include="ILibraryContentUpdater.cs" />
+    <Compile Include="LibraryContentUpdater.cs" />
     <Compile Include="Scrobbler\IScrobbler.cs" />
     <Compile Include="Scrobbler\PersistentScrobbler.cs" />
     <Compile Include="ViewModels\Interfaces\ILibraryExplorerViewModel.cs" />

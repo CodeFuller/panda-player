@@ -30,6 +30,7 @@ namespace CF.MusicLibrary.Dal
 			modelBuilder.Entity<Disc>().Ignore(d => d.LastPlaybackTime);
 			modelBuilder.Entity<Disc>().Ignore(d => d.PlaybacksPassed);
 			modelBuilder.Entity<Disc>().Ignore(d => d.Songs);
+			modelBuilder.Entity<Disc>().Ignore(d => d.IsDeleted);
 
 			modelBuilder.Entity<Genre>().Property(g => g.Name).IsRequired();
 
@@ -38,6 +39,7 @@ namespace CF.MusicLibrary.Dal
 			modelBuilder.Entity<Song>().Property(s => s.DurationInMilliseconds).IsRequired().HasColumnName("Duration");
 			modelBuilder.Entity<Song>().Ignore(s => s.Uri);
 			modelBuilder.Entity<Song>().Property(s => s.SongUri).IsRequired().HasColumnName("Uri");
+			modelBuilder.Entity<Song>().Ignore(s => s.IsDeleted);
 		}
 
 		public DbSet<Artist> Artists { get; set; }

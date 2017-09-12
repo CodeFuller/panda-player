@@ -11,9 +11,10 @@ namespace CF.MusicLibrary.DiscAdviser
 
 		public Collection<RankedDisc> RankedDiscs { get; }
 
+		//	Deleted discs are also included
 		public int PlaybacksPassed => RankedDiscs.Select(d => d.PlaybacksPassed).Min();
 
-		public double Rating => RankedDiscs.Select(rd => rd.Rating).Average();
+		public double Rating => RankedDiscs.Where(rd => !rd.Disc.IsDeleted).Select(rd => rd.Rating).Average();
 
 		public RankedDiscGroup(DiscGroup discGroup)
 		{

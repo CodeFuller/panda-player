@@ -14,16 +14,21 @@ namespace CF.MusicLibrary.BL
 			await libraryRepository.AddSong(song);
 		}
 
-		public async Task DeleteSong(Song song)
+		public async Task DeleteSong(Song song, DateTime deleteTime)
 		{
 			await libraryStorage.DeleteSong(song);
-			await libraryRepository.DeleteSong(song);
+
+			song.DeleteDate = deleteTime;
+			await libraryRepository.UpdateSong(song);
 		}
 
 		public async Task DeleteDisc(Disc disc)
 		{
-			await libraryStorage.DeleteDisc(disc);
-			await libraryRepository.DeleteDisc(disc);
+			var deleteTime = DateTime.Now;
+			foreach (var song in disc.Songs)
+			{
+				await DeleteSong(song, deleteTime);
+			}
 		}
 
 		public async Task SetDiscCoverImage(Disc disc, string coverImageFileName)

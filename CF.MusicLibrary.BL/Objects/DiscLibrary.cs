@@ -53,6 +53,11 @@ namespace CF.MusicLibrary.BL.Objects
 			FillPlaybacksPassed();
 		}
 
+		public void RemoveDisc(Disc disc)
+		{
+			discs.Remove(disc);
+		}
+
 		private void FillPlaybacksPassed()
 		{
 			int playbacksPassed = 0;

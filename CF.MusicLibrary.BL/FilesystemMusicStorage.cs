@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CF.Library.Core.Extensions;
 using CF.Library.Core.Facades;
@@ -77,27 +78,38 @@ namespace CF.MusicLibrary.BL
 		{
 			await Task.Run(() =>
 			{
-				fileSystemFacade.DeleteFile(UriToFilesystemPath(song.Uri));
+				var songFileName = UriToFilesystemPath(song.Uri);
+				fileSystemFacade.ClearReadOnlyAttribute(songFileName);
+				fileSystemFacade.DeleteFile(songFileName);
+
+				var discDirectory = Path.GetDirectoryName(songFileName);
+				var restDirectoryFiles = fileSystemFacade.EnumerateFiles(discDirectory).ToList();
+				if (restDirectoryFiles.Count == 0 || restDirectoryFiles.Count == 1 && IsCoverImageFile(restDirectoryFiles.Single()))
+				{
+					if (restDirectoryFiles.Count == 1)
+					{
+						var coverImageFileName = restDirectoryFiles.Single();
+						fileSystemFacade.ClearReadOnlyAttribute(coverImageFileName);
+						fileSystemFacade.DeleteFile(coverImageFileName);
+					}
+
+					//	Deleting directories that became empty (disc, artist, category, ...)
+					string currDirectoryPath = discDirectory;
+					do
+					{
+						fileSystemFacade.DeleteDirectory(currDirectoryPath);
+						currDirectoryPath = Directory.GetParent(currDirectoryPath)?.FullName;
+					}
+					while (currDirectoryPath != null &&
+						!String.Equals(Path.GetFullPath(currDirectoryPath), Path.GetFullPath(libraryRootDirectory), StringComparison.OrdinalIgnoreCase) &&
+						fileSystemFacade.DirectoryIsEmpty(currDirectoryPath));
+				}
 			});
 		}
 
-		public async Task DeleteDisc(Disc disc)
+		private static bool IsCoverImageFile(string filePath)
 		{
-			await Task.Run(() =>
-			{
-				var discDirectory = UriToFilesystemPath(disc.Uri);
-				var coverImageFileName = Path.Combine(discDirectory, DiscCoverFileName);
-				if (fileSystemFacade.FileExists(coverImageFileName))
-				{
-					fileSystemFacade.DeleteFile(coverImageFileName);
-				}
-
-				if (fileSystemFacade.DirectoryIsEmpty(discDirectory))
-				{
-					throw new InvalidOperationException($"Could not delete disc directory because it's not empty: '{discDirectory}'");
-				}
-				fileSystemFacade.DeleteDirectory(discDirectory);
-			});
+			return String.Equals(Path.GetFileName(filePath), DiscCoverFileName, StringComparison.OrdinalIgnoreCase);
 		}
 
 		public async Task SetDiscCoverImage(Disc disc, string coverImageFileName)

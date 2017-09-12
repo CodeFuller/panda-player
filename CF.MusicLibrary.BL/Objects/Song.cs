@@ -72,6 +72,10 @@ namespace CF.MusicLibrary.BL.Objects
 
 		public Collection<Playback> Playbacks { get; } = new Collection<Playback>();
 
+		public DateTime? DeleteDate { get; set; }
+
+		public bool IsDeleted => DeleteDate != null;
+
 		public void AddPlayback(DateTime playbackTime)
 		{
 			++PlaybacksCount;

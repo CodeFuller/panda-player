@@ -12,8 +12,6 @@ namespace CF.MusicLibrary.BL.Interfaces
 
 		Task DeleteSong(Song song);
 
-		Task DeleteDisc(Disc disc);
-
 		Task SetDiscCoverImage(Disc disc, string coverImageFileName);
 
 		Task<bool> CheckSongContent(Song song);

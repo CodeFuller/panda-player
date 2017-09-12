@@ -76,32 +76,14 @@ namespace CF.MusicLibrary.Dal
 			}
 		}
 
-		public Task DeleteSong(Song song)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task DeleteDisc(Disc disc)
-		{
-			throw new NotImplementedException();
-		}
-
-		public async Task<IEnumerable<Artist>> GetArtistsAsync()
+		public async Task UpdateSong(Song song)
 		{
 			using (var ctx = GetContext())
 			{
-				var artists = new List<Artist>();
-				foreach (IGrouping<Artist, Song> g in await ctx.Songs
-					.Where(s => s.Artist != null)
-					.GroupBy(s => s.Artist).ToArrayAsync())
-				{
-					var artist = g.Key;
-					artist.Songs = new HashSet<Song>(g);
-					artists.Add(artist);
-				}
+				ctx.Entry(song).State = EntityState.Modified;
 
-				return artists;
-			};
+				await ctx.SaveChangesAsync();
+			}
 		}
 
 		public async Task<IEnumerable<Disc>> GetDiscsAsync()

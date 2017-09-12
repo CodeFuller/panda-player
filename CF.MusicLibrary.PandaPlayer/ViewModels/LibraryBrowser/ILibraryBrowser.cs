@@ -7,5 +7,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 		IEnumerable<FolderExplorerItem> GetChildFolderItems(FolderExplorerItem folderItem);
 
 		FolderExplorerItem GetParentFolder(FolderExplorerItem folderItem);
+
+		void RemoveDiscItem(DiscExplorerItem discItem);
 	}
 }

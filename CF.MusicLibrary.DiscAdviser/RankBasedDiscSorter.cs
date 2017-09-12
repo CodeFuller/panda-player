@@ -22,13 +22,14 @@ namespace CF.MusicLibrary.DiscAdviser
 		public IEnumerable<Disc> SortDiscsWithinGroup(DiscGroup discGroup)
 		{
 			return discGroup.Discs
+				.Where(d => !d.IsDeleted)
 				.Select(d => new RankedDisc(d))
 				.OrderByDescending(CalculateDiscRankWithinGroup).Select(d => d.Disc);
 		}
 
 		private double CalculateDiscGroupRank(RankedDiscGroup discGroup)
 		{
-			return CalculateGroupFactorForDiscsNumber(discGroup.RankedDiscs.Count) *
+			return CalculateGroupFactorForDiscsNumber(discGroup.RankedDiscs.Count(d => !d.Disc.IsDeleted)) *
 				   CalculateGroupFactorForAverageDiscRating(discGroup.Rating) *
 				   CalculateGroupFactorForPlaybackAge(discGroup.PlaybacksPassed);
 		}

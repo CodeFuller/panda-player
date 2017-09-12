@@ -2,6 +2,8 @@
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using CF.MusicLibrary.PandaPlayer.ViewModels;
+using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
 
 namespace CF.MusicLibrary.PandaPlayer.Views
 {
@@ -94,6 +96,33 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 			}
 
 			return null;
+		}
+
+		private void DataGrid_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+		{
+			var frameworkElement = e.Source as FrameworkElement;
+			var viewModel = DataContext as LibraryExplorerViewModel;
+			if (frameworkElement == null || viewModel == null)
+			{
+				return;
+			}
+
+			if (viewModel.SelectedItem is DiscExplorerItem)
+			{
+				ContextMenu contextMenu = new ContextMenu();
+				contextMenu.Items.Add(
+				new MenuItem
+				{
+					Header = "Delete Disc",
+					Command = viewModel.DeleteDiscCommand,
+				});
+
+				frameworkElement.ContextMenu = contextMenu;
+			}
+			else
+			{
+				frameworkElement.ContextMenu = null;
+			}
 		}
 	}
 }
