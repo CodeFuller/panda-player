@@ -35,7 +35,7 @@
         </DataGrid.ColumnHeaderStyle>
         <DataGrid.Columns>
             <DataGridTextColumn Header="Artist" MinWidth="400" IsReadOnly="True" Binding="{Binding Artist.Name}" />
-            <DataGridTextColumn Header="Track #" MinWidth="60" IsReadOnly="True" Binding="{Binding OrderNumber}">
+            <DataGridTextColumn Header="Track #" MinWidth="60" IsReadOnly="True" Binding="{Binding TrackNumber}">
                 <DataGridTextColumn.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="TextBlock.TextAlignment" Value="Right"/>
