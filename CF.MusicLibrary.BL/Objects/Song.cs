@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 
 namespace CF.MusicLibrary.BL.Objects
@@ -11,12 +9,8 @@ namespace CF.MusicLibrary.BL.Objects
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		//	CF TEMP: Switch from annotations to fluent configuration
-
-		[Key]
 		public int Id { get; set; }
 
-		[Required]
 		public Disc Disc { get; set; }
 
 		public Artist Artist { get; set; }
@@ -25,16 +19,12 @@ namespace CF.MusicLibrary.BL.Objects
 
 		public short? Year { get; set; }
 
-		[Required]
 		public string Title { get; set; }
 
 		public Genre Genre { get; set; }
 
-		[NotMapped]
 		public TimeSpan Duration { get; set; }
 
-		[Required]
-		[Column("Duration")]
 		public double DurationInMilliseconds
 		{
 			get { return Duration.TotalMilliseconds; }
@@ -45,11 +35,8 @@ namespace CF.MusicLibrary.BL.Objects
 
 		public Rating SafeRating => Rating ?? Objects.Rating.R5;
 
-		[NotMapped]
 		public Uri Uri { get; set; }
 
-		[Required]
-		[Column("Uri")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Support property for Uri field. It's required because Uri type is not supported by used Data Provider.")]
 		public string SongUri
 		{
