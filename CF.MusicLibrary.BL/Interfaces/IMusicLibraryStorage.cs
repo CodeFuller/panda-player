@@ -16,7 +16,7 @@ namespace CF.MusicLibrary.BL.Interfaces
 
 		Task<bool> CheckSongContent(Song song);
 
-		Task UpdateSongTagData(Song song, SongTagData tagData);
+		Task UpdateSongTagData(Song song, UpdatedSongProperties updatedProperties);
 
 		Task FixSongTagData(Song song);
 

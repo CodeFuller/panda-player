@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:valueConverters="clr-namespace:CF.MusicLibrary.PandaPlayer.ViewModels.ValueConverters"
+             xmlns:views="clr-namespace:CF.MusicLibrary.PandaPlayer.Views"
              mc:Ignorable="d" 
              d:DesignWidth="800" d:DesignHeight="600"
              >
@@ -15,11 +16,25 @@
         <valueConverters:SongLastPlaybackValueConverter x:Key="SongLastPlaybackValueConverter" />
     </UserControl.Resources>
 
-    <DataGrid AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="None"
+    <views:MultiSelectionDataGrid x:Name="Songs" AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="None"
               ColumnHeaderHeight="20"
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
               Background="#1B1B1B" RowBackground="#1B1B1B" Foreground="White"
-              ItemsSource="{Binding Songs}" SelectedItem="{Binding SelectedSong}">
+              ItemsSource="{Binding Songs}" SelectedItem="{Binding SelectedSong}" SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+              ContextMenuOpening="DataGrid_ContextMenuOpening">
+
+        <DataGrid.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Set Rating" ItemsSource="{Binding SetRatingMenuItems}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Header" Value="{Binding Title}"></Setter>
+                            <Setter Property="Command" Value="{Binding Command}"></Setter>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+            </ContextMenu>
+        </DataGrid.ContextMenu>
 
         <DataGrid.InputBindings>
             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding PlayDiscFromSongCommand}" />
@@ -80,6 +95,6 @@
             </DataGridTextColumn>
             <DataGridTextColumn Header="Rating" MinWidth="100" IsReadOnly="True" Binding="{Binding Rating}" />
         </DataGrid.Columns>
-    </DataGrid>
+    </views:MultiSelectionDataGrid>
 
 </UserControl>

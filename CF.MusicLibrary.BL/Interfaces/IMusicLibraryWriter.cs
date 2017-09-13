@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
 
 namespace CF.MusicLibrary.BL.Interfaces
@@ -9,6 +8,8 @@ namespace CF.MusicLibrary.BL.Interfaces
 	{
 		Task AddSong(Song song, string songSourceFileName);
 
+		Task UpdateSong(Song song, UpdatedSongProperties updatedProperties);
+
 		Task DeleteSong(Song song, DateTime deleteTime);
 
 		Task DeleteDisc(Disc disc);
@@ -16,8 +17,6 @@ namespace CF.MusicLibrary.BL.Interfaces
 		Task SetDiscCoverImage(Disc disc, string coverImageFileName);
 
 		Task AddSongPlayback(Song song, DateTime playbackTime);
-
-		Task UpdateSongTagData(Song song, SongTagData tagData);
 
 		Task FixSongTagData(Song song);
 	}

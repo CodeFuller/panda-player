@@ -13,5 +13,8 @@
 		public int? Track { get; set; }
 
 		public string Title { get; set; }
+
+		public static UpdatedSongProperties TaggedProperties => UpdatedSongProperties.Artist | UpdatedSongProperties.Album | UpdatedSongProperties.Year |
+																UpdatedSongProperties.Genre | UpdatedSongProperties.Track | UpdatedSongProperties.Title;
 	}
 }

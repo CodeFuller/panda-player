@@ -7,6 +7,7 @@ using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.LastFM;
+using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Player;
 using CF.MusicLibrary.PandaPlayer.Scrobbler;
 using CF.MusicLibrary.PandaPlayer.ViewModels;

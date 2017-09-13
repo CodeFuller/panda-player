@@ -61,15 +61,7 @@ namespace CF.MusicLibrary.BL
 				fileSystemFacade.CreateDirectory(Path.GetDirectoryName(destFileName));
 
 				StoreFile(songSourceFileName, destFileName, false);
-				SongTagger.SetTagData(destFileName, new SongTagData
-				{
-					Artist = song.Artist?.Name,
-					Album = song.Disc.AlbumTitle,
-					Year = song.Year,
-					Genre = song.Genre?.Name,
-					Track = song.TrackNumber,
-					Title = song.Title,
-				});
+				SongTagger.SetTagData(destFileName, FillSongTagData(song));
 				fileSystemFacade.SetReadOnlyAttribute(destFileName);
 			});
 		}
@@ -126,9 +118,15 @@ namespace CF.MusicLibrary.BL
 			return await Task.Run(() => File.Exists(songFileName));
 		}
 
-		public async Task UpdateSongTagData(Song song, SongTagData tagData)
+		public async Task UpdateSongTagData(Song song, UpdatedSongProperties updatedProperties)
 		{
-			await Task.Run(() => SongTagger.SetTagData(UriToFilesystemPath(song.Uri), tagData));
+			await Task.Run(() =>
+			{
+				string songFileName = UriToFilesystemPath(song.Uri);
+				fileSystemFacade.ClearReadOnlyAttribute(songFileName);
+				SongTagger.SetTagData(songFileName, FillSongTagData(song));
+				fileSystemFacade.SetReadOnlyAttribute(songFileName);
+			});
 		}
 
 		public async Task FixSongTagData(Song song)
@@ -173,6 +171,19 @@ namespace CF.MusicLibrary.BL
 			{
 				fileSystemFacade.ClearReadOnlyAttribute(dstFileName);
 			}
+		}
+
+		private static SongTagData FillSongTagData(Song song)
+		{
+			return new SongTagData
+			{
+				Artist = song.Artist?.Name,
+				Album = song.Disc.AlbumTitle,
+				Year = song.Year,
+				Genre = song.Genre?.Name,
+				Track = song.TrackNumber,
+				Title = song.Title,
+			};
 		}
 	}
 }

@@ -144,8 +144,8 @@
     <Compile Include="Events\PlayDiscEventArgs.cs" />
     <Compile Include="Events\PlayDiscFromSongEventArgs.cs" />
     <Compile Include="Events\ReversePlayingEventArgs.cs" />
-    <Compile Include="ILibraryContentUpdater.cs" />
-    <Compile Include="LibraryContentUpdater.cs" />
+    <Compile Include="ContentUpdate\ILibraryContentUpdater.cs" />
+    <Compile Include="ContentUpdate\LibraryContentUpdater.cs" />
     <Compile Include="Scrobbler\IScrobbler.cs" />
     <Compile Include="Scrobbler\PersistentScrobbler.cs" />
     <Compile Include="ViewModels\Interfaces\ILibraryExplorerViewModel.cs" />
@@ -167,6 +167,7 @@
     <Compile Include="ViewModels\Logging\LogMessage.cs" />
     <Compile Include="ViewModels\Logging\LogMessageLevel.cs" />
     <Compile Include="ViewModels\MusicPlayerViewModel.cs" />
+    <Compile Include="ViewModels\SetRatingMenuItem.cs" />
     <Compile Include="ViewModels\SongListViewModel.cs" />
     <Compile Include="ViewModels\ValueConverters\SongBitrateValueConverter.cs" />
     <Compile Include="ViewModels\ValueConverters\SongDurationValueConverter.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="Views\LoggerView.xaml.cs">
       <DependentUpon>LoggerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MultiSelectionDataGrid.cs" />
     <Compile Include="Views\MusicPlayerView.xaml.cs">
       <DependentUpon>MusicPlayerView.xaml</DependentUpon>
     </Compile>

@@ -14,6 +14,15 @@ namespace CF.MusicLibrary.BL
 			await libraryRepository.AddSong(song);
 		}
 
+		public async Task UpdateSong(Song song, UpdatedSongProperties updatedProperties)
+		{
+			if ((updatedProperties & SongTagData.TaggedProperties) != 0)
+			{
+				await libraryStorage.UpdateSongTagData(song, updatedProperties);
+			}
+			await libraryRepository.UpdateSong(song);
+		}
+
 		public async Task DeleteSong(Song song, DateTime deleteTime)
 		{
 			await libraryStorage.DeleteSong(song);
@@ -39,11 +48,6 @@ namespace CF.MusicLibrary.BL
 		public async Task AddSongPlayback(Song song, DateTime playbackTime)
 		{
 			await libraryRepository.AddSongPlayback(song, playbackTime);
-		}
-
-		public async Task UpdateSongTagData(Song song, SongTagData tagData)
-		{
-			await libraryStorage.UpdateSongTagData(song, tagData);
 		}
 
 		public async Task FixSongTagData(Song song)

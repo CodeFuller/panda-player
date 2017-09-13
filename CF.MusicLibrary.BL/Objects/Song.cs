@@ -31,7 +31,16 @@ namespace CF.MusicLibrary.BL.Objects
 			set { Duration = TimeSpan.FromMilliseconds(value); }
 		}
 
-		public Rating? Rating { get; set; }
+		private Rating? rating;
+		public Rating? Rating
+		{
+			get { return rating; }
+			set
+			{
+				rating = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public Rating SafeRating => Rating ?? Objects.Rating.R5;
 
