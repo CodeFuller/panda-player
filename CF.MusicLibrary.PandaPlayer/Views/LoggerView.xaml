@@ -6,9 +6,9 @@
              xmlns:logging="clr-namespace:CF.MusicLibrary.PandaPlayer.ViewModels.Logging"
              mc:Ignorable="d" 
              d:DesignWidth="800" d:DesignHeight="300"
-             >
+             Loaded="View_Loaded">
 
-    <DataGrid AutoGenerateColumns="False" HeadersVisibility="None" GridLinesVisibility="None"
+    <DataGrid Name="MessagesDataGrid" AutoGenerateColumns="False" HeadersVisibility="None" GridLinesVisibility="None"
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
               Background="#1B1B1B" RowBackground="#1B1B1B" Foreground="White"
               FontSize="13"
