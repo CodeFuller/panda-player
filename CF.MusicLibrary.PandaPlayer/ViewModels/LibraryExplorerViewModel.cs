@@ -41,6 +41,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public ICommand ChangeFolderCommand { get; }
 		public ICommand PlayDiscCommand { get; }
 		public ICommand DeleteDiscCommand { get; }
+		public ICommand JumpToFirstItemCommand { get; }
+		public ICommand JumpToLastItemCommand { get; }
 
 		public LibraryExplorerViewModel(ILibraryBrowser libraryBrowser, ILibraryContentUpdater libraryContentUpdater)
 		{
@@ -59,6 +61,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			ChangeFolderCommand = new RelayCommand(ChangeFolder);
 			PlayDiscCommand = new RelayCommand(PlayDisc);
 			DeleteDiscCommand = new AsyncRelayCommand(DeleteDisc);
+			JumpToFirstItemCommand = new RelayCommand(() => SelectedItem = Items.FirstOrDefault());
+			JumpToLastItemCommand = new RelayCommand(() => SelectedItem = Items.LastOrDefault());
 		}
 
 		public void Load()
