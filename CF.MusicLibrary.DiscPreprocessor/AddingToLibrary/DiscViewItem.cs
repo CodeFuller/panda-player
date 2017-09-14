@@ -45,6 +45,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			set
 			{
 				Set(ref title, value);
+				RaisePropertyChanged(nameof(AlbumTitleMatchesDiscTitle));
 				RaisePropertyChanged(nameof(RequiredDataIsFilled));
 			}
 		}
@@ -56,9 +57,12 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			set
 			{
 				Set(ref albumTitle, value);
+				RaisePropertyChanged(nameof(AlbumTitleMatchesDiscTitle));
 				RaisePropertyChanged(nameof(RequiredDataIsFilled));
 			}
 		}
+
+		public bool AlbumTitleMatchesDiscTitle => String.Equals(AlbumTitle, Title, StringComparison.OrdinalIgnoreCase);
 
 		private int? year;
 		public virtual int? Year

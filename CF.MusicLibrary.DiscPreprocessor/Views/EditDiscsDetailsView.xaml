@@ -39,8 +39,18 @@
                 </DataGridTextColumn.CellStyle>
             </DataGridTextColumn>
             <DataGridTextColumn Header="Disc Title" Width="*" Binding="{Binding Title}" />
-            <DataGridTextColumn Header="Album Title" Width="*" Binding="{Binding AlbumTitle}" />
-            <DataGridTextColumn Header="Year" Binding="{Binding Year}" >
+            <DataGridTextColumn Header="Album Title" Width="*" Binding="{Binding AlbumTitle}">
+                <DataGridTextColumn.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AlbumTitleMatchesDiscTitle}" Value="False">
+                                <Setter Property="Background" Value="Yellow" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGridTextColumn.CellStyle>
+            </DataGridTextColumn>
+                <DataGridTextColumn Header="Year" Binding="{Binding Year}" >
                 <DataGridTextColumn.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="TextBlock.TextAlignment" Value="Center"/>
