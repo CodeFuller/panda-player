@@ -20,8 +20,7 @@
               ColumnHeaderHeight="20"
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
               Background="#1B1B1B" RowBackground="#1B1B1B" Foreground="White"
-              ItemsSource="{Binding Songs}" SelectedItem="{Binding SelectedSong}" SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-              ContextMenuOpening="DataGrid_ContextMenuOpening">
+              ItemsSource="{Binding Songs}" SelectedItem="{Binding SelectedSong}" SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
         <DataGrid.ContextMenu>
             <ContextMenu>
