@@ -69,7 +69,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			};
 
 			ILibraryStructurer libraryStructurer = Substitute.For<ILibraryStructurer>();
-			libraryStructurer.GetArtistStorageUri(Arg.Any<Artist>()).Returns(new Uri("/Some Artist", UriKind.Relative));
+			libraryStructurer.GetArtistStorageUri(Arg.Any<DiscLibrary>(), Arg.Any<Artist>()).Returns(new Uri("/Some Artist", UriKind.Relative));
 			libraryStructurer.BuildArtistDiscUri(new Uri("/Some Artist", UriKind.Relative), "2000 - Some Disc").Returns(new Uri("/SomeCategory/Some Artist/2000 - Some Disc", UriKind.Relative));
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
