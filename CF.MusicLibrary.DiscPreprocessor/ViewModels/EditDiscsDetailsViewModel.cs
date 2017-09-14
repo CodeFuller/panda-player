@@ -98,7 +98,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 						{
 							var artist = availableArtists.Single(a => String.Equals(a.Name, addedDiscInfo.Artist));
 
-							var artistStorageUri = libraryStructurer.GetArtistStorageUri(artist);
+							var artistStorageUri = libraryStructurer.GetArtistStorageUri(discLibrary, artist);
 							IEnumerable<Uri> artistStorageUris = artistStorageUri != null
 								? Enumerable.Repeat(artistStorageUri, 1)
 								: libraryStructurer.GetAllPossibleArtistStorageUris(artist);

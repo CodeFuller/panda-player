@@ -8,7 +8,7 @@ namespace CF.MusicLibrary.BL.Interfaces
 	{
 		IEnumerable<Uri> GetAllPossibleArtistStorageUris(Artist artist);
 
-		Uri GetArtistStorageUri(Artist artist);
+		Uri GetArtistStorageUri(DiscLibrary library, Artist artist);
 
 		Uri BuildArtistDiscUri(Uri artistUri, string discNamePart);
 

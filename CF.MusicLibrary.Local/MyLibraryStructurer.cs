@@ -16,10 +16,10 @@ namespace CF.MusicLibrary.Local
 				.Select(c => BuildArtistUri(c, artist.Name));
 		}
 
-		public Uri GetArtistStorageUri(Artist artist)
+		public Uri GetArtistStorageUri(DiscLibrary library, Artist artist)
 		{
-			var categories = artist.Songs
-				.Select(s => new LocalLibraryDiscPath(s.Disc.Uri).Category)
+			var categories = library.Discs.Where(d => d.Artist?.Id == artist.Id)
+				.Select(d => new LocalLibraryDiscPath(d.Uri).Category)
 				.Distinct()
 				.ToList();
 
