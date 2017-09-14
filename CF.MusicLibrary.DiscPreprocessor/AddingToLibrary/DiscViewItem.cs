@@ -28,6 +28,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		public abstract Artist Artist { get; set; }
 		public abstract bool ArtistIsEditable { get; }
 		public abstract bool ArtistIsNotFilled { get; }
+		public bool ArtistIsNew => Artist?.Id == 0;
 
 		protected IReadOnlyCollection<Artist> AvailableArtists { get; }
 

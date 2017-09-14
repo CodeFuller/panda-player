@@ -31,6 +31,9 @@
                             <DataTrigger Binding="{Binding ArtistIsNotFilled}" Value="True">
                                 <Setter Property="Background" Value="Yellow" />
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding ArtistIsNew}" Value="True">
+                                <Setter Property="Background" Value="LightSkyBlue" />
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </DataGridTextColumn.CellStyle>

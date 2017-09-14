@@ -17,6 +17,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			{
 				Set(ref artist, value);
 				RaisePropertyChanged(nameof(ArtistIsNotFilled));
+				RaisePropertyChanged(nameof(ArtistIsNew));
 				RaisePropertyChanged(nameof(RequiredDataIsFilled));
 			}
 		}
