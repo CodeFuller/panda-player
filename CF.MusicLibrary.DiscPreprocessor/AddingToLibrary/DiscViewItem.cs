@@ -30,7 +30,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		public abstract bool ArtistIsNotFilled { get; }
 		public bool ArtistIsNew => Artist?.Id == 0;
 
-		protected IReadOnlyCollection<Artist> AvailableArtists { get; }
+		public Collection<Artist> AvailableArtists { get; }
 
 		private string title;
 		/// <summary>
@@ -162,8 +162,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			SourcePath = sourcePath;
 			title = disc.Title;
 			albumTitle = DiscTitleToAlbumMapper.GetAlbumTitleFromDiscTitle(disc.Title);
-			AvailableArtists = availableArtists.ToList();
-			AvailableGenres = availableGenres.ToCollection();
+			AvailableArtists = availableArtists.OrderBy(a => a.Name).ToCollection();
+			AvailableGenres = availableGenres.OrderBy(a => a.Name).ToCollection();
 			SourceSongs = disc.Songs.ToList();
 		}
 

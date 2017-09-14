@@ -9,5 +9,10 @@ namespace CF.MusicLibrary.BL.Objects
 		public string Name { get; set; }
 
 		public ICollection<Song> Songs { get; set; } = new HashSet<Song>();
+
+		public override string ToString()
+		{
+			return Name;
+		}
 	}
 }

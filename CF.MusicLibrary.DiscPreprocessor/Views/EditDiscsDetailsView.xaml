@@ -23,8 +23,8 @@
                     </Style>
                 </DataGridTextColumn.CellStyle>
             </DataGridTextColumn>
-            <DataGridTextColumn Header="Artist" Width="*" Binding="{Binding Artist.Name}">
-                <DataGridTextColumn.CellStyle>
+            <DataGridComboBoxColumn Header="Artist" Width="*" SelectedItemBinding="{Binding Artist}">
+                <DataGridComboBoxColumn.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="IsEnabled" Value="{Binding ArtistIsEditable}" />
                         <Style.Triggers>
@@ -36,8 +36,18 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </DataGridTextColumn.CellStyle>
-            </DataGridTextColumn>
+                </DataGridComboBoxColumn.CellStyle>
+                <DataGridComboBoxColumn.ElementStyle>
+                    <Style TargetType="ComboBox">
+                        <Setter Property="ItemsSource" Value="{Binding AvailableArtists}" />
+                    </Style>
+                </DataGridComboBoxColumn.ElementStyle>
+                <DataGridComboBoxColumn.EditingElementStyle>
+                    <Style TargetType="ComboBox">
+                        <Setter Property="ItemsSource" Value="{Binding AvailableArtists}" />
+                    </Style>
+                </DataGridComboBoxColumn.EditingElementStyle>
+            </DataGridComboBoxColumn>
             <DataGridTextColumn Header="Disc Title" Width="*" Binding="{Binding Title}" />
             <DataGridTextColumn Header="Album Title" Width="*" Binding="{Binding AlbumTitle}">
                 <DataGridTextColumn.CellStyle>
