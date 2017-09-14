@@ -72,8 +72,6 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Register<PlayDiscEventArgs>(this, OnPlayDiscLaunched);
 			Messenger.Default.Register<PlayDiscFromSongEventArgs>(this, OnPlayDiscFromSongLaunched);
 			Messenger.Default.Register<ReversePlayingEventArgs>(this, OnReversePlaying);
-
-			Messenger.Default.Register<PlayDiscEventArgs>(this, OnPlayDiscLaunched);
 		}
 
 		private async Task Load()
