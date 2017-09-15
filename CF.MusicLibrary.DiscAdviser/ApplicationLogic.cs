@@ -59,7 +59,7 @@ namespace CF.MusicLibrary.DiscAdviser
 
 				foreach (var disc in discAdviser.AdviseDiscs(discLibrary).Take(AdvisedDiscsNumber))
 				{
-					Console.WriteLine(Current($"[{FormatPlaybackTime(disc.LastPlaybackTime)}]  {disc.Artist.Name,-30} {disc.Title}"));
+					Console.WriteLine(Current($"[{FormatPlaybackTime(disc.LastPlaybackTime)}]  {disc.Artist?.Name,-30} {disc.Title}"));
 					Console.ReadKey(true);
 				}
 			}
