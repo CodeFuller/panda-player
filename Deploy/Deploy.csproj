@@ -15,6 +15,7 @@
     <Exec Command="xcopy /q /y /s /e &quot;..\CF.MusicLibrary.DiscPreprocessor\bin\Release&quot; &quot;$(OutputPath)\DiscPreprocessor\&quot;" />
     <Exec Command="xcopy /q /y /s /e &quot;..\CF.MusicLibrary.DiscAdviser\bin\Release&quot; &quot;$(OutputPath)\DiscAdviser\&quot;" />
     <Exec Command="xcopy /q /y /s /e &quot;..\CF.MusicLibrary.PandaPlayer\bin\Release&quot; &quot;$(OutputPath)\PandaPlayer\&quot;" />
+    <Exec Command="xcopy /q /y /s /e &quot;..\CF.MusicLibrary.LibraryChecker\bin\Release&quot; &quot;$(OutputPath)\LibraryChecker\&quot;" />
   </Target>
   <ItemGroup>
     <ProjectReference Include="..\CF.MusicLibrary.DiscAdviser\CF.MusicLibrary.DiscAdviser.csproj">
@@ -24,6 +25,10 @@
     <ProjectReference Include="..\CF.MusicLibrary.DiscPreprocessor\CF.MusicLibrary.DiscPreprocessor.csproj">
       <Project>{B977EA7B-85A2-429A-B98F-E76023589321}</Project>
       <Name>CF.MusicLibrary.DiscPreprocessor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.LibraryChecker\CF.MusicLibrary.LibraryChecker.csproj">
+      <Project>{72458eff-83e3-4907-8161-5401aa303d93}</Project>
+      <Name>CF.MusicLibrary.LibraryChecker</Name>
     </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.PandaPlayer\CF.MusicLibrary.PandaPlayer.csproj">
       <Project>{502d59ca-7973-46c9-a2a4-9144c48cbee4}</Project>
