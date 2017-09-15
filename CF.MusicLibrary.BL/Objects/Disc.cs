@@ -49,7 +49,7 @@ namespace CF.MusicLibrary.BL.Objects
 			set { Uri = new Uri(value, UriKind.Relative); }
 		}
 
-		public DateTime? LastPlaybackTime => Songs.Select(s => s.LastPlaybackTime).Min();
+		public DateTime? LastPlaybackTime => Songs.Any(s => s.LastPlaybackTime == null) ? null : Songs.Select(s => s.LastPlaybackTime).Min();
 
 		public int? PlaybacksPassed { get; set; }
 

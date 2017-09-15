@@ -87,6 +87,7 @@
     <Compile Include="..\Global\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CF.MusicLibrary.BL\Objects\DiscTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\ArtistDiscViewItemTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\CompilationDiscWithArtistInfoViewItemTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\CompilationDiscWithoutArtistInfoViewItemTests.cs" />
