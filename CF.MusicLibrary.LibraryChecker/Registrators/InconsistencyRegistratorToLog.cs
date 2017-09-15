@@ -11,7 +11,7 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 	{
 		public void RegisterInconsistency_SuspiciousAlbumTitle(Disc disc)
 		{
-			LogInconsistency(Current($"Album title looks suspicious for {disc.Uri + ":",-100}: '{disc.AlbumTitle}'"));
+			LogInconsistency(Current($"Album title looks suspicious for {disc.Uri}: '{disc.AlbumTitle}'"));
 		}
 
 		public void RegisterInconsistency_DiscWithoutSongs(Disc disc)
@@ -27,11 +27,6 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 		public void RegisterInconsistency_DifferentGenresForDisc(Disc disc, IEnumerable<Genre> genres)
 		{
 			LogInconsistency(Current($"Disc '{disc.Uri}' contains different genres: {String.Join(", ", genres)}"));
-		}
-
-		public void RegisterInconsistency_BadSongContent(Song song)
-		{
-			LogInconsistency(Current($"Bad content for song '{song.Uri}'"));
 		}
 
 		public void RegisterInconsistency_BadTagData(string inconsistencyMessage)
@@ -82,6 +77,16 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 		public void RegisterInconsistency_NoListensForSong(Song song)
 		{
 			LogInconsistency(Current($"No listens for song on Last.fm: '{song.Uri}'"));
+		}
+
+		public void RegisterInconsistency_MissingSongData(Song song)
+		{
+			LogInconsistency(Current($"Missing song data: '{song.Uri}'"));
+		}
+
+		public void RegisterInconsistency_LibraryData(string inconsistencyMessage)
+		{
+			LogInconsistency(inconsistencyMessage);
 		}
 
 		private static void LogInconsistency(string inconsistencyMessage)

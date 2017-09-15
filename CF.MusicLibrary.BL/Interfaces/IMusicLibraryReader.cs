@@ -22,6 +22,6 @@ namespace CF.MusicLibrary.BL.Interfaces
 
 		Task<FileInfo> GetSongFile(Song song);
 
-		Task<bool> CheckSongContent(Song song);
+		Task CheckStorage(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator);
 	}
 }

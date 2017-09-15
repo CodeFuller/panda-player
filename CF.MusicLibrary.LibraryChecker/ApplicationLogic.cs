@@ -15,16 +15,21 @@ namespace CF.MusicLibrary.LibraryChecker
 	public class ApplicationLogic : IApplicationLogic
 	{
 		private readonly IDiscConsistencyChecker discConsistencyChecker;
+		private readonly IStorageConsistencyChecker storageConsistencyChecker;
 		private readonly ITagDataConsistencyChecker tagDataChecker;
-		private readonly ILastFMConsistencyChecker lastFmConsistencyChecker;
+		private readonly ILastFMConsistencyChecker lastFMConsistencyChecker;
 		private readonly IMusicLibrary musicLibrary;
 
-		public ApplicationLogic(IDiscConsistencyChecker discConsistencyChecker, ITagDataConsistencyChecker tagDataChecker,
-			ILastFMConsistencyChecker lastFMConsistencyChecker, IMusicLibrary musicLibrary)
+		public ApplicationLogic(IDiscConsistencyChecker discConsistencyChecker, IStorageConsistencyChecker storageConsistencyChecker,
+			ITagDataConsistencyChecker tagDataChecker, ILastFMConsistencyChecker lastFMConsistencyChecker, IMusicLibrary musicLibrary)
 		{
 			if (discConsistencyChecker == null)
 			{
 				throw new ArgumentNullException(nameof(discConsistencyChecker));
+			}
+			if (storageConsistencyChecker == null)
+			{
+				throw new ArgumentNullException(nameof(storageConsistencyChecker));
 			}
 			if (tagDataChecker == null)
 			{
@@ -40,19 +45,21 @@ namespace CF.MusicLibrary.LibraryChecker
 			}
 
 			this.discConsistencyChecker = discConsistencyChecker;
+			this.storageConsistencyChecker = storageConsistencyChecker;
 			this.tagDataChecker = tagDataChecker;
-			this.lastFmConsistencyChecker = lastFMConsistencyChecker;
+			this.lastFMConsistencyChecker = lastFMConsistencyChecker;
 			this.musicLibrary = musicLibrary;
 		}
 
 		public int Run(string[] args)
 		{
-			LibraryCheckFlags checkFlags = LibraryCheckFlags.CheckDiscsConsistency | LibraryCheckFlags.CheckTagData;
+			LibraryCheckFlags checkFlags = LibraryCheckFlags.CheckDiscsConsistency | LibraryCheckFlags.CheckLibraryStorage;
 			LaunchCommand command = LaunchCommand.ShowHelp;
 
 			var options = new Dictionary<string, LibraryCheckFlags>
 			{
 				{ "check-discs", LibraryCheckFlags.CheckDiscsConsistency },
+				{ "check-storage", LibraryCheckFlags.CheckLibraryStorage },
 				{ "check-tags", LibraryCheckFlags.CheckTagData },
 				{ "check-artists", LibraryCheckFlags.CheckArtistsOnLastFM },
 				{ "check-albums", LibraryCheckFlags.CheckAlbumsOnLastFM },
@@ -99,7 +106,8 @@ namespace CF.MusicLibrary.LibraryChecker
 			Console.Error.WriteLine("  --check          Check library consistency. Possible checks");
 			Console.Error.WriteLine();
 			Console.Error.WriteLine("        --check-discs=yes|no        Default");
-			Console.Error.WriteLine("        --check-tags=yes|no         Default");
+			Console.Error.WriteLine("        --check-storage=yes|no      Default");
+			Console.Error.WriteLine("        --check-tags=yes|no");
 			Console.Error.WriteLine("        --check-artists=yes|no");
 			Console.Error.WriteLine("        --check-albums=yes|no");
 			Console.Error.WriteLine("        --check-songs=yes|no");
@@ -137,6 +145,11 @@ namespace CF.MusicLibrary.LibraryChecker
 				await discConsistencyChecker.CheckDiscsConsistency(discLibrary);
 			}
 
+			if ((checkFlags & LibraryCheckFlags.CheckLibraryStorage) != 0)
+			{
+				await storageConsistencyChecker.CheckStorage(discLibrary);
+			}
+
 			if ((checkFlags & LibraryCheckFlags.CheckTagData) != 0)
 			{
 				await tagDataChecker.CheckTagData(discLibrary.Songs);
@@ -144,17 +157,17 @@ namespace CF.MusicLibrary.LibraryChecker
 
 			if ((checkFlags & LibraryCheckFlags.CheckArtistsOnLastFM) != 0)
 			{
-				await lastFmConsistencyChecker.CheckArtists(discLibrary.Artists);
+				await lastFMConsistencyChecker.CheckArtists(discLibrary.Artists);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckAlbumsOnLastFM) != 0)
 			{
-				await lastFmConsistencyChecker.CheckAlbums(discLibrary);
+				await lastFMConsistencyChecker.CheckAlbums(discLibrary);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckSongsOnLastFM) != 0)
 			{
-				await lastFmConsistencyChecker.CheckSongs(discLibrary.Songs);
+				await lastFMConsistencyChecker.CheckSongs(discLibrary.Songs);
 			}
 
 			Logger.WriteInfo("Library check has finished");

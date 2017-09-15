@@ -34,6 +34,7 @@ namespace CF.MusicLibrary.LibraryChecker
 			DIContainer.RegisterType<IFileSystemFacade, FileSystemFacade>();
 
 			DIContainer.RegisterType<IDiscConsistencyChecker, DiscConsistencyChecker>();
+			DIContainer.RegisterType<IStorageConsistencyChecker, StorageConsistencyChecker>();
 			DIContainer.RegisterType<ITagDataConsistencyChecker, TagDataConsistencyChecker>();
 			DIContainer.RegisterType<ILastFMConsistencyChecker, LastFMConsistencyChecker>();
 

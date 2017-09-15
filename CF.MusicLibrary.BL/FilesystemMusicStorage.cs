@@ -8,6 +8,7 @@ using CF.Library.Core.Facades;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
+using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.BL
 {
@@ -86,17 +87,28 @@ namespace CF.MusicLibrary.BL
 					}
 
 					//	Deleting directories that became empty (disc, artist, category, ...)
-					string currDirectoryPath = discDirectory;
-					do
+					foreach (var currDirectoryPath in GetParentDirectoriesWithinStorage(discDirectory))
 					{
+						if (!fileSystemFacade.DirectoryIsEmpty(currDirectoryPath))
+						{
+							break;
+						}
 						fileSystemFacade.DeleteDirectory(currDirectoryPath);
-						currDirectoryPath = Directory.GetParent(currDirectoryPath)?.FullName;
 					}
-					while (currDirectoryPath != null &&
-						!String.Equals(Path.GetFullPath(currDirectoryPath), Path.GetFullPath(libraryRootDirectory), StringComparison.OrdinalIgnoreCase) &&
-						fileSystemFacade.DirectoryIsEmpty(currDirectoryPath));
 				}
 			});
+		}
+
+		private IEnumerable<string> GetParentDirectoriesWithinStorage(string startDirectoryPath)
+		{
+			string currDirectoryPath = startDirectoryPath;
+			do
+			{
+				yield return currDirectoryPath;
+				currDirectoryPath = Directory.GetParent(currDirectoryPath)?.FullName;
+			}
+			while (currDirectoryPath != null &&
+						!String.Equals(Path.GetFullPath(currDirectoryPath), Path.GetFullPath(libraryRootDirectory), StringComparison.OrdinalIgnoreCase));
 		}
 
 		private static bool IsCoverImageFile(string filePath)
@@ -110,12 +122,6 @@ namespace CF.MusicLibrary.BL
 			string destFileName = Path.Combine(discDirectory, DiscCoverFileName);
 
 			await Task.Run(() => StoreFile(coverImageFileName, destFileName, true));
-		}
-
-		public async Task<bool> CheckSongContent(Song song)
-		{
-			var songFileName = UriToFilesystemPath(song.Uri);
-			return await Task.Run(() => File.Exists(songFileName));
 		}
 
 		public async Task UpdateSongTagData(Song song, UpdatedSongProperties updatedProperties)
@@ -147,6 +153,64 @@ namespace CF.MusicLibrary.BL
 		public Task<FileInfo> GetSongFile(Song song)
 		{
 			return Task.FromResult(new FileInfo(UriToFilesystemPath(song.Uri)));
+		}
+
+		public async Task CheckDataConsistency(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator)
+		{
+			await Task.Run(() =>
+			{
+				//	Checking that all song files exist and have read-only attribute set.
+				foreach (var song in library.Songs)
+				{
+					var songFileName = UriToFilesystemPath(song.Uri);
+					if (!fileSystemFacade.FileExists(songFileName))
+					{
+						registrator.RegisterInconsistency_MissingSongData(song);
+					}
+					else if (!fileSystemFacade.GetReadOnlyAttribute(songFileName))
+					{
+						registrator.RegisterInconsistency_LibraryData($"Song file has no read-only attribute set: {songFileName}");
+					}
+				}
+
+				CheckForUnexpectedFileSystemItems(library, registrator);
+			});
+		}
+
+		private void CheckForUnexpectedFileSystemItems(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator)
+		{
+			HashSet<string> skipList = new HashSet<string>(new[] { @"d:\music\.sync" });
+
+			HashSet<string> expectedDirectories = new HashSet<string>();
+			HashSet<string> expectedFileNames = new HashSet<string>(library.Songs.Select(s => UriToFilesystemPath(s.Uri)));
+
+			foreach (var disc in library)
+			{
+				var discDirectory = UriToFilesystemPath(disc.Uri);
+				expectedFileNames.Add(Path.Combine(discDirectory, DiscCoverFileName));
+				foreach (var directory in GetParentDirectoriesWithinStorage(discDirectory))
+				{
+					expectedDirectories.Add(directory);
+				}
+			}
+
+			foreach (string fileName in Directory.EnumerateFiles(libraryRootDirectory, "*.*", SearchOption.AllDirectories))
+			{
+				if (!expectedFileNames.Contains(fileName) &&
+					!skipList.Any(s => fileName.StartsWith(s, StringComparison.OrdinalIgnoreCase)))
+				{
+					registrator.RegisterInconsistency_LibraryData(Current($"Detected unexpected file within the storage: {fileName}"));
+				}
+			}
+
+			foreach (string directory in Directory.EnumerateDirectories(libraryRootDirectory, "*.*", SearchOption.AllDirectories))
+			{
+				if (!expectedDirectories.Contains(directory) &&
+					!skipList.Any(s => directory.StartsWith(s, StringComparison.OrdinalIgnoreCase)))
+				{
+					registrator.RegisterInconsistency_LibraryData(Current($"Detected unexpected directory within the storage: {directory}"));
+				}
+			}
 		}
 
 		private string UriToFilesystemPath(Uri uri)

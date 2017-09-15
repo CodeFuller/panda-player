@@ -53,11 +53,6 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 			inconsistencyRegistrator.RegisterInconsistency_DifferentGenresForDisc(disc, genresList);
 		}
 
-		public void RegisterInconsistency_BadSongContent(Song song)
-		{
-			inconsistencyRegistrator.RegisterInconsistency_BadSongContent(song);
-		}
-
 		public void RegisterInconsistency_BadTagData(string inconsistencyMessage)
 		{
 			inconsistencyRegistrator.RegisterInconsistency_BadTagData(inconsistencyMessage);
@@ -116,6 +111,16 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 		public void RegisterInconsistency_NoListensForSong(Song song)
 		{
 			inconsistencyRegistrator.RegisterInconsistency_NoListensForSong(song);
+		}
+
+		public void RegisterInconsistency_MissingSongData(Song song)
+		{
+			inconsistencyRegistrator.RegisterInconsistency_MissingSongData(song);
+		}
+
+		public void RegisterInconsistency_LibraryData(string inconsistencyMessage)
+		{
+			inconsistencyRegistrator.RegisterInconsistency_LibraryData(inconsistencyMessage);
 		}
 	}
 }

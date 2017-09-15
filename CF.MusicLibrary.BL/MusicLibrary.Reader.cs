@@ -80,9 +80,9 @@ namespace CF.MusicLibrary.BL
 			return await libraryStorage.GetSongFile(song);
 		}
 
-		public async Task<bool> CheckSongContent(Song song)
+		public async Task CheckStorage(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator)
 		{
-			return await libraryStorage.CheckSongContent(song);
+			await libraryStorage.CheckDataConsistency(library, registrator);
 		}
 	}
 }

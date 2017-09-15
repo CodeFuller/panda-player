@@ -14,8 +14,6 @@ namespace CF.MusicLibrary.BL.Interfaces
 
 		Task SetDiscCoverImage(Disc disc, string coverImageFileName);
 
-		Task<bool> CheckSongContent(Song song);
-
 		Task UpdateSongTagData(Song song, UpdatedSongProperties updatedProperties);
 
 		Task FixSongTagData(Song song);
@@ -25,5 +23,7 @@ namespace CF.MusicLibrary.BL.Interfaces
 		Task<IEnumerable<SongTagType>> GetSongTagTypes(Song song);
 
 		Task<FileInfo> GetSongFile(Song song);
+
+		Task CheckDataConsistency(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator);
 	}
 }

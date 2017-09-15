@@ -12,21 +12,15 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 {
 	public class DiscConsistencyChecker : IDiscConsistencyChecker
 	{
-		private readonly IMusicLibrary musicLibrary;
 		private readonly ILibraryInconsistencyRegistrator inconsistencyRegistrator;
 
-		public DiscConsistencyChecker(IMusicLibrary musicLibrary, ILibraryInconsistencyRegistrator inconsistencyRegistrator)
+		public DiscConsistencyChecker(ILibraryInconsistencyRegistrator inconsistencyRegistrator)
 		{
-			if (musicLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(musicLibrary));
-			}
 			if (inconsistencyRegistrator == null)
 			{
 				throw new ArgumentNullException(nameof(inconsistencyRegistrator));
 			}
 
-			this.musicLibrary = musicLibrary;
 			this.inconsistencyRegistrator = inconsistencyRegistrator;
 		}
 
@@ -49,15 +43,6 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 					continue;
 				}
 
-				//	Checking that all song files exist
-				foreach (var song in disc.Songs)
-				{
-					if (!await musicLibrary.CheckSongContent(song))
-					{
-						inconsistencyRegistrator.RegisterInconsistency_BadSongContent(song);
-					}
-				}
-
 				//	Checking songs order & track numbers
 				var trackNumbers = disc.Songs.Select(s => s.TrackNumber).ToList();
 				if (trackNumbers.Any(n => n != null))
@@ -75,6 +60,8 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 					inconsistencyRegistrator.RegisterInconsistency_DifferentGenresForDisc(disc, genres);
 				}
 			}
+
+			await Task.FromResult(0);
 		}
 	}
 }
