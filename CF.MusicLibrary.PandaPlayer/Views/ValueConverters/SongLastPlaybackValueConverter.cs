@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
+using CF.Library.Core.Extensions;
 
-namespace CF.MusicLibrary.PandaPlayer.ViewModels.ValueConverters
+namespace CF.MusicLibrary.PandaPlayer.Views.ValueConverters
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Class is used from XAML")]
 	internal class SongLastPlaybackValueConverter : IValueConverter
@@ -36,7 +36,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.ValueConverters
 				dayPart = dt.ToString("yyyy.MM.dd", CultureInfo.CurrentCulture);
 			}
 
-			return Current($"{dayPart} {dt:HH:mm}");
+			return FormattableStringExtensions.Current($"{dayPart} {dt:HH:mm}");
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

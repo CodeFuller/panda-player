@@ -169,10 +169,11 @@
     <Compile Include="ViewModels\MusicPlayerViewModel.cs" />
     <Compile Include="ViewModels\SetRatingMenuItem.cs" />
     <Compile Include="ViewModels\SongListViewModel.cs" />
-    <Compile Include="ViewModels\ValueConverters\SongBitrateValueConverter.cs" />
-    <Compile Include="ViewModels\ValueConverters\SongDurationValueConverter.cs" />
-    <Compile Include="ViewModels\ValueConverters\SongFileSizeValueConverter.cs" />
-    <Compile Include="ViewModels\ValueConverters\SongLastPlaybackValueConverter.cs" />
+    <Compile Include="Views\ValueConverters\RatingToImageNameValueConverter.cs" />
+    <Compile Include="Views\ValueConverters\SongBitrateValueConverter.cs" />
+    <Compile Include="Views\ValueConverters\SongDurationValueConverter.cs" />
+    <Compile Include="Views\ValueConverters\SongFileSizeValueConverter.cs" />
+    <Compile Include="Views\ValueConverters\SongLastPlaybackValueConverter.cs" />
     <Compile Include="Views\LibraryExplorerView.xaml.cs">
       <DependentUpon>LibraryExplorerView.xaml</DependentUpon>
     </Compile>
@@ -290,6 +291,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="PandaPlayer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Icons\Ratings\Rating01.png" />
+    <Resource Include="Views\Icons\Ratings\Rating02.png" />
+    <Resource Include="Views\Icons\Ratings\Rating03.png" />
+    <Resource Include="Views\Icons\Ratings\Rating04.png" />
+    <Resource Include="Views\Icons\Ratings\Rating05.png" />
+    <Resource Include="Views\Icons\Ratings\Rating06.png" />
+    <Resource Include="Views\Icons\Ratings\Rating07.png" />
+    <Resource Include="Views\Icons\Ratings\Rating08.png" />
+    <Resource Include="Views\Icons\Ratings\Rating09.png" />
+    <Resource Include="Views\Icons\Ratings\Rating10.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets')" />

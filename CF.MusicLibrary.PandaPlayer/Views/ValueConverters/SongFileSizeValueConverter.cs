@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
+using CF.Library.Core.Extensions;
 
-namespace CF.MusicLibrary.PandaPlayer.ViewModels.ValueConverters
+namespace CF.MusicLibrary.PandaPlayer.Views.ValueConverters
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Class is used from XAML")]
 	internal class SongFileSizeValueConverter : IValueConverter
@@ -24,20 +24,20 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.ValueConverters
 
 			if (size < KbValue)
 			{
-				return Current($"{size} B");
+				return FormattableStringExtensions.Current($"{size} B");
 			}
 
 			if (size < MbValue)
 			{
-				return Current($"{size/KbValue:F1} KB");
+				return FormattableStringExtensions.Current($"{size/KbValue:F1} KB");
 			}
 
 			if (size < GbValue)
 			{
-				return Current($"{size/MbValue:F1} MB");
+				return FormattableStringExtensions.Current($"{size/MbValue:F1} MB");
 			}
 
-			return Current($"{size/GbValue:F1} GB");
+			return FormattableStringExtensions.Current($"{size/GbValue:F1} GB");
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
