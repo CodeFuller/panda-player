@@ -8,6 +8,7 @@ using CF.Library.Core.Facades;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
+using static CF.Library.Core.Application;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.BL
@@ -72,16 +73,19 @@ namespace CF.MusicLibrary.BL
 			await Task.Run(() =>
 			{
 				var songFileName = UriToFilesystemPath(song.Uri);
+				Logger.WriteInfo($"Deleting song file '{songFileName}'");
 				fileSystemFacade.ClearReadOnlyAttribute(songFileName);
 				fileSystemFacade.DeleteFile(songFileName);
 
 				var discDirectory = Path.GetDirectoryName(songFileName);
 				var restDirectoryFiles = fileSystemFacade.EnumerateFiles(discDirectory).ToList();
+				Logger.WriteDebug($"Rest directory files: {restDirectoryFiles.Count}");
 				if (restDirectoryFiles.Count == 0 || restDirectoryFiles.Count == 1 && IsCoverImageFile(restDirectoryFiles.Single()))
 				{
 					if (restDirectoryFiles.Count == 1)
 					{
 						var coverImageFileName = restDirectoryFiles.Single();
+						Logger.WriteInfo($"Deleting cover image file '{coverImageFileName}'");
 						fileSystemFacade.ClearReadOnlyAttribute(coverImageFileName);
 						fileSystemFacade.DeleteFile(coverImageFileName);
 					}
@@ -93,6 +97,7 @@ namespace CF.MusicLibrary.BL
 						{
 							break;
 						}
+						Logger.WriteInfo($"Deleting empty directory '{currDirectoryPath}'");
 						fileSystemFacade.DeleteDirectory(currDirectoryPath);
 					}
 				}

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using CF.Library.Core.Logging;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Logging;
@@ -12,22 +13,27 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public void WriteDebug(string message)
 		{
-			Messages.Add(new LogMessage(LogMessageLevel.Debug, message));
+			AddMessage(new LogMessage(LogMessageLevel.Debug, message));
 		}
 
 		public void WriteInfo(string message)
 		{
-			Messages.Add(new LogMessage(LogMessageLevel.Info, message));
+			AddMessage(new LogMessage(LogMessageLevel.Info, message));
 		}
 
 		public void WriteWarning(string message)
 		{
-			Messages.Add(new LogMessage(LogMessageLevel.Warning, message));
+			AddMessage(new LogMessage(LogMessageLevel.Warning, message));
 		}
 
 		public void WriteError(string message)
 		{
-			Messages.Add(new LogMessage(LogMessageLevel.Error, message));
+			AddMessage(new LogMessage(LogMessageLevel.Error, message));
+		}
+
+		private void AddMessage(LogMessage logMessage)
+		{
+			Application.Current.Dispatcher.Invoke(() => Messages.Add(logMessage));
 		}
 	}
 }

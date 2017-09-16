@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
+using static CF.Library.Core.Application;
 
 namespace CF.MusicLibrary.BL
 {
@@ -33,11 +34,13 @@ namespace CF.MusicLibrary.BL
 
 		public async Task DeleteDisc(Disc disc)
 		{
+			Logger.WriteInfo($"Deleting disc '{disc.Title}'");
 			var deleteTime = DateTime.Now;
 			foreach (var song in disc.Songs)
 			{
 				await DeleteSong(song, deleteTime);
 			}
+			Logger.WriteInfo($"Disc '{disc.Title}' was deleted successfully");
 		}
 
 		public async Task SetDiscCoverImage(Disc disc, string coverImageFileName)
