@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Wpf;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
@@ -15,6 +17,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 	public class ApplicationViewModel : ViewModelBase
 	{
 		private readonly DiscLibrary discLibrary;
+
+		private readonly IWindowService windowService;
+		private readonly ILibraryContentUpdater libraryContentUpdater;
 
 		public ILibraryExplorerViewModel LibraryExplorerViewModel { get; }
 
@@ -36,7 +41,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public ICommand LoadCommand { get; }
 
 		public ApplicationViewModel(DiscLibrary discLibrary, ILibraryExplorerViewModel libraryExplorerViewModel, IExplorerSongListViewModel explorerSongListViewModel,
-			IMusicPlayerViewModel musicPlayerViewModel, ILoggerViewModel loggerViewModel)
+			IMusicPlayerViewModel musicPlayerViewModel, ILoggerViewModel loggerViewModel, IWindowService windowService, ILibraryContentUpdater libraryContentUpdater)
 		{
 			if (discLibrary == null)
 			{
@@ -58,12 +63,22 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 				throw new ArgumentNullException(nameof(loggerViewModel));
 			}
+			if (windowService == null)
+			{
+				throw new ArgumentNullException(nameof(windowService));
+			}
+			if (libraryContentUpdater == null)
+			{
+				throw new ArgumentNullException(nameof(libraryContentUpdater));
+			}
 
 			this.discLibrary = discLibrary;
 			LibraryExplorerViewModel = libraryExplorerViewModel;
 			ExplorerSongListViewModel = explorerSongListViewModel;
 			MusicPlayerViewModel = musicPlayerViewModel;
 			LoggerViewModel = loggerViewModel;
+			this.windowService = windowService;
+			this.libraryContentUpdater = libraryContentUpdater;
 
 			LoadCommand = new AsyncRelayCommand(Load);
 
@@ -71,6 +86,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Register<PlayDiscEventArgs>(this, OnPlayDiscLaunched);
 			Messenger.Default.Register<PlayDiscFromSongEventArgs>(this, OnPlayDiscFromSongLaunched);
 			Messenger.Default.Register<ReversePlayingEventArgs>(this, OnReversePlaying);
+			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, async e => await OnPlaylistFinished(e));
 		}
 
 		private async Task Load()
@@ -119,6 +135,34 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			else
 			{
 				MusicPlayerViewModel.Resume();
+			}
+		}
+
+		private async Task OnPlaylistFinished(PlaylistFinishedEventArgs e)
+		{
+			windowService.BringApplicationToFront();
+
+			var playedDiscs = Playlist.Songs.Select(s => s.Disc).Distinct().ToList();
+			if (playedDiscs.Count == 1)
+			{
+				var disc = playedDiscs.Single();
+				var unratedSongsNumber = disc.Songs.Count(s => s.Rating == null);
+				if (unratedSongsNumber > 0)
+				{
+					var rateDiscViewModel = new RateDiscViewModel(disc);
+					if (unratedSongsNumber == disc.Songs.Count)
+					{
+						windowService.ShowRateDiscViewDialog(rateDiscViewModel);
+						if (rateDiscViewModel.SelectedRating.HasValue)
+						{
+							await libraryContentUpdater.SetSongsRating(disc.Songs, rateDiscViewModel.SelectedRating.Value);
+						}
+					}
+					else
+					{
+						windowService.ShowRateReminderViewDialog(rateDiscViewModel);
+					}
+				}
 			}
 		}
 

@@ -7,6 +7,8 @@ namespace CF.MusicLibrary.BL.Objects
 {
 	public class Song : INotifyPropertyChanged
 	{
+		public static Rating DefaultRating => Objects.Rating.R5;
+
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		public int Id { get; set; }
@@ -42,7 +44,7 @@ namespace CF.MusicLibrary.BL.Objects
 			}
 		}
 
-		public Rating SafeRating => Rating ?? Objects.Rating.R5;
+		public Rating SafeRating => Rating ?? DefaultRating;
 
 		public Uri Uri { get; set; }
 

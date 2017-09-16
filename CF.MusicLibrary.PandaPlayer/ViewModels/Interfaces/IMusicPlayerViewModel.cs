@@ -17,9 +17,6 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", Justification = "'Resume' is the best name in current semantics")]
 		void Resume();
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", Justification = "'Stop' is the best name in current semantics")]
-		void Stop();
-
 		void SetCurrentSongProgress(double progress);
 	}
 }

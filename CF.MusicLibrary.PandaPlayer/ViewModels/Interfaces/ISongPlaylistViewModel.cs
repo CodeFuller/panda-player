@@ -1,16 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using CF.MusicLibrary.BL.Objects;
+﻿using CF.MusicLibrary.BL.Objects;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
-	public interface ISongPlaylistViewModel
+	public interface ISongPlaylistViewModel : ISongListViewModel
 	{
-		ObservableCollection<SongListItem> SongItems { get; }
-
 		Song CurrentSong { get; }
-
-		void SetSongs(IEnumerable<Song> newSongs);
 
 		void SwitchToNextSong();
 

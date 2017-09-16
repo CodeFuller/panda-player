@@ -11,6 +11,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		ObservableCollection<SongListItem> SongItems { get; }
 
+		IEnumerable<Song> Songs { get; }
+
 		SongListItem SelectedSongItem { get; }
 
 		void SetSongs(IEnumerable<Song> newSongs);

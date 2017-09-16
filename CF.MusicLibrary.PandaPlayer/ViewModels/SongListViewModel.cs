@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -24,6 +23,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			get { return songItems; }
 			private set { Set(ref songItems, value); }
 		}
+
+		public IEnumerable<Song> Songs => SongItems.Select(s => s.Song);
 
 		private SongListItem selectedSongItem;
 		public SongListItem SelectedSongItem
@@ -54,8 +55,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 			SongItems = new ObservableCollection<SongListItem>();
 
-			SetRatingMenuItems = Enum.GetValues(typeof(Rating)).Cast<Rating>().Where(r => r != Rating.Invalid)
-				.OrderByDescending(r => r).Select(r => new SetRatingMenuItem(this, r)).ToList();
+			SetRatingMenuItems = RatingsHelper.AllowedRatingsDesc.Select(r => new SetRatingMenuItem(this, r)).ToList();
 		}
 
 		public virtual void SetSongs(IEnumerable<Song> newSongs)
@@ -68,12 +68,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			var updatedSongs = SelectedSongs.ToList();
 			if (updatedSongs.Any())
 			{
-				foreach (var song in updatedSongs)
-				{
-					song.Rating = rating;
-				}
-
-				await libraryContentUpdater.UpdateSongs(updatedSongs, UpdatedSongProperties.Rating);
+				await libraryContentUpdater.SetSongsRating(updatedSongs, rating);
 			}
 		}
 	}

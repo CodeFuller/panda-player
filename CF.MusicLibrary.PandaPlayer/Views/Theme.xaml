@@ -30,4 +30,24 @@
         <Setter Property="Foreground" Value="White"/>
     </Style>
 
+    <!-- Dialog -->
+    <Style TargetType="{x:Type Window}" x:Key="DialogWindow">
+        <Setter Property="Background" Value="#6A6A6A"/>
+        <Setter Property="Foreground" Value ="White" />
+    </Style>
+
+    <!-- ComboBox -->
+    <Style TargetType="{x:Type ComboBox}">
+        <Setter Property="Background" Value="#222222"/>
+    </Style>
+    <Style TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="Background" Value="#222222"/>
+    </Style>
+
+    <!-- Label -->
+    <Style TargetType="{x:Type Label}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
 </ResourceDictionary>

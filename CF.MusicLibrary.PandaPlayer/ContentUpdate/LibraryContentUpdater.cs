@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
@@ -19,6 +20,17 @@ namespace CF.MusicLibrary.PandaPlayer.ContentUpdate
 			}
 
 			this.musicLibrary = musicLibrary;
+		}
+
+		public async Task SetSongsRating(IEnumerable<Song> songs, Rating newRating)
+		{
+			var songsList = songs.ToList();
+			foreach (var song in songsList)
+			{
+				song.Rating = newRating;
+			}
+
+			await UpdateSongs(songsList, UpdatedSongProperties.Rating);
 		}
 
 		public async Task UpdateSongs(IEnumerable<Song> songs, UpdatedSongProperties updatedProperties)

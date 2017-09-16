@@ -7,6 +7,8 @@ namespace CF.MusicLibrary.PandaPlayer.ContentUpdate
 {
 	public interface ILibraryContentUpdater
 	{
+		Task SetSongsRating(IEnumerable<Song> songs, Rating newRating);
+
 		Task UpdateSongs(IEnumerable<Song> songs, UpdatedSongProperties updatedProperties);
 
 		Task DeleteDisc(Disc disc);

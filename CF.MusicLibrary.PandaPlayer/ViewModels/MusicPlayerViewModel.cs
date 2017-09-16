@@ -8,10 +8,12 @@ using CF.Library.Core.Facades;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.LastFM.Objects;
+using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.Scrobbler;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels
 {
@@ -107,7 +109,6 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			Song currSong = Playlist.CurrentSong;
 			if (currSong == null)
 			{
-				StopPlayback();
 				return;
 			}
 
@@ -126,13 +127,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			if (Playlist.CurrentSong != null)
 			{
 				mediaPlayer.Play();
-				StartPlayback();
+				timer.Start();
+				IsPlaying = true;
 			}
-		}
-
-		public void Stop()
-		{
-			throw new System.NotImplementedException();
 		}
 
 		public void SetCurrentSongProgress(double progress)
@@ -165,6 +162,14 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			}
 
 			Playlist.SwitchToNextSong();
+			if (Playlist.CurrentSong == null)
+			{
+				//	We finished the end of playlist.
+				StopPlayback();
+				Messenger.Default.Send(new PlaylistFinishedEventArgs());
+				return;
+			}
+
 			await Play();
 		}
 
@@ -185,15 +190,6 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				Album = new Album(song.Artist.Name, song.Disc.AlbumTitle),
 				Duration = song.Duration,
 			};
-		}
-
-		private void StartPlayback()
-		{
-			if (!timer.Enabled)
-			{
-				timer.Start();
-			}
-			IsPlaying = true;
 		}
 
 		private void StopPlayback()
