@@ -54,10 +54,10 @@
             </Grid.RowDefinitions>
             <TabControl Grid.Row="0" TabStripPlacement="Bottom" SelectedIndex="{Binding SelectedSongListIndex}" BorderThickness="0">
                 <TabItem Header="Content">
-                    <views:SongListView DataContext="{Binding SongListViewModel}" />
+                    <views:SongListView DataContext="{Binding ExplorerSongListViewModel}" />
                 </TabItem>
                 <TabItem Header="Playlist">
-                    <views:PlaylistView DataContext="{Binding Playlist}" />
+                    <views:SongListView DataContext="{Binding Playlist}" />
                 </TabItem>
             </TabControl>
             <views:LoggerView Grid.Row="1" DataContext="{Binding LoggerViewModel}" />

@@ -5,7 +5,6 @@ using System.Windows.Input;
 using CF.Library.Wpf;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.Events;
-using CF.MusicLibrary.PandaPlayer.Player;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
 using GalaSoft.MvvmLight;
@@ -19,9 +18,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public ILibraryExplorerViewModel LibraryExplorerViewModel { get; }
 
-		public ISongListViewModel SongListViewModel { get; }
+		public IExplorerSongListViewModel ExplorerSongListViewModel { get; }
 
-		public ISongPlaylist Playlist => MusicPlayerViewModel.Playlist;
+		public ISongPlaylistViewModel Playlist => MusicPlayerViewModel.Playlist;
 
 		public IMusicPlayerViewModel MusicPlayerViewModel { get; }
 
@@ -36,7 +35,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand LoadCommand { get; }
 
-		public ApplicationViewModel(DiscLibrary discLibrary, ILibraryExplorerViewModel libraryExplorerViewModel, ISongListViewModel songListViewModel,
+		public ApplicationViewModel(DiscLibrary discLibrary, ILibraryExplorerViewModel libraryExplorerViewModel, IExplorerSongListViewModel explorerSongListViewModel,
 			IMusicPlayerViewModel musicPlayerViewModel, ILoggerViewModel loggerViewModel)
 		{
 			if (discLibrary == null)
@@ -47,9 +46,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 				throw new ArgumentNullException(nameof(libraryExplorerViewModel));
 			}
-			if (songListViewModel == null)
+			if (explorerSongListViewModel == null)
 			{
-				throw new ArgumentNullException(nameof(songListViewModel));
+				throw new ArgumentNullException(nameof(explorerSongListViewModel));
 			}
 			if (musicPlayerViewModel == null)
 			{
@@ -62,7 +61,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 			this.discLibrary = discLibrary;
 			LibraryExplorerViewModel = libraryExplorerViewModel;
-			SongListViewModel = songListViewModel;
+			ExplorerSongListViewModel = explorerSongListViewModel;
 			MusicPlayerViewModel = musicPlayerViewModel;
 			LoggerViewModel = loggerViewModel;
 
@@ -87,7 +86,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				var discItem = LibraryExplorerViewModel.SelectedItem as DiscExplorerItem;
 				if (discItem != null)
 				{
-					SongListViewModel.SetSongs(discItem.Disc.Songs);
+					ExplorerSongListViewModel.SetSongs(discItem.Disc.Songs);
 				}
 				SwitchToExplorerSongList();
 			}

@@ -7,9 +7,11 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
 	public interface ISongListViewModel
 	{
-		ObservableCollection<Song> Songs { get; }
+		bool DisplayTrackNumbers { get; }
 
-		Song SelectedSong { get; }
+		ObservableCollection<SongListItem> SongItems { get; }
+
+		SongListItem SelectedSongItem { get; }
 
 		void SetSongs(IEnumerable<Song> newSongs);
 

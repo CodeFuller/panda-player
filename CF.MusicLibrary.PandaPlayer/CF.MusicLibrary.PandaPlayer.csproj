@@ -148,6 +148,8 @@
     <Compile Include="ContentUpdate\LibraryContentUpdater.cs" />
     <Compile Include="Scrobbler\IScrobbler.cs" />
     <Compile Include="Scrobbler\PersistentScrobbler.cs" />
+    <Compile Include="ViewModels\ExplorerSongListViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IExplorerSongListViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ILibraryExplorerViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ILoggerViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ISongListViewModel.cs" />
@@ -157,9 +159,9 @@
     <Compile Include="ViewModels\LibraryBrowser\DiscExplorerItem.cs" />
     <Compile Include="ViewModels\LibraryBrowser\FolderExplorerItem.cs" />
     <Compile Include="ViewModels\LibraryBrowser\LibraryExplorerItem.cs" />
-    <Compile Include="Player\ISongPlaylist.cs" />
-    <Compile Include="Player\SongListItem.cs" />
-    <Compile Include="Player\SongPlaylist.cs" />
+    <Compile Include="ViewModels\Interfaces\ISongPlaylistViewModel.cs" />
+    <Compile Include="ViewModels\SongListItem.cs" />
+    <Compile Include="ViewModels\SongPlaylistViewModel.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IMusicPlayerViewModel.cs" />
     <Compile Include="ViewModels\LibraryExplorerViewModel.cs" />
@@ -169,6 +171,7 @@
     <Compile Include="ViewModels\MusicPlayerViewModel.cs" />
     <Compile Include="ViewModels\SetRatingMenuItem.cs" />
     <Compile Include="ViewModels\SongListViewModel.cs" />
+    <Compile Include="Views\ValueConverters\BooleanToVisibilityValueConverter.cs" />
     <Compile Include="Views\ValueConverters\RatingToImageNameValueConverter.cs" />
     <Compile Include="Views\ValueConverters\SongBitrateValueConverter.cs" />
     <Compile Include="Views\ValueConverters\SongDurationValueConverter.cs" />
@@ -183,9 +186,6 @@
     <Compile Include="Views\MultiSelectionDataGrid.cs" />
     <Compile Include="Views\MusicPlayerView.xaml.cs">
       <DependentUpon>MusicPlayerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PlaylistView.xaml.cs">
-      <DependentUpon>PlaylistView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SongListView.xaml.cs">
       <DependentUpon>SongListView.xaml</DependentUpon>
@@ -212,10 +212,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MusicPlayerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\PlaylistView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

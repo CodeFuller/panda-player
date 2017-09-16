@@ -8,7 +8,6 @@ using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
-using CF.MusicLibrary.PandaPlayer.Player;
 using CF.MusicLibrary.PandaPlayer.Scrobbler;
 using CF.MusicLibrary.PandaPlayer.ViewModels;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -42,9 +41,9 @@ namespace CF.MusicLibrary.PandaPlayer
 
 			DIContainer.RegisterType<ILibraryBrowser, FileSystemLibraryBrowser>();
 			DIContainer.RegisterType<ILibraryExplorerViewModel, LibraryExplorerViewModel>();
-			DIContainer.RegisterType<ISongListViewModel, SongListViewModel>();
+			DIContainer.RegisterType<IExplorerSongListViewModel, ExplorerSongListViewModel>();
+			DIContainer.RegisterType<ISongPlaylistViewModel, SongPlaylistViewModel>();
 			DIContainer.RegisterType<IMusicPlayerViewModel, MusicPlayerViewModel>();
-			DIContainer.RegisterType<ISongPlaylist, SongPlaylist>();
 			DIContainer.RegisterType<ApplicationViewModel>();
 			DIContainer.RegisterType<ITimerFacade, TimerFacade>(new InjectionConstructor());
 			DIContainer.RegisterType<ITokenAuthorizer, DefaultBrowserTokenAuthorizer>();

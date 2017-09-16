@@ -2,7 +2,7 @@
 using CF.MusicLibrary.BL.Objects;
 using GalaSoft.MvvmLight;
 
-namespace CF.MusicLibrary.PandaPlayer.Player
+namespace CF.MusicLibrary.PandaPlayer.ViewModels
 {
 	public class SongListItem : ViewModelBase
 	{

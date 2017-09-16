@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
-using CF.MusicLibrary.PandaPlayer.Player;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
 	public interface IMusicPlayerViewModel
 	{
-		ISongPlaylist Playlist { get; }
+		ISongPlaylistViewModel Playlist { get; }
 
 		double Volume { get; set; }
 

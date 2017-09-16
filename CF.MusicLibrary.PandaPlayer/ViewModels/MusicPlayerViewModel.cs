@@ -8,7 +8,6 @@ using CF.Library.Core.Facades;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.LastFM.Objects;
-using CF.MusicLibrary.PandaPlayer.Player;
 using CF.MusicLibrary.PandaPlayer.Scrobbler;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
@@ -55,7 +54,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public int CurrSongProgress => (int)Math.Round(100 * CurrSongElapsed.TotalMilliseconds / CurrSongLength.TotalMilliseconds);
 
-		public ISongPlaylist Playlist { get; }
+		public ISongPlaylistViewModel Playlist { get; }
 
 		public double Volume
 		{
@@ -70,7 +69,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public ICommand PlayCommand { get; }
 		public ICommand PauseCommand { get; }
 
-		public MusicPlayerViewModel(ISongPlaylist playlist, IMusicLibrary musicLibrary, ITimerFacade timer, IScrobbler scrobbler)
+		public MusicPlayerViewModel(ISongPlaylistViewModel playlist, IMusicLibrary musicLibrary, ITimerFacade timer, IScrobbler scrobbler)
 		{
 			if (playlist == null)
 			{

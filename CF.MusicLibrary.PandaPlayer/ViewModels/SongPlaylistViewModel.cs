@@ -1,30 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using CF.MusicLibrary.BL.Objects;
-using GalaSoft.MvvmLight;
+using CF.MusicLibrary.PandaPlayer.ContentUpdate;
+using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
-namespace CF.MusicLibrary.PandaPlayer.Player
+namespace CF.MusicLibrary.PandaPlayer.ViewModels
 {
-	public class SongPlaylist : ViewModelBase, ISongPlaylist
+	public class SongPlaylistViewModel : SongListViewModel, ISongPlaylistViewModel
 	{
+		public override bool DisplayTrackNumbers => false;
+
 		private int CurrentSongIndex { get; set; }
 
-		private ObservableCollection<SongListItem> songs;
-		public ObservableCollection<SongListItem> Songs
-		{
-			get { return songs; }
-			private set { Set(ref songs, value); }
-		}
-
-		private SongListItem CurrentItem => Songs != null && CurrentSongIndex >= 0 && CurrentSongIndex < Songs.Count ? Songs[CurrentSongIndex] : null;
+		private SongListItem CurrentItem => SongItems != null && CurrentSongIndex >= 0 && CurrentSongIndex < SongItems.Count ? SongItems[CurrentSongIndex] : null;
 
 		public Song CurrentSong => CurrentItem?.Song;
 
-		public void SetSongs(IEnumerable<Song> newSongs)
+		public SongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater)
+			: base(libraryContentUpdater)
 		{
-			Songs = new ObservableCollection<SongListItem>(newSongs.Select(s => new SongListItem(s)));
+		}
+
+		public override void SetSongs(IEnumerable<Song> newSongs)
+		{
+			base.SetSongs(newSongs);
 			CurrentSongIndex = -1;
 		}
 
@@ -60,9 +59,9 @@ namespace CF.MusicLibrary.PandaPlayer.Player
 
 		private int GetSongIndex(Song song)
 		{
-			for (var i = 0; i < Songs.Count; ++i)
+			for (var i = 0; i < SongItems.Count; ++i)
 			{
-				if (Songs[i].Song == song)
+				if (SongItems[i].Song == song)
 				{
 					return i;
 				}

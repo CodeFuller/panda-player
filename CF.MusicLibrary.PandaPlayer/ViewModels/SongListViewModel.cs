@@ -4,50 +4,46 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
-using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels
 {
-	public class SongListViewModel : ViewModelBase, ISongListViewModel
+	public abstract class SongListViewModel : ViewModelBase, ISongListViewModel
 	{
-		public ICommand PlayDiscFromSongCommand { get; }
-
 		private readonly ILibraryContentUpdater libraryContentUpdater;
 
-		private ObservableCollection<Song> songs;
-		public ObservableCollection<Song> Songs
+		public abstract bool DisplayTrackNumbers { get; }
+
+		private ObservableCollection<SongListItem> songItems;
+		public ObservableCollection<SongListItem> SongItems
 		{
-			get { return songs; }
-			private set { Set(ref songs, value); }
+			get { return songItems; }
+			private set { Set(ref songItems, value); }
 		}
 
-		private Song selectedSong;
-		public Song SelectedSong
+		private SongListItem selectedSongItem;
+		public SongListItem SelectedSongItem
 		{
-			get { return selectedSong; }
-			set { Set(ref selectedSong, value); }
+			get { return selectedSongItem; }
+			set { Set(ref selectedSongItem, value); }
 		}
 
-		private IList selectedItems;
-		public IList SelectedItems
+		private IList selectedSongItems;
+		public IList SelectedSongItems
 		{
-			get { return selectedItems; }
-			set { Set(ref selectedItems, value); }
+			get { return selectedSongItems; }
+			set { Set(ref selectedSongItems, value); }
 		}
 
-		public IEnumerable<Song> SelectedSongs => SelectedItems.OfType<Song>();
+		public IEnumerable<Song> SelectedSongs => SelectedSongItems.OfType<SongListItem>().Select(it => it.Song);
 
 		public IReadOnlyCollection<SetRatingMenuItem> SetRatingMenuItems { get; }
 
-		public SongListViewModel(ILibraryContentUpdater libraryContentUpdater)
+		protected SongListViewModel(ILibraryContentUpdater libraryContentUpdater)
 		{
 			if (libraryContentUpdater == null)
 			{
@@ -56,16 +52,15 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 			this.libraryContentUpdater = libraryContentUpdater;
 
-			Songs = new ObservableCollection<Song>();
-			PlayDiscFromSongCommand = new RelayCommand(PlayDiscFromSong);
+			SongItems = new ObservableCollection<SongListItem>();
 
 			SetRatingMenuItems = Enum.GetValues(typeof(Rating)).Cast<Rating>().Where(r => r != Rating.Invalid)
 				.OrderByDescending(r => r).Select(r => new SetRatingMenuItem(this, r)).ToList();
 		}
 
-		public void SetSongs(IEnumerable<Song> newSongs)
+		public virtual void SetSongs(IEnumerable<Song> newSongs)
 		{
-			Songs = new ObservableCollection<Song>(newSongs);
+			SongItems = new ObservableCollection<SongListItem>(newSongs.Select(s => new SongListItem(s)));
 		}
 
 		public async Task SetRatingForSelectedSongs(Rating rating)
@@ -80,11 +75,6 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 				await libraryContentUpdater.UpdateSongs(updatedSongs, UpdatedSongProperties.Rating);
 			}
-		}
-
-		private void PlayDiscFromSong()
-		{
-			Messenger.Default.Send(new PlayDiscFromSongEventArgs(SelectedSong));
 		}
 	}
 }

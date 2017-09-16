@@ -6,8 +6,7 @@
              xmlns:views="clr-namespace:CF.MusicLibrary.PandaPlayer.Views"
              xmlns:valueConverters="clr-namespace:CF.MusicLibrary.PandaPlayer.Views.ValueConverters"
              mc:Ignorable="d" 
-             d:DesignWidth="800" d:DesignHeight="600"
-             >
+             d:DesignWidth="800" d:DesignHeight="600">
 
     <UserControl.Resources>
         <valueConverters:SongDurationValueConverter x:Key="SongDurationValueConverter" />
@@ -15,92 +14,108 @@
         <valueConverters:SongFileSizeValueConverter x:Key="SongFileSizeValueConverter" />
         <valueConverters:SongLastPlaybackValueConverter x:Key="SongLastPlaybackValueConverter" />
         <valueConverters:RatingToImageNameValueConverter x:Key="RatingToImageValueConverter" />
+        <valueConverters:BooleanToVisibilityValueConverter x:Key="BooleanToVisibilityValueConverter" />
     </UserControl.Resources>
 
-    <views:MultiSelectionDataGrid x:Name="Songs" AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="None"
+    <Grid>
+        <!-- https://stackoverflow.com/a/22074985/5740031 -->
+        <FrameworkElement x:Name="DummyElement" Visibility="Collapsed" />
+
+        <views:MultiSelectionDataGrid x:Name="SongsDataGrid" AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="None"
               ColumnHeaderHeight="20"
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
               Background="#1B1B1B" RowBackground="#1B1B1B" Foreground="White"
-              ItemsSource="{Binding Songs}" SelectedItem="{Binding SelectedSong}" SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+              ItemsSource="{Binding SongItems}" SelectedItem="{Binding SelectedSongItem}" SelectedItemsList="{Binding SelectedSongItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
-        <DataGrid.ContextMenu>
-            <ContextMenu>
-                <MenuItem Header="Set Rating" ItemsSource="{Binding SetRatingMenuItems}">
-                    <MenuItem.ItemContainerStyle>
-                        <Style TargetType="MenuItem">
-                            <Setter Property="Header" Value="{Binding Title}"></Setter>
-                            <Setter Property="Command" Value="{Binding Command}"></Setter>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Set Rating" ItemsSource="{Binding SetRatingMenuItems}">
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Header" Value="{Binding Title}"></Setter>
+                                <Setter Property="Command" Value="{Binding Command}"></Setter>
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
+                    </MenuItem>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+
+            <DataGrid.InputBindings>
+                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding PlayDiscFromSongCommand}" />
+            </DataGrid.InputBindings>
+
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="Background" Value="#4B4B4B" />
+                    <Setter Property="BorderBrush" Value="Gray"/>
+                    <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsCurrentlyPlayed}" Value="True">
+                            <Setter Property="FontWeight" Value="Bold" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Artist" MinWidth="400" IsReadOnly="True" Binding="{Binding Song.Artist.Name}" />
+                <DataGridTextColumn Header="Track #" MinWidth="60" IsReadOnly="True" Binding="{Binding Song.TrackNumber}"
+                                Visibility="{Binding DataContext.DisplayTrackNumbers, Source={x:Reference DummyElement}, Converter={StaticResource BooleanToVisibilityValueConverter}}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
                         </Style>
-                    </MenuItem.ItemContainerStyle>
-                </MenuItem>
-            </ContextMenu>
-        </DataGrid.ContextMenu>
-
-        <DataGrid.InputBindings>
-            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding PlayDiscFromSongCommand}" />
-        </DataGrid.InputBindings>
-
-        <DataGrid.ColumnHeaderStyle>
-            <Style TargetType="{x:Type DataGridColumnHeader}">
-                <Setter Property="HorizontalContentAlignment" Value="Center" />
-                <Setter Property="Background" Value="#4B4B4B" />
-                <Setter Property="BorderBrush" Value="Gray"/>
-                <Setter Property="BorderThickness" Value="0,0,1,0"/>
-            </Style>
-        </DataGrid.ColumnHeaderStyle>
-        <DataGrid.Columns>
-            <DataGridTextColumn Header="Artist" MinWidth="400" IsReadOnly="True" Binding="{Binding Artist.Name}" />
-            <DataGridTextColumn Header="Track #" MinWidth="60" IsReadOnly="True" Binding="{Binding TrackNumber}">
-                <DataGridTextColumn.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Setter Property="TextBlock.TextAlignment" Value="Right"/>
-                    </Style>
-                </DataGridTextColumn.CellStyle>
-            </DataGridTextColumn>
-            <DataGridTextColumn Header="Title" MinWidth="600" IsReadOnly="True" Binding="{Binding Title}" />
-            <DataGridTextColumn Header="Length" MinWidth="60" IsReadOnly="True" Binding="{Binding Duration, Converter={StaticResource SongDurationValueConverter}}">
-                <DataGridTextColumn.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Setter Property="TextBlock.TextAlignment" Value="Right"/>
-                    </Style>
-                </DataGridTextColumn.CellStyle>
-            </DataGridTextColumn>
-            <DataGridTextColumn Header="Bitrate" MinWidth="60" IsReadOnly="True" Binding="{Binding Bitrate, Converter={StaticResource SongBitrateValueConverter}}">
-                <DataGridTextColumn.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Setter Property="TextBlock.TextAlignment" Value="Right"/>
-                    </Style>
-                </DataGridTextColumn.CellStyle>
-            </DataGridTextColumn>
-            <DataGridTextColumn Header="File Size" MinWidth="60" IsReadOnly="True" Binding="{Binding FileSize, Converter={StaticResource SongFileSizeValueConverter}}">
-                <DataGridTextColumn.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Setter Property="TextBlock.TextAlignment" Value="Right"/>
-                    </Style>
-                </DataGridTextColumn.CellStyle>
-            </DataGridTextColumn>
-            <DataGridTextColumn Header="Played #" MinWidth="60" IsReadOnly="True" Binding="{Binding PlaybacksCount}">
-                <DataGridTextColumn.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Setter Property="TextBlock.TextAlignment" Value="Right"/>
-                    </Style>
-                </DataGridTextColumn.CellStyle>
-            </DataGridTextColumn>
-            <DataGridTextColumn Header="Last Played" MinWidth="120" IsReadOnly="True" Binding="{Binding LastPlaybackTime, Converter={StaticResource SongLastPlaybackValueConverter}}">
-                <DataGridTextColumn.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-                    </Style>
-                </DataGridTextColumn.CellStyle>
-            </DataGridTextColumn>
-            <DataGridTemplateColumn Header="Rating" MinWidth="150" IsReadOnly="True">
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <Image Height="15" HorizontalAlignment="Left" Source="{Binding Path=Rating, Converter={StaticResource RatingToImageValueConverter}}" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-        </DataGrid.Columns>
-    </views:MultiSelectionDataGrid>
-
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Title" MinWidth="600" IsReadOnly="True" Binding="{Binding Song.Title}" />
+                <DataGridTextColumn Header="Length" MinWidth="60" IsReadOnly="True" Binding="{Binding Song.Duration, Converter={StaticResource SongDurationValueConverter}}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Bitrate" MinWidth="60" IsReadOnly="True" Binding="{Binding Song.Bitrate, Converter={StaticResource SongBitrateValueConverter}}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="File Size" MinWidth="60" IsReadOnly="True" Binding="{Binding Song.FileSize, Converter={StaticResource SongFileSizeValueConverter}}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Played #" MinWidth="60" IsReadOnly="True" Binding="{Binding Song.PlaybacksCount}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Last Played" MinWidth="120" IsReadOnly="True" Binding="{Binding Song.LastPlaybackTime, Converter={StaticResource SongLastPlaybackValueConverter}}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="Rating" MinWidth="150" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Height="15" HorizontalAlignment="Left" Source="{Binding Song.Rating, Converter={StaticResource RatingToImageValueConverter}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </views:MultiSelectionDataGrid>
+    </Grid>
+    
 </UserControl>

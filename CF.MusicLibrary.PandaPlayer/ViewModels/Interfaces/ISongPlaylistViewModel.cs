@@ -2,11 +2,11 @@
 using System.Collections.ObjectModel;
 using CF.MusicLibrary.BL.Objects;
 
-namespace CF.MusicLibrary.PandaPlayer.Player
+namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
-	public interface ISongPlaylist
+	public interface ISongPlaylistViewModel
 	{
-		ObservableCollection<SongListItem> Songs { get; }
+		ObservableCollection<SongListItem> SongItems { get; }
 
 		Song CurrentSong { get; }
 
