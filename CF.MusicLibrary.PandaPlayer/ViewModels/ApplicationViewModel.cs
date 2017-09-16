@@ -86,7 +86,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Register<PlayDiscEventArgs>(this, OnPlayDiscLaunched);
 			Messenger.Default.Register<PlayDiscFromSongEventArgs>(this, OnPlayDiscFromSongLaunched);
 			Messenger.Default.Register<ReversePlayingEventArgs>(this, OnReversePlaying);
-			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, async e => await OnPlaylistFinished(e));
+			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, async e => await OnPlaylistFinished());
 		}
 
 		private async Task Load()
@@ -138,7 +138,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		private async Task OnPlaylistFinished(PlaylistFinishedEventArgs e)
+		private async Task OnPlaylistFinished()
 		{
 			windowService.BringApplicationToFront();
 
