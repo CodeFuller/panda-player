@@ -12,7 +12,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 	{
 		private readonly ISongListViewModel parentViewModel;
 
-		public string Title { get; }
+		public Rating Rating { get; }
 
 		public ICommand Command { get; }
 
@@ -24,7 +24,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			}
 
 			this.parentViewModel = parentViewModel;
-			Title = rating.GetDescription();
+			this.Rating = rating;
 			Command = new AsyncRelayCommand(() => SetRating(rating));
 		}
 

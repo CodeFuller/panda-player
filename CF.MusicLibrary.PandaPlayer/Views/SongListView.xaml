@@ -31,12 +31,19 @@
                 <ContextMenu>
                     <MenuItem Header="Set Rating" ItemsSource="{Binding SetRatingMenuItems}">
                         <MenuItem.ItemContainerStyle>
-                            <Style TargetType="MenuItem">
-                                <Setter Property="Header" Value="{Binding Title}"></Setter>
-                                <Setter Property="Command" Value="{Binding Command}"></Setter>
+                            <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                <Setter Property="HeaderTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <Image Height="15" Source="{Binding Rating, Converter={StaticResource RatingToImageValueConverter}}" />
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Command" Value="{Binding Command}" />
                             </Style>
                         </MenuItem.ItemContainerStyle>
                     </MenuItem>
+                    <MenuItem Header="Properties" Command="{Binding EditSongsPropertiesCommand}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
 
