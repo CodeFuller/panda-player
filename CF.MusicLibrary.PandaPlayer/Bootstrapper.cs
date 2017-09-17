@@ -7,11 +7,14 @@ using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.LastFM;
+using CF.MusicLibrary.Local;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
+using CF.MusicLibrary.PandaPlayer.DiscAdviser;
 using CF.MusicLibrary.PandaPlayer.Scrobbler;
 using CF.MusicLibrary.PandaPlayer.ViewModels;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
+using CF.MusicLibrary.Universal.Interfaces;
 using Microsoft.Practices.Unity;
 
 namespace CF.MusicLibrary.PandaPlayer
@@ -36,7 +39,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterInstance(new DiscLibrary(async () =>
 			{
 				var library = DIContainer.Resolve<IMusicLibrary>();
-				return await library.GetDiscsAsync();
+				return await library.GetDiscsAsync(true);
 			}));
 
 			DIContainer.RegisterType<ILibraryBrowser, FileSystemLibraryBrowser>();
@@ -44,6 +47,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<IExplorerSongListViewModel, ExplorerSongListViewModel>();
 			DIContainer.RegisterType<ISongPlaylistViewModel, SongPlaylistViewModel>();
 			DIContainer.RegisterType<IMusicPlayerViewModel, MusicPlayerViewModel>();
+			DIContainer.RegisterType<IDiscAdviserViewModel, DiscAdviserViewModel>();
 			DIContainer.RegisterType<ApplicationViewModel>();
 			DIContainer.RegisterType<ITimerFacade, TimerFacade>(new InjectionConstructor());
 			DIContainer.RegisterType<ITokenAuthorizer, DefaultBrowserTokenAuthorizer>();
@@ -53,6 +57,9 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<ILoggerViewModel, LoggerViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<ILibraryContentUpdater, LibraryContentUpdater>();
 			DIContainer.RegisterType<IWindowService, WindowService>();
+			DIContainer.RegisterType<IDiscAdviser, RankBasedDiscAdviser>();
+			DIContainer.RegisterType<IDiscGroupper, MyLibraryDiscGroupper>();
+			DIContainer.RegisterType<IDiscGroupSorter, RankBasedDiscSorter>();
 		}
 	}
 }

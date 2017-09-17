@@ -95,7 +95,6 @@
     <Compile Include="..\Global\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CF.MusicLibrary.DiscAdviser\BootstrapperTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\BootstrapperTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\EditDiscsDetailsViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.LibraryChecker\BootstrapperTests.cs" />
@@ -110,10 +109,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CF.MusicLibrary.DiscAdviser\CF.MusicLibrary.DiscAdviser.csproj">
-      <Project>{600BEFAB-9D92-455D-A6F2-E7DDA2DBA557}</Project>
-      <Name>CF.MusicLibrary.DiscAdviser</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.DiscPreprocessor\CF.MusicLibrary.DiscPreprocessor.csproj">
       <Project>{B977EA7B-85A2-429A-B98F-E76023589321}</Project>
       <Name>CF.MusicLibrary.DiscPreprocessor</Name>

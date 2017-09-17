@@ -42,9 +42,11 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="24"/>
+                <RowDefinition Height="24"/>
             </Grid.RowDefinitions>
             <views:LibraryExplorerView Grid.Row="0" x:Name="LibraryExplorer" DataContext="{Binding LibraryExplorerViewModel}" />
-            <views:MusicPlayerView Grid.Row="1" DataContext="{Binding MusicPlayerViewModel}" />
+            <views:DiscAdviserView Grid.Row="1" DataContext="{Binding DiscAdviserViewModel}" BorderThickness="1,0,1,1" />
+            <views:MusicPlayerView Grid.Row="2" DataContext="{Binding MusicPlayerViewModel}" BorderThickness="1,0,1,0" />
         </Grid>
 
         <Grid Grid.Column="1">

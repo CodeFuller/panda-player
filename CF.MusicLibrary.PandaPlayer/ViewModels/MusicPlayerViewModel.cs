@@ -166,7 +166,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 				//	We finished the end of playlist.
 				StopPlayback();
-				Messenger.Default.Send(new PlaylistFinishedEventArgs());
+				Messenger.Default.Send(new PlaylistFinishedEventArgs(Playlist));
 				return;
 			}
 

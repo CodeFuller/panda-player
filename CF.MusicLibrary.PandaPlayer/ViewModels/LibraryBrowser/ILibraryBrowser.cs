@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CF.MusicLibrary.BL.Objects;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 {
@@ -7,6 +8,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 		IEnumerable<FolderExplorerItem> GetChildFolderItems(FolderExplorerItem folderItem);
 
 		FolderExplorerItem GetParentFolder(FolderExplorerItem folderItem);
+
+		DiscExplorerItem GetDiscItem(Disc disc);
 
 		void RemoveDiscItem(DiscExplorerItem discItem);
 	}

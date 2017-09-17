@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Wpf;
+using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -68,6 +69,24 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public void Load()
 		{
 			ChangeFolder(FolderExplorerItem.Root);
+		}
+
+		public void SwitchToDisc(Disc disc)
+		{
+			var discItem = libraryBrowser.GetDiscItem(disc);
+			if (discItem == null)
+			{
+				return;
+			}
+
+			var discParentFolder = libraryBrowser.GetParentFolder(discItem);
+			if (discParentFolder == null)
+			{
+				return;
+			}
+
+			ChangeFolder(discParentFolder);
+			SelectedItem = Items.OfType<DiscExplorerItem>().SingleOrDefault(it => it.Disc.Id == disc.Id);
 		}
 
 		private void ChangeFolder()

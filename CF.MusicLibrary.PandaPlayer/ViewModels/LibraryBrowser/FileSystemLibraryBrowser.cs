@@ -66,6 +66,11 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 			return new FolderExplorerItem(parentUri);
 		}
 
+		public DiscExplorerItem GetDiscItem(Disc disc)
+		{
+			return new DiscExplorerItem(disc);
+		}
+
 		public void RemoveDiscItem(DiscExplorerItem discItem)
 		{
 			discLibrary.RemoveDisc(discItem.Disc);

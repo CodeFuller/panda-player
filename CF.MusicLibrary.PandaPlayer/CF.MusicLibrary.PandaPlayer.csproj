@@ -141,6 +141,17 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="DiscAdviser\IDiscAdviser.cs" />
+    <Compile Include="DiscAdviser\IDiscGroupSorter.cs" />
+    <Compile Include="DiscAdviser\RankBasedDiscAdviser.cs" />
+    <Compile Include="DiscAdviser\RankBasedDiscSorter.cs" />
+    <Compile Include="DiscAdviser\RankedDisc.cs" />
+    <Compile Include="DiscAdviser\RankedDiscGroup.cs" />
+    <Compile Include="ViewModels\DiscAdviserViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IDiscAdviserViewModel.cs" />
+    <Compile Include="Views\DiscAdviserView.xaml.cs">
+      <DependentUpon>DiscAdviserView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WindowService.cs" />
     <Compile Include="Events\PlayDiscEventArgs.cs" />
     <Compile Include="Events\PlayDiscFromSongEventArgs.cs" />
@@ -202,6 +213,10 @@
       <DependentUpon>SongListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TrayClickCommand.cs" />
+    <Page Include="Views\DiscAdviserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\RateDiscView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -294,6 +309,14 @@
       <Project>{7F368759-572F-41D4-A7FF-1B3898AE3918}</Project>
       <Name>CF.MusicLibrary.LastFM</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.Local\CF.MusicLibrary.Local.csproj">
+      <Project>{378157BA-2DA4-4E39-8AFD-59CED35B9B1F}</Project>
+      <Name>CF.MusicLibrary.Local</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.Universal\CF.MusicLibrary.Universal.csproj">
+      <Project>{C82EEE4A-B797-40A5-B733-34DF2DA02A85}</Project>
+      <Name>CF.MusicLibrary.Universal</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Icons\PlayButton.png" />
@@ -318,6 +341,9 @@
     <Resource Include="Views\Icons\Ratings\Rating08.png" />
     <Resource Include="Views\Icons\Ratings\Rating09.png" />
     <Resource Include="Views\Icons\Ratings\Rating10.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Icons\NextAdviseButton.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets')" />

@@ -2,7 +2,7 @@
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.Universal;
 
-namespace CF.MusicLibrary.DiscAdviser
+namespace CF.MusicLibrary.PandaPlayer.DiscAdviser
 {
 	public interface IDiscGroupSorter
 	{

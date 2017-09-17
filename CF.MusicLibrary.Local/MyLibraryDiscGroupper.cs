@@ -14,7 +14,7 @@ namespace CF.MusicLibrary.Local
 		public IEnumerable<DiscGroup> GroupLibraryDiscs(DiscLibrary library)
 		{
 			List<DiscGroup> groups = new List<DiscGroup>();
-			foreach (var disc in library)
+			foreach (var disc in library.AllDiscs)
 			{
 				var discGroup = GetGroupForDisc(disc);
 				var group = groups.SingleOrDefault(g => g.Id == discGroup.Id);

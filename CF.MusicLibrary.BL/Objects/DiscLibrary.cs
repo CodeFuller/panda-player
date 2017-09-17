@@ -12,7 +12,26 @@ namespace CF.MusicLibrary.BL.Objects
 
 		private readonly Func<Task<IEnumerable<Disc>>> discsLoader;
 
+		/// <summary>
+		/// Collection of library discs, excluding deleted.
+		/// </summary>
 		public IReadOnlyCollection<Disc> Discs
+		{
+			get
+			{
+				if (discs == null)
+				{
+					throw new InvalidOperationException("Library has not been loaded yet");
+				}
+
+				return discs.Where(d => !d.IsDeleted).ToList();
+			}
+		}
+
+		/// <summary>
+		/// Collection of all discs, including deleted, if they were loaded.
+		/// </summary>
+		public IReadOnlyCollection<Disc> AllDiscs
 		{
 			get
 			{
@@ -25,7 +44,7 @@ namespace CF.MusicLibrary.BL.Objects
 			}
 		}
 
-		public IEnumerable<Song> Songs => Discs.SelectMany(d => d.Songs);
+		public IEnumerable<Song> Songs => Discs.SelectMany(d => d.Songs).Where(s => !s.IsDeleted);
 
 		public IEnumerable<Artist> Artists => Songs.Select(s => s.Artist).Where(a => a != null).Distinct();
 

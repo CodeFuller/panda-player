@@ -3,7 +3,7 @@ using System.Linq;
 using CF.Library.Core.Extensions;
 using CF.MusicLibrary.Universal;
 
-namespace CF.MusicLibrary.DiscAdviser
+namespace CF.MusicLibrary.PandaPlayer.DiscAdviser
 {
 	internal class RankedDiscGroup
 	{

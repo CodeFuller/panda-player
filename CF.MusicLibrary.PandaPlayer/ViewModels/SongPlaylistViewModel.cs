@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -8,13 +9,22 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 {
 	public class SongPlaylistViewModel : SongListViewModel, ISongPlaylistViewModel
 	{
-		public override bool DisplayTrackNumbers => false;
-
 		private int CurrentSongIndex { get; set; }
 
 		private SongListItem CurrentItem => SongItems != null && CurrentSongIndex >= 0 && CurrentSongIndex < SongItems.Count ? SongItems[CurrentSongIndex] : null;
 
+		public override bool DisplayTrackNumbers => false;
+
 		public Song CurrentSong => CurrentItem?.Song;
+
+		public Disc PlayedDisc
+		{
+			get
+			{
+				var discs = Songs.Select(s => s.Disc).Distinct().ToList();
+				return discs.Count == 1 ? discs.Single() : null;
+			}
+		}
 
 		public SongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater)
 			: base(libraryContentUpdater)

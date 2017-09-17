@@ -4,7 +4,7 @@ using System.Linq;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.Universal.Interfaces;
 
-namespace CF.MusicLibrary.DiscAdviser
+namespace CF.MusicLibrary.PandaPlayer.DiscAdviser
 {
 	public class RankBasedDiscAdviser : IDiscAdviser
 	{
