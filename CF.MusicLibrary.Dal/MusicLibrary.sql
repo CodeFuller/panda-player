@@ -1,5 +1,8 @@
 CREATE TABLE [Songs] (
   [Id] INTEGER NOT NULL,
+  [Artist_Id] int NULL,
+  [Disc_Id] int NOT NULL,
+  [Genre_Id] int NULL,
   [TrackNumber] smallint NULL,
   [Year] smallint NULL,
   [Title] ntext NOT NULL,
@@ -10,9 +13,7 @@ CREATE TABLE [Songs] (
   [Bitrate] int NULL,
   [LastPlaybackTime] datetime NULL,
   [PlaybacksCount] int NOT NULL,
-  [Artist_Id] int NULL,
-  [Disc_Id] int NOT NULL,
-  [Genre_Id] int NULL,
+  [DeleteDate] datetime NULL,
   CONSTRAINT [sqlite_master_PK_Songs] PRIMARY KEY ([Id]),
   CONSTRAINT [sqlite_master_UC_Songs] UNIQUE (Uri),
   FOREIGN KEY ([Genre_Id]) REFERENCES [Genres] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -22,8 +23,8 @@ CREATE TABLE [Songs] (
 
 CREATE TABLE [Playbacks] (
   [Id] INTEGER NOT NULL,
-  [PlaybackTime] datetime NOT NULL,
   [Song_Id] int NOT NULL,
+  [PlaybackTime] datetime NOT NULL,
   CONSTRAINT [sqlite_master_PK_Playbacks] PRIMARY KEY ([Id]),
   CONSTRAINT [sqlite_master_UC_Playbacks] UNIQUE (PlaybackTime, Song_Id),
   FOREIGN KEY ([Song_Id]) REFERENCES [Songs] ([Id]) ON DELETE CASCADE ON UPDATE NO ACTION
