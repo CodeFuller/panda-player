@@ -148,10 +148,17 @@
     <Compile Include="DiscAdviser\RankedDisc.cs" />
     <Compile Include="DiscAdviser\RankedDiscGroup.cs" />
     <Compile Include="ViewModels\DiscAdviserViewModel.cs" />
+    <Compile Include="ViewModels\EditedSongProperty.cs" />
+    <Compile Include="ViewModels\EditSongPropertiesViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IDiscAdviserViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IEditSongPropertiesViewModel.cs" />
     <Compile Include="Views\DiscAdviserView.xaml.cs">
       <DependentUpon>DiscAdviserView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\EditSongPropertiesView.xaml.cs">
+      <DependentUpon>EditSongPropertiesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ValueConverters\EditedSongPropertyValueConverter.cs" />
     <Compile Include="WindowService.cs" />
     <Compile Include="Events\PlayDiscEventArgs.cs" />
     <Compile Include="Events\PlayDiscFromSongEventArgs.cs" />
@@ -214,6 +221,10 @@
     </Compile>
     <Compile Include="Views\TrayClickCommand.cs" />
     <Page Include="Views\DiscAdviserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditSongPropertiesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -312,6 +323,10 @@
     <ProjectReference Include="..\CF.MusicLibrary.Local\CF.MusicLibrary.Local.csproj">
       <Project>{378157BA-2DA4-4E39-8AFD-59CED35B9B1F}</Project>
       <Name>CF.MusicLibrary.Local</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.Tagger\CF.MusicLibrary.Tagger.csproj">
+      <Project>{931CDE55-D545-47AF-B525-06AB15E74C3E}</Project>
+      <Name>CF.MusicLibrary.Tagger</Name>
     </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.Universal\CF.MusicLibrary.Universal.csproj">
       <Project>{C82EEE4A-B797-40A5-B733-34DF2DA02A85}</Project>

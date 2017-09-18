@@ -17,5 +17,7 @@ namespace CF.MusicLibrary.BL.Interfaces
 		Uri BuildUriForWorkshopStoragePath(string pathWithinStorage);
 
 		Uri ReplaceDiscPartInUri(Uri discUri, string discPart);
+
+		string GetSongFileName(Uri songUri);
 	}
 }

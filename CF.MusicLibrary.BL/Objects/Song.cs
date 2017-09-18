@@ -15,15 +15,57 @@ namespace CF.MusicLibrary.BL.Objects
 
 		public Disc Disc { get; set; }
 
-		public Artist Artist { get; set; }
+		public int? ArtistId { get; set; }
 
-		public short? TrackNumber { get; set; }
+		private Artist artist;
+		public Artist Artist
+		{
+			get { return artist; }
+			set
+			{
+				artist = value;
+				ArtistId = artist?.Id;
+				OnPropertyChanged();
+			}
+		}
 
-		public short? Year { get; set; }
+		private short? trackNumber;
+		public short? TrackNumber
+		{
+			get { return trackNumber; }
+			set
+			{
+				trackNumber = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private short? year;
+		public short? Year
+		{
+			get { return year; }
+			set
+			{
+				year = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public string Title { get; set; }
 
-		public Genre Genre { get; set; }
+		public int? GenreId { get; set; }
+
+		private Genre genre;
+		public Genre Genre
+		{
+			get { return genre; }
+			set
+			{
+				genre = value;
+				GenreId = genre?.Id;
+				OnPropertyChanged();
+			}
+		}
 
 		public TimeSpan Duration { get; set; }
 

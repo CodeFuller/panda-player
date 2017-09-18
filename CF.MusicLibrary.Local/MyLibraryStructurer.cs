@@ -58,6 +58,12 @@ namespace CF.MusicLibrary.Local
 			return ItemUriParts.Join(parts);
 		}
 
+		public string GetSongFileName(Uri songUri)
+		{
+			var parts = (new ItemUriParts(songUri)).ToList();
+			return parts[parts.Count - 1];
+		}
+
 		private static Uri BuildCategoryUri(string category)
 		{
 			return ItemUriParts.Join(Enumerable.Repeat(category, 1));

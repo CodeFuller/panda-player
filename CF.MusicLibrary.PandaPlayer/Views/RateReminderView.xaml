@@ -10,6 +10,6 @@
     <StackPanel Orientation="Vertical">
         <Label HorizontalAlignment="Center" Content="{Binding Path=DiscTitle}" ContentStringFormat="You've just finished listening of disc '{0}'" />
         <Label HorizontalAlignment="Center" Content="Some songs are still unrated. Please devote some time and rate them." />
-        <Button Content="OK" Width="100" Margin="10" Click="OkButton_Click" />
+        <Button Content="OK" Width="100" Margin="10" IsCancel="true" Click="OkButton_Click" />
     </StackPanel>
 </Window>

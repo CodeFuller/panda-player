@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace CF.MusicLibrary.PandaPlayer.Events

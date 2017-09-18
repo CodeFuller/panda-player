@@ -157,7 +157,7 @@ namespace CF.MusicLibrary.LibraryChecker
 
 			if ((checkFlags & LibraryCheckFlags.CheckArtistsOnLastFM) != 0)
 			{
-				await lastFMConsistencyChecker.CheckArtists(discLibrary.Artists);
+				await lastFMConsistencyChecker.CheckArtists(discLibrary);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckAlbumsOnLastFM) != 0)

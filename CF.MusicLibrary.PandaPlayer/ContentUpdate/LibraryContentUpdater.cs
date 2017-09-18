@@ -45,5 +45,10 @@ namespace CF.MusicLibrary.PandaPlayer.ContentUpdate
 		{
 			await musicLibrary.DeleteDisc(disc);
 		}
+
+		public async Task ChangeSongUri(Song song, Uri newSongUri)
+		{
+			await musicLibrary.ChangeSongUri(song, newSongUri);
+		}
 	}
 }

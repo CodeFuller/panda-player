@@ -1,4 +1,5 @@
 ﻿using CF.MusicLibrary.PandaPlayer.ViewModels;
+using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace CF.MusicLibrary.PandaPlayer
 {
@@ -9,5 +10,7 @@ namespace CF.MusicLibrary.PandaPlayer
 		void ShowRateDiscViewDialog(RateDiscViewModel viewModel);
 
 		void ShowRateReminderViewDialog(RateDiscViewModel viewModel);
+
+		bool ShowSongPropertiesView(IEditSongPropertiesViewModel viewModel);
 	}
 }
