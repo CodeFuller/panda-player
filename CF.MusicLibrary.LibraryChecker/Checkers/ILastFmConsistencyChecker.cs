@@ -6,7 +6,7 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 {
 	public interface ILastFMConsistencyChecker
 	{
-		Task CheckArtists(IEnumerable<Artist> artists);
+		Task CheckArtists(DiscLibrary library);
 
 		Task CheckAlbums(IEnumerable<Disc> discs);
 

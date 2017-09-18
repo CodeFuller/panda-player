@@ -4,6 +4,7 @@ using CF.Library.Core.Logging;
 using CF.Library.Unity;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
+using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.LastFM;
@@ -13,6 +14,7 @@ using CF.MusicLibrary.PandaPlayer.DiscAdviser;
 using CF.MusicLibrary.PandaPlayer.ViewModels;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
+using CF.MusicLibrary.Tagger;
 using CF.MusicLibrary.Universal.Interfaces;
 using Microsoft.Practices.Unity;
 
@@ -31,7 +33,8 @@ namespace CF.MusicLibrary.PandaPlayer
 			string lastFMSessionKey = AppSettings.GetPrivateRequiredValue<string>("LastFMSessionKey");
 
 			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepositoryEF>(new InjectionConstructor());
-			DIContainer.RegisterType<IMusicLibraryStorage, FileSystemMusicStorage>(new InjectionConstructor(typeof(IFileSystemFacade), localStorageRoot));
+			DIContainer.RegisterType<ISongTagger, SongTagger>();
+			DIContainer.RegisterType<IMusicLibraryStorage, FileSystemMusicStorage>(new InjectionConstructor(typeof(IFileSystemFacade), typeof(ISongTagger), localStorageRoot));
 			DIContainer.RegisterType<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
 			DIContainer.RegisterType<IFileSystemFacade, FileSystemFacade>();
 			DIContainer.RegisterInstance(new DiscLibrary(async () =>
@@ -44,6 +47,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<ILibraryExplorerViewModel, LibraryExplorerViewModel>();
 			DIContainer.RegisterType<IExplorerSongListViewModel, ExplorerSongListViewModel>();
 			DIContainer.RegisterType<ISongPlaylistViewModel, SongPlaylistViewModel>();
+			DIContainer.RegisterType<IEditSongPropertiesViewModel, EditSongPropertiesViewModel>();
 			DIContainer.RegisterType<IMusicPlayerViewModel, MusicPlayerViewModel>();
 			DIContainer.RegisterType<IDiscAdviserViewModel, DiscAdviserViewModel>();
 			DIContainer.RegisterType<ApplicationViewModel>();
@@ -58,6 +62,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<IDiscAdviser, RankBasedDiscAdviser>();
 			DIContainer.RegisterType<IDiscGroupper, MyLibraryDiscGroupper>();
 			DIContainer.RegisterType<IDiscGroupSorter, RankBasedDiscSorter>();
+			DIContainer.RegisterType<ILibraryStructurer, MyLibraryStructurer>();
 		}
 	}
 }

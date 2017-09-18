@@ -31,13 +31,13 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 			this.inconsistencyRegistrator = inconsistencyRegistrator;
 		}
 
-		public async Task CheckArtists(IEnumerable<Artist> artists)
+		public async Task CheckArtists(DiscLibrary library)
 		{
 			Logger.WriteInfo("Checking Last.fm artists ...");
 
 			var username = AppSettings.GetRequiredValue<string>("LastFmUsername");
 
-			foreach (var artist in artists)
+			foreach (var artist in library.Artists)
 			{
 				var artistInfo = await lastFmApiClient.GetArtistInfo(artist.Name, username);
 
@@ -53,7 +53,8 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 				}
 
 				if (artistInfo.Artist.Stats.UserPlayCount == 0 &&
-					(artist.Songs.Any(s => s.LastPlaybackTime.HasValue && s.LastPlaybackTime >= LastFMConstants.ScrobbleStartTime)))
+					library.Songs.Where(s => s.Artist?.Id == artist.Id)
+						.Any(s => s.LastPlaybackTime.HasValue && s.LastPlaybackTime >= LastFMConstants.ScrobbleStartTime))
 				{
 					inconsistencyRegistrator.RegisterInconsistency_NoListensForArtist(artist);
 				}

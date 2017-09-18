@@ -50,4 +50,26 @@
         <Setter Property="FontSize" Value="12"/>
     </Style>
 
+    <!-- Song & Disc Properties Window -->
+    <Style TargetType="{x:Type Window}" x:Key="PropertiesWindow">
+        <Setter Property="Background" Value="#6A6A6A"/>
+        <Setter Property="Foreground" Value ="White" />
+        <Style.Resources>
+            <Style TargetType="{x:Type Label}">
+                <Setter Property="Foreground" Value ="White" />
+                <Setter Property="Margin" Value="0,0,10,0"></Setter>
+            </Style>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Background" Value="Black"></Setter>
+                <Setter Property="Foreground" Value ="White" />
+                <Setter Property="Margin" Value="0,0,10,0"></Setter>
+            </Style>
+            <Style TargetType="{x:Type ComboBox}">
+                <Setter Property="Background" Value="Black"></Setter>
+                <Setter Property="Foreground" Value ="White" />
+                <Setter Property="Margin" Value="0,0,10,0"></Setter>
+            </Style>
+        </Style.Resources>
+    </Style>
+
 </ResourceDictionary>

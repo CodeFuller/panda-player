@@ -32,6 +32,13 @@ namespace CF.MusicLibrary.BL
 			await libraryRepository.UpdateSong(song);
 		}
 
+		public async Task ChangeSongUri(Song song, Uri newSongUri)
+		{
+			await libraryStorage.ChangeSongUri(song, newSongUri);
+			song.Uri = newSongUri;
+			await libraryRepository.UpdateSong(song);
+		}
+
 		public async Task DeleteDisc(Disc disc)
 		{
 			Logger.WriteInfo($"Deleting disc '{disc.Title}'");

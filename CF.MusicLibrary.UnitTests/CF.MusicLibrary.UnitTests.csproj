@@ -101,6 +101,7 @@
     <Compile Include="CF.MusicLibrary.BL\FilesystemMusicStorageTests.cs" />
     <Compile Include="CF.MusicLibrary.BL\ItemUriPartsTests.cs" />
     <Compile Include="CF.MusicLibrary.LastFM\LastFMScrobblerTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\EditSongPropertiesViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

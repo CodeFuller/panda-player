@@ -42,11 +42,6 @@ namespace CF.MusicLibrary.Dal
 			}
 
 			var artist = song.Artist;
-			if (artist != null && artist.Songs.Any())
-			{
-				throw new InvalidOperationException("Artist of added Song should not have Songs collection filled");
-			}
-
 			var genre = song.Genre;
 
 			using (var ctx = GetContext())
@@ -72,7 +67,6 @@ namespace CF.MusicLibrary.Dal
 
 				//	Undo adding of related objects
 				disc.SongsUnordered.Clear();
-				artist?.Songs.Clear();
 			}
 		}
 

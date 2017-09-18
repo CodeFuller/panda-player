@@ -13,5 +13,7 @@ namespace CF.MusicLibrary.BL
 		Genre = 0x010,
 		Track = 0x020,
 		Title = 0x040,
+		Uri = 0x080,
+		ForceTagUpdate = 0x100,
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using CF.MusicLibrary.BL.Media;
@@ -23,6 +24,8 @@ namespace CF.MusicLibrary.BL.Interfaces
 		Task<IEnumerable<SongTagType>> GetSongTagTypes(Song song);
 
 		Task<FileInfo> GetSongFile(Song song);
+
+		Task ChangeSongUri(Song song, Uri newSongUri);
 
 		Task CheckDataConsistency(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator);
 	}
