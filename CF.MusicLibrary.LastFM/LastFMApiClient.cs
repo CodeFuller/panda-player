@@ -57,6 +57,8 @@ namespace CF.MusicLibrary.LastFM
 
 		public async Task UpdateNowPlaying(Track track)
 		{
+			ValidateScrobbledTrack(track);
+
 			CheckSession();
 
 			Logger.WriteInfo($"Updating current track: [Title: {track.Title}][Artist: {track.Artist}][Album: {track.Album.Title}]");
@@ -66,9 +68,12 @@ namespace CF.MusicLibrary.LastFM
 				{ "method", "track.updateNowPlaying"},
 				{ "artist", track.Artist },
 				{ "track", track.Title },
-				{ "album", track.Album.Title },
 				{ "duration", track.Duration.TotalSeconds.ToString(CultureInfo.InvariantCulture) },
 			};
+			if (!String.IsNullOrEmpty(track.Album.Title))
+			{
+				requestParams.Add("album", track.Album.Title);
+			}
 			if (track.Number.HasValue)
 			{
 				requestParams.Add("trackNumber", track.Number.Value.ToString(CultureInfo.InvariantCulture));
@@ -80,6 +85,8 @@ namespace CF.MusicLibrary.LastFM
 
 		public async Task Scrobble(TrackScrobble trackScrobble)
 		{
+			ValidateScrobbledTrack(trackScrobble.Track);
+
 			CheckSession();
 
 			Logger.WriteInfo($"Scrobbling track: [Title: {trackScrobble.Track.Title}][Artist: {trackScrobble.Track.Artist}][Album: {trackScrobble.Track.Album.Title}]");
@@ -90,10 +97,13 @@ namespace CF.MusicLibrary.LastFM
 				{ "artist", trackScrobble.Track.Artist },
 				{ "track", trackScrobble.Track.Title },
 				{ "timestamp", ((Int32)trackScrobble.PlayStartTimestamp.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds).ToString(CultureInfo.InvariantCulture) },
-				{ "album", trackScrobble.Track.Album.Title },
 				{ "choosenByUser", trackScrobble.ChosenByUser ? "1" : "0" },
 				{ "duration", trackScrobble.Track.Duration.TotalSeconds.ToString(CultureInfo.InvariantCulture) },
 			};
+			if (!String.IsNullOrEmpty(trackScrobble.Track.Album.Title))
+			{
+				requestParams.Add("album", trackScrobble.Track.Album.Title);
+			}
 			if (trackScrobble.Track.Number.HasValue)
 			{
 				requestParams.Add("trackNumber", trackScrobble.Track.Number.Value.ToString(CultureInfo.InvariantCulture));
@@ -146,6 +156,19 @@ namespace CF.MusicLibrary.LastFM
 			};
 
 			return await PerformGetRequest<GetTrackInfoResponse>(requestParams, false);
+		}
+
+		private static void ValidateScrobbledTrack(Track track)
+		{
+			if (String.IsNullOrEmpty(track.Artist))
+			{
+				throw new InvalidOperationException("Could not scrobble track without an Artist");
+			}
+
+			if (String.IsNullOrEmpty(track.Title))
+			{
+				throw new InvalidOperationException("Could not scrobble track without a Title");
+			}
 		}
 
 		private static void LogCorrections(Track track, TrackProcessingInfo trackInfo)

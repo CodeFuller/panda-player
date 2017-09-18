@@ -10,7 +10,6 @@ using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.Local;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.DiscAdviser;
-using CF.MusicLibrary.PandaPlayer.Scrobbler;
 using CF.MusicLibrary.PandaPlayer.ViewModels;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
@@ -26,7 +25,6 @@ namespace CF.MusicLibrary.PandaPlayer
 		protected override void RegisterDependencies()
 		{
 			string localStorageRoot = AppSettings.GetRequiredValue<string>("LocalStorageRoot");
-			string appDataDirectory = AppSettings.GetRequiredValue<string>("AppDataPath");
 			string lastFMApiKey = AppSettings.GetRequiredValue<string>("LastFMApiKey");
 
 			string lastFMSharedSecret = AppSettings.GetPrivateRequiredValue<string>("LastFMSharedSecret");
@@ -52,7 +50,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<ITimerFacade, TimerFacade>(new InjectionConstructor());
 			DIContainer.RegisterType<ITokenAuthorizer, DefaultBrowserTokenAuthorizer>();
 			DIContainer.RegisterType<ILastFMApiClient, LastFMApiClient>(new InjectionConstructor(typeof(ITokenAuthorizer), lastFMApiKey, lastFMSharedSecret, lastFMSessionKey));
-			DIContainer.RegisterType<IScrobbler, PersistentScrobbler>(new InjectionConstructor(typeof(ILastFMApiClient), appDataDirectory));
+			DIContainer.RegisterType<IScrobbler, LastFMScrobbler>(new InjectionConstructor(typeof(ILastFMApiClient)));
 			DIContainer.RegisterType<IMessageLogger, LoggerViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<ILoggerViewModel, LoggerViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<ILibraryContentUpdater, LibraryContentUpdater>();

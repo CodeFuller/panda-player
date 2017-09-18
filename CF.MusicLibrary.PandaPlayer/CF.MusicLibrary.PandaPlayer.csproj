@@ -164,8 +164,6 @@
     <Compile Include="Views\RateDiscView.xaml.cs">
       <DependentUpon>RateDiscView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Scrobbler\IScrobbler.cs" />
-    <Compile Include="Scrobbler\PersistentScrobbler.cs" />
     <Compile Include="ViewModels\ExplorerSongListViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IExplorerSongListViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ILibraryExplorerViewModel.cs" />

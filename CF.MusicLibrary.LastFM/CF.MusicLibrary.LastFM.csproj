@@ -82,10 +82,12 @@
     <Compile Include="DataContracts\UpdateNowPlayingTrackResponse.cs" />
     <Compile Include="DefaultBrowserTokenAuthorizer.cs" />
     <Compile Include="ILastFMApiClient.cs" />
+    <Compile Include="IScrobbler.cs" />
     <Compile Include="ITokenAuthorizer.cs" />
     <Compile Include="LastFMApiCallFailedException.cs" />
     <Compile Include="LastFMApiClient.cs" />
     <Compile Include="LastFMConstants.cs" />
+    <Compile Include="LastFMScrobbler.cs" />
     <Compile Include="Objects\Album.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Objects\Track.cs" />
