@@ -23,8 +23,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		public override bool ArtistIsEditable => false;
 		public override bool ArtistIsNotFilled => false;
 
-		private readonly int? year;
-		public override int? Year
+		private readonly short? year;
+		public override short? Year
 		{
 			get { return year; }
 			set

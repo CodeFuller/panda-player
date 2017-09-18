@@ -64,8 +64,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public bool AlbumTitleMatchesDiscTitle => String.Equals(AlbumTitle, Title, StringComparison.OrdinalIgnoreCase);
 
-		private int? year;
-		public virtual int? Year
+		private short? year;
+		public virtual short? Year
 		{
 			get { return year; }
 			set
@@ -121,7 +121,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public Disc Disc => new Disc
 		{
-			Year = Year,
 			Title = Title,
 			AlbumTitle = AlbumTitle,
 			Uri = DestinationUri,
@@ -137,7 +136,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 					Disc = disc,
 					Artist = GetSongArtist(s),
 					TrackNumber = s.Track,
-					Year = (short?)disc.Year,
+					Year = Year,
 					Title = s.Title,
 					Genre = Genre,
 					Rating = null,

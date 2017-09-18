@@ -100,11 +100,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 
 			var disc1 = new Disc
 			{
-				Year = 2005,
 				SongsUnordered = new Collection<Song>
 				{
 					new Song
 					{
+						Year = 2005,
 						Artist = artist,
 						Genre = genre1,
 					}
@@ -113,11 +113,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 
 			var disc2 = new Disc
 			{
-				Year = 2000,
 				SongsUnordered = new Collection<Song>
 				{
 					new Song
 					{
+						Year = 2000,
 						Artist = artist,
 						Genre = genre2,
 					}

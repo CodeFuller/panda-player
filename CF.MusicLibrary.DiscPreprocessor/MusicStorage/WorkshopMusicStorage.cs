@@ -37,7 +37,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 				throw new InvalidInputDataException(Current($"Could not parse disc data from '{pathParts[1]}'"));
 			}
 
-			int? year;
+			short? year;
 			string title;
 			ParseDiscData(pathParts[pathParts.Count - 1], out year, out title);
 
@@ -73,12 +73,12 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 			return discInfo;
 		}
 
-		private static void ParseDiscData(string discName, out int? year, out string title)
+		private static void ParseDiscData(string discName, out short? year, out string title)
 		{
 			var match = DiscDataRegex.Match(discName);
 			if (match.Success)
 			{
-				year = Int32.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture);
+				year = Int16.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture);
 				title = match.Groups[2].Value;
 			}
 			else

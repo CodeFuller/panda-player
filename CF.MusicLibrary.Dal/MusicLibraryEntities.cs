@@ -24,6 +24,7 @@ namespace CF.MusicLibrary.Dal
 
 			modelBuilder.Entity<Disc>().Ignore(d => d.Artist);
 			modelBuilder.Entity<Disc>().Ignore(d => d.Genre);
+			modelBuilder.Entity<Disc>().Ignore(d => d.Year);
 			modelBuilder.Entity<Disc>().Property(d => d.Title).IsRequired();
 			modelBuilder.Entity<Disc>().Ignore(d => d.Uri);
 			modelBuilder.Entity<Disc>().Property(d => d.DiscUri).IsRequired().HasColumnName("Uri");

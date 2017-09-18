@@ -6,7 +6,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 {
 	public class AddedDiscInfo
 	{
-		public int? Year { get; set; }
+		public short? Year { get; set; }
 
 		public string Title { get; set; }
 

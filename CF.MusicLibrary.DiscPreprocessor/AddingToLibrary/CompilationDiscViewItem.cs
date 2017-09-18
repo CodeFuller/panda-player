@@ -9,7 +9,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 	public abstract class CompilationDiscViewItem : DiscViewItem
 	{
 		// Seal the method for calling it in constructor.
-		public sealed override int? Year
+		public sealed override short? Year
 		{
 			get { return base.Year; }
 			set { base.Year = value; }

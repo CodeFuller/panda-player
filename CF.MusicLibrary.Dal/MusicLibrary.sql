@@ -38,7 +38,6 @@ CREATE TABLE [Genres] (
 
 CREATE TABLE [Discs] (
   [Id] INTEGER NOT NULL,
-  [Year] int NULL,
   [Title] ntext NOT NULL,
   [AlbumTitle] ntext NULL,
   [Uri] ntext NOT NULL,

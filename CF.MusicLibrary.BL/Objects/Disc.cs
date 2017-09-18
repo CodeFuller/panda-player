@@ -28,7 +28,14 @@ namespace CF.MusicLibrary.BL.Objects
 			}
 		}
 
-		public int? Year { get; set; }
+		public short? Year
+		{
+			get
+			{
+				var years = Songs.Select(s => s.Year).Distinct().ToList();
+				return years.Count == 1 ? years.Single() : null;
+			}
+		}
 
 		/// <example>
 		/// The Classical Conspiracy (Live) (CD 1)
