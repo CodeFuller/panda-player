@@ -32,11 +32,36 @@ namespace CF.MusicLibrary.BL
 			await libraryRepository.UpdateSong(song);
 		}
 
+		public async Task ChangeDiscUri(Disc disc, Uri newDiscUri)
+		{
+			await libraryStorage.ChangeDiscUri(disc, newDiscUri);
+			disc.Uri = newDiscUri;
+			await libraryRepository.UpdateDisc(disc);
+
+			foreach (var song in disc.Songs)
+			{
+				song.Uri = libraryStructurer.ReplaceDiscPartInSongUri(newDiscUri, song.Uri);
+				await libraryRepository.UpdateSong(song);
+			}
+		}
+
 		public async Task ChangeSongUri(Song song, Uri newSongUri)
 		{
 			await libraryStorage.ChangeSongUri(song, newSongUri);
 			song.Uri = newSongUri;
 			await libraryRepository.UpdateSong(song);
+		}
+
+		public async Task UpdateDisc(Disc disc, UpdatedSongProperties updatedProperties)
+		{
+			if ((updatedProperties & SongTagData.TaggedProperties) != 0)
+			{
+				foreach (var song in disc.Songs)
+				{
+					await libraryStorage.UpdateSongTagData(song, updatedProperties);
+				}
+			}
+			await libraryRepository.UpdateDisc(disc);
 		}
 
 		public async Task DeleteDisc(Disc disc)

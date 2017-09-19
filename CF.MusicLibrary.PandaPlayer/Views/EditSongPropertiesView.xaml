@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:valueConverters="clr-namespace:CF.MusicLibrary.PandaPlayer.Views.ValueConverters"
+        xmlns:validationRules="clr-namespace:CF.MusicLibrary.PandaPlayer.Views.ValidationRules"
         mc:Ignorable="d"
         Title="Edit song properties" Width="400" Height="210" WindowStartupLocation="CenterOwner"
         Style="{StaticResource PropertiesWindow}" ResizeMode="NoResize">
@@ -19,7 +20,15 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" HorizontalAlignment="Left" Content="File Name:" />
-            <TextBox Grid.Column="1" Width="310" HorizontalAlignment="Left" IsEnabled="{Binding SingleSongMode}" Text="{Binding FileName}" />
+            <TextBox Grid.Column="1" Width="310" HorizontalAlignment="Left" IsEnabled="{Binding SingleSongMode}">
+                <TextBox.Text>
+                    <Binding Path="FileName" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <validationRules:NotEmptyStringValidationRule ValidationStep="RawProposedValue"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
         </Grid>
         <Grid Margin="0,0,0,5">
             <Grid.ColumnDefinitions>
@@ -27,7 +36,15 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" HorizontalAlignment="Left" Content="Title:" />
-            <TextBox Grid.Column="1" Width="310" HorizontalAlignment="Left" IsEnabled="{Binding SingleSongMode}" Text="{Binding Title}" />
+            <TextBox Grid.Column="1" Width="310" HorizontalAlignment="Left" IsEnabled="{Binding SingleSongMode}">
+                <TextBox.Text>
+                    <Binding Path="Title" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <validationRules:NotEmptyStringValidationRule ValidationStep="RawProposedValue"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
         </Grid>
         <Grid Margin="0,0,0,5">
             <Grid.ColumnDefinitions>
@@ -68,7 +85,10 @@
             </Grid>
         </Grid>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Save" Width="100" Margin="10" Click="SaveButton_Click" />
+            <StackPanel.CommandBindings>
+                <CommandBinding Command="Save" CanExecute="Save_CanExecute" Executed="Save_Executed" />
+            </StackPanel.CommandBindings>
+            <Button Content="Save" Width="100" Margin="10" Command="Save" />
             <Button Content="Cancel" Width="100" Margin="10" IsCancel="true" Click="CancelButton_Click" />
         </StackPanel>
     </StackPanel>

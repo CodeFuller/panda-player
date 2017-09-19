@@ -7,11 +7,11 @@ using CF.MusicLibrary.PandaPlayer.ViewModels;
 namespace CF.MusicLibrary.PandaPlayer.Views
 {
 	/// <summary>
-	/// Interaction logic for EditSongPropertiesView.xaml
+	/// Interaction logic for EditDiscPropertiesView.xaml
 	/// </summary>
-	public partial class EditSongPropertiesView : Window
+	public partial class EditDiscPropertiesView : Window
 	{
-		public EditSongPropertiesView()
+		public EditDiscPropertiesView()
 		{
 			InitializeComponent();
 		}
@@ -23,7 +23,7 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 
 		private async void Save_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			var vm = DataContext as EditSongPropertiesViewModel;
+			var vm = DataContext as EditDiscPropertiesViewModel;
 			if (vm == null)
 			{
 				throw new InvalidOperationException("ViewModel is not set");

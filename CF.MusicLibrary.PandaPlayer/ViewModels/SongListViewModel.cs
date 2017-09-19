@@ -5,20 +5,18 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CF.Library.Wpf;
-using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels
 {
 	public abstract class SongListViewModel : ViewModelBase, ISongListViewModel
 	{
 		private readonly ILibraryContentUpdater libraryContentUpdater;
-		private readonly IEditSongPropertiesViewModel editSongPropertiesViewModel;
-		private readonly IWindowService windowService;
+		private readonly IViewNavigator viewNavigator;
 
 		public abstract bool DisplayTrackNumbers { get; }
 
@@ -51,53 +49,32 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand EditSongsPropertiesCommand { get; }
 
-		protected SongListViewModel(ILibraryContentUpdater libraryContentUpdater, IEditSongPropertiesViewModel editSongPropertiesViewModel, IWindowService windowService)
+		protected SongListViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
 		{
 			if (libraryContentUpdater == null)
 			{
 				throw new ArgumentNullException(nameof(libraryContentUpdater));
 			}
-			if (editSongPropertiesViewModel == null)
+			if (viewNavigator == null)
 			{
-				throw new ArgumentNullException(nameof(editSongPropertiesViewModel));
-			}
-			if (windowService == null)
-			{
-				throw new ArgumentNullException(nameof(windowService));
+				throw new ArgumentNullException(nameof(viewNavigator));
 			}
 
 			this.libraryContentUpdater = libraryContentUpdater;
-			this.editSongPropertiesViewModel = editSongPropertiesViewModel;
-			this.windowService = windowService;
+			this.viewNavigator = viewNavigator;
 
 			SongItems = new ObservableCollection<SongListItem>();
 
 			SetRatingMenuItems = RatingsHelper.AllowedRatingsDesc.Select(r => new SetRatingMenuItem(this, r)).ToList();
-			EditSongsPropertiesCommand = new AsyncRelayCommand(EditSongsProperties);
+			EditSongsPropertiesCommand = new RelayCommand(EditSongsProperties);
 		}
 
-		private async Task EditSongsProperties()
+		private void EditSongsProperties()
 		{
 			var selectedSongs = SelectedSongs.ToList();
-			if (!selectedSongs.Any())
+			if (selectedSongs.Any())
 			{
-				return;
-			}
-
-			editSongPropertiesViewModel.Load(selectedSongs);
-			if (windowService.ShowSongPropertiesView(editSongPropertiesViewModel))
-			{
-				//	Should we rename a song?
-				if (selectedSongs.Count == 1)
-				{
-					Uri newSongUri = editSongPropertiesViewModel.UpdatedSongUri;
-					if (newSongUri != null)
-					{
-						await libraryContentUpdater.ChangeSongUri(selectedSongs.Single(), newSongUri);
-					}
-				}
-
-				await libraryContentUpdater.UpdateSongs(editSongPropertiesViewModel.GetUpdatedSongs(), UpdatedSongProperties.ForceTagUpdate);
+				viewNavigator.ShowSongPropertiesView(selectedSongs);
 			}
 		}
 

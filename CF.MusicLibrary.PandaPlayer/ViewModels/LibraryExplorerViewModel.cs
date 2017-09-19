@@ -21,6 +21,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		private readonly ILibraryContentUpdater libraryContentUpdater;
 
+		private readonly IViewNavigator viewNavigator;
+
 		private FolderExplorerItem ParentFolder { get; set; }
 
 		private ObservableCollection<FolderExplorerItem> items;
@@ -44,8 +46,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public ICommand DeleteDiscCommand { get; }
 		public ICommand JumpToFirstItemCommand { get; }
 		public ICommand JumpToLastItemCommand { get; }
+		public ICommand EditDiscPropertiesCommand { get; }
 
-		public LibraryExplorerViewModel(ILibraryBrowser libraryBrowser, ILibraryContentUpdater libraryContentUpdater)
+		public LibraryExplorerViewModel(ILibraryBrowser libraryBrowser, ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
 		{
 			if (libraryBrowser == null)
 			{
@@ -55,15 +58,21 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 				throw new ArgumentNullException(nameof(libraryContentUpdater));
 			}
+			if (viewNavigator == null)
+			{
+				throw new ArgumentNullException(nameof(viewNavigator));
+			}
 
 			this.libraryBrowser = libraryBrowser;
 			this.libraryContentUpdater = libraryContentUpdater;
+			this.viewNavigator = viewNavigator;
 
 			ChangeFolderCommand = new RelayCommand(ChangeFolder);
 			PlayDiscCommand = new RelayCommand(PlayDisc);
 			DeleteDiscCommand = new AsyncRelayCommand(DeleteDisc);
 			JumpToFirstItemCommand = new RelayCommand(() => SelectedItem = Items.FirstOrDefault());
 			JumpToLastItemCommand = new RelayCommand(() => SelectedItem = Items.LastOrDefault());
+			EditDiscPropertiesCommand = new RelayCommand(EditDiscProperties);
 		}
 
 		public void Load()
@@ -132,6 +141,15 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				{
 					ChangeFolder(currFolder);
 				}
+			}
+		}
+
+		private void EditDiscProperties()
+		{
+			var discItem = SelectedItem as DiscExplorerItem;
+			if (discItem != null)
+			{
+				viewNavigator.ShowDiscPropertiesView(discItem.Disc);
 			}
 		}
 

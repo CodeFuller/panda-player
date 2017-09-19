@@ -12,7 +12,11 @@ namespace CF.MusicLibrary.BL.Interfaces
 
 		Task DeleteSong(Song song, DateTime deleteTime);
 
+		Task ChangeDiscUri(Disc disc, Uri newDiscUri);
+
 		Task ChangeSongUri(Song song, Uri newSongUri);
+
+		Task UpdateDisc(Disc disc, UpdatedSongProperties updatedProperties);
 
 		Task DeleteDisc(Disc disc);
 

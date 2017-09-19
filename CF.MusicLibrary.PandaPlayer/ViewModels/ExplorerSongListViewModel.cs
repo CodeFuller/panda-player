@@ -13,8 +13,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand PlayDiscFromSongCommand { get; }
 
-		public ExplorerSongListViewModel(ILibraryContentUpdater libraryContentUpdater, IEditSongPropertiesViewModel editSongPropertiesViewModel, IWindowService windowService)
-			: base(libraryContentUpdater, editSongPropertiesViewModel, windowService)
+		public ExplorerSongListViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
+			: base(libraryContentUpdater, viewNavigator)
 		{
 			PlayDiscFromSongCommand = new RelayCommand(PlayDiscFromSong);
 		}

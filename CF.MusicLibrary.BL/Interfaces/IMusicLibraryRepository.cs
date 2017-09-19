@@ -14,6 +14,8 @@ namespace CF.MusicLibrary.BL.Interfaces
 
 		Task UpdateSong(Song song);
 
+		Task UpdateDisc(Disc disc);
+
 		/// <summary>
 		/// Returns all discs including deleted.
 		/// </summary>

@@ -75,7 +75,15 @@ namespace CF.MusicLibrary.Dal
 			using (var ctx = GetContext())
 			{
 				ctx.Entry(song).State = EntityState.Modified;
+				await ctx.SaveChangesAsync();
+			}
+		}
 
+		public async Task UpdateDisc(Disc disc)
+		{
+			using (var ctx = GetContext())
+			{
+				ctx.Entry(disc).State = EntityState.Modified;
 				await ctx.SaveChangesAsync();
 			}
 		}

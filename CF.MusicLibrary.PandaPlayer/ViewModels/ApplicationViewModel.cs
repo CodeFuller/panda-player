@@ -18,7 +18,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 	{
 		private readonly DiscLibrary discLibrary;
 
-		private readonly IWindowService windowService;
+		private readonly IViewNavigator viewNavigator;
 		private readonly ILibraryContentUpdater libraryContentUpdater;
 
 		public ILibraryExplorerViewModel LibraryExplorerViewModel { get; }
@@ -43,7 +43,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public ICommand LoadCommand { get; }
 
 		public ApplicationViewModel(DiscLibrary discLibrary, ILibraryExplorerViewModel libraryExplorerViewModel, IExplorerSongListViewModel explorerSongListViewModel,
-			IMusicPlayerViewModel musicPlayerViewModel, IDiscAdviserViewModel discAdviserViewModel, ILoggerViewModel loggerViewModel, IWindowService windowService, ILibraryContentUpdater libraryContentUpdater)
+			IMusicPlayerViewModel musicPlayerViewModel, IDiscAdviserViewModel discAdviserViewModel, ILoggerViewModel loggerViewModel, IViewNavigator viewNavigator, ILibraryContentUpdater libraryContentUpdater)
 		{
 			if (discLibrary == null)
 			{
@@ -69,9 +69,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 				throw new ArgumentNullException(nameof(loggerViewModel));
 			}
-			if (windowService == null)
+			if (viewNavigator == null)
 			{
-				throw new ArgumentNullException(nameof(windowService));
+				throw new ArgumentNullException(nameof(viewNavigator));
 			}
 			if (libraryContentUpdater == null)
 			{
@@ -84,7 +84,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			MusicPlayerViewModel = musicPlayerViewModel;
 			DiscAdviserViewModel = discAdviserViewModel;
 			LoggerViewModel = loggerViewModel;
-			this.windowService = windowService;
+			this.viewNavigator = viewNavigator;
 			this.libraryContentUpdater = libraryContentUpdater;
 
 			LoadCommand = new AsyncRelayCommand(Load);
@@ -149,7 +149,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		private async Task OnPlaylistFinished()
 		{
-			windowService.BringApplicationToFront();
+			viewNavigator.BringApplicationToFront();
 
 			var playedDisc = Playlist.PlayedDisc;
 			if (playedDisc == null)
@@ -163,7 +163,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				var rateDiscViewModel = new RateDiscViewModel(playedDisc);
 				if (unratedSongsNumber == playedDisc.Songs.Count)
 				{
-					windowService.ShowRateDiscViewDialog(rateDiscViewModel);
+					viewNavigator.ShowRateDiscViewDialog(rateDiscViewModel);
 					if (rateDiscViewModel.SelectedRating.HasValue)
 					{
 						await libraryContentUpdater.SetSongsRating(playedDisc.Songs, rateDiscViewModel.SelectedRating.Value);
@@ -171,7 +171,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				}
 				else
 				{
-					windowService.ShowRateReminderViewDialog(rateDiscViewModel);
+					viewNavigator.ShowRateReminderViewDialog(rateDiscViewModel);
 				}
 			}
 		}

@@ -10,6 +10,7 @@ using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.LibraryChecker.Checkers;
 using CF.MusicLibrary.LibraryChecker.Registrators;
+using CF.MusicLibrary.Local;
 using CF.MusicLibrary.Tagger;
 using Microsoft.Practices.Unity;
 
@@ -26,6 +27,7 @@ namespace CF.MusicLibrary.LibraryChecker
 			DIContainer.RegisterType<IApplicationLogic, ApplicationLogic>();
 			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepositoryEF>(new InjectionConstructor());
 			DIContainer.RegisterType<IMusicLibraryStorage, FileSystemMusicStorage>(new InjectionConstructor(typeof(IFileSystemFacade), typeof(ISongTagger), localStorageRoot));
+			DIContainer.RegisterType<ILibraryStructurer, MyLibraryStructurer>();
 			DIContainer.RegisterType<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
 			DIContainer.RegisterType<ISongTagger, SongTagger>();
 			DIContainer.RegisterType<ITokenAuthorizer, DefaultBrowserTokenAuthorizer>();

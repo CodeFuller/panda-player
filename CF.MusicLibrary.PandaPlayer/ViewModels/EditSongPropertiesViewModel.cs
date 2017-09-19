@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
 
@@ -12,6 +15,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 	{
 		private readonly DiscLibrary library;
 		private readonly ILibraryStructurer libraryStructurer;
+		private readonly ILibraryContentUpdater libraryContentUpdater;
 
 		private List<Song> editedSongs;
 
@@ -40,11 +44,16 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				{
 					throw new InvalidOperationException("File name could not be edited in multi-song mode");
 				}
+				if (String.IsNullOrWhiteSpace(value))
+				{
+					throw new InvalidOperationException("Value of song file name could not be empty");
+				}
+
 				Set(ref fileName, value);
 			}
 		}
 
-		public Uri UpdatedSongUri
+		private Uri UpdatedSongUri
 		{
 			get
 			{
@@ -68,6 +77,11 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				{
 					throw new InvalidOperationException("Title could not be edited in multi-song mode");
 				}
+				if (String.IsNullOrWhiteSpace(value))
+				{
+					throw new InvalidOperationException("Value of song title could not be empty");
+				}
+
 				Set(ref title, value);
 			}
 		}
@@ -84,7 +98,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public IEnumerable<EditedSongProperty<Genre>> AvailableGenres { get; private set; }
 
-		public EditSongPropertiesViewModel(DiscLibrary library, ILibraryStructurer libraryStructurer)
+		public EditSongPropertiesViewModel(DiscLibrary library, ILibraryStructurer libraryStructurer, ILibraryContentUpdater libraryContentUpdater)
 		{
 			if (library == null)
 			{
@@ -94,9 +108,14 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 				throw new ArgumentNullException(nameof(libraryStructurer));
 			}
+			if (libraryContentUpdater == null)
+			{
+				throw new ArgumentNullException(nameof(libraryContentUpdater));
+			}
 
-			this.libraryStructurer = libraryStructurer;
 			this.library = library;
+			this.libraryStructurer = libraryStructurer;
+			this.libraryContentUpdater = libraryContentUpdater;
 		}
 
 		public void Load(IEnumerable<Song> songs)
@@ -118,6 +137,21 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			TrackNumber = BuildProperty(editedSongs, s => s.TrackNumber);
 		}
 
+		public async Task Save()
+		{
+			//	Should we rename a song?
+			if (editedSongs.Count == 1)
+			{
+				Uri newSongUri = UpdatedSongUri;
+				if (newSongUri != null)
+				{
+					await libraryContentUpdater.ChangeSongUri(SingleSong, newSongUri);
+				}
+			}
+
+			await libraryContentUpdater.UpdateSongs(GetUpdatedSongs(), UpdatedSongProperties.ForceTagUpdate);
+		}
+
 		private static IEnumerable<EditedSongProperty<T>> FillAvailableValues<T>(IEnumerable<T> values, Func<T, object> sortedProperty) where T : class
 		{
 			var availableValues = new List<EditedSongProperty<T>>();
@@ -127,7 +161,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			return availableValues;
 		}
 
-		public IEnumerable<Song> GetUpdatedSongs()
+		private IEnumerable<Song> GetUpdatedSongs()
 		{
 			foreach (var song in editedSongs)
 			{

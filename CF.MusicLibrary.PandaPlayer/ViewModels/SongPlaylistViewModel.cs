@@ -26,8 +26,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		public SongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater, IEditSongPropertiesViewModel editSongPropertiesViewModel, IWindowService windowService)
-			: base(libraryContentUpdater, editSongPropertiesViewModel, windowService)
+		public SongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
+			: base(libraryContentUpdater, viewNavigator)
 		{
 		}
 

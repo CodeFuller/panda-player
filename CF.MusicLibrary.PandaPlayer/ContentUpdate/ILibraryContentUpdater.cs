@@ -12,7 +12,11 @@ namespace CF.MusicLibrary.PandaPlayer.ContentUpdate
 
 		Task UpdateSongs(IEnumerable<Song> songs, UpdatedSongProperties updatedProperties);
 
+		Task UpdateDisc(Disc disc, UpdatedSongProperties updatedProperties);
+
 		Task DeleteDisc(Disc disc);
+
+		Task ChangeDiscUri(Disc disc, Uri newDiscUri);
 
 		Task ChangeSongUri(Song song, Uri newSongUri);
 	}

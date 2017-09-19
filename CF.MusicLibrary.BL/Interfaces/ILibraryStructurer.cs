@@ -18,6 +18,10 @@ namespace CF.MusicLibrary.BL.Interfaces
 
 		Uri ReplaceDiscPartInUri(Uri discUri, string discPart);
 
+		Uri ReplaceDiscPartInSongUri(Uri newDiscUri, Uri songUri);
+
+		string GetDiscFolderName(Uri discUri);
+
 		string GetSongFileName(Uri songUri);
 	}
 }

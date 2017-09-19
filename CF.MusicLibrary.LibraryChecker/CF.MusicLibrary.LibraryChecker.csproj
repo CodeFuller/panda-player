@@ -39,8 +39,8 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6467.26095, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6467.26095\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6471.41691, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6471.41691\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CF.Library.Unity, Version=0.1.6463.16912, Culture=neutral, processorArchitecture=MSIL">
@@ -151,6 +151,10 @@
     <ProjectReference Include="..\CF.MusicLibrary.LastFM\CF.MusicLibrary.LastFM.csproj">
       <Project>{7F368759-572F-41D4-A7FF-1B3898AE3918}</Project>
       <Name>CF.MusicLibrary.LastFM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.Local\CF.MusicLibrary.Local.csproj">
+      <Project>{378157BA-2DA4-4E39-8AFD-59CED35B9B1F}</Project>
+      <Name>CF.MusicLibrary.Local</Name>
     </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.Tagger\CF.MusicLibrary.Tagger.csproj">
       <Project>{931CDE55-D545-47AF-B525-06AB15E74C3E}</Project>

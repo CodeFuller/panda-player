@@ -111,11 +111,17 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 			{
 				ContextMenu contextMenu = new ContextMenu();
 				contextMenu.Items.Add(
-				new MenuItem
-				{
-					Header = "Delete Disc",
-					Command = viewModel.DeleteDiscCommand,
-				});
+					new MenuItem
+					{
+						Header = "Delete Disc",
+						Command = viewModel.DeleteDiscCommand,
+					});
+				contextMenu.Items.Add(
+					new MenuItem
+					{
+						Header = "Properties",
+						Command = viewModel.EditDiscPropertiesCommand,
+					});
 
 				frameworkElement.ContextMenu = contextMenu;
 			}

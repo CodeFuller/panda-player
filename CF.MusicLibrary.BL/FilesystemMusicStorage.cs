@@ -160,6 +160,16 @@ namespace CF.MusicLibrary.BL
 			return Task.FromResult(new FileInfo(UriToFilesystemPath(song.Uri)));
 		}
 
+		public async Task ChangeDiscUri(Disc disc, Uri newDiscUri)
+		{
+			await Task.Run(() =>
+			{
+				var oldFolderName = UriToFilesystemPath(disc.Uri);
+				var newFolderName = UriToFilesystemPath(newDiscUri);
+				fileSystemFacade.MoveDirectory(oldFolderName, newFolderName);
+			});
+		}
+
 		public async Task ChangeSongUri(Song song, Uri newSongUri)
 		{
 			await Task.Run(() =>

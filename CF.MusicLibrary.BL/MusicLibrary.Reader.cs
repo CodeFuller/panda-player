@@ -16,7 +16,9 @@ namespace CF.MusicLibrary.BL
 
 		private readonly IMusicLibraryStorage libraryStorage;
 
-		public RepositoryAndStorageMusicLibrary(IMusicLibraryRepository libraryRepository, IMusicLibraryStorage libraryStorage)
+		private readonly ILibraryStructurer libraryStructurer;
+
+		public RepositoryAndStorageMusicLibrary(IMusicLibraryRepository libraryRepository, IMusicLibraryStorage libraryStorage, ILibraryStructurer libraryStructurer)
 		{
 			if (libraryRepository == null)
 			{
@@ -29,6 +31,7 @@ namespace CF.MusicLibrary.BL
 
 			this.libraryRepository = libraryRepository;
 			this.libraryStorage = libraryStorage;
+			this.libraryStructurer = libraryStructurer;
 		}
 
 		public async Task<DiscLibrary> Load()

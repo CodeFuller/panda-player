@@ -25,6 +25,8 @@ namespace CF.MusicLibrary.BL.Interfaces
 
 		Task<FileInfo> GetSongFile(Song song);
 
+		Task ChangeDiscUri(Disc disc, Uri newDiscUri);
+
 		Task ChangeSongUri(Song song, Uri newSongUri);
 
 		Task CheckDataConsistency(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator);
