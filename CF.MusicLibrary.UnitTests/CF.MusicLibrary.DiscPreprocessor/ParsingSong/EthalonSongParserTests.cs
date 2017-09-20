@@ -34,6 +34,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ParsingSong
 			Assert.AreEqual(expectedTitle, resultTitle);
 		}
 
+		[Test]
 		public void ParseSongTitle_ForTitleInLatin_CapitalizesFirstLetters()
 		{
 			EthalonSongParser target = new EthalonSongParser();
@@ -43,6 +44,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ParsingSong
 			Assert.AreEqual("This Is The Life", resultTitle);
 		}
 
+		[Test]
 		public void ParseSongTitle_ForTitleInCyrillic_DoesNotCapitalizeFirstLetters()
 		{
 			EthalonSongParser target = new EthalonSongParser();
