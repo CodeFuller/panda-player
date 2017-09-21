@@ -41,12 +41,14 @@
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="300"/>
                 <RowDefinition Height="24"/>
                 <RowDefinition Height="24"/>
             </Grid.RowDefinitions>
             <views:LibraryExplorerView Grid.Row="0" x:Name="LibraryExplorer" DataContext="{Binding LibraryExplorerViewModel}" />
-            <views:DiscAdviserView Grid.Row="1" DataContext="{Binding ViewModelHolder.DiscAdviserViewModel}" BorderThickness="1,0,1,1" />
-            <views:MusicPlayerView Grid.Row="2" DataContext="{Binding MusicPlayerViewModel}" BorderThickness="1,0,1,0" />
+            <views:DiscArtView Grid.Row="1" DataContext="{Binding ViewModelHolder.DiscArtViewModel}" BorderThickness="1,0,1,1" />
+            <views:DiscAdviserView Grid.Row="2" DataContext="{Binding ViewModelHolder.DiscAdviserViewModel}" BorderThickness="1,0,1,1" />
+            <views:MusicPlayerView Grid.Row="3" DataContext="{Binding MusicPlayerViewModel}" BorderThickness="1,0,1,0" />
         </Grid>
 
         <Grid Grid.Column="1">

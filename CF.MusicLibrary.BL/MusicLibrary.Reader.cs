@@ -83,6 +83,11 @@ namespace CF.MusicLibrary.BL
 			return await libraryStorage.GetSongFile(song);
 		}
 
+		public async Task<string> GetDiscCoverImage(Disc disc)
+		{
+			return await libraryStorage.GetDiscCoverImage(disc);
+		}
+		
 		public async Task CheckStorage(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator)
 		{
 			await libraryStorage.CheckDataConsistency(library, registrator);

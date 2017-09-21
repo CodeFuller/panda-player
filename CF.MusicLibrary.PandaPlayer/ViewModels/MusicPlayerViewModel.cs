@@ -178,6 +178,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			var songFile = await musicLibrary.GetSongFile(newSong);
 			mediaPlayer.Open(new Uri(songFile.FullName));
 			await scrobbler.UpdateNowPlaying(GetTrackFromSong(newSong));
+			Messenger.Default.Send(new NewSongPlaybackStartedEventArgs(newSong));
 		}
 
 		private static Track GetTrackFromSong(Song song)

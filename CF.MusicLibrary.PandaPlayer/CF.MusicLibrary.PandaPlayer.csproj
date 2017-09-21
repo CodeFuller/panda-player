@@ -148,19 +148,28 @@
     <Compile Include="DiscAdviser\RankedDisc.cs" />
     <Compile Include="DiscAdviser\RankedDiscGroup.cs" />
     <Compile Include="Events\LibraryExplorerDiscChangedEventArgs.cs" />
+    <Compile Include="Events\LibraryExplorerFolderChangedEventArgs.cs" />
     <Compile Include="Events\LibraryLoadedEventArgs.cs" />
+    <Compile Include="Events\NewSongPlaybackStartedEventArgs.cs" />
     <Compile Include="ViewModels\DiscAdviserViewModel.cs" />
+    <Compile Include="ViewModels\DiscArtViewModel.cs" />
     <Compile Include="ViewModels\EditDiscPropertiesViewModel.cs" />
     <Compile Include="ViewModels\EditedSongProperty.cs" />
     <Compile Include="ViewModels\EditSongPropertiesViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IDiscArtViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEditDiscPropertiesViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IDiscAdviserViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEditSongPropertiesViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\INavigatedViewModelHolder.cs" />
     <Compile Include="ViewModels\Interfaces\IRateDiscViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IViewModelHolder.cs" />
-    <Compile Include="ViewModels\ViewModelHolder.cs" />
+    <Compile Include="ViewModels\Interfaces\IApplicationViewModelHolder.cs" />
+    <Compile Include="ViewModels\ApplicationViewModelHolder.cs" />
+    <Compile Include="ViewModels\NavigatedViewModelHolder.cs" />
     <Compile Include="Views\DiscAdviserView.xaml.cs">
       <DependentUpon>DiscAdviserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DiscArtView.xaml.cs">
+      <DependentUpon>DiscArtView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EditDiscPropertiesView.xaml.cs">
       <DependentUpon>EditDiscPropertiesView.xaml</DependentUpon>
@@ -227,6 +236,10 @@
     </Compile>
     <Compile Include="Views\TrayClickCommand.cs" />
     <Page Include="Views\DiscAdviserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DiscArtView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

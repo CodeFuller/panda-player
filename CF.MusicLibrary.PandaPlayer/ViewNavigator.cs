@@ -15,11 +15,11 @@ namespace CF.MusicLibrary.PandaPlayer
 	{
 		private static Window ApplicationWindow => Application.Current.MainWindow;
 
-		private readonly IViewModelHolder viewModelHolder;
+		private readonly INavigatedViewModelHolder viewModelHolder;
 
 		private readonly IWindowService windowService;
 
-		public ViewNavigator(IViewModelHolder viewModelHolder, IWindowService windowService)
+		public ViewNavigator(INavigatedViewModelHolder viewModelHolder, IWindowService windowService)
 		{
 			if (viewModelHolder == null)
 			{

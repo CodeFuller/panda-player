@@ -123,10 +123,18 @@ namespace CF.MusicLibrary.BL
 
 		public async Task SetDiscCoverImage(Disc disc, string coverImageFileName)
 		{
-			string discDirectory = UriToFilesystemPath(disc.Uri);
-			string destFileName = Path.Combine(discDirectory, DiscCoverFileName);
+			await Task.Run(() => StoreFile(coverImageFileName, GetDiscCoverImageFileName(disc), true));
+		}
 
-			await Task.Run(() => StoreFile(coverImageFileName, destFileName, true));
+		public async Task<string> GetDiscCoverImage(Disc disc)
+		{
+			var discCoverImageFileName = GetDiscCoverImageFileName(disc);
+			return await Task.FromResult(fileSystemFacade.FileExists(discCoverImageFileName) ? discCoverImageFileName : null);
+		}
+
+		private string GetDiscCoverImageFileName(Disc disc)
+		{
+			return Path.Combine(UriToFilesystemPath(disc.Uri), DiscCoverFileName);
 		}
 
 		public async Task UpdateSongTagData(Song song, UpdatedSongProperties updatedProperties)

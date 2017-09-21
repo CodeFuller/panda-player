@@ -17,7 +17,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		private readonly IViewNavigator viewNavigator;
 
-		public IViewModelHolder ViewModelHolder { get; }
+		public IApplicationViewModelHolder ViewModelHolder { get; }
 
 		public ILibraryExplorerViewModel LibraryExplorerViewModel => ViewModelHolder.LibraryExplorerViewModel;
 
@@ -34,7 +34,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand LoadCommand { get; }
 
-		public ApplicationViewModel(DiscLibrary discLibrary, IViewModelHolder viewModelHolder, IMusicPlayerViewModel musicPlayerViewModel, IViewNavigator viewNavigator)
+		public ApplicationViewModel(DiscLibrary discLibrary, IApplicationViewModelHolder viewModelHolder, IMusicPlayerViewModel musicPlayerViewModel, IViewNavigator viewNavigator)
 		{
 			if (discLibrary == null)
 			{
