@@ -44,16 +44,16 @@
     <ApplicationIcon>PandaPlayer.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6471.41691, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6471.41691\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6472.39302, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6472.39302\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CF.Library.Unity, Version=0.1.6463.16912, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Unity.0.1.6463.16912\lib\net462\CF.Library.Unity.dll</HintPath>
+    <Reference Include="CF.Library.Unity, Version=0.1.6472.39381, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Unity.0.1.6472.39381\lib\net462\CF.Library.Unity.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CF.Library.Wpf, Version=0.1.6472.16123, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Wpf.0.1.6472.16123\lib\net462\CF.Library.Wpf.dll</HintPath>
+    <Reference Include="CF.Library.Wpf, Version=0.1.6472.39364, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Wpf.0.1.6472.39364\lib\net462\CF.Library.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">

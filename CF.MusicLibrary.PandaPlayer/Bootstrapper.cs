@@ -1,7 +1,9 @@
 ﻿using CF.Library.Core.Configuration;
 using CF.Library.Core.Facades;
+using CF.Library.Core.Interfaces;
 using CF.Library.Core.Logging;
 using CF.Library.Unity;
+using CF.Library.Wpf;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Media;
@@ -64,6 +66,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<IDiscGroupper, MyLibraryDiscGroupper>();
 			DIContainer.RegisterType<IDiscGroupSorter, RankBasedDiscSorter>();
 			DIContainer.RegisterType<ILibraryStructurer, MyLibraryStructurer>();
+			DIContainer.RegisterType<IWindowService, WpfWindowService>();
 		}
 	}
 }

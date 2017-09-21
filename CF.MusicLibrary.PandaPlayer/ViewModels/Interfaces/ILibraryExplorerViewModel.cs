@@ -7,6 +7,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
 	public interface ILibraryExplorerViewModel : INotifyPropertyChanged
 	{
+		FolderExplorerItem CurrentFolder { get; }
+
 		ObservableCollection<FolderExplorerItem> Items { get; }
 
 		FolderExplorerItem SelectedItem { get; set; }

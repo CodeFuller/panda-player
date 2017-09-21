@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CF.Library.Core.Enums;
+using CF.Library.Core.Interfaces;
 using CF.Library.Wpf;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
@@ -23,6 +25,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		private readonly IViewNavigator viewNavigator;
 
+		private readonly IWindowService windowService;
+
 		private FolderExplorerItem ParentFolder { get; set; }
 
 		private ObservableCollection<FolderExplorerItem> items;
@@ -32,7 +36,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			private set { Set(ref items, value); }
 		}
 
-		private FolderExplorerItem CurrentFolder { get; set; }
+		public FolderExplorerItem CurrentFolder { get; private set; }
 
 		private FolderExplorerItem selectedItem;
 		public FolderExplorerItem SelectedItem
@@ -48,7 +52,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public ICommand JumpToLastItemCommand { get; }
 		public ICommand EditDiscPropertiesCommand { get; }
 
-		public LibraryExplorerViewModel(ILibraryBrowser libraryBrowser, ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
+		public LibraryExplorerViewModel(ILibraryBrowser libraryBrowser, ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
 		{
 			if (libraryBrowser == null)
 			{
@@ -62,10 +66,15 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 				throw new ArgumentNullException(nameof(viewNavigator));
 			}
+			if (windowService == null)
+			{
+				throw new ArgumentNullException(nameof(windowService));
+			}
 
 			this.libraryBrowser = libraryBrowser;
 			this.libraryContentUpdater = libraryContentUpdater;
 			this.viewNavigator = viewNavigator;
+			this.windowService = windowService;
 
 			ChangeFolderCommand = new RelayCommand(ChangeFolder);
 			PlayDiscCommand = new RelayCommand(PlayDisc);
@@ -118,6 +127,12 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			var discItem = SelectedItem as DiscExplorerItem;
 			if (discItem == null)
+			{
+				return;
+			}
+
+			if (windowService.ShowMessageBox($"Do you really want to delete the selected disc '{discItem.Disc.Title}'?", "Delete disc",
+				ShowMessageBoxButton.YesNo, ShowMessageBoxIcon.Question) != ShowMessageBoxResult.Yes)
 			{
 				return;
 			}

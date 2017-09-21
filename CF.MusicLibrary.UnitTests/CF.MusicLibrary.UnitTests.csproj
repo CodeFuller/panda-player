@@ -34,8 +34,8 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.Tests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6471.41691, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6471.41691\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6472.39302, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6472.39302\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
@@ -104,6 +104,7 @@
     <Compile Include="CF.MusicLibrary.LastFM\LastFMScrobblerTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\EditDiscPropertiesViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\EditSongPropertiesViewModelTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\LibraryExplorerViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -34,12 +34,12 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6471.41691, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6471.41691\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6472.39302, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6472.39302\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CF.Library.Http, Version=0.1.6463.16722, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Http.0.1.6463.16722\lib\net462\CF.Library.Http.dll</HintPath>
+    <Reference Include="CF.Library.Http, Version=0.1.6472.39375, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Http.0.1.6472.39375\lib\net462\CF.Library.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
