@@ -45,21 +45,24 @@ namespace CF.MusicLibrary.PandaPlayer
 				return await library.GetDiscsAsync(true);
 			}));
 
+			DIContainer.RegisterType<IViewModelHolder, ViewModelHolder>(new ContainerControlledLifetimeManager());
+			DIContainer.RegisterType<ILibraryExplorerViewModel, LibraryExplorerViewModel>(new ContainerControlledLifetimeManager());
+			DIContainer.RegisterType<IExplorerSongListViewModel, ExplorerSongListViewModel>(new ContainerControlledLifetimeManager());
+			DIContainer.RegisterType<ISongPlaylistViewModel, SongPlaylistViewModel>(new ContainerControlledLifetimeManager());
+			DIContainer.RegisterType<IEditDiscPropertiesViewModel, EditDiscPropertiesViewModel>(new ContainerControlledLifetimeManager());
+			DIContainer.RegisterType<IEditSongPropertiesViewModel, EditSongPropertiesViewModel>(new ContainerControlledLifetimeManager());
+			DIContainer.RegisterType<IMusicPlayerViewModel, MusicPlayerViewModel>(new ContainerControlledLifetimeManager());
+			DIContainer.RegisterType<IDiscAdviserViewModel, DiscAdviserViewModel>(new ContainerControlledLifetimeManager());
+			DIContainer.RegisterType<IRateDiscViewModel, RateDiscViewModel>(new ContainerControlledLifetimeManager());
+			DIContainer.RegisterType<ILoggerViewModel, LoggerViewModel>(new ContainerControlledLifetimeManager());
+			DIContainer.RegisterType<ApplicationViewModel>(new ContainerControlledLifetimeManager());
+
 			DIContainer.RegisterType<ILibraryBrowser, FileSystemLibraryBrowser>();
-			DIContainer.RegisterType<ILibraryExplorerViewModel, LibraryExplorerViewModel>();
-			DIContainer.RegisterType<IExplorerSongListViewModel, ExplorerSongListViewModel>();
-			DIContainer.RegisterType<ISongPlaylistViewModel, SongPlaylistViewModel>();
-			DIContainer.RegisterType<IEditDiscPropertiesViewModel, EditDiscPropertiesViewModel>();
-			DIContainer.RegisterType<IEditSongPropertiesViewModel, EditSongPropertiesViewModel>();
-			DIContainer.RegisterType<IMusicPlayerViewModel, MusicPlayerViewModel>();
-			DIContainer.RegisterType<IDiscAdviserViewModel, DiscAdviserViewModel>();
-			DIContainer.RegisterType<ApplicationViewModel>();
 			DIContainer.RegisterType<ITimerFacade, TimerFacade>(new InjectionConstructor());
 			DIContainer.RegisterType<ITokenAuthorizer, DefaultBrowserTokenAuthorizer>();
 			DIContainer.RegisterType<ILastFMApiClient, LastFMApiClient>(new InjectionConstructor(typeof(ITokenAuthorizer), lastFMApiKey, lastFMSharedSecret, lastFMSessionKey));
 			DIContainer.RegisterType<IScrobbler, LastFMScrobbler>(new InjectionConstructor(typeof(ILastFMApiClient)));
 			DIContainer.RegisterType<IMessageLogger, LoggerViewModel>(new ContainerControlledLifetimeManager());
-			DIContainer.RegisterType<ILoggerViewModel, LoggerViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<ILibraryContentUpdater, LibraryContentUpdater>();
 			DIContainer.RegisterType<IViewNavigator, ViewNavigator>();
 			DIContainer.RegisterType<IDiscAdviser, RankBasedDiscAdviser>();

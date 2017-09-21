@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
+using CF.Library.Core.Enums;
+using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.BL.Objects;
-using CF.MusicLibrary.PandaPlayer.ViewModels;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.Views;
+using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.PandaPlayer
 {
@@ -12,30 +15,23 @@ namespace CF.MusicLibrary.PandaPlayer
 	{
 		private static Window ApplicationWindow => Application.Current.MainWindow;
 
-		private readonly IEditDiscPropertiesViewModel editDiscPropertiesViewModel;
-		private readonly IEditSongPropertiesViewModel editSongPropertiesViewModel;
+		private readonly IViewModelHolder viewModelHolder;
 
-		public ViewNavigator(IEditDiscPropertiesViewModel editDiscPropertiesViewModel, IEditSongPropertiesViewModel editSongPropertiesViewModel)
+		private readonly IWindowService windowService;
+
+		public ViewNavigator(IViewModelHolder viewModelHolder, IWindowService windowService)
 		{
-			if (editDiscPropertiesViewModel == null)
+			if (viewModelHolder == null)
 			{
-				throw new ArgumentNullException(nameof(editDiscPropertiesViewModel));
+				throw new ArgumentNullException(nameof(viewModelHolder));
 			}
-			if (editSongPropertiesViewModel == null)
+			if (windowService == null)
 			{
-				throw new ArgumentNullException(nameof(editSongPropertiesViewModel));
+				throw new ArgumentNullException(nameof(windowService));
 			}
 
-			this.editDiscPropertiesViewModel = editDiscPropertiesViewModel;
-			this.editSongPropertiesViewModel = editSongPropertiesViewModel;
-		}
-
-		public void ShowRateDiscViewDialog(RateDiscViewModel viewModel)
-		{
-			if (!ShowDialog<RateDiscView>(viewModel))
-			{
-				viewModel.SelectedRating = null;
-			}
+			this.viewModelHolder = viewModelHolder;
+			this.windowService = windowService;
 		}
 
 		public void BringApplicationToFront()
@@ -44,21 +40,39 @@ namespace CF.MusicLibrary.PandaPlayer
 			ApplicationWindow.Activate();
 		}
 
-		public void ShowRateReminderViewDialog(RateDiscViewModel viewModel)
+		public void ShowRateDiscView(Disc disc)
 		{
-			ShowDialog<RateReminderView>(viewModel);
+			var unratedSongsNumber = disc.Songs.Count(s => s.Rating == null);
+			if (unratedSongsNumber == 0)
+			{
+				throw new InvalidOperationException("All disc songs are already rated");
+			}
+
+			if (unratedSongsNumber == disc.Songs.Count)
+			{
+				var rateDiscViewModel = viewModelHolder.RateDiscViewModel;
+				rateDiscViewModel.Load(disc);
+				ShowDialog<RateDiscView>(rateDiscViewModel);
+			}
+			else
+			{
+				windowService.ShowMessageBox(Current($"You've just finished listening of disc '{disc.Title}' that have some songs still unrated. Please devote some time and rate them."),
+					"Rate listened disc", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation);
+			}
 		}
 
 		public void ShowDiscPropertiesView(Disc disc)
 		{
-			editDiscPropertiesViewModel.Load(disc);
-			ShowDialog<EditDiscPropertiesView>(editDiscPropertiesViewModel);
+			var viewModel = viewModelHolder.EditDiscPropertiesViewModel;
+			viewModel.Load(disc);
+			ShowDialog<EditDiscPropertiesView>(viewModel);
 		}
 
 		public void ShowSongPropertiesView(IEnumerable<Song> songs)
 		{
-			editSongPropertiesViewModel.Load(songs);
-			ShowDialog<EditSongPropertiesView>(editSongPropertiesViewModel);
+			var viewModel = viewModelHolder.EditSongPropertiesViewModel;
+			viewModel.Load(songs);
+			ShowDialog<EditSongPropertiesView>(viewModel);
 		}
 
 		private static bool ShowDialog<TDialogView>(object dataContext) where TDialogView : Window, new()

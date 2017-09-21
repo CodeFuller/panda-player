@@ -45,7 +45,7 @@
                 <RowDefinition Height="24"/>
             </Grid.RowDefinitions>
             <views:LibraryExplorerView Grid.Row="0" x:Name="LibraryExplorer" DataContext="{Binding LibraryExplorerViewModel}" />
-            <views:DiscAdviserView Grid.Row="1" DataContext="{Binding DiscAdviserViewModel}" BorderThickness="1,0,1,1" />
+            <views:DiscAdviserView Grid.Row="1" DataContext="{Binding ViewModelHolder.DiscAdviserViewModel}" BorderThickness="1,0,1,1" />
             <views:MusicPlayerView Grid.Row="2" DataContext="{Binding MusicPlayerViewModel}" BorderThickness="1,0,1,0" />
         </Grid>
 
@@ -56,13 +56,13 @@
             </Grid.RowDefinitions>
             <TabControl Grid.Row="0" TabStripPlacement="Bottom" SelectedIndex="{Binding SelectedSongListIndex}" BorderThickness="0">
                 <TabItem Header="Content">
-                    <views:SongListView DataContext="{Binding ExplorerSongListViewModel}" />
+                    <views:SongListView DataContext="{Binding LibraryExplorerViewModel.SongListViewModel}" />
                 </TabItem>
                 <TabItem Header="Playlist">
                     <views:SongListView DataContext="{Binding Playlist}" />
                 </TabItem>
             </TabControl>
-            <views:LoggerView Grid.Row="1" DataContext="{Binding LoggerViewModel}" />
+            <views:LoggerView Grid.Row="1" DataContext="{Binding ViewModelHolder.LoggerViewModel}" />
         </Grid>
     </Grid>
 </Window>

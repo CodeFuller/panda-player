@@ -147,6 +147,8 @@
     <Compile Include="DiscAdviser\RankBasedDiscSorter.cs" />
     <Compile Include="DiscAdviser\RankedDisc.cs" />
     <Compile Include="DiscAdviser\RankedDiscGroup.cs" />
+    <Compile Include="Events\LibraryExplorerDiscChangedEventArgs.cs" />
+    <Compile Include="Events\LibraryLoadedEventArgs.cs" />
     <Compile Include="ViewModels\DiscAdviserViewModel.cs" />
     <Compile Include="ViewModels\EditDiscPropertiesViewModel.cs" />
     <Compile Include="ViewModels\EditedSongProperty.cs" />
@@ -154,6 +156,9 @@
     <Compile Include="ViewModels\Interfaces\IEditDiscPropertiesViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IDiscAdviserViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEditSongPropertiesViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IRateDiscViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IViewModelHolder.cs" />
+    <Compile Include="ViewModels\ViewModelHolder.cs" />
     <Compile Include="Views\DiscAdviserView.xaml.cs">
       <DependentUpon>DiscAdviserView.xaml</DependentUpon>
     </Compile>
@@ -201,9 +206,6 @@
     <Compile Include="ViewModels\MusicPlayerViewModel.cs" />
     <Compile Include="ViewModels\SetRatingMenuItem.cs" />
     <Compile Include="ViewModels\SongListViewModel.cs" />
-    <Compile Include="Views\RateReminderView.xaml.cs">
-      <DependentUpon>RateReminderView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ValueConverters\BooleanToVisibilityValueConverter.cs" />
     <Compile Include="Views\ValueConverters\RatingToImageNameValueConverter.cs" />
     <Compile Include="Views\ValueConverters\SongBitrateValueConverter.cs" />
@@ -261,10 +263,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MusicPlayerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\RateReminderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

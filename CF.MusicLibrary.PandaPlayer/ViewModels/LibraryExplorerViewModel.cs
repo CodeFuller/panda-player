@@ -42,8 +42,19 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public FolderExplorerItem SelectedItem
 		{
 			get { return selectedItem; }
-			set { Set(ref selectedItem, value); }
+			set
+			{
+				Set(ref selectedItem, value);
+				var discItem = selectedItem as DiscExplorerItem;
+				if (discItem != null)
+				{
+					SongListViewModel.SetSongs(discItem.Disc.Songs);
+					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(discItem.Disc));
+               }
+			}
 		}
+
+		public IExplorerSongListViewModel SongListViewModel { get; }
 
 		public ICommand ChangeFolderCommand { get; }
 		public ICommand PlayDiscCommand { get; }
@@ -52,11 +63,15 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public ICommand JumpToLastItemCommand { get; }
 		public ICommand EditDiscPropertiesCommand { get; }
 
-		public LibraryExplorerViewModel(ILibraryBrowser libraryBrowser, ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
+		public LibraryExplorerViewModel(ILibraryBrowser libraryBrowser, IExplorerSongListViewModel songListViewModel, ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
 		{
 			if (libraryBrowser == null)
 			{
 				throw new ArgumentNullException(nameof(libraryBrowser));
+			}
+			if (songListViewModel == null)
+			{
+				throw new ArgumentNullException(nameof(songListViewModel));
 			}
 			if (libraryContentUpdater == null)
 			{
@@ -72,6 +87,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			}
 
 			this.libraryBrowser = libraryBrowser;
+			SongListViewModel = songListViewModel;
 			this.libraryContentUpdater = libraryContentUpdater;
 			this.viewNavigator = viewNavigator;
 			this.windowService = windowService;
@@ -82,6 +98,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			JumpToFirstItemCommand = new RelayCommand(() => SelectedItem = Items.FirstOrDefault());
 			JumpToLastItemCommand = new RelayCommand(() => SelectedItem = Items.LastOrDefault());
 			EditDiscPropertiesCommand = new RelayCommand(EditDiscProperties);
+
+			Messenger.Default.Register<LibraryLoadedEventArgs>(this, e => Load());
+			Messenger.Default.Register<PlayDiscEventArgs>(this, e => SwitchToDisc(e.Disc));
 		}
 
 		public void Load()

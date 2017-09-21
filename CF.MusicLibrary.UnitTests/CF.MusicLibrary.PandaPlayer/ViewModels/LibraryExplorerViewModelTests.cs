@@ -5,6 +5,7 @@ using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.ViewModels;
+using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
 using NSubstitute;
 using NUnit.Framework;
@@ -23,7 +24,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);
 
 			ILibraryContentUpdater libraryContentUpdaterMock = Substitute.For<ILibraryContentUpdater>();
-			LibraryExplorerViewModel target = new LibraryExplorerViewModel(Substitute.For<ILibraryBrowser>(), libraryContentUpdaterMock, Substitute.For<IViewNavigator>(), windowServiceStub);
+			LibraryExplorerViewModel target = new LibraryExplorerViewModel(Substitute.For<ILibraryBrowser>(), Substitute.For<IExplorerSongListViewModel>(),
+				libraryContentUpdaterMock, Substitute.For<IViewNavigator>(), windowServiceStub);
 			target.SelectedItem = new FolderExplorerItem(new Uri("/SomeFolder", UriKind.Relative));
 
 			//	Act
@@ -44,7 +46,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.No);
 
 			ILibraryContentUpdater libraryContentUpdaterMock = Substitute.For<ILibraryContentUpdater>();
-			LibraryExplorerViewModel target = new LibraryExplorerViewModel(Substitute.For<ILibraryBrowser>(), libraryContentUpdaterMock, Substitute.For<IViewNavigator>(), windowServiceStub);
+			LibraryExplorerViewModel target = new LibraryExplorerViewModel(Substitute.For<ILibraryBrowser>(), Substitute.For<IExplorerSongListViewModel>(),
+				libraryContentUpdaterMock, Substitute.For<IViewNavigator>(), windowServiceStub);
 			target.SelectedItem = new DiscExplorerItem(new Disc
 			{
 				Title = "Some title",
@@ -75,7 +78,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);
 
 			ILibraryContentUpdater libraryContentUpdaterMock = Substitute.For<ILibraryContentUpdater>();
-			LibraryExplorerViewModel target = new LibraryExplorerViewModel(Substitute.For<ILibraryBrowser>(), libraryContentUpdaterMock, Substitute.For<IViewNavigator>(), windowServiceStub);
+			LibraryExplorerViewModel target = new LibraryExplorerViewModel(Substitute.For<ILibraryBrowser>(), Substitute.For<IExplorerSongListViewModel>(),
+				libraryContentUpdaterMock, Substitute.For<IViewNavigator>(), windowServiceStub);
 			target.SelectedItem = new DiscExplorerItem(disc);
 
 			//	Act
@@ -102,7 +106,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);
 
 			ILibraryBrowser libraryBrowserMock = Substitute.For<ILibraryBrowser>();
-			LibraryExplorerViewModel target = new LibraryExplorerViewModel(libraryBrowserMock, Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), windowServiceStub);
+			LibraryExplorerViewModel target = new LibraryExplorerViewModel(libraryBrowserMock, Substitute.For<IExplorerSongListViewModel>(),
+				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), windowServiceStub);
 			target.SelectedItem = discItem;
 
 			//	Act
@@ -133,7 +138,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			IWindowService windowServiceStub = Substitute.For<IWindowService>();
 			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);
 
-			LibraryExplorerViewModel target = new LibraryExplorerViewModel(libraryBrowserStub, Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), windowServiceStub);
+			LibraryExplorerViewModel target = new LibraryExplorerViewModel(libraryBrowserStub, Substitute.For<IExplorerSongListViewModel>(),
+				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), windowServiceStub);
 			target.SelectedItem = folderItem;
 			target.ChangeFolderCommand.Execute(null);
 			target.SelectedItem = discItem;
@@ -173,7 +179,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			IWindowService windowServiceStub = Substitute.For<IWindowService>();
 			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);
 
-			LibraryExplorerViewModel target = new LibraryExplorerViewModel(libraryBrowserStub, Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), windowServiceStub);
+			LibraryExplorerViewModel target = new LibraryExplorerViewModel(libraryBrowserStub, Substitute.For<IExplorerSongListViewModel>(),
+				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), windowServiceStub);
 			target.SelectedItem = folderItem21;
 			target.ChangeFolderCommand.Execute(null);
 			target.SelectedItem = discItem;
@@ -217,7 +224,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			IWindowService windowServiceStub = Substitute.For<IWindowService>();
 			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);
 
-			LibraryExplorerViewModel target = new LibraryExplorerViewModel(libraryBrowserStub, Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), windowServiceStub);
+			LibraryExplorerViewModel target = new LibraryExplorerViewModel(libraryBrowserStub, Substitute.For<IExplorerSongListViewModel>(),
+				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), windowServiceStub);
 			target.SelectedItem = folderItem2;
 			target.ChangeFolderCommand.Execute(null);
 			target.SelectedItem = discItem1;

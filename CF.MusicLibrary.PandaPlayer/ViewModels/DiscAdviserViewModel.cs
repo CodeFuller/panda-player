@@ -72,6 +72,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			SwitchToNextDiscCommand = new RelayCommand(SwitchToNextDisc);
 
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => OnPlaylistFinished(e.Playlist));
+			Messenger.Default.Register<LibraryLoadedEventArgs>(this, e => Load());
 		}
 
 		public void Load()

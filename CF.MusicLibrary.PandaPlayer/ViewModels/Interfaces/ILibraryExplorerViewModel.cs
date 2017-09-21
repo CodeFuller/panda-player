@@ -13,6 +13,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		FolderExplorerItem SelectedItem { get; set; }
 
+		IExplorerSongListViewModel SongListViewModel { get; }
+
 		void Load();
 
 		void SwitchToDisc(Disc disc);

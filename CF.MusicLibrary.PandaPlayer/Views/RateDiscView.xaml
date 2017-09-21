@@ -37,8 +37,8 @@
         </Grid>
         <Grid Grid.Row="3" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal">
-                <Button Content="Rate" Width="100" Margin="10" Click="RateButton_Click" />
-                <Button Content="No, Thank you" Width="100" Margin="10" IsCancel="true" Click="CancelButton_Click" />
+                <Button Content="Rate" Width="100" Margin="10" IsDefault="True" Click="RateButton_Click" />
+                <Button Content="No, Thank you" Width="100" Margin="10" IsCancel="true" />
             </StackPanel>
         </Grid>
     </Grid>

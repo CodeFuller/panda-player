@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using CF.MusicLibrary.BL.Objects;
-using CF.MusicLibrary.PandaPlayer.ViewModels;
 
 namespace CF.MusicLibrary.PandaPlayer
 {
@@ -8,9 +7,7 @@ namespace CF.MusicLibrary.PandaPlayer
 	{
 		void BringApplicationToFront();
 
-		void ShowRateDiscViewDialog(RateDiscViewModel viewModel);
-
-		void ShowRateReminderViewDialog(RateDiscViewModel viewModel);
+		void ShowRateDiscView(Disc disc);
 
 		void ShowDiscPropertiesView(Disc disc);
 
