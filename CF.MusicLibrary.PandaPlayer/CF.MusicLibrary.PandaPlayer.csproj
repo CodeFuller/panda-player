@@ -156,9 +156,11 @@
     <Compile Include="ViewModels\Interfaces\IEditDiscPropertiesViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IDiscAdviserViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEditSongPropertiesViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\INavigatedViewModelHolder.cs" />
     <Compile Include="ViewModels\Interfaces\IRateDiscViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IViewModelHolder.cs" />
-    <Compile Include="ViewModels\ViewModelHolder.cs" />
+    <Compile Include="ViewModels\Interfaces\IApplicationViewModelHolder.cs" />
+    <Compile Include="ViewModels\ApplicationViewModelHolder.cs" />
+    <Compile Include="ViewModels\NavigatedViewModelHolder.cs" />
     <Compile Include="Views\DiscAdviserView.xaml.cs">
       <DependentUpon>DiscAdviserView.xaml</DependentUpon>
     </Compile>

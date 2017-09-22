@@ -45,7 +45,8 @@ namespace CF.MusicLibrary.PandaPlayer
 				return await library.GetDiscsAsync(true);
 			}));
 
-			DIContainer.RegisterType<IViewModelHolder, ViewModelHolder>(new ContainerControlledLifetimeManager());
+			DIContainer.RegisterType<IApplicationViewModelHolder, ApplicationViewModelHolder>();
+			DIContainer.RegisterType<INavigatedViewModelHolder, NavigatedViewModelHolder>();
 			DIContainer.RegisterType<ILibraryExplorerViewModel, LibraryExplorerViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<IExplorerSongListViewModel, ExplorerSongListViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<ISongPlaylistViewModel, SongPlaylistViewModel>(new ContainerControlledLifetimeManager());
@@ -64,7 +65,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<IScrobbler, LastFMScrobbler>(new InjectionConstructor(typeof(ILastFMApiClient)));
 			DIContainer.RegisterType<IMessageLogger, LoggerViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<ILibraryContentUpdater, LibraryContentUpdater>();
-			DIContainer.RegisterType<IViewNavigator, ViewNavigator>();
+			DIContainer.RegisterType<IViewNavigator, ViewNavigator>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<IDiscAdviser, RankBasedDiscAdviser>();
 			DIContainer.RegisterType<IDiscGroupper, MyLibraryDiscGroupper>();
 			DIContainer.RegisterType<IDiscGroupSorter, RankBasedDiscSorter>();

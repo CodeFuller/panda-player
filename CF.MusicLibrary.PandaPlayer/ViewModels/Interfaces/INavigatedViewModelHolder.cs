@@ -1,13 +1,7 @@
 ﻿namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
-	public interface IViewModelHolder
+	public interface INavigatedViewModelHolder
 	{
-		ILibraryExplorerViewModel LibraryExplorerViewModel { get; }
-
-		IDiscAdviserViewModel DiscAdviserViewModel { get; }
-
-		ILoggerViewModel LoggerViewModel { get; }
-
 		IEditDiscPropertiesViewModel EditDiscPropertiesViewModel { get; }
 
 		IEditSongPropertiesViewModel EditSongPropertiesViewModel { get; }
