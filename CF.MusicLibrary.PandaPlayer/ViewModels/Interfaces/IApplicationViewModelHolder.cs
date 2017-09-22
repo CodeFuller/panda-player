@@ -6,6 +6,8 @@
 
 		IDiscAdviserViewModel DiscAdviserViewModel { get; }
 
+		IDiscArtViewModel DiscArtViewModel { get; }
+
 		ILoggerViewModel LoggerViewModel { get; }
 	}
 }

@@ -15,6 +15,8 @@ namespace CF.MusicLibrary.BL.Interfaces
 
 		Task SetDiscCoverImage(Disc disc, string coverImageFileName);
 
+		Task<string> GetDiscCoverImage(Disc disc);
+
 		Task UpdateSongTagData(Song song, UpdatedSongProperties updatedProperties);
 
 		Task FixSongTagData(Song song);

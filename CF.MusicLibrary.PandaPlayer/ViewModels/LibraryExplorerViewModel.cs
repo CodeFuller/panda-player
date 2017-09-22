@@ -50,7 +50,12 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				{
 					SongListViewModel.SetSongs(discItem.Disc.Songs);
 					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(discItem.Disc));
-               }
+				}
+				else
+				{
+					SongListViewModel.SetSongs(Enumerable.Empty<Song>());
+					Messenger.Default.Send(new LibraryExplorerFolderChangedEventArgs(selectedItem?.Uri));
+				}
 			}
 		}
 
