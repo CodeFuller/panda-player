@@ -1,4 +1,6 @@
-﻿using CF.Library.Core.Configuration;
+﻿using System.IO;
+using CF.Library.Core;
+using CF.Library.Core.Configuration;
 using CF.Library.Core.Facades;
 using CF.Library.Core.Interfaces;
 using CF.Library.Core.Logging;
@@ -16,12 +18,15 @@ using CF.MusicLibrary.PandaPlayer.DiscAdviser;
 using CF.MusicLibrary.PandaPlayer.ViewModels;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
+using CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist;
+using CF.MusicLibrary.PandaPlayer.ViewModels.Player;
 using CF.MusicLibrary.Tagger;
 using CF.MusicLibrary.Universal.Interfaces;
 using Microsoft.Practices.Unity;
 
 namespace CF.MusicLibrary.PandaPlayer
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "It's ok for Composition Root")]
 	internal class Bootstrapper : UnityBootstrapper<ApplicationViewModel>
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "It's ok for Composition Root")]
@@ -33,6 +38,9 @@ namespace CF.MusicLibrary.PandaPlayer
 
 			string lastFMSharedSecret = AppSettings.GetPrivateRequiredValue<string>("LastFMSharedSecret");
 			string lastFMSessionKey = AppSettings.GetPrivateRequiredValue<string>("LastFMSessionKey");
+
+			string appDataPath = AppSettings.GetRequiredValue<string>("AppDataPath");
+			string storedPlaylistFileName = Path.Combine(appDataPath, "Playlist.json");
 
 			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepositoryEF>(new InjectionConstructor());
 			DIContainer.RegisterType<ISongTagger, SongTagger>();
@@ -49,7 +57,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<INavigatedViewModelHolder, NavigatedViewModelHolder>();
 			DIContainer.RegisterType<ILibraryExplorerViewModel, LibraryExplorerViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<IExplorerSongListViewModel, ExplorerSongListViewModel>(new ContainerControlledLifetimeManager());
-			DIContainer.RegisterType<ISongPlaylistViewModel, SongPlaylistViewModel>(new ContainerControlledLifetimeManager());
+			DIContainer.RegisterType<ISongPlaylistViewModel, PersistentSongPlaylistViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<IEditDiscPropertiesViewModel, EditDiscPropertiesViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<IEditSongPropertiesViewModel, EditSongPropertiesViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<IMusicPlayerViewModel, MusicPlayerViewModel>(new ContainerControlledLifetimeManager());
@@ -72,6 +80,11 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<IDiscGroupSorter, RankBasedDiscSorter>();
 			DIContainer.RegisterType<ILibraryStructurer, MyLibraryStructurer>();
 			DIContainer.RegisterType<IWindowService, WpfWindowService>();
+			DIContainer.RegisterType<IPlaylistDataRepository, JsonFilePlaylistDataRepository>(new InjectionConstructor(typeof(IFileSystemFacade), storedPlaylistFileName));
+			DIContainer.RegisterType<IAudioPlayer, AudioPlayer>();
+			DIContainer.RegisterType<IMediaPlayerFacade, MediaPlayerFacade>();
+			DIContainer.RegisterType<ISongPlaybacksRegistrator, SongPlaybacksRegistrator>();
+			DIContainer.RegisterType<IClock, SystemClock>();
 		}
 	}
 }

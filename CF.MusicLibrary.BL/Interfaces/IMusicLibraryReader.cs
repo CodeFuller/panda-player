@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
@@ -20,7 +19,7 @@ namespace CF.MusicLibrary.BL.Interfaces
 
 		Task<IEnumerable<SongTagType>> GetSongTagTypes(Song song);
 
-		Task<FileInfo> GetSongFile(Song song);
+		Task<string> GetSongFile(Song song);
 
 		Task<string> GetDiscCoverImage(Disc disc);
 

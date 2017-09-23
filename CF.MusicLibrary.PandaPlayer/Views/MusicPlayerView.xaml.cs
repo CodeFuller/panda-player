@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 using System.Windows.Input;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
@@ -14,7 +15,20 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 			InitializeComponent();
 		}
 
-		public IMusicPlayerViewModel ViewModel => DataContext as IMusicPlayerViewModel;
+		public IMusicPlayerViewModel ViewModel
+		{
+			get
+			{
+				var viewModel = DataContext as IMusicPlayerViewModel;
+				if (viewModel == null)
+				{
+					throw new InvalidOperationException("MusicPlayerViewModel is not set");
+				}
+
+				return viewModel;
+			}
+		}
+		
 
 		private void CurrSongProgressBar_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
@@ -24,7 +38,7 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 				return;
 			}
 
-			ViewModel?.SetCurrentSongProgress(GetProgressBarClickValue(progressBar, e));
+			ViewModel.CurrSongProgress = GetProgressBarClickValue(progressBar, e);
 		}
 
 		private void VolumeBar_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

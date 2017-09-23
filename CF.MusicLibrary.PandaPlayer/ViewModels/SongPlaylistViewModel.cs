@@ -3,13 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
+using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels
 {
 	public class SongPlaylistViewModel : SongListViewModel, ISongPlaylistViewModel
 	{
-		private int CurrentSongIndex { get; set; }
+		private int currentSongIndex;
+		private int CurrentSongIndex
+		{
+			get { return currentSongIndex; }
+			set
+			{
+				currentSongIndex = value;
+				Messenger.Default.Send(new PlaylistChangedEventArgs(this));
+			}
+		}
 
 		private SongListItem CurrentItem => SongItems != null && CurrentSongIndex >= 0 && CurrentSongIndex < SongItems.Count ? SongItems[CurrentSongIndex] : null;
 

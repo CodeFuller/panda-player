@@ -50,7 +50,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 			this.musicLibrary = musicLibrary;
 
-			Messenger.Default.Register<NewSongPlaybackStartedEventArgs>(this, e => CurrentSong = e.Song);
+			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => CurrentSong = e.Playlist.CurrentSong);
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => CurrentSong = null);
 			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => CurrentDisc = e.Disc);
 			Messenger.Default.Register<LibraryExplorerFolderChangedEventArgs>(this, e => CurrentDisc = null);

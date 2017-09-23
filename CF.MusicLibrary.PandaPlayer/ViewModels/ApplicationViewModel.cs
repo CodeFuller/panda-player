@@ -67,10 +67,16 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => SwitchToExplorerSongList());
 		}
 
-		private async Task Load()
+		public async Task Load()
 		{
 			await discLibrary.Load();
-			Messenger.Default.Send(new LibraryLoadedEventArgs());
+			Messenger.Default.Send(new LibraryLoadedEventArgs(discLibrary));
+
+			//	Setting playlist active if some previous playlist was loaded.
+			if (Playlist.Songs.Any())
+			{
+				SwitchToSongPlaylist();
+			}
 		}
 
 		private void OnPlayDiscLaunched(PlayDiscEventArgs message)
@@ -99,7 +105,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			}
 			else
 			{
-				MusicPlayerViewModel.Resume();
+				MusicPlayerViewModel.Play();
 			}
 		}
 

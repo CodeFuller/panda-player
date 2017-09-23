@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CF.Library.Core.Extensions;
@@ -78,7 +77,7 @@ namespace CF.MusicLibrary.BL
 			return await libraryStorage.GetSongTagTypes(song);
 		}
 
-		public async Task<FileInfo> GetSongFile(Song song)
+		public async Task<string> GetSongFile(Song song)
 		{
 			return await libraryStorage.GetSongFile(song);
 		}

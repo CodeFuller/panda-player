@@ -13,6 +13,12 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 	[TestFixture]
 	public class DiscArtViewModelTests
 	{
+		[SetUp]
+		public void SetUp()
+		{
+			Messenger.Reset();
+		}
+
 		[Test]
 		public void Constructor_IfMusicLibraryArgumentIsNull_ThrowsArgumentNullException()
 		{
@@ -89,6 +95,9 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			var songDisc = new Disc();
 			var song = new Song { Disc = songDisc };
 
+			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
+			songPlaylistStub.CurrentSong.Returns(song);
+
 			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();
 			musicLibraryStub.GetDiscCoverImage(disc).Returns("SomeDiscCover.jpg");
 			musicLibraryStub.GetDiscCoverImage(songDisc).Returns("SomeSongDiscCover.jpg");
@@ -97,7 +106,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			//	Act
 
 			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(disc));
-			Messenger.Default.Send(new NewSongPlaybackStartedEventArgs(song));
+			Messenger.Default.Send(new PlaylistChangedEventArgs(songPlaylistStub));
 			var currImageFileName = target.CurrImageFileName;
 
 			//	Assert
@@ -114,6 +123,9 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			var songDisc = new Disc();
 			var song = new Song { Disc = songDisc };
 
+			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
+			songPlaylistStub.CurrentSong.Returns(song);
+
 			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();
 			musicLibraryStub.GetDiscCoverImage(disc).Returns("SomeDiscCover.jpg");
 			musicLibraryStub.GetDiscCoverImage(songDisc).Returns("SomeSongDiscCover.jpg");
@@ -122,8 +134,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			//	Act
 
 			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(disc));
-			Messenger.Default.Send(new NewSongPlaybackStartedEventArgs(song));
-			Messenger.Default.Send(new PlaylistFinishedEventArgs(Substitute.For<ISongPlaylistViewModel>()));
+			Messenger.Default.Send(new PlaylistChangedEventArgs(songPlaylistStub));
+			Messenger.Default.Send(new PlaylistFinishedEventArgs(songPlaylistStub));
 			var currImageFileName = target.CurrImageFileName;
 
 			//	Assert

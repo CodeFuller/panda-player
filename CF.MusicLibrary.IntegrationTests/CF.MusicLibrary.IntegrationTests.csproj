@@ -34,8 +34,8 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.Tests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6472.39302, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6472.39302\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6474.30547, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6474.30547\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CF.Library.Unity, Version=0.1.6472.39381, Culture=neutral, processorArchitecture=MSIL">
@@ -100,6 +100,7 @@
     <Compile Include="CF.MusicLibrary.LibraryChecker\BootstrapperTests.cs" />
     <Compile Include="CF.MusicLibrary.LibraryToolkit\BootstrapperTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\BootstrapperTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\PersistentPlaylist\JsonFilePlaylistDataRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -44,8 +44,8 @@
     <ApplicationIcon>PandaPlayer.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6472.39302, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6472.39302\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6474.30547, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6474.30547\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CF.Library.Unity, Version=0.1.6472.39381, Culture=neutral, processorArchitecture=MSIL">
@@ -150,7 +150,11 @@
     <Compile Include="Events\LibraryExplorerDiscChangedEventArgs.cs" />
     <Compile Include="Events\LibraryExplorerFolderChangedEventArgs.cs" />
     <Compile Include="Events\LibraryLoadedEventArgs.cs" />
-    <Compile Include="Events\NewSongPlaybackStartedEventArgs.cs" />
+    <Compile Include="Events\PlaylistChangedEventArgs.cs" />
+    <Compile Include="Events\PlaylistLoadedEventArgs.cs" />
+    <Compile Include="ViewModels\PersistentPlaylist\IPlaylistDataRepository.cs" />
+    <Compile Include="ViewModels\PersistentPlaylist\JsonFilePlaylistDataRepository.cs" />
+    <Compile Include="ViewModels\PersistentPlaylist\PlaylistData.cs" />
     <Compile Include="ViewModels\DiscAdviserViewModel.cs" />
     <Compile Include="ViewModels\DiscArtViewModel.cs" />
     <Compile Include="ViewModels\EditDiscPropertiesViewModel.cs" />
@@ -165,6 +169,15 @@
     <Compile Include="ViewModels\Interfaces\IApplicationViewModelHolder.cs" />
     <Compile Include="ViewModels\ApplicationViewModelHolder.cs" />
     <Compile Include="ViewModels\NavigatedViewModelHolder.cs" />
+    <Compile Include="ViewModels\PersistentPlaylist\PersistentSongPlaylistViewModel.cs" />
+    <Compile Include="ViewModels\PersistentPlaylist\PlaylistSongData.cs" />
+    <Compile Include="ViewModels\Player\IAudioPlayer.cs" />
+    <Compile Include="ViewModels\Player\IMediaPlayerFacade.cs" />
+    <Compile Include="ViewModels\Player\ISongPlaybacksRegistrator.cs" />
+    <Compile Include="ViewModels\Player\MediaPlayerFacade.cs" />
+    <Compile Include="ViewModels\Player\AudioPlayer.cs" />
+    <Compile Include="ViewModels\Player\SongMediaFinishedEventArgs.cs" />
+    <Compile Include="ViewModels\Player\SongPlaybacksRegistrator.cs" />
     <Compile Include="Views\DiscAdviserView.xaml.cs">
       <DependentUpon>DiscAdviserView.xaml</DependentUpon>
     </Compile>
@@ -212,7 +225,7 @@
     <Compile Include="ViewModels\LoggerViewModel.cs" />
     <Compile Include="ViewModels\Logging\LogMessage.cs" />
     <Compile Include="ViewModels\Logging\LogMessageLevel.cs" />
-    <Compile Include="ViewModels\MusicPlayerViewModel.cs" />
+    <Compile Include="ViewModels\Player\MusicPlayerViewModel.cs" />
     <Compile Include="ViewModels\SetRatingMenuItem.cs" />
     <Compile Include="ViewModels\SongListViewModel.cs" />
     <Compile Include="Views\ValueConverters\BooleanToVisibilityValueConverter.cs" />

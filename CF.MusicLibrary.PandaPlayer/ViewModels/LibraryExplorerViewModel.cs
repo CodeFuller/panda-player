@@ -106,6 +106,14 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 			Messenger.Default.Register<LibraryLoadedEventArgs>(this, e => Load());
 			Messenger.Default.Register<PlayDiscEventArgs>(this, e => SwitchToDisc(e.Disc));
+			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e =>
+			{
+				var playlistDisc = e.Playlist.PlayedDisc;
+				if (playlistDisc != null)
+				{
+					SwitchToDisc(playlistDisc);
+				}
+			});
 		}
 
 		public void Load()
@@ -131,7 +139,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			SelectedItem = Items.OfType<DiscExplorerItem>().SingleOrDefault(it => it.Disc.Id == disc.Id);
 		}
 
-		private void ChangeFolder()
+		public void ChangeFolder()
 		{
 			ChangeFolder(SelectedItem);
 		}
@@ -147,7 +155,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Send(new PlayDiscEventArgs(discItem.Disc));
 		}
 
-		private async Task DeleteDisc()
+		public async Task DeleteDisc()
 		{
 			var discItem = SelectedItem as DiscExplorerItem;
 			if (discItem == null)

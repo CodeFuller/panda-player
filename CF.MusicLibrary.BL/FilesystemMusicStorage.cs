@@ -163,9 +163,9 @@ namespace CF.MusicLibrary.BL
 			return await Task.Run(() => SongTagger.GetTagTypes(UriToFilesystemPath(song.Uri)));
 		}
 
-		public Task<FileInfo> GetSongFile(Song song)
+		public Task<string> GetSongFile(Song song)
 		{
-			return Task.FromResult(new FileInfo(UriToFilesystemPath(song.Uri)));
+			return Task.FromResult(UriToFilesystemPath(song.Uri));
 		}
 
 		public async Task ChangeDiscUri(Disc disc, Uri newDiscUri)
