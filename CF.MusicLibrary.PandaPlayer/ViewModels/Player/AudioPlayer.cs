@@ -118,6 +118,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 		{
 			currentSongFile = null;
 			OnPlaybackInterrupted();
+			mediaPlayer.Close();
 			CurrSongPosition = TimeSpan.Zero;
 			CurrSongLength = TimeSpan.Zero;
 			SongMediaFinished?.Invoke(this, new SongMediaFinishedEventArgs());

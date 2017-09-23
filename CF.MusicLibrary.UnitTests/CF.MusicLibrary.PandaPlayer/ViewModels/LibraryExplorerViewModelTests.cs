@@ -4,11 +4,14 @@ using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
+using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.ViewModels;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
+using GalaSoft.MvvmLight.Messaging;
 using NSubstitute;
 using NUnit.Framework;
+using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 {
@@ -96,6 +99,52 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			//	Assert
 
 			libraryContentUpdaterMock.Received(1).DeleteDisc(discItem.Disc);
+		}
+
+		[Test]
+		public void DeleteDisc_IfDiscIsDeleted_SendsLibraryExplorerDiscChangedEventBeforeDiscDeletion()
+		{
+			//	Arrange
+
+			var discItem = new DiscExplorerItem(new Disc
+			{
+				Title = "Some title",
+				Uri = new Uri("/SomeFolder", UriKind.Relative),
+			});
+
+			var folderItem = new FolderExplorerItem(new Uri("/SomeFolder", UriKind.Relative));
+
+			ILibraryBrowser libraryBrowserStub = Substitute.For<ILibraryBrowser>();
+			libraryBrowserStub.GetChildFolderItems(folderItem).Returns(new[] { discItem });
+
+			IWindowService windowServiceStub = Substitute.For<IWindowService>();
+			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);
+
+			bool receivedEvent = false;
+			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => receivedEvent = (e.Disc == null));
+
+			ILibraryContentUpdater libraryContentUpdater = Substitute.For<ILibraryContentUpdater>();
+			libraryContentUpdater.When(x => x.DeleteDisc(Arg.Any<Disc>())).Do(x =>
+			{
+				if (!receivedEvent)
+				{
+					throw new InvalidOperationException(Current($"{nameof(LibraryExplorerDiscChangedEventArgs)} should be sent before disc deletion"));
+				}
+			});
+
+			LibraryExplorerViewModel target = new LibraryExplorerViewModel(libraryBrowserStub, Substitute.For<IExplorerSongListViewModel>(),
+				libraryContentUpdater, Substitute.For<IViewNavigator>(), windowServiceStub);
+			target.SelectedItem = folderItem;
+			target.ChangeFolder();
+			target.SelectedItem = discItem;
+
+			//	Act
+
+			target.DeleteDisc().Wait();
+
+			//	Assert
+
+			Assert.IsTrue(receivedEvent);
 		}
 
 		[Test]

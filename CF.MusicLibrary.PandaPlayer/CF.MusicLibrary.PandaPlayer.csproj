@@ -229,6 +229,7 @@
     <Compile Include="ViewModels\SetRatingMenuItem.cs" />
     <Compile Include="ViewModels\SongListViewModel.cs" />
     <Compile Include="Views\ValueConverters\BooleanToVisibilityValueConverter.cs" />
+    <Compile Include="Views\ValueConverters\ImageSourceValueConverter.cs" />
     <Compile Include="Views\ValueConverters\RatingToImageNameValueConverter.cs" />
     <Compile Include="Views\ValueConverters\SongBitrateValueConverter.cs" />
     <Compile Include="Views\ValueConverters\SongDurationValueConverter.cs" />

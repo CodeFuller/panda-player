@@ -169,6 +169,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				return;
 			}
 
+			//	We're sending this event to release any disc images hold by DiscArtViewModel.
+			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null));
 			await libraryContentUpdater.DeleteDisc(discItem.Disc);
 
 			libraryBrowser.RemoveDiscItem(discItem);

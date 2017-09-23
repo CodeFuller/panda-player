@@ -20,5 +20,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 		void Play();
 
 		void Pause();
+
+		void Close();
 	}
 }
