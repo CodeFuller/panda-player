@@ -9,8 +9,9 @@ namespace CF.MusicLibrary.LibraryChecker
 		CheckDiscsConsistency = 0x01,
 		CheckLibraryStorage = 0x02,
 		CheckTagData = 0x04,
-		CheckArtistsOnLastFM = 0x08,
-		CheckAlbumsOnLastFM = 0x10,
-		CheckSongsOnLastFM = 0x20,
+		CheckDiscArts = 0x08,
+		CheckArtistsOnLastFM = 0x10,
+		CheckAlbumsOnLastFM = 0x20,
+		CheckSongsOnLastFM = 0x40,
 	}
 }

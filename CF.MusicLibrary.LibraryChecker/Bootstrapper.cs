@@ -12,6 +12,7 @@ using CF.MusicLibrary.LibraryChecker.Checkers;
 using CF.MusicLibrary.LibraryChecker.Registrators;
 using CF.MusicLibrary.Local;
 using CF.MusicLibrary.Tagger;
+using CF.MusicLibrary.Universal.DiscArt;
 using Microsoft.Practices.Unity;
 
 namespace CF.MusicLibrary.LibraryChecker
@@ -34,11 +35,13 @@ namespace CF.MusicLibrary.LibraryChecker
 			DIContainer.RegisterType<ILastFMApiClient, LastFMApiClient>(new InjectionConstructor(typeof(ITokenAuthorizer), @"66b7aec24069590c0d674448f7e0538d", @"2ba2f3f93caedbb3816aafefdbb4ebaa", @"qDaJ5D15454f2XPHSOytLE0yDLrUqmX2"));
 			DIContainer.RegisterType<IMessageLogger, ConsoleLogger>(new ContainerControlledLifetimeManager(), new InjectionConstructor(true));
 			DIContainer.RegisterType<IFileSystemFacade, FileSystemFacade>();
+			DIContainer.RegisterType<IDiscArtValidator, DiscArtValidator>();
 
 			DIContainer.RegisterType<IDiscConsistencyChecker, DiscConsistencyChecker>();
 			DIContainer.RegisterType<IStorageConsistencyChecker, StorageConsistencyChecker>();
 			DIContainer.RegisterType<ITagDataConsistencyChecker, TagDataConsistencyChecker>();
 			DIContainer.RegisterType<ILastFMConsistencyChecker, LastFMConsistencyChecker>();
+			DIContainer.RegisterType<IDiscArtConsistencyChecker, DiscArtConsistencyChecker>();
 
 			DIContainer.RegisterType<ILibraryInconsistencyFilter, LibraryInconsistencyFilter>();
 			DIContainer.RegisterType<ILibraryInconsistencyRegistrator, InconsistencyRegistratorToLog>("Inner");

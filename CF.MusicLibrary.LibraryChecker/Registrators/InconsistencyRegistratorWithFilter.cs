@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Universal.DiscArt;
 
 namespace CF.MusicLibrary.LibraryChecker.Registrators
 {
@@ -121,6 +122,26 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 		public void RegisterInconsistency_LibraryData(string inconsistencyMessage)
 		{
 			inconsistencyRegistrator.RegisterInconsistency_LibraryData(inconsistencyMessage);
+		}
+
+		public void RegisterInconsistency_DiscCoverIsTooSmall(Disc disc, DiscArtImageInfo imageInfo)
+		{
+			inconsistencyRegistrator.RegisterInconsistency_DiscCoverIsTooSmall(disc, imageInfo);
+		}
+
+		public void RegisterInconsistency_DiscCoverIsTooBig(Disc disc, DiscArtImageInfo imageInfo)
+		{
+			inconsistencyRegistrator.RegisterInconsistency_DiscCoverIsTooBig(disc, imageInfo);
+		}
+
+		public void RegisterInconsistency_ImageFileIsTooBig(Disc disc, DiscArtImageInfo imageInfo)
+		{
+			inconsistencyRegistrator.RegisterInconsistency_ImageFileIsTooBig(disc, imageInfo);
+		}
+
+		public void RegisterInconsistency_ImageHasUnsupportedFormat(Disc disc, DiscArtImageInfo imageInfo)
+		{
+			inconsistencyRegistrator.RegisterInconsistency_ImageHasUnsupportedFormat(disc, imageInfo);
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Universal.DiscArt;
 using static CF.Library.Core.Application;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
@@ -87,6 +88,26 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 		public void RegisterInconsistency_LibraryData(string inconsistencyMessage)
 		{
 			LogInconsistency(inconsistencyMessage);
+		}
+
+		public void RegisterInconsistency_DiscCoverIsTooSmall(Disc disc, DiscArtImageInfo imageInfo)
+		{
+			LogInconsistency(Current($"Disc cover is too small: {imageInfo.Width} x {imageInfo.Height} for {disc.Uri}"));
+		}
+
+		public void RegisterInconsistency_DiscCoverIsTooBig(Disc disc, DiscArtImageInfo imageInfo)
+		{
+			LogInconsistency(Current($"Disc cover is too big: {imageInfo.Width} x {imageInfo.Height} for {disc.Uri}"));
+		}
+
+		public void RegisterInconsistency_ImageFileIsTooBig(Disc disc, DiscArtImageInfo imageInfo)
+		{
+			LogInconsistency(Current($"Disc cover file is too big: {imageInfo.FileSize:n0} for {disc.Uri}"));
+		}
+
+		public void RegisterInconsistency_ImageHasUnsupportedFormat(Disc disc, DiscArtImageInfo imageInfo)
+		{
+			LogInconsistency(Current($"Disc cover has unsupported format '{imageInfo.FormatName}' for {disc.Uri}"));
 		}
 
 		private static void LogInconsistency(string inconsistencyMessage)

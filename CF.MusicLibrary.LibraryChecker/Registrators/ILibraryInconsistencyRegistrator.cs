@@ -2,7 +2,8 @@
 
 namespace CF.MusicLibrary.LibraryChecker.Registrators
 {
-	public interface ILibraryInconsistencyRegistrator : IDiscInconsistencyRegistrator, ITagDataInconsistencyRegistrator, ILastFMInconsistencyRegistrator, ILibraryStorageInconsistencyRegistrator
+	public interface ILibraryInconsistencyRegistrator : IDiscInconsistencyRegistrator, ITagDataInconsistencyRegistrator, ILastFMInconsistencyRegistrator,
+		ILibraryStorageInconsistencyRegistrator, IDiscArtInconsistencyRegistrator
 	{
 	}
 }

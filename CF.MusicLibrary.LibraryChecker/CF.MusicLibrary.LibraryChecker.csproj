@@ -96,13 +96,16 @@
     </Compile>
     <Compile Include="ApplicationLogic.cs" />
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Checkers\DiscArtConsistencyChecker.cs" />
     <Compile Include="Checkers\DiscConsistencyChecker.cs" />
+    <Compile Include="Checkers\IDiscArtConsistencyChecker.cs" />
     <Compile Include="Checkers\IDiscConsistencyChecker.cs" />
     <Compile Include="Checkers\IStorageConsistencyChecker.cs" />
     <Compile Include="Checkers\StorageConsistencyChecker.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="LaunchCommand.cs" />
     <Compile Include="LibraryCheckFlags.cs" />
+    <Compile Include="Registrators\IDiscArtInconsistencyRegistrator.cs" />
     <Compile Include="Registrators\IDiscInconsistencyRegistrator.cs" />
     <Compile Include="Checkers\ILastFMConsistencyChecker.cs" />
     <Compile Include="Checkers\LastFMConsistencyChecker.cs" />
@@ -152,6 +155,10 @@
     <ProjectReference Include="..\CF.MusicLibrary.Tagger\CF.MusicLibrary.Tagger.csproj">
       <Project>{931CDE55-D545-47AF-B525-06AB15E74C3E}</Project>
       <Name>CF.MusicLibrary.Tagger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.Universal\CF.MusicLibrary.Universal.csproj">
+      <Project>{C82EEE4A-B797-40A5-B733-34DF2DA02A85}</Project>
+      <Name>CF.MusicLibrary.Universal</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

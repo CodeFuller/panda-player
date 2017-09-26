@@ -18,10 +18,12 @@ namespace CF.MusicLibrary.LibraryChecker
 		private readonly IStorageConsistencyChecker storageConsistencyChecker;
 		private readonly ITagDataConsistencyChecker tagDataChecker;
 		private readonly ILastFMConsistencyChecker lastFMConsistencyChecker;
+		private readonly IDiscArtConsistencyChecker discArtConsistencyChecker;
 		private readonly IMusicLibrary musicLibrary;
 
 		public ApplicationLogic(IDiscConsistencyChecker discConsistencyChecker, IStorageConsistencyChecker storageConsistencyChecker,
-			ITagDataConsistencyChecker tagDataChecker, ILastFMConsistencyChecker lastFMConsistencyChecker, IMusicLibrary musicLibrary)
+			ITagDataConsistencyChecker tagDataChecker, ILastFMConsistencyChecker lastFMConsistencyChecker, IDiscArtConsistencyChecker discArtConsistencyChecker,
+			IMusicLibrary musicLibrary)
 		{
 			if (discConsistencyChecker == null)
 			{
@@ -39,6 +41,10 @@ namespace CF.MusicLibrary.LibraryChecker
 			{
 				throw new ArgumentNullException(nameof(lastFMConsistencyChecker));
 			}
+			if (discArtConsistencyChecker == null)
+			{
+				throw new ArgumentNullException(nameof(discArtConsistencyChecker));
+			}
 			if (musicLibrary == null)
 			{
 				throw new ArgumentNullException(nameof(musicLibrary));
@@ -48,6 +54,7 @@ namespace CF.MusicLibrary.LibraryChecker
 			this.storageConsistencyChecker = storageConsistencyChecker;
 			this.tagDataChecker = tagDataChecker;
 			this.lastFMConsistencyChecker = lastFMConsistencyChecker;
+			this.discArtConsistencyChecker = discArtConsistencyChecker;
 			this.musicLibrary = musicLibrary;
 		}
 
@@ -61,6 +68,7 @@ namespace CF.MusicLibrary.LibraryChecker
 				{ "check-discs", LibraryCheckFlags.CheckDiscsConsistency },
 				{ "check-storage", LibraryCheckFlags.CheckLibraryStorage },
 				{ "check-tags", LibraryCheckFlags.CheckTagData },
+				{ "check-arts", LibraryCheckFlags.CheckDiscArts },
 				{ "check-artists", LibraryCheckFlags.CheckArtistsOnLastFM },
 				{ "check-albums", LibraryCheckFlags.CheckAlbumsOnLastFM },
 				{ "check-songs", LibraryCheckFlags.CheckSongsOnLastFM },
@@ -108,6 +116,7 @@ namespace CF.MusicLibrary.LibraryChecker
 			Console.Error.WriteLine("        --check-discs=yes|no        Default");
 			Console.Error.WriteLine("        --check-storage=yes|no      Default");
 			Console.Error.WriteLine("        --check-tags=yes|no");
+			Console.Error.WriteLine("        --check-arts=yes|no");
 			Console.Error.WriteLine("        --check-artists=yes|no");
 			Console.Error.WriteLine("        --check-albums=yes|no");
 			Console.Error.WriteLine("        --check-songs=yes|no");
@@ -153,6 +162,11 @@ namespace CF.MusicLibrary.LibraryChecker
 			if ((checkFlags & LibraryCheckFlags.CheckTagData) != 0)
 			{
 				await tagDataChecker.CheckTagData(discLibrary.Songs);
+			}
+
+			if ((checkFlags & LibraryCheckFlags.CheckDiscArts) != 0)
+			{
+				await discArtConsistencyChecker.CheckDiscArtsConsistency(discLibrary.Discs);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckArtistsOnLastFM) != 0)
