@@ -1,6 +1,5 @@
-﻿using System;
-using System.Windows;
-using CF.MusicLibrary.PandaPlayer.ViewModels;
+﻿using System.Windows;
+using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace CF.MusicLibrary.PandaPlayer.Views
 {
@@ -9,6 +8,8 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 	/// </summary>
 	public partial class RateDiscView : Window
 	{
+		private IRateDiscViewModel ViewModel => DataContext.GetViewModel<IRateDiscViewModel>();
+
 		public RateDiscView()
 		{
 			InitializeComponent();
@@ -16,14 +17,8 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 
 		private async void RateButton_Click(object sender, RoutedEventArgs e)
 		{
-			var viewModel = DataContext as RateDiscViewModel;
-			if (viewModel == null)
-			{
-				throw new InvalidOperationException("ViewModel is not set");
-			}
-
 			DialogResult = true;
-			await viewModel.Save();
+			await ViewModel.Save();
 		}
 	}
 }

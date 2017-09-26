@@ -10,12 +10,15 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public IRateDiscViewModel RateDiscViewModel { get; }
 
+		public IEditDiscArtViewModel EditDiscArtViewModel { get; }
+
 		public NavigatedViewModelHolder(IEditDiscPropertiesViewModel editDiscPropertiesViewModel, IEditSongPropertiesViewModel editSongPropertiesViewModel,
-			IRateDiscViewModel rateDiscViewModel)
+			IRateDiscViewModel rateDiscViewModel, IEditDiscArtViewModel editDiscArtViewModel)
 		{
 			EditDiscPropertiesViewModel = editDiscPropertiesViewModel;
 			EditSongPropertiesViewModel = editSongPropertiesViewModel;
 			RateDiscViewModel = rateDiscViewModel;
+			EditDiscArtViewModel = editDiscArtViewModel;
 		}
 	}
 }

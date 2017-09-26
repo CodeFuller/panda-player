@@ -34,8 +34,8 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.Tests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6474.30547, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6474.30547\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6477.15924, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6477.15924\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
@@ -68,6 +68,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -103,7 +104,9 @@
     <Compile Include="CF.MusicLibrary.BL\ItemUriPartsTests.cs" />
     <Compile Include="CF.MusicLibrary.LastFM\LastFMScrobblerTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\ApplicationViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscArtViewModelTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscArt\DiscArtImageFileTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscArt\DiscArtViewModelTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscArt\EditDiscArtViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\EditDiscPropertiesViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\EditSongPropertiesViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\LibraryExplorerViewModelTests.cs" />
@@ -112,6 +115,7 @@
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\PersistentPlaylist\PersistentSongPlaylistViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\Player\SongPlaybacksRegistratorTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\SongPlaylistViewModelTests.cs" />
+    <Compile Include="CF.MusicLibrary.Universal\DiscArt\DiscArtValidatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +146,10 @@
     <ProjectReference Include="..\CF.MusicLibrary.Tagger\CF.MusicLibrary.Tagger.csproj">
       <Project>{931CDE55-D545-47AF-B525-06AB15E74C3E}</Project>
       <Name>CF.MusicLibrary.Tagger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.Universal\CF.MusicLibrary.Universal.csproj">
+      <Project>{C82EEE4A-B797-40A5-B733-34DF2DA02A85}</Project>
+      <Name>CF.MusicLibrary.Universal</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

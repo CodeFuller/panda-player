@@ -44,8 +44,8 @@
     <ApplicationIcon>PandaPlayer.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6474.30547, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6474.30547\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6477.15924, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6477.15924\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CF.Library.Unity, Version=0.1.6472.39381, Culture=neutral, processorArchitecture=MSIL">
@@ -116,6 +116,8 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.105.2\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -147,16 +149,26 @@
     <Compile Include="DiscAdviser\RankBasedDiscSorter.cs" />
     <Compile Include="DiscAdviser\RankedDisc.cs" />
     <Compile Include="DiscAdviser\RankedDiscGroup.cs" />
+    <Compile Include="Events\DiscArtChangedEventArgs.cs" />
     <Compile Include="Events\LibraryExplorerDiscChangedEventArgs.cs" />
     <Compile Include="Events\LibraryExplorerFolderChangedEventArgs.cs" />
     <Compile Include="Events\LibraryLoadedEventArgs.cs" />
     <Compile Include="Events\PlaylistChangedEventArgs.cs" />
     <Compile Include="Events\PlaylistLoadedEventArgs.cs" />
+    <Compile Include="FileSizeFormatter.cs" />
+    <Compile Include="IWebBrowser.cs" />
+    <Compile Include="SystemDefaultWebBrowser.cs" />
+    <Compile Include="ViewModels\DiscArt\DiscArtImageFile.cs" />
+    <Compile Include="ViewModels\DiscArt\DocumentDownloadFailedException.cs" />
+    <Compile Include="ViewModels\DiscArt\HttpDocumentDownloader.cs" />
+    <Compile Include="ViewModels\DiscArt\IDiscArtImageFile.cs" />
+    <Compile Include="ViewModels\DiscArt\IDocumentDownloader.cs" />
+    <Compile Include="ViewModels\Interfaces\IEditDiscArtViewModel.cs" />
     <Compile Include="ViewModels\PersistentPlaylist\IPlaylistDataRepository.cs" />
     <Compile Include="ViewModels\PersistentPlaylist\JsonFilePlaylistDataRepository.cs" />
     <Compile Include="ViewModels\PersistentPlaylist\PlaylistData.cs" />
     <Compile Include="ViewModels\DiscAdviserViewModel.cs" />
-    <Compile Include="ViewModels\DiscArtViewModel.cs" />
+    <Compile Include="ViewModels\DiscArt\DiscArtViewModel.cs" />
     <Compile Include="ViewModels\EditDiscPropertiesViewModel.cs" />
     <Compile Include="ViewModels\EditedSongProperty.cs" />
     <Compile Include="ViewModels\EditSongPropertiesViewModel.cs" />
@@ -178,6 +190,14 @@
     <Compile Include="ViewModels\Player\AudioPlayer.cs" />
     <Compile Include="ViewModels\Player\SongMediaFinishedEventArgs.cs" />
     <Compile Include="ViewModels\Player\SongPlaybacksRegistrator.cs" />
+    <Compile Include="ViewModels\DiscArt\EditDiscArtViewModel.cs" />
+    <Compile Include="Views\ClipboardAccess\ClipboardChangeTracker.cs" />
+    <Compile Include="Views\ClipboardAccess\ClipboardDataProvider.cs" />
+    <Compile Include="Views\ClipboardAccess\ClipboardImageExtractor.cs" />
+    <Compile Include="Views\ClipboardAccess\IClipboardChangeTracker.cs" />
+    <Compile Include="Views\ClipboardAccess\IClipboardDataProvider.cs" />
+    <Compile Include="Views\ClipboardAccess\IClipboardImageExtractor.cs" />
+    <Compile Include="Views\ClipboardAccess\NativeMethods.cs" />
     <Compile Include="Views\DiscAdviserView.xaml.cs">
       <DependentUpon>DiscAdviserView.xaml</DependentUpon>
     </Compile>
@@ -190,7 +210,12 @@
     <Compile Include="Views\EditSongPropertiesView.xaml.cs">
       <DependentUpon>EditSongPropertiesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\EditDiscArtView.xaml.cs">
+      <DependentUpon>EditDiscArtView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ClipboardAccess\ClipboardContentChangedEventArgs.cs" />
     <Compile Include="Views\ValidationRules\NotEmptyStringValidationRule.cs" />
+    <Compile Include="Views\ValueConverters\BooleanAndConverter.cs" />
     <Compile Include="Views\ValueConverters\EditedSongPropertyValueConverter.cs" />
     <Compile Include="ViewNavigator.cs" />
     <Compile Include="Events\PlayDiscEventArgs.cs" />
@@ -249,6 +274,7 @@
       <DependentUpon>SongListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TrayClickCommand.cs" />
+    <Compile Include="Views\ViewModelExtensions.cs" />
     <Page Include="Views\DiscAdviserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -290,6 +316,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MusicPlayerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditDiscArtView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

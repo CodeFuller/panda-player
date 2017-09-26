@@ -11,7 +11,6 @@ using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
 using GalaSoft.MvvmLight.Messaging;
 using NSubstitute;
 using NUnit.Framework;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 {
@@ -120,17 +119,13 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			IWindowService windowServiceStub = Substitute.For<IWindowService>();
 			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);
 
-			bool receivedEvent = false;
-			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => receivedEvent = (e.Disc == null));
+			int currCallOrder = 1;
+			int? receivedEventOrder = null;
+			int? deleteDiscOrder = null;
+			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => receivedEventOrder = currCallOrder++);
 
 			ILibraryContentUpdater libraryContentUpdater = Substitute.For<ILibraryContentUpdater>();
-			libraryContentUpdater.When(x => x.DeleteDisc(Arg.Any<Disc>())).Do(x =>
-			{
-				if (!receivedEvent)
-				{
-					throw new InvalidOperationException(Current($"{nameof(LibraryExplorerDiscChangedEventArgs)} should be sent before disc deletion"));
-				}
-			});
+			libraryContentUpdater.When(x => x.DeleteDisc(Arg.Any<Disc>())).Do(x => deleteDiscOrder = currCallOrder++);
 
 			LibraryExplorerViewModel target = new LibraryExplorerViewModel(libraryBrowserStub, Substitute.For<IExplorerSongListViewModel>(),
 				libraryContentUpdater, Substitute.For<IViewNavigator>(), windowServiceStub);
@@ -138,13 +133,16 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			target.ChangeFolder();
 			target.SelectedItem = discItem;
 
+			currCallOrder = 1;
+
 			//	Act
 
 			target.DeleteDisc().Wait();
 
 			//	Assert
 
-			Assert.IsTrue(receivedEvent);
+			Assert.AreEqual(1, receivedEventOrder);
+			Assert.AreEqual(2, deleteDiscOrder);
 		}
 
 		[Test]

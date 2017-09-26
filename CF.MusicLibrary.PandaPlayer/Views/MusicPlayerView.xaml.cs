@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
@@ -10,25 +9,12 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 	/// </summary>
 	public partial class MusicPlayerView : UserControl
 	{
+		private IMusicPlayerViewModel ViewModel => DataContext.GetViewModel<IMusicPlayerViewModel>();
+
 		public MusicPlayerView()
 		{
 			InitializeComponent();
 		}
-
-		public IMusicPlayerViewModel ViewModel
-		{
-			get
-			{
-				var viewModel = DataContext as IMusicPlayerViewModel;
-				if (viewModel == null)
-				{
-					throw new InvalidOperationException("MusicPlayerViewModel is not set");
-				}
-
-				return viewModel;
-			}
-		}
-		
 
 		private void CurrSongProgressBar_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{

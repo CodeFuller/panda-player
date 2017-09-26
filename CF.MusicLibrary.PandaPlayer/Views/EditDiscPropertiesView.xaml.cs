@@ -1,8 +1,7 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using CF.Library.Wpf.Extensions;
-using CF.MusicLibrary.PandaPlayer.ViewModels;
+using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace CF.MusicLibrary.PandaPlayer.Views
 {
@@ -11,6 +10,8 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 	/// </summary>
 	public partial class EditDiscPropertiesView : Window
 	{
+		private IEditDiscPropertiesViewModel ViewModel => DataContext.GetViewModel<IEditDiscPropertiesViewModel>();
+
 		public EditDiscPropertiesView()
 		{
 			InitializeComponent();
@@ -23,13 +24,7 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 
 		private async void Save_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			var vm = DataContext as EditDiscPropertiesViewModel;
-			if (vm == null)
-			{
-				throw new InvalidOperationException("ViewModel is not set");
-			}
-
-			await vm.Save();
+			await ViewModel.Save();
 			DialogResult = true;
 			e.Handled = true;
 		}

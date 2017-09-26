@@ -16,11 +16,13 @@ using CF.MusicLibrary.Local;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.DiscAdviser;
 using CF.MusicLibrary.PandaPlayer.ViewModels;
+using CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
 using CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Player;
 using CF.MusicLibrary.Tagger;
+using CF.MusicLibrary.Universal.DiscArt;
 using CF.MusicLibrary.Universal.Interfaces;
 using Microsoft.Practices.Unity;
 
@@ -65,6 +67,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<IRateDiscViewModel, RateDiscViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<ILoggerViewModel, LoggerViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<IDiscArtViewModel, DiscArtViewModel>(new ContainerControlledLifetimeManager());
+			DIContainer.RegisterType<IEditDiscArtViewModel, EditDiscArtViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<ApplicationViewModel>(new ContainerControlledLifetimeManager());
 
 			DIContainer.RegisterType<ILibraryBrowser, FileSystemLibraryBrowser>();
@@ -85,6 +88,9 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<IMediaPlayerFacade, MediaPlayerFacade>();
 			DIContainer.RegisterType<ISongPlaybacksRegistrator, SongPlaybacksRegistrator>();
 			DIContainer.RegisterType<IClock, SystemClock>();
+			DIContainer.RegisterType<IDocumentDownloader, HttpDocumentDownloader>();
+			DIContainer.RegisterType<IWebBrowser, SystemDefaultWebBrowser>();
+			DIContainer.RegisterType<IDiscArtValidator, DiscArtValidator>();
 		}
 	}
 }

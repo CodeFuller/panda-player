@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Wpf;
@@ -156,7 +157,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 			await playbacksRegistrator.RegisterPlaybackStart(newSong);
 		}
 
-		private void AudioPlayer_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		private void AudioPlayer_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == nameof(IAudioPlayer.CurrSongLength))
 			{

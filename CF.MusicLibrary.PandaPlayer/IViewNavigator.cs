@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using CF.MusicLibrary.BL.Objects;
 
 namespace CF.MusicLibrary.PandaPlayer
@@ -12,5 +13,7 @@ namespace CF.MusicLibrary.PandaPlayer
 		void ShowDiscPropertiesView(Disc disc);
 
 		void ShowSongPropertiesView(IEnumerable<Song> songs);
+
+		Task ShowEditDiscArtView(Disc disc);
 	}
 }

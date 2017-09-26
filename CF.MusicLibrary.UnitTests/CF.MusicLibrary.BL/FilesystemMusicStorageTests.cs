@@ -12,7 +12,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.BL
 	public class FilesystemMusicStorageTests
 	{
 		[Test]
-		public void AddSongAsync_CreatesDestinationDirectory()
+		public void AddSong_CreatesDestinationDirectory()
 		{
 			//	Arrange
 
@@ -40,7 +40,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.BL
 		}
 
 		[Test]
-		public void AddSongAsync_CopiesSongFileCorrectly()
+		public void AddSong_CopiesSongFileCorrectly()
 		{
 			//	Arrange
 
@@ -68,7 +68,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.BL
 		}
 
 		[Test]
-		public void AddSongAsync_BeforeTaggingSongFile_ClearsReadOnlyAttribute()
+		public void AddSong_BeforeTaggingSongFile_ClearsReadOnlyAttribute()
 		{
 			//	Arrange
 
@@ -102,7 +102,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.BL
 		}
 
 		[Test]
-		public void AddSongAsync_SetsReadOnlyAttributeForDestinationSongFile()
+		public void AddSong_SetsReadOnlyAttributeForDestinationSongFile()
 		{
 			//	Arrange
 
@@ -130,7 +130,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.BL
 		}
 
 		[Test]
-		public void AddSongAsync_SetsCorrectTagData()
+		public void AddSong_SetsCorrectTagData()
 		{
 			//	Arrange
 
@@ -166,6 +166,99 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.BL
 			Assert.AreEqual(song.Genre.Name, setTagData.Genre);
 			Assert.AreEqual(song.TrackNumber, setTagData.Track);
 			Assert.AreEqual(song.Title, setTagData.Title);
+		}
+
+		[Test]
+		public void SetDiscCoverImage_IfPreviousDiscCoverImageExists_DeletesPreviousDiscCoverImage()
+		{
+			//	Arrange
+
+			var disc = new Disc
+			{
+				Uri = new Uri("/SomeDisc", UriKind.Relative),
+			};
+
+			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
+			fileSystemMock.FileExists(@"RootDir\SomeDisc\cover.jpg").Returns(true);
+			FileSystemMusicStorage target = new FileSystemMusicStorage(fileSystemMock, Substitute.For<ISongTagger>(), "RootDir");
+
+			//	Act
+
+			target.SetDiscCoverImage(disc, "SomeNewCover.jpg").Wait();
+
+			//	Assert
+
+			Received.InOrder(() => {
+				fileSystemMock.Received(1).ClearReadOnlyAttribute(@"RootDir\SomeDisc\cover.jpg");
+				fileSystemMock.Received(1).DeleteFile(@"RootDir\SomeDisc\cover.jpg");
+			});
+		}
+
+		[Test]
+		public void SetDiscCoverImage_IfPreviousDiscCoverDoesNotExist_DoesNotAttemptsToDeletesPreviousDiscCoverImage()
+		{
+			//	Arrange
+
+			var disc = new Disc
+			{
+				Uri = new Uri("/SomeDisc", UriKind.Relative),
+			};
+
+			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
+			fileSystemMock.FileExists(@"RootDir\SomeDisc\cover.jpg").Returns(false);
+			FileSystemMusicStorage target = new FileSystemMusicStorage(fileSystemMock, Substitute.For<ISongTagger>(), "RootDir");
+
+			//	Act
+
+			target.SetDiscCoverImage(disc, "SomeNewCover.jpg").Wait();
+
+			//	Assert
+
+			fileSystemMock.DidNotReceive().DeleteFile(@"RootDir\SomeDisc\cover.jpg");
+		}
+
+		[Test]
+		public void SetDiscCoverImage_StoresCoverImageFileCorrectly()
+		{
+			//	Arrange
+
+			var disc = new Disc
+			{
+				Uri = new Uri("/SomeDisc", UriKind.Relative),
+			};
+
+			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
+			FileSystemMusicStorage target = new FileSystemMusicStorage(fileSystemMock, Substitute.For<ISongTagger>(), "RootDir");
+
+			//	Act
+
+			target.SetDiscCoverImage(disc, "SomeNewCover.jpg").Wait();
+
+			//	Assert
+
+			fileSystemMock.Received(1).CopyFile("SomeNewCover.jpg", @"RootDir\SomeDisc\cover.jpg");
+		}
+
+		[Test]
+		public void SetDiscCoverImage_SetsReadOnlyAttributeForDestinationCoverImageFile()
+		{
+			//	Arrange
+
+			var disc = new Disc
+			{
+				Uri = new Uri("/SomeDisc", UriKind.Relative),
+			};
+
+			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
+			FileSystemMusicStorage target = new FileSystemMusicStorage(fileSystemMock, Substitute.For<ISongTagger>(), "RootDir");
+
+			//	Act
+
+			target.SetDiscCoverImage(disc, "SomeNewCover.jpg").Wait();
+
+			//	Assert
+
+			fileSystemMock.Received(1).SetReadOnlyAttribute(@"RootDir\SomeDisc\cover.jpg");
 		}
 	}
 }

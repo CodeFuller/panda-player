@@ -74,8 +74,7 @@ namespace CF.MusicLibrary.BL
 			{
 				var songFileName = UriToFilesystemPath(song.Uri);
 				Logger.WriteInfo($"Deleting song file '{songFileName}'");
-				fileSystemFacade.ClearReadOnlyAttribute(songFileName);
-				fileSystemFacade.DeleteFile(songFileName);
+				DeleteFile(songFileName);
 
 				var discDirectory = Path.GetDirectoryName(songFileName);
 				var restDirectoryFiles = fileSystemFacade.EnumerateFiles(discDirectory).ToList();
@@ -86,8 +85,7 @@ namespace CF.MusicLibrary.BL
 					{
 						var coverImageFileName = restDirectoryFiles.Single();
 						Logger.WriteInfo($"Deleting cover image file '{coverImageFileName}'");
-						fileSystemFacade.ClearReadOnlyAttribute(coverImageFileName);
-						fileSystemFacade.DeleteFile(coverImageFileName);
+						DeleteFile(coverImageFileName);
 					}
 
 					//	Deleting directories that became empty (disc, artist, category, ...)
@@ -123,7 +121,15 @@ namespace CF.MusicLibrary.BL
 
 		public async Task SetDiscCoverImage(Disc disc, string coverImageFileName)
 		{
-			await Task.Run(() => StoreFile(coverImageFileName, GetDiscCoverImageFileName(disc), true));
+			await Task.Run(() =>
+			{
+				var storageCoverImageFileName = GetDiscCoverImageFileName(disc);
+				if (fileSystemFacade.FileExists(storageCoverImageFileName))
+				{
+					DeleteFile(storageCoverImageFileName);
+				}
+				StoreFile(coverImageFileName, storageCoverImageFileName, true);
+			});
 		}
 
 		public async Task<string> GetDiscCoverImage(Disc disc)
@@ -268,6 +274,12 @@ namespace CF.MusicLibrary.BL
 			{
 				fileSystemFacade.ClearReadOnlyAttribute(dstFileName);
 			}
+		}
+
+		private void DeleteFile(string fileName)
+		{
+			fileSystemFacade.ClearReadOnlyAttribute(fileName);
+			fileSystemFacade.DeleteFile(fileName);
 		}
 
 		private static SongTagData FillSongTagData(Song song)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using CF.MusicLibrary.PandaPlayer.ViewModels;
@@ -56,6 +57,12 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 		public void HideToSystemTray()
 		{
 			Hide();
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Class is called from XAML")]
+		private void DiscArtView_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			DiscArtView.Image_MouseLeftButtonDown(sender, e);
 		}
 	}
 }

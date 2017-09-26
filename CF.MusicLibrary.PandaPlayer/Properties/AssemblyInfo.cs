@@ -32,3 +32,5 @@ using System.Windows;
 )]
 
 [assembly: InternalsVisibleTo("CF.MusicLibrary.IntegrationTests")]
+[assembly: InternalsVisibleTo("CF.MusicLibrary.UnitTests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
