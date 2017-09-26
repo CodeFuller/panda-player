@@ -7,6 +7,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.BL
 	public class DiscTitleToAlbumMapperTests
 	{
 		[TestCase("Broken Crown Halo (CD 1)", "Broken Crown Halo")]
+		[TestCase("Broken Crown Halo (CD1)", "Broken Crown Halo")]
 		[TestCase("Stolzes Herz (Single)", "Stolzes Herz")]
 		[TestCase("Exordium (EP)", "Exordium")]
 		[TestCase("Origin (Demo)", "Origin")]

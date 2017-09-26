@@ -4,7 +4,7 @@ namespace CF.MusicLibrary.BL
 {
 	public static class DiscTitleToAlbumMapper
 	{
-		private static readonly Regex CDRegex = new Regex(@"^(.+) \(CD \d+\)$", RegexOptions.Compiled);
+		private static readonly Regex CDRegex = new Regex(@"^(.+) \(CD ?\d+\)$", RegexOptions.Compiled);
 		private static readonly Regex SingleRegex = new Regex(@"^(.+) \((?:(?:Single)|(?:EP))\)$", RegexOptions.Compiled);
 		private static readonly Regex DemoRegex = new Regex(@"^(.+) \(Demo\)$", RegexOptions.Compiled);
 		private static readonly Regex LiveRegex = new Regex(@"^(.+) \(Live\)$", RegexOptions.Compiled);
