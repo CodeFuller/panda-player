@@ -84,12 +84,6 @@
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Global\GlobalAssemblyInfo.cs">
@@ -133,10 +127,6 @@
     <ProjectReference Include="..\CF.MusicLibrary.PandaPlayer\CF.MusicLibrary.PandaPlayer.csproj">
       <Project>{502D59CA-7973-46C9-A2A4-9144C48CBEE4}</Project>
       <Name>CF.MusicLibrary.PandaPlayer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.Tagger\CF.MusicLibrary.Tagger.csproj">
-      <Project>{931cde55-d545-47af-b525-06ab15e74c3e}</Project>
-      <Name>CF.MusicLibrary.Tagger</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

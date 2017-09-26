@@ -73,12 +73,6 @@
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
     <Reference Include="taglib-sharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
       <HintPath>..\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
       <Private>True</Private>
@@ -134,10 +128,6 @@
     <ProjectReference Include="..\CF.MusicLibrary.LastFM\CF.MusicLibrary.LastFM.csproj">
       <Project>{7F368759-572F-41D4-A7FF-1B3898AE3918}</Project>
       <Name>CF.MusicLibrary.LastFM</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.LibraryChecker\CF.MusicLibrary.LibraryChecker.csproj">
-      <Project>{72458EFF-83E3-4907-8161-5401AA303D93}</Project>
-      <Name>CF.MusicLibrary.LibraryChecker</Name>
     </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.PandaPlayer\CF.MusicLibrary.PandaPlayer.csproj">
       <Project>{502D59CA-7973-46C9-A2A4-9144C48CBEE4}</Project>
