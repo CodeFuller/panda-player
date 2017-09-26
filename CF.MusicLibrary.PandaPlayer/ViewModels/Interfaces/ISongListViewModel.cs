@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CF.MusicLibrary.BL.Objects;
@@ -14,6 +15,14 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 		IEnumerable<Song> Songs { get; }
 
 		SongListItem SelectedSongItem { get; }
+
+		bool HasSongs { get; }
+
+		int SongsNumber { get; }
+
+		long TotalSongsFileSize { get; }
+
+		TimeSpan TotalSongsDuration { get; }
 
 		void SetSongs(IEnumerable<Song> newSongs);
 

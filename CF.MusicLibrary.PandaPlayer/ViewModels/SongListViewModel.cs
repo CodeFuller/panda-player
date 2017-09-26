@@ -24,7 +24,14 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public ObservableCollection<SongListItem> SongItems
 		{
 			get { return songItems; }
-			private set { Set(ref songItems, value); }
+			private set
+			{
+				Set(ref songItems, value);
+				RaisePropertyChanged(nameof(HasSongs));
+				RaisePropertyChanged(nameof(SongsNumber));
+				RaisePropertyChanged(nameof(TotalSongsFileSize));
+				RaisePropertyChanged(nameof(TotalSongsDuration));
+			}
 		}
 
 		public IEnumerable<Song> Songs => SongItems.Select(s => s.Song);
@@ -35,6 +42,14 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			get { return selectedSongItem; }
 			set { Set(ref selectedSongItem, value); }
 		}
+
+		public bool HasSongs => SongsNumber > 0;
+
+		public int SongsNumber => Songs.Count();
+
+		public long TotalSongsFileSize => Songs.Select(s => (long)s.FileSize).Sum();
+
+		public TimeSpan TotalSongsDuration => Songs.Aggregate(TimeSpan.Zero, (currSum, currSong) => currSum + currSong.Duration);
 
 		private IList selectedSongItems;
 		public IList SelectedSongItems
@@ -63,7 +78,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			this.libraryContentUpdater = libraryContentUpdater;
 			this.viewNavigator = viewNavigator;
 
-			SongItems = new ObservableCollection<SongListItem>();
+			songItems = new ObservableCollection<SongListItem>();
 
 			SetRatingMenuItems = RatingsHelper.AllowedRatingsDesc.Select(r => new SetRatingMenuItem(this, r)).ToList();
 			EditSongsPropertiesCommand = new RelayCommand(EditSongsProperties);

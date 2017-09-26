@@ -18,10 +18,17 @@
     </UserControl.Resources>
 
     <Grid>
-        <!-- https://stackoverflow.com/a/22074985/5740031 -->
-        <FrameworkElement x:Name="DummyElement" Visibility="Collapsed" />
 
-        <views:MultiSelectionDataGrid x:Name="SongsDataGrid" AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="None"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- https://stackoverflow.com/a/22074985/5740031 -->
+        <FrameworkElement Grid.Row="0" x:Name="DummyElement" Visibility="Collapsed" />
+
+        <views:MultiSelectionDataGrid Grid.Row="1" x:Name="SongsDataGrid" AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="None"
               ColumnHeaderHeight="20"
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
               Background="#1B1B1B" RowBackground="#1B1B1B" Foreground="White"
@@ -123,6 +130,57 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </views:MultiSelectionDataGrid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Background="#505050">
+            <Label MinWidth="80" HorizontalContentAlignment="Center" Background="#505050">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasSongs}" Value="True">
+                                <Setter Property="Content" Value="{Binding SongsNumber}" />
+                                <Setter Property="ContentStringFormat" Value="{}{0} song(s)" />
+                            </DataTrigger>
+                            <!-- Using 'space' instead of empty line so that Label height is the same in both cases -->
+                            <DataTrigger Binding="{Binding HasSongs}" Value="False">
+                                <Setter Property="Content" Value=" " />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+            <Label MinWidth="60" HorizontalContentAlignment="Center" Background="#505050">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasSongs}" Value="True">
+                                <Setter Property="Content" Value="{Binding TotalSongsDuration, Converter={StaticResource SongDurationValueConverter}}" />
+                            </DataTrigger>
+                            <!-- Using 'space' instead of empty line so that Label height is the same in both cases -->
+                            <DataTrigger Binding="{Binding HasSongs}" Value="False">
+                                <Setter Property="Content" Value=" " />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+            <Label MinWidth="70" HorizontalContentAlignment="Center" Background="#505050">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasSongs}" Value="True">
+                                <Setter Property="Content" Value="{Binding TotalSongsFileSize, Converter={StaticResource SongFileSizeValueConverter}}" />
+                            </DataTrigger>
+                            <!-- Using 'space' instead of empty line so that Label height is the same in both cases -->
+                            <DataTrigger Binding="{Binding HasSongs}" Value="False">
+                                <Setter Property="Content" Value=" " />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+        </StackPanel>
     </Grid>
-    
+
 </UserControl>
