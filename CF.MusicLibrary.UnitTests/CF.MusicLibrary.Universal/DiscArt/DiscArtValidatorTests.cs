@@ -95,7 +95,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Universal.DiscArt
 
 			var imageInfo = new DiscArtImageInfo
 			{
-				Width = 5000,
+				Width = 10000,
 				Height = 500,
 				FileSize = 500 * 1024,
 				Format = ImageFormat.Jpeg,
@@ -120,7 +120,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Universal.DiscArt
 			var imageInfo = new DiscArtImageInfo
 			{
 				Width = 500,
-				Height = 5000,
+				Height = 10000,
 				FileSize = 500 * 1024,
 				Format = ImageFormat.Jpeg,
 			};
@@ -192,7 +192,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Universal.DiscArt
 			var imageInfo = new DiscArtImageInfo
 			{
 				Width = 50,
-				Height = 5000,
+				Height = 10000,
 				FileSize = 500 * 1024 * 1024,
 				Format = ImageFormat.Png,
 			};

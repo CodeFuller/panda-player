@@ -12,9 +12,9 @@ namespace CF.MusicLibrary.Universal.DiscArt
 	{
 		private const int MinWidthAndHeight = 300;
 
-		private const int MaxWidthAndHeight = 1024;
+		private const int MaxWidthAndHeight = 5000;
 
-		private const long MaxFileSize = 1 * 1024 * 1024;
+		private const long MaxFileSize = 10 * 1024 * 1024;
 
 		private readonly IFileSystemFacade fileSystemFacade;
 
