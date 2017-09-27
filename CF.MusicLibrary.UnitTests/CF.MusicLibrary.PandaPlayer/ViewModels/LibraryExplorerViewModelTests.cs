@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using CF.Library.Core.Enums;
 using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.BL.Objects;
@@ -17,6 +19,100 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 	[TestFixture]
 	public class LibraryExplorerViewModelTests
 	{
+		[Test]
+		public void SelectedItemSetter_WhenNewItemIsDisc_LoadsSongListWithSongsFromNewDisc()
+		{
+			//	Arrange
+
+			var disc = new Disc
+			{
+				Uri = new Uri("/SomeDisc", UriKind.Relative),
+				SongsUnordered = new[] { new Song(), new Song() },
+			};
+
+			List<Song> newSongs = null;
+			IExplorerSongListViewModel explorerSongListMock = Substitute.For<IExplorerSongListViewModel>();
+			explorerSongListMock.SetSongs(Arg.Do<IEnumerable<Song>>(arg => newSongs = arg.ToList()));
+
+			LibraryExplorerViewModel target = new LibraryExplorerViewModel(Substitute.For<ILibraryBrowser>(), explorerSongListMock,
+				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
+
+			//	Act
+
+			target.SelectedItem = new DiscExplorerItem(disc);
+
+			//	Assert
+
+			Assert.IsNotNull(newSongs);
+			CollectionAssert.AreEqual(disc.Songs, newSongs);
+		}
+
+		[Test]
+		public void SelectedItemSetter_WhenNewItemIsDisc_SendsLibraryExplorerDiscChangedEventForNewDisc()
+		{
+			//	Arrange
+
+			var disc = new Disc { Uri = new Uri("/SomeDisc", UriKind.Relative) };
+
+			LibraryExplorerViewModel target = new LibraryExplorerViewModel(Substitute.For<ILibraryBrowser>(), Substitute.For<IExplorerSongListViewModel>(),
+				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
+
+			LibraryExplorerDiscChangedEventArgs receivedEvent = null;
+			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => receivedEvent = e);
+
+			//	Act
+
+			target.SelectedItem = new DiscExplorerItem(disc);
+
+			//	Assert
+
+			Assert.IsNotNull(receivedEvent);
+			Assert.AreSame(disc, receivedEvent.Disc);
+		}
+
+		[Test]
+		public void SelectedItemSetter_WhenNewItemIsNotDisc_ClearsSongsList()
+		{
+			//	Arrange
+
+			List<Song> newSongs = null;
+			IExplorerSongListViewModel explorerSongListMock = Substitute.For<IExplorerSongListViewModel>();
+			explorerSongListMock.SetSongs(Arg.Do<IEnumerable<Song>>(arg => newSongs = arg.ToList()));
+
+			LibraryExplorerViewModel target = new LibraryExplorerViewModel(Substitute.For<ILibraryBrowser>(), explorerSongListMock,
+				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
+
+			//	Act
+
+			target.SelectedItem = new FolderExplorerItem(new Uri("/SomeFolder", UriKind.Relative));
+
+			//	Assert
+
+			Assert.IsNotNull(newSongs);
+			CollectionAssert.IsEmpty(newSongs);
+		}
+
+		[Test]
+		public void SelectedItemSetter_WhenNewItemIsNotDisc_SendsLibraryExplorerDiscChangedEventWithNullDisc()
+		{
+			//	Arrange
+
+			LibraryExplorerViewModel target = new LibraryExplorerViewModel(Substitute.For<ILibraryBrowser>(), Substitute.For<IExplorerSongListViewModel>(),
+				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
+
+			LibraryExplorerDiscChangedEventArgs receivedEvent = null;
+			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => receivedEvent = e);
+
+			//	Act
+
+			target.SelectedItem = new FolderExplorerItem(new Uri("/SomeFolder", UriKind.Relative));
+
+			//	Assert
+
+			Assert.IsNotNull(receivedEvent);
+			Assert.IsNull(receivedEvent.Disc);
+		}
+
 		[Test]
 		public void DeleteDisc_IfSelectedItemIsNotADisc_ReturnsWithNoAction()
 		{

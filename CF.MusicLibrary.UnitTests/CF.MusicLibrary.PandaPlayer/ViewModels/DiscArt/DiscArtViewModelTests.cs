@@ -4,7 +4,6 @@ using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer;
 using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt;
-using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight.Messaging;
 using NSubstitute;
 using NUnit.Framework;
@@ -51,107 +50,27 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.DiscA
 		}
 
 		[Test]
-		public void CurrImageFileName_AfterCurrExplorerItemSetToDiscWhenNoSongIsPlayed_ReturnsCoverImageOfExplorerDisc()
+		public void ActiveDiscChangedEventHandler_IfNewActiveDiscHasCoverImage_SetsCurrImageFileNameToNewDiscCoverImage()
 		{
 			//	Arrange
 
 			var disc = new Disc();
-
-			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();
-			musicLibraryStub.GetDiscCoverImage(disc).Returns("SomeCover.jpg");
-			var target = new DiscArtViewModel(musicLibraryStub, Substitute.For<IViewNavigator>());
-
-			//	Act
-			
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(disc));
-			var currImageFileName = target.CurrImageFileName;
-
-			//	Assert
-
-			Assert.AreEqual("SomeCover.jpg", currImageFileName);
-		}
-
-		[Test]
-		public void CurrImageFileName_AfterCurrExplorerItemSetToFolderWhenNoSongIsPlayed_ReturnsNull()
-		{
-			//	Arrange
-
-			var disc = new Disc();
-
-			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();
-			musicLibraryStub.GetDiscCoverImage(disc).Returns("SomeCover.jpg");
-			var target = new DiscArtViewModel(musicLibraryStub, Substitute.For<IViewNavigator>());
-
-			//	Act
-
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(disc));
-			Messenger.Default.Send(new LibraryExplorerFolderChangedEventArgs(new Uri("/SomeUri", UriKind.Relative)));
-			var currImageFileName = target.CurrImageFileName;
-
-			//	Assert
-
-			Assert.IsNull(currImageFileName);
-		}
-
-		[Test]
-		public void CurrImageFileName_AfterPlayedSongChanges_ReturnsCoverImageOfSongDisc()
-		{
-			//	Arrange
-
-			var disc = new Disc();
-			var songDisc = new Disc();
-			var song = new Song { Disc = songDisc };
-
-			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
-			songPlaylistStub.CurrentSong.Returns(song);
 
 			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();
 			musicLibraryStub.GetDiscCoverImage(disc).Returns("SomeDiscCover.jpg");
-			musicLibraryStub.GetDiscCoverImage(songDisc).Returns("SomeSongDiscCover.jpg");
 			var target = new DiscArtViewModel(musicLibraryStub, Substitute.For<IViewNavigator>());
 
 			//	Act
 
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(disc));
-			Messenger.Default.Send(new PlaylistChangedEventArgs(songPlaylistStub));
-			var currImageFileName = target.CurrImageFileName;
+			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc));
 
 			//	Assert
 
-			Assert.AreEqual("SomeSongDiscCover.jpg", currImageFileName);
+			Assert.AreEqual("SomeDiscCover.jpg", target.CurrImageFileName);
 		}
 
 		[Test]
-		public void CurrImageFileName_AfterPlaylistFinishes_ReturnsCoverImageOfExplorerDisc()
-		{
-			//	Arrange
-
-			var disc = new Disc();
-			var songDisc = new Disc();
-			var song = new Song { Disc = songDisc };
-
-			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
-			songPlaylistStub.CurrentSong.Returns(song);
-
-			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();
-			musicLibraryStub.GetDiscCoverImage(disc).Returns("SomeDiscCover.jpg");
-			musicLibraryStub.GetDiscCoverImage(songDisc).Returns("SomeSongDiscCover.jpg");
-			var target = new DiscArtViewModel(musicLibraryStub, Substitute.For<IViewNavigator>());
-
-			//	Act
-
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(disc));
-			Messenger.Default.Send(new PlaylistChangedEventArgs(songPlaylistStub));
-			Messenger.Default.Send(new PlaylistFinishedEventArgs(songPlaylistStub));
-			var currImageFileName = target.CurrImageFileName;
-
-			//	Assert
-
-			Assert.AreEqual("SomeDiscCover.jpg", currImageFileName);
-		}
-
-		[Test]
-		public void CurrImageFileName_IfActiveDiscDoesNotHaveCoverImage_ReturnsNull()
+		public void ActiveDiscChangedEventHandler_IfNewActiveDiscHasNoCoverImage_SetsCurrImageFileNameToNull()
 		{
 			//	Arrange
 
@@ -163,12 +82,11 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.DiscA
 
 			//	Act
 
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(disc));
-			var currImageFileName = target.CurrImageFileName;
+			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc));
 
 			//	Assert
 
-			Assert.IsNull(currImageFileName);
+			Assert.IsNull(target.CurrImageFileName);
 		}
 
 		[Test]
@@ -189,7 +107,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.DiscA
 		}
 
 		[Test]
-		public void EditDiscArt_IfActiveDiscIsCurrExplorerItem_ShowEditDiscArtViewForExplorerDisc()
+		public void EditDiscArt_IfActiveDiscIsSet_ShowEditDiscArtViewForExplorerDisc()
 		{
 			//	Arrange
 
@@ -198,7 +116,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.DiscA
 			IViewNavigator viewNavigatorMock = Substitute.For<IViewNavigator>();
 			var target = new DiscArtViewModel(Substitute.For<IMusicLibrary>(), viewNavigatorMock);
 
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(disc));
+			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc));
 
 			//	Act
 
@@ -210,40 +128,13 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.DiscA
 		}
 
 		[Test]
-		public void EditDiscArt_IfActiveDiscIsCurrSongDisc_ShowEditDiscArtViewForCurrSongDisc()
-		{
-			//	Arrange
-
-			var disc = new Disc();
-			var songDisc = new Disc();
-			var song = new Song { Disc = songDisc };
-
-			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
-			songPlaylistStub.CurrentSong.Returns(song);
-
-			IViewNavigator viewNavigatorMock = Substitute.For<IViewNavigator>();
-			var target = new DiscArtViewModel(Substitute.For<IMusicLibrary>(), viewNavigatorMock);
-
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(disc));
-			Messenger.Default.Send(new PlaylistChangedEventArgs(songPlaylistStub));
-
-			//	Act
-
-			target.EditDiscArt().Wait();
-
-			//	Assert
-
-			viewNavigatorMock.Received(1).ShowEditDiscArtView(songDisc);
-		}
-
-		[Test]
 		public void DiscArtChangedEventHandler_IfChangedDiscIsActiveDisc_RaisesPropertyChangedEventForCurrImageFileName()
 		{
 			//	Arrange
 
 			var disc = new Disc();
 			var target = new DiscArtViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IViewNavigator>());
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(disc));
+			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc));
 
 			bool raisedPropertyChangedEvent = false;
 			target.PropertyChanged += (sender, e) => raisedPropertyChangedEvent = (e.PropertyName == nameof(DiscArtViewModel.CurrImageFileName) || raisedPropertyChangedEvent);

@@ -13,6 +13,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 {
 	public class ApplicationViewModel : ViewModelBase
 	{
+		private const int ExplorerSongListIndex = 0;
+		private const int PlaylistSongListIndex = 1;
+
 		private readonly DiscLibrary discLibrary;
 
 		private readonly IViewNavigator viewNavigator;
@@ -29,7 +32,24 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public int SelectedSongListIndex
 		{
 			get { return selectedSongListIndex; }
-			set { Set(ref selectedSongListIndex, value); }
+			set
+			{
+				Set(ref selectedSongListIndex, value);
+				ActiveDisc = (SelectedSongListIndex == ExplorerSongListIndex) ? LibraryExplorerViewModel.SelectedDisc : Playlist.CurrentSong?.Disc;
+			}
+		}
+
+		private Disc activeDisc;
+		private Disc ActiveDisc
+		{
+			set
+			{
+				if (activeDisc != value)
+				{
+					activeDisc = value;
+					Messenger.Default.Send(new ActiveDiscChangedEventArgs(activeDisc));
+				}
+			}
 		}
 
 		public ICommand LoadCommand { get; }
@@ -65,6 +85,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Register<ReversePlayingEventArgs>(this, OnReversePlaying);
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, OnPlaylistFinished);
 			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => SwitchToExplorerSongList());
+			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => OnPlaylistSongChanged(Playlist.CurrentSong));
 		}
 
 		public async Task Load()
@@ -109,6 +130,14 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
+		private void OnPlaylistSongChanged(Song song)
+		{
+			if (SelectedSongListIndex == PlaylistSongListIndex)
+			{
+				ActiveDisc = song?.Disc;
+			}
+		}
+
 		private void OnPlaylistFinished(PlaylistFinishedEventArgs e)
 		{
 			viewNavigator.BringApplicationToFront();
@@ -124,12 +153,12 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		private void SwitchToExplorerSongList()
 		{
-			SelectedSongListIndex = 0;
+			SelectedSongListIndex = ExplorerSongListIndex;
 		}
 
 		private void SwitchToSongPlaylist()
 		{
-			SelectedSongListIndex = 1;
+			SelectedSongListIndex = PlaylistSongListIndex;
 		}
 	}
 }

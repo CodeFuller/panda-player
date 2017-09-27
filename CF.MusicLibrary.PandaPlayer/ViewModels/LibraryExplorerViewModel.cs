@@ -45,19 +45,21 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			set
 			{
 				Set(ref selectedItem, value);
-				var discItem = selectedItem as DiscExplorerItem;
-				if (discItem != null)
+				var selectedDisc = SelectedDisc;
+				if (selectedDisc != null)
 				{
-					SongListViewModel.SetSongs(discItem.Disc.Songs);
-					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(discItem.Disc));
+					SongListViewModel.SetSongs(selectedDisc.Songs);
+					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(selectedDisc));
 				}
 				else
 				{
 					SongListViewModel.SetSongs(Enumerable.Empty<Song>());
-					Messenger.Default.Send(new LibraryExplorerFolderChangedEventArgs(selectedItem?.Uri));
+					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null));
 				}
 			}
 		}
+
+		public Disc SelectedDisc => (selectedItem as DiscExplorerItem)?.Disc;
 
 		public IExplorerSongListViewModel SongListViewModel { get; }
 

@@ -14,29 +14,16 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt
 		private readonly IMusicLibrary musicLibrary;
 		private readonly IViewNavigator viewNavigator;
 
-		private Song currentSong;
-		private Song CurrentSong
+		private Disc displayedArtDisc;
+		private Disc DisplayedArtDisc
 		{
-			get { return currentSong; }
+			get {return displayedArtDisc;}
 			set
 			{
-				Set(ref currentSong, value);
+				Set(ref displayedArtDisc, value);
 				CurrImageFileName = GetCurrImageFileName();
 			}
 		}
-
-		private Disc currentExplorerDisc;
-		private Disc CurrentExplorerDisc
-		{
-			get { return currentExplorerDisc; }
-			set
-			{
-				Set(ref currentExplorerDisc, value);
-				CurrImageFileName = GetCurrImageFileName();
-			}
-		}
-
-		private Disc DisplayedArtDisc => CurrentSong?.Disc ?? CurrentExplorerDisc;
 
 		private string currImageFileName;
 		public string CurrImageFileName
@@ -68,10 +55,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt
 			this.musicLibrary = musicLibrary;
 			this.viewNavigator = viewNavigator;
 
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => CurrentSong = e.Playlist.CurrentSong);
-			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => CurrentSong = null);
-			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => CurrentExplorerDisc = e.Disc);
-			Messenger.Default.Register<LibraryExplorerFolderChangedEventArgs>(this, e => CurrentExplorerDisc = null);
+			Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => DisplayedArtDisc = e.Disc);
 			Messenger.Default.Register<DiscArtChangedEventArgs>(this, e => OnDiscArtChanged(e.Disc));
 		}
 

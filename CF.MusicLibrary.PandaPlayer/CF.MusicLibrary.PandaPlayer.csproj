@@ -142,9 +142,9 @@
     <Compile Include="DiscAdviser\RankBasedDiscSorter.cs" />
     <Compile Include="DiscAdviser\RankedDisc.cs" />
     <Compile Include="DiscAdviser\RankedDiscGroup.cs" />
+    <Compile Include="Events\ActiveDiscChangedEventArgs.cs" />
     <Compile Include="Events\DiscArtChangedEventArgs.cs" />
     <Compile Include="Events\LibraryExplorerDiscChangedEventArgs.cs" />
-    <Compile Include="Events\LibraryExplorerFolderChangedEventArgs.cs" />
     <Compile Include="Events\LibraryLoadedEventArgs.cs" />
     <Compile Include="Events\PlaylistChangedEventArgs.cs" />
     <Compile Include="Events\PlaylistLoadedEventArgs.cs" />
