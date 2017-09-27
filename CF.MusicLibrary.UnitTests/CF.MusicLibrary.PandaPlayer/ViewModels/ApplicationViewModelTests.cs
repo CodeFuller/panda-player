@@ -15,6 +15,12 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 	[TestFixture]
 	public class ApplicationViewModelTests
 	{
+		[SetUp]
+		public void SetUp()
+		{
+			Messenger.Reset();
+		}
+
 		[Test]
 		public void Constructor_IfDiscLibraryArgumentIsNull_ThrowsArgumentNullException()
 		{
@@ -300,6 +306,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			//	Assert
 
 			Assert.IsFalse(receivedEvent);
+			//	Avoiding uncovered lambda code (receivedEvent = true)
+			Messenger.Default.Send(new ActiveDiscChangedEventArgs(null));
 		}
 	}
 }

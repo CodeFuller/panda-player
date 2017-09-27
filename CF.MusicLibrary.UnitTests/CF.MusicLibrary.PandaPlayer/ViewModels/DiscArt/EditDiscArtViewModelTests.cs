@@ -18,6 +18,12 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.DiscA
 	[TestFixture]
 	public class EditDiscArtViewModelTests
 	{
+		[SetUp]
+		public void SetUp()
+		{
+			Messenger.Reset();
+		}
+
 		[TearDown]
 		public void TearDown()
 		{

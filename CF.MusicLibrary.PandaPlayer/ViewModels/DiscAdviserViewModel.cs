@@ -75,12 +75,12 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Register<LibraryLoadedEventArgs>(this, e => Load());
 		}
 
-		public void Load()
+		private void Load()
 		{
 			RebuildAdvisedDiscs();
 		}
 
-		private void PlayCurrentDisc()
+		internal void PlayCurrentDisc()
 		{
 			var disc = CurrentDisc;
 			if (disc != null)
@@ -89,9 +89,15 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		private void SwitchToNextDisc()
+		internal void SwitchToNextDisc()
 		{
-			if (++CurrAdvisedDiscIndex >= currAdvisedDsics.Count)
+			++CurrAdvisedDiscIndex;
+			RebuildAdvisedDiscsIfRequired();
+		}
+
+		private void RebuildAdvisedDiscsIfRequired()
+		{
+			if (CurrAdvisedDiscIndex >= currAdvisedDsics.Count)
 			{
 				RebuildAdvisedDiscs();
 			}
@@ -107,9 +113,27 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private void OnPlaylistFinished(ISongPlaylistViewModel playlist)
 		{
 			var playedDisc = playlist.PlayedDisc;
-			if (playedDisc != null && playedDisc == CurrentDisc)
+			if (playedDisc == null)
+			{
+				return;
+			}
+
+			if (playedDisc == CurrentDisc)
 			{
 				SwitchToNextDisc();
+			}
+			else
+			{
+				for (var i = currAdvisedDiscIndex; i < currAdvisedDsics.Count; ++i)
+				{
+					if (currAdvisedDsics[i] == playedDisc)
+					{
+						currAdvisedDsics.RemoveAt(i);
+						break;
+					}
+				}
+
+				RebuildAdvisedDiscsIfRequired();
 			}
 		}
 	}

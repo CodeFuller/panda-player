@@ -1,4 +1,5 @@
-﻿using CF.MusicLibrary.BL.Objects;
+﻿using System.Windows.Input;
+using CF.MusicLibrary.BL.Objects;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
@@ -6,6 +7,10 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 	{
 		Disc CurrentDisc { get; }
 
-		void Load();
+		string CurrentDiscAnnouncement { get; }
+
+		ICommand PlayCurrentDiscCommand { get; }
+
+		ICommand SwitchToNextDiscCommand { get; }
 	}
 }

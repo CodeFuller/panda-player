@@ -98,6 +98,7 @@
     <Compile Include="CF.MusicLibrary.BL\ItemUriPartsTests.cs" />
     <Compile Include="CF.MusicLibrary.LastFM\LastFMScrobblerTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\ApplicationViewModelTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscAdviserViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscArt\DiscArtImageFileTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscArt\DiscArtViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscArt\EditDiscArtViewModelTests.cs" />

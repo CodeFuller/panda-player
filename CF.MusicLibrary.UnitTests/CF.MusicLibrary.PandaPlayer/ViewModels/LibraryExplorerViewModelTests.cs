@@ -19,6 +19,12 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 	[TestFixture]
 	public class LibraryExplorerViewModelTests
 	{
+		[SetUp]
+		public void SetUp()
+		{
+			Messenger.Reset();
+		}
+
 		[Test]
 		public void SelectedItemSetter_WhenNewItemIsDisc_LoadsSongListWithSongsFromNewDisc()
 		{
