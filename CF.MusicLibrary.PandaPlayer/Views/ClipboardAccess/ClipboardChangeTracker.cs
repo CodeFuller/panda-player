@@ -57,7 +57,10 @@ namespace CF.MusicLibrary.PandaPlayer.Views.ClipboardAccess
 
 		protected virtual void OnClipboardContentChanged(ClipboardContentChangedEventArgs e)
 		{
-			ClipboardContentChanged?.Invoke(this, e);
+			if (isStarted)
+			{
+				ClipboardContentChanged?.Invoke(this, e);
+			}
 		}
 
 		private IntPtr WinProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
