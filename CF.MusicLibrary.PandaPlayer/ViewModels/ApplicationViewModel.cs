@@ -35,7 +35,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			set
 			{
 				Set(ref selectedSongListIndex, value);
-				ActiveDisc = (SelectedSongListIndex == ExplorerSongListIndex) ? LibraryExplorerViewModel.SelectedDisc : Playlist.CurrentSong?.Disc;
+				ActiveDisc = (SelectedSongListIndex == ExplorerSongListIndex) ? LibraryExplorerViewModel.SelectedDisc : PlaylistActiveDisc;
 			}
 		}
 
@@ -51,6 +51,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				}
 			}
 		}
+
+		private Disc PlaylistActiveDisc => Playlist.CurrentSong?.Disc ?? Playlist.PlayedDisc;
 
 		public ICommand LoadCommand { get; }
 
@@ -85,7 +87,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Register<ReversePlayingEventArgs>(this, OnReversePlaying);
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, OnPlaylistFinished);
 			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => SwitchToExplorerSongList());
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => OnPlaylistSongChanged(Playlist.CurrentSong));
+			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => OnPlaylistSongChanged());
 		}
 
 		public async Task Load()
@@ -130,11 +132,11 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		private void OnPlaylistSongChanged(Song song)
+		private void OnPlaylistSongChanged()
 		{
 			if (SelectedSongListIndex == PlaylistSongListIndex)
 			{
-				ActiveDisc = song?.Disc;
+				ActiveDisc = PlaylistActiveDisc;
 			}
 		}
 

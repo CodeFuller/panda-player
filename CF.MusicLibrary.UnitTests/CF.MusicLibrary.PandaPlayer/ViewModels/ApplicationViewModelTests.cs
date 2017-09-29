@@ -170,7 +170,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		[Test]
-		public void SelectedSongListIndexSetter_WhenPlaylistSongListSelected_SendsActiveDiscChangedEventForCurrentPlaylistSongDisc()
+		public void SelectedSongListIndexSetter_WhenPlaylistSongListSelectedAndPlaylistHasCurrentSong_SendsActiveDiscChangedEventForCurrentPlaylistSongDisc()
 		{
 			//	Arrange
 
@@ -197,6 +197,70 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			Assert.IsNotNull(receivedEvent);
 			Assert.AreSame(playlistSongDisc, receivedEvent.Disc);
+		}
+
+		[Test]
+		public void SelectedSongListIndexSetter_WhenPlaylistSongListSelectedAndOneDiscPlaylistDoesNotHaveCurrentSong_SendsActiveDiscChangedEventForPlaylistDisc()
+		{
+			//	Arrange
+
+			var playlistDisc = new Disc();
+
+			ISongPlaylistViewModel songPlaylistViewModelStub = Substitute.For<ISongPlaylistViewModel>();
+			songPlaylistViewModelStub.CurrentSong.Returns((Song)null);
+			songPlaylistViewModelStub.PlayedDisc.Returns(playlistDisc);
+			IMusicPlayerViewModel musicPlayerViewModelStub = Substitute.For<IMusicPlayerViewModel>();
+			musicPlayerViewModelStub.Playlist.Returns(songPlaylistViewModelStub);
+
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
+				musicPlayerViewModelStub, Substitute.For<IViewNavigator>());
+			target.Load().Wait();
+
+			ActiveDiscChangedEventArgs receivedEvent = null;
+			Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => receivedEvent = e);
+
+			//	Act
+
+			target.SelectedSongListIndex = 1;
+
+			//	Assert
+
+			Assert.IsNotNull(receivedEvent);
+			Assert.AreSame(playlistDisc, receivedEvent.Disc);
+		}
+
+		[Test]
+		public void SelectedSongListIndexSetter_WhenPlaylistSongListSelectedAndMultipleSongsPlaylistDoesNotHaveCurrentSong_SendsActiveDiscChangedEventForNullDisc()
+		{
+			//	Arrange
+
+			ILibraryExplorerViewModel libraryExplorerViewModelStub = Substitute.For<ILibraryExplorerViewModel>();
+			libraryExplorerViewModelStub.SelectedDisc.Returns(new Disc());
+			IApplicationViewModelHolder viewModelHolderStub = Substitute.For<IApplicationViewModelHolder>();
+			viewModelHolderStub.LibraryExplorerViewModel.Returns(libraryExplorerViewModelStub);
+
+			ISongPlaylistViewModel songPlaylistViewModelStub = Substitute.For<ISongPlaylistViewModel>();
+			songPlaylistViewModelStub.CurrentSong.Returns((Song)null);
+			songPlaylistViewModelStub.PlayedDisc.Returns((Disc)null);
+			IMusicPlayerViewModel musicPlayerViewModelStub = Substitute.For<IMusicPlayerViewModel>();
+			musicPlayerViewModelStub.Playlist.Returns(songPlaylistViewModelStub);
+
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), viewModelHolderStub,
+				musicPlayerViewModelStub, Substitute.For<IViewNavigator>());
+			target.Load().Wait();
+			target.SelectedSongListIndex = 0;
+
+			ActiveDiscChangedEventArgs receivedEvent = null;
+			Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => receivedEvent = e);
+
+			//	Act
+
+			target.SelectedSongListIndex = 1;
+
+			//	Assert
+
+			Assert.IsNotNull(receivedEvent);
+			Assert.IsNull(receivedEvent.Disc);
 		}
 
 		[Test]
