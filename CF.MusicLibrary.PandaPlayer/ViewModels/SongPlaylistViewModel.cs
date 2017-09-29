@@ -11,18 +11,34 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 {
 	public class SongPlaylistViewModel : SongListViewModel, ISongPlaylistViewModel
 	{
-		private int currentSongIndex;
-		private int CurrentSongIndex
+		private int? currentSongIndex;
+		public int? CurrentSongIndex
 		{
 			get { return currentSongIndex; }
-			set
+			protected set
 			{
-				currentSongIndex = value;
+				if (currentSongIndex == value)
+				{
+					return;
+				}
+
+				if (CurrentItem != null)
+				{
+					CurrentItem.IsCurrentlyPlayed = false;
+				}
+
+				currentSongIndex = value < SongItems.Count ? value : null;
+
+				if (CurrentItem != null)
+				{
+					CurrentItem.IsCurrentlyPlayed = true;
+				}
+
 				Messenger.Default.Send(new PlaylistChangedEventArgs(this));
 			}
 		}
 
-		private SongListItem CurrentItem => SongItems != null && CurrentSongIndex >= 0 && CurrentSongIndex < SongItems.Count ? SongItems[CurrentSongIndex] : null;
+		private SongListItem CurrentItem => SongItems != null && CurrentSongIndex != null ? SongItems[CurrentSongIndex.Value] : null;
 
 		public override bool DisplayTrackNumbers => false;
 
@@ -40,55 +56,75 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public SongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
 			: base(libraryContentUpdater, viewNavigator)
 		{
+			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => OnAddingNextSongs(e.Songs));
+			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => OnAddingLastSongs(e.Songs));
+
+			SongItems.CollectionChanged += (sender, e) => Messenger.Default.Send(new PlaylistChangedEventArgs(this));
 		}
 
 		public override void SetSongs(IEnumerable<Song> newSongs)
 		{
 			base.SetSongs(newSongs);
-			CurrentSongIndex = -1;
+			CurrentSongIndex = null;
 		}
 
 		public void SwitchToNextSong()
 		{
-			if (CurrentItem != null)
-			{
-				CurrentItem.IsCurrentlyPlayed = false;
-			}
-
-			++CurrentSongIndex;
-
-			if (CurrentItem != null)
-			{
-				CurrentItem.IsCurrentlyPlayed = true;
-			}
+			CurrentSongIndex = CurrentSongIndex + 1 ?? 0;
 		}
 
 		public void SwitchToSong(Song song)
 		{
-			if (CurrentItem != null)
-			{
-				CurrentItem.IsCurrentlyPlayed = false;
-			}
-
 			CurrentSongIndex = GetSongIndex(song);
-
-			if (CurrentItem != null)
-			{
-				CurrentItem.IsCurrentlyPlayed = true;
-			}
 		}
 
 		private int GetSongIndex(Song song)
 		{
-			for (var i = 0; i < SongItems.Count; ++i)
+			var songIndexes = SongItems.Select((item, i) => new { item.Song, Index = i })
+				.Where(obj => obj.Song == song)
+				.Select(obj => obj.Index)
+				.ToList();
+
+			if (!songIndexes.Any())
 			{
-				if (SongItems[i].Song == song)
-				{
-					return i;
-				}
+				throw new InvalidOperationException("No matched song in the list");
 			}
 
-			throw new InvalidOperationException("Failed to find song in the list");
+			if (songIndexes.Count > 1)
+			{
+				throw new InvalidOperationException("Multiple matched songs in the list");
+			}
+
+			return songIndexes.Single();
+		}
+
+		private void OnAddingNextSongs(IReadOnlyCollection<Song> songs)
+		{
+			int insertIndex = CurrentSongIndex + 1 ?? 0;
+			int firstSongIndex = insertIndex;
+			foreach (var song in songs)
+			{
+				SongItems.Insert(insertIndex++, new SongListItem(song));
+			}
+
+			if (CurrentItem == null && songs.Any())
+			{
+				CurrentSongIndex = firstSongIndex;
+			}
+		}
+
+		private void OnAddingLastSongs(IReadOnlyCollection<Song> songs)
+		{
+			int firstSongIndex = SongItems.Count;
+			foreach (var song in songs)
+			{
+				SongItems.Add(new SongListItem(song));
+			}
+
+			if (CurrentItem == null && songs.Any())
+			{
+				CurrentSongIndex = firstSongIndex;
+			}
 		}
 	}
 }

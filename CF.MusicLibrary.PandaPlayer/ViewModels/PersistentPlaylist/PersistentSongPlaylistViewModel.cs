@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CF.Library.Core;
+using CF.Library.Core.Extensions;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events;
@@ -59,25 +61,17 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 				songs.Add(song);
 			}
 
-			Song currentSong = null;
-			if (playListData.CurrentSong != null)
+			if (playListData.CurrentSongIndex != null && (playListData.CurrentSongIndex < 0 || playListData.CurrentSongIndex >= songs.Count))
 			{
-				currentSong = songs.SingleOrDefault(s => playListData.CurrentSong.Matches(s));
-				if (currentSong == null)
-				{
-					Logger.WriteWarning(Current($"Current song {playListData.CurrentSong.Uri} from saved playlist was not found in library. Ignoring saved playlist"));
-					return;
-				}
+				Logger.WriteWarning(Current($"Index of current song in saved playlist is invalid ({playListData.CurrentSongIndex}, [{0}, {songs.Count})). Ignoring saved playlist"));
+				return;
 			}
 
 			updatingSongsFromLoad = true;
 			try
 			{
 				SetSongs(songs);
-				if (currentSong != null)
-				{
-					SwitchToSong(currentSong);
-				}
+				CurrentSongIndex = playListData.CurrentSongIndex;
 			}
 			finally
 			{

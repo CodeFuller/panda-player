@@ -79,7 +79,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			PlaylistData playlistData = new PlaylistData
 			{
 				Songs = new[] { new PlaylistSongData(song1), new PlaylistSongData(song2) }.ToCollection(),
-				CurrentSong = new PlaylistSongData(song2),
+				CurrentSongIndex = 1,
 			};
 
 			Logger = Substitute.For<IMessageLogger>();
@@ -109,7 +109,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			PlaylistData playlistData = new PlaylistData
 			{
 				Songs = new[] { new PlaylistSongData(song) }.ToCollection(),
-				CurrentSong = null,
+				CurrentSongIndex = null,
 			};
 
 			Logger = Substitute.For<IMessageLogger>();
@@ -139,7 +139,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			PlaylistData playlistData = new PlaylistData
 			{
 				Songs = new[] { new PlaylistSongData(song), new PlaylistSongData(new Song { Id = 2 }) }.ToCollection(),
-				CurrentSong = new PlaylistSongData(song),
+				CurrentSongIndex = 0,
 			};
 
 			Logger = Substitute.For<IMessageLogger>();
@@ -157,8 +157,9 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			Assert.IsEmpty(target.Songs);
 		}
 
-		[Test]
-		public void LibraryLoadedEventHandler_IfPlaylistCurrentSongIsNotInPlaylist_ReturnsWithNoAction()
+		[TestCase(-1)]
+		[TestCase(1)]
+		public void LibraryLoadedEventHandler_IfCurrentSongIndexIsInvalid_ReturnsWithNoAction(int savedSongIndex)
 		{
 			//	Arrange
 
@@ -168,7 +169,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			PlaylistData playlistData = new PlaylistData
 			{
 				Songs = new[] { new PlaylistSongData(song) }.ToCollection(),
-				CurrentSong = new PlaylistSongData(new Song { Id = 2 }),
+				CurrentSongIndex = savedSongIndex,
 			};
 
 			Logger = Substitute.For<IMessageLogger>();
@@ -197,7 +198,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			PlaylistData playlistData = new PlaylistData
 			{
 				Songs = new[] { new PlaylistSongData(song) }.ToCollection(),
-				CurrentSong = new PlaylistSongData(song),
+				CurrentSongIndex = 0,
 			};
 
 			Logger = Substitute.For<IMessageLogger>();
@@ -228,7 +229,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			PlaylistData playlistData = new PlaylistData
 			{
 				Songs = new[] { new PlaylistSongData(song) }.ToCollection(),
-				CurrentSong = new PlaylistSongData(song),
+				CurrentSongIndex = 0,
 			};
 
 			Logger = Substitute.For<IMessageLogger>();
@@ -282,7 +283,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			Assert.AreEqual(new Uri("/SongUri1", UriKind.Relative), savedSongs[0].Uri);
 			Assert.AreEqual(2, savedSongs[1].Id);
 			Assert.AreEqual(new Uri("/SongUri2", UriKind.Relative), savedSongs[1].Uri);
-			Assert.AreSame(savedSongs[1], savedPlaylistData.CurrentSong);
+			Assert.AreEqual(1, savedPlaylistData.CurrentSongIndex);
 		}
 
 		[Test]
@@ -309,7 +310,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			//	Assert
 
 			playlistDataRepositoryMock.Received(1).Save(Arg.Any<PlaylistData>());
-			Assert.IsNull(savedPlaylistData.CurrentSong);
+			Assert.IsNull(savedPlaylistData.CurrentSongIndex);
 		}
 
 		[Test]

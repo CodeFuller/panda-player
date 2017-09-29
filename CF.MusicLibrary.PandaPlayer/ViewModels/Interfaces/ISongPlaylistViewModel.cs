@@ -6,6 +6,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 	{
 		Song CurrentSong { get; }
 
+		int? CurrentSongIndex { get; }
+
 		/// <summary>
 		/// If all songs in playlist belong to one Disc, returns this Disc.
 		/// Returns null otherwise.

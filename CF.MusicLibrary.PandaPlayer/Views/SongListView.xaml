@@ -36,6 +36,8 @@
 
             <DataGrid.ContextMenu>
                 <ContextMenu>
+                    <MenuItem Header="Play Next" Command="{Binding PlaySongsNextCommand}" />
+                    <MenuItem Header="Play Last" Command="{Binding PlaySongsLastCommand}" />
                     <MenuItem Header="Set Rating" ItemsSource="{Binding SetRatingMenuItems}">
                         <MenuItem.ItemContainerStyle>
                             <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">

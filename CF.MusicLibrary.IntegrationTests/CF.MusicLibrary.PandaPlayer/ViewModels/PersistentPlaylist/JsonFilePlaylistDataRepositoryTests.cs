@@ -26,7 +26,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.PandaPlayer.ViewModel
 			PlaylistData playlistData = new PlaylistData
 			{
 				Songs = new[] { new PlaylistSongData(song1), new PlaylistSongData(song2) }.ToCollection(),
-				CurrentSong = new PlaylistSongData(song2),
+				CurrentSongIndex = 1,
 			};
 
 			Logger = Substitute.For<IMessageLogger>();
@@ -53,8 +53,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.PandaPlayer.ViewModel
 			Assert.AreEqual(new Uri("/SongUri1", UriKind.Relative), loadedSongs[0].Uri);
 			Assert.AreEqual(2, loadedSongs[1].Id);
 			Assert.AreEqual(new Uri("/SongUri2", UriKind.Relative), loadedSongs[1].Uri);
-			Assert.AreEqual(2, loadedPlaylistData.CurrentSong.Id);
-			Assert.AreEqual(new Uri("/SongUri2", UriKind.Relative), loadedPlaylistData.CurrentSong.Uri);
+			Assert.AreEqual(1, loadedPlaylistData.CurrentSongIndex);
 		}
 	}
 }

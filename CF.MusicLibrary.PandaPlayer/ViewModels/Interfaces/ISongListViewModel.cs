@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CF.MusicLibrary.BL.Objects;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
@@ -23,6 +24,13 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 		long TotalSongsFileSize { get; }
 
 		TimeSpan TotalSongsDuration { get; }
+
+		ICommand PlaySongsNextCommand { get; }
+		ICommand PlaySongsLastCommand { get; }
+
+		ICommand EditSongsPropertiesCommand { get; }
+
+		IReadOnlyCollection<SetRatingMenuItem> SetRatingMenuItems { get; }
 
 		void SetSongs(IEnumerable<Song> newSongs);
 

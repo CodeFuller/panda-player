@@ -109,6 +109,7 @@
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\PersistentPlaylist\JsonFilePlaylistDataRepositoryTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\PersistentPlaylist\PersistentSongPlaylistViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\Player\SongPlaybacksRegistratorTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\SongListViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\SongPlaylistViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.Universal\DiscArt\DiscArtValidatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

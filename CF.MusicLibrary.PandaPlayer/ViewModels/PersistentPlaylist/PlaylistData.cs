@@ -9,7 +9,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 	{
 		public IReadOnlyCollection<PlaylistSongData> Songs { get; set; }
 
-		public PlaylistSongData CurrentSong { get; set; }
+		public int? CurrentSongIndex { get; set; }
 
 		public PlaylistData()
 		{
@@ -18,7 +18,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 		public PlaylistData(ISongPlaylistViewModel songPlaylistViewModel)
 		{
 			Songs = songPlaylistViewModel.Songs.Select(s => new PlaylistSongData(s)).ToCollection();
-			CurrentSong = songPlaylistViewModel.CurrentSong == null ? null : Songs.Single(s => s.Matches(songPlaylistViewModel.CurrentSong));
+			CurrentSongIndex = songPlaylistViewModel.CurrentSongIndex;
 		}
 	}
 }

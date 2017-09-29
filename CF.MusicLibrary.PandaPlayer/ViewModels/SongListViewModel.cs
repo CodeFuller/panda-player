@@ -2,14 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
+using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels
 {
@@ -20,19 +23,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public abstract bool DisplayTrackNumbers { get; }
 
-		private ObservableCollection<SongListItem> songItems;
-		public ObservableCollection<SongListItem> SongItems
-		{
-			get { return songItems; }
-			private set
-			{
-				Set(ref songItems, value);
-				RaisePropertyChanged(nameof(HasSongs));
-				RaisePropertyChanged(nameof(SongsNumber));
-				RaisePropertyChanged(nameof(TotalSongsFileSize));
-				RaisePropertyChanged(nameof(TotalSongsDuration));
-			}
-		}
+		public ObservableCollection<SongListItem> SongItems { get; }
 
 		public IEnumerable<Song> Songs => SongItems.Select(s => s.Song);
 
@@ -60,9 +51,12 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public IEnumerable<Song> SelectedSongs => SelectedSongItems.OfType<SongListItem>().Select(it => it.Song);
 
-		public IReadOnlyCollection<SetRatingMenuItem> SetRatingMenuItems { get; }
+		public ICommand PlaySongsNextCommand { get; }
+		public ICommand PlaySongsLastCommand { get; }
 
 		public ICommand EditSongsPropertiesCommand { get; }
+
+		public IReadOnlyCollection<SetRatingMenuItem> SetRatingMenuItems { get; }
 
 		protected SongListViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
 		{
@@ -78,10 +72,21 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			this.libraryContentUpdater = libraryContentUpdater;
 			this.viewNavigator = viewNavigator;
 
-			songItems = new ObservableCollection<SongListItem>();
+			SongItems = new ObservableCollection<SongListItem>();
+			SongItems.CollectionChanged += SongItems_CollectionChanged;
 
-			SetRatingMenuItems = RatingsHelper.AllowedRatingsDesc.Select(r => new SetRatingMenuItem(this, r)).ToList();
+			PlaySongsNextCommand = new RelayCommand(PlaySongsNext);
+			PlaySongsLastCommand = new RelayCommand(PlaySongsLast);
 			EditSongsPropertiesCommand = new RelayCommand(EditSongsProperties);
+			SetRatingMenuItems = RatingsHelper.AllowedRatingsDesc.Select(r => new SetRatingMenuItem(this, r)).ToList();
+		}
+
+		private void SongItems_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			RaisePropertyChanged(nameof(HasSongs));
+			RaisePropertyChanged(nameof(SongsNumber));
+			RaisePropertyChanged(nameof(TotalSongsFileSize));
+			RaisePropertyChanged(nameof(TotalSongsDuration));
 		}
 
 		private void EditSongsProperties()
@@ -95,7 +100,11 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public virtual void SetSongs(IEnumerable<Song> newSongs)
 		{
-			SongItems = new ObservableCollection<SongListItem>(newSongs.Select(s => new SongListItem(s)));
+			SongItems.Clear();
+			foreach (var song in newSongs)
+			{
+				SongItems.Add(new SongListItem(song));
+			}
 		}
 
 		public async Task SetRatingForSelectedSongs(Rating rating)
@@ -104,6 +113,26 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			if (updatedSongs.Any())
 			{
 				await libraryContentUpdater.SetSongsRating(updatedSongs, rating);
+			}
+		}
+
+		internal void PlaySongsNext()
+		{
+			AddSongsToPlaylist(songs => new AddingSongsToPlaylistNextEventArgs(songs));
+		}
+
+		internal void PlaySongsLast()
+		{
+			AddSongsToPlaylist(songs => new AddingSongsToPlaylistLastEventArgs(songs));
+		}
+
+		private void AddSongsToPlaylist<TAddingSongsToPlaylistEventArgs>(Func<IEnumerable<Song>, TAddingSongsToPlaylistEventArgs> eventFactory)
+			where TAddingSongsToPlaylistEventArgs : AddingSongsToPlaylistEventArgs
+		{
+			var selectedSongs = SelectedSongs.ToList();
+			if (selectedSongs.Any())
+			{
+				Messenger.Default.Send(eventFactory(selectedSongs));
 			}
 		}
 	}
