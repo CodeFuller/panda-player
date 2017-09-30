@@ -19,8 +19,7 @@ namespace CF.MusicLibrary.BL.Interfaces
 		/// <summary>
 		/// Returns all discs including deleted.
 		/// </summary>
-		/// <returns></returns>
-		Task<IEnumerable<Disc>> GetDiscsAsync();
+		Task<IEnumerable<Disc>> GetDiscs();
 
 		Task AddSongPlayback(Song song, DateTime playbackTime);
 	}

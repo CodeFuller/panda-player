@@ -33,7 +33,7 @@ namespace CF.MusicLibrary.BL
 
 		public async Task<IEnumerable<Disc>> LoadDiscs()
 		{
-			return await libraryRepository.GetDiscsAsync();
+			return await libraryRepository.GetDiscs();
 		}
 
 		public async Task<DiscLibrary> LoadLibrary()

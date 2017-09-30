@@ -88,7 +88,7 @@ namespace CF.MusicLibrary.Dal
 			}
 		}
 
-		public async Task<IEnumerable<Disc>> GetDiscsAsync()
+		public async Task<IEnumerable<Disc>> GetDiscs()
 		{
 			using (var ctx = GetContext())
 			{
