@@ -223,7 +223,7 @@ namespace CF.MusicLibrary.BL
 			HashSet<string> expectedDirectories = new HashSet<string>();
 			HashSet<string> expectedFileNames = new HashSet<string>(library.Songs.Select(s => UriToFilesystemPath(s.Uri)));
 
-			foreach (var disc in library)
+			foreach (var disc in library.Discs)
 			{
 				var discDirectory = UriToFilesystemPath(disc.Uri);
 				expectedFileNames.Add(Path.Combine(discDirectory, DiscCoverFileName));

@@ -151,7 +151,7 @@ namespace CF.MusicLibrary.LibraryChecker
 
 			if ((checkFlags & LibraryCheckFlags.CheckDiscsConsistency) != 0)
 			{
-				await discConsistencyChecker.CheckDiscsConsistency(discLibrary);
+				await discConsistencyChecker.CheckDiscsConsistency(discLibrary.Discs);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckLibraryStorage) != 0)
@@ -176,7 +176,7 @@ namespace CF.MusicLibrary.LibraryChecker
 
 			if ((checkFlags & LibraryCheckFlags.CheckAlbumsOnLastFM) != 0)
 			{
-				await lastFMConsistencyChecker.CheckAlbums(discLibrary);
+				await lastFMConsistencyChecker.CheckAlbums(discLibrary.Discs);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckSongsOnLastFM) != 0)

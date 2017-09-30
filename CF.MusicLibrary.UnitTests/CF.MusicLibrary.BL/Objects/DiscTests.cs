@@ -220,7 +220,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.BL.Objects
 		}
 
 		[Test]
-		public void LastPlaybackTime_WhenAllSongsHaveLastPlaybackTime_ReturnsEarliestSongLastPlaybackTime()
+		public void LastPlaybackTimeGetter_WhenAllSongsHaveLastPlaybackTime_ReturnsEarliestSongLastPlaybackTime()
 		{
 			//	Arrange
 
@@ -244,7 +244,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.BL.Objects
 		}
 
 		[Test]
-		public void LastPlaybackTime_WhenSomeSongsHaveNoLastPlaybackTime_ReturnsNull()
+		public void LastPlaybackTimeGetter_WhenSomeSongsHaveNoLastPlaybackTime_ReturnsNull()
 		{
 			//	Arrange
 
@@ -264,6 +264,171 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.BL.Objects
 			//	Assert
 
 			Assert.IsNull(lastPlaybackTime);
+		}
+
+		[Test]
+		public void LastPlaybackTimeGetter_IfDiscIsDeleted_ReturnsEarliestSongLastPlaybackTime()
+		{
+			//	Arrange
+
+			var disc = new Disc
+			{
+				SongsUnordered = new List<Song>
+				{
+					new Song { LastPlaybackTime = new DateTime(2017, 11, 28), DeleteDate = new DateTime(2017, 12, 01) },
+					new Song { LastPlaybackTime = new DateTime(2017, 04, 03), DeleteDate = new DateTime(2017, 12, 01) },
+					new Song { LastPlaybackTime = new DateTime(2017, 05, 09), DeleteDate = new DateTime(2017, 12, 01) },
+				}
+			};
+
+			//	Act
+
+			var lastPlaybackTime = disc.LastPlaybackTime;
+
+			//	Assert
+
+			Assert.AreEqual(new DateTime(2017, 04, 03), lastPlaybackTime);
+		}
+
+		[Test]
+		public void LastPlaybackTimeGetter_IfDiscIsDeletedAndSomeSongsHaveNoLastPlaybackTime_ReturnsNull()
+		{
+			//	Arrange
+
+			var disc = new Disc
+			{
+				SongsUnordered = new List<Song>
+				{
+					new Song { LastPlaybackTime = new DateTime(2017, 04, 03), DeleteDate = new DateTime(2017, 12, 01) },
+					new Song { LastPlaybackTime = null, DeleteDate = new DateTime(2017, 12, 01) },
+				}
+			};
+
+			//	Act
+
+			var lastPlaybackTime = disc.LastPlaybackTime;
+
+			//	Assert
+
+			Assert.IsNull(lastPlaybackTime);
+		}
+
+		[Test]
+		public void LastPlaybackTimeGetter_IfSomeSongsAreDeleted_ReturnsEarliestSongLastPlaybackTimeAmongActiveSongs()
+		{
+			//	Arrange
+
+			var disc = new Disc
+			{
+				SongsUnordered = new List<Song>
+				{
+					new Song { LastPlaybackTime = new DateTime(2017, 01, 01), DeleteDate = new DateTime(2017, 12, 01) },
+					new Song { LastPlaybackTime = new DateTime(2017, 11, 28), },
+					new Song { LastPlaybackTime = new DateTime(2017, 04, 03), },
+					new Song { LastPlaybackTime = new DateTime(2017, 05, 09), },
+				}
+			};
+
+			//	Act
+
+			var lastPlaybackTime = disc.LastPlaybackTime;
+
+			//	Assert
+
+			Assert.AreEqual(new DateTime(2017, 04, 03), lastPlaybackTime);
+		}
+
+		[Test]
+		public void LastPlaybackTimeGetter_IfSomeSongsAreDeletedAndSomeActiveSongsHaveNoLastPlaybackTime_ReturnsNull()
+		{
+			//	Arrange
+
+			var disc = new Disc
+			{
+				SongsUnordered = new List<Song>
+				{
+					new Song { LastPlaybackTime = new DateTime(2017, 01, 01), DeleteDate = new DateTime(2017, 12, 01) },
+					new Song { LastPlaybackTime = new DateTime(2017, 04, 03), },
+					new Song { LastPlaybackTime = null, },
+				}
+			};
+
+			//	Act
+
+			var lastPlaybackTime = disc.LastPlaybackTime;
+
+			//	Assert
+
+			Assert.IsNull(lastPlaybackTime);
+		}
+
+		[Test]
+		public void SongsGetter_ReturnsAllActiveSongs()
+		{
+			//	Arrange
+
+			var song1 = new Song();
+			var song2 = new Song();
+
+			var disc = new Disc { SongsUnordered = new[] { song1, song2 } };
+
+			//	Act
+
+			var songs = disc.Songs;
+
+			//	Assert
+
+			CollectionAssert.AreEqual(new[] { song1, song2 }, songs);
+		}
+
+		[Test]
+		public void SongsGetter_DoesNotReturnDeletedSongs()
+		{
+			//	Arrange
+
+			var disc = new Disc { SongsUnordered = new[] { new Song { DeleteDate = new DateTime(2017, 09, 30) } } };
+
+			//	Act & Assert
+
+			Assert.IsEmpty(disc.Songs);
+		}
+
+		[Test]
+		public void IsDeletedGetter_WhenSomeSongsAreNotDeleted_ReturnsFalse()
+		{
+			//	Arrange
+
+			var disc = new Disc
+			{
+				SongsUnordered = new[]
+				{
+					new Song { DeleteDate = null},
+					new Song { DeleteDate = new DateTime(2017, 09, 30)},
+				}
+			};
+
+			//	Act & Assert
+
+			Assert.IsFalse(disc.IsDeleted);
+		}
+
+		[Test]
+		public void IsDeletedGetter_WhenAllSongsAreDeleted_ReturnsTrue()
+		{
+			//	Arrange
+
+			var disc = new Disc
+			{
+				SongsUnordered = new[]
+				{
+					new Song { DeleteDate = new DateTime(2017, 09, 30)},
+					new Song { DeleteDate = new DateTime(2017, 09, 30)},
+				}
+			};
+
+			//	Act & Assert
+
+			Assert.IsTrue(disc.IsDeleted);
 		}
 	}
 }

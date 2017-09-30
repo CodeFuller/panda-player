@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace CF.MusicLibrary.BL.Objects
 {
-	public class DiscLibrary : IEnumerable<Disc>
+	public class DiscLibrary
 	{
 		private List<Disc> discs;
 
@@ -80,16 +79,6 @@ namespace CF.MusicLibrary.BL.Objects
 			{
 				disc.PlaybacksPassed = disc.LastPlaybackTime.HasValue ? playbacksPassed++ : Int32.MaxValue;
 			}
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-
-		public IEnumerator<Disc> GetEnumerator()
-		{
-			return Discs.GetEnumerator();
 		}
 	}
 }

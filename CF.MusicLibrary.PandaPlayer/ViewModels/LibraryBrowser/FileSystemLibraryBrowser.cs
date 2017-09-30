@@ -28,7 +28,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 			}
 
 			Dictionary<Uri, FolderExplorerItem> knownFolderUris = new Dictionary<Uri, FolderExplorerItem>();
-			foreach (var disc in discLibrary)
+			foreach (var disc in discLibrary.Discs)
 			{
 				var childUri = GetDirectChildUri(folderItem.Uri, disc.Uri);
 				if (childUri != null && !knownFolderUris.ContainsKey(childUri))

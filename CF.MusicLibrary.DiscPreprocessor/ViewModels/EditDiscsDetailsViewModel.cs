@@ -198,7 +198,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		private Genre PredictArtistGenre(string artist)
 		{
 			//	Selecting genre of the most recent disc
-			return discLibrary
+			return discLibrary.AllDiscs
 				.OrderByDescending(d => d.Year)
 				.Where(d => d.Artist?.Name == artist)
 				.Where(d => d.Genre != null)

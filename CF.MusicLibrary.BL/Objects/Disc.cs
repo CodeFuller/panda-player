@@ -35,7 +35,14 @@ namespace CF.MusicLibrary.BL.Objects
 			set { Uri = new Uri(value, UriKind.Relative); }
 		}
 
-		public DateTime? LastPlaybackTime => Songs.Any(s => s.LastPlaybackTime == null) ? null : Songs.Select(s => s.LastPlaybackTime).Min();
+		public DateTime? LastPlaybackTime
+		{
+			get
+			{
+				var analyzedSongs = ((IsDeleted || AllSongs.All(s => !s.IsDeleted)) ? AllSongs : Songs).ToList();
+				return analyzedSongs.Any(s => s.LastPlaybackTime == null) ? null : analyzedSongs.Select(s => s.LastPlaybackTime).Min();
+			}
+		}
 
 		public int? PlaybacksPassed { get; set; }
 
@@ -45,6 +52,6 @@ namespace CF.MusicLibrary.BL.Objects
 
 		public ICollection<Song> SongsUnordered { get; set; } = new Collection<Song>();
 
-		public bool IsDeleted => Songs.All(s => s.IsDeleted);
+		public bool IsDeleted => !Songs.Any();
 	}
 }

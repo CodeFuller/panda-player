@@ -99,13 +99,24 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.BL.Objects
 
 			var target = new DiscLibrary(new[] { new Disc { SongsUnordered = new[] { new Song { DeleteDate = new DateTime(2017, 09, 30) } } } });
 
-			//	Act
+			//	Act & Assert
 
-			var returnedDiscs = target.AsEnumerable();
+			CollectionAssert.IsEmpty(target.Discs);
+		}
 
-			//	Assert
+		[Test]
+		public void DiscsGetter_IfLibraryWasNotLoaded_ThrowsInvalidOperationException()
+		{
+			//	Arrange
 
-			CollectionAssert.IsEmpty(returnedDiscs);
+			var target = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
+
+			//	Act & Assert
+
+			IEnumerable<Disc> discs;
+			Assert.Throws<InvalidOperationException>(() => discs = target.Discs);
+			//	Avoiding uncovered lambda code (Task.FromResult(Enumerable.Empty<Disc>()))
+			target.Load().Wait();
 		}
 
 		[Test]
@@ -498,59 +509,6 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.BL.Objects
 			//	Assert
 
 			CollectionAssert.IsEmpty(returnedGenres);
-		}
-
-		[Test]
-		public void GetEnumerator_ReturnsAllActiveDiscs()
-		{
-			//	Arrange
-
-			var discs = new[]
-			{
-				new Disc {SongsUnordered = new[] {new Song {DeleteDate = null}}},
-				new Disc {SongsUnordered = new[] {new Song {DeleteDate = null}}},
-			};
-
-			var target = new DiscLibrary(discs);
-
-			//	Act
-
-			var enumeratedDiscs = target.AsEnumerable();
-
-			//	Assert
-
-			CollectionAssert.AreEqual(discs, enumeratedDiscs);
-		}
-
-		[Test]
-		public void GetEnumerator_DoesNotReturnDeletedDiscs()
-		{
-			//	Arrange
-
-			var target = new DiscLibrary(new[] { new Disc { SongsUnordered = new[] { new Song { DeleteDate = new DateTime(2017, 09, 30) } } } });
-
-			//	Act
-
-			var enumeratedDiscs = target.AsEnumerable();
-
-			//	Assert
-
-			CollectionAssert.IsEmpty(enumeratedDiscs);
-		}
-
-		[Test]
-		public void DiscsGetter_IfLibraryWasNotLoaded_ThrowsInvalidOperationException()
-		{
-			//	Arrange
-
-			var target = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-
-			//	Act & Assert
-
-			IEnumerable<Disc> discs;
-			Assert.Throws<InvalidOperationException>(() => discs = target.Discs);
-			//	Avoiding uncovered lambda code (Task.FromResult(Enumerable.Empty<Disc>()))
-			target.Load().Wait();
 		}
 	}
 }
