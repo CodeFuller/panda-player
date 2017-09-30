@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CF.Library.Core.Extensions;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events;
@@ -44,14 +45,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public Song CurrentSong => CurrentItem?.Song;
 
-		public Disc PlayedDisc
-		{
-			get
-			{
-				var discs = Songs.Select(s => s.Disc).Distinct().ToList();
-				return discs.Count == 1 ? discs.Single() : null;
-			}
-		}
+		public Disc PlayedDisc => Songs.Select(s => s.Disc).UniqueOrDefault();
 
 		public SongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
 			: base(libraryContentUpdater, viewNavigator)

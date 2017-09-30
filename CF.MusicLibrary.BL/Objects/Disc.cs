@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using CF.Library.Core.Extensions;
 
 namespace CF.MusicLibrary.BL.Objects
 {
@@ -9,32 +10,11 @@ namespace CF.MusicLibrary.BL.Objects
 	{
 		public int Id { get; set; }
 
-		public Artist Artist
-		{
-			get
-			{
-				var artists = Songs.Select(s => s.Artist).Distinct().ToList();
-				return artists.Count == 1 ? artists.Single() : null;
-			}
-		}
+		public Artist Artist => Songs.Select(s => s.Artist).UniqueOrDefault();
 
-		public Genre Genre
-		{
-			get
-			{
-				var genres = Songs.Select(s => s.Genre).Distinct().ToList();
-				return genres.Count == 1 ? genres.Single() : null;
-			}
-		}
+		public Genre Genre => Songs.Select(s => s.Genre).UniqueOrDefault();
 
-		public short? Year
-		{
-			get
-			{
-				var years = Songs.Select(s => s.Year).Distinct().ToList();
-				return years.Count == 1 ? years.Single() : null;
-			}
-		}
+		public short? Year => Songs.Select(s => s.Year).UniqueOrDefault();
 
 		/// <example>
 		/// The Classical Conspiracy (Live) (CD 1)
