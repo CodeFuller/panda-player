@@ -133,7 +133,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 		private List<Artist> BuildAvailableArtistsList(IEnumerable<AddedDiscInfo> discs)
 		{
-			List<Artist> artists = discLibrary.Artists.ToList();
+			List<Artist> artists = discLibrary.AllArtists.ToList();
 
 			var discsList = discs.ToList();
 			foreach (var songArtistName in discsList.Where(d => d.HasArtist).Select(d => d.Artist)

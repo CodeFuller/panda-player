@@ -7,13 +7,13 @@ namespace CF.MusicLibrary.BL.Interfaces
 {
 	public interface IMusicLibraryReader
 	{
-		Task<DiscLibrary> Load();
+		/// <summary>
+		/// Loads all library discs including deleted.
+		/// </summary>
+		/// <returns></returns>
+		Task<IEnumerable<Disc>> LoadDiscs();
 
-		Task<DiscLibrary> Load(bool includeDeleted);
-
-		Task<IEnumerable<Disc>> GetDiscsAsync();
-
-		Task<IEnumerable<Disc>> GetDiscsAsync(bool includeDeleted);
+		Task<DiscLibrary> LoadLibrary();
 
 		Task<SongTagData> GetSongTagData(Song song);
 

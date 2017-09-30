@@ -52,7 +52,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterInstance(new DiscLibrary(async () =>
 			{
 				var library = DIContainer.Resolve<IMusicLibrary>();
-				return await library.GetDiscsAsync(true);
+				return await library.LoadDiscs();
 			}));
 
 			DIContainer.RegisterType<IApplicationViewModelHolder, ApplicationViewModelHolder>();

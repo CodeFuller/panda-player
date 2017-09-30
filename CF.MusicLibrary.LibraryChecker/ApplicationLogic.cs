@@ -147,7 +147,7 @@ namespace CF.MusicLibrary.LibraryChecker
 		private async Task RunChecks(LibraryCheckFlags checkFlags)
 		{
 			Logger.WriteInfo("Loading library content...");
-			var discLibrary = await musicLibrary.Load();
+			var discLibrary = await musicLibrary.LoadLibrary();
 
 			if ((checkFlags & LibraryCheckFlags.CheckDiscsConsistency) != 0)
 			{
@@ -190,7 +190,7 @@ namespace CF.MusicLibrary.LibraryChecker
 		private async Task UnifyTags()
 		{
 			Logger.WriteInfo("Loading library content...");
-			var discLibrary = await musicLibrary.Load();
+			var discLibrary = await musicLibrary.LoadLibrary();
 
 			await tagDataChecker.UnifyTags(discLibrary.Songs);
 		}

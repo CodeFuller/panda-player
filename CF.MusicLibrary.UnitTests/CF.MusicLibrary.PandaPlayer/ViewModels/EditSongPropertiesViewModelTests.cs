@@ -23,13 +23,13 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		[Test]
 		public void Constructor_WhenLibraryStructurerArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), null, Substitute.For<ILibraryContentUpdater>()));
+			Assert.Throws<ArgumentNullException>(() => new EditSongPropertiesViewModel(new DiscLibrary(), null, Substitute.For<ILibraryContentUpdater>()));
 		}
 
 		[Test]
 		public void Constructor_WhenLibraryContentUpdaterArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), Substitute.For<ILibraryStructurer>(), null));
+			Assert.Throws<ArgumentNullException>(() => new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), null));
 		}
 
 		[Test]
@@ -113,7 +113,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var target = new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
+			var target = new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
 
 			//	Act & Arrange
 
@@ -131,7 +131,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			var libraryStructurer = Substitute.For<ILibraryStructurer>();
 			libraryStructurer.GetSongFileName(new Uri("/SomeDisc/Uri/SomeFileName.mp3", UriKind.Relative)).Returns("SomeFileName.mp3");
 
-			var target = new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), libraryStructurer, Substitute.For<ILibraryContentUpdater>());
+			var target = new EditSongPropertiesViewModel(new DiscLibrary(), libraryStructurer, Substitute.For<ILibraryContentUpdater>());
 			target.Load(new[]
 			{
 				new Song
@@ -166,7 +166,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			var libraryStructurer = Substitute.For<ILibraryStructurer>();
 			libraryStructurer.GetSongFileName(new Uri("/SomeDisc/Uri/SomeFileName.mp3", UriKind.Relative)).Returns("SomeFileName.mp3");
 
-			var target = new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), libraryStructurer, Substitute.For<ILibraryContentUpdater>());
+			var target = new EditSongPropertiesViewModel(new DiscLibrary(), libraryStructurer, Substitute.For<ILibraryContentUpdater>());
 			target.Load(new[]
 			{
 				new Song
@@ -208,7 +208,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			var libraryStructurer = Substitute.For<ILibraryStructurer>();
 			libraryStructurer.GetSongFileName(new Uri("/SomeDisc/Uri/SomeFileName.mp3", UriKind.Relative)).Returns("SomeFileName.mp3");
 
-			var target = new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), libraryStructurer, Substitute.For<ILibraryContentUpdater>());
+			var target = new EditSongPropertiesViewModel(new DiscLibrary(), libraryStructurer, Substitute.For<ILibraryContentUpdater>());
 			target.Load(new[]
 			{
 				new Song
@@ -249,7 +249,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			ILibraryContentUpdater libraryContentUpdaterMock = Substitute.For<ILibraryContentUpdater>();
 			libraryContentUpdaterMock.UpdateSongs(Arg.Do<IEnumerable<Song>>(arg => songsUpdate = arg.ToList()), Arg.Do<UpdatedSongProperties>(arg => updatedProperties = arg));
 
-			var target = new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), Substitute.For<ILibraryStructurer>(), libraryContentUpdaterMock);
+			var target = new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), libraryContentUpdaterMock);
 			target.Load(new[]
 			{
 				new Song
@@ -291,7 +291,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			ILibraryContentUpdater libraryContentUpdaterMock = Substitute.For<ILibraryContentUpdater>();
 			libraryContentUpdaterMock.UpdateSongs(Arg.Do<IEnumerable<Song>>(arg => songsUpdate = arg.ToList()), Arg.Do<UpdatedSongProperties>(arg => updatedProperties = arg));
 
-			var target = new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), Substitute.For<ILibraryStructurer>(), libraryContentUpdaterMock);
+			var target = new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), libraryContentUpdaterMock);
 			target.Load(new[]
 			{
 				new Song
@@ -336,7 +336,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			ILibraryContentUpdater libraryContentUpdaterMock = Substitute.For<ILibraryContentUpdater>();
 			libraryContentUpdaterMock.UpdateSongs(Arg.Do<IEnumerable<Song>>(arg => songsUpdate = arg.ToList()), Arg.Do<UpdatedSongProperties>(arg => updatedProperties = arg));
 
-			var target = new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), Substitute.For<ILibraryStructurer>(), libraryContentUpdaterMock);
+			var target = new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), libraryContentUpdaterMock);
 			target.Load(new[]
 			{
 				new Song
@@ -382,7 +382,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			ILibraryContentUpdater libraryContentUpdaterMock = Substitute.For<ILibraryContentUpdater>();
 			libraryContentUpdaterMock.UpdateSongs(Arg.Do<IEnumerable<Song>>(arg => songsUpdate = arg.ToList()), Arg.Do<UpdatedSongProperties>(arg => updatedProperties = arg));
 
-			var target = new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), Substitute.For<ILibraryStructurer>(), libraryContentUpdaterMock);
+			var target = new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), libraryContentUpdaterMock);
 			target.Load(new[]
 			{
 				new Song
@@ -436,7 +436,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			var libraryStructurer = Substitute.For<ILibraryStructurer>();
 			libraryStructurer.BuildSongUri(Arg.Any<Uri>(), "SomeFileName.mp3").Returns(new Uri("SomeFileName.mp3", UriKind.Relative));
-			var target = new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), libraryStructurer, libraryContentUpdaterMock);
+			var target = new EditSongPropertiesViewModel(new DiscLibrary(), libraryStructurer, libraryContentUpdaterMock);
 			target.Load(new[]
 			{
 				new Song { Uri = new Uri("SomeFileName.mp3", UriKind.Relative) }
@@ -466,7 +466,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			var libraryStructurer = Substitute.For<ILibraryStructurer>();
 			libraryStructurer.BuildSongUri(new Uri("/SomeDiscUri", UriKind.Relative), "NewFileName.mp3").Returns(new Uri("/SomeDiscUri/NewFileName.mp3", UriKind.Relative));
-			var target = new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), libraryStructurer, libraryContentUpdaterMock);
+			var target = new EditSongPropertiesViewModel(new DiscLibrary(), libraryStructurer, libraryContentUpdaterMock);
 			target.Load(new[] { song });
 
 			//	Act
@@ -488,7 +488,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			var libraryStructurer = Substitute.For<ILibraryStructurer>();
 			libraryStructurer.BuildSongUri(new Uri("/SomeDiscUri", UriKind.Relative), "NewFileName.mp3").Returns(new Uri("/SomeDiscUri/NewFileName.mp3", UriKind.Relative));
-			var target = new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), libraryStructurer, libraryContentUpdaterMock);
+			var target = new EditSongPropertiesViewModel(new DiscLibrary(), libraryStructurer, libraryContentUpdaterMock);
 			target.Load(new[]
 			{
 				new Song
@@ -517,7 +517,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var target = new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
+			var target = new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
 			target.Load(new[]
 			{
 				new Song(),
@@ -536,7 +536,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var target = new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
+			var target = new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
 			target.Load(new[] { new Song() });
 
 			//	Act & Assert
@@ -549,7 +549,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var target = new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
+			var target = new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
 			target.Load(new[]
 			{
 				new Song(),
@@ -568,7 +568,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var target = new EditSongPropertiesViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
+			var target = new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
 			target.Load(new[] { new Song() });
 
 			//	Act & Assert

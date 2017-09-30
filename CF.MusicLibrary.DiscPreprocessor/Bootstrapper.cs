@@ -37,7 +37,7 @@ namespace CF.MusicLibrary.DiscPreprocessor
 			DIContainer.RegisterInstance(new DiscLibrary(async () =>
 			{
 				var library = DIContainer.Resolve<IMusicLibrary>();
-				return await library.GetDiscsAsync();
+				return await library.LoadDiscs();
 			}));
 
 			DIContainer.RegisterType<IEthalonSongParser, EthalonSongParser>();

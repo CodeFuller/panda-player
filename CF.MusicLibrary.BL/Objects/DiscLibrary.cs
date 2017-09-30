@@ -15,21 +15,10 @@ namespace CF.MusicLibrary.BL.Objects
 		/// <summary>
 		/// Collection of library discs, excluding deleted.
 		/// </summary>
-		public IReadOnlyCollection<Disc> Discs
-		{
-			get
-			{
-				if (discs == null)
-				{
-					throw new InvalidOperationException("Library has not been loaded yet");
-				}
-
-				return discs.Where(d => !d.IsDeleted).ToList();
-			}
-		}
+		public IEnumerable<Disc> Discs => AllDiscs.Where(disc => !disc.IsDeleted);
 
 		/// <summary>
-		/// Collection of all discs, including deleted, if they were loaded.
+		/// Collection of all discs including deleted.
 		/// </summary>
 		public IReadOnlyCollection<Disc> AllDiscs
 		{
@@ -47,15 +36,22 @@ namespace CF.MusicLibrary.BL.Objects
 		public IEnumerable<Song> Songs => Discs.SelectMany(d => d.Songs).Where(s => !s.IsDeleted);
 
 		/// <summary>
-		/// Collection of all songs, including deleted, if they were loaded.
+		/// Collection of all songs including deleted.
 		/// </summary>
-		public IEnumerable<Song> AllSongs => AllDiscs.SelectMany(d => d.Songs).Where(s => !s.IsDeleted);
+		public IEnumerable<Song> AllSongs => AllDiscs.SelectMany(d => d.AllSongs);
 
 		public IEnumerable<Artist> Artists => Songs.Select(s => s.Artist).Where(a => a != null).Distinct();
 
-		public IEnumerable<Genre> Genres => Songs.Select(s => s.Genre).Where(g => g != null).Distinct();
+		public IEnumerable<Artist> AllArtists => AllSongs.Select(s => s.Artist).Where(a => a != null).Distinct();
 
-		public DiscLibrary(IEnumerable<Disc> libraryDiscs)
+		public IEnumerable<Genre> Genres => AllSongs.Select(s => s.Genre).Where(g => g != null).Distinct();
+
+		internal DiscLibrary() :
+			this(Enumerable.Empty<Disc>())
+		{
+		}
+
+		internal DiscLibrary(IEnumerable<Disc> libraryDiscs)
 		{
 			discs = libraryDiscs.ToList();
 			FillPlaybacksPassed();
@@ -75,11 +71,6 @@ namespace CF.MusicLibrary.BL.Objects
 
 			discs = (await discsLoader()).ToList();
 			FillPlaybacksPassed();
-		}
-
-		public void RemoveDisc(Disc disc)
-		{
-			discs.Remove(disc);
 		}
 
 		private void FillPlaybacksPassed()

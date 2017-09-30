@@ -126,7 +126,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				throw new InvalidOperationException("Songs list is empty");
 			}
 
-			AvailableArtists = FillAvailableValues(library.Artists, a => a.Name);
+			AvailableArtists = FillAvailableValues(library.AllArtists, a => a.Name);
 			AvailableGenres = FillAvailableValues(library.Genres, g => g.Name);
 
 			fileName = SingleSongMode ? GetSongFileName(SingleSong) : null;

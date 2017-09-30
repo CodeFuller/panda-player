@@ -31,21 +31,21 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		[Test]
 		public void Constructor_IfViewModelHolderArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), null,
+			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(new DiscLibrary(), null,
 				Substitute.For<IMusicPlayerViewModel>(), Substitute.For<IViewNavigator>()));
 		}
 
 		[Test]
 		public void Constructor_IfMusicPlayerViewModelArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), Substitute.For<IApplicationViewModelHolder>(),
+			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(new DiscLibrary(), Substitute.For<IApplicationViewModelHolder>(),
 				null, Substitute.For<IViewNavigator>()));
 		}
 
 		[Test]
 		public void Constructor_IfViewNavigatorArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), Substitute.For<IApplicationViewModelHolder>(),
+			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(new DiscLibrary(), Substitute.For<IApplicationViewModelHolder>(),
 				Substitute.For<IMusicPlayerViewModel>(), null));
 		}
 

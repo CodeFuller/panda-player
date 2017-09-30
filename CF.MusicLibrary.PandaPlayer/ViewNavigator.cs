@@ -49,7 +49,7 @@ namespace CF.MusicLibrary.PandaPlayer
 				throw new InvalidOperationException("All disc songs are already rated");
 			}
 
-			if (unratedSongsNumber == disc.Songs.Count)
+			if (unratedSongsNumber == disc.Songs.Count())
 			{
 				var rateDiscViewModel = viewModelHolder.RateDiscViewModel;
 				rateDiscViewModel.Load(disc);

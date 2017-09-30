@@ -248,40 +248,6 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		[Test]
-		public void DeleteDisc_IfDiscIsDeleted_RemovesDiscItemFromLibraryBrowser()
-		{
-			//	Arrange
-
-			var discItem = new DiscExplorerItem(new Disc
-			{
-				Title = "Some title",
-				Uri = new Uri("/SomeFolder", UriKind.Relative),
-			});
-
-			var folderItem = new FolderExplorerItem(new Uri("/SomeFolder", UriKind.Relative));
-
-			ILibraryBrowser libraryBrowserMock = Substitute.For<ILibraryBrowser>();
-			libraryBrowserMock.GetChildFolderItems(folderItem).Returns(new[] { discItem });
-
-			IWindowService windowServiceStub = Substitute.For<IWindowService>();
-			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);
-
-			LibraryExplorerViewModel target = new LibraryExplorerViewModel(libraryBrowserMock, Substitute.For<IExplorerSongListViewModel>(),
-				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), windowServiceStub);
-			target.SelectedItem = folderItem;
-			target.ChangeFolder();
-			target.SelectedItem = discItem;
-
-			//	Act
-
-			target.DeleteDisc().Wait();
-
-			//	Assert
-
-			libraryBrowserMock.Received(1).RemoveDiscItem(discItem);
-		}
-
-		[Test]
 		public void DeleteDisc_IfDiscIsDeleted_RemovesDiscFromItemsList()
 		{
 			//	Arrange
@@ -330,13 +296,11 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 				Uri = new Uri("/SomeFolder1/SomeFolder12/SomeDisc", UriKind.Relative),
 			});
 
-			bool discDeleted = false;
 			ILibraryBrowser libraryBrowserStub = Substitute.For<ILibraryBrowser>();
-			libraryBrowserStub.GetChildFolderItems(folderItem1).Returns(x => !discDeleted ? new[] { folderItem21, folderItem22 } : new[] { folderItem22 });
-			libraryBrowserStub.GetChildFolderItems(folderItem21).Returns(x => !discDeleted ? new[] { discItem } : new DiscExplorerItem[] { });
+			libraryBrowserStub.GetChildFolderItems(folderItem1).Returns(new[] { folderItem21, folderItem22 }.AsEnumerable(), new[] { folderItem22 }.AsEnumerable());
+			libraryBrowserStub.GetChildFolderItems(folderItem21).Returns(new[] { discItem }.AsEnumerable(), Enumerable.Empty<DiscExplorerItem>());
 			libraryBrowserStub.GetParentFolder(discItem).Returns(folderItem21);
 			libraryBrowserStub.GetParentFolder(folderItem21).Returns(folderItem1);
-			libraryBrowserStub.RemoveDiscItem(Arg.Do<DiscExplorerItem>(arg => discDeleted = true));
 
 			IWindowService windowServiceStub = Substitute.For<IWindowService>();
 			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);
@@ -376,12 +340,10 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 				Uri = new Uri("/SomeFolder1/SomeFolder12/SomeDisc2", UriKind.Relative),
 			});
 
-			bool discDeleted = false;
 			ILibraryBrowser libraryBrowserStub = Substitute.For<ILibraryBrowser>();
-			libraryBrowserStub.GetChildFolderItems(folderItem2).Returns(x => !discDeleted ? new[] { discItem1, discItem2 } : new DiscExplorerItem[] { discItem2 });
+			libraryBrowserStub.GetChildFolderItems(folderItem2).Returns(new[] { discItem1, discItem2 }.AsEnumerable(), new[] { discItem2 }.AsEnumerable());
 			libraryBrowserStub.GetParentFolder(discItem1).Returns(folderItem2);
 			libraryBrowserStub.GetParentFolder(folderItem2).Returns(folderItem1);
-			libraryBrowserStub.RemoveDiscItem(Arg.Do<DiscExplorerItem>(arg => discDeleted = true));
 
 			IWindowService windowServiceStub = Substitute.For<IWindowService>();
 			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);

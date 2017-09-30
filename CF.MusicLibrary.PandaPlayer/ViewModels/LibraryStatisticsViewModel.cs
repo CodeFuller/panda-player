@@ -17,7 +17,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public int DiscArtistsNumber => discLibrary.Discs.Select(d => d.Artist).Where(a => a != null).Distinct().Count();
 
-		public int DiscsNumber => discLibrary.Discs.Count;
+		public int DiscsNumber => discLibrary.Discs.Count();
 
 		public int SongsNumber => discLibrary.Songs.Count();
 

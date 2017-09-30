@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using CF.Library.Core.Extensions;
 
 namespace CF.MusicLibrary.BL.Objects
 {
@@ -60,7 +59,9 @@ namespace CF.MusicLibrary.BL.Objects
 
 		public int? PlaybacksPassed { get; set; }
 
-		public IReadOnlyCollection<Song> Songs => SongsUnordered?.OrderBy(s => s.TrackNumber).ThenBy(s => s.Title).ToCollection();
+		public IEnumerable<Song> Songs => AllSongs.Where(s => !s.IsDeleted);
+
+		public IEnumerable<Song> AllSongs => SongsUnordered?.OrderBy(s => s.TrackNumber).ThenBy(s => s.Title);
 
 		public ICollection<Song> SongsUnordered { get; set; } = new Collection<Song>();
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using CF.Library.Core.Extensions;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
@@ -33,38 +31,14 @@ namespace CF.MusicLibrary.BL
 			this.libraryStructurer = libraryStructurer;
 		}
 
-		public async Task<DiscLibrary> Load()
+		public async Task<IEnumerable<Disc>> LoadDiscs()
 		{
-			return await Load(false);
+			return await libraryRepository.GetDiscsAsync();
 		}
 
-		public async Task<DiscLibrary> Load(bool includeDeleted)
+		public async Task<DiscLibrary> LoadLibrary()
 		{
-			return new DiscLibrary(await GetDiscsAsync(includeDeleted));
-		}
-
-		public async Task<IEnumerable<Disc>> GetDiscsAsync()
-		{
-			return await GetDiscsAsync(false);
-		}
-
-		public async Task<IEnumerable<Disc>> GetDiscsAsync(bool includeDeleted)
-		{
-			var discs = await libraryRepository.GetDiscsAsync();
-
-			if (includeDeleted)
-			{
-				return discs;
-			}
-
-			//	Removing deleted songs from discs where some songs are still not deleted
-			var resultDiscs = new List<Disc>();
-			foreach (var disc in discs.Where(d => !d.IsDeleted))
-			{
-				disc.SongsUnordered = disc.SongsUnordered.Where(s => !s.IsDeleted).ToCollection();
-				resultDiscs.Add(disc);
-			}
-			return resultDiscs;
+			return new DiscLibrary(await LoadDiscs());
 		}
 
 		public async Task<SongTagData> GetSongTagData(Song song)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.DiscAdviser;
 using CF.MusicLibrary.PandaPlayer.Events;
@@ -30,7 +29,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		[Test]
 		public void Constructor_IfDiscAdviserArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new DiscAdviserViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), null));
+			Assert.Throws<ArgumentNullException>(() => new DiscAdviserViewModel(new DiscLibrary(), null));
 		}
 
 		[Test]
@@ -39,7 +38,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			//	Arrange
 
 			var disc = new Disc();
-			var library = new DiscLibrary(Enumerable.Empty<Disc>());
+			var library = new DiscLibrary();
 
 			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
 			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { disc });
@@ -60,7 +59,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var target = new DiscAdviserViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), Substitute.For<IDiscAdviser>());
+			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<IDiscAdviser>());
 
 			//	Act & Assert
 
@@ -72,7 +71,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var target = new DiscAdviserViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), Substitute.For<IDiscAdviser>());
+			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<IDiscAdviser>());
 
 			//	Act & Assert
 
@@ -89,7 +88,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 				Title = "Some Disc Title",
 			};
-			var library = new DiscLibrary(Enumerable.Empty<Disc>());
+			var library = new DiscLibrary();
 
 			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
 			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { disc });
@@ -116,7 +115,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 				Title = "Some Disc Title",
 				SongsUnordered = new[] { new Song { Artist = new Artist { Name = "Some Artist" } } },
 			};
-			var library = new DiscLibrary(Enumerable.Empty<Disc>());
+			var library = new DiscLibrary();
 
 			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
 			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { disc });
@@ -138,7 +137,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var target = new DiscAdviserViewModel(new DiscLibrary(Enumerable.Empty<Disc>()), Substitute.For<IDiscAdviser>());
+			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<IDiscAdviser>());
 
 			bool receivedEvent = false;
 			Messenger.Default.Register<PlayDiscEventArgs>(this, e => receivedEvent = true);
@@ -160,7 +159,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			//	Arrange
 
 			var disc = new Disc();
-			var library = new DiscLibrary(Enumerable.Empty<Disc>());
+			var library = new DiscLibrary();
 
 			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
 			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { disc });
@@ -188,7 +187,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			var disc1 = new Disc();
 			var disc2 = new Disc();
-			var library = new DiscLibrary(Enumerable.Empty<Disc>());
+			var library = new DiscLibrary();
 
 			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
 			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { disc1, disc2 });
@@ -212,7 +211,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			var disc1 = new Disc();
 			var disc2 = new Disc();
-			var library = new DiscLibrary(Enumerable.Empty<Disc>());
+			var library = new DiscLibrary();
 
 			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
 			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { disc1 }, new Collection<Disc> { disc2 });
@@ -236,7 +235,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			var disc1 = new Disc();
 			var disc2 = new Disc();
-			var library = new DiscLibrary(Enumerable.Empty<Disc>());
+			var library = new DiscLibrary();
 
 			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
 			songPlaylistStub.PlayedDisc.Returns(disc1);
@@ -263,7 +262,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			var disc1 = new Disc();
 			var disc2 = new Disc();
-			var library = new DiscLibrary(Enumerable.Empty<Disc>());
+			var library = new DiscLibrary();
 
 			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
 			songPlaylistStub.PlayedDisc.Returns(disc1);
@@ -290,7 +289,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			var finishedDisc = new Disc();
 			var currDisc = new Disc();
-			var library = new DiscLibrary(Enumerable.Empty<Disc>());
+			var library = new DiscLibrary();
 
 			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
 			songPlaylistStub.PlayedDisc.Returns(finishedDisc);
@@ -318,7 +317,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			var currDisc = new Disc();
 			var finishedDisc = new Disc();
 			var lastDisc = new Disc();
-			var library = new DiscLibrary(Enumerable.Empty<Disc>());
+			var library = new DiscLibrary();
 
 			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
 			songPlaylistStub.PlayedDisc.Returns(finishedDisc);
@@ -346,7 +345,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			//	Arrange
 
 			var disc = new Disc();
-			var library = new DiscLibrary(Enumerable.Empty<Disc>());
+			var library = new DiscLibrary();
 
 			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
 			songPlaylistStub.PlayedDisc.Returns((Disc)null);

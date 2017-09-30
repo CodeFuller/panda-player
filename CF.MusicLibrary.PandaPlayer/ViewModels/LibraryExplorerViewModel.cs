@@ -175,7 +175,6 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null));
 			await libraryContentUpdater.DeleteDisc(discItem.Disc);
 
-			libraryBrowser.RemoveDiscItem(discItem);
 			Items.Remove(discItem);
 
 			//	If only '..' item remains
