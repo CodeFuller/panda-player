@@ -160,6 +160,8 @@
     <Compile Include="ViewModels\DiscArt\IDiscArtImageFile.cs" />
     <Compile Include="ViewModels\DiscArt\IDocumentDownloader.cs" />
     <Compile Include="ViewModels\Interfaces\IEditDiscArtViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ILibraryStatisticsViewModel.cs" />
+    <Compile Include="ViewModels\LibraryStatisticsViewModel.cs" />
     <Compile Include="ViewModels\PersistentPlaylist\IPlaylistDataRepository.cs" />
     <Compile Include="ViewModels\PersistentPlaylist\JsonFilePlaylistDataRepository.cs" />
     <Compile Include="ViewModels\PersistentPlaylist\PlaylistData.cs" />
@@ -210,8 +212,12 @@
       <DependentUpon>EditDiscArtView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ClipboardAccess\ClipboardContentChangedEventArgs.cs" />
+    <Compile Include="Views\LibraryStatisticsView.xaml.cs">
+      <DependentUpon>LibraryStatisticsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ValidationRules\NotEmptyStringValidationRule.cs" />
     <Compile Include="Views\ValueConverters\BooleanAndConverter.cs" />
+    <Compile Include="Views\ValueConverters\CommaSeparatedNumberValueConverter.cs" />
     <Compile Include="Views\ValueConverters\EditedSongPropertyValueConverter.cs" />
     <Compile Include="ViewNavigator.cs" />
     <Compile Include="Events\PlayDiscEventArgs.cs" />
@@ -251,6 +257,7 @@
     <Compile Include="ViewModels\SongListViewModel.cs" />
     <Compile Include="Views\ValueConverters\BooleanToVisibilityValueConverter.cs" />
     <Compile Include="Views\ValueConverters\ImageSourceValueConverter.cs" />
+    <Compile Include="Views\ValueConverters\PercentageValueConverter.cs" />
     <Compile Include="Views\ValueConverters\RatingToImageNameValueConverter.cs" />
     <Compile Include="Views\ValueConverters\SongBitrateValueConverter.cs" />
     <Compile Include="Views\ValueConverters\SongDurationValueConverter.cs" />
@@ -270,6 +277,7 @@
       <DependentUpon>SongListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TrayClickCommand.cs" />
+    <Compile Include="Views\ValueConverters\SongsTotalDurationValueConverter.cs" />
     <Compile Include="Views\ViewModelExtensions.cs" />
     <Page Include="Views\DiscAdviserView.xaml">
       <SubType>Designer</SubType>
@@ -284,6 +292,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\EditSongPropertiesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LibraryStatisticsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

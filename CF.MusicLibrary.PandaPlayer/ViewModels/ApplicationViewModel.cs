@@ -7,6 +7,7 @@ using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels
@@ -56,6 +57,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand LoadCommand { get; }
 
+		public ICommand ShowLibraryStatisticsCommand { get; }
+
 		public ApplicationViewModel(DiscLibrary discLibrary, IApplicationViewModelHolder viewModelHolder, IMusicPlayerViewModel musicPlayerViewModel, IViewNavigator viewNavigator)
 		{
 			if (discLibrary == null)
@@ -81,6 +84,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			this.viewNavigator = viewNavigator;
 
 			LoadCommand = new AsyncRelayCommand(Load);
+			ShowLibraryStatisticsCommand = new RelayCommand(ShowLibraryStatistics);
 
 			Messenger.Default.Register<PlayDiscEventArgs>(this, OnPlayDiscLaunched);
 			Messenger.Default.Register<PlayDiscFromSongEventArgs>(this, OnPlayDiscFromSongLaunched);
@@ -100,6 +104,11 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 				SwitchToSongPlaylist();
 			}
+		}
+
+		public void ShowLibraryStatistics()
+		{
+			viewNavigator.ShowLibraryStatisticsView();
 		}
 
 		private void OnPlayDiscLaunched(PlayDiscEventArgs message)

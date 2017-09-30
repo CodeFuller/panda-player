@@ -11,7 +11,7 @@ namespace CF.MusicLibrary.PandaPlayer
 
 		public static string GetFormattedFileSize(long fileSize)
 		{
-			float size = (int)fileSize;
+			float size = fileSize;
 
 			if (fileSize < KbValue)
 			{

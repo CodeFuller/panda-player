@@ -16,6 +16,10 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
+    <Window.InputBindings>
+        <KeyBinding Key="F12" Command="{Binding ShowLibraryStatisticsCommand}" />
+    </Window.InputBindings>
+
     <Window.Resources>
         <ResourceDictionary>
             <!-- http://www.codeproject.com/Articles/36468/WPF-NotifyIcon -->

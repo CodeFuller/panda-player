@@ -46,6 +46,11 @@ namespace CF.MusicLibrary.BL.Objects
 
 		public IEnumerable<Song> Songs => Discs.SelectMany(d => d.Songs).Where(s => !s.IsDeleted);
 
+		/// <summary>
+		/// Collection of all songs, including deleted, if they were loaded.
+		/// </summary>
+		public IEnumerable<Song> AllSongs => AllDiscs.SelectMany(d => d.Songs).Where(s => !s.IsDeleted);
+
 		public IEnumerable<Artist> Artists => Songs.Select(s => s.Artist).Where(a => a != null).Distinct();
 
 		public IEnumerable<Genre> Genres => Songs.Select(s => s.Genre).Where(g => g != null).Distinct();

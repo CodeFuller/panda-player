@@ -68,6 +68,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<ILoggerViewModel, LoggerViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<IDiscArtViewModel, DiscArtViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<IEditDiscArtViewModel, EditDiscArtViewModel>(new ContainerControlledLifetimeManager());
+			DIContainer.RegisterType<ILibraryStatisticsViewModel, LibraryStatisticsViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<ApplicationViewModel>(new ContainerControlledLifetimeManager());
 
 			DIContainer.RegisterType<ILibraryBrowser, FileSystemLibraryBrowser>();
