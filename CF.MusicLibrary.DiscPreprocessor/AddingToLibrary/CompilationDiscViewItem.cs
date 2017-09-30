@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 
@@ -15,21 +13,9 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			set { base.Year = value; }
 		}
 
-		public override bool DestinationUriIsEditable => false;
-
-		public override IEnumerable<Uri> AvailableDestinationUris => Enumerable.Repeat(DestinationUri, 1);
-
-		public override bool RequiredDataIsFilled => Genre != null;
-
-		protected CompilationDiscViewItem(string sourcePath, AddedDiscInfo disc, IEnumerable<Artist> availableArtists,
-			Uri destinationUri, IEnumerable<Genre> availableGenres) : base(sourcePath, disc, availableArtists, availableGenres)
+		protected CompilationDiscViewItem(string sourcePath, AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
+			: base(sourcePath, disc, availableArtists, availableGenres)
 		{
-			if (disc == null)
-			{
-				throw new ArgumentNullException(nameof(disc));
-			}
-
-			DestinationUri = destinationUri;
 			Year = disc.Year;
 		}
 	}

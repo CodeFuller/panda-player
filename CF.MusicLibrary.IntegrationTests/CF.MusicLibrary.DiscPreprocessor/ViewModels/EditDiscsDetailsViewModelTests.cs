@@ -30,8 +30,8 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 				Year = 2000,
 				Title = "Some Disc",
 				SourcePath = Invariant($@"{TestWorkshopMusicStorage}\Some Artist\2000 - Some Disc"),
-				PathWithinStorage = @"Some Artist\2000 - Some Disc",
 				NameInStorage = "2000 - Some Disc",
+				UriWithinStorage = new Uri("/Foreign/Some Artist/2000 - Some Disc", UriKind.Relative),
 				DiscType = DsicType.ArtistDisc,
 				Artist = "Some Artist",
 			};
@@ -47,42 +47,13 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 
 			var discItem = target.Discs.Single() as ArtistDiscViewItem;
 			Assert.IsNotNull(discItem);
-			Assert.AreEqual(@"Some Artist\2000 - Some Disc", discItem.PathWithinWorkshopStorage);
+			Assert.AreEqual(new Uri("/Foreign/Some Artist/2000 - Some Disc", UriKind.Relative), discItem.DestinationUri);
 			Assert.AreEqual(Invariant($@"{TestWorkshopMusicStorage}\Some Artist\2000 - Some Disc"), discItem.SourcePath);
 			Assert.AreEqual("Some Artist", discItem.Artist.Name);
-			Assert.AreEqual("Some Disc", discItem.Title);
+			Assert.AreEqual("Some Disc", discItem.DiscTitle);
 			Assert.AreEqual(2000, discItem.Year);
 			Assert.IsNull(discItem.Genre);
 			Assert.AreEqual("2000 - Some Disc", discItem.NameInStorage);
-			Assert.IsNull(discItem.DestinationUri);
-		}
-
-		[Test]
-		public void SetDiscs_ForArtistDiscOfKnownArtist_SetsDestinationUriCorrectly()
-		{
-			//	Arrange
-
-			var addedDisc = new AddedDiscInfo(new AddedSongInfo[] { })
-			{
-				NameInStorage = "2000 - Some Disc",
-				DiscType = DsicType.ArtistDisc,
-			};
-
-			ILibraryStructurer libraryStructurer = Substitute.For<ILibraryStructurer>();
-			libraryStructurer.GetArtistStorageUri(Arg.Any<DiscLibrary>(), Arg.Any<Artist>()).Returns(new Uri("/Some Artist", UriKind.Relative));
-			libraryStructurer.BuildArtistDiscUri(new Uri("/Some Artist", UriKind.Relative), "2000 - Some Disc").Returns(new Uri("/SomeCategory/Some Artist/2000 - Some Disc", UriKind.Relative));
-
-			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, libraryStructurer, Substitute.For<IFileSystemFacade>());
-
-			//	Act
-
-			target.SetDiscs(Enumerable.Repeat(addedDisc, 1)).Wait();
-
-			//	Assert
-
-			var discItem = target.Discs.Single();
-			Assert.AreEqual(new Uri("/SomeCategory/Some Artist/2000 - Some Disc", UriKind.Relative), discItem.DestinationUri);
 		}
 
 		[Test]
@@ -126,6 +97,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 
 			var addedDisc = new AddedDiscInfo(new AddedSongInfo[] { })
 			{
+				Title = "Some Title",
 				DiscType = DsicType.ArtistDisc,
 				Artist = "Some Artist",
 			};
@@ -158,16 +130,13 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			{
 				Title = "Some Movie",
 				SourcePath = Invariant($@"{TestWorkshopMusicStorage}\Soundtracks\Some Movie"),
-				PathWithinStorage = @"Soundtracks\Some Movie",
 				NameInStorage = "Some Movie",
+				UriWithinStorage = new Uri("/Soundtracks/Some Movie", UriKind.Relative),
 				DiscType = DsicType.CompilationDiscWithArtistInfo,
 			};
 
-			ILibraryStructurer libraryStructurer = Substitute.For<ILibraryStructurer>();
-			libraryStructurer.BuildUriForWorkshopStoragePath(@"Soundtracks\Some Movie").Returns(new Uri("/Soundtracks/Some Movie", UriKind.Relative));
-
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, libraryStructurer, Substitute.For<IFileSystemFacade>());
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IFileSystemFacade>());
 
 			//	Act
 
@@ -177,10 +146,10 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 
 			var discItem = target.Discs.Single() as CompilationDiscWithArtistInfoViewItem;
 			Assert.IsNotNull(discItem);
-			Assert.AreEqual(@"Soundtracks\Some Movie", discItem.PathWithinWorkshopStorage);
+			Assert.AreEqual(new Uri("/Soundtracks/Some Movie", UriKind.Relative), discItem.DestinationUri);
 			Assert.AreEqual(Invariant($@"{TestWorkshopMusicStorage}\Soundtracks\Some Movie"), discItem.SourcePath);
 			Assert.IsNull(discItem.Artist);
-			Assert.AreEqual("Some Movie", discItem.Title);
+			Assert.AreEqual("Some Movie", discItem.DiscTitle);
 			Assert.IsNull(discItem.Year);
 			Assert.IsNull(discItem.Genre);
 			Assert.AreEqual(new Uri("/Soundtracks/Some Movie", UriKind.Relative), discItem.DestinationUri);
@@ -201,16 +170,13 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			{
 				Title = "Some Movie",
 				SourcePath = Invariant($@"{TestWorkshopMusicStorage}\Soundtracks\Some Movie"),
-				PathWithinStorage = @"Soundtracks\Some Movie",
 				NameInStorage = "Some Movie",
+				UriWithinStorage = new Uri("/Soundtracks/Some Movie", UriKind.Relative),
 				DiscType = DsicType.CompilationDiscWithoutArtistInfo,
 			};
 
-			ILibraryStructurer libraryStructurer = Substitute.For<ILibraryStructurer>();
-			libraryStructurer.BuildUriForWorkshopStoragePath(@"Soundtracks\Some Movie").Returns(new Uri("/Soundtracks/Some Movie", UriKind.Relative));
-
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, libraryStructurer, Substitute.For<IFileSystemFacade>());
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IFileSystemFacade>());
 
 			//	Act
 
@@ -220,10 +186,10 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 
 			var discItem = target.Discs.Single() as CompilationDiscWithoutArtistInfoViewItem;
 			Assert.IsNotNull(discItem);
-			Assert.AreEqual(@"Soundtracks\Some Movie", discItem.PathWithinWorkshopStorage);
+			Assert.AreEqual(new Uri("/Soundtracks/Some Movie", UriKind.Relative), discItem.DestinationUri);
 			Assert.AreEqual(Invariant($@"{TestWorkshopMusicStorage}\Soundtracks\Some Movie"), discItem.SourcePath);
 			Assert.IsNull(discItem.Artist);
-			Assert.AreEqual("Some Movie", discItem.Title);
+			Assert.AreEqual("Some Movie", discItem.DiscTitle);
 			Assert.IsNull(discItem.Year);
 			Assert.IsNull(discItem.Genre);
 			Assert.AreEqual(new Uri("/Soundtracks/Some Movie", UriKind.Relative), discItem.DestinationUri);
@@ -238,7 +204,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			{
 				new AddedDiscInfo(new[]
 				{
-					new AddedSongInfo(Invariant($@"{TestWorkshopMusicStorage}\Nightwish\2000 - Wishmaster\01 - She Is My Sin.mp3"))
+					new AddedSongInfo(Invariant($@"{TestWorkshopMusicStorage}\Foreign\Nightwish\2000 - Wishmaster\01 - She Is My Sin.mp3"))
 					{
 						Track = 1,
 						Title = "She Is My Sin",
@@ -248,6 +214,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 				{
 					Year = 2000,
 					Title = "Wishmaster",
+					UriWithinStorage = new Uri("/Foreign/Nightwish/2000 - Wishmaster", UriKind.Relative),
 					DiscType = DsicType.ArtistDisc,
 					Artist = "Nightwish",
 				},
@@ -263,7 +230,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 				})
 				{
 					Title = "Gladiator",
-					PathWithinStorage = @"Soundtracks\Gladiator",
+					UriWithinStorage = new Uri("/Soundtracks/Gladiator", UriKind.Relative),
 					DiscType = DsicType.CompilationDiscWithoutArtistInfo,
 				},
 
@@ -286,7 +253,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 				})
 				{
 					Title = "The Matrix",
-					PathWithinStorage = @"Soundtracks\The Matrix",
+					UriWithinStorage = new Uri("/Soundtracks/The Matrix", UriKind.Relative),
 					DiscType = DsicType.CompilationDiscWithArtistInfo,
 				},
 			};
@@ -297,7 +264,6 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			target.SetDiscs(discs).Wait();
 
 			//	Emulating editing of disc data by the user.
-			target.Discs[0].DestinationUri = new Uri("/Foreign/Nightwish/2000 - Wishmaster", UriKind.Relative);
 			target.Discs[0].Genre = new Genre { Name = "Gothic Metal" };
 			target.Discs[1].Genre = new Genre { Name = "Soundtrack" };
 			target.Discs[1].Artist = new Artist { Name = "Hans Zimmer" };
@@ -316,7 +282,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			Assert.AreEqual(4, songs.Count);
 
 			var song1 = songs[0].Song;
-			Assert.AreEqual(Invariant($@"{TestWorkshopMusicStorage}\Nightwish\2000 - Wishmaster\01 - She Is My Sin.mp3"), songs[0].SourceFileName);
+			Assert.AreEqual(Invariant($@"{TestWorkshopMusicStorage}\Foreign\Nightwish\2000 - Wishmaster\01 - She Is My Sin.mp3"), songs[0].SourceFileName);
 			Assert.AreEqual(new Uri("/Foreign/Nightwish/2000 - Wishmaster/01 - She Is My Sin.mp3", UriKind.Relative), song1.Uri);
 			Assert.AreEqual("Nightwish", song1.Artist.Name);
 			Assert.AreEqual("Wishmaster", song1.Disc.Title);

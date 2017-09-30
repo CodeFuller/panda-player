@@ -13,10 +13,8 @@
             </Style>
         </DataGrid.ColumnHeaderStyle>
         <DataGrid.Columns>
-            <DataGridTextColumn Header="Source Dir" Width="*"
-                                    IsReadOnly="True" Binding="{Binding PathWithinWorkshopStorage}" />
-            <DataGridTextColumn Header="Type"
-                                    IsReadOnly="True" Binding="{Binding DiscTypeTitle}">
+            <DataGridTextColumn Header="Destination URI" Width="*" IsReadOnly="True" Binding="{Binding DestinationUri}" />
+            <DataGridTextColumn Header="Type" IsReadOnly="True" Binding="{Binding DiscTypeTitle}">
                 <DataGridTextColumn.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -48,7 +46,7 @@
                     </Style>
                 </DataGridComboBoxColumn.EditingElementStyle>
             </DataGridComboBoxColumn>
-            <DataGridTextColumn Header="Disc Title" Width="*" Binding="{Binding Title}" />
+            <DataGridTextColumn Header="Disc Title" Width="*" IsReadOnly="True" Binding="{Binding DiscTitle}" />
             <DataGridTextColumn Header="Album Title" Width="*" Binding="{Binding AlbumTitle}">
                 <DataGridTextColumn.CellStyle>
                     <Style TargetType="DataGridCell">
@@ -90,28 +88,6 @@
                 <DataGridComboBoxColumn.EditingElementStyle>
                     <Style TargetType="ComboBox">
                         <Setter Property="ItemsSource" Value="{Binding AvailableGenres}" />
-                    </Style>
-                </DataGridComboBoxColumn.EditingElementStyle>
-            </DataGridComboBoxColumn>
-            <DataGridComboBoxColumn Header="Destination URI" Width="*" SelectedItemBinding="{Binding DestinationUri}">
-                <DataGridComboBoxColumn.CellStyle>
-                    <Style TargetType="{x:Type DataGridCell}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding DestinationUriIsNotFilled}" Value="True">
-                                <Setter Property="Background" Value="Red" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGridComboBoxColumn.CellStyle>
-                <DataGridComboBoxColumn.ElementStyle>
-                    <Style TargetType="ComboBox">
-                        <Setter Property="ItemsSource" Value="{Binding AvailableDestinationUris}" />
-                    </Style>
-                </DataGridComboBoxColumn.ElementStyle>
-                <DataGridComboBoxColumn.EditingElementStyle>
-                    <Style TargetType="ComboBox">
-                        <Setter Property="IsEnabled" Value="{Binding DestinationUriIsEditable}" />
-                        <Setter Property="ItemsSource" Value="{Binding AvailableDestinationUris}" />
                     </Style>
                 </DataGridComboBoxColumn.EditingElementStyle>
             </DataGridComboBoxColumn>

@@ -14,11 +14,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 	public abstract class DiscViewItem : ViewModelBase
 	{
 		/// <summary>
-		/// Disc source path within workshop directory.
-		/// </summary>
-		public string PathWithinWorkshopStorage { get; }
-
-		/// <summary>
 		/// Disc source path.
 		/// </summary>
 		public string SourcePath { get; }
@@ -32,23 +27,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public Collection<Artist> AvailableArtists { get; }
 
-		private string title;
-		/// <summary>
-		/// Disc title.
-		/// </summary>
-		/// <remarks>
-		/// The only case when this title is edited currently, it's setting empty title for 'Best\Foreign' and 'Best\Russian' directories.
-		/// </remarks>
-		public string Title
-		{
-			get { return title; }
-			set
-			{
-				Set(ref title, value);
-				RaisePropertyChanged(nameof(AlbumTitleMatchesDiscTitle));
-				RaisePropertyChanged(nameof(RequiredDataIsFilled));
-			}
-		}
+		public string DiscTitle { get; }
 
 		private string albumTitle;
 		public string AlbumTitle
@@ -58,11 +37,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			{
 				Set(ref albumTitle, value);
 				RaisePropertyChanged(nameof(AlbumTitleMatchesDiscTitle));
-				RaisePropertyChanged(nameof(RequiredDataIsFilled));
 			}
 		}
 
-		public bool AlbumTitleMatchesDiscTitle => String.Equals(AlbumTitle, Title, StringComparison.OrdinalIgnoreCase);
+		public bool AlbumTitleMatchesDiscTitle => String.Equals(AlbumTitle, DiscTitle, StringComparison.OrdinalIgnoreCase);
 
 		private short? year;
 		public virtual short? Year
@@ -72,9 +50,9 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			{
 				Set(ref year, value);
 				RaisePropertyChanged(nameof(YearIsNotFilled));
-				RaisePropertyChanged(nameof(RequiredDataIsFilled));
 			}
 		}
+
 		public bool YearIsNotFilled => !Year.HasValue;
 
 		private Genre genre;
@@ -92,36 +70,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public Collection<Genre> AvailableGenres { get; }
 
-		private Uri destinationUri;
-		/// <summary>
-		/// Disc destination uri.
-		/// </summary>
-		/// <example>
-		/// "/Foreign/Guano Apes" for "Guano Apes".
-		/// "/Soundtracks/Pulp Fiction" for "Pulp Fiction"
-		/// </example>
-		public Uri DestinationUri
-		{
-			get { return destinationUri; }
-			set
-			{
-				Set(ref destinationUri, value);
-				RaisePropertyChanged(nameof(DestinationUriIsNotFilled));
-				RaisePropertyChanged(nameof(RequiredDataIsFilled));
-			}
-		}
-		public abstract bool DestinationUriIsEditable { get; }
-		public bool DestinationUriIsNotFilled => DestinationUri == null;
+		public Uri DestinationUri { get; }
 
-		public abstract IEnumerable<Uri> AvailableDestinationUris { get; }
-
-		public abstract bool RequiredDataIsFilled { get; }
+		public bool RequiredDataIsFilled => !GenreIsNotFilled;
 
 		protected IReadOnlyCollection<AddedSongInfo> SourceSongs { get; }
 
 		public Disc Disc => new Disc
 		{
-			Title = Title,
+			Title = DiscTitle,
 			AlbumTitle = AlbumTitle,
 			Uri = DestinationUri,
 		};
@@ -152,21 +109,21 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		protected DiscViewItem(string sourcePath, AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
 		{
-			if (disc == null)
+			if (String.IsNullOrWhiteSpace(disc.Title))
 			{
-				throw new ArgumentNullException(nameof(disc));
+				throw new InvalidOperationException("Disc title could not be empty");
 			}
 
-			PathWithinWorkshopStorage = disc.PathWithinStorage;
 			SourcePath = sourcePath;
-			title = disc.Title;
+			DiscTitle = disc.Title;
 			albumTitle = DiscTitleToAlbumMapper.GetAlbumTitleFromDiscTitle(disc.Title);
 			AvailableArtists = availableArtists.OrderBy(a => a.Name).ToCollection();
 			AvailableGenres = availableGenres.OrderBy(a => a.Name).ToCollection();
+			DestinationUri = disc.UriWithinStorage;
 			SourceSongs = disc.Songs.ToList();
 		}
 
-		public abstract Artist GetSongArtist(AddedSongInfo song);
+		protected abstract Artist GetSongArtist(AddedSongInfo song);
 
 		protected Artist LookupArtist(string artistName)
 		{

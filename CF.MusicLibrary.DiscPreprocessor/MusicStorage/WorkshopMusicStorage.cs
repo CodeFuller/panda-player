@@ -31,30 +31,30 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 		{
 			List<AddedSongInfo> songs = songFiles.Select(GetSongInfo).ToList();
 
-			ItemUriParts pathParts = new ItemUriParts(discPath, workshopRootPath);
-			if (pathParts.Count == 0)
+			ItemUriParts uriParts = new ItemUriParts(discPath, workshopRootPath);
+			if (uriParts.Count == 0)
 			{
-				throw new InvalidInputDataException(Current($"Could not parse disc data from '{pathParts[1]}'"));
+				throw new InvalidInputDataException(Current($"Could not parse disc data from '{uriParts[1]}'"));
 			}
 
 			short? year;
 			string title;
-			ParseDiscData(pathParts[pathParts.Count - 1], out year, out title);
+			ParseDiscData(uriParts[uriParts.Count - 1], out year, out title);
 
 			AddedDiscInfo discInfo = new AddedDiscInfo(songs)
 			{
 				Year = year,
 				Title = title,
 				SourcePath = discPath,
-				PathWithinStorage = pathParts.PathWithinLibrary,
-				NameInStorage = pathParts[pathParts.Count - 1],
+				UriWithinStorage = uriParts.Uri,
+				NameInStorage = uriParts[uriParts.Count - 1],
 			};
 
-			//	Case of "Artist \ Disc", e.g. "Nightwish\2011 - Imaginaerum"
-			if (pathParts.Count == 2 && year.HasValue)
+			//	Case of "Category\Artist\Disc", e.g. "Foreign\Nightwish\2011 - Imaginaerum"
+			if (uriParts.Count == 3 && year.HasValue)
 			{
 				discInfo.DiscType = DsicType.ArtistDisc;
-				discInfo.Artist = pathParts[0];
+				discInfo.Artist = uriParts[1];
 			}
 			else
 			{

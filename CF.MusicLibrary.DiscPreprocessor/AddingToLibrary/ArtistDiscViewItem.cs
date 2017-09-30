@@ -17,7 +17,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			get { return artist; }
 			set
 			{
-				throw new InvalidOperationException(Current($"Artist could not be changed for '{Title}' directory"));
+				throw new InvalidOperationException(Current($"Artist could not be changed for '{DiscTitle}' directory"));
 			}
 		}
 		public override bool ArtistIsEditable => false;
@@ -29,30 +29,18 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			get { return year; }
 			set
 			{
-				throw new InvalidOperationException(Current($"Year could not be set for '{Title}' directory"));
+				throw new InvalidOperationException(Current($"Year could not be set for '{DiscTitle}' directory"));
 			}
 		}
 
-		public override bool DestinationUriIsEditable => true;
-
-		private readonly List<Uri> availableDestinationUris;
-		public override IEnumerable<Uri> AvailableDestinationUris => availableDestinationUris;
-
-		public override bool RequiredDataIsFilled => !(Genre == null || DestinationUriIsNotFilled);
-
 		public string NameInStorage { get; private set; }
 
-		public ArtistDiscViewItem(string sourcePath, AddedDiscInfo disc,
-			IEnumerable<Artist> availableArtists,
-			IEnumerable<Uri> availableDestinationUris, Uri destinationUri,
-			IEnumerable<Genre> availableGenres, Genre genre) :
-			base(sourcePath, disc, availableArtists, availableGenres)
+		public ArtistDiscViewItem(string sourcePath, AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres, Genre genre)
+			: base(sourcePath, disc, availableArtists, availableGenres)
 		{
 			artist = LookupArtist(disc.Artist);
 			Genre = genre;
 			year = disc.Year;
-			this.availableDestinationUris = availableDestinationUris.ToList();
-			DestinationUri = destinationUri;
 			NameInStorage = disc.NameInStorage;
 
 			//	Should we keep Artist parsed from songs or should we clear it?
@@ -70,7 +58,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			}
 		}
 
-		public override Artist GetSongArtist(AddedSongInfo song)
+		protected override Artist GetSongArtist(AddedSongInfo song)
 		{
 			return String.IsNullOrEmpty(song.Artist) ? Artist : LookupArtist(song.Artist);
 		}

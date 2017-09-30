@@ -15,18 +15,18 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			get { return null; }
 			set
 			{
-				throw new InvalidOperationException(Current($"Artist could not be set for '{Title}' directory"));
+				throw new InvalidOperationException(Current($"Artist could not be set for '{DiscTitle}' directory"));
 			}
 		}
 		public override bool ArtistIsEditable => false;
 		public override bool ArtistIsNotFilled => false;
 
-		public CompilationDiscWithArtistInfoViewItem(string sourcePath, AddedDiscInfo discInfo, IEnumerable<Artist> availableArtists, 
-			Uri destinationUri, IEnumerable<Genre> availableGenres) : base(sourcePath, discInfo, availableArtists, destinationUri, availableGenres)
+		public CompilationDiscWithArtistInfoViewItem(string sourcePath, AddedDiscInfo discInfo, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
+			: base(sourcePath, discInfo, availableArtists, availableGenres)
 		{
 		}
 
-		public override Artist GetSongArtist(AddedSongInfo song)
+		protected override Artist GetSongArtist(AddedSongInfo song)
 		{
 			return LookupArtist(song.Artist);
 		}
