@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
@@ -12,24 +11,80 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 	public class CompilationDiscWithoutArtistInfoViewItemTests
 	{
 		[Test]
-		public void RequiredDataIsFilled_WhenGenreIsNotFilled_ReturnsFalse()
+		public void ArtistIsEditableGetter_ReturnsTrue()
 		{
-			var disc = new CompilationDiscWithoutArtistInfoViewItem(Arg.Any<string>(), new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>()),
-				Enumerable.Empty<Artist>(), Arg.Any<Uri>(), Enumerable.Empty<Genre>());
+			//	Arrange
 
-			Assert.IsFalse(disc.RequiredDataIsFilled);
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				DiscType = DsicType.CompilationDiscWithArtistInfo,
+				Title = "Some Title",
+			};
+
+			var target = new CompilationDiscWithoutArtistInfoViewItem(Arg.Any<string>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
+
+			//	Act & Assert
+
+			Assert.IsTrue(target.ArtistIsEditable);
 		}
 
 		[Test]
-		public void RequiredDataIsFilled_WhenGenreIsFilled_ReturnsTrue()
+		public void ArtistIsNotFilledGetter_IfArtistIsNotSet_ReturnsTrue()
 		{
-			var disc = new CompilationDiscWithoutArtistInfoViewItem(Arg.Any<string>(), new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>()),
-				Enumerable.Empty<Artist>(), Arg.Any<Uri>(), Enumerable.Empty<Genre>())
+			//	Arrange
+
+			var artist = new Artist { Name = "Some Artist" };
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Genre = new Genre()
+				DiscType = DsicType.CompilationDiscWithArtistInfo,
+				Title = "Some Title",
 			};
 
-			Assert.IsTrue(disc.RequiredDataIsFilled);
+			var target = new CompilationDiscWithoutArtistInfoViewItem(Arg.Any<string>(), discInfo, new[] { artist }, Enumerable.Empty<Genre>());
+
+			//	Act & Assert
+
+			Assert.IsTrue(target.ArtistIsNotFilled);
+		}
+
+		[Test]
+		public void ArtistIsNotFilledGetter_IfArtistIsSet_ReturnsFalse()
+		{
+			//	Arrange
+
+			var artist = new Artist { Name = "Some Artist" };
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				DiscType = DsicType.CompilationDiscWithArtistInfo,
+				Title = "Some Title",
+			};
+
+			var target = new CompilationDiscWithoutArtistInfoViewItem(Arg.Any<string>(), discInfo, new[] { artist }, Enumerable.Empty<Genre>());
+			target.Artist = artist;
+
+			//	Act & Assert
+
+			Assert.IsFalse(target.ArtistIsNotFilled);
+		}
+
+		[Test]
+		public void DiscTypeTitleGetter_ReturnsCorrectDiscTypeTitle()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				DiscType = DsicType.CompilationDiscWithoutArtistInfo,
+				Title = "Some Title",
+			};
+
+			var target = new CompilationDiscWithoutArtistInfoViewItem(Arg.Any<string>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
+
+			//	Act & Assert
+
+			Assert.AreEqual("Compilation without Artists", target.DiscTypeTitle);
 		}
 	}
 }

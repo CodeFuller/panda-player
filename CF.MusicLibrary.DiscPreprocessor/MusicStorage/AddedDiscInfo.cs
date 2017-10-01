@@ -14,7 +14,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 
 		public string SourcePath { get; set; }
 
-		public string PathWithinStorage { get; set; }
+		public Uri UriWithinStorage { get; set; }
 
 		public string NameInStorage { get; set; }
 

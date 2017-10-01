@@ -95,31 +95,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 				switch (addedDiscInfo.DiscType)
 				{
 					case DsicType.ArtistDisc:
-						{
-							var artist = availableArtists.Single(a => String.Equals(a.Name, addedDiscInfo.Artist));
-
-							var artistStorageUri = libraryStructurer.GetArtistStorageUri(discLibrary, artist);
-							IEnumerable<Uri> artistStorageUris = artistStorageUri != null
-								? Enumerable.Repeat(artistStorageUri, 1)
-								: libraryStructurer.GetAllPossibleArtistStorageUris(artist);
-
-							addedDisc = new ArtistDiscViewItem(addedDiscInfo.SourcePath, addedDiscInfo,
-								availableArtists,
-								artistStorageUris.Select(u => libraryStructurer.BuildArtistDiscUri(u, addedDiscInfo.NameInStorage)),
-								artistStorageUri != null ? libraryStructurer.BuildArtistDiscUri(artistStorageUri, addedDiscInfo.NameInStorage) : null,
-								discLibrary.Genres,
-								PredictArtistGenre(addedDiscInfo.Artist));
-						}
+						addedDisc = new ArtistDiscViewItem(addedDiscInfo.SourcePath, addedDiscInfo, availableArtists, discLibrary.Genres, PredictArtistGenre(addedDiscInfo.Artist));
 						break;
 
 					case DsicType.CompilationDiscWithArtistInfo:
-						addedDisc = new CompilationDiscWithArtistInfoViewItem(addedDiscInfo.SourcePath, addedDiscInfo, availableArtists,
-							libraryStructurer.BuildUriForWorkshopStoragePath(addedDiscInfo.PathWithinStorage), discLibrary.Genres);
+						addedDisc = new CompilationDiscWithArtistInfoViewItem(addedDiscInfo.SourcePath, addedDiscInfo, availableArtists, discLibrary.Genres);
 						break;
 
 					case DsicType.CompilationDiscWithoutArtistInfo:
-						addedDisc = new CompilationDiscWithoutArtistInfoViewItem(addedDiscInfo.SourcePath, addedDiscInfo, availableArtists,
-							libraryStructurer.BuildUriForWorkshopStoragePath(addedDiscInfo.PathWithinStorage), discLibrary.Genres);
+						addedDisc = new CompilationDiscWithoutArtistInfoViewItem(addedDiscInfo.SourcePath, addedDiscInfo, availableArtists, discLibrary.Genres);
 						break;
 
 					default:
@@ -175,10 +159,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 				if (e.PropertyName == nameof(DiscViewItem.Genre))
 				{
 					FillSameArtistDiscsData(changedDisc, a => a.Genre == null, a => a.Genre = changedDisc.Genre);
-				}
-				else if (e.PropertyName == nameof(DiscViewItem.DestinationUri))
-				{
-					FillSameArtistDiscsData(changedDisc, a => a.DestinationUri == null, a => a.DestinationUri = libraryStructurer.ReplaceDiscPartInUri(changedDisc.DestinationUri, a.NameInStorage));
 				}
 			}
 		}

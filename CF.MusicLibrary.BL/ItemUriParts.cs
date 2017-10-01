@@ -17,11 +17,11 @@ namespace CF.MusicLibrary.BL
 
 		public static Uri RootUri => new Uri(UriDelimiter, UriKind.Relative);
 
+		public Uri Uri => Join(parts);
+
 		public int Count => parts.Length;
 
 		public string this[int i] => parts[i];
-
-		public string PathWithinLibrary => Path.Combine(parts.ToArray());
 
 		public ItemUriParts(string path, string libraryRootDirectory)
 		{

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 
@@ -18,18 +17,17 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 				Set(ref artist, value);
 				RaisePropertyChanged(nameof(ArtistIsNotFilled));
 				RaisePropertyChanged(nameof(ArtistIsNew));
-				RaisePropertyChanged(nameof(RequiredDataIsFilled));
 			}
 		}
 		public override bool ArtistIsEditable => true;
 		public override bool ArtistIsNotFilled => Artist == null;
 
-		public CompilationDiscWithoutArtistInfoViewItem(string sourcePath, AddedDiscInfo discInfo, IEnumerable<Artist> availableArtists,
-			Uri destinationUri, IEnumerable<Genre> availableGenres) : base(sourcePath, discInfo, availableArtists, destinationUri, availableGenres)
+		public CompilationDiscWithoutArtistInfoViewItem(string sourcePath, AddedDiscInfo discInfo, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
+			: base(sourcePath, discInfo, availableArtists, availableGenres)
 		{
 		}
 
-		public override Artist GetSongArtist(AddedSongInfo song)
+		protected override Artist GetSongArtist(AddedSongInfo song)
 		{
 			return Artist;
 		}

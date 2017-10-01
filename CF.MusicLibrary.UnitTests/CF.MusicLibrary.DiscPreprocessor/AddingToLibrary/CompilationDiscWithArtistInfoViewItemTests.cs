@@ -12,24 +12,77 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 	public class CompilationDiscWithArtistInfoViewItemTests
 	{
 		[Test]
-		public void RequiredDataIsFilled_WhenGenreIsNotFilled_ReturnsFalse()
+		public void ArtistSetter_ThrowsInvalidOperationException()
 		{
-			var disc = new CompilationDiscWithArtistInfoViewItem(Arg.Any<string>(), new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>()),
-				Enumerable.Empty<Artist>(), Arg.Any<Uri>(), Enumerable.Empty<Genre>());
+			//	Arrange
 
-			Assert.IsFalse(disc.RequiredDataIsFilled);
+			var artist = new Artist { Name = "Some Artist" };
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				DiscType = DsicType.CompilationDiscWithArtistInfo,
+				Title = "Some Title",
+			};
+
+			var target = new CompilationDiscWithArtistInfoViewItem(Arg.Any<string>(), discInfo, new[] { artist }, Enumerable.Empty<Genre>());
+
+			//	Act & Assert
+
+			Assert.Throws<InvalidOperationException>(() => target.Artist = artist);
 		}
 
 		[Test]
-		public void RequiredDataIsFilled_WhenGenreIsFilled_ReturnsTrue()
+		public void ArtistIsEditableGetter_ReturnsFalse()
 		{
-			var disc = new CompilationDiscWithArtistInfoViewItem(Arg.Any<string>(), new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>()),
-				Enumerable.Empty<Artist>(), Arg.Any<Uri>(), Enumerable.Empty<Genre>())
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Genre = new Genre()
+				DiscType = DsicType.CompilationDiscWithArtistInfo,
+				Title = "Some Title",
 			};
 
-			Assert.IsTrue(disc.RequiredDataIsFilled);
+			var target = new CompilationDiscWithArtistInfoViewItem(Arg.Any<string>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
+
+			//	Act & Assert
+
+			Assert.IsFalse(target.ArtistIsEditable);
+		}
+
+		[Test]
+		public void ArtistIsNotFilledGetter_ReturnsFalse()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				DiscType = DsicType.CompilationDiscWithArtistInfo,
+				Title = "Some Title",
+			};
+
+			var target = new CompilationDiscWithArtistInfoViewItem(Arg.Any<string>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
+
+			//	Act & Assert
+
+			Assert.IsFalse(target.ArtistIsNotFilled);
+		}
+
+		[Test]
+		public void DiscTypeTitleGetter_ReturnsCorrectDiscTypeTitle()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				DiscType = DsicType.CompilationDiscWithArtistInfo,
+				Title = "Some Title",
+			};
+
+			var target = new CompilationDiscWithArtistInfoViewItem(Arg.Any<string>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
+
+			//	Act & Assert
+
+			Assert.AreEqual("Compilation with Artists", target.DiscTypeTitle);
 		}
 	}
 }
