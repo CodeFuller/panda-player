@@ -128,6 +128,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CF.MusicLibrary.Common\CF.MusicLibrary.Common.csproj">
+      <Project>{5501311F-CBCD-40B3-95F4-F28D521E6EC5}</Project>
+      <Name>CF.MusicLibrary.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.Dal\CF.MusicLibrary.Dal.csproj">
       <Project>{83AD3795-4E4A-4D32-BE5B-9D68287EF586}</Project>
       <Name>CF.MusicLibrary.Dal</Name>

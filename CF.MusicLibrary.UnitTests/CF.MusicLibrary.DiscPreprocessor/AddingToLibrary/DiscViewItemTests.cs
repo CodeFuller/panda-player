@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using CF.Library.Core.Attributes;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using NSubstitute;
@@ -15,8 +17,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 	{
 		private class ConcreteDiscViewItem : DiscViewItem
 		{
-			public ConcreteDiscViewItem(string sourcePath, AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
-				: base(sourcePath, disc, availableArtists, availableGenres)
+			public ConcreteDiscViewItem(IDiscArtImageFile discArtImageFile, AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
+				: base(discArtImageFile, disc, availableArtists, availableGenres)
 			{
 			}
 
@@ -43,6 +45,21 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 		}
 
 		[Test]
+		public void Constructor_IfDiscArtImageFileArgumentIsNull_ThrowsArgumentNullException()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			//	Act & Assert
+
+			Assert.Throws<ArgumentNullException>(() => new ConcreteDiscViewItem(null, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>()));
+		}
+
+		[Test]
 		public void Constructor_IfDiscTitleIsCorrect_InitializesDiscTitleCorrectly()
 		{
 			//	Arrange
@@ -54,7 +71,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 
 			//	Act
 
-			var target = new ConcreteDiscViewItem("Some Source", discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
 			//	Assert
 
@@ -75,7 +92,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 
 			//	Act & Assert
 
-			Assert.Throws<InvalidOperationException>(() => new ConcreteDiscViewItem(Arg.Any<string>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>()));
+			Assert.Throws<InvalidOperationException>(() => new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>()));
 		}
 
 		[Test]
@@ -86,15 +103,16 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				Title = "Some Title",
+				SourcePath = "Some Source Path",
 			};
 
 			//	Act
 
-			var target = new ConcreteDiscViewItem("Some Source", discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
 			//	Assert
 
-			Assert.AreEqual("Some Source", target.SourcePath);
+			Assert.AreEqual("Some Source Path", target.SourcePath);
 		}
 
 		[TestCase("Broken Crown Halo (CD 1)", "Broken Crown Halo")]
@@ -110,7 +128,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 
 			//	Act
 
-			var target = new ConcreteDiscViewItem("Some Source", discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
 			//	Assert
 
@@ -135,7 +153,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 
 			//	Act
 
-			var target = new ConcreteDiscViewItem("Some Source", discInfo, artists, Enumerable.Empty<Genre>());
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, artists, Enumerable.Empty<Genre>());
 
 			//	Assert
 
@@ -160,7 +178,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 
 			//	Act
 
-			var target = new ConcreteDiscViewItem("Some Source", discInfo, Enumerable.Empty<Artist>(), genres);
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), genres);
 
 			//	Assert
 
@@ -180,7 +198,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 
 			//	Act
 
-			var target = new ConcreteDiscViewItem("Some Source", discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
 			//	Assert
 
@@ -197,7 +215,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new ConcreteDiscViewItem("Some Source", discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 			target.Artist = new Artist { Id = 0 };
 
 			//	Act & Assert
@@ -215,7 +233,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new ConcreteDiscViewItem("Some Source", discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 			target.Artist = new Artist { Id = 1 };
 
 			//	Act & Assert
@@ -233,7 +251,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new ConcreteDiscViewItem("Some Source", discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 			target.AlbumTitle = "Some Title";
 
 			//	Act & Assert
@@ -251,7 +269,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new ConcreteDiscViewItem("Some Source", discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 			target.AlbumTitle = "Album Title";
 
 			//	Act & Assert
@@ -270,7 +288,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new ConcreteDiscViewItem("Some Source", discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 			target.Year = year;
 
 			//	Act & Assert
@@ -288,7 +306,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new ConcreteDiscViewItem("Some Source", discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
 			target.Year = 2017;
 
@@ -307,7 +325,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new ConcreteDiscViewItem("Some Source", discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
 			//	Act & Assert
 
@@ -326,7 +344,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new ConcreteDiscViewItem(Arg.Any<string>(), discInfo, Enumerable.Empty<Artist>(), new[] { genre });
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), new[] { genre });
 			target.Genre = genre;
 
 			//	Act & Assert
@@ -344,7 +362,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new ConcreteDiscViewItem(Arg.Any<string>(), discInfo, Enumerable.Empty<Artist>(), new[] { new Genre() });
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), new[] { new Genre() });
 
 			//	Act & Assert
 
@@ -363,7 +381,10 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new ConcreteDiscViewItem(Arg.Any<string>(), discInfo, Enumerable.Empty<Artist>(), new[] { genre });
+			IDiscArtImageFile discArtImageFileStub = Substitute.For<IDiscArtImageFile>();
+			discArtImageFileStub.ImageIsValid.Returns(true);
+
+			var target = new ConcreteDiscViewItem(discArtImageFileStub, discInfo, Enumerable.Empty<Artist>(), new[] { genre });
 			target.Genre = genre;
 
 			//	Act & Assert
@@ -381,7 +402,33 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new ConcreteDiscViewItem(Arg.Any<string>(), discInfo, Enumerable.Empty<Artist>(), new[] { new Genre() });
+			IDiscArtImageFile discArtImageFileStub = Substitute.For<IDiscArtImageFile>();
+			discArtImageFileStub.ImageIsValid.Returns(true);
+
+			var target = new ConcreteDiscViewItem(discArtImageFileStub, discInfo, Enumerable.Empty<Artist>(), new[] { new Genre() });
+
+			//	Act & Assert
+
+			Assert.IsFalse(target.RequiredDataIsFilled);
+		}
+
+		[Test]
+		public void RequiredDataIsFilledGetter_WhenDiscArtImageIsNotValid_ReturnsFalse()
+		{
+			//	Arrange
+
+			Genre genre = new Genre();
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			IDiscArtImageFile discArtImageFileStub = Substitute.For<IDiscArtImageFile>();
+			discArtImageFileStub.ImageIsValid.Returns(false);
+
+			var target = new ConcreteDiscViewItem(discArtImageFileStub, discInfo, Enumerable.Empty<Artist>(), new[] { genre });
+			target.Genre = genre;
 
 			//	Act & Assert
 
@@ -408,7 +455,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				UriWithinStorage = new Uri("/Some/Disc/Uri", UriKind.Relative),
 			};
 
-			var target = new ConcreteDiscViewItem(Arg.Any<string>(), discInfo, Enumerable.Empty<Artist>(), new[] { new Genre() });
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), new[] { new Genre() });
 
 			target.Genre = genre;
 			target.Year = 2017;
@@ -450,7 +497,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 			var artist2 = new Artist { Name = "Artist 2" };
 			var artists = new[] { artist1, artist2 };
 
-			var target = new ConcreteDiscViewItem(Arg.Any<string>(), discInfo, artists, new[] { new Genre() });
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, artists, new[] { new Genre() });
 
 			//	Act
 
@@ -471,11 +518,260 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new ConcreteDiscViewItem(Arg.Any<string>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, new[] { new Genre() });
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, new[] { new Genre() });
 
 			//	Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.CallLookupArtist("Another Artist"));
+		}
+
+		[Test]
+		public void DiscArtIsValidGetter_IfDiscArtIsValid_ReturnsTrue()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			IDiscArtImageFile discArtImageFileStub = Substitute.For<IDiscArtImageFile>();
+			discArtImageFileStub.ImageIsValid.Returns(true);
+
+			var target = new ConcreteDiscViewItem(discArtImageFileStub, discInfo, new[] { new Artist { Name = "Some Artist" } }, new[] { new Genre() });
+
+			//	Act & Assert
+
+			Assert.IsTrue(target.DiscArtIsValid);
+		}
+
+		[Test]
+		public void DiscArtIsValidGetter_IfDiscArtIsNotValid_ReturnsFalse()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			IDiscArtImageFile discArtImageFileStub = Substitute.For<IDiscArtImageFile>();
+			discArtImageFileStub.ImageIsValid.Returns(false);
+
+			var target = new ConcreteDiscViewItem(discArtImageFileStub, discInfo, new[] { new Artist { Name = "Some Artist" } }, new[] { new Genre() });
+
+			//	Act & Assert
+
+			Assert.IsFalse(target.DiscArtIsValid);
+		}
+
+		[Test]
+		public void DiscArtInfoGetter_IfDiscArtIsValid_ReturnsImageProperties()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			IDiscArtImageFile discArtImageFileStub = Substitute.For<IDiscArtImageFile>();
+			discArtImageFileStub.ImageIsValid.Returns(true);
+			discArtImageFileStub.ImageProperties.Returns("Some Image Properties");
+
+			var target = new ConcreteDiscViewItem(discArtImageFileStub, discInfo, new[] { new Artist { Name = "Some Artist" } }, new[] { new Genre() });
+
+			//	Act & Assert
+
+			Assert.AreEqual("Some Image Properties", target.DiscArtInfo);
+		}
+
+		[Test]
+		public void DiscArtInfoGetter_IfDiscArtIsNotValid_ReturnsImageStatus()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			IDiscArtImageFile discArtImageFileStub = Substitute.For<IDiscArtImageFile>();
+			discArtImageFileStub.ImageIsValid.Returns(false);
+			discArtImageFileStub.ImageStatus.Returns("Some Image Status");
+
+			var target = new ConcreteDiscViewItem(discArtImageFileStub, discInfo, new[] { new Artist { Name = "Some Artist" } }, new[] { new Genre() });
+
+			//	Act & Assert
+
+			Assert.AreEqual("Some Image Status", target.DiscArtInfo);
+		}
+
+		[Test]
+		public void SetDiscCoverImage_LoadsDiscArtImageFileCorrectly()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			IDiscArtImageFile discArtImageFileMock = Substitute.For<IDiscArtImageFile>();
+			var target = new ConcreteDiscViewItem(discArtImageFileMock, discInfo, new[] { new Artist { Name = "Some Artist" } }, new[] { new Genre() });
+
+			//	Act
+
+			target.SetDiscCoverImage("SomeDiscCover.jpg");
+
+			//	Assert
+
+			discArtImageFileMock.Received(1).Load("SomeDiscCover.jpg", false);
+		}
+
+		[Test]
+		public void UnsetDiscCoverImage_UnloadsDiscArtImageFileCorrectly()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			IDiscArtImageFile discArtImageFileMock = Substitute.For<IDiscArtImageFile>();
+			var target = new ConcreteDiscViewItem(discArtImageFileMock, discInfo, new[] { new Artist { Name = "Some Artist" } }, new[] { new Genre() });
+
+			//	Act
+
+			target.UnsetDiscCoverImage();
+
+			//	Assert
+
+			discArtImageFileMock.Received(1).Unload();
+		}
+
+		[Test]
+		public void DiscArtImageIsValidPropertyChangedHandler_RaisesPropertyChangedEventForAllAffectedProperties()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			IDiscArtImageFile discArtImageFileStub = Substitute.For<IDiscArtImageFile>();
+			var target = new ConcreteDiscViewItem(discArtImageFileStub, discInfo, new[] { new Artist { Name = "Some Artist" } }, new[] { new Genre() });
+
+			var changedProperties = new List<string>();
+			target.PropertyChanged += (sender, e) => changedProperties.Add(e.PropertyName);
+
+			//	Act
+
+			discArtImageFileStub.PropertyChanged += Raise.Event<PropertyChangedEventHandler>(new PropertyChangedEventArgs(nameof(IDiscArtImageFile.ImageIsValid)));
+
+			//	Assert
+
+			CollectionAssert.Contains(changedProperties, nameof(DiscViewItem.DiscArtIsValid));
+			CollectionAssert.Contains(changedProperties, nameof(DiscViewItem.DiscArtInfo));
+			CollectionAssert.Contains(changedProperties, nameof(DiscViewItem.RequiredDataIsFilled));
+		}
+
+		[Test]
+		public void DiscArtImageStatusPropertyChangedHandler_RaisesPropertyChangedEventForDiscArtInfo()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			IDiscArtImageFile discArtImageFileStub = Substitute.For<IDiscArtImageFile>();
+			var target = new ConcreteDiscViewItem(discArtImageFileStub, discInfo, new[] { new Artist { Name = "Some Artist" } }, new[] { new Genre() });
+
+			var changedProperties = new List<string>();
+			target.PropertyChanged += (sender, e) => changedProperties.Add(e.PropertyName);
+
+			//	Act
+
+			discArtImageFileStub.PropertyChanged += Raise.Event<PropertyChangedEventHandler>(new PropertyChangedEventArgs(nameof(IDiscArtImageFile.ImageStatus)));
+
+			//	Assert
+
+			CollectionAssert.Contains(changedProperties, nameof(DiscViewItem.DiscArtInfo));
+		}
+
+		[Test]
+		public void DiscArtImagePropertiesPropertyChangedHandler_RaisesPropertyChangedEventForDiscArtInfo()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			IDiscArtImageFile discArtImageFileStub = Substitute.For<IDiscArtImageFile>();
+			var target = new ConcreteDiscViewItem(discArtImageFileStub, discInfo, new[] { new Artist { Name = "Some Artist" } }, new[] { new Genre() });
+
+			var changedProperties = new List<string>();
+			target.PropertyChanged += (sender, e) => changedProperties.Add(e.PropertyName);
+
+			//	Act
+
+			discArtImageFileStub.PropertyChanged += Raise.Event<PropertyChangedEventHandler>(new PropertyChangedEventArgs(nameof(IDiscArtImageFile.ImageProperties)));
+
+			//	Assert
+
+			CollectionAssert.Contains(changedProperties, nameof(DiscViewItem.DiscArtInfo));
+		}
+
+		[Test]
+		public void AddedDiscCoverImageGetter_IfDiscArtIsNotValid_ThrowsInvalidOperationException()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			IDiscArtImageFile discArtImageFileStub = Substitute.For<IDiscArtImageFile>();
+			discArtImageFileStub.ImageIsValid.Returns(false);
+			var target = new ConcreteDiscViewItem(discArtImageFileStub, discInfo, new[] { new Artist { Name = "Some Artist" } }, new[] { new Genre() });
+
+			//	Act & Assert
+
+			AddedDiscCoverImage addedDiscCoverImage = null;
+			Assert.Throws<InvalidOperationException>(() => addedDiscCoverImage = target.AddedDiscCoverImage);
+		}
+
+		[Test]
+		public void AddedDiscCoverImageGetter_IfDiscArtIsValid_ReturnsCorrectAddedDiscCoverImage()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+				UriWithinStorage = new Uri("/Some/Disc/Uri", UriKind.Relative),
+			};
+
+			IDiscArtImageFile discArtImageFileStub = Substitute.For<IDiscArtImageFile>();
+			discArtImageFileStub.ImageIsValid.Returns(true);
+			discArtImageFileStub.ImageFileName.Returns("SomeDiscCover.jpg");
+			var target = new ConcreteDiscViewItem(discArtImageFileStub, discInfo, new[] { new Artist { Name = "Some Artist" } }, new[] { new Genre() });
+
+			//	Act
+
+			AddedDiscCoverImage addedDiscCoverImage = target.AddedDiscCoverImage;
+
+			//	Assert
+
+			Assert.AreEqual("SomeDiscCover.jpg", addedDiscCoverImage.CoverImageFileName);
+			Assert.AreEqual(new Uri("/Some/Disc/Uri", UriKind.Relative), addedDiscCoverImage.Disc.Uri);
 		}
 	}
 }

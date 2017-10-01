@@ -22,6 +22,24 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 		}
 
 		[Test]
+		public void Constructor_IfMusicLibraryArgumentIsNull_ThrowsArgumentNullException()
+		{
+			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(null, Substitute.For<ISongMediaInfoProvider>(), Substitute.For<IFileSystemFacade>(), false));
+		}
+
+		[Test]
+		public void Constructor_IfSongMediaInfoProviderArgumentIsNull_ThrowsArgumentNullException()
+		{
+			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), null, Substitute.For<IFileSystemFacade>(), false));
+		}
+
+		[Test]
+		public void Constructor_IfFileSystemFacadeArgumentIsNull_ThrowsArgumentNullException()
+		{
+			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<ISongMediaInfoProvider>(), null, false));
+		}
+
+		[Test]
 		public void AddContentToLibrary_FillsSongMediaInfoCorrectly()
 		{
 			//	Arrange
@@ -52,6 +70,35 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 			Assert.AreEqual(12345, addedSong.FileSize);
 			Assert.AreEqual(256000, addedSong.Bitrate);
 			Assert.AreEqual(TimeSpan.FromSeconds(3600), addedSong.Duration);
+		}
+
+		[Test]
+		public void AddContentToLibrary_StoresDiscsCoverImagesCorrectly()
+		{
+			//	Arrange
+
+			Disc disc1 = new Disc();
+			Disc disc2 = new Disc();
+			AddedDiscCoverImage addedCover1 = new AddedDiscCoverImage(disc1, "DiscCoverImage1.jpg");
+			AddedDiscCoverImage addedCover2 = new AddedDiscCoverImage(disc2, "DiscCoverImage2.jpg");
+
+			IMusicLibrary musicLibraryMock = Substitute.For<IMusicLibrary>();
+
+			ISongMediaInfoProvider mediaInfoProviderStub = Substitute.For<ISongMediaInfoProvider>();
+			mediaInfoProviderStub.GetSongMediaInfo(Arg.Any<string>()).Returns(Task.FromResult(new SongMediaInfo()));
+
+			AddToLibraryViewModel target = new AddToLibraryViewModel(musicLibraryMock, mediaInfoProviderStub, Substitute.For<IFileSystemFacade>(), false);
+			target.SetSongs(new[] { new AddedSong(new Song(), @"SomeSongPath\SomeSongFile.mp3") });
+			target.SetDiscsCoverImages(new[] { addedCover1, addedCover2 });
+
+			//	Act
+
+			target.AddContentToLibrary().Wait();
+
+			//	Assert
+
+			musicLibraryMock.Received(1).SetDiscCoverImage(disc1, "DiscCoverImage1.jpg");
+			musicLibraryMock.Received(1).SetDiscCoverImage(disc2, "DiscCoverImage2.jpg");
 		}
 
 		[Test]

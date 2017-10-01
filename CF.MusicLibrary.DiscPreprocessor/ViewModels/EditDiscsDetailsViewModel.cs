@@ -5,14 +5,18 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CF.Library.Core.Exceptions;
 using CF.Library.Core.Facades;
+using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
@@ -23,6 +27,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 		private readonly DiscLibrary discLibrary;
 		private readonly ILibraryStructurer libraryStructurer;
+		private readonly IObjectFactory<IDiscArtImageFile> discArtImageFileFactory;
 		private readonly IFileSystemFacade fileSystemFacade;
 
 		public string Name => "Edit Discs Details";
@@ -31,20 +36,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 		public ObservableCollection<DiscViewItem> Discs { get; private set; }
 
-		public IEnumerable<AddedDiscCoverImage> DiscCoverImages
-		{
-			get
-			{
-				foreach (DiscViewItem disc in Discs)
-				{
-					var coverImagePath = Path.Combine(disc.SourcePath, CoverImageFileName);
-					if (fileSystemFacade.FileExists(coverImagePath))
-					{
-						yield return new AddedDiscCoverImage(disc.Disc, coverImagePath);
-					}
-				}
-			}
-		}
+		public IEnumerable<AddedDiscCoverImage> DiscCoverImages => Discs.Select(disc => disc.AddedDiscCoverImage);
 
 		public IEnumerable<AddedSong> AddedSongs
 		{
@@ -61,7 +53,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			}
 		}
 
-		public EditDiscsDetailsViewModel(DiscLibrary discLibrary, ILibraryStructurer libraryStructurer, IFileSystemFacade fileSystemFacade)
+		public ICommand RefreshContentCommand { get; }
+
+		public EditDiscsDetailsViewModel(DiscLibrary discLibrary, ILibraryStructurer libraryStructurer,
+			IObjectFactory<IDiscArtImageFile> discArtImageFileFactory, IFileSystemFacade fileSystemFacade)
 		{
 			if (discLibrary == null)
 			{
@@ -71,6 +66,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			{
 				throw new ArgumentNullException(nameof(libraryStructurer));
 			}
+			if (discArtImageFileFactory == null)
+			{
+				throw new ArgumentNullException(nameof(discArtImageFileFactory));
+			}
 			if (fileSystemFacade == null)
 			{
 				throw new ArgumentNullException(nameof(fileSystemFacade));
@@ -78,7 +77,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 			this.discLibrary = discLibrary;
 			this.libraryStructurer = libraryStructurer;
+			this.discArtImageFileFactory = discArtImageFileFactory;
 			this.fileSystemFacade = fileSystemFacade;
+
+			RefreshContentCommand = new RelayCommand(RefreshContent);
 		}
 
 		public async Task SetDiscs(IEnumerable<AddedDiscInfo> discs)
@@ -95,15 +97,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 				switch (addedDiscInfo.DiscType)
 				{
 					case DsicType.ArtistDisc:
-						addedDisc = new ArtistDiscViewItem(addedDiscInfo.SourcePath, addedDiscInfo, availableArtists, discLibrary.Genres, PredictArtistGenre(addedDiscInfo.Artist));
+						addedDisc = new ArtistDiscViewItem(discArtImageFileFactory.CreateInstance(), addedDiscInfo, availableArtists, discLibrary.Genres, PredictArtistGenre(addedDiscInfo.Artist));
 						break;
 
 					case DsicType.CompilationDiscWithArtistInfo:
-						addedDisc = new CompilationDiscWithArtistInfoViewItem(addedDiscInfo.SourcePath, addedDiscInfo, availableArtists, discLibrary.Genres);
+						addedDisc = new CompilationDiscWithArtistInfoViewItem(discArtImageFileFactory.CreateInstance(), addedDiscInfo, availableArtists, discLibrary.Genres);
 						break;
 
 					case DsicType.CompilationDiscWithoutArtistInfo:
-						addedDisc = new CompilationDiscWithoutArtistInfoViewItem(addedDiscInfo.SourcePath, addedDiscInfo, availableArtists, discLibrary.Genres);
+						addedDisc = new CompilationDiscWithoutArtistInfoViewItem(discArtImageFileFactory.CreateInstance(), addedDiscInfo, availableArtists, discLibrary.Genres);
 						break;
 
 					default:
@@ -112,6 +114,29 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 				addedDisc.PropertyChanged += Property_Changed;
 				Discs.Add(addedDisc);
+			}
+
+			LoadDiscsArt();
+		}
+
+		internal void RefreshContent()
+		{
+			LoadDiscsArt();
+		}
+
+		private void LoadDiscsArt()
+		{
+			foreach (var disc in Discs)
+			{
+				var coverImagePath = Path.Combine(disc.SourcePath, CoverImageFileName);
+				if (fileSystemFacade.FileExists(coverImagePath))
+				{
+					disc.SetDiscCoverImage(coverImagePath);
+				}
+				else
+				{
+					disc.UnsetDiscCoverImage();
+				}
 			}
 		}
 

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.LibraryChecker.Registrators;
-using CF.MusicLibrary.Universal.DiscArt;
 using static CF.Library.Core.Application;
 
 namespace CF.MusicLibrary.LibraryChecker.Checkers

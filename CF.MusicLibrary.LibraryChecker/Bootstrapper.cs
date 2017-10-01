@@ -6,13 +6,13 @@ using CF.Library.Unity;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Media;
+using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.LibraryChecker.Checkers;
 using CF.MusicLibrary.LibraryChecker.Registrators;
 using CF.MusicLibrary.Local;
 using CF.MusicLibrary.Tagger;
-using CF.MusicLibrary.Universal.DiscArt;
 using Microsoft.Practices.Unity;
 
 namespace CF.MusicLibrary.LibraryChecker

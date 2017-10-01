@@ -5,9 +5,9 @@ using CF.Library.Core.Configuration;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
-using CF.MusicLibrary.Universal.DiscArt;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 

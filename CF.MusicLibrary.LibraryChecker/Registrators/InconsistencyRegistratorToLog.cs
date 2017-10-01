@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
-using CF.MusicLibrary.Universal.DiscArt;
+using CF.MusicLibrary.Common.DiscArt;
 using static CF.Library.Core.Application;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 

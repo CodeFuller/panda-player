@@ -98,10 +98,12 @@
     <Compile Include="CF.MusicLibrary.BL\DiscTitleToAlbumMapperTests.cs" />
     <Compile Include="CF.MusicLibrary.BL\FilesystemMusicStorageTests.cs" />
     <Compile Include="CF.MusicLibrary.BL\ItemUriPartsTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\ApplicationViewModelTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\EditDiscsDetailsViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.LastFM\LastFMScrobblerTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\ApplicationViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscAdviserViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscArt\DiscArtImageFileTests.cs" />
+    <Compile Include="CF.MusicLibrary.Common\DiscArt\DiscArtImageFileTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscArt\DiscArtViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscArt\EditDiscArtViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\EditDiscPropertiesViewModelTests.cs" />
@@ -113,7 +115,7 @@
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\Player\SongPlaybacksRegistratorTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\SongListViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\SongPlaylistViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.Universal\DiscArt\DiscArtValidatorTests.cs" />
+    <Compile Include="CF.MusicLibrary.Common\DiscArt\DiscArtValidatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +123,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CF.MusicLibrary.Common\CF.MusicLibrary.Common.csproj">
+      <Project>{5501311F-CBCD-40B3-95F4-F28D521E6EC5}</Project>
+      <Name>CF.MusicLibrary.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.DiscPreprocessor\CF.MusicLibrary.DiscPreprocessor.csproj">
       <Project>{B977EA7B-85A2-429A-B98F-E76023589321}</Project>
       <Name>CF.MusicLibrary.DiscPreprocessor</Name>

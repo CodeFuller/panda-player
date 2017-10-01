@@ -1,8 +1,8 @@
-﻿using static CF.Library.Core.Extensions.FormattableStringExtensions;
+﻿using CF.Library.Core.Extensions;
 
-namespace CF.MusicLibrary.PandaPlayer
+namespace CF.MusicLibrary.Common
 {
-	internal static class FileSizeFormatter
+	public static class FileSizeFormatter
 	{
 		private const int KiloMultiplier = 1024;
 		private const int KbValue = 1 * KiloMultiplier;
@@ -15,20 +15,20 @@ namespace CF.MusicLibrary.PandaPlayer
 
 			if (fileSize < KbValue)
 			{
-				return Current($"{fileSize} B");
+				return FormattableStringExtensions.Current($"{fileSize} B");
 			}
 
 			if (fileSize < MbValue)
 			{
-				return Current($"{size / KbValue:F1} KB");
+				return FormattableStringExtensions.Current($"{size / KbValue:F1} KB");
 			}
 
 			if (size < GbValue)
 			{
-				return Current($"{size / MbValue:F1} MB");
+				return FormattableStringExtensions.Current($"{size / MbValue:F1} MB");
 			}
 
-			return Current($"{size / GbValue:F1} GB");
+			return FormattableStringExtensions.Current($"{size / GbValue:F1} GB");
 		}
 	}
 }

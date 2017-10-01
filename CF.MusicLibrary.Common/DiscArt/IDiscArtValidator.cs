@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CF.MusicLibrary.Universal.DiscArt
+namespace CF.MusicLibrary.Common.DiscArt
 {
 	public interface IDiscArtValidator
 	{

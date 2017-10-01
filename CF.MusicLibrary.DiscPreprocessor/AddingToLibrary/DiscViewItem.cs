@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using CF.Library.Core.Extensions;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using GalaSoft.MvvmLight;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
@@ -13,9 +15,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 {
 	public abstract class DiscViewItem : ViewModelBase
 	{
-		/// <summary>
-		/// Disc source path.
-		/// </summary>
+		private readonly IDiscArtImageFile discArtImageFile;
+
 		public string SourcePath { get; }
 
 		public abstract string DiscTypeTitle { get; }
@@ -72,7 +73,24 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public Uri DestinationUri { get; }
 
-		public bool RequiredDataIsFilled => !GenreIsNotFilled;
+		public bool DiscArtIsValid => discArtImageFile.ImageIsValid;
+
+		public string DiscArtInfo => DiscArtIsValid ? discArtImageFile.ImageProperties : discArtImageFile.ImageStatus;
+
+		public AddedDiscCoverImage AddedDiscCoverImage
+		{
+			get
+			{
+				if (!DiscArtIsValid)
+				{
+					throw new InvalidOperationException("Disc Art is not valid");
+				}
+
+				return new AddedDiscCoverImage(Disc, discArtImageFile.ImageFileName);
+			}
+		}
+
+		public bool RequiredDataIsFilled => !GenreIsNotFilled && DiscArtIsValid;
 
 		protected IReadOnlyCollection<AddedSongInfo> SourceSongs { get; }
 
@@ -107,14 +125,22 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			}
 		}
 
-		protected DiscViewItem(string sourcePath, AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
+		protected DiscViewItem(IDiscArtImageFile discArtImageFile, AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
 		{
+			if (discArtImageFile == null)
+			{
+				throw new ArgumentNullException(nameof(discArtImageFile));
+			}
+
 			if (String.IsNullOrWhiteSpace(disc.Title))
 			{
 				throw new InvalidOperationException("Disc title could not be empty");
 			}
 
-			SourcePath = sourcePath;
+			this.discArtImageFile = discArtImageFile;
+			this.discArtImageFile.PropertyChanged += DiscArtImageFileOnPropertyChanged;
+
+			SourcePath = disc.SourcePath;
 			DiscTitle = disc.Title;
 			albumTitle = DiscTitleToAlbumMapper.GetAlbumTitleFromDiscTitle(disc.Title);
 			AvailableArtists = availableArtists.OrderBy(a => a.Name).ToCollection();
@@ -134,6 +160,31 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			}
 
 			return artist;
+		}
+
+		public void SetDiscCoverImage(string imageFileName)
+		{
+			discArtImageFile.Load(imageFileName, false);
+		}
+
+		public void UnsetDiscCoverImage()
+		{
+			discArtImageFile.Unload();
+		}
+
+		private void DiscArtImageFileOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == nameof(IDiscArtImageFile.ImageIsValid))
+			{
+				RaisePropertyChanged(nameof(DiscArtIsValid));
+				RaisePropertyChanged(nameof(DiscArtInfo));
+				RaisePropertyChanged(nameof(RequiredDataIsFilled));
+			}
+
+			if (e.PropertyName == nameof(IDiscArtImageFile.ImageStatus) || e.PropertyName == nameof(IDiscArtImageFile.ImageProperties))
+			{
+				RaisePropertyChanged(nameof(DiscArtInfo));
+			}
 		}
 	}
 }

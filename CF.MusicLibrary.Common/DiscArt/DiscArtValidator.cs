@@ -6,7 +6,7 @@ using System.Linq;
 using CF.Library.Core.Extensions;
 using CF.Library.Core.Facades;
 
-namespace CF.MusicLibrary.Universal.DiscArt
+namespace CF.MusicLibrary.Common.DiscArt
 {
 	public class DiscArtValidator : IDiscArtValidator
 	{

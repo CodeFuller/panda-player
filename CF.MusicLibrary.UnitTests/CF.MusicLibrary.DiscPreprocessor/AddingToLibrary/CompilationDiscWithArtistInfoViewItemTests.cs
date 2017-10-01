@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using NSubstitute;
@@ -24,7 +25,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new CompilationDiscWithArtistInfoViewItem(Arg.Any<string>(), discInfo, new[] { artist }, Enumerable.Empty<Genre>());
+			var target = new CompilationDiscWithArtistInfoViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { artist }, Enumerable.Empty<Genre>());
 
 			//	Act & Assert
 
@@ -42,7 +43,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new CompilationDiscWithArtistInfoViewItem(Arg.Any<string>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
+			var target = new CompilationDiscWithArtistInfoViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
 
 			//	Act & Assert
 
@@ -60,7 +61,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new CompilationDiscWithArtistInfoViewItem(Arg.Any<string>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
+			var target = new CompilationDiscWithArtistInfoViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
 
 			//	Act & Assert
 
@@ -78,7 +79,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new CompilationDiscWithArtistInfoViewItem(Arg.Any<string>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
+			var target = new CompilationDiscWithArtistInfoViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
 
 			//	Act & Assert
 

@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace CF.MusicLibrary.Universal.DiscArt
+namespace CF.MusicLibrary.Common.DiscArt
 {
 	public class DiscArtImageInfo
 	{

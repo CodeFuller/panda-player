@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using CF.Library.Core.Facades;
-using CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt;
-using CF.MusicLibrary.Universal.DiscArt;
+using CF.MusicLibrary.Common.DiscArt;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt
+namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Common.DiscArt
 {
 	[TestFixture]
 	public class DiscArtImageFileTests

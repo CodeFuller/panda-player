@@ -154,7 +154,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			editSourceContentViewModel.LoadDefaultContent();
 		}
 
-		private async Task SwitchToNextPage()
+		internal async Task SwitchToNextPage()
 		{
 			var nextPage = NextPage;
 

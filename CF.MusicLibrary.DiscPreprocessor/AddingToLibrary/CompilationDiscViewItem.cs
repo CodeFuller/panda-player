@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 
 namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
@@ -13,8 +14,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			set { base.Year = value; }
 		}
 
-		protected CompilationDiscViewItem(string sourcePath, AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
-			: base(sourcePath, disc, availableArtists, availableGenres)
+		protected CompilationDiscViewItem(IDiscArtImageFile discArtImageFile, AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
+			: base(discArtImageFile, disc, availableArtists, availableGenres)
 		{
 			Year = disc.Year;
 		}

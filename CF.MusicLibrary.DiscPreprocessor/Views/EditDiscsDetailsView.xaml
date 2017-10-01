@@ -5,6 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         d:DesignWidth="800" d:DesignHeight="400">
+
+    <UserControl.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding RefreshContentCommand}" />
+    </UserControl.InputBindings>
+
     <DataGrid x:Name="ContentDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding Discs}">
         <DataGrid.ColumnHeaderStyle>
             <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -58,7 +63,7 @@
                     </Style>
                 </DataGridTextColumn.CellStyle>
             </DataGridTextColumn>
-                <DataGridTextColumn Header="Year" Binding="{Binding Year}" >
+            <DataGridTextColumn Header="Year" Binding="{Binding Year}" >
                 <DataGridTextColumn.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="TextBlock.TextAlignment" Value="Center"/>
@@ -91,6 +96,17 @@
                     </Style>
                 </DataGridComboBoxColumn.EditingElementStyle>
             </DataGridComboBoxColumn>
+            <DataGridTextColumn Header="Cover Image" Width="*" IsReadOnly="True" Binding="{Binding DiscArtInfo}">
+                <DataGridTextColumn.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DiscArtIsValid}" Value="False">
+                                <Setter Property="Background" Value="Red" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGridTextColumn.CellStyle>
+            </DataGridTextColumn>
         </DataGrid.Columns>
     </DataGrid>
 </UserControl>

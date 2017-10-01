@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace CF.MusicLibrary.Universal.DiscArt
+namespace CF.MusicLibrary.Common.DiscArt
 {
 	[Flags]
 	public enum DiscArtValidationResults

@@ -1,12 +1,11 @@
 ﻿using System;
 using CF.Library.Core.Facades;
-using CF.MusicLibrary.Universal.DiscArt;
 using GalaSoft.MvvmLight;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt
+namespace CF.MusicLibrary.Common.DiscArt
 {
-	internal class DiscArtImageFile : ViewModelBase, IDiscArtImageFile
+	public class DiscArtImageFile : ViewModelBase, IDiscArtImageFile
 	{
 		private readonly IDiscArtValidator discArtValidator;
 		private readonly IFileSystemFacade fileSystemFacade;

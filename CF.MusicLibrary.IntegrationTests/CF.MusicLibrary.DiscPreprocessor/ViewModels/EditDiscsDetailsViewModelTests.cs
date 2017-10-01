@@ -3,8 +3,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CF.Library.Core.Facades;
+using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels;
@@ -37,7 +39,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			};
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IFileSystemFacade>());
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IFileSystemFacade>());
 
 			//	Act
 
@@ -100,10 +102,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 				Title = "Some Title",
 				DiscType = DsicType.ArtistDisc,
 				Artist = "Some Artist",
+				SourcePath = "DiscSourcePath",
 			};
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(new[] { disc1, disc2 }.Select(d => d)));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IFileSystemFacade>());
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IFileSystemFacade>());
 
 			//	Act
 
@@ -136,7 +139,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			};
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IFileSystemFacade>());
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IFileSystemFacade>());
 
 			//	Act
 
@@ -176,7 +179,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			};
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IFileSystemFacade>());
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IFileSystemFacade>());
 
 			//	Act
 
@@ -217,6 +220,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 					UriWithinStorage = new Uri("/Foreign/Nightwish/2000 - Wishmaster", UriKind.Relative),
 					DiscType = DsicType.ArtistDisc,
 					Artist = "Nightwish",
+					SourcePath = "DiscSourcePath1",
 				},
 
 				new AddedDiscInfo(new[]
@@ -232,6 +236,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 					Title = "Gladiator",
 					UriWithinStorage = new Uri("/Soundtracks/Gladiator", UriKind.Relative),
 					DiscType = DsicType.CompilationDiscWithoutArtistInfo,
+					SourcePath = "DiscSourcePath2",
 				},
 
 				new AddedDiscInfo(new[]
@@ -255,11 +260,17 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 					Title = "The Matrix",
 					UriWithinStorage = new Uri("/Soundtracks/The Matrix", UriKind.Relative),
 					DiscType = DsicType.CompilationDiscWithArtistInfo,
+					SourcePath = "DiscSourcePath3",
 				},
 			};
 
+			IDiscArtImageFile discArtImageFileStub = Substitute.For<IDiscArtImageFile>();
+			discArtImageFileStub.ImageIsValid.Returns(true);
+			IObjectFactory<IDiscArtImageFile> discArtImageFileFactoryStub = Substitute.For<IObjectFactory<IDiscArtImageFile>>();
+			discArtImageFileFactoryStub.CreateInstance().Returns(discArtImageFileStub);
+
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, new MyLibraryStructurer(), Substitute.For<IFileSystemFacade>());
+			var target = new EditDiscsDetailsViewModel(discLibrary, new MyLibraryStructurer(), discArtImageFileFactoryStub, Substitute.For<IFileSystemFacade>());
 
 			target.SetDiscs(discs).Wait();
 

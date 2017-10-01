@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using CF.MusicLibrary.Common;
 
 namespace CF.MusicLibrary.PandaPlayer.Views.ValueConverters
 {

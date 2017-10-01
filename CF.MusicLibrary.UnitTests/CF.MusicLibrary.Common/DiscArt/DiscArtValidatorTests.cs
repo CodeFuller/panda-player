@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Drawing.Imaging;
 using CF.Library.Core.Facades;
-using CF.MusicLibrary.Universal.DiscArt;
+using CF.MusicLibrary.Common.DiscArt;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Universal.DiscArt
+namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Common.DiscArt
 {
 	[TestFixture]
 	public class DiscArtValidatorTests

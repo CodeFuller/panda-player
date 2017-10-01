@@ -1,10 +1,12 @@
 ﻿using CF.Library.Core.Configuration;
 using CF.Library.Core.Facades;
+using CF.Library.Core.Interfaces;
 using CF.Library.Unity;
 using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.DiscPreprocessor.Interfaces;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
@@ -48,6 +50,9 @@ namespace CF.MusicLibrary.DiscPreprocessor
 			DIContainer.RegisterType<ISongTagger, SongTagger>();
 			DIContainer.RegisterType<ISongMediaInfoProvider, SongMediaInfoProvider>();
 			DIContainer.RegisterType<ILibraryStructurer, MyLibraryStructurer>();
+			DIContainer.RegisterType<IDiscArtValidator, DiscArtValidator>();
+			DIContainer.RegisterType<IDiscArtImageFile, DiscArtImageFile>();
+			DIContainer.RegisterType<IObjectFactory<IDiscArtImageFile>, UnityBasedObjectFactory<IDiscArtImageFile>>(new InjectionConstructor(DIContainer));
 
 			DIContainer.RegisterType<IEditSourceContentViewModel, EditSourceContentViewModel>();
 			DIContainer.RegisterType<IEditDiscsDetailsViewModel, EditDiscsDetailsViewModel>();

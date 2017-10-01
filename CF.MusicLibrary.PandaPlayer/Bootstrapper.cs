@@ -10,6 +10,7 @@ using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.Local;
@@ -22,7 +23,6 @@ using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
 using CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Player;
 using CF.MusicLibrary.Tagger;
-using CF.MusicLibrary.Universal.DiscArt;
 using CF.MusicLibrary.Universal.Interfaces;
 using Microsoft.Practices.Unity;
 

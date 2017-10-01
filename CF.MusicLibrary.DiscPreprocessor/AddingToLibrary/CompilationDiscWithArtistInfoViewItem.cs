@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
@@ -21,8 +22,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		public override bool ArtistIsEditable => false;
 		public override bool ArtistIsNotFilled => false;
 
-		public CompilationDiscWithArtistInfoViewItem(string sourcePath, AddedDiscInfo discInfo, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
-			: base(sourcePath, discInfo, availableArtists, availableGenres)
+		public CompilationDiscWithArtistInfoViewItem(IDiscArtImageFile discArtImageFile, AddedDiscInfo discInfo, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
+			: base(discArtImageFile, discInfo, availableArtists, availableGenres)
 		{
 		}
 

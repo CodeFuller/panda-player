@@ -151,13 +151,10 @@
     <Compile Include="Events\LibraryLoadedEventArgs.cs" />
     <Compile Include="Events\PlaylistChangedEventArgs.cs" />
     <Compile Include="Events\PlaylistLoadedEventArgs.cs" />
-    <Compile Include="FileSizeFormatter.cs" />
     <Compile Include="IWebBrowser.cs" />
     <Compile Include="SystemDefaultWebBrowser.cs" />
-    <Compile Include="ViewModels\DiscArt\DiscArtImageFile.cs" />
     <Compile Include="ViewModels\DiscArt\DocumentDownloadFailedException.cs" />
     <Compile Include="ViewModels\DiscArt\HttpDocumentDownloader.cs" />
-    <Compile Include="ViewModels\DiscArt\IDiscArtImageFile.cs" />
     <Compile Include="ViewModels\DiscArt\IDocumentDownloader.cs" />
     <Compile Include="ViewModels\Interfaces\IEditDiscArtViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ILibraryStatisticsViewModel.cs" />
@@ -382,6 +379,10 @@
     <ProjectReference Include="..\CF.MusicLibrary.BL\CF.MusicLibrary.BL.csproj">
       <Project>{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}</Project>
       <Name>CF.MusicLibrary.BL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.Common\CF.MusicLibrary.Common.csproj">
+      <Project>{5501311F-CBCD-40B3-95F4-F28D521E6EC5}</Project>
+      <Name>CF.MusicLibrary.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.Dal\CF.MusicLibrary.Dal.csproj">
       <Project>{83AD3795-4E4A-4D32-BE5B-9D68287EF586}</Project>

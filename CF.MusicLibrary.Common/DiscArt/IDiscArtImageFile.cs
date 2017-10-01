@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
-using CF.MusicLibrary.Universal.DiscArt;
 
-namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt
+namespace CF.MusicLibrary.Common.DiscArt
 {
-	internal interface IDiscArtImageFile : INotifyPropertyChanged
+	public interface IDiscArtImageFile : INotifyPropertyChanged
 	{
 		string ImageFileName { get; }
 
