@@ -5,7 +5,7 @@ using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 
 namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 {
-	public abstract class CompilationDiscViewItem : DiscViewItem
+	public abstract class CompilationDiscViewItem : NewDiscViewItem
 	{
 		// Seal the method for calling it in constructor.
 		public sealed override short? Year

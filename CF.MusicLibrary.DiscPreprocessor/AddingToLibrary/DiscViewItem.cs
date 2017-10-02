@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using CF.Library.Core.Extensions;
-using CF.MusicLibrary.BL;
 using CF.MusicLibrary.BL.Objects;
-using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using GalaSoft.MvvmLight;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
@@ -15,8 +12,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 {
 	public abstract class DiscViewItem : ViewModelBase
 	{
-		private readonly IDiscArtImageFile discArtImageFile;
-
 		public string SourcePath { get; }
 
 		public abstract string DiscTypeTitle { get; }
@@ -28,18 +23,9 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public Collection<Artist> AvailableArtists { get; }
 
-		public string DiscTitle { get; }
+		public abstract string DiscTitle { get; }
 
-		private string albumTitle;
-		public string AlbumTitle
-		{
-			get { return albumTitle; }
-			set
-			{
-				Set(ref albumTitle, value);
-				RaisePropertyChanged(nameof(AlbumTitleMatchesDiscTitle));
-			}
-		}
+		public abstract string AlbumTitle { get; set; }
 
 		public bool AlbumTitleMatchesDiscTitle => String.Equals(AlbumTitle, DiscTitle, StringComparison.OrdinalIgnoreCase);
 
@@ -67,39 +53,22 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 				RaisePropertyChanged(nameof(RequiredDataIsFilled));
 			}
 		}
-		public bool GenreIsNotFilled => genre == null;
+
+		public bool GenreIsNotFilled => Genre == null;
 
 		public Collection<Genre> AvailableGenres { get; }
 
 		public Uri DestinationUri { get; }
 
-		public bool DiscArtIsValid => discArtImageFile.ImageIsValid;
+		public abstract bool DiscArtIsValid { get; }
 
-		public string DiscArtInfo => DiscArtIsValid ? discArtImageFile.ImageProperties : discArtImageFile.ImageStatus;
+		public abstract string DiscArtInfo { get; }
 
-		public AddedDiscCoverImage AddedDiscCoverImage
-		{
-			get
-			{
-				if (!DiscArtIsValid)
-				{
-					throw new InvalidOperationException("Disc Art is not valid");
-				}
-
-				return new AddedDiscCoverImage(Disc, discArtImageFile.ImageFileName);
-			}
-		}
-
-		public bool RequiredDataIsFilled => !GenreIsNotFilled && DiscArtIsValid;
+		public abstract bool RequiredDataIsFilled { get; }
 
 		protected IReadOnlyCollection<AddedSongInfo> SourceSongs { get; }
 
-		public Disc Disc => new Disc
-		{
-			Title = DiscTitle,
-			AlbumTitle = AlbumTitle,
-			Uri = DestinationUri,
-		};
+		protected abstract  Disc Disc { get; }
 
 		public IEnumerable<AddedSong> Songs
 		{
@@ -125,28 +94,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			}
 		}
 
-		protected DiscViewItem(IDiscArtImageFile discArtImageFile, AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
+		public abstract AddedDiscCoverImage AddedDiscCoverImage { get; }
+
+		protected DiscViewItem(AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
 		{
-			if (discArtImageFile == null)
-			{
-				throw new ArgumentNullException(nameof(discArtImageFile));
-			}
-
-			if (String.IsNullOrWhiteSpace(disc.Title))
-			{
-				throw new InvalidOperationException("Disc title could not be empty");
-			}
-
-			this.discArtImageFile = discArtImageFile;
-			this.discArtImageFile.PropertyChanged += DiscArtImageFileOnPropertyChanged;
-
 			SourcePath = disc.SourcePath;
-			DiscTitle = disc.Title;
-			albumTitle = DiscTitleToAlbumMapper.GetAlbumTitleFromDiscTitle(disc.Title);
 			AvailableArtists = availableArtists.OrderBy(a => a.Name).ToCollection();
-			AvailableGenres = availableGenres.OrderBy(a => a.Name).ToCollection();
 			DestinationUri = disc.UriWithinStorage;
 			SourceSongs = disc.Songs.ToList();
+			AvailableGenres = availableGenres.OrderBy(a => a.Name).ToCollection();
 		}
 
 		protected abstract Artist GetSongArtist(AddedSongInfo song);
@@ -162,29 +118,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			return artist;
 		}
 
-		public void SetDiscCoverImage(string imageFileName)
-		{
-			discArtImageFile.Load(imageFileName, false);
-		}
+		public abstract void SetDiscCoverImage(string imageFileName);
 
-		public void UnsetDiscCoverImage()
-		{
-			discArtImageFile.Unload();
-		}
-
-		private void DiscArtImageFileOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			if (e.PropertyName == nameof(IDiscArtImageFile.ImageIsValid))
-			{
-				RaisePropertyChanged(nameof(DiscArtIsValid));
-				RaisePropertyChanged(nameof(DiscArtInfo));
-				RaisePropertyChanged(nameof(RequiredDataIsFilled));
-			}
-
-			if (e.PropertyName == nameof(IDiscArtImageFile.ImageStatus) || e.PropertyName == nameof(IDiscArtImageFile.ImageProperties))
-			{
-				RaisePropertyChanged(nameof(DiscArtInfo));
-			}
-		}
+		public abstract void UnsetDiscCoverImage();
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Linq;
@@ -35,38 +36,40 @@ namespace CF.MusicLibrary.Dal
 				throw new InvalidOperationException("Added song could not contain any playbacks");
 			}
 
+			//	Adding will not work correctly if songs collection is filled for the Disc.
 			var disc = song.Disc;
-			if (disc.Songs.Any())
+			ICollection<Song> discSongs = disc.SongsUnordered;
+			disc.SongsUnordered = new Collection<Song>();
+			try
 			{
-				throw new InvalidOperationException("Disc of added Song should not have Songs collection filled");
+				var artist = song.Artist;
+				var genre = song.Genre;
+
+				using (var ctx = GetContext())
+				{
+					//	Is it a new Genre?
+					if (genre != null)
+					{
+						ctx.Entry(genre).State = genre.Id == 0 ? EntityState.Added : EntityState.Unchanged;
+					}
+
+					//	Is it a new Disc?
+					ctx.Entry(disc).State = disc.Id == 0 ? EntityState.Added : EntityState.Unchanged;
+
+					//	Is it a new Artist?
+					if (artist != null)
+					{
+						ctx.Entry(artist).State = artist.Id == 0 ? EntityState.Added : EntityState.Unchanged;
+					}
+
+					ctx.Entry(song).State = EntityState.Added;
+
+					await ctx.SaveChangesAsync();
+				}
 			}
-
-			var artist = song.Artist;
-			var genre = song.Genre;
-
-			using (var ctx = GetContext())
+			finally
 			{
-				//	Is it a new Genre?
-				if (genre != null)
-				{
-					ctx.Entry(genre).State = genre.Id == 0 ? EntityState.Added : EntityState.Unchanged;
-				}
-
-				//	Is it a new Disc?
-				ctx.Entry(disc).State = disc.Id == 0 ? EntityState.Added : EntityState.Unchanged;
-
-				//	Is it a new Artist?
-				if (artist != null)
-				{
-					ctx.Entry(artist).State = artist.Id == 0 ? EntityState.Added : EntityState.Unchanged;
-				}
-
-				ctx.Entry(song).State = EntityState.Added;
-
-				await ctx.SaveChangesAsync();
-
-				//	Undo adding of related objects
-				disc.SongsUnordered.Clear();
+				disc.SongsUnordered = discSongs;
 			}
 		}
 

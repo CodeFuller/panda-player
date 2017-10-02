@@ -36,7 +36,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 		public ObservableCollection<DiscViewItem> Discs { get; private set; }
 
-		public IEnumerable<AddedDiscCoverImage> DiscCoverImages => Discs.Select(disc => disc.AddedDiscCoverImage);
+		public IEnumerable<AddedDiscCoverImage> DiscCoverImages => Discs.Select(disc => disc.AddedDiscCoverImage).Where(ci => ci != null);
 
 		public IEnumerable<AddedSong> AddedSongs
 		{
@@ -46,7 +46,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 				{
 					foreach (var addedSong in addedDisc.Songs)
 					{
-						addedSong.Song.Uri = libraryStructurer.BuildSongUri(addedDisc.Disc.Uri, Path.GetFileName(addedSong.SourceFileName));
+						addedSong.Song.Uri = libraryStructurer.BuildSongUri(addedDisc.DestinationUri, Path.GetFileName(addedSong.SourceFileName));
 						yield return addedSong;
 					}
 				}
@@ -93,23 +93,33 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			Discs = new ObservableCollection<DiscViewItem>();
 			foreach (var addedDiscInfo in discsList)
 			{
+				Disc existingDisc = discLibrary.Discs.SingleOrDefault(d => d.Uri == addedDiscInfo.UriWithinStorage);
+
 				DiscViewItem addedDisc;
-				switch (addedDiscInfo.DiscType)
+
+				if (existingDisc != null)
 				{
-					case DsicType.ArtistDisc:
-						addedDisc = new ArtistDiscViewItem(discArtImageFileFactory.CreateInstance(), addedDiscInfo, availableArtists, discLibrary.Genres, PredictArtistGenre(addedDiscInfo.Artist));
-						break;
+					addedDisc = new ExistingDiscViewItem(existingDisc, addedDiscInfo, availableArtists, discLibrary.Genres);
+				}
+				else
+				{
+					switch (addedDiscInfo.DiscType)
+					{
+						case DsicType.ArtistDisc:
+							addedDisc = new ArtistDiscViewItem(discArtImageFileFactory.CreateInstance(), addedDiscInfo, availableArtists, discLibrary.Genres, PredictArtistGenre(addedDiscInfo.Artist));
+							break;
 
-					case DsicType.CompilationDiscWithArtistInfo:
-						addedDisc = new CompilationDiscWithArtistInfoViewItem(discArtImageFileFactory.CreateInstance(), addedDiscInfo, availableArtists, discLibrary.Genres);
-						break;
+						case DsicType.CompilationDiscWithArtistInfo:
+							addedDisc = new CompilationDiscWithArtistInfoViewItem(discArtImageFileFactory.CreateInstance(), addedDiscInfo, availableArtists, discLibrary.Genres);
+							break;
 
-					case DsicType.CompilationDiscWithoutArtistInfo:
-						addedDisc = new CompilationDiscWithoutArtistInfoViewItem(discArtImageFileFactory.CreateInstance(), addedDiscInfo, availableArtists, discLibrary.Genres);
-						break;
+						case DsicType.CompilationDiscWithoutArtistInfo:
+							addedDisc = new CompilationDiscWithoutArtistInfoViewItem(discArtImageFileFactory.CreateInstance(), addedDiscInfo, availableArtists, discLibrary.Genres);
+							break;
 
-					default:
-						throw new UnexpectedEnumValueException(addedDiscInfo.DiscType);
+						default:
+							throw new UnexpectedEnumValueException(addedDiscInfo.DiscType);
+					}
 				}
 
 				addedDisc.PropertyChanged += Property_Changed;

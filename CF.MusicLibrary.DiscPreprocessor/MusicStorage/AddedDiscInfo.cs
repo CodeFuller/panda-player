@@ -16,8 +16,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 
 		public Uri UriWithinStorage { get; set; }
 
-		public string NameInStorage { get; set; }
-
 		public bool HasArtist => DiscType == DsicType.ArtistDisc;
 
 		private string artist;

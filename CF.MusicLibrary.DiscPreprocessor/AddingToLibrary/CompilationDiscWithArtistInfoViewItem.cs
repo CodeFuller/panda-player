@@ -16,7 +16,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			get { return null; }
 			set
 			{
-				throw new InvalidOperationException(Current($"Artist could not be set for '{DiscTitle}' directory"));
+				throw new InvalidOperationException(Current($"Artist could not be set for '{DiscTitle}' disc"));
 			}
 		}
 		public override bool ArtistIsEditable => false;

@@ -8,7 +8,7 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 {
-	public sealed class ArtistDiscViewItem : DiscViewItem
+	public sealed class ArtistDiscViewItem : NewDiscViewItem
 	{
 		public override string DiscTypeTitle => "Artist Disc";
 
@@ -18,7 +18,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			get { return artist; }
 			set
 			{
-				throw new InvalidOperationException(Current($"Artist could not be changed for '{DiscTitle}' directory"));
+				throw new InvalidOperationException(Current($"Artist could not be changed for '{DiscTitle}' disc"));
 			}
 		}
 		public override bool ArtistIsEditable => false;
@@ -30,11 +30,9 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			get { return year; }
 			set
 			{
-				throw new InvalidOperationException(Current($"Year could not be set for '{DiscTitle}' directory"));
+				throw new InvalidOperationException(Current($"Year could not be set for '{DiscTitle}' disc"));
 			}
 		}
-
-		public string NameInStorage { get; private set; }
 
 		public ArtistDiscViewItem(IDiscArtImageFile discArtImageFile, AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres, Genre genre)
 			: base(discArtImageFile, disc, availableArtists, availableGenres)
@@ -42,7 +40,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			artist = LookupArtist(disc.Artist);
 			Genre = genre;
 			year = disc.Year;
-			NameInStorage = disc.NameInStorage;
 
 			//	Should we keep Artist parsed from songs or should we clear it?
 			//	Currently artist is parsed from the song filename by following regex: (.+) - (.+)

@@ -133,6 +133,8 @@
     <Compile Include="AddingToLibrary\CompilationDiscWithArtistInfoViewItem.cs" />
     <Compile Include="AddingToLibrary\CompilationDiscWithoutArtistInfoViewItem.cs" />
     <Compile Include="AddingToLibrary\AddedSong.cs" />
+    <Compile Include="AddingToLibrary\ExistingDiscViewItem.cs" />
+    <Compile Include="AddingToLibrary\NewDiscViewItem.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Events\DiscContentChangedEventArgs.cs" />
     <Compile Include="Events\SongTitleChangedEventArgs.cs" />

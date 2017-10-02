@@ -47,7 +47,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 				Title = title,
 				SourcePath = discPath,
 				UriWithinStorage = uriParts.Uri,
-				NameInStorage = uriParts[uriParts.Count - 1],
 			};
 
 			//	Case of "Category\Artist\Disc", e.g. "Foreign\Nightwish\2011 - Imaginaerum"

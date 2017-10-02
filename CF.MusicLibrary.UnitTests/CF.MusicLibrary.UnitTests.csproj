@@ -89,6 +89,8 @@
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\CompilationDiscWithArtistInfoViewItemTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\CompilationDiscWithoutArtistInfoViewItemTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\DiscViewItemTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\ExistingDiscViewItemTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\NewDiscViewItemTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\SongTaggerTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ParsingContent\DiscContentParserTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ParsingContent\EthalonDiscParserTests.cs" />
