@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using CF.Library.Core.Configuration;
-using CF.Library.Core.Facades;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
+using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels;
 using NSubstitute;
 using NUnit.Framework;
@@ -15,26 +16,20 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 	[TestFixture]
 	public class AddToLibraryViewModelTests
 	{
-		[TearDown]
-		public void TearDown()
-		{
-			AppSettings.ResetSettingsProvider();
-		}
-
 		[Test]
 		public void Constructor_IfMusicLibraryArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(null, Substitute.For<ISongMediaInfoProvider>(), Substitute.For<IFileSystemFacade>(), false));
+			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(null, Substitute.For<ISongMediaInfoProvider>(), Substitute.For<IWorkshopMusicStorage>(), false));
 		}
 
 		[Test]
 		public void Constructor_IfSongMediaInfoProviderArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), null, Substitute.For<IFileSystemFacade>(), false));
+			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), null, Substitute.For<IWorkshopMusicStorage>(), false));
 		}
 
 		[Test]
-		public void Constructor_IfFileSystemFacadeArgumentIsNull_ThrowsArgumentNullException()
+		public void Constructor_IfWorkshopMusicStorageArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<ISongMediaInfoProvider>(), null, false));
 		}
@@ -58,7 +53,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 				Duration = TimeSpan.FromSeconds(3600),
 			}));
 
-			AddToLibraryViewModel target = new AddToLibraryViewModel(musicLibraryMock, mediaInfoProviderStub, Substitute.For<IFileSystemFacade>(), false);
+			AddToLibraryViewModel target = new AddToLibraryViewModel(musicLibraryMock, mediaInfoProviderStub, Substitute.For<IWorkshopMusicStorage>(), false);
 			target.SetSongs(new[] { new AddedSong(new Song(), @"SomeSongPath\SomeSongFile.mp3") });
 
 			//	Act
@@ -87,7 +82,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 			ISongMediaInfoProvider mediaInfoProviderStub = Substitute.For<ISongMediaInfoProvider>();
 			mediaInfoProviderStub.GetSongMediaInfo(Arg.Any<string>()).Returns(Task.FromResult(new SongMediaInfo()));
 
-			AddToLibraryViewModel target = new AddToLibraryViewModel(musicLibraryMock, mediaInfoProviderStub, Substitute.For<IFileSystemFacade>(), false);
+			AddToLibraryViewModel target = new AddToLibraryViewModel(musicLibraryMock, mediaInfoProviderStub, Substitute.For<IWorkshopMusicStorage>(), false);
 			target.SetSongs(new[] { new AddedSong(new Song(), @"SomeSongPath\SomeSongFile.mp3") });
 			target.SetDiscsCoverImages(new[] { addedCover1, addedCover2 });
 
@@ -102,22 +97,28 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 		}
 
 		[Test]
-		public void AddContentToLibrary_IfDeleteSourceContentIsTrue_DeletesSourceDirTree()
+		public void AddContentToLibrary_IfDeleteSourceContentIsTrue_DeletesSourceContentCorrectly()
 		{
 			//	Arrange
-
-			ISettingsProvider settingsProvider = Substitute.For<ISettingsProvider>();
-			settingsProvider.GetRequiredValue<string>("WorkshopDirectory").Returns("SomeWorkshopDirectory");
-			AppSettings.SettingsProvider = settingsProvider;
 
 			ISongMediaInfoProvider mediaInfoProviderStub = Substitute.For<ISongMediaInfoProvider>();
 			mediaInfoProviderStub.GetSongMediaInfo(Arg.Any<string>()).Returns(Task.FromResult(new SongMediaInfo()));
 
-			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
-			fileSystemMock.EnumerateDirectories("SomeWorkshopDirectory").Returns(new[] { @"SomeWorkshopDirectory\SubDir1", @"SomeWorkshopDirectory\SubDir2" });
+			List<string> deletedFiles = null;
+			IWorkshopMusicStorage workshopMusicStorageMock = Substitute.For<IWorkshopMusicStorage>();
+			workshopMusicStorageMock.DeleteSourceContent(Arg.Do<IEnumerable<string>>(arg => deletedFiles = arg.ToList()));
 
-			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), mediaInfoProviderStub, fileSystemMock, true);
-			target.SetSongs(new[] { new AddedSong(new Song(), @"SomeSongPath\SomeSongFile.mp3") });
+			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), mediaInfoProviderStub, workshopMusicStorageMock, true);
+			target.SetSongs(new[]
+			{
+				new AddedSong(new Song(), @"SomeSongPath\SomeSongFile1.mp3"),
+				new AddedSong(new Song(), @"SomeSongPath\SomeSongFile2.mp3"),
+			});
+			target.SetDiscsCoverImages(new[]
+			{
+				new AddedDiscCoverImage(new Disc(), @"DiscCoverImage1.jpg"),
+				new AddedDiscCoverImage(new Disc(), @"DiscCoverImage2.jpg"),
+			});
 
 			//	Act
 
@@ -125,26 +126,27 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 			//	Assert
 
-			fileSystemMock.Received(1).DeleteDirectory(@"SomeWorkshopDirectory\SubDir1", true);
-			fileSystemMock.Received(1).DeleteDirectory(@"SomeWorkshopDirectory\SubDir2", true);
+			Assert.IsNotNull(deletedFiles);
+			CollectionAssert.AreEqual(new[]
+			{
+				@"SomeSongPath\SomeSongFile1.mp3",
+				@"SomeSongPath\SomeSongFile2.mp3",
+				@"DiscCoverImage1.jpg",
+				@"DiscCoverImage2.jpg",
+			}, deletedFiles);
 		}
 
 		[Test]
-		public void AddContentToLibrary_IfDeleteSourceContentIsFalse_DoesNotDeleteSourceDirTree()
+		public void AddContentToLibrary_IfDeleteSourceContentIsFalse_DoesNotDeleteSourceContent()
 		{
 			//	Arrange
-
-			ISettingsProvider settingsProvider = Substitute.For<ISettingsProvider>();
-			settingsProvider.GetRequiredValue<string>("WorkshopDirectory").Returns("SomeWorkshopDirectory");
-			AppSettings.SettingsProvider = settingsProvider;
 
 			ISongMediaInfoProvider mediaInfoProviderStub = Substitute.For<ISongMediaInfoProvider>();
 			mediaInfoProviderStub.GetSongMediaInfo(Arg.Any<string>()).Returns(Task.FromResult(new SongMediaInfo()));
 
-			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
-			fileSystemMock.EnumerateDirectories("SomeWorkshopDirectory").Returns(new[] { @"SomeWorkshopDirectory\SubDir1", @"SomeWorkshopDirectory\SubDir2" });
+			IWorkshopMusicStorage workshopMusicStorageMock = Substitute.For<IWorkshopMusicStorage>();
 
-			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), mediaInfoProviderStub, fileSystemMock, false);
+			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), mediaInfoProviderStub, workshopMusicStorageMock, false);
 			target.SetSongs(new[] { new AddedSong(new Song(), @"SomeSongPath\SomeSongFile.mp3") });
 
 			//	Act
@@ -153,36 +155,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 			//	Assert
 
-			fileSystemMock.DidNotReceiveWithAnyArgs().DeleteDirectory(Arg.Any<string>(), Arg.Any<bool>());
-		}
-
-		[Test]
-		public void AddContentToLibrary_IfSomeSubDirectoryContainsFiles_DoesNotDeleteSourceDirTree()
-		{
-			//	Arrange
-
-			ISettingsProvider settingsProvider = Substitute.For<ISettingsProvider>();
-			settingsProvider.GetRequiredValue<string>("WorkshopDirectory").Returns("SomeWorkshopDirectory");
-			AppSettings.SettingsProvider = settingsProvider;
-
-			ISongMediaInfoProvider mediaInfoProviderStub = Substitute.For<ISongMediaInfoProvider>();
-			mediaInfoProviderStub.GetSongMediaInfo(Arg.Any<string>()).Returns(Task.FromResult(new SongMediaInfo()));
-
-			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
-			fileSystemMock.EnumerateDirectories("SomeWorkshopDirectory").Returns(new[] { @"SomeWorkshopDirectory\SubDir" });
-			fileSystemMock.EnumerateDirectories(@"SomeWorkshopDirectory\SubDir").Returns(new[] { @"SomeWorkshopDirectory\SubDir\DeeperDir" });
-			fileSystemMock.EnumerateFiles(@"SomeWorkshopDirectory\SubDir\DeeperDir").Returns(new[] { @"SomeWorkshopDirectory\SubDir\DeeperDir\SomeFile.mp3" });
-
-			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), mediaInfoProviderStub, fileSystemMock, true);
-			target.SetSongs(new[] { new AddedSong(new Song(), @"SomeSongPath\SomeSongFile.mp3") });
-
-			//	Act
-
-			target.AddContentToLibrary().Wait();
-
-			//	Assert
-
-			fileSystemMock.DidNotReceive().DeleteDirectory(@"SomeWorkshopDirectory\SubDir", true);
+			workshopMusicStorageMock.DidNotReceiveWithAnyArgs().DeleteSourceContent(Arg.Any<IEnumerable<string>>());
 		}
 	}
 }

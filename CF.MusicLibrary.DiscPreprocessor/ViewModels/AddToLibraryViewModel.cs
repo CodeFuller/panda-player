@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CF.Library.Core.Configuration;
-using CF.Library.Core.Facades;
 using CF.Library.Wpf;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
+using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
@@ -19,7 +18,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 	{
 		private readonly IMusicLibrary musicLibrary;
 		private readonly ISongMediaInfoProvider songMediaInfoProvider;
-		private readonly IFileSystemFacade fileSystemFacade;
+		private readonly IWorkshopMusicStorage workshopMusicStorage;
 
 		private readonly bool deleteSourceContent;
 
@@ -68,7 +67,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			discsCoverImages = coverImages.ToList();
 		}
 
-		public AddToLibraryViewModel(IMusicLibrary musicLibrary, ISongMediaInfoProvider songMediaInfoProvider, IFileSystemFacade fileSystemFacade, bool deleteSourceContent)
+		public AddToLibraryViewModel(IMusicLibrary musicLibrary, ISongMediaInfoProvider songMediaInfoProvider, IWorkshopMusicStorage workshopMusicStorage, bool deleteSourceContent)
 		{
 			if (musicLibrary == null)
 			{
@@ -78,14 +77,14 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			{
 				throw new ArgumentNullException(nameof(songMediaInfoProvider));
 			}
-			if (fileSystemFacade == null)
+			if (workshopMusicStorage == null)
 			{
-				throw new ArgumentNullException(nameof(fileSystemFacade));
+				throw new ArgumentNullException(nameof(workshopMusicStorage));
 			}
 
 			this.musicLibrary = musicLibrary;
 			this.songMediaInfoProvider = songMediaInfoProvider;
-			this.fileSystemFacade = fileSystemFacade;
+			this.workshopMusicStorage = workshopMusicStorage;
 			this.deleteSourceContent = deleteSourceContent;
 
 			AddToLibraryCommand = new AsyncRelayCommand(AddContentToLibrary);
@@ -109,7 +108,9 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 			if (deleteSourceContent)
 			{
-				DeleteSourceDirTree();
+				ProgressMessages += Current($"Deleting source content...\n");
+				workshopMusicStorage.DeleteSourceContent(addedSongs.Select(s => s.SourceFileName).Union(discsCoverImages.Select(c => c.CoverImageFileName)));
+				ProgressMessages += Current($"Source content was deleted successfully\n");
 			}
 
 			DataIsReady = true;
@@ -172,36 +173,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			}
 
 			return taskProgressSize;
-		}
-
-		private void DeleteSourceDirTree()
-		{
-			foreach (var subDirectory in fileSystemFacade.EnumerateDirectories(AppSettings.GetRequiredValue<string>("WorkshopDirectory")))
-			{
-				List<string> files = new List<string>();
-				FindDirectoryFiles(subDirectory, files);
-
-				if (files.Any())
-				{
-					return;
-				}
-
-				ProgressMessages += Current($"Deleting source directory '{subDirectory}'...\n");
-				fileSystemFacade.DeleteDirectory(subDirectory, true);
-			}
-		}
-
-		private void FindDirectoryFiles(string directoryPath, List<string> files)
-		{
-			foreach (string subDirectory in fileSystemFacade.EnumerateDirectories(directoryPath))
-			{
-				FindDirectoryFiles(subDirectory, files);
-			}
-
-			foreach (string file in fileSystemFacade.EnumerateFiles(directoryPath))
-			{
-				files.Add(file);
-			}
 		}
 	}
 }

@@ -34,7 +34,7 @@ namespace CF.MusicLibrary.DiscPreprocessor
 			DIContainer.RegisterType<IMusicLibraryStorage, FileSystemMusicStorage>(new InjectionConstructor(typeof(IFileSystemFacade), typeof(ISongTagger), localStorageRoot));
 			DIContainer.RegisterType<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
 			DIContainer.RegisterType<IFileSystemFacade, FileSystemFacade>();
-			DIContainer.RegisterType<IWorkshopMusicStorage, WorkshopMusicStorage>(new InjectionConstructor(workshopDirectory));
+			DIContainer.RegisterType<IWorkshopMusicStorage, WorkshopMusicStorage>(new InjectionConstructor(typeof(IFileSystemFacade), workshopDirectory));
 
 			DIContainer.RegisterInstance(new DiscLibrary(async () =>
 			{
@@ -58,7 +58,7 @@ namespace CF.MusicLibrary.DiscPreprocessor
 			DIContainer.RegisterType<IEditDiscsDetailsViewModel, EditDiscsDetailsViewModel>();
 			DIContainer.RegisterType<IEditSongsDetailsViewModel, EditSongsDetailsViewModel>();
 			DIContainer.RegisterType<IAddToLibraryViewModel, AddToLibraryViewModel>(new InjectionConstructor(
-				typeof(IMusicLibrary), typeof(ISongMediaInfoProvider), typeof(IFileSystemFacade), deleteSourceContentAfterAdding));
+				typeof(IMusicLibrary), typeof(ISongMediaInfoProvider), typeof(IWorkshopMusicStorage), deleteSourceContentAfterAdding));
 			DIContainer.RegisterType<ApplicationViewModel>();
 		}
 	}

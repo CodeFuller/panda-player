@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CF.Library.Core.Exceptions;
+using CF.Library.Core.Facades;
 using CF.MusicLibrary.BL;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
@@ -20,10 +21,18 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 		private static readonly Regex SongWithTrackRegex = new Regex(@"^(\d{2}) - (.+)$", RegexOptions.Compiled);
 		private static readonly Regex SongWithArtistRegex = new Regex(@"^((.+) - (.+))$", RegexOptions.Compiled);
 
+		private readonly IFileSystemFacade fileSystemFacade;
+
 		private readonly string workshopRootPath;
 
-		public WorkshopMusicStorage(string workshopRootPath)
+		public WorkshopMusicStorage(IFileSystemFacade fileSystemFacade, string workshopRootPath)
 		{
+			if (fileSystemFacade == null)
+			{
+				throw new ArgumentNullException(nameof(fileSystemFacade));
+			}
+
+			this.fileSystemFacade = fileSystemFacade;
 			this.workshopRootPath = workshopRootPath;
 		}
 
@@ -128,6 +137,41 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 			}
 
 			throw new InvalidInputDataException(Current($"Could not parse song data from '{songPath}'"));
+		}
+
+		public void DeleteSourceContent(IEnumerable<string> contentFiles)
+		{
+			foreach (var file in contentFiles)
+			{
+				fileSystemFacade.ClearReadOnlyAttribute(file);
+				fileSystemFacade.DeleteFile(file);
+			}
+
+			foreach (var subDirectory in fileSystemFacade.EnumerateDirectories(workshopRootPath))
+			{
+				List<string> files = new List<string>();
+				FindDirectoryFiles(subDirectory, files);
+
+				if (files.Any())
+				{
+					return;
+				}
+
+				fileSystemFacade.DeleteDirectory(subDirectory, true);
+			}
+		}
+
+		private void FindDirectoryFiles(string directoryPath, List<string> files)
+		{
+			foreach (string subDirectory in fileSystemFacade.EnumerateDirectories(directoryPath))
+			{
+				FindDirectoryFiles(subDirectory, files);
+			}
+
+			foreach (string file in fileSystemFacade.EnumerateFiles(directoryPath))
+			{
+				files.Add(file);
+			}
 		}
 	}
 }
