@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using CF.Library.Core.Exceptions;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.BL;
+using CF.MusicLibrary.Local;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
@@ -58,11 +59,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 				UriWithinStorage = uriParts.Uri,
 			};
 
-			//	Case of "Category\Artist\Disc", e.g. "Foreign\Nightwish\2011 - Imaginaerum"
-			if (uriParts.Count == 3 && year.HasValue)
+			if (MyLocalLibraryNames.IsArtistCategory(uriParts[0]) && uriParts.Count > 2)
 			{
 				discInfo.DiscType = DsicType.ArtistDisc;
-				discInfo.Artist = uriParts[1];
+				discInfo.Artist = uriParts[uriParts.Count - 2];
 			}
 			else
 			{
