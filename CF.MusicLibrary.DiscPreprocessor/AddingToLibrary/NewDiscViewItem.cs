@@ -21,9 +21,22 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			set
 			{
 				Set(ref albumTitle, value);
-				RaisePropertyChanged(nameof(AlbumTitleMatchesDiscTitle));
+				RaisePropertyChanged(nameof(WarnAboutUnequalAlbumTitle));
 			}
 		}
+		public override bool AlbumTitleIsEditable => true;
+
+		private short? year;
+		public override short? Year
+		{
+			get { return year; }
+			set
+			{
+				Set(ref year, value);
+				RaisePropertyChanged(nameof(WarnAboutNotFilledYear));
+			}
+		}
+		public override bool YearIsEditable => true;
 
 		public override bool DiscArtIsValid => discArtImageFile.ImageIsValid;
 

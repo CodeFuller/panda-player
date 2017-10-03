@@ -115,7 +115,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = "Album Title",
+				Title = "Some Title",
 			};
 
 			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
@@ -128,6 +128,118 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 
 			Assert.AreEqual("New Album Title", target.AlbumTitle);
 		}
+
+		[Test]
+		public void AlbumTitleIsEditableGetter_ReturnsTrue()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+
+			//	Act & Assert
+
+			Assert.IsTrue(target.AlbumTitleIsEditable);
+		}
+
+		[Test]
+		public void WarnAboutUnequalAlbumTitleGetter_WhenAlbumTitleEqualsDiscTitle_ReturnsFalse()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+
+			//	Sanity check
+			Assert.AreEqual(target.DiscTitle, target.AlbumTitle);
+
+			//	Act & Assert
+
+			Assert.IsFalse(target.WarnAboutUnequalAlbumTitle);
+		}
+
+		[Test]
+		public void WarnAboutUnequalAlbumTitleGetter_WhenAlbumTitleDoesNotEqualDiscTitle_ReturnsTrue()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+			target.AlbumTitle = "Album Title";
+
+			//	Sanity check
+			Assert.AreNotEqual(target.DiscTitle, target.AlbumTitle);
+
+			//	Act & Assert
+
+			Assert.IsTrue(target.WarnAboutUnequalAlbumTitle);
+		}
+
+		[Test]
+		public void YearIsEditableGetter_ReturnsTrue()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+
+			//	Act & Assert
+
+			Assert.IsTrue(target.YearIsEditable);
+		}
+
+		[Test]
+		public void WarnAboutNotFilledYearGetter_IfYearIsSet_ReturnsFalse()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+
+			target.Year = 2017;
+
+			//	Act & Assert
+
+			Assert.IsFalse(target.WarnAboutNotFilledYear);
+		}
+
+		[Test]
+		public void WarnAboutNotFilledYearGetter_IfYearIsNotSet_ReturnsTrue()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Title",
+			};
+
+			var target = new ConcreteDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+
+			//	Act & Assert
+
+			Assert.IsTrue(target.WarnAboutNotFilledYear);
+		}
+
 
 		[Test]
 		public void RequiredDataIsFilledGetter_WhenAllRequiredDataIsSet_ReturnsTrue()

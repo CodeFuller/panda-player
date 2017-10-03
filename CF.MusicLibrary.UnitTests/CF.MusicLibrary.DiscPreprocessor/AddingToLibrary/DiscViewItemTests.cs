@@ -20,18 +20,14 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 			{
 			}
 
-			public ConcreteDiscViewItem(string discTitle, AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
-				: this(disc, availableArtists, availableGenres)
-			{
-				DiscTitle = discTitle;
-			}
-
 			public override string DiscTypeTitle { get; }
 			public override Artist Artist { get; set; }
 			public override bool ArtistIsEditable { get; }
 			public override bool ArtistIsNotFilled { get; }
 			public override string DiscTitle { get; }
 			public override string AlbumTitle { get; set; }
+			public override bool AlbumTitleIsEditable { get; }
+			public override bool YearIsEditable { get; }
 			public override bool DiscArtIsValid { get; }
 			public override string DiscArtInfo { get; }
 			public override bool RequiredDataIsFilled { get; }
@@ -144,6 +140,21 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 		}
 
 		[Test]
+		public void WarnAboutDiscTypeGetter_ReturnsFalse()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
+
+			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+			target.Artist = new Artist { Id = 0 };
+
+			//	Act & Assert
+
+			Assert.IsFalse(target.WarnAboutDiscType);
+		}
+
+		[Test]
 		public void ArtistIsNewGetter_ForNewArtist_ReturnsTrue()
 		{
 			//	Arrange
@@ -173,36 +184,6 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 			Assert.IsFalse(target.ArtistIsNew);
 		}
 
-		[Test]
-		public void AlbumTitleMatchesDiscTitleGetter_WhenAlbumTitleEqualsDiscTitle_ReturnsTrue()
-		{
-			//	Arrange
-
-			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
-
-			var target = new ConcreteDiscViewItem("Some Title", discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
-			target.AlbumTitle = "Some Title";
-
-			//	Act & Assert
-
-			Assert.IsTrue(target.AlbumTitleMatchesDiscTitle);
-		}
-
-		[Test]
-		public void AlbumTitleMatchesDiscTitleGetter_WhenAlbumTitleDoesNotEqualDiscTitle_ReturnsFalse()
-		{
-			//	Arrange
-
-			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
-
-			var target = new ConcreteDiscViewItem("Some Title", discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
-			target.AlbumTitle = "Album Title";
-
-			//	Act & Assert
-
-			Assert.IsFalse(target.AlbumTitleMatchesDiscTitle);
-		}
-
 		[TestCase(2017)]
 		[TestCase(null)]
 		public void YearGetter_ReturnsCorrectYearValue(short? year)
@@ -217,36 +198,6 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 			//	Act & Assert
 
 			Assert.AreEqual(year, target.Year);
-		}
-
-		[Test]
-		public void YearIsNotFilledGetter_IfYearIsSet_ReturnsFalse()
-		{
-			//	Arrange
-
-			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
-
-			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
-
-			target.Year = 2017;
-
-			//	Act & Assert
-
-			Assert.IsFalse(target.YearIsNotFilled);
-		}
-
-		[Test]
-		public void YearIsNotFilledGetter_IfYearIsNotSet_ReturnsTrue()
-		{
-			//	Arrange
-
-			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
-
-			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
-
-			//	Act & Assert
-
-			Assert.IsTrue(target.YearIsNotFilled);
 		}
 
 		[Test]

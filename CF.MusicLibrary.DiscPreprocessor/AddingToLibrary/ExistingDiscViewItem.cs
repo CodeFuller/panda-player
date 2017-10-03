@@ -10,6 +10,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 	public class ExistingDiscViewItem : DiscViewItem
 	{
 		public override string DiscTypeTitle => "Existing Disc";
+		public override bool WarnAboutDiscType => true;
 
 		public override string DiscTitle => Disc.Title;
 
@@ -21,6 +22,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 				throw new InvalidOperationException(Current($"Album title could not be changed for '{DiscTitle}' disc"));
 			}
 		}
+		public override bool AlbumTitleIsEditable => false;
 
 		public override Artist Artist
 		{
@@ -42,6 +44,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 				throw new InvalidOperationException(Current($"Year could not be changed for '{DiscTitle}' disc"));
 			}
 		}
+		public override bool YearIsEditable => false;
 
 		public override bool DiscArtIsValid => true;
 

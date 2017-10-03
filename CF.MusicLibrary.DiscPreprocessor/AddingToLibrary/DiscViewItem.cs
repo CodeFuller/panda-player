@@ -15,6 +15,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		public string SourcePath { get; }
 
 		public abstract string DiscTypeTitle { get; }
+		public virtual bool WarnAboutDiscType => false;
 
 		public abstract Artist Artist { get; set; }
 		public abstract bool ArtistIsEditable { get; }
@@ -26,21 +27,12 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		public abstract string DiscTitle { get; }
 
 		public abstract string AlbumTitle { get; set; }
+		public abstract bool AlbumTitleIsEditable { get; }
+		public bool WarnAboutUnequalAlbumTitle => AlbumTitleIsEditable && !String.Equals(AlbumTitle, DiscTitle, StringComparison.OrdinalIgnoreCase);
 
-		public bool AlbumTitleMatchesDiscTitle => String.Equals(AlbumTitle, DiscTitle, StringComparison.OrdinalIgnoreCase);
-
-		private short? year;
-		public virtual short? Year
-		{
-			get { return year; }
-			set
-			{
-				Set(ref year, value);
-				RaisePropertyChanged(nameof(YearIsNotFilled));
-			}
-		}
-
-		public bool YearIsNotFilled => !Year.HasValue;
+		public virtual short? Year { get; set; }
+		public abstract bool YearIsEditable { get; }
+		public bool WarnAboutNotFilledYear => YearIsEditable && !Year.HasValue;
 
 		private Genre genre;
 		public Genre Genre

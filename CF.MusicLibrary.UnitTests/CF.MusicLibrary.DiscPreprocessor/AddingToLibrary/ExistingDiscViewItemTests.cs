@@ -30,6 +30,25 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 		}
 
 		[Test]
+		public void WarnAboutDiscTypeGetter_ReturnsTrue()
+		{
+			//	Arrange
+
+			var existingDisc = new Disc();
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				DiscType = DsicType.ArtistDisc,
+			};
+
+			var target = new ExistingDiscViewItem(existingDisc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+
+			//	Act & Assert
+
+			Assert.IsTrue(target.WarnAboutDiscType);
+		}
+
+		[Test]
 		public void DiscTitleGetter_ReturnsTitleOfExistingDisc()
 		{
 			//	Arrange
@@ -96,6 +115,76 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 			//	Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.AlbumTitle = "Very New Title");
+		}
+
+		[Test]
+		public void AlbumTitleIsEditableGetter_ReturnsFalse()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
+			var target = new ExistingDiscViewItem(new Disc(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+
+			//	Act & Assert
+
+			Assert.IsFalse(target.AlbumTitleIsEditable);
+		}
+
+		[Test]
+		public void WarnAboutUnequalAlbumTitleGetter_ReturnsFalse()
+		{
+			//	Arrange
+
+			var disc = new Disc
+			{
+				Title = "Disc Title",
+				AlbumTitle = "Album Title",
+			};
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
+			var target = new ExistingDiscViewItem(disc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+
+			//	Sanity check
+			Assert.AreNotEqual(target.DiscTitle, target.AlbumTitle);
+
+			//	Act & Assert
+
+			Assert.IsFalse(target.WarnAboutUnequalAlbumTitle);
+		}
+
+		[Test]
+		public void YearIsEditableGetter_ReturnsFalse()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
+			var target = new ExistingDiscViewItem(new Disc(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+
+			//	Act & Assert
+
+			Assert.IsFalse(target.YearIsEditable);
+		}
+
+		[Test]
+		public void WarnAboutNotFilledYearGetter_ReturnsFalse()
+		{
+			//	Arrange
+
+			var disc = new Disc
+			{
+				Title = "Disc Title",
+				AlbumTitle = "Album Title",
+			};
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
+			var target = new ExistingDiscViewItem(disc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+
+			//	Sanity check
+			Assert.IsNull(target.Year);
+
+			//	Act & Assert
+
+			Assert.IsFalse(target.WarnAboutNotFilledYear);
 		}
 
 		[Test]
