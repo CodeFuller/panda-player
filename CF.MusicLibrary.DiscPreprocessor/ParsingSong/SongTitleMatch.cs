@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using static System.FormattableString;
 
@@ -54,7 +56,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 				return rawTitle;
 			}
 
-			var title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rawTitle);
+			//	CultureInfo.CurrentCulture.TextInfo.ToTitleCase() doesn't work good for titles like 'RockStar',
+			//	where middle letters should be in upper case. That's why we reinvent this wheels.
+			//var title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rawTitle);
+			var title = ToTitleCase(rawTitle);
+
 			//	Handling numeric ordinals, 1st, 2nd, 12th
 			return Regex.Replace(title, "(1st)|(2nd)|(3rd)|([0-9]th)",
 				m => m.Captures[0].Value.ToLower(CultureInfo.CurrentCulture), RegexOptions.IgnoreCase);
@@ -63,6 +69,31 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 		private static bool TextHasCyrillic(string text)
 		{
 			return Regex.IsMatch(text, @"\p{IsCyrillic}");
+		}
+
+		private static string ToTitleCase(string title)
+		{
+			return String.Join(String.Empty, SplitTitle(title).Select(CapitalizeFirstLetter));
+		}
+
+		private static IEnumerable<string> SplitTitle(string title)
+		{
+			var regex = new Regex("(\\S+\\s*)");
+			MatchCollection matches = regex.Matches(title);
+			for (var i = 0; i < matches.Count; ++i)
+			{
+				yield return matches[i].Value;
+			}
+		}
+
+		static string CapitalizeFirstLetter(string str)
+		{
+			if (String.IsNullOrEmpty(str))
+			{
+				return str;
+			}
+
+			return str.Length > 1 ? Char.ToUpper(str[0], CultureInfo.InvariantCulture) + str.Substring(1) : str.ToUpper(CultureInfo.InvariantCulture);
 		}
 	}
 }

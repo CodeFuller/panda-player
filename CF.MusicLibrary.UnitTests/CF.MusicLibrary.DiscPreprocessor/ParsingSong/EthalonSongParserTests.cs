@@ -44,6 +44,17 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ParsingSong
 			Assert.AreEqual("This Is The Life", resultTitle);
 		}
 
+		[TestCase("RockStar")]
+		[TestCase("Rock'n'Roll")]
+		public void ParseSongTitle_ForTitleInLatin_DoesNotChangeCaseForInsideLetters(string title)
+		{
+			EthalonSongParser target = new EthalonSongParser();
+
+			string resultTitle = target.ParseSongTitle(title);
+
+			Assert.AreEqual(title, resultTitle);
+		}
+
 		[Test]
 		public void ParseSongTitle_ForTitleInCyrillic_DoesNotCapitalizeFirstLetters()
 		{
