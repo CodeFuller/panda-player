@@ -26,6 +26,35 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		[Test]
+		public void ItemsGetter_ReturnsItemsSortedByName()
+		{
+			//	Arrange
+
+			var item1 = new FolderExplorerItem(new Uri("/SomeFolder/Item 1", UriKind.Relative));
+			var item2 = new FolderExplorerItem(new Uri("/SomeFolder/Item 2", UriKind.Relative));
+			var item3 = new FolderExplorerItem(new Uri("/SomeFolder/Item 3", UriKind.Relative));
+			//	Sanity check
+			Assert.AreEqual("Item 1", item1.Name);
+
+			var unsortedItems = new[] { item2, item1, item3 };
+			var sortedItems = new[] { item1, item2, item3 };
+
+			var parentItem = new FolderExplorerItem(new Uri("/SomeFolder", UriKind.Relative));
+
+			ILibraryBrowser libraryBrowserStub = Substitute.For<ILibraryBrowser>();
+			libraryBrowserStub.GetChildFolderItems(parentItem).Returns(unsortedItems);
+
+			LibraryExplorerViewModel target = new LibraryExplorerViewModel(libraryBrowserStub, Substitute.For<IExplorerSongListViewModel>(),
+				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
+			target.SelectedItem = parentItem;
+			target.ChangeFolder();
+
+			//	Act & Assert
+
+			CollectionAssert.AreEqual(sortedItems, target.Items);
+		}
+
+		[Test]
 		public void SelectedItemSetter_WhenNewItemIsDisc_LoadsSongListWithSongsFromNewDisc()
 		{
 			//	Arrange

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Core.Enums;
+using CF.Library.Core.Extensions;
 using CF.Library.Core.Interfaces;
 using CF.Library.Wpf;
 using CF.MusicLibrary.BL.Objects;
@@ -29,12 +31,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		private FolderExplorerItem ParentFolder { get; set; }
 
-		private ObservableCollection<FolderExplorerItem> items;
-		public ObservableCollection<FolderExplorerItem> Items
-		{
-			get { return items; }
-			private set { Set(ref items, value); }
-		}
+		public ObservableCollection<FolderExplorerItem> Items { get; } = new ObservableCollection<FolderExplorerItem>();
 
 		public FolderExplorerItem CurrentFolder { get; private set; }
 
@@ -232,7 +229,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			}
 
 			//	Building new items list
-			Items = new ObservableCollection<FolderExplorerItem>(childFolderItems);
+			SetItems(childFolderItems);
 			if (ParentFolder != null)
 			{
 				Items.Insert(0, ParentFolder);
@@ -245,6 +242,12 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				newSelectedItem = Items.FirstOrDefault(f => new FolderItemComparer().Equals(f, prevFolder));
 			}
 			SelectedItem = newSelectedItem ?? Items.FirstOrDefault();
+		}
+
+		private void SetItems(IEnumerable<FolderExplorerItem> newItems)
+		{
+			Items.Clear();
+			Items.AddRange(newItems.OrderBy(it => it.Name));
 		}
 	}
 }
