@@ -43,13 +43,13 @@ namespace CF.MusicLibrary.Local
 			}
 
 			//	All discs from "Soundtracks" category fall into one group.
-			if (localLibraryDiscPath.Category == MyLocalLibraryNames.Soundtracks || localLibraryDiscPath.Category == MyLocalLibraryNames.Collections)
+			if (localLibraryDiscPath.Category == MyLocalLibraryNames.Soundtracks)
 			{
 				return new DiscGroup(localLibraryDiscPath.Category);
 			}
 
-			//	Disc from "Сборники" category are groupped by compilation type
-			if (localLibraryDiscPath.Category == MyLocalLibraryNames.Soundtracks || localLibraryDiscPath.Category == MyLocalLibraryNames.Collections)
+			//	Disc from "Collections" category are groupped by compilation type
+			if (localLibraryDiscPath.Category == MyLocalLibraryNames.Collections)
 			{
 				return GetCompilationDiscGroup(localLibraryDiscPath.NestedDirectory);
 			}
