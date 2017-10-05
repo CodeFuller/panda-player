@@ -57,7 +57,7 @@
             </DataGrid.ContextMenu>
 
             <DataGrid.InputBindings>
-                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding PlayDiscFromSongCommand}" />
+                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding PlayFromSongCommand}" />
             </DataGrid.InputBindings>
 
             <DataGrid.ColumnHeaderStyle>

@@ -373,5 +373,26 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			//	Avoiding uncovered lambda code (receivedEvent = true)
 			Messenger.Default.Send(new ActiveDiscChangedEventArgs(null));
 		}
+
+		[Test]
+		public void PlayPlaylistStartingFromSongEventHandler_SwitchesPlayerSongCorrectly()
+		{
+			//	Arrange
+
+			var song = new Song();
+
+			IMusicPlayerViewModel musicPlayerViewModelMock = Substitute.For<IMusicPlayerViewModel>();
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
+				musicPlayerViewModelMock, Substitute.For<IViewNavigator>());
+			target.Load().Wait();
+
+			//	Act
+
+			Messenger.Default.Send(new PlayPlaylistStartingFromSongEventArgs(song));
+
+			//	Assert
+
+			musicPlayerViewModelMock.Received(1).PlayFromSong(song);
+		}
 	}
 }

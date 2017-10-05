@@ -151,6 +151,7 @@
     <Compile Include="Events\LibraryLoadedEventArgs.cs" />
     <Compile Include="Events\PlaylistChangedEventArgs.cs" />
     <Compile Include="Events\PlaylistLoadedEventArgs.cs" />
+    <Compile Include="Events\PlayPlaylistStartingFromSongEventArgs.cs" />
     <Compile Include="IWebBrowser.cs" />
     <Compile Include="SystemDefaultWebBrowser.cs" />
     <Compile Include="ViewModels\DiscArt\DocumentDownloadFailedException.cs" />

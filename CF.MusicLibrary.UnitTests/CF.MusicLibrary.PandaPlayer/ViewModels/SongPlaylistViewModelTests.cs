@@ -454,5 +454,49 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			Assert.IsNotNull(updatedSongList);
 			CollectionAssert.AreEqual(newSongs, updatedSongList);
 		}
+
+		[Test]
+		public void PlayFromSongCommand_IfSomeSongIsSelected_SendsPlayPlaylistStartingFromSongEventForSelectedSong()
+		{
+			//	Arrange
+
+			var song = new Song();
+
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			target.SelectedSongItem = new SongListItem(song);
+
+			PlayPlaylistStartingFromSongEventArgs receivedEvent = null;
+			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, e => receivedEvent = e);
+
+			//	Act
+
+			target.PlayFromSong();
+
+			//	Assert
+
+			Assert.IsNotNull(receivedEvent);
+			Assert.AreSame(song, receivedEvent.Song);
+		}
+
+		[Test]
+		public void PlayFromSongCommand_IfNoSongIsSelected_DoesNotSendPlayPlaylistStartingFromSongEvent()
+		{
+			//	Arrange
+
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+
+			PlayPlaylistStartingFromSongEventArgs receivedEvent = null;
+			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, e => receivedEvent = e);
+
+			//	Act
+
+			target.PlayFromSong();
+
+			//	Assert
+
+			Assert.IsNull(receivedEvent);
+			//	Avoiding uncovered lambda code (e => receivedEvent = e)
+			Messenger.Default.Send(new PlayPlaylistStartingFromSongEventArgs(null));
+		}
 	}
 }

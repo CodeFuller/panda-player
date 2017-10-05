@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Input;
 using CF.Library.Core.Attributes;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer;
@@ -14,6 +15,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 	[TestFixture]
 	public class SongListViewModelTests
 	{
+		[ExcludeFromTestCoverage("Empty stub of base abstract class")]
 		private class ConcreteSongListViewModel : SongListViewModel
 		{
 			public ConcreteSongListViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
@@ -21,8 +23,9 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 			}
 
-			[ExcludeFromTestCoverage("Unused stub of base abstract method")]
 			public override bool DisplayTrackNumbers => true;
+
+			public override ICommand PlayFromSongCommand { get; }
 		}
 
 		[SetUp]

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 using CF.Library.Core.Extensions;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels
@@ -47,9 +49,13 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public Disc PlayedDisc => Songs.Select(s => s.Disc).UniqueOrDefault();
 
+		public override ICommand PlayFromSongCommand { get; }
+
 		public SongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
 			: base(libraryContentUpdater, viewNavigator)
 		{
+			PlayFromSongCommand = new RelayCommand(PlayFromSong);
+
 			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => OnAddingNextSongs(e.Songs));
 			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => OnAddingLastSongs(e.Songs));
 
@@ -118,6 +124,15 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			if (CurrentItem == null && songs.Any())
 			{
 				CurrentSongIndex = firstSongIndex;
+			}
+		}
+
+		internal void PlayFromSong()
+		{
+			var selectedSong = SelectedSongItem?.Song;
+			if (selectedSong != null)
+			{
+				Messenger.Default.Send(new PlayPlaylistStartingFromSongEventArgs(selectedSong));
 			}
 		}
 	}

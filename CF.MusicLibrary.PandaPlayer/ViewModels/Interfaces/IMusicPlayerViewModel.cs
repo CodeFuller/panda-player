@@ -27,5 +27,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 		Task Play();
 
 		void Pause();
+
+		Task PlayFromSong(Song newSong);
 	}
 }

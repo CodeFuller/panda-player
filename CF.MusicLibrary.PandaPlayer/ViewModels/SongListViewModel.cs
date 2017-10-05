@@ -56,6 +56,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand EditSongsPropertiesCommand { get; }
 
+		public abstract ICommand PlayFromSongCommand { get; }
+
 		public IReadOnlyCollection<SetRatingMenuItem> SetRatingMenuItems { get; }
 
 		protected SongListViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)

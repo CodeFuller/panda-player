@@ -126,6 +126,13 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 			audioPlayer.Pause();
 		}
 
+		public async Task PlayFromSong(Song newSong)
+		{
+			CurrentSong = null;
+			Playlist.SwitchToSong(newSong);
+			await Play();
+		}
+
 		private async void AudioPlayer_SongFinished(object sender, SongMediaFinishedEventArgs eventArgs)
 		{
 			Song currSong = Playlist.CurrentSong;

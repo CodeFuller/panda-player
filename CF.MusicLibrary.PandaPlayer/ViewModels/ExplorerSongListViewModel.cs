@@ -11,12 +11,12 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 	{
 		public override bool DisplayTrackNumbers => true;
 
-		public ICommand PlayDiscFromSongCommand { get; }
+		public override ICommand PlayFromSongCommand { get; }
 
 		public ExplorerSongListViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
 			: base(libraryContentUpdater, viewNavigator)
 		{
-			PlayDiscFromSongCommand = new RelayCommand(PlayDiscFromSong);
+			PlayFromSongCommand = new RelayCommand(PlayDiscFromSong);
 		}
 
 		private void PlayDiscFromSong()
