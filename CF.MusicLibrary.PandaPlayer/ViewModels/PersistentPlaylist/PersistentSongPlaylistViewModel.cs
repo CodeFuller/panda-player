@@ -12,9 +12,6 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 {
 	public class PersistentSongPlaylistViewModel : SongPlaylistViewModel
 	{
-		//	We need this flag to recognize PlaylistChanged event fired from the Load() itself and avoid instant playlist Save() just after Load().
-		private bool updatingSongsFromLoad;
-
 		private readonly IPlaylistDataRepository playlistDataRepository;
 
 		public PersistentSongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IPlaylistDataRepository playlistDataRepository)
@@ -28,7 +25,6 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 			this.playlistDataRepository = playlistDataRepository;
 
 			Messenger.Default.Register<LibraryLoadedEventArgs>(this, e => Load(e.DiscLibrary));
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => OnPlaylistChanged());
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => this.playlistDataRepository.Purge());
 		}
 
@@ -65,28 +61,16 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 				return;
 			}
 
-			updatingSongsFromLoad = true;
-			try
-			{
-				SetSongs(songs);
-				CurrentSongIndex = playListData.CurrentSongIndex;
-			}
-			finally
-			{
-				updatingSongsFromLoad = false;
-			}
+			SetSongsRaw(songs);
+			CurrentSongIndex = playListData.CurrentSongIndex;
 
 			Messenger.Default.Send(new PlaylistLoadedEventArgs(this));
 		}
 
-		private void OnPlaylistChanged()
+		protected override void OnPlaylistChanged()
 		{
-			if (updatingSongsFromLoad)
-			{
-				return;
-			}
-
 			playlistDataRepository.Save(new PlaylistData(this));
+			base.OnPlaylistChanged();
 		}
 	}
 }

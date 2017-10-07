@@ -15,6 +15,33 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 	[TestFixture]
 	public class SongPlaylistViewModelTests
 	{
+		private class SongPlaylistViewModelInheritor : SongPlaylistViewModel
+		{
+			public int OnPlaylistChangedCallsNumber { get; set; }
+
+			private List<Song> songsWhenOnPlaylistChangedCalled;
+			public IReadOnlyCollection<Song> SongsWhenOnPlaylistChangedCalled => songsWhenOnPlaylistChangedCalled;
+
+			public Song CurrentSongWhenOnPlaylistChangedCalled { get; set; }
+
+			public SongPlaylistViewModelInheritor(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
+				: base(libraryContentUpdater, viewNavigator)
+			{
+			}
+
+			protected override void OnPlaylistChanged()
+			{
+				songsWhenOnPlaylistChangedCalled = Songs.ToList();
+				CurrentSongWhenOnPlaylistChangedCalled = CurrentSong;
+				++OnPlaylistChangedCallsNumber;
+			}
+
+			public void InvokeOnPlaylistChanged()
+			{
+				base.OnPlaylistChanged();
+			}
+		}
+
 		[SetUp]
 		public void SetUp()
 		{
@@ -77,15 +104,12 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		[Test]
-		public void SetSongs_WhenSongListIsChanged_SendsPlaylistChangedEventWithUpdatedSongs()
+		public void SetSongs_AfterSongListIsChanged_CallsOnPlaylistChanged()
 		{
 			//	Arrange
 
 			var songs = new List<Song> { new Song() };
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
-
-			List<Song> registeredSongs = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => registeredSongs = e.Songs.ToList());
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
 			//	Act
 
@@ -93,8 +117,26 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			//	Assert
 
-			Assert.IsNotNull(registeredSongs);
-			CollectionAssert.AreEqual(songs, registeredSongs);
+			CollectionAssert.AreEqual(songs, target.SongsWhenOnPlaylistChangedCalled);
+		}
+
+		[Test]
+		public void SetSongs_WhenSongListIsChanged_CallsOnPlaylistChangedOnlyOnce()
+		{
+			//	Arrange
+
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			target.SetSongs(new[] { new Song() });
+			target.SwitchToNextSong();
+			target.OnPlaylistChangedCallsNumber = 0;
+
+			//	Act
+
+			target.SetSongs(new[] { new Song(), new Song() });
+
+			//	Assert
+
+			Assert.AreEqual(1, target.OnPlaylistChangedCallsNumber);
 		}
 
 		[Test]
@@ -182,19 +224,17 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		[Test]
-		public void SwitchToNextSong_WhenSwitchingToNextSong_SendsPlaylistChangedEventWithNewCurrentSong()
+		public void SwitchToNextSong_WhenSwitchingToNextSong_CallsOnPlaylistChangedCorrectly()
 		{
 			//	Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
 			target.SetSongs(new List<Song> { song1, song2 });
 			target.SwitchToNextSong();
-
-			Song registeredCurrentSong = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => registeredCurrentSong = e.CurrentSong);
+			target.CurrentSongWhenOnPlaylistChangedCalled = null;
 
 			//	Act
 
@@ -202,8 +242,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			//	Assert
 
-			Assert.IsNotNull(registeredCurrentSong);
-			Assert.AreSame(song2, registeredCurrentSong);
+			Assert.AreSame(song2, target.CurrentSongWhenOnPlaylistChangedCalled);
 		}
 
 		[Test]
@@ -248,18 +287,16 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		[Test]
-		public void SwitchToSong_WhenSwitchingToSpecifiedSong_SendsPlaylistChangedEventWithNewCurrentSong()
+		public void SwitchToSong_WhenSwitchingToSpecifiedSong_CallsOnPlaylistChangedCorrectly()
 		{
 			//	Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
 			target.SetSongs(new List<Song> { song1, song2 });
-
-			Song registeredCurrentSong = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => registeredCurrentSong = e.CurrentSong);
+			target.CurrentSongWhenOnPlaylistChangedCalled = null;
 
 			//	Act
 
@@ -267,8 +304,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			//	Assert
 
-			Assert.IsNotNull(registeredCurrentSong);
-			Assert.AreSame(song2, registeredCurrentSong);
+			Assert.AreSame(song2, target.CurrentSongWhenOnPlaylistChangedCalled);
 		}
 
 		[Test]
@@ -368,16 +404,13 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		[Test]
-		public void AddingSongsToPlaylistNextEventHandler_AfterUpdatingPlaylist_SendsPlaylistChangedEvent()
+		public void AddingSongsToPlaylistNextEventHandler_AfterUpdatingPlaylist_CallsOnPlaylistChangedCorrectly()
 		{
 			//	Arrange
 
 			var newSongs = new[] { new Song() };
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
-
-			List<Song> updatedSongList = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => updatedSongList = e.Songs.ToList());
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
 			//	Act
 
@@ -385,8 +418,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			//	Assert
 
-			Assert.IsNotNull(updatedSongList);
-			CollectionAssert.AreEqual(newSongs, updatedSongList);
+			CollectionAssert.AreEqual(newSongs, target.SongsWhenOnPlaylistChangedCalled);
 		}
 
 		[Test]
@@ -434,16 +466,13 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		[Test]
-		public void AddingSongsToPlaylistLastEventHandler_AfterUpdatingPlaylist_SendsPlaylistChangedEvent()
+		public void AddingSongsToPlaylistLastEventHandler_AfterUpdatingPlaylist_CallsOnPlaylistChangedCorrectly()
 		{
 			//	Arrange
 
 			var newSongs = new[] {new Song()};
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
-
-			List<Song> updatedSongList = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => updatedSongList = e.Songs.ToList());
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
 			//	Act
 
@@ -451,8 +480,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			//	Assert
 
-			Assert.IsNotNull(updatedSongList);
-			CollectionAssert.AreEqual(newSongs, updatedSongList);
+			CollectionAssert.AreEqual(newSongs, target.SongsWhenOnPlaylistChangedCalled);
 		}
 
 		[Test]
@@ -497,6 +525,25 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			Assert.IsNull(receivedEvent);
 			//	Avoiding uncovered lambda code (e => receivedEvent = e)
 			Messenger.Default.Send(new PlayPlaylistStartingFromSongEventArgs(null));
+		}
+
+		[Test]
+		public void OnPlaylistChanged_SendsPlaylistChangedEvent()
+		{
+			//	Arrange
+
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+
+			PlaylistChangedEventArgs receivedEvent = null;
+			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => receivedEvent = e);
+
+			//	Act
+
+			target.InvokeOnPlaylistChanged();
+
+			//	Assert
+
+			Assert.IsNotNull(receivedEvent);
 		}
 	}
 }

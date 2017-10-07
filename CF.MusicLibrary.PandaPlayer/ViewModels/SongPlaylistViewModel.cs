@@ -36,8 +36,6 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				{
 					CurrentItem.IsCurrentlyPlayed = true;
 				}
-
-				Messenger.Default.Send(new PlaylistChangedEventArgs(this));
 			}
 		}
 
@@ -58,24 +56,35 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => OnAddingNextSongs(e.Songs));
 			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => OnAddingLastSongs(e.Songs));
+		}
 
-			SongItems.CollectionChanged += (sender, e) => Messenger.Default.Send(new PlaylistChangedEventArgs(this));
+		protected virtual void OnPlaylistChanged()
+		{
+			Messenger.Default.Send(new PlaylistChangedEventArgs(this));
 		}
 
 		public override void SetSongs(IEnumerable<Song> newSongs)
 		{
-			base.SetSongs(newSongs);
+			SetSongsRaw(newSongs);
 			CurrentSongIndex = null;
+			OnPlaylistChanged();
+		}
+
+		protected void SetSongsRaw(IEnumerable<Song> newSongs)
+		{
+			base.SetSongs(newSongs);
 		}
 
 		public void SwitchToNextSong()
 		{
 			CurrentSongIndex = CurrentSongIndex + 1 ?? 0;
+			OnPlaylistChanged();
 		}
 
 		public void SwitchToSong(Song song)
 		{
 			CurrentSongIndex = GetSongIndex(song);
+			OnPlaylistChanged();
 		}
 
 		private int GetSongIndex(Song song)
@@ -102,29 +111,27 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			int insertIndex = CurrentSongIndex + 1 ?? 0;
 			int firstSongIndex = insertIndex;
-			foreach (var song in songs)
-			{
-				SongItems.Insert(insertIndex++, new SongListItem(song));
-			}
+			InsertSongs(insertIndex, songs);
 
 			if (CurrentItem == null && songs.Any())
 			{
 				CurrentSongIndex = firstSongIndex;
 			}
+
+			OnPlaylistChanged();
 		}
 
 		private void OnAddingLastSongs(IReadOnlyCollection<Song> songs)
 		{
 			int firstSongIndex = SongItems.Count;
-			foreach (var song in songs)
-			{
-				SongItems.Add(new SongListItem(song));
-			}
+			AddSongs(songs);
 
 			if (CurrentItem == null && songs.Any())
 			{
 				CurrentSongIndex = firstSongIndex;
 			}
+
+			OnPlaylistChanged();
 		}
 
 		internal void PlayFromSong()

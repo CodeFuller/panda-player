@@ -17,6 +17,19 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 	[TestFixture]
 	public class PersistentSongPlaylistViewModelTests
 	{
+		private class PersistentSongPlaylistViewModelInheritor : PersistentSongPlaylistViewModel
+		{
+			public PersistentSongPlaylistViewModelInheritor(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IPlaylistDataRepository playlistDataRepository)
+				: base(libraryContentUpdater, viewNavigator, playlistDataRepository)
+			{
+			}
+
+			public void InvokeOnPlaylistChanged()
+			{
+				base.OnPlaylistChanged();
+			}
+		}
+
 		[SetUp]
 		public void SetUp()
 		{
@@ -251,7 +264,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 		}
 
 		[Test]
-		public void PlaylistChangedEventHandler_SavesPlaylistDataCorrectly()
+		public void OnPlaylistChanged_SavesPlaylistDataCorrectly()
 		{
 			//	Arrange
 
@@ -264,7 +277,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			Logger = Substitute.For<IMessageLogger>();
 			IPlaylistDataRepository playlistDataRepositoryMock = Substitute.For<IPlaylistDataRepository>();
 
-			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), playlistDataRepositoryMock);
+			var target = new PersistentSongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), playlistDataRepositoryMock);
 			target.SetSongs(songs);
 			target.SwitchToSong(song2);
 			playlistDataRepositoryMock.ClearReceivedCalls();
@@ -272,7 +285,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 
 			//	Act
 
-			Messenger.Default.Send(new PlaylistChangedEventArgs(target));
+			target.InvokeOnPlaylistChanged();
 
 			//	Assert
 
@@ -287,7 +300,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 		}
 
 		[Test]
-		public void PlaylistChangedEventHandler_WhenPlaylistCurrentSongIsNotSet_SavesPlaylistDataCorrectly()
+		public void OnPlaylistChanged_WhenPlaylistCurrentSongIsNotSet_SavesPlaylistDataCorrectly()
 		{
 			//	Arrange
 
@@ -298,14 +311,14 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			Logger = Substitute.For<IMessageLogger>();
 			IPlaylistDataRepository playlistDataRepositoryMock = Substitute.For<IPlaylistDataRepository>();
 
-			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), playlistDataRepositoryMock);
+			var target = new PersistentSongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), playlistDataRepositoryMock);
 			target.SetSongs(songs);
 			playlistDataRepositoryMock.ClearReceivedCalls();
 			playlistDataRepositoryMock.Save(Arg.Do<PlaylistData>(arg => savedPlaylistData = arg));
 
 			//	Act
 
-			Messenger.Default.Send(new PlaylistChangedEventArgs(target));
+			target.InvokeOnPlaylistChanged();
 
 			//	Assert
 

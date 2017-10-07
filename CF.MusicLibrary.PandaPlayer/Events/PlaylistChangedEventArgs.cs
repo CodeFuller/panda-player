@@ -5,14 +5,12 @@ namespace CF.MusicLibrary.PandaPlayer.Events
 {
 	public class PlaylistChangedEventArgs : BaseSongListEventArgs
 	{
-		private readonly ISongPlaylistViewModel playlist;
-
-		public Song CurrentSong => playlist.CurrentSong;
+		public Song CurrentSong { get; }
 
 		public PlaylistChangedEventArgs(ISongPlaylistViewModel playlist)
 			: base(playlist.Songs)
 		{
-			this.playlist = playlist;
+			CurrentSong = playlist.CurrentSong;
 		}
 	}
 }

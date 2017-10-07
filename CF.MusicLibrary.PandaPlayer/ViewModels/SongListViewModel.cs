@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CF.Library.Core.Extensions;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events;
@@ -23,7 +23,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public abstract bool DisplayTrackNumbers { get; }
 
-		public ObservableCollection<SongListItem> SongItems { get; }
+		private readonly ObservableCollection<SongListItem> songItems;
+		public ReadOnlyObservableCollection<SongListItem> SongItems { get; }
 
 		public IEnumerable<Song> Songs => SongItems.Select(s => s.Song);
 
@@ -74,8 +75,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			this.libraryContentUpdater = libraryContentUpdater;
 			this.viewNavigator = viewNavigator;
 
-			SongItems = new ObservableCollection<SongListItem>();
-			SongItems.CollectionChanged += SongItems_CollectionChanged;
+			songItems = new ObservableCollection<SongListItem>();
+			SongItems = new ReadOnlyObservableCollection<SongListItem>(songItems);
 
 			PlaySongsNextCommand = new RelayCommand(PlaySongsNext);
 			PlaySongsLastCommand = new RelayCommand(PlaySongsLast);
@@ -83,7 +84,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			SetRatingMenuItems = RatingsHelper.AllowedRatingsDesc.Select(r => new SetRatingMenuItem(this, r)).ToList();
 		}
 
-		private void SongItems_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		protected virtual void OnSongItemsChanged()
 		{
 			RaisePropertyChanged(nameof(HasSongs));
 			RaisePropertyChanged(nameof(SongsNumber));
@@ -102,11 +103,23 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public virtual void SetSongs(IEnumerable<Song> newSongs)
 		{
-			SongItems.Clear();
-			foreach (var song in newSongs)
+			songItems.Clear();
+			AddSongs(newSongs);
+		}
+
+		protected void AddSongs(IEnumerable<Song> addedSongs)
+		{
+			songItems.AddRange(addedSongs.Select(song => new SongListItem(song)));
+			OnSongItemsChanged();
+		}
+
+		protected void InsertSongs(int index, IEnumerable<Song> addedSongs)
+		{
+			foreach (var song in addedSongs)
 			{
-				SongItems.Add(new SongListItem(song));
+				songItems.Insert(index++, new SongListItem(song));
 			}
+			OnSongItemsChanged();
 		}
 
 		public async Task SetRatingForSelectedSongs(Rating rating)

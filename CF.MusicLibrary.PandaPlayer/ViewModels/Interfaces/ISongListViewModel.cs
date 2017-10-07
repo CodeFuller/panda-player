@@ -11,7 +11,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 	{
 		bool DisplayTrackNumbers { get; }
 
-		ObservableCollection<SongListItem> SongItems { get; }
+		ReadOnlyObservableCollection<SongListItem> SongItems { get; }
 
 		IEnumerable<Song> Songs { get; }
 
