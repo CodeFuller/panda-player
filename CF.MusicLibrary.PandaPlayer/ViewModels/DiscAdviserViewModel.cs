@@ -9,132 +9,129 @@ using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels
 {
 	public class DiscAdviserViewModel : ViewModelBase, IDiscAdviserViewModel
 	{
-		private const int AdvisedDiscsNumber = 30;
+		private const int AdvisedPlaylistsNumber = 30;
 
 		private readonly DiscLibrary discLibrary;
-		private readonly IDiscAdviser discAdviser;
+		private readonly IPlaylistAdviser playlistAdviser;
 
-		private readonly List<Disc> currAdvisedDsics = new List<Disc>();
+		private readonly List<AdvisedPlaylist> currAdvises = new List<AdvisedPlaylist>();
 
-		private int currAdvisedDiscIndex;
-		private int CurrAdvisedDiscIndex
+		private int currAdviseIndex;
+		private int CurrAdviseIndex
 		{
-			get { return currAdvisedDiscIndex; }
+			get { return currAdviseIndex; }
 			set
 			{
-				currAdvisedDiscIndex = value;
-				RaisePropertyChanged(nameof(CurrentDisc));
-				RaisePropertyChanged(nameof(CurrentDiscAnnouncement));
+				currAdviseIndex = value;
+				OnCurrentAdvisedChanged();
 			}
 		}
 
-		public Disc CurrentDisc => CurrAdvisedDiscIndex < currAdvisedDsics.Count ? currAdvisedDsics[CurrAdvisedDiscIndex] : null;
+		public AdvisedPlaylist CurrentAdvise => CurrAdviseIndex < currAdvises.Count ? currAdvises[CurrAdviseIndex] : null;
 
-		public string CurrentDiscAnnouncement
-		{
-			get
-			{
-				var currDisc = CurrentDisc;
-				if (currDisc == null)
-				{
-					return "N/A";
-				}
+		public string CurrentAdviseAnnouncement => CurrentAdvise?.Title ?? "N/A";
 
-				return currDisc.Artist == null ? currDisc.Title : Current($"{currDisc.Artist.Name} - {currDisc.Title}");
-			}
-		}
+		public ICommand PlayCurrentAdviseCommand { get; }
 
-		public ICommand PlayCurrentDiscCommand { get; }
+		public ICommand SwitchToNextAdviseCommand { get; }
 
-		public ICommand SwitchToNextDiscCommand { get; }
-
-		public DiscAdviserViewModel(DiscLibrary discLibrary, IDiscAdviser discAdviser)
+		public DiscAdviserViewModel(DiscLibrary discLibrary, IPlaylistAdviser playlistAdviser)
 		{
 			if (discLibrary == null)
 			{
 				throw new ArgumentNullException(nameof(discLibrary));
 			}
-			if (discAdviser == null)
+			if (playlistAdviser == null)
 			{
-				throw new ArgumentNullException(nameof(discAdviser));
+				throw new ArgumentNullException(nameof(playlistAdviser));
 			}
 
 			this.discLibrary = discLibrary;
-			this.discAdviser = discAdviser;
+			this.playlistAdviser = playlistAdviser;
 
-			PlayCurrentDiscCommand = new RelayCommand(PlayCurrentDisc);
-			SwitchToNextDiscCommand = new RelayCommand(SwitchToNextDisc);
+			PlayCurrentAdviseCommand = new RelayCommand(PlayCurrentAdvise);
+			SwitchToNextAdviseCommand = new RelayCommand(SwitchToNextAdvise);
 
-			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => OnPlaylistFinished(e.Playlist));
+			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => OnPlaylistFinished(e.Songs));
 			Messenger.Default.Register<LibraryLoadedEventArgs>(this, e => Load());
 		}
 
 		private void Load()
 		{
-			RebuildAdvisedDiscs();
+			RebuildAdvises();
 		}
 
-		internal void PlayCurrentDisc()
+		internal void PlayCurrentAdvise()
 		{
-			var disc = CurrentDisc;
-			if (disc != null)
+			var playlist = CurrentAdvise;
+			if (playlist != null)
 			{
-				Messenger.Default.Send(new PlayDiscEventArgs(disc));
+				Messenger.Default.Send(new PlaySongsListEventArgs(playlist.Songs));
 			}
 		}
 
-		internal void SwitchToNextDisc()
+		internal void SwitchToNextAdvise()
 		{
-			++CurrAdvisedDiscIndex;
-			RebuildAdvisedDiscsIfRequired();
+			++CurrAdviseIndex;
+			RebuildAdvisesIfRequired();
 		}
 
-		private void RebuildAdvisedDiscsIfRequired()
+		private void RebuildAdvisesIfRequired()
 		{
-			if (CurrAdvisedDiscIndex >= currAdvisedDsics.Count)
+			if (CurrAdviseIndex >= currAdvises.Count)
 			{
-				RebuildAdvisedDiscs();
+				RebuildAdvises();
 			}
 		}
 
-		private void RebuildAdvisedDiscs()
+		private void RebuildAdvises()
 		{
-			currAdvisedDsics.Clear();
-			currAdvisedDsics.AddRange(discAdviser.AdviseDiscs(discLibrary).Take(AdvisedDiscsNumber));
-			CurrAdvisedDiscIndex = 0;
+			currAdvises.Clear();
+			currAdvises.AddRange(playlistAdviser.Advise(discLibrary).Take(AdvisedPlaylistsNumber));
+			CurrAdviseIndex = 0;
 		}
 
-		private void OnPlaylistFinished(ISongPlaylistViewModel playlist)
+		private void OnPlaylistFinished(IEnumerable<Song> finishedSongs)
 		{
-			var playedDisc = playlist.PlayedDisc;
-			if (playedDisc == null)
-			{
-				return;
-			}
+			List<Song> finishedSongsList = finishedSongs.ToList();
 
-			if (playedDisc == CurrentDisc)
+			//	Removing advises that could be covered by just finished playlist.
+			bool currAdviseChanged = false;
+			for (var i = currAdviseIndex; i < currAdvises.Count; )
 			{
-				SwitchToNextDisc();
-			}
-			else
-			{
-				for (var i = currAdvisedDiscIndex; i < currAdvisedDsics.Count; ++i)
+				if (SongListCoversAdvise(finishedSongsList, currAdvises[i]))
 				{
-					if (currAdvisedDsics[i] == playedDisc)
-					{
-						currAdvisedDsics.RemoveAt(i);
-						break;
-					}
+					currAdvises.RemoveAt(i);
+					currAdviseChanged = currAdviseChanged || (i == currAdviseIndex);
 				}
-
-				RebuildAdvisedDiscsIfRequired();
+				else
+				{
+					++i;
+				}
 			}
+
+			if (currAdviseChanged)
+			{
+				OnCurrentAdvisedChanged();
+			}
+
+			RebuildAdvisesIfRequired();
+		}
+
+		protected void OnCurrentAdvisedChanged()
+		{
+			RaisePropertyChanged(nameof(CurrentAdvise));
+			RaisePropertyChanged(nameof(CurrentAdviseAnnouncement));
+		}
+
+		private static bool SongListCoversAdvise(List<Song> songs, AdvisedPlaylist advise)
+		{
+			return advise.Songs.All(songs.Contains);
 		}
 	}
 }

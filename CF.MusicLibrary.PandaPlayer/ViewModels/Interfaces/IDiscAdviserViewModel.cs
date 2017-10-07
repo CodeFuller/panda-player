@@ -1,16 +1,16 @@
 ﻿using System.Windows.Input;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.PandaPlayer.DiscAdviser;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
 	public interface IDiscAdviserViewModel
 	{
-		Disc CurrentDisc { get; }
+		AdvisedPlaylist CurrentAdvise { get; }
 
-		string CurrentDiscAnnouncement { get; }
+		string CurrentAdviseAnnouncement { get; }
 
-		ICommand PlayCurrentDiscCommand { get; }
+		ICommand PlayCurrentAdviseCommand { get; }
 
-		ICommand SwitchToNextDiscCommand { get; }
+		ICommand SwitchToNextAdviseCommand { get; }
 	}
 }

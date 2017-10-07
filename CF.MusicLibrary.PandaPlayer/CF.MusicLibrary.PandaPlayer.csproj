@@ -136,8 +136,11 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="DiscAdviser\AdvisedPlaylist.cs" />
     <Compile Include="DiscAdviser\IDiscAdviser.cs" />
     <Compile Include="DiscAdviser\IDiscGroupSorter.cs" />
+    <Compile Include="DiscAdviser\IPlaylistAdviser.cs" />
+    <Compile Include="DiscAdviser\PlaylistAdviser.cs" />
     <Compile Include="DiscAdviser\RankBasedDiscAdviser.cs" />
     <Compile Include="DiscAdviser\RankBasedDiscSorter.cs" />
     <Compile Include="DiscAdviser\RankedDisc.cs" />
@@ -146,12 +149,14 @@
     <Compile Include="Events\AddingSongsToPlaylistEventArgs.cs" />
     <Compile Include="Events\AddingSongsToPlaylistLastEventArgs.cs" />
     <Compile Include="Events\AddingSongsToPlaylistNextEventArgs.cs" />
+    <Compile Include="Events\BaseSongListEventArgs.cs" />
     <Compile Include="Events\DiscArtChangedEventArgs.cs" />
     <Compile Include="Events\LibraryExplorerDiscChangedEventArgs.cs" />
     <Compile Include="Events\LibraryLoadedEventArgs.cs" />
     <Compile Include="Events\PlaylistChangedEventArgs.cs" />
     <Compile Include="Events\PlaylistLoadedEventArgs.cs" />
     <Compile Include="Events\PlayPlaylistStartingFromSongEventArgs.cs" />
+    <Compile Include="Events\PlaySongsListEventArgs.cs" />
     <Compile Include="IWebBrowser.cs" />
     <Compile Include="SystemDefaultWebBrowser.cs" />
     <Compile Include="ViewModels\DiscArt\DocumentDownloadFailedException.cs" />
@@ -218,7 +223,6 @@
     <Compile Include="Views\ValueConverters\CommaSeparatedNumberValueConverter.cs" />
     <Compile Include="Views\ValueConverters\EditedSongPropertyValueConverter.cs" />
     <Compile Include="ViewNavigator.cs" />
-    <Compile Include="Events\PlayDiscEventArgs.cs" />
     <Compile Include="Events\PlayDiscFromSongEventArgs.cs" />
     <Compile Include="Events\PlaylistFinishedEventArgs.cs" />
     <Compile Include="Events\ReversePlayingEventArgs.cs" />

@@ -86,7 +86,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			LoadCommand = new AsyncRelayCommand(Load);
 			ShowLibraryStatisticsCommand = new RelayCommand(ShowLibraryStatistics);
 
-			Messenger.Default.Register<PlayDiscEventArgs>(this, OnPlayDiscLaunched);
+			Messenger.Default.Register<PlaySongsListEventArgs>(this, OnPlaySongList);
 			Messenger.Default.Register<PlayDiscFromSongEventArgs>(this, OnPlayDiscFromSongLaunched);
 			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, OnPlayPlaylistStartingFromSong);
 			Messenger.Default.Register<ReversePlayingEventArgs>(this, OnReversePlaying);
@@ -112,10 +112,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			viewNavigator.ShowLibraryStatisticsView();
 		}
 
-		private void OnPlayDiscLaunched(PlayDiscEventArgs message)
+		private void OnPlaySongList(PlaySongsListEventArgs e)
 		{
-			var disc = message.Disc;
-			Playlist.SetSongs(disc.Songs);
+			Playlist.SetSongs(e.Songs);
 			Playlist.SwitchToNextSong();
 			MusicPlayerViewModel.Play();
 			SwitchToSongPlaylist();

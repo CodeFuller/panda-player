@@ -104,6 +104,7 @@
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\ApplicationViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\EditDiscsDetailsViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.LastFM\LastFMScrobblerTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\DiscAdviser\AdvisedPlaylistTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\ApplicationViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscAdviserViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.Common\DiscArt\DiscArtImageFileTests.cs" />

@@ -92,6 +92,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<IDocumentDownloader, HttpDocumentDownloader>();
 			DIContainer.RegisterType<IWebBrowser, SystemDefaultWebBrowser>();
 			DIContainer.RegisterType<IDiscArtValidator, DiscArtValidator>();
+			DIContainer.RegisterType<IPlaylistAdviser, PlaylistAdviser>();
 		}
 	}
 }

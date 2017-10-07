@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using CF.Library.Core.Extensions;
+﻿using System.Collections.Generic;
 using CF.MusicLibrary.BL.Objects;
 
 namespace CF.MusicLibrary.PandaPlayer.Events
 {
-	public abstract class AddingSongsToPlaylistEventArgs : EventArgs
+	public abstract class AddingSongsToPlaylistEventArgs : BaseSongListEventArgs
 	{
-		public IReadOnlyCollection<Song> Songs { get; }
-
 		protected AddingSongsToPlaylistEventArgs(IEnumerable<Song> songs)
+			: base(songs)
 		{
-			Songs = songs.ToCollection();
 		}
 	}
 }

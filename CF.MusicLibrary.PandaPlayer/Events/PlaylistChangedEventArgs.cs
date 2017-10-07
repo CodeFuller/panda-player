@@ -1,15 +1,18 @@
-﻿using System;
+﻿using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace CF.MusicLibrary.PandaPlayer.Events
 {
-	public class PlaylistChangedEventArgs : EventArgs
+	public class PlaylistChangedEventArgs : BaseSongListEventArgs
 	{
-		public ISongPlaylistViewModel Playlist { get; set; }
+		private readonly ISongPlaylistViewModel playlist;
+
+		public Song CurrentSong => playlist.CurrentSong;
 
 		public PlaylistChangedEventArgs(ISongPlaylistViewModel playlist)
+			: base(playlist.Songs)
 		{
-			Playlist = playlist;
+			this.playlist = playlist;
 		}
 	}
 }

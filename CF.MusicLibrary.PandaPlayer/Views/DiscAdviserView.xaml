@@ -13,16 +13,16 @@
             <ColumnDefinition Width="1"/>
             <ColumnDefinition Width="32"/>
         </Grid.ColumnDefinitions>
-        <Label Grid.Column="0" Content="{Binding CurrentDiscAnnouncement}" />
+		<Label Grid.Column="0" Content="{Binding CurrentAdviseAnnouncement}" />
         <Separator Grid.Column="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-        <Button Grid.Column="2" BorderThickness="0" Command="{Binding PlayCurrentDiscCommand}">
+        <Button Grid.Column="2" BorderThickness="0" Command="{Binding PlayCurrentAdviseCommand}">
             <Image Source="/Views/Icons/PlayButton.png" />
             <Button.Style>
                 <Style TargetType="Button" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" />
             </Button.Style>
         </Button>
         <Separator Grid.Column="3" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-        <Button Grid.Column="4" BorderThickness="0" Command="{Binding SwitchToNextDiscCommand}">
+        <Button Grid.Column="4" BorderThickness="0" Command="{Binding SwitchToNextAdviseCommand}">
             <Image Source="/Views/Icons/NextAdviseButton.png" />
             <Button.Style>
                 <Style TargetType="Button" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" />

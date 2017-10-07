@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.DiscAdviser;
 using CF.MusicLibrary.PandaPlayer.Events;
@@ -23,11 +24,11 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		[Test]
 		public void Constructor_IfDiscLibraryArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new DiscAdviserViewModel(null, Substitute.For<IDiscAdviser>()));
+			Assert.Throws<ArgumentNullException>(() => new DiscAdviserViewModel(null, Substitute.For<IPlaylistAdviser>()));
 		}
 
 		[Test]
-		public void Constructor_IfDiscAdviserArgumentIsNull_ThrowsArgumentNullException()
+		public void Constructor_IfPlaylistAdviserArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new DiscAdviserViewModel(new DiscLibrary(), null));
 		}
@@ -37,13 +38,13 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var disc = new Disc();
+			var advise = new AdvisedPlaylist(String.Empty, Enumerable.Empty<Song>());
 			var library = new DiscLibrary();
 
-			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
-			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { disc });
+			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { advise });
 
-			var target = new DiscAdviserViewModel(library, discAdviserStub);
+			var target = new DiscAdviserViewModel(library, adviserStub);
 
 			//	Act
 
@@ -51,199 +52,175 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			//	Assert
 
-			Assert.AreSame(disc, target.CurrentDisc);
+			Assert.AreSame(advise, target.CurrentAdvise);
 		}
 
 		[Test]
-		public void CurrentDiscGetter_IfNoDiscsAreAdvised_ReturnsNull()
+		public void CurrentAdviseGetter_IfCurrentAdviseIsNotSet_ReturnsNull()
 		{
 			//	Arrange
 
-			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<IDiscAdviser>());
+			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<IPlaylistAdviser>());
 
 			//	Act & Assert
 
-			Assert.IsNull(target.CurrentDisc);
+			Assert.IsNull(target.CurrentAdvise);
 		}
 
 		[Test]
-		public void CurrentDiscAnnouncementGetter_IfNoDiscsAreAdvised_DoesNotThrow()
+		public void CurrentAdviseAnnouncementGetter_IfCurrentAdviseIsNotSet_DoesNotThrow()
 		{
 			//	Arrange
 
-			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<IDiscAdviser>());
+			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<IPlaylistAdviser>());
 
 			//	Act & Assert
 
-			string currDiscAnnouncement;
-			Assert.DoesNotThrow(() => currDiscAnnouncement =  target.CurrentDiscAnnouncement);
+			string currAnnouncement;
+			Assert.DoesNotThrow(() => currAnnouncement =  target.CurrentAdviseAnnouncement);
 		}
 
 		[Test]
-		public void CurrentDiscAnnouncementGetter_IfDiscWithoutArtistIsAdvised_ReturnsCorrectDiscAnnouncement()
+		public void CurrentAdviseAnnouncementGetter_IfCurrentAdviseIsSet_ReturnsAdviseTitle()
 		{
 			//	Arrange
 
-			var disc = new Disc
-			{
-				Title = "Some Disc Title",
-			};
+			var advise = new AdvisedPlaylist("Some Advise Title", Enumerable.Empty<Song>());
 			var library = new DiscLibrary();
 
-			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
-			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { disc });
+			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { advise });
 
-			var target = new DiscAdviserViewModel(library, discAdviserStub);
+			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
 			//	Act
 
-			string discAnnouncement = target.CurrentDiscAnnouncement;
+			string announcement = target.CurrentAdviseAnnouncement;
 
 			//	Assert
 
-			Assert.AreEqual("Some Disc Title", discAnnouncement);
+			Assert.AreEqual("Some Advise Title", announcement);
 		}
 
 		[Test]
-		public void CurrentDiscAnnouncementGetter_IfDiscWithArtistIsAdvised_ReturnsCorrectDiscAnnouncement()
+		public void PlayCurrentAdviseCommand_IfNoAdvisesAreMade_ReturnsWithNoAction()
 		{
 			//	Arrange
 
-			var disc = new Disc
-			{
-				Title = "Some Disc Title",
-				SongsUnordered = new[] { new Song { Artist = new Artist { Name = "Some Artist" } } },
-			};
-			var library = new DiscLibrary();
-
-			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
-			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { disc });
-
-			var target = new DiscAdviserViewModel(library, discAdviserStub);
-			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
-
-			//	Act
-
-			string discAnnouncement = target.CurrentDiscAnnouncement;
-
-			//	Assert
-
-			Assert.AreEqual("Some Artist - Some Disc Title", discAnnouncement);
-		}
-
-		[Test]
-		public void PlayCurrentDiscCommand_IfNoDiscsAreAdvised_ReturnsWithNoAction()
-		{
-			//	Arrange
-
-			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<IDiscAdviser>());
+			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<IPlaylistAdviser>());
 
 			bool receivedEvent = false;
-			Messenger.Default.Register<PlayDiscEventArgs>(this, e => receivedEvent = true);
+			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => receivedEvent = true);
 
 			//	Act
 
-			target.PlayCurrentDisc();
+			target.PlayCurrentAdvise();
 
 			//	Assert
 
 			Assert.IsFalse(receivedEvent);
 			//	Avoiding uncovered lambda code (receivedEvent = true)
-			Messenger.Default.Send(new PlayDiscEventArgs(null));
+			Messenger.Default.Send(new PlaySongsListEventArgs(Enumerable.Empty<Song>()));
 		}
 
 		[Test]
-		public void PlayCurrentDiscCommand_IfSomeDiscsAreAdvised_SendsPlayDiscEventForNextAdvisedDisc()
+		public void PlayCurrentAdviseCommand_IfSomeAdvisesAreMade_SendsPlaySongsListEventForCurrentAdvise()
 		{
 			//	Arrange
 
-			var disc = new Disc();
+			var song1 = new Song();
+			var song2 = new Song();
+			var advise = new AdvisedPlaylist(String.Empty, new[] { song1, song2 });
 			var library = new DiscLibrary();
 
-			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
-			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { disc });
+			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { advise });
 
-			var target = new DiscAdviserViewModel(library, discAdviserStub);
+			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
-			PlayDiscEventArgs receivedEvent = null;
-			Messenger.Default.Register<PlayDiscEventArgs>(this, e => receivedEvent = e);
+			PlaySongsListEventArgs receivedEvent = null;
+			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => receivedEvent = e);
 
 			//	Act
 
-			target.PlayCurrentDisc();
+			target.PlayCurrentAdvise();
 
 			//	Assert
 
 			Assert.IsNotNull(receivedEvent);
-			Assert.AreSame(disc, receivedEvent.Disc);
+			CollectionAssert.AreEqual(advise.Songs, receivedEvent.Songs);
 		}
 
 		[Test]
-		public void SwitchToNextDiscCommand_IfCurrentAdvisedDiscIsNotLast_SwitchesToNextDiscInAdviseList()
+		public void SwitchToNextAdviseCommand_IfCurrentAdviseIsNotLast_SwitchesToNextAdvise()
 		{
 			//	Arrange
 
-			var disc1 = new Disc();
-			var disc2 = new Disc();
+			var advise1 = new AdvisedPlaylist(String.Empty, Enumerable.Empty<Song>());
+			var advise2 = new AdvisedPlaylist(String.Empty, Enumerable.Empty<Song>());
 			var library = new DiscLibrary();
 
-			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
-			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { disc1, disc2 });
+			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { advise1, advise2 });
 
-			var target = new DiscAdviserViewModel(library, discAdviserStub);
+			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
 			//	Act
 
-			target.SwitchToNextDisc();
+			target.SwitchToNextAdvise();
 
 			//	Assert
 
-			Assert.AreSame(disc2, target.CurrentDisc);
+			Assert.AreSame(advise2, target.CurrentAdvise);
 		}
 
 		[Test]
-		public void SwitchToNextDiscCommand_IfCurrentAdvisedDiscIsLast_LoadsNewAdvisedDiscs()
+		public void SwitchToNextAdviseCommand_IfCurrentAdviseIsLast_RebuildsAdvises()
 		{
 			//	Arrange
 
-			var disc1 = new Disc();
-			var disc2 = new Disc();
+			var advise1 = new AdvisedPlaylist(String.Empty, Enumerable.Empty<Song>());
+			var advise2 = new AdvisedPlaylist(String.Empty, Enumerable.Empty<Song>());
 			var library = new DiscLibrary();
 
-			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
-			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { disc1 }, new Collection<Disc> { disc2 });
+			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { advise1 }, new Collection<AdvisedPlaylist> { advise2 });
 
-			var target = new DiscAdviserViewModel(library, discAdviserStub);
+			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
 			//	Act
 
-			target.SwitchToNextDisc();
+			target.SwitchToNextAdvise();
 
 			//	Assert
 
-			Assert.AreSame(disc2, target.CurrentDisc);
+			Assert.AreSame(advise2, target.CurrentAdvise);
 		}
 
 		[Test]
-		public void PlaylistFinishedEventHandler_IfFinshedDiscIsCurrentAdvisedDisc_SwitchesToNextDiscInAdviseList()
+		public void PlaylistFinishedEventHandler_IfFinshedPlaylistContainsAllSongsFromCurrentAdvise_SwitchesToNextAdvise()
 		{
 			//	Arrange
 
-			var disc1 = new Disc();
-			var disc2 = new Disc();
+			var song1 = new Song();
+			var song2 = new Song();
+			var song3 = new Song();
+
+			var advise1 = new AdvisedPlaylist(String.Empty, new[] { song1, song2 });
+			var advise2 = new AdvisedPlaylist(String.Empty, new[] { new Song() });
 			var library = new DiscLibrary();
 
 			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
-			songPlaylistStub.PlayedDisc.Returns(disc1);
+			songPlaylistStub.Songs.Returns(new[] { song1, song2, song3 });
 
-			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
-			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { disc1, disc2 });
+			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { advise1, advise2 });
 
-			var target = new DiscAdviserViewModel(library, discAdviserStub);
+			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
 			//	Act
@@ -252,25 +229,28 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			//	Assert
 
-			Assert.AreSame(disc2, target.CurrentDisc);
+			Assert.AreSame(advise2, target.CurrentAdvise);
 		}
 
 		[Test]
-		public void PlaylistFinishedEventHandler_IfCurrentAdvisedDiscIsLast_LoadsNewAdvisedDiscs()
+		public void PlaylistFinishedEventHandler_IfCurrentAdviseIsLast_RebuildsAdvises()
 		{
 			//	Arrange
 
-			var disc1 = new Disc();
-			var disc2 = new Disc();
+			var song1 = new Song();
+			var song2 = new Song();
+
+			var advise1 = new AdvisedPlaylist(String.Empty, new[] { song1, song2 });
+			var advise2 = new AdvisedPlaylist(String.Empty, Enumerable.Empty<Song>());
 			var library = new DiscLibrary();
 
 			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
-			songPlaylistStub.PlayedDisc.Returns(disc1);
+			songPlaylistStub.Songs.Returns(new[] { song1, song2 });
 
-			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
-			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { disc1 }, new Collection<Disc> { disc2 });
+			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { advise1 }, new Collection<AdvisedPlaylist> { advise2 });
 
-			var target = new DiscAdviserViewModel(library, discAdviserStub);
+			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
 			//	Act
@@ -279,25 +259,28 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			//	Assert
 
-			Assert.AreSame(disc2, target.CurrentDisc);
+			Assert.AreSame(advise2, target.CurrentAdvise);
 		}
 
 		[Test]
-		public void PlaylistFinishedEventHandler_IfFinshedDiscIsNotCurrentAdvisedDisc_DoesNotSwitchesFromCurrentDisc()
+		public void PlaylistFinishedEventHandler_IfFinshedPlaylistContainsNotAllSongsFromCurrentAdvise_DoesNotSwitchesFromCurrentAdvise()
 		{
 			//	Arrange
 
-			var finishedDisc = new Disc();
-			var currDisc = new Disc();
+			var song1 = new Song();
+			var song2 = new Song();
+
+			var currAdvise = new AdvisedPlaylist(String.Empty, new[] { song1, song2 });
+			var nextAdvise = new AdvisedPlaylist(String.Empty, Enumerable.Empty<Song>());
 			var library = new DiscLibrary();
 
 			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
-			songPlaylistStub.PlayedDisc.Returns(finishedDisc);
+			songPlaylistStub.Songs.Returns(new[] { song1 });
 
-			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
-			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { currDisc }, new Collection<Disc> { new Disc() });
+			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { currAdvise }, new Collection<AdvisedPlaylist> { nextAdvise });
 
-			var target = new DiscAdviserViewModel(library, discAdviserStub);
+			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
 			//	Act
@@ -306,26 +289,28 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			//	Assert
 
-			Assert.AreSame(currDisc, target.CurrentDisc);
+			Assert.AreSame(currAdvise, target.CurrentAdvise);
 		}
 
 		[Test]
-		public void PlaylistFinishedEventHandler_IfFinshedDiscPresentsInFutureAdvisedDisc_RemovesThisDiscFromAdviseList()
+		public void PlaylistFinishedEventHandler_IfFinshedPlaylistCoversSomeFutureAdvises_RemovesThisAdvisesFromList()
 		{
 			//	Arrange
 
-			var currDisc = new Disc();
-			var finishedDisc = new Disc();
-			var lastDisc = new Disc();
+			var song = new Song();
+
+			var currAdvise = new AdvisedPlaylist(String.Empty, new[] { new Song() });
+			var coveredAdvise = new AdvisedPlaylist(String.Empty, new[] { song });
+			var lastAdvise = new AdvisedPlaylist(String.Empty, new[] { new Song() });
 			var library = new DiscLibrary();
 
 			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
-			songPlaylistStub.PlayedDisc.Returns(finishedDisc);
+			songPlaylistStub.Songs.Returns(new[] { song });
 
-			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
-			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { currDisc, finishedDisc, lastDisc });
+			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { currAdvise, coveredAdvise, lastAdvise });
 
-			var target = new DiscAdviserViewModel(library, discAdviserStub);
+			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
 			//	Act
@@ -334,35 +319,9 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			//	Assert
 
-			Assert.AreSame(currDisc, target.CurrentDisc);
-			target.SwitchToNextDisc();
-			Assert.AreSame(lastDisc, target.CurrentDisc);
-		}
-
-		[Test]
-		public void PlaylistFinishedEventHandler_IfFinshedDiscIsNull_ReturnsWithNoAction()
-		{
-			//	Arrange
-
-			var disc = new Disc();
-			var library = new DiscLibrary();
-
-			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
-			songPlaylistStub.PlayedDisc.Returns((Disc)null);
-
-			IDiscAdviser discAdviserStub = Substitute.For<IDiscAdviser>();
-			discAdviserStub.AdviseDiscs(library).Returns(new Collection<Disc> { disc });
-
-			var target = new DiscAdviserViewModel(library, discAdviserStub);
-			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
-
-			//	Act
-
-			Messenger.Default.Send(new PlaylistFinishedEventArgs(songPlaylistStub));
-
-			//	Assert
-
-			Assert.AreSame(disc, target.CurrentDisc);
+			Assert.AreSame(currAdvise, target.CurrentAdvise);
+			target.SwitchToNextAdvise();
+			Assert.AreSame(lastAdvise, target.CurrentAdvise);
 		}
 	}
 }

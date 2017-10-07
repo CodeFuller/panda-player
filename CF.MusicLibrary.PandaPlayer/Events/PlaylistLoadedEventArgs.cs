@@ -1,15 +1,12 @@
-﻿using System;
-using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
+﻿using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace CF.MusicLibrary.PandaPlayer.Events
 {
-	public class PlaylistLoadedEventArgs : EventArgs
+	public class PlaylistLoadedEventArgs : BaseSongListEventArgs
 	{
-		public ISongPlaylistViewModel Playlist { get; }
-
 		public PlaylistLoadedEventArgs(ISongPlaylistViewModel playlist)
+			: base(playlist.Songs)
 		{
-			Playlist = playlist;
 		}
 	}
 }

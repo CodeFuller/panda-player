@@ -85,7 +85,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
 			List<Song> registeredSongs = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => registeredSongs = e.Playlist.Songs.ToList());
+			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => registeredSongs = e.Songs.ToList());
 
 			//	Act
 
@@ -194,7 +194,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			target.SwitchToNextSong();
 
 			Song registeredCurrentSong = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => registeredCurrentSong = e.Playlist.CurrentSong);
+			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => registeredCurrentSong = e.CurrentSong);
 
 			//	Act
 
@@ -259,7 +259,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			target.SetSongs(new List<Song> { song1, song2 });
 
 			Song registeredCurrentSong = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => registeredCurrentSong = e.Playlist.CurrentSong);
+			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => registeredCurrentSong = e.CurrentSong);
 
 			//	Act
 
@@ -377,7 +377,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
 			List<Song> updatedSongList = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => updatedSongList = e.Playlist.Songs.ToList());
+			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => updatedSongList = e.Songs.ToList());
 
 			//	Act
 
@@ -443,7 +443,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
 			List<Song> updatedSongList = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => updatedSongList = e.Playlist.Songs.ToList());
+			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => updatedSongList = e.Songs.ToList());
 
 			//	Act
 
