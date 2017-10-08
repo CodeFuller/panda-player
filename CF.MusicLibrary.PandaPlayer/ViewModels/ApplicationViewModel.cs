@@ -9,6 +9,7 @@ using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels
 {
@@ -17,9 +18,18 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private const int ExplorerSongListIndex = 0;
 		private const int PlaylistSongListIndex = 1;
 
+		private const string DefaultTitle = "Panda Player";
+
 		private readonly DiscLibrary discLibrary;
 
 		private readonly IViewNavigator viewNavigator;
+
+		private string title = DefaultTitle;
+		public string Title
+		{
+			get { return title; }
+			set { Set(ref title, value); }
+		}
 
 		public IApplicationViewModelHolder ViewModelHolder { get; }
 
@@ -93,6 +103,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, OnPlaylistFinished);
 			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => SwitchToExplorerSongList());
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => OnPlaylistSongChanged());
+			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistSongChanged());
 		}
 
 		public async Task Load()
@@ -149,10 +160,18 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		private void OnPlaylistSongChanged()
 		{
+			Title = Playlist.CurrentSong != null ? BuildCurrentTitle(Playlist.CurrentSong) : DefaultTitle;
+
 			if (SelectedSongListIndex == PlaylistSongListIndex)
 			{
 				ActiveDisc = PlaylistActiveDisc;
 			}
+		}
+
+		private string BuildCurrentTitle(Song song)
+		{
+			var songTitle = song.Artist != null ? Current($"{song.Artist.Name} - {song.Title}") : song.Title;
+			return Current($"{Playlist.CurrentSongIndex + 1}/{Playlist.SongsNumber} - {songTitle}");
 		}
 
 		private void OnPlaylistFinished(PlaylistFinishedEventArgs e)

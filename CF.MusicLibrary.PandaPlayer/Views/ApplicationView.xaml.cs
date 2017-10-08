@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -14,6 +15,8 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 	public partial class ApplicationView : Window
 	{
 		private readonly TaskbarIcon taskBarIcon;
+
+		private ApplicationViewModel ViewModel => DataContext.GetViewModel<ApplicationViewModel>();
 
 		public ApplicationView(ApplicationViewModel model)
 		{
@@ -37,6 +40,16 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 			var icon = BitmapFrame.Create(iconUri);
 			Icon = icon;
 			taskBarIcon.IconSource = icon;
+
+			model.PropertyChanged += ViewModel_PropertyChanged;
+		}
+
+		private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == nameof(ViewModel.Title))
+			{
+				taskBarIcon.ToolTipText = ViewModel.Title;
+			}
 		}
 
 		private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)

@@ -7,7 +7,7 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="Panda Player" Width="800" Height="600" WindowState="Maximized"
+        Title="{Binding Title}" Width="800" Height="600" WindowState="Maximized"
         Background="#1B1B1B">
 
     <i:Interaction.Triggers>

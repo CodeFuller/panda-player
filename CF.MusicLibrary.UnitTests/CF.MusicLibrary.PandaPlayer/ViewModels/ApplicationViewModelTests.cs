@@ -375,6 +375,126 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		[Test]
+		public void PlaylistChangedEventHandler_IfNewPlaylistSongHasArtist_SetsCorrectTitle()
+		{
+			//	Arrange
+
+			var song = new Song
+			{
+				Artist = new Artist { Name = "Some Artist" },
+				Title = "Some Song",
+			};
+
+			ISongPlaylistViewModel songPlaylistViewModelStub = Substitute.For<ISongPlaylistViewModel>();
+			songPlaylistViewModelStub.CurrentSongIndex.Returns(1);
+			songPlaylistViewModelStub.SongsNumber.Returns(3);
+			songPlaylistViewModelStub.CurrentSong.Returns(song);
+
+			IMusicPlayerViewModel musicPlayerViewModelStub = Substitute.For<IMusicPlayerViewModel>();
+			musicPlayerViewModelStub.Playlist.Returns(songPlaylistViewModelStub);
+
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
+				musicPlayerViewModelStub, Substitute.For<IViewNavigator>());
+			target.Load().Wait();
+
+			//	Act
+
+			Messenger.Default.Send(new PlaylistChangedEventArgs(songPlaylistViewModelStub));
+
+			//	Assert
+
+			Assert.AreEqual("2/3 - Some Artist - Some Song", target.Title);
+		}
+
+		[Test]
+		public void PlaylistChangedEventHandler_IfNewPlaylistSongDoesNotHaveArtist_SetsCorrectTitle()
+		{
+			//	Arrange
+
+			var song = new Song
+			{
+				Artist = null,
+				Title = "Some Song",
+			};
+
+			ISongPlaylistViewModel songPlaylistViewModelStub = Substitute.For<ISongPlaylistViewModel>();
+			songPlaylistViewModelStub.CurrentSongIndex.Returns(1);
+			songPlaylistViewModelStub.SongsNumber.Returns(3);
+			songPlaylistViewModelStub.CurrentSong.Returns(song);
+
+			IMusicPlayerViewModel musicPlayerViewModelStub = Substitute.For<IMusicPlayerViewModel>();
+			musicPlayerViewModelStub.Playlist.Returns(songPlaylistViewModelStub);
+
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
+				musicPlayerViewModelStub, Substitute.For<IViewNavigator>());
+			target.Load().Wait();
+
+			//	Act
+
+			Messenger.Default.Send(new PlaylistChangedEventArgs(songPlaylistViewModelStub));
+
+			//	Assert
+
+			Assert.AreEqual("2/3 - Some Song", target.Title);
+		}
+
+		[Test]
+		public void PlaylistChangedEventHandler_IfPlaylistCurrentSongIsNotSet_SetsDefaultApplicationTitle()
+		{
+			//	Arrange
+
+			ISongPlaylistViewModel songPlaylistViewModelStub = Substitute.For<ISongPlaylistViewModel>();
+			songPlaylistViewModelStub.CurrentSong.Returns((Song)null);
+
+			IMusicPlayerViewModel musicPlayerViewModelStub = Substitute.For<IMusicPlayerViewModel>();
+			musicPlayerViewModelStub.Playlist.Returns(songPlaylistViewModelStub);
+
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
+				musicPlayerViewModelStub, Substitute.For<IViewNavigator>());
+			target.Load().Wait();
+
+			//	Act
+
+			Messenger.Default.Send(new PlaylistChangedEventArgs(songPlaylistViewModelStub));
+
+			//	Assert
+
+			Assert.AreEqual("Panda Player", target.Title);
+		}
+
+		[Test]
+		public void PlaylistLoadedEventHandler_SetsCorrectTitle()
+		{
+			//	Arrange
+
+			var song = new Song
+			{
+				Artist = new Artist { Name = "Some Artist" },
+				Title = "Some Song",
+			};
+
+			ISongPlaylistViewModel songPlaylistViewModelStub = Substitute.For<ISongPlaylistViewModel>();
+			songPlaylistViewModelStub.CurrentSongIndex.Returns(1);
+			songPlaylistViewModelStub.SongsNumber.Returns(3);
+			songPlaylistViewModelStub.CurrentSong.Returns(song);
+
+			IMusicPlayerViewModel musicPlayerViewModelStub = Substitute.For<IMusicPlayerViewModel>();
+			musicPlayerViewModelStub.Playlist.Returns(songPlaylistViewModelStub);
+
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
+				musicPlayerViewModelStub, Substitute.For<IViewNavigator>());
+			target.Load().Wait();
+
+			//	Act
+
+			Messenger.Default.Send(new PlaylistLoadedEventArgs(songPlaylistViewModelStub));
+
+			//	Assert
+
+			Assert.AreEqual("2/3 - Some Artist - Some Song", target.Title);
+		}
+
+		[Test]
 		public void PlayPlaylistStartingFromSongEventHandler_SwitchesPlayerSongCorrectly()
 		{
 			//	Arrange
