@@ -9,7 +9,6 @@ namespace CF.MusicLibrary.LastFM.DataContracts
 		public ScrobbleStatistics Statistics { get; set; }
 
 		[DataMember(Name = "Scrobble")]
-		//	CF TEMP: Extend for arrays
 		public ScrobbleInfo Scrobble { get; set; }
 	}
 }

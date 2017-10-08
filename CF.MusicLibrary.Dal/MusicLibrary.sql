@@ -49,6 +49,7 @@ CREATE TABLE [Discs] (
 CREATE TABLE [Artists] (
   [Id] INTEGER NOT NULL,
   [Name] ntext NOT NULL,
+  [IsFavourite] INTEGER NOT NULL,
   CONSTRAINT [sqlite_master_PK_Artists] PRIMARY KEY ([Id]),
   CONSTRAINT [sqlite_master_UC_Artists] UNIQUE (Name)
 );

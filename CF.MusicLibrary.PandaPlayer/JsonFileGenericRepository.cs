@@ -5,15 +5,15 @@ using Newtonsoft.Json;
 using static CF.Library.Core.Application;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
+namespace CF.MusicLibrary.PandaPlayer
 {
-	public class JsonFilePlaylistDataRepository : IPlaylistDataRepository
+	public class JsonFileGenericRepository<T> : IGenericDataRepository<T> where T : class
 	{
 		private readonly IFileSystemFacade fileSystemFacade;
 
 		private readonly string dataFileName;
 
-		public JsonFilePlaylistDataRepository(IFileSystemFacade fileSystemFacade, string dataFileName)
+		public JsonFileGenericRepository(IFileSystemFacade fileSystemFacade, string dataFileName)
 		{
 			if (fileSystemFacade == null)
 			{
@@ -28,29 +28,29 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 			this.dataFileName = dataFileName;
 		}
 
-		public void Save(PlaylistData playlistData)
+		public void Save(T data)
 		{
-			var data = JsonConvert.SerializeObject(playlistData, Formatting.Indented);
-			fileSystemFacade.WriteAllText(dataFileName, data, Encoding.UTF8);
+			var jsonData = JsonConvert.SerializeObject(data, Formatting.Indented);
+			fileSystemFacade.WriteAllText(dataFileName, jsonData, Encoding.UTF8);
 		}
 
-		public PlaylistData Load()
+		public T Load()
 		{
 			if (!fileSystemFacade.FileExists(dataFileName))
 			{
-				Logger.WriteInfo(Current($"Playlist data file {dataFileName} does not exist."));
-				return null;
+				Logger.WriteInfo(Current($"Data file {dataFileName} does not exist."));
+				return default(T);
 			}
 
 			var data = fileSystemFacade.ReadAllText(dataFileName, Encoding.UTF8);
-			return JsonConvert.DeserializeObject<PlaylistData>(data);
+			return JsonConvert.DeserializeObject<T>(data);
 		}
 
 		public void Purge()
 		{
 			if (fileSystemFacade.FileExists(dataFileName))
 			{
-				Logger.WriteInfo(Current($"Deleting playlist data file {dataFileName}..."));
+				Logger.WriteInfo(Current($"Deleting data file {dataFileName}..."));
 				fileSystemFacade.DeleteFile(dataFileName);
 			}
 		}

@@ -1,5 +1,5 @@
 ﻿using System.Windows.Input;
-using CF.MusicLibrary.PandaPlayer.DiscAdviser;
+using CF.MusicLibrary.PandaPlayer.Adviser;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {

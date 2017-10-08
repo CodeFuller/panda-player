@@ -14,8 +14,10 @@ using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.Local;
+using CF.MusicLibrary.PandaPlayer.Adviser;
+using CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
+using CF.MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
-using CF.MusicLibrary.PandaPlayer.DiscAdviser;
 using CF.MusicLibrary.PandaPlayer.ViewModels;
 using CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -42,7 +44,6 @@ namespace CF.MusicLibrary.PandaPlayer
 			string lastFMSessionKey = AppSettings.GetPrivateRequiredValue<string>("LastFMSessionKey");
 
 			string appDataPath = AppSettings.GetRequiredValue<string>("AppDataPath");
-			string storedPlaylistFileName = Path.Combine(appDataPath, "Playlist.json");
 
 			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepositoryEF>(new InjectionConstructor());
 			DIContainer.RegisterType<ISongTagger, SongTagger>();
@@ -79,12 +80,11 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<IMessageLogger, LoggerViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<ILibraryContentUpdater, LibraryContentUpdater>();
 			DIContainer.RegisterType<IViewNavigator, ViewNavigator>(new ContainerControlledLifetimeManager());
-			DIContainer.RegisterType<IDiscAdviser, RankBasedDiscAdviser>();
 			DIContainer.RegisterType<IDiscGroupper, MyLibraryDiscGroupper>();
-			DIContainer.RegisterType<IDiscGroupSorter, RankBasedDiscSorter>();
+			DIContainer.RegisterType<IDiscGroupSorter, RankBasedDiscGroupSorter>();
+			DIContainer.RegisterType<IAdviseFactorsProvider, AdviseFactorsProvider>();
 			DIContainer.RegisterType<ILibraryStructurer, MyLibraryStructurer>();
 			DIContainer.RegisterType<IWindowService, WpfWindowService>();
-			DIContainer.RegisterType<IPlaylistDataRepository, JsonFilePlaylistDataRepository>(new InjectionConstructor(typeof(IFileSystemFacade), storedPlaylistFileName));
 			DIContainer.RegisterType<IAudioPlayer, AudioPlayer>();
 			DIContainer.RegisterType<IMediaPlayerFacade, MediaPlayerFacade>();
 			DIContainer.RegisterType<ISongPlaybacksRegistrator, SongPlaybacksRegistrator>();
@@ -92,7 +92,21 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<IDocumentDownloader, HttpDocumentDownloader>();
 			DIContainer.RegisterType<IWebBrowser, SystemDefaultWebBrowser>();
 			DIContainer.RegisterType<IDiscArtValidator, DiscArtValidator>();
-			DIContainer.RegisterType<IPlaylistAdviser, PlaylistAdviser>();
+
+			DIContainer.RegisterType<IPlaylistAdviser, RankBasedDiscAdviser>("RankBasedDiscAdviser");
+			DIContainer.RegisterType<IPlaylistAdviser, HighlyRatedSongsAdviser>("HighlyRatedSongsAdviser");
+			DIContainer.RegisterType<IPlaylistAdviser, FavouriteArtistDiscsAdviser>("FavouriteArtistDiscsAdviser",
+				new InjectionConstructor(new ResolvedParameter<IPlaylistAdviser>("RankBasedDiscAdviser")));
+			DIContainer.RegisterType<ICompositePlaylistAdviser, CompositePlaylistAdviser>(new InjectionConstructor(
+				new ResolvedParameter<IPlaylistAdviser>("RankBasedDiscAdviser"),
+				new ResolvedParameter<IPlaylistAdviser>("HighlyRatedSongsAdviser"),
+				new ResolvedParameter<IPlaylistAdviser>("FavouriteArtistDiscsAdviser"),
+				new ResolvedParameter<IGenericDataRepository<PlaylistAdviserMemo>>()));
+
+			DIContainer.RegisterType<IGenericDataRepository<PlaylistData>, JsonFileGenericRepository<PlaylistData>>(
+				new InjectionConstructor(typeof(IFileSystemFacade), Path.Combine(appDataPath, "Playlist.json")));
+			DIContainer.RegisterType<IGenericDataRepository<PlaylistAdviserMemo>, JsonFileGenericRepository<PlaylistAdviserMemo>>(
+				new InjectionConstructor(typeof(IFileSystemFacade), Path.Combine(appDataPath, "AdviserMemo.json")));
 		}
 	}
 }

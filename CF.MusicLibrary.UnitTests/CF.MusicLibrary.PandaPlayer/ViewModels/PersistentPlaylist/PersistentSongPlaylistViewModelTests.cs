@@ -19,7 +19,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 	{
 		private class PersistentSongPlaylistViewModelInheritor : PersistentSongPlaylistViewModel
 		{
-			public PersistentSongPlaylistViewModelInheritor(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IPlaylistDataRepository playlistDataRepository)
+			public PersistentSongPlaylistViewModelInheritor(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IGenericDataRepository<PlaylistData> playlistDataRepository)
 				: base(libraryContentUpdater, viewNavigator, playlistDataRepository)
 			{
 			}
@@ -40,14 +40,14 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 		public void Constructor_IfLibraryContentUpdaterArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new PersistentSongPlaylistViewModel(null,
-				Substitute.For<IViewNavigator>(), Substitute.For<IPlaylistDataRepository>()));
+				Substitute.For<IViewNavigator>(), Substitute.For<IGenericDataRepository<PlaylistData>>()));
 		}
 
 		[Test]
 		public void Constructor_IfViewNavigatorArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(),
-				null, Substitute.For<IPlaylistDataRepository>()));
+				null, Substitute.For<IGenericDataRepository<PlaylistData>>()));
 		}
 
 		[Test]
@@ -66,7 +66,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			var disc = new Disc { SongsUnordered = new[] { song } };
 
 			Logger = Substitute.For<IMessageLogger>();
-			IPlaylistDataRepository playlistDataRepositoryStub = Substitute.For<IPlaylistDataRepository>();
+			IGenericDataRepository<PlaylistData> playlistDataRepositoryStub = Substitute.For<IGenericDataRepository<PlaylistData>>();
 			playlistDataRepositoryStub.Load().Returns((PlaylistData)null);
 
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), playlistDataRepositoryStub);
@@ -96,7 +96,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			};
 
 			Logger = Substitute.For<IMessageLogger>();
-			IPlaylistDataRepository playlistDataRepositoryStub = Substitute.For<IPlaylistDataRepository>();
+			IGenericDataRepository<PlaylistData> playlistDataRepositoryStub = Substitute.For<IGenericDataRepository<PlaylistData>>();
 			playlistDataRepositoryStub.Load().Returns(playlistData);
 
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), playlistDataRepositoryStub);
@@ -126,7 +126,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			};
 
 			Logger = Substitute.For<IMessageLogger>();
-			IPlaylistDataRepository playlistDataRepositoryStub = Substitute.For<IPlaylistDataRepository>();
+			IGenericDataRepository<PlaylistData> playlistDataRepositoryStub = Substitute.For<IGenericDataRepository<PlaylistData>>();
 			playlistDataRepositoryStub.Load().Returns(playlistData);
 
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), playlistDataRepositoryStub);
@@ -156,7 +156,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			};
 
 			Logger = Substitute.For<IMessageLogger>();
-			IPlaylistDataRepository playlistDataRepositoryStub = Substitute.For<IPlaylistDataRepository>();
+			IGenericDataRepository<PlaylistData> playlistDataRepositoryStub = Substitute.For<IGenericDataRepository<PlaylistData>>();
 			playlistDataRepositoryStub.Load().Returns(playlistData);
 
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), playlistDataRepositoryStub);
@@ -186,7 +186,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			};
 
 			Logger = Substitute.For<IMessageLogger>();
-			IPlaylistDataRepository playlistDataRepositoryStub = Substitute.For<IPlaylistDataRepository>();
+			IGenericDataRepository<PlaylistData> playlistDataRepositoryStub = Substitute.For<IGenericDataRepository<PlaylistData>>();
 			playlistDataRepositoryStub.Load().Returns(playlistData);
 
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), playlistDataRepositoryStub);
@@ -215,7 +215,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			};
 
 			Logger = Substitute.For<IMessageLogger>();
-			IPlaylistDataRepository playlistDataRepositoryMock = Substitute.For<IPlaylistDataRepository>();
+			IGenericDataRepository<PlaylistData> playlistDataRepositoryMock = Substitute.For<IGenericDataRepository<PlaylistData>>();
 			playlistDataRepositoryMock.Load().Returns(playlistData);
 
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), playlistDataRepositoryMock);
@@ -246,7 +246,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			};
 
 			Logger = Substitute.For<IMessageLogger>();
-			IPlaylistDataRepository playlistDataRepositoryStub = Substitute.For<IPlaylistDataRepository>();
+			IGenericDataRepository<PlaylistData> playlistDataRepositoryStub = Substitute.For<IGenericDataRepository<PlaylistData>>();
 			playlistDataRepositoryStub.Load().Returns(playlistData);
 
 			bool receivedEvent = false;
@@ -275,7 +275,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			PlaylistData savedPlaylistData = null;
 
 			Logger = Substitute.For<IMessageLogger>();
-			IPlaylistDataRepository playlistDataRepositoryMock = Substitute.For<IPlaylistDataRepository>();
+			IGenericDataRepository<PlaylistData> playlistDataRepositoryMock = Substitute.For<IGenericDataRepository<PlaylistData>>();
 
 			var target = new PersistentSongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), playlistDataRepositoryMock);
 			target.SetSongs(songs);
@@ -309,7 +309,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			PlaylistData savedPlaylistData = null;
 
 			Logger = Substitute.For<IMessageLogger>();
-			IPlaylistDataRepository playlistDataRepositoryMock = Substitute.For<IPlaylistDataRepository>();
+			IGenericDataRepository<PlaylistData> playlistDataRepositoryMock = Substitute.For<IGenericDataRepository<PlaylistData>>();
 
 			var target = new PersistentSongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), playlistDataRepositoryMock);
 			target.SetSongs(songs);
@@ -332,7 +332,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Persi
 			//	Arrange
 
 			Logger = Substitute.For<IMessageLogger>();
-			IPlaylistDataRepository playlistDataRepositoryMock = Substitute.For<IPlaylistDataRepository>();
+			IGenericDataRepository<PlaylistData> playlistDataRepositoryMock = Substitute.For<IGenericDataRepository<PlaylistData>>();
 
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), playlistDataRepositoryMock);
 

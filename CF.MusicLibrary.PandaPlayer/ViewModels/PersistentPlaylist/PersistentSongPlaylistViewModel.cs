@@ -12,9 +12,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 {
 	public class PersistentSongPlaylistViewModel : SongPlaylistViewModel
 	{
-		private readonly IPlaylistDataRepository playlistDataRepository;
+		private readonly IGenericDataRepository<PlaylistData> playlistDataRepository;
 
-		public PersistentSongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IPlaylistDataRepository playlistDataRepository)
+		public PersistentSongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IGenericDataRepository<PlaylistData> playlistDataRepository)
 			: base(libraryContentUpdater, viewNavigator)
 		{
 			if (playlistDataRepository == null)

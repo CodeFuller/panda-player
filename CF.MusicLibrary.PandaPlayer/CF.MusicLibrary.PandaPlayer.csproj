@@ -136,15 +136,22 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="DiscAdviser\AdvisedPlaylist.cs" />
-    <Compile Include="DiscAdviser\IDiscAdviser.cs" />
-    <Compile Include="DiscAdviser\IDiscGroupSorter.cs" />
-    <Compile Include="DiscAdviser\IPlaylistAdviser.cs" />
-    <Compile Include="DiscAdviser\PlaylistAdviser.cs" />
-    <Compile Include="DiscAdviser\RankBasedDiscAdviser.cs" />
-    <Compile Include="DiscAdviser\RankBasedDiscSorter.cs" />
-    <Compile Include="DiscAdviser\RankedDisc.cs" />
-    <Compile Include="DiscAdviser\RankedDiscGroup.cs" />
+    <Compile Include="Adviser\AdvisedPlaylist.cs" />
+    <Compile Include="Adviser\AdvisedPlaylistType.cs" />
+    <Compile Include="Adviser\AdviseFactorsProvider.cs" />
+    <Compile Include="Adviser\PlaylistAdvisers\FavouriteArtistDiscsAdviser.cs" />
+    <Compile Include="Adviser\PlaylistAdvisers\HighlyRatedSongsAdviser.cs" />
+    <Compile Include="Adviser\PlaylistAdvisers\ICompositePlaylistAdviser.cs" />
+    <Compile Include="Adviser\IAdviseFactorsProvider.cs" />
+    <Compile Include="Adviser\RankBasedAdviser\IDiscAdviser.cs" />
+    <Compile Include="Adviser\RankBasedAdviser\IDiscGroupSorter.cs" />
+    <Compile Include="Adviser\PlaylistAdvisers\IPlaylistAdviser.cs" />
+    <Compile Include="Adviser\PlaylistAdvisers\CompositePlaylistAdviser.cs" />
+    <Compile Include="Adviser\PlaylistAdviserMemo.cs" />
+    <Compile Include="Adviser\PlaylistAdvisers\RankBasedDiscAdviser.cs" />
+    <Compile Include="Adviser\RankBasedAdviser\RankBasedDiscGroupSorter.cs" />
+    <Compile Include="Adviser\RankBasedAdviser\RankedDisc.cs" />
+    <Compile Include="Adviser\RankBasedAdviser\RankedDiscGroup.cs" />
     <Compile Include="Events\ActiveDiscChangedEventArgs.cs" />
     <Compile Include="Events\AddingSongsToPlaylistEventArgs.cs" />
     <Compile Include="Events\AddingSongsToPlaylistLastEventArgs.cs" />
@@ -157,7 +164,9 @@
     <Compile Include="Events\PlaylistLoadedEventArgs.cs" />
     <Compile Include="Events\PlayPlaylistStartingFromSongEventArgs.cs" />
     <Compile Include="Events\PlaySongsListEventArgs.cs" />
+    <Compile Include="IGenericDataRepository.cs" />
     <Compile Include="IWebBrowser.cs" />
+    <Compile Include="JsonFileGenericRepository.cs" />
     <Compile Include="SystemDefaultWebBrowser.cs" />
     <Compile Include="ViewModels\DiscArt\DocumentDownloadFailedException.cs" />
     <Compile Include="ViewModels\DiscArt\HttpDocumentDownloader.cs" />
@@ -165,8 +174,6 @@
     <Compile Include="ViewModels\Interfaces\IEditDiscArtViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ILibraryStatisticsViewModel.cs" />
     <Compile Include="ViewModels\LibraryStatisticsViewModel.cs" />
-    <Compile Include="ViewModels\PersistentPlaylist\IPlaylistDataRepository.cs" />
-    <Compile Include="ViewModels\PersistentPlaylist\JsonFilePlaylistDataRepository.cs" />
     <Compile Include="ViewModels\PersistentPlaylist\PlaylistData.cs" />
     <Compile Include="ViewModels\DiscAdviserViewModel.cs" />
     <Compile Include="ViewModels\DiscArt\DiscArtViewModel.cs" />

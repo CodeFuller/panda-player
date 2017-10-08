@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser;
 using CF.MusicLibrary.Universal.Interfaces;
 
-namespace CF.MusicLibrary.PandaPlayer.DiscAdviser
+namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 {
-	public class RankBasedDiscAdviser : IDiscAdviser
+	public class RankBasedDiscAdviser : IPlaylistAdviser
 	{
 		private readonly IDiscGroupper discGroupper;
 		private readonly IDiscGroupSorter discGroupSorter;
@@ -26,9 +28,9 @@ namespace CF.MusicLibrary.PandaPlayer.DiscAdviser
 			this.discGroupSorter = discGroupSorter;
 		}
 
-		public Collection<Disc> AdviseDiscs(DiscLibrary library)
+		public IEnumerable<AdvisedPlaylist> Advise(DiscLibrary discLibrary)
 		{
-			var discGroups = discGroupper.GroupLibraryDiscs(library)
+			var discGroups = discGroupper.GroupLibraryDiscs(discLibrary)
 				.Where(dg => !dg.Discs.All(d => d.IsDeleted));
 
 			Collection<Disc> advisedDiscs = new Collection<Disc>();
@@ -41,7 +43,7 @@ namespace CF.MusicLibrary.PandaPlayer.DiscAdviser
 				}
 			}
 
-			return advisedDiscs;
+			return advisedDiscs.Select(AdvisedPlaylist.ForDisc);
 		}
 	}
 }

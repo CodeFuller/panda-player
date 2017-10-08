@@ -109,7 +109,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			if (deleteSourceContent)
 			{
 				ProgressMessages += Current($"Deleting source content...\n");
-				workshopMusicStorage.DeleteSourceContent(addedSongs.Select(s => s.SourceFileName).Union(discsCoverImages.Select(c => c.CoverImageFileName)));
+				workshopMusicStorage.DeleteSourceContent(addedSongs.Select(s => s.SourceFileName).Concat(discsCoverImages.Select(c => c.CoverImageFileName)));
 				ProgressMessages += Current($"Source content was deleted successfully\n");
 			}
 

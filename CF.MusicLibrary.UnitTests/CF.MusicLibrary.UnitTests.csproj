@@ -104,7 +104,11 @@
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\ApplicationViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\EditDiscsDetailsViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.LastFM\LastFMScrobblerTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\DiscAdviser\AdvisedPlaylistTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\Adviser\AdvisedPlaylistTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\Adviser\PlaylistAdviserMemoTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\Adviser\PlaylistAdvisers\FavouriteArtistDiscsAdviserTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\Adviser\PlaylistAdvisers\HighlyRatedSongsAdviserTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\Adviser\PlaylistAdvisers\CompositePlaylistAdviserTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\ApplicationViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscAdviserViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.Common\DiscArt\DiscArtImageFileTests.cs" />
@@ -114,7 +118,7 @@
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\EditSongPropertiesViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\LibraryExplorerViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\Player\MusicPlayerViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\PersistentPlaylist\JsonFilePlaylistDataRepositoryTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\JsonFilePlaylistDataRepositoryTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\PersistentPlaylist\PersistentSongPlaylistViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\Player\SongPlaybacksRegistratorTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\SongListViewModelTests.cs" />

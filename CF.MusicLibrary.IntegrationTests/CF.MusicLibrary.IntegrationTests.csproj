@@ -118,7 +118,7 @@
     <Compile Include="CF.MusicLibrary.LibraryChecker\BootstrapperTests.cs" />
     <Compile Include="CF.MusicLibrary.LibraryToolkit\BootstrapperTests.cs" />
     <Compile Include="CF.MusicLibrary.PandaPlayer\BootstrapperTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\PersistentPlaylist\JsonFilePlaylistDataRepositoryTests.cs" />
+    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\PersistentPlaylist\JsonFileGenericRepositoryPlaylistDataTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

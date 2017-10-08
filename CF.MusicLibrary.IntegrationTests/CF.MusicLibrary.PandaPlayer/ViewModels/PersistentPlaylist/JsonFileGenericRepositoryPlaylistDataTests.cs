@@ -5,6 +5,7 @@ using CF.Library.Core.Extensions;
 using CF.Library.Core.Facades;
 using CF.Library.Core.Logging;
 using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.PandaPlayer;
 using CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist;
 using NSubstitute;
 using NUnit.Framework;
@@ -13,7 +14,7 @@ using static CF.Library.Core.Application;
 namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 {
 	[TestFixture]
-	public class JsonFilePlaylistDataRepositoryTests
+	public class JsonFileGenericRepositoryPlaylistDataTests
 	{
 		[Test]
 		public void Load_LoadsSavedPlaylistDataCorrectly()
@@ -37,7 +38,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.PandaPlayer.ViewModel
 			fileSystemFacadeStub.WriteAllText("SomeFile.json", Arg.Do<string>(arg => writtenData = arg), Encoding.UTF8);
 			fileSystemFacadeStub.ReadAllText("SomeFile.json", Encoding.UTF8).Returns(x => writtenData);
 
-			var target = new JsonFilePlaylistDataRepository(fileSystemFacadeStub, "SomeFile.json");
+			var target = new JsonFileGenericRepository<PlaylistData>(fileSystemFacadeStub, "SomeFile.json");
 
 			//	Act
 

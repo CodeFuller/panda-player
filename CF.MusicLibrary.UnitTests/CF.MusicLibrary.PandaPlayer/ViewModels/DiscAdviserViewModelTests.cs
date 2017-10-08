@@ -2,7 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using CF.MusicLibrary.BL.Objects;
-using CF.MusicLibrary.PandaPlayer.DiscAdviser;
+using CF.MusicLibrary.PandaPlayer.Adviser;
+using CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
 using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.ViewModels;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -24,7 +25,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		[Test]
 		public void Constructor_IfDiscLibraryArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new DiscAdviserViewModel(null, Substitute.For<IPlaylistAdviser>()));
+			Assert.Throws<ArgumentNullException>(() => new DiscAdviserViewModel(null, Substitute.For<ICompositePlaylistAdviser>()));
 		}
 
 		[Test]
@@ -38,10 +39,10 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var advise = new AdvisedPlaylist(String.Empty, Enumerable.Empty<Song>());
+			var advise = AdvisedPlaylist.ForDisc(new Disc());
 			var library = new DiscLibrary();
 
-			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			ICompositePlaylistAdviser adviserStub = Substitute.For<ICompositePlaylistAdviser>();
 			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { advise });
 
 			var target = new DiscAdviserViewModel(library, adviserStub);
@@ -60,7 +61,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<IPlaylistAdviser>());
+			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<ICompositePlaylistAdviser>());
 
 			//	Act & Assert
 
@@ -72,7 +73,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<IPlaylistAdviser>());
+			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<ICompositePlaylistAdviser>());
 
 			//	Act & Assert
 
@@ -85,22 +86,18 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var advise = new AdvisedPlaylist("Some Advise Title", Enumerable.Empty<Song>());
+			var advise = AdvisedPlaylist.ForDisc(new Disc { Title = "Some Disc" });
 			var library = new DiscLibrary();
 
-			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			ICompositePlaylistAdviser adviserStub = Substitute.For<ICompositePlaylistAdviser>();
 			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { advise });
 
 			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
-			//	Act
+			//	Act & Assert
 
-			string announcement = target.CurrentAdviseAnnouncement;
-
-			//	Assert
-
-			Assert.AreEqual("Some Advise Title", announcement);
+			Assert.AreEqual(advise.Title, target.CurrentAdviseAnnouncement);
 		}
 
 		[Test]
@@ -108,7 +105,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<IPlaylistAdviser>());
+			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<ICompositePlaylistAdviser>());
 
 			bool receivedEvent = false;
 			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => receivedEvent = true);
@@ -125,16 +122,39 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		[Test]
-		public void PlayCurrentAdviseCommand_IfSomeAdvisesAreMade_SendsPlaySongsListEventForCurrentAdvise()
+		public void PlayCurrentAdviseCommand_IfCurrentAdviseIsFilled_RegisterAdvicePlaybackAtAdviser()
+		{
+			//	Arrange
+
+			var library = new DiscLibrary();
+			var advise = AdvisedPlaylist.ForDisc(new Disc());
+
+			ICompositePlaylistAdviser adviserMock = Substitute.For<ICompositePlaylistAdviser>();
+			adviserMock.Advise(library).Returns(new Collection<AdvisedPlaylist> { advise });
+
+			var target = new DiscAdviserViewModel(library, adviserMock);
+			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
+
+			//	Act
+
+			target.PlayCurrentAdvise();
+
+			//	Assert
+
+			adviserMock.Received(1).RegisterAdvicePlayback(advise);
+		}
+
+		[Test]
+		public void PlayCurrentAdviseCommand_IfCurrentAdviseIsFilled_SendsPlaySongsListEventForCurrentAdvise()
 		{
 			//	Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
-			var advise = new AdvisedPlaylist(String.Empty, new[] { song1, song2 });
+			var advise = AdvisedPlaylist.ForHighlyRatedSongs(new[] { song1, song2 });
 			var library = new DiscLibrary();
 
-			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			ICompositePlaylistAdviser adviserStub = Substitute.For<ICompositePlaylistAdviser>();
 			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { advise });
 
 			var target = new DiscAdviserViewModel(library, adviserStub);
@@ -158,11 +178,11 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var advise1 = new AdvisedPlaylist(String.Empty, Enumerable.Empty<Song>());
-			var advise2 = new AdvisedPlaylist(String.Empty, Enumerable.Empty<Song>());
+			var advise1 = AdvisedPlaylist.ForHighlyRatedSongs(Enumerable.Empty<Song>());
+			var advise2 = AdvisedPlaylist.ForHighlyRatedSongs(Enumerable.Empty<Song>());
 			var library = new DiscLibrary();
 
-			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			ICompositePlaylistAdviser adviserStub = Substitute.For<ICompositePlaylistAdviser>();
 			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { advise1, advise2 });
 
 			var target = new DiscAdviserViewModel(library, adviserStub);
@@ -182,11 +202,11 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			//	Arrange
 
-			var advise1 = new AdvisedPlaylist(String.Empty, Enumerable.Empty<Song>());
-			var advise2 = new AdvisedPlaylist(String.Empty, Enumerable.Empty<Song>());
+			var advise1 = AdvisedPlaylist.ForHighlyRatedSongs(Enumerable.Empty<Song>());
+			var advise2 = AdvisedPlaylist.ForHighlyRatedSongs(Enumerable.Empty<Song>());
 			var library = new DiscLibrary();
 
-			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			ICompositePlaylistAdviser adviserStub = Substitute.For<ICompositePlaylistAdviser>();
 			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { advise1 }, new Collection<AdvisedPlaylist> { advise2 });
 
 			var target = new DiscAdviserViewModel(library, adviserStub);
@@ -210,14 +230,14 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			var song2 = new Song();
 			var song3 = new Song();
 
-			var advise1 = new AdvisedPlaylist(String.Empty, new[] { song1, song2 });
-			var advise2 = new AdvisedPlaylist(String.Empty, new[] { new Song() });
+			var advise1 = AdvisedPlaylist.ForHighlyRatedSongs(new[] { song1, song2 });
+			var advise2 = AdvisedPlaylist.ForHighlyRatedSongs(new[] { new Song() });
 			var library = new DiscLibrary();
 
 			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
 			songPlaylistStub.Songs.Returns(new[] { song1, song2, song3 });
 
-			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			ICompositePlaylistAdviser adviserStub = Substitute.For<ICompositePlaylistAdviser>();
 			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { advise1, advise2 });
 
 			var target = new DiscAdviserViewModel(library, adviserStub);
@@ -240,14 +260,14 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			var song1 = new Song();
 			var song2 = new Song();
 
-			var advise1 = new AdvisedPlaylist(String.Empty, new[] { song1, song2 });
-			var advise2 = new AdvisedPlaylist(String.Empty, Enumerable.Empty<Song>());
+			var advise1 = AdvisedPlaylist.ForHighlyRatedSongs(new[] { song1, song2 });
+			var advise2 = AdvisedPlaylist.ForHighlyRatedSongs(Enumerable.Empty<Song>());
 			var library = new DiscLibrary();
 
 			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
 			songPlaylistStub.Songs.Returns(new[] { song1, song2 });
 
-			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			ICompositePlaylistAdviser adviserStub = Substitute.For<ICompositePlaylistAdviser>();
 			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { advise1 }, new Collection<AdvisedPlaylist> { advise2 });
 
 			var target = new DiscAdviserViewModel(library, adviserStub);
@@ -270,14 +290,14 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			var song1 = new Song();
 			var song2 = new Song();
 
-			var currAdvise = new AdvisedPlaylist(String.Empty, new[] { song1, song2 });
-			var nextAdvise = new AdvisedPlaylist(String.Empty, Enumerable.Empty<Song>());
+			var currAdvise = AdvisedPlaylist.ForHighlyRatedSongs(new[] { song1, song2 });
+			var nextAdvise = AdvisedPlaylist.ForHighlyRatedSongs(Enumerable.Empty<Song>());
 			var library = new DiscLibrary();
 
 			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
 			songPlaylistStub.Songs.Returns(new[] { song1 });
 
-			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			ICompositePlaylistAdviser adviserStub = Substitute.For<ICompositePlaylistAdviser>();
 			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { currAdvise }, new Collection<AdvisedPlaylist> { nextAdvise });
 
 			var target = new DiscAdviserViewModel(library, adviserStub);
@@ -299,15 +319,15 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			var song = new Song();
 
-			var currAdvise = new AdvisedPlaylist(String.Empty, new[] { new Song() });
-			var coveredAdvise = new AdvisedPlaylist(String.Empty, new[] { song });
-			var lastAdvise = new AdvisedPlaylist(String.Empty, new[] { new Song() });
+			var currAdvise = AdvisedPlaylist.ForHighlyRatedSongs(new[] { new Song() });
+			var coveredAdvise = AdvisedPlaylist.ForHighlyRatedSongs(new[] { song });
+			var lastAdvise = AdvisedPlaylist.ForHighlyRatedSongs(new[] { new Song() });
 			var library = new DiscLibrary();
 
 			ISongPlaylistViewModel songPlaylistStub = Substitute.For<ISongPlaylistViewModel>();
 			songPlaylistStub.Songs.Returns(new[] { song });
 
-			IPlaylistAdviser adviserStub = Substitute.For<IPlaylistAdviser>();
+			ICompositePlaylistAdviser adviserStub = Substitute.For<ICompositePlaylistAdviser>();
 			adviserStub.Advise(library).Returns(new Collection<AdvisedPlaylist> { currAdvise, coveredAdvise, lastAdvise });
 
 			var target = new DiscAdviserViewModel(library, adviserStub);

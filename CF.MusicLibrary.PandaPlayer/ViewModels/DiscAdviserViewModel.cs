@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using CF.MusicLibrary.BL.Objects;
-using CF.MusicLibrary.PandaPlayer.DiscAdviser;
+using CF.MusicLibrary.PandaPlayer.Adviser;
+using CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
 using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
@@ -17,7 +18,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private const int AdvisedPlaylistsNumber = 30;
 
 		private readonly DiscLibrary discLibrary;
-		private readonly IPlaylistAdviser playlistAdviser;
+		private readonly ICompositePlaylistAdviser playlistAdviser;
 
 		private readonly List<AdvisedPlaylist> currAdvises = new List<AdvisedPlaylist>();
 
@@ -40,7 +41,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand SwitchToNextAdviseCommand { get; }
 
-		public DiscAdviserViewModel(DiscLibrary discLibrary, IPlaylistAdviser playlistAdviser)
+		public DiscAdviserViewModel(DiscLibrary discLibrary, ICompositePlaylistAdviser playlistAdviser)
 		{
 			if (discLibrary == null)
 			{
@@ -68,10 +69,11 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		internal void PlayCurrentAdvise()
 		{
-			var playlist = CurrentAdvise;
-			if (playlist != null)
+			var advise = CurrentAdvise;
+			if (advise != null)
 			{
-				Messenger.Default.Send(new PlaySongsListEventArgs(playlist.Songs));
+				playlistAdviser.RegisterAdvicePlayback(advise);
+				Messenger.Default.Send(new PlaySongsListEventArgs(advise.Songs));
 			}
 		}
 

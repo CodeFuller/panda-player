@@ -148,7 +148,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			//	Assert
 
-			CollectionAssert.AreEqual(oldSongs.Union(newSongs), target.Songs);
+			CollectionAssert.AreEqual(oldSongs.Concat(newSongs), target.Songs);
 		}
 
 		[Test]
