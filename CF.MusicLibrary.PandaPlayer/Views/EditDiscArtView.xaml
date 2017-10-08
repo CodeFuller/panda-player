@@ -6,7 +6,7 @@
         xmlns:valueConverters="clr-namespace:CF.MusicLibrary.PandaPlayer.Views.ValueConverters"
         mc:Ignorable="d"
         Title="Edit Disc Art" Width="360" Height="450"  WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="#1B1B1B"
-        Loaded="Window_OnLoaded" Closing="Window_OnClosing">
+        Loaded="Window_OnLoaded">
 
     <Window.Resources>
         <valueConverters:ImageSourceValueConverter x:Key="ImageSourceValueConverter" />

@@ -53,6 +53,9 @@ namespace CF.MusicLibrary.PandaPlayer.Views.ClipboardAccess
 
 			RemoveClipboardHook();
 			isStarted = false;
+
+			//	Without this call Application process will not close properly because background Window still exist.
+			Close();
 		}
 
 		protected virtual void OnClipboardContentChanged(ClipboardContentChangedEventArgs e)
