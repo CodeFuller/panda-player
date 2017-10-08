@@ -33,7 +33,7 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 				source?.AddHook(WndProc);
 			};
 
-			var iconUri = new Uri("pack://application:,,,/PandaPlayer.ico", UriKind.RelativeOrAbsolute);
+			var iconUri = new Uri("pack://application:,,,/Views/Icons/PandaPlayer.ico", UriKind.RelativeOrAbsolute);
 			var icon = BitmapFrame.Create(iconUri);
 			Icon = icon;
 			taskBarIcon.IconSource = icon;

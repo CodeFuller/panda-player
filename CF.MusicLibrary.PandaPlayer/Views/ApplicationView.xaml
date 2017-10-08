@@ -25,7 +25,7 @@
             <!-- http://www.codeproject.com/Articles/36468/WPF-NotifyIcon -->
             <views:TrayClickCommand x:Key="TrayClickCommand" />
             <tb:TaskbarIcon x:Key="MainWindowNotifyIcon"
-                IconSource="/PandaPlayer.ico"
+                IconSource="/Views/Icons/PandaPlayer.ico"
                 ToolTipText="Panda Player"
                             
                 LeftClickCommand="{StaticResource TrayClickCommand}"

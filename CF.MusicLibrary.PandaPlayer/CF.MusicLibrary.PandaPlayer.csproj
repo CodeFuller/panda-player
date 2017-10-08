@@ -41,7 +41,7 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>PandaPlayer.ico</ApplicationIcon>
+    <ApplicationIcon>Views\Icons\PandaPlayer.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CF.Library.Core, Version=0.1.6486.14019, Culture=neutral, processorArchitecture=MSIL">
@@ -427,7 +427,7 @@
     <Resource Include="Views\Icons\PauseButton.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="PandaPlayer.ico" />
+    <Resource Include="Views\Icons\PandaPlayer.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Icons\Ratings\Rating01.png" />
