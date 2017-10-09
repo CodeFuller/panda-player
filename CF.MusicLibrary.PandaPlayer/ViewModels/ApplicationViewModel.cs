@@ -107,6 +107,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => SwitchToExplorerSongList());
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => OnPlaylistSongChanged());
 			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistSongChanged());
+			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => NavigateLibraryExplorerToDisc(e.Disc));
 		}
 
 		public async Task Load()
@@ -198,6 +199,12 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private void SwitchToSongPlaylist()
 		{
 			SelectedSongListIndex = PlaylistSongListIndex;
+		}
+
+		private void NavigateLibraryExplorerToDisc(Disc disc)
+		{
+			LibraryExplorerViewModel.SwitchToDisc(disc);
+			SwitchToExplorerSongList();
 		}
 	}
 }

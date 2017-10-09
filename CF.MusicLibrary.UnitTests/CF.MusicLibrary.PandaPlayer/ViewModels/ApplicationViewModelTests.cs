@@ -517,5 +517,47 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			musicPlayerViewModelMock.Received(1).PlayFromSong(song);
 		}
+
+		[Test]
+		public void NavigateLibraryExplorerToDiscEventHandler_SwitchesLibraryExplorerToDisc()
+		{
+			//	Arrange
+
+			var disc = new Disc();
+
+			ILibraryExplorerViewModel libraryExplorerViewModelMock = Substitute.For<ILibraryExplorerViewModel>();
+			IApplicationViewModelHolder viewModelHolderStub = Substitute.For<IApplicationViewModelHolder>();
+			viewModelHolderStub.LibraryExplorerViewModel.Returns(libraryExplorerViewModelMock);
+
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), viewModelHolderStub,
+				Substitute.For<IMusicPlayerViewModel>(), Substitute.For<IViewNavigator>());
+			target.Load().Wait();
+
+			//	Act
+
+			Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(disc));
+
+			//	Assert
+
+			libraryExplorerViewModelMock.Received(1).SwitchToDisc(disc);
+		}
+
+		[Test]
+		public void NavigateLibraryExplorerToDiscEventHandler_SwitchesToExplorerSongListView()
+		{
+			//	Arrange
+
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
+				Substitute.For<IMusicPlayerViewModel>(), Substitute.For<IViewNavigator>());
+			target.Load().Wait();
+
+			//	Act
+
+			Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(new Disc()));
+
+			//	Assert
+
+			Assert.AreEqual(0, target.SelectedSongListIndex);
+		}
 	}
 }

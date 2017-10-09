@@ -1,4 +1,5 @@
-﻿using CF.MusicLibrary.BL.Objects;
+﻿using System.Windows.Input;
+using CF.MusicLibrary.BL.Objects;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
@@ -13,6 +14,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 		/// Returns null otherwise.
 		/// </summary>
 		Disc PlayedDisc { get; }
+
+		ICommand NavigateToSongDiscCommand { get; }
 
 		void SwitchToNextSong();
 

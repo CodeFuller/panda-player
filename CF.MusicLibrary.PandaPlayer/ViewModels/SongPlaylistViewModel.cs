@@ -5,6 +5,7 @@ using System.Windows.Input;
 using CF.Library.Core.Extensions;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
+using CF.MusicLibrary.PandaPlayer.Events.DiscEvents;
 using CF.MusicLibrary.PandaPlayer.Events.SongEvents;
 using CF.MusicLibrary.PandaPlayer.Events.SongListEvents;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -50,10 +51,13 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public override ICommand PlayFromSongCommand { get; }
 
+		public ICommand NavigateToSongDiscCommand { get; }
+
 		public SongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
 			: base(libraryContentUpdater, viewNavigator)
 		{
 			PlayFromSongCommand = new RelayCommand(PlayFromSong);
+			NavigateToSongDiscCommand = new RelayCommand(NavigateToSongDisc);
 
 			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => OnAddingNextSongs(e.Songs));
 			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => OnAddingLastSongs(e.Songs));
@@ -142,6 +146,17 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 				Messenger.Default.Send(new PlayPlaylistStartingFromSongEventArgs(selectedSong));
 			}
+		}
+
+		internal void NavigateToSongDisc()
+		{
+			var song = SelectedSongItem?.Song ?? CurrentSong;
+			if (song == null)
+			{
+				return;
+			}
+
+			Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(song.Disc));
 		}
 	}
 }

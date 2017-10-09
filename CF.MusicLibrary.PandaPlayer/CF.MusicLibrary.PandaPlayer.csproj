@@ -162,6 +162,7 @@
     <Compile Include="Events\DiscEvents\DiscArtChangedEventArgs.cs" />
     <Compile Include="Events\DiscEvents\LibraryExplorerDiscChangedEventArgs.cs" />
     <Compile Include="Events\LibraryLoadedEventArgs.cs" />
+    <Compile Include="Events\DiscEvents\NavigateLibraryExplorerToDiscEventArgs.cs" />
     <Compile Include="Events\SongListEvents\PlaylistChangedEventArgs.cs" />
     <Compile Include="Events\SongListEvents\PlaylistLoadedEventArgs.cs" />
     <Compile Include="Events\SongEvents\PlayPlaylistStartingFromSongEventArgs.cs" />

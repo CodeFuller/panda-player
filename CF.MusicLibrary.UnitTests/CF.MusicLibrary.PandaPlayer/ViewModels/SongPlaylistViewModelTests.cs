@@ -4,6 +4,7 @@ using System.Linq;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
+using CF.MusicLibrary.PandaPlayer.Events.DiscEvents;
 using CF.MusicLibrary.PandaPlayer.Events.SongEvents;
 using CF.MusicLibrary.PandaPlayer.Events.SongListEvents;
 using CF.MusicLibrary.PandaPlayer.ViewModels;
@@ -545,6 +546,82 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			//	Assert
 
 			Assert.IsNotNull(receivedEvent);
+		}
+
+		[Test]
+		public void NavigateToSongDiscCommand_IfSomeSongIsSelected_SendsNavigateLibraryExplorerToDiscEventForDiscOfThisSong()
+		{
+			//	Arrange
+
+			var currentDisc = new Disc();
+			var selectedDisc = new Disc();
+
+			Song currentSong = new Song { Disc = currentDisc };
+			Song selectedSong = new Song { Disc = selectedDisc };
+
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			target.SetSongs(new[] { currentSong, selectedSong });
+			target.SwitchToSong(currentSong);
+			target.SelectedSongItem = new SongListItem(selectedSong);
+
+			NavigateLibraryExplorerToDiscEventArgs receivedEvent = null;
+			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => receivedEvent = e);
+
+			//	Act
+
+			target.NavigateToSongDisc();
+
+			//	Assert
+
+			Assert.IsNotNull(receivedEvent);
+			Assert.AreSame(selectedDisc, receivedEvent.Disc);
+		}
+
+		[Test]
+		public void NavigateToSongDiscCommand_IfNoSongIsSelected_SendsNavigateLibraryExplorerToDiscEventForDiscOfCurrentSong()
+		{
+			//	Arrange
+
+			var currentDisc = new Disc();
+			Song currentSong = new Song { Disc = currentDisc };
+
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			target.SetSongs(new[] { new Song(), currentSong });
+			target.SwitchToSong(currentSong);
+
+			NavigateLibraryExplorerToDiscEventArgs receivedEvent = null;
+			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => receivedEvent = e);
+
+			//	Act
+
+			target.NavigateToSongDisc();
+
+			//	Assert
+
+			Assert.IsNotNull(receivedEvent);
+			Assert.AreSame(currentDisc, receivedEvent.Disc);
+		}
+
+		[Test]
+		public void NavigateToSongDiscCommand_IfThereIsNoSelectedOrCurrentSong_DoesNothing()
+		{
+			//	Arrange
+
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			target.SetSongs(new[] { new Song() });
+
+			bool receivedEvent = false;
+			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => receivedEvent = true);
+
+			//	Act
+
+			target.NavigateToSongDisc();
+
+			//	Assert
+
+			Assert.IsFalse(receivedEvent);
+			//	Avoiding uncovered lambda code (e => receivedEvent = true)
+			Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(null));
 		}
 	}
 }
