@@ -4,7 +4,7 @@ using System.Linq;
 using CF.Library.Core.Extensions;
 using CF.MusicLibrary.BL.Objects;
 
-namespace CF.MusicLibrary.PandaPlayer.Events
+namespace CF.MusicLibrary.PandaPlayer.Events.SongListEvents
 {
 	public abstract class BaseSongListEventArgs : EventArgs
 	{

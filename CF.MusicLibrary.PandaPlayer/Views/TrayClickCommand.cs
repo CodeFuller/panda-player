@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
-using CF.MusicLibrary.PandaPlayer.Events;
+using CF.MusicLibrary.PandaPlayer.Events.SongListEvents;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace CF.MusicLibrary.PandaPlayer.Views

@@ -4,6 +4,7 @@ using System.Linq;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events;
+using CF.MusicLibrary.PandaPlayer.Events.SongListEvents;
 using GalaSoft.MvvmLight.Messaging;
 using static CF.Library.Core.Application;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;

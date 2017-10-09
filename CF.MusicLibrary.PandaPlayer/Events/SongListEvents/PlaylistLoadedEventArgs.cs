@@ -1,6 +1,6 @@
 ﻿using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
-namespace CF.MusicLibrary.PandaPlayer.Events
+namespace CF.MusicLibrary.PandaPlayer.Events.SongListEvents
 {
 	public class PlaylistLoadedEventArgs : BaseSongListEventArgs
 	{

@@ -5,7 +5,7 @@ using CF.Library.Core.Attributes;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
-using CF.MusicLibrary.PandaPlayer.Events;
+using CF.MusicLibrary.PandaPlayer.Events.SongListEvents;
 using CF.MusicLibrary.PandaPlayer.ViewModels;
 using GalaSoft.MvvmLight.Messaging;
 using NSubstitute;

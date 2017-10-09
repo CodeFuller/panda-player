@@ -2,7 +2,7 @@
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.PandaPlayer;
-using CF.MusicLibrary.PandaPlayer.Events;
+using CF.MusicLibrary.PandaPlayer.Events.DiscEvents;
 using CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt;
 using GalaSoft.MvvmLight.Messaging;
 using NSubstitute;
