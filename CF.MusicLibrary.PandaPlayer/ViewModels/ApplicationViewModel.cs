@@ -180,8 +180,6 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		private void OnPlaylistFinished(PlaylistFinishedEventArgs e)
 		{
-			viewNavigator.BringApplicationToFront();
-
 			var playedDisc = Playlist.PlayedDisc;
 			if (playedDisc == null || playedDisc.Songs.All(s => s.Rating != null))
 			{

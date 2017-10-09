@@ -6,8 +6,6 @@ namespace CF.MusicLibrary.PandaPlayer
 {
 	public interface IViewNavigator
 	{
-		void BringApplicationToFront();
-
 		void ShowRateDiscView(Disc disc);
 
 		void ShowDiscPropertiesView(Disc disc);

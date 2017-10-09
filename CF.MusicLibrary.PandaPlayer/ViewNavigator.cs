@@ -35,12 +35,6 @@ namespace CF.MusicLibrary.PandaPlayer
 			this.windowService = windowService;
 		}
 
-		public void BringApplicationToFront()
-		{
-			ApplicationWindow.Show();
-			ApplicationWindow.Activate();
-		}
-
 		public void ShowRateDiscView(Disc disc)
 		{
 			var unratedSongsNumber = disc.Songs.Count(s => s.Rating == null);
