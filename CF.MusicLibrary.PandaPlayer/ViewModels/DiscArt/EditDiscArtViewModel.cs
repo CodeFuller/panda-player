@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CF.Library.Core.Configuration;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.BL.Interfaces;
@@ -9,6 +10,7 @@ using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.PandaPlayer.Events.DiscEvents;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt
@@ -60,6 +62,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt
 
 		public string ImageStatus => DiscArtImageFile.ImageStatus;
 
+		public ICommand LaunchSearchForDiscArtCommand { get; }
+
 		public EditDiscArtViewModel(IMusicLibrary musicLibrary, IDocumentDownloader documentDownloader, IDiscArtValidator discArtValidator,
 			IFileSystemFacade fileSystemFacade, IWebBrowser webBrowser)
 		{
@@ -90,6 +94,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt
 			this.webBrowser = webBrowser;
 
 			DiscArtImageFile = new DiscArtImageFile(discArtValidator, fileSystemFacade);
+
+			LaunchSearchForDiscArtCommand = new RelayCommand(LaunchSearchForDiscArt);
 		}
 
 		public async Task Load(Disc disc)
@@ -102,15 +108,12 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt
 			{
 				DiscArtImageFile.Load(currDiscCoverImage, false);
 			}
-			ImageWasChanged = false;
-
-			foreach (var discCoverSearchPageStub in AppSettings.GetOptionalValues<string>("DiscCoverImageLookupPages"))
+			else
 			{
-				string discCoverSearchPage = discCoverSearchPageStub;
-				discCoverSearchPage = discCoverSearchPage.Replace("{DiscArtist}", disc.Artist?.Name ?? String.Empty);
-				discCoverSearchPage = discCoverSearchPage.Replace("{DiscTitle}", disc.AlbumTitle ?? String.Empty);
-				webBrowser.OpenPage(new Uri(discCoverSearchPage));
+				LaunchSearchForDiscArt();
 			}
+
+			ImageWasChanged = false;
 		}
 
 		public void Unload()
@@ -166,6 +169,17 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt
 		private void DiscArtImageFileOnPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			RaisePropertyChanged(e.PropertyName);
+		}
+
+		internal void LaunchSearchForDiscArt()
+		{
+			foreach (var discCoverSearchPageStub in AppSettings.GetOptionalValues<string>("DiscCoverImageLookupPages"))
+			{
+				string discCoverSearchPage = discCoverSearchPageStub;
+				discCoverSearchPage = discCoverSearchPage.Replace("{DiscArtist}", Disc.Artist?.Name ?? String.Empty);
+				discCoverSearchPage = discCoverSearchPage.Replace("{DiscTitle}", Disc.AlbumTitle ?? String.Empty);
+				webBrowser.OpenPage(new Uri(discCoverSearchPage));
+			}
 		}
 	}
 }

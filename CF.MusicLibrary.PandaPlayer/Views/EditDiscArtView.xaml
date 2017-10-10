@@ -40,7 +40,8 @@
                 </Label.Style>
             </Label>
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Name="SaveButton" Content="Save" Width="100" Margin="10" IsDefault="True" Click="SaveButton_Click">
+                <Button Content="Search" Width="80" Margin="10" IsCancel="true" Command="{Binding LaunchSearchForDiscArtCommand}" />
+                <Button Name="SaveButton" Content="Save" Width="80" Margin="10" IsDefault="True" Click="SaveButton_Click">
                     <Button.IsEnabled>
                         <MultiBinding Converter="{StaticResource BooleanAndConverter}">
                             <Binding Path="ImageIsValid" />
@@ -48,7 +49,7 @@
                         </MultiBinding>
                     </Button.IsEnabled>
                 </Button>
-                <Button Content="Cancel" Width="100" Margin="10" IsCancel="true" Click="CancelButton_Click" />
+                <Button Content="Cancel" Width="80" Margin="10" IsCancel="true" Click="CancelButton_Click" />
             </StackPanel>
         </Grid>
     </StackPanel>

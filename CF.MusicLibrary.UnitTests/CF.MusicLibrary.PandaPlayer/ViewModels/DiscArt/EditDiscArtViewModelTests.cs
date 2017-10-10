@@ -195,7 +195,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.DiscA
 		}
 
 		[Test]
-		public void Load_IfSearchedDiscDataIsFilled_OpensDiscCoverImageLookupPagesCorrectly()
+		public void Load_IfDiscHasNoCoverAndDiscCoverImageLookupPagesAreConfigured_OpensDiscCoverImageLookupPagesCorrectly()
 		{
 			//	Arrange
 
@@ -211,9 +211,12 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.DiscA
 				SongsUnordered = new[] { new Song { Artist = new Artist { Name = "Some Artist" } } },
 			};
 
+			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();
+			musicLibraryStub.GetDiscCoverImage(disc).Returns(Task.FromResult((string)null));
+
 			IWebBrowser webBrowserMock = Substitute.For<IWebBrowser>();
 
-			var target = new EditDiscArtViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
+			var target = new EditDiscArtViewModel(musicLibraryStub, Substitute.For<IDocumentDownloader>(),
 				Substitute.For<IDiscArtValidator>(), Substitute.For<IFileSystemFacade>(), webBrowserMock);
 
 			//	Act
@@ -224,6 +227,33 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.DiscA
 
 			webBrowserMock.Received(1).OpenPage(new Uri("http://google.com?search1=\"Some Artist\" and \"Some Album\""));
 			webBrowserMock.Received(1).OpenPage(new Uri("http://google.com?search2=\"Some Artist\" and \"Some Album\""));
+		}
+
+		[Test]
+		public void Load_IfDiscHasCover_DoesNotOpenDiscCoverImageLookupPages()
+		{
+			//	Arrange
+
+			var settingsProvider = Substitute.For<ISettingsProvider>();
+			settingsProvider.GetOptionalValue<string>("DiscCoverImageLookupPages1").Returns("http://google.com?search1=\"{DiscArtist}\" and \"{DiscTitle}\"");
+			settingsProvider.GetOptionalValue<string>("DiscCoverImageLookupPages2").Returns((string)null);
+			AppSettings.SettingsProvider = settingsProvider;
+
+			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();
+			musicLibraryStub.GetDiscCoverImage(Arg.Any<Disc>()).Returns(Task.FromResult("cover.jpg"));
+
+			IWebBrowser webBrowserMock = Substitute.For<IWebBrowser>();
+
+			var target = new EditDiscArtViewModel(musicLibraryStub, Substitute.For<IDocumentDownloader>(),
+				Substitute.For<IDiscArtValidator>(), Substitute.For<IFileSystemFacade>(), webBrowserMock);
+
+			//	Act
+
+			target.Load(new Disc()).Wait();
+
+			//	Assert
+
+			webBrowserMock.DidNotReceive().OpenPage(Arg.Any<Uri>());
 		}
 
 		[Test]
