@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using CF.Library.Core.Facades;
 using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
@@ -38,7 +37,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			};
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IFileSystemFacade>());
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IDiscArtFileStorage>());
 
 			//	Act
 
@@ -106,7 +105,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			};
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(new[] { disc1, disc2 }.Select(d => d)));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IFileSystemFacade>());
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IDiscArtFileStorage>());
 
 			//	Act
 
@@ -138,7 +137,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			};
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IFileSystemFacade>());
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IDiscArtFileStorage>());
 
 			//	Act
 
@@ -177,7 +176,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			};
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IFileSystemFacade>());
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IDiscArtFileStorage>());
 
 			//	Act
 
@@ -230,7 +229,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			};
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(new[] {existingDisc}.AsEnumerable()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IFileSystemFacade>());
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IDiscArtFileStorage>());
 
 			//	Act
 
@@ -357,7 +356,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			discArtImageFileFactoryStub.CreateInstance().Returns(discArtImageFileStub);
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(new[] { existingDisc }.AsEnumerable()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, new MyLibraryStructurer(), discArtImageFileFactoryStub, Substitute.For<IFileSystemFacade>());
+			var target = new EditDiscsDetailsViewModel(discLibrary, new MyLibraryStructurer(), discArtImageFileFactoryStub, Substitute.For<IDiscArtFileStorage>());
 
 			target.SetDiscs(discs).Wait();
 

@@ -27,7 +27,8 @@ namespace CF.MusicLibrary.LibraryChecker
 
 			DIContainer.RegisterType<IApplicationLogic, ApplicationLogic>();
 			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepositoryEF>(new InjectionConstructor());
-			DIContainer.RegisterType<IMusicLibraryStorage, FileSystemMusicStorage>(new InjectionConstructor(typeof(IFileSystemFacade), typeof(ISongTagger), localStorageRoot));
+			DIContainer.RegisterType<IMusicLibraryStorage, FileSystemMusicStorage>(
+				new InjectionConstructor(typeof(IFileSystemFacade), typeof(ISongTagger), typeof(IDiscArtFileStorage), localStorageRoot));
 			DIContainer.RegisterType<ILibraryStructurer, MyLibraryStructurer>();
 			DIContainer.RegisterType<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
 			DIContainer.RegisterType<ISongTagger, SongTagger>();
@@ -36,6 +37,8 @@ namespace CF.MusicLibrary.LibraryChecker
 			DIContainer.RegisterType<IMessageLogger, ConsoleLogger>(new ContainerControlledLifetimeManager(), new InjectionConstructor(true));
 			DIContainer.RegisterType<IFileSystemFacade, FileSystemFacade>();
 			DIContainer.RegisterType<IDiscArtValidator, DiscArtValidator>();
+			DIContainer.RegisterType<IDiscArtFileStorage, DiscArtFileStorage>();
+			DIContainer.RegisterType<IImageFacade, ImageFacade>();
 
 			DIContainer.RegisterType<IDiscConsistencyChecker, DiscConsistencyChecker>();
 			DIContainer.RegisterType<IStorageConsistencyChecker, StorageConsistencyChecker>();

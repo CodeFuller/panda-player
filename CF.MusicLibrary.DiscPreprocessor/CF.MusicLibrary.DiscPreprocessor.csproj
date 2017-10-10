@@ -140,6 +140,7 @@
     <Compile Include="Events\SongTitleChangedEventArgs.cs" />
     <Compile Include="Events\SongTitleChangeEventArgs.cs" />
     <Compile Include="Events\SongTitleChangingEventArgs.cs" />
+    <Compile Include="IDiscCrawler.cs" />
     <Compile Include="MusicStorage\AddedDiscInfo.cs" />
     <Compile Include="MusicStorage\DsicType.cs" />
     <Compile Include="MusicStorage\WorkshopMusicStorage.cs" />

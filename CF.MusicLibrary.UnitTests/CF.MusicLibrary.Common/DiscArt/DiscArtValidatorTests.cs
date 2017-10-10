@@ -170,7 +170,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Common.DiscArt
 				Width = 500,
 				Height = 500,
 				FileSize = 500 * 1024 * 1024,
-				Format = ImageFormat.Png,
+				Format = ImageFormat.Icon,
 			};
 
 			var target = new DiscArtValidator(Substitute.For<IFileSystemFacade>());
@@ -194,7 +194,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Common.DiscArt
 				Width = 50,
 				Height = 10000,
 				FileSize = 500 * 1024 * 1024,
-				Format = ImageFormat.Png,
+				Format = ImageFormat.Icon,
 			};
 
 			var target = new DiscArtValidator(Substitute.For<IFileSystemFacade>());

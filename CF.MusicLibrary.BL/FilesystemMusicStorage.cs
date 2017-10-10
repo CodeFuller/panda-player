@@ -3,47 +3,35 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CF.Library.Core;
 using CF.Library.Core.Extensions;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Media;
 using CF.MusicLibrary.BL.Objects;
-using static CF.Library.Core.Application;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.BL
 {
 	public class FileSystemMusicStorage : IMusicLibraryStorage
 	{
-		private static string DiscCoverFileName = "cover.jpg";
-
 		private readonly IFileSystemFacade fileSystemFacade;
+		private readonly IDiscArtFileStorage discArtFileStorage;
 		private readonly string libraryRootDirectory;
-
 		private readonly ISongTagger songTagger;
-		private ISongTagger SongTagger
-		{
-			get
-			{
-				if (songTagger == null)
-				{
-					throw new InvalidOperationException($"SongTagger is not bootstrapped");
-				}
 
-				return songTagger;
-			}
-		}
-
-		public FileSystemMusicStorage(IFileSystemFacade fileSystemFacade, string libraryRootDirectory) :
-			this(fileSystemFacade, null, libraryRootDirectory)
-		{
-		}
-
-		public FileSystemMusicStorage(IFileSystemFacade fileSystemFacade, ISongTagger songTagger, string libraryRootDirectory)
+		public FileSystemMusicStorage(IFileSystemFacade fileSystemFacade, ISongTagger songTagger, IDiscArtFileStorage discArtFileStorage, string libraryRootDirectory)
 		{
 			if (fileSystemFacade == null)
 			{
 				throw new ArgumentNullException(nameof(fileSystemFacade));
+			}
+			if (songTagger == null)
+			{
+				throw new ArgumentNullException(nameof(songTagger));
+			}
+			if (discArtFileStorage == null)
+			{
+				throw new ArgumentNullException(nameof(discArtFileStorage));
 			}
 			if (libraryRootDirectory == null)
 			{
@@ -52,6 +40,7 @@ namespace CF.MusicLibrary.BL
 
 			this.fileSystemFacade = fileSystemFacade;
 			this.songTagger = songTagger;
+			this.discArtFileStorage = discArtFileStorage;
 			this.libraryRootDirectory = libraryRootDirectory;
 		}
 
@@ -59,11 +48,11 @@ namespace CF.MusicLibrary.BL
 		{
 			await Task.Run(() =>
 			{
-				string destFileName = UriToFilesystemPath(song.Uri);
+				string destFileName = GetSongFileName(song);
 				fileSystemFacade.CreateDirectory(Path.GetDirectoryName(destFileName));
 
 				StoreFile(songSourceFileName, destFileName, false);
-				SongTagger.SetTagData(destFileName, FillSongTagData(song));
+				songTagger.SetTagData(destFileName, FillSongTagData(song));
 				fileSystemFacade.SetReadOnlyAttribute(destFileName);
 			});
 		}
@@ -72,32 +61,40 @@ namespace CF.MusicLibrary.BL
 		{
 			await Task.Run(() =>
 			{
-				var songFileName = UriToFilesystemPath(song.Uri);
-				Logger.WriteInfo($"Deleting song file '{songFileName}'");
+				var songFileName = GetSongFileName(song);
+				Application.Logger.WriteInfo($"Deleting song file '{songFileName}'");
 				DeleteFile(songFileName);
 
 				var discDirectory = Path.GetDirectoryName(songFileName);
 				var restDirectoryFiles = fileSystemFacade.EnumerateFiles(discDirectory).ToList();
-				Logger.WriteDebug($"Rest directory files: {restDirectoryFiles.Count}");
-				if (restDirectoryFiles.Count == 0 || restDirectoryFiles.Count == 1 && IsCoverImageFile(restDirectoryFiles.Single()))
+				Application.Logger.WriteDebug($"Rest directory files: {restDirectoryFiles.Count}");
+				if (restDirectoryFiles.Count > 1)
 				{
-					if (restDirectoryFiles.Count == 1)
+					return;
+				}
+
+				if (restDirectoryFiles.Count == 1)
+				{
+					var discCoverImageFileName = restDirectoryFiles.Single();
+					if (!discArtFileStorage.IsCoverImageFile(discCoverImageFileName))
 					{
-						var coverImageFileName = restDirectoryFiles.Single();
-						Logger.WriteInfo($"Deleting cover image file '{coverImageFileName}'");
-						DeleteFile(coverImageFileName);
+						//	Rest directory file is not a cover image
+						return;
 					}
 
-					//	Deleting directories that became empty (disc, artist, category, ...)
-					foreach (var currDirectoryPath in GetParentDirectoriesWithinStorage(discDirectory))
+					Application.Logger.WriteInfo($"Deleting cover image file '{discCoverImageFileName}'");
+					DeleteFile(discCoverImageFileName);
+				}
+
+				//	Deleting directories that became empty (disc, artist, category, ...)
+				foreach (var currDirectoryPath in GetParentDirectoriesWithinStorage(discDirectory))
+				{
+					if (!fileSystemFacade.DirectoryIsEmpty(currDirectoryPath))
 					{
-						if (!fileSystemFacade.DirectoryIsEmpty(currDirectoryPath))
-						{
-							break;
-						}
-						Logger.WriteInfo($"Deleting empty directory '{currDirectoryPath}'");
-						fileSystemFacade.DeleteDirectory(currDirectoryPath);
+						break;
 					}
+					Application.Logger.WriteInfo($"Deleting empty directory '{currDirectoryPath}'");
+					fileSystemFacade.DeleteDirectory(currDirectoryPath);
 				}
 			});
 		}
@@ -114,71 +111,52 @@ namespace CF.MusicLibrary.BL
 						!String.Equals(Path.GetFullPath(currDirectoryPath), Path.GetFullPath(libraryRootDirectory), StringComparison.OrdinalIgnoreCase));
 		}
 
-		private static bool IsCoverImageFile(string filePath)
-		{
-			return String.Equals(Path.GetFileName(filePath), DiscCoverFileName, StringComparison.OrdinalIgnoreCase);
-		}
-
 		public async Task SetDiscCoverImage(Disc disc, string coverImageFileName)
 		{
-			await Task.Run(() =>
-			{
-				var storageCoverImageFileName = GetDiscCoverImageFileName(disc);
-				if (fileSystemFacade.FileExists(storageCoverImageFileName))
-				{
-					DeleteFile(storageCoverImageFileName);
-				}
-				StoreFile(coverImageFileName, storageCoverImageFileName, true);
-			});
+			await Task.Run(() => discArtFileStorage.StoreDiscCoverImage(GetDiscDirecotry(disc), coverImageFileName));
 		}
 
 		public async Task<string> GetDiscCoverImage(Disc disc)
 		{
-			var discCoverImageFileName = GetDiscCoverImageFileName(disc);
-			return await Task.FromResult(fileSystemFacade.FileExists(discCoverImageFileName) ? discCoverImageFileName : null);
-		}
-
-		private string GetDiscCoverImageFileName(Disc disc)
-		{
-			return Path.Combine(UriToFilesystemPath(disc.Uri), DiscCoverFileName);
+			return await Task.FromResult(discArtFileStorage.GetDiscCoverImageFileName(GetDiscDirecotry(disc)));
 		}
 
 		public async Task UpdateSongTagData(Song song, UpdatedSongProperties updatedProperties)
 		{
 			await Task.Run(() =>
 			{
-				string songFileName = UriToFilesystemPath(song.Uri);
+				string songFileName = GetSongFileName(song);
 				fileSystemFacade.ClearReadOnlyAttribute(songFileName);
-				SongTagger.SetTagData(songFileName, FillSongTagData(song));
+				songTagger.SetTagData(songFileName, FillSongTagData(song));
 				fileSystemFacade.SetReadOnlyAttribute(songFileName);
 			});
 		}
 
 		public async Task FixSongTagData(Song song)
 		{
-			await Task.Run(() => SongTagger.FixTagData(UriToFilesystemPath(song.Uri)));
+			await Task.Run(() => songTagger.FixTagData(UriToFilesystemPath(song.Uri)));
 		}
 
 		public async Task<SongTagData> GetSongTagData(Song song)
 		{
-			return await Task.Run(() => SongTagger.GetTagData(UriToFilesystemPath(song.Uri)));
+			return await Task.Run(() => songTagger.GetTagData(GetSongFileName(song)));
 		}
 
 		public async Task<IEnumerable<SongTagType>> GetSongTagTypes(Song song)
 		{
-			return await Task.Run(() => SongTagger.GetTagTypes(UriToFilesystemPath(song.Uri)));
+			return await Task.Run(() => songTagger.GetTagTypes(GetSongFileName(song)));
 		}
 
 		public Task<string> GetSongFile(Song song)
 		{
-			return Task.FromResult(UriToFilesystemPath(song.Uri));
+			return Task.FromResult(GetSongFileName(song));
 		}
 
 		public async Task ChangeDiscUri(Disc disc, Uri newDiscUri)
 		{
 			await Task.Run(() =>
 			{
-				var oldFolderName = UriToFilesystemPath(disc.Uri);
+				var oldFolderName = GetDiscDirecotry(disc);
 				var newFolderName = UriToFilesystemPath(newDiscUri);
 				fileSystemFacade.MoveDirectory(oldFolderName, newFolderName);
 			});
@@ -188,7 +166,7 @@ namespace CF.MusicLibrary.BL
 		{
 			await Task.Run(() =>
 			{
-				var oldFileName = UriToFilesystemPath(song.Uri);
+				var oldFileName = GetSongFileName(song);
 				var newFileName = UriToFilesystemPath(newSongUri);
 				fileSystemFacade.MoveFile(oldFileName, newFileName);
 			});
@@ -201,7 +179,7 @@ namespace CF.MusicLibrary.BL
 				//	Checking that all song files exist and have read-only attribute set.
 				foreach (var song in library.Songs)
 				{
-					var songFileName = UriToFilesystemPath(song.Uri);
+					var songFileName = GetSongFileName(song);
 					if (!fileSystemFacade.FileExists(songFileName))
 					{
 						registrator.RegisterInconsistency_MissingSongData(song);
@@ -221,12 +199,16 @@ namespace CF.MusicLibrary.BL
 			HashSet<string> skipList = new HashSet<string>(new[] { @"d:\music\.sync" });
 
 			HashSet<string> expectedDirectories = new HashSet<string>();
-			HashSet<string> expectedFileNames = new HashSet<string>(library.Songs.Select(s => UriToFilesystemPath(s.Uri)));
+			HashSet<string> expectedFileNames = new HashSet<string>(library.Songs.Select(GetSongFileName));
 
 			foreach (var disc in library.Discs)
 			{
-				var discDirectory = UriToFilesystemPath(disc.Uri);
-				expectedFileNames.Add(Path.Combine(discDirectory, DiscCoverFileName));
+				var discDirectory = GetDiscDirecotry(disc);
+				var discCoverFileName = discArtFileStorage.GetDiscCoverImageFileName(discDirectory);
+				if (discCoverFileName != null)
+				{
+					expectedFileNames.Add(discCoverFileName);
+				}
 				foreach (var directory in GetParentDirectoriesWithinStorage(discDirectory))
 				{
 					expectedDirectories.Add(directory);
@@ -238,7 +220,7 @@ namespace CF.MusicLibrary.BL
 				if (!expectedFileNames.Contains(fileName) &&
 					!skipList.Any(s => fileName.StartsWith(s, StringComparison.OrdinalIgnoreCase)))
 				{
-					registrator.RegisterInconsistency_LibraryData(Current($"Detected unexpected file within the storage: {fileName}"));
+					registrator.RegisterInconsistency_LibraryData(FormattableStringExtensions.Current($"Detected unexpected file within the storage: {fileName}"));
 				}
 			}
 
@@ -247,7 +229,7 @@ namespace CF.MusicLibrary.BL
 				if (!expectedDirectories.Contains(directory) &&
 					!skipList.Any(s => directory.StartsWith(s, StringComparison.OrdinalIgnoreCase)))
 				{
-					registrator.RegisterInconsistency_LibraryData(Current($"Detected unexpected directory within the storage: {directory}"));
+					registrator.RegisterInconsistency_LibraryData(FormattableStringExtensions.Current($"Detected unexpected directory within the storage: {directory}"));
 				}
 			}
 		}
@@ -293,6 +275,16 @@ namespace CF.MusicLibrary.BL
 				Track = song.TrackNumber,
 				Title = song.Title,
 			};
+		}
+
+		private string GetSongFileName(Song song)
+		{
+			return UriToFilesystemPath(song.Uri);
+		}
+
+		private string GetDiscDirecotry(Disc disc)
+		{
+			return UriToFilesystemPath(disc.Uri);
 		}
 	}
 }

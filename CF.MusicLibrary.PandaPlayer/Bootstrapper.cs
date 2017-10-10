@@ -47,7 +47,8 @@ namespace CF.MusicLibrary.PandaPlayer
 
 			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepositoryEF>(new InjectionConstructor());
 			DIContainer.RegisterType<ISongTagger, SongTagger>();
-			DIContainer.RegisterType<IMusicLibraryStorage, FileSystemMusicStorage>(new InjectionConstructor(typeof(IFileSystemFacade), typeof(ISongTagger), localStorageRoot));
+			DIContainer.RegisterType<IMusicLibraryStorage, FileSystemMusicStorage>(
+				new InjectionConstructor(typeof(IFileSystemFacade), typeof(ISongTagger), typeof(IDiscArtFileStorage), localStorageRoot));
 			DIContainer.RegisterType<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
 			DIContainer.RegisterType<IFileSystemFacade, FileSystemFacade>();
 			DIContainer.RegisterInstance(new DiscLibrary(async () =>
@@ -92,6 +93,8 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<IDocumentDownloader, HttpDocumentDownloader>();
 			DIContainer.RegisterType<IWebBrowser, SystemDefaultWebBrowser>();
 			DIContainer.RegisterType<IDiscArtValidator, DiscArtValidator>();
+			DIContainer.RegisterType<IDiscArtFileStorage, DiscArtFileStorage>();
+			DIContainer.RegisterType<IImageFacade, ImageFacade>();
 
 			DIContainer.RegisterType<IPlaylistAdviser, RankBasedDiscAdviser>("RankBasedDiscAdviser");
 			DIContainer.RegisterType<IPlaylistAdviser, HighlyRatedSongsAdviser>("HighlyRatedSongsAdviser");

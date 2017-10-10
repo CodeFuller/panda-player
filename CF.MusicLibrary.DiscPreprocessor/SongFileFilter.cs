@@ -1,14 +1,26 @@
-﻿using System.IO;
+﻿using System;
+using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.DiscPreprocessor.Interfaces;
 
 namespace CF.MusicLibrary.DiscPreprocessor
 {
 	public class SongFileFilter : ISongFileFilter
 	{
+		private readonly IDiscArtFileStorage discArtFileStorage;
+
+		public SongFileFilter(IDiscArtFileStorage discArtFileStorage)
+		{
+			if (discArtFileStorage == null)
+			{
+				throw new ArgumentNullException(nameof(discArtFileStorage));
+			}
+
+			this.discArtFileStorage = discArtFileStorage;
+		}
+
 		public bool IsSongFile(string filePath)
 		{
-			var filename = Path.GetFileName(filePath);
-			return filename != "cover.jpg";
+			return !discArtFileStorage.IsCoverImageFile(filePath);
 		}
 	}
 }

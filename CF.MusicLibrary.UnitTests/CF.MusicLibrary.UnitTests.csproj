@@ -82,6 +82,7 @@
     <Compile Include="..\Global\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CF.MusicLibrary.BL\DiscArtFileStorageTests.cs" />
     <Compile Include="CF.MusicLibrary.BL\MusicLibrary.Writer.Tests.cs" />
     <Compile Include="CF.MusicLibrary.BL\Objects\DiscLibraryTests.cs" />
     <Compile Include="CF.MusicLibrary.BL\Objects\DiscTests.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ParsingContent\EthalonDiscParserTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ParsingSong\EthalonSongParserTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ParsingContent\InputContentSplitterTests.cs" />
+    <Compile Include="CF.MusicLibrary.DiscPreprocessor\SongFileFilterTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\AddToLibraryViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.BL\DiscTitleToAlbumMapperTests.cs" />
     <Compile Include="CF.MusicLibrary.BL\FilesystemMusicStorageTests.cs" />

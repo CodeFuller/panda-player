@@ -54,6 +54,7 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="DiscTitleToAlbumMapper.cs" />
+    <Compile Include="Interfaces\IDiscArtFileStorage.cs" />
     <Compile Include="Interfaces\ILibraryStorageInconsistencyRegistrator.cs" />
     <Compile Include="Media\ISongMediaInfoProvider.cs" />
     <Compile Include="Media\SongMediaInfo.cs" />

@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Core.Exceptions;
-using CF.Library.Core.Facades;
 using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
@@ -23,12 +22,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 {
 	public class EditDiscsDetailsViewModel : ViewModelBase, IEditDiscsDetailsViewModel
 	{
-		private const string CoverImageFileName = "cover.jpg";
-
 		private readonly DiscLibrary discLibrary;
 		private readonly ILibraryStructurer libraryStructurer;
 		private readonly IObjectFactory<IDiscArtImageFile> discArtImageFileFactory;
-		private readonly IFileSystemFacade fileSystemFacade;
+		private readonly IDiscArtFileStorage discArtFileStorage;
 
 		public string Name => "Edit Discs Details";
 
@@ -56,7 +53,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		public ICommand RefreshContentCommand { get; }
 
 		public EditDiscsDetailsViewModel(DiscLibrary discLibrary, ILibraryStructurer libraryStructurer,
-			IObjectFactory<IDiscArtImageFile> discArtImageFileFactory, IFileSystemFacade fileSystemFacade)
+			IObjectFactory<IDiscArtImageFile> discArtImageFileFactory, IDiscArtFileStorage discArtFileStorage)
 		{
 			if (discLibrary == null)
 			{
@@ -70,15 +67,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			{
 				throw new ArgumentNullException(nameof(discArtImageFileFactory));
 			}
-			if (fileSystemFacade == null)
+			if (discArtFileStorage == null)
 			{
-				throw new ArgumentNullException(nameof(fileSystemFacade));
+				throw new ArgumentNullException(nameof(discArtFileStorage));
 			}
 
 			this.discLibrary = discLibrary;
 			this.libraryStructurer = libraryStructurer;
 			this.discArtImageFileFactory = discArtImageFileFactory;
-			this.fileSystemFacade = fileSystemFacade;
+			this.discArtFileStorage = discArtFileStorage;
 
 			RefreshContentCommand = new RelayCommand(RefreshContent);
 		}
@@ -138,8 +135,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		{
 			foreach (var disc in Discs)
 			{
-				var coverImagePath = Path.Combine(disc.SourcePath, CoverImageFileName);
-				if (fileSystemFacade.FileExists(coverImagePath))
+				var coverImagePath = discArtFileStorage.GetDiscCoverImageFileName(disc.SourcePath);
+				if (coverImagePath != null)
 				{
 					disc.SetDiscCoverImage(coverImagePath);
 				}

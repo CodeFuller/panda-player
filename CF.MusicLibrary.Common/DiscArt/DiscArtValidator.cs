@@ -10,6 +10,12 @@ namespace CF.MusicLibrary.Common.DiscArt
 {
 	public class DiscArtValidator : IDiscArtValidator
 	{
+		private static readonly ImageFormat[] SupportedDiscCoverImageFormats =
+		{
+			ImageFormat.Jpeg,
+			ImageFormat.Png,
+		};
+
 		private const int MinWidthAndHeight = 300;
 
 		private const int MaxWidthAndHeight = 5000;
@@ -66,7 +72,7 @@ namespace CF.MusicLibrary.Common.DiscArt
 				validationResults |= DiscArtValidationResults.FileSizeIsTooBig;
 			}
 
-			if (!ImageFormat.Jpeg.Equals(imageInfo.Format))
+			if (SupportedDiscCoverImageFormats.All(format => !format.Equals(imageInfo.Format)))
 			{
 				validationResults |= DiscArtValidationResults.UnsupportedFormat;
 			}

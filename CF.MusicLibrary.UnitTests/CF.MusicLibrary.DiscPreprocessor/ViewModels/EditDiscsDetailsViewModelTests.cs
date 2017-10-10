@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using CF.Library.Core.Facades;
 using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.BL.Interfaces;
 using CF.MusicLibrary.BL.Objects;
@@ -20,25 +19,25 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 		public void Constructor_IfDiscLibraryArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new EditDiscsDetailsViewModel(null, Substitute.For<ILibraryStructurer>(),
-				Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IFileSystemFacade>()));
+				Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IDiscArtFileStorage>()));
 		}
 
 		[Test]
 		public void Constructor_IfLibraryStructurerArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new EditDiscsDetailsViewModel(new DiscLibrary(), null,
-				Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IFileSystemFacade>()));
+				Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IDiscArtFileStorage>()));
 		}
 
 		[Test]
 		public void Constructor_IfDiscArtImageFileFactoryArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new EditDiscsDetailsViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(),
-				null, Substitute.For<IFileSystemFacade>()));
+				null, Substitute.For<IDiscArtFileStorage>()));
 		}
 
 		[Test]
-		public void Constructor_IfFileSystemFacadeArgumentIsNull_ThrowsArgumentNullException()
+		public void Constructor_IfDiscArtFileStorageArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new EditDiscsDetailsViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(),
 				Substitute.For<IObjectFactory<IDiscArtImageFile>>(), null));
@@ -62,11 +61,11 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 			IObjectFactory<IDiscArtImageFile> discArtImageFileFactoryStub = Substitute.For<IObjectFactory<IDiscArtImageFile>>();
 			discArtImageFileFactoryStub.CreateInstance().Returns(discArtImageFileMock);
 
-			IFileSystemFacade fileSystemFacadeStub = Substitute.For<IFileSystemFacade>();
-			fileSystemFacadeStub.FileExists(@"Workshop\Some Artist\2000 - Some Disc\cover.jpg").Returns(true);
+			IDiscArtFileStorage discArtFileStorageStub = Substitute.For<IDiscArtFileStorage>();
+			discArtFileStorageStub.GetDiscCoverImageFileName(@"Workshop\Some Artist\2000 - Some Disc").Returns(@"Workshop\Some Artist\2000 - Some Disc\SomeCover.img");
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, fileSystemFacadeStub);
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, discArtFileStorageStub);
 
 			//	Act
 
@@ -74,7 +73,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 			//	Assert
 
-			discArtImageFileMock.Received(1).Load(@"Workshop\Some Artist\2000 - Some Disc\cover.jpg", false);
+			discArtImageFileMock.Received(1).Load(@"Workshop\Some Artist\2000 - Some Disc\SomeCover.img", false);
 		}
 
 		[Test]
@@ -95,11 +94,11 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 			IObjectFactory<IDiscArtImageFile> discArtImageFileFactoryStub = Substitute.For<IObjectFactory<IDiscArtImageFile>>();
 			discArtImageFileFactoryStub.CreateInstance().Returns(discArtImageFileMock);
 
-			IFileSystemFacade fileSystemFacadeStub = Substitute.For<IFileSystemFacade>();
-			fileSystemFacadeStub.FileExists(Arg.Any<string>()).Returns(false);
+			IDiscArtFileStorage discArtFileStorageStub = Substitute.For<IDiscArtFileStorage>();
+			discArtFileStorageStub.GetDiscCoverImageFileName(@"Workshop\Some Artist\2000 - Some Disc").Returns((string)null);
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, fileSystemFacadeStub);
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, discArtFileStorageStub);
 
 			//	Act
 
@@ -128,21 +127,19 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 			IObjectFactory<IDiscArtImageFile> discArtImageFileFactoryStub = Substitute.For<IObjectFactory<IDiscArtImageFile>>();
 			discArtImageFileFactoryStub.CreateInstance().Returns(discArtImageFileMock);
 
-			IFileSystemFacade fileSystemFacadeStub = Substitute.For<IFileSystemFacade>();
-			fileSystemFacadeStub.FileExists(@"Workshop\Some Artist\2000 - Some Disc\cover.jpg").Returns(true);
+			IDiscArtFileStorage discArtFileStorageStub = Substitute.For<IDiscArtFileStorage>();
+			discArtFileStorageStub.GetDiscCoverImageFileName(@"Workshop\Some Artist\2000 - Some Disc").Returns(@"Workshop\Some Artist\2000 - Some Disc\SomeCover.img");
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, fileSystemFacadeStub);
-			target.SetDiscs(new[] { addedDisc }).Wait();
-			discArtImageFileMock.ClearReceivedCalls();
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, discArtFileStorageStub);
 
 			//	Act
 
-			target.RefreshContent();
+			target.SetDiscs(new[] { addedDisc }).Wait();
 
 			//	Assert
 
-			discArtImageFileMock.Received(1).Load(@"Workshop\Some Artist\2000 - Some Disc\cover.jpg", false);
+			discArtImageFileMock.Received(1).Load(@"Workshop\Some Artist\2000 - Some Disc\SomeCover.img", false);
 		}
 
 		[Test]
@@ -163,17 +160,15 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 			IObjectFactory<IDiscArtImageFile> discArtImageFileFactoryStub = Substitute.For<IObjectFactory<IDiscArtImageFile>>();
 			discArtImageFileFactoryStub.CreateInstance().Returns(discArtImageFileMock);
 
-			IFileSystemFacade fileSystemFacadeStub = Substitute.For<IFileSystemFacade>();
-			fileSystemFacadeStub.FileExists(Arg.Any<string>()).Returns(false);
+			IDiscArtFileStorage discArtFileStorageStub = Substitute.For<IDiscArtFileStorage>();
+			discArtFileStorageStub.GetDiscCoverImageFileName(@"Workshop\Some Artist\2000 - Some Disc").Returns((string)null);
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, fileSystemFacadeStub);
-			target.SetDiscs(new[] { addedDisc }).Wait();
-			discArtImageFileMock.ClearReceivedCalls();
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, discArtFileStorageStub);
 
 			//	Act
 
-			target.RefreshContent();
+			target.SetDiscs(new[] { addedDisc }).Wait();
 
 			//	Assert
 
@@ -209,7 +204,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 			discArtImageFileFactoryStub.CreateInstance().Returns(discArtImageFileStub);
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, Substitute.For<IFileSystemFacade>());
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, Substitute.For<IDiscArtFileStorage>());
 			target.SetDiscs(new[] { addedDisc1, addedDisc2 }).Wait();
 
 			//	Act
@@ -251,7 +246,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 			discArtImageFileFactoryStub.CreateInstance().Returns(discArtImageFileStub);
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(new [] { existingDisc }.AsEnumerable()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, Substitute.For<IFileSystemFacade>());
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, Substitute.For<IDiscArtFileStorage>());
 			target.SetDiscs(new[] { addedDisc }).Wait();
 
 			//	Act

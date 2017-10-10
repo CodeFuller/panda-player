@@ -72,17 +72,26 @@
     <Compile Include="..\Global\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DiscArt\DiscArtFileStorage.cs" />
     <Compile Include="DiscArt\DiscArtImageFile.cs" />
     <Compile Include="DiscArt\DiscArtImageInfo.cs" />
     <Compile Include="DiscArt\DiscArtValidationResults.cs" />
     <Compile Include="DiscArt\DiscArtValidator.cs" />
     <Compile Include="DiscArt\IDiscArtImageFile.cs" />
     <Compile Include="DiscArt\IDiscArtValidator.cs" />
+    <Compile Include="DiscArt\IImageFacade.cs" />
+    <Compile Include="DiscArt\ImageFacade.cs" />
     <Compile Include="FileSizeFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CF.MusicLibrary.BL\CF.MusicLibrary.BL.csproj">
+      <Project>{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}</Project>
+      <Name>CF.MusicLibrary.BL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

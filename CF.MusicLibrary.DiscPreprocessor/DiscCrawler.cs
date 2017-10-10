@@ -7,7 +7,7 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.DiscPreprocessor
 {
-	public class DiscCrawler
+	public class DiscCrawler : IDiscCrawler
 	{
 		private readonly ISongFileFilter songFileFilter;
 
@@ -29,7 +29,6 @@ namespace CF.MusicLibrary.DiscPreprocessor
 		private IEnumerable<DiscContent> LoadDiscs(DirectoryInfo directoryInfo)
 		{
 			List<string> songFiles = directoryInfo.GetFiles().
-				Where(IsSongFile).
 				OrderBy(f => f.Name).
 				Select(f => f.FullName).
 				ToList();
@@ -53,11 +52,6 @@ namespace CF.MusicLibrary.DiscPreprocessor
 			{
 				return nestedDiscs;
 			}
-		}
-
-		private bool IsSongFile(FileInfo fileInfo)
-		{
-			return true;
 		}
 	}
 }
