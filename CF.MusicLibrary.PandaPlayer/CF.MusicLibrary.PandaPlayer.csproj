@@ -235,7 +235,6 @@
     <Compile Include="ViewNavigator.cs" />
     <Compile Include="Events\SongEvents\PlayDiscFromSongEventArgs.cs" />
     <Compile Include="Events\SongListEvents\PlaylistFinishedEventArgs.cs" />
-    <Compile Include="Events\SongListEvents\ReversePlayingEventArgs.cs" />
     <Compile Include="ContentUpdate\ILibraryContentUpdater.cs" />
     <Compile Include="ContentUpdate\LibraryContentUpdater.cs" />
     <Compile Include="IViewNavigator.cs" />
@@ -288,7 +287,6 @@
     <Compile Include="Views\SongListView.xaml.cs">
       <DependentUpon>SongListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TrayClickCommand.cs" />
     <Compile Include="Views\ValueConverters\SongsTotalDurationValueConverter.cs" />
     <Compile Include="Views\ViewModelExtensions.cs" />
     <Page Include="Views\DiscAdviserView.xaml">

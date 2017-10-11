@@ -559,5 +559,47 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			Assert.AreEqual(0, target.SelectedSongListIndex);
 		}
+
+		[Test]
+		public void ReversePlayingCommand_IfPlayerIsInPlayingState_PausesPlayback()
+		{
+			//	Arrange
+
+			IMusicPlayerViewModel musicPlayerViewModelMock = Substitute.For<IMusicPlayerViewModel>();
+			musicPlayerViewModelMock.IsPlaying.Returns(true);
+
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
+				musicPlayerViewModelMock, Substitute.For<IViewNavigator>());
+
+			//	Act
+
+			target.ReversePlaying();
+
+			//	Assert
+
+			musicPlayerViewModelMock.Received(1).Pause();
+			musicPlayerViewModelMock.DidNotReceive().Play();
+		}
+
+		[Test]
+		public void ReversePlayingCommand_IfPlayerIsInPausedState_ResumesPlayback()
+		{
+			//	Arrange
+
+			IMusicPlayerViewModel musicPlayerViewModelMock = Substitute.For<IMusicPlayerViewModel>();
+			musicPlayerViewModelMock.IsPlaying.Returns(false);
+
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
+				musicPlayerViewModelMock, Substitute.For<IViewNavigator>());
+
+			//	Act
+
+			target.ReversePlaying();
+
+			//	Assert
+
+			musicPlayerViewModelMock.Received(1).Play();
+			musicPlayerViewModelMock.DidNotReceive().Pause();
+		}
 	}
 }

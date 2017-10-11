@@ -20,56 +20,53 @@
         <KeyBinding Key="F12" Command="{Binding ShowLibraryStatisticsCommand}" />
     </Window.InputBindings>
 
-    <Window.Resources>
-        <ResourceDictionary>
-            <!-- http://www.codeproject.com/Articles/36468/WPF-NotifyIcon -->
-            <views:TrayClickCommand x:Key="TrayClickCommand" />
-            <tb:TaskbarIcon x:Key="MainWindowNotifyIcon"
-                IconSource="/Views/Icons/PandaPlayer.ico"
-                ToolTipText="Panda Player"
-                            
-                LeftClickCommand="{StaticResource TrayClickCommand}"
-                LeftClickCommandParameter="LeftClick"
-
-                DoubleClickCommand="{StaticResource TrayClickCommand}"
-                DoubleClickCommandParameter="DoubleClick" />
-
-        </ResourceDictionary>
-    </Window.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="300"/>
-                <RowDefinition Height="25"/>
-                <RowDefinition Height="25"/>
-            </Grid.RowDefinitions>
-            <views:LibraryExplorerView Grid.Row="0" x:Name="LibraryExplorer" DataContext="{Binding LibraryExplorerViewModel}" />
-            <views:DiscArtView x:Name="DiscArtView"  Grid.Row="1" DataContext="{Binding ViewModelHolder.DiscArtViewModel}" BorderThickness="1,0,1,1"
-                               MouseLeftButtonDown="DiscArtView_MouseLeftButtonDown"/>
-            <views:DiscAdviserView Grid.Row="2" DataContext="{Binding ViewModelHolder.DiscAdviserViewModel}" BorderThickness="1,0,1,1" />
-            <views:MusicPlayerView Grid.Row="3" DataContext="{Binding MusicPlayerViewModel}" BorderThickness="1,0,1,0" />
+        <Grid>
+            <!-- http://www.codeproject.com/Articles/36468/WPF-NotifyIcon -->
+            <tb:TaskbarIcon Name="TaskbarIcon"
+                IconSource="/Views/Icons/PandaPlayer.ico"
+                ToolTipText="{Binding Title}"
+                LeftClickCommand="{Binding ReversePlayingCommand}"/>
         </Grid>
 
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="300"/>
-            </Grid.RowDefinitions>
-            <TabControl Grid.Row="0" TabStripPlacement="Bottom" SelectedIndex="{Binding SelectedSongListIndex}" BorderThickness="0">
-                <TabItem Header="Content">
-                    <views:SongListView DataContext="{Binding LibraryExplorerViewModel.SongListViewModel}" />
-                </TabItem>
-                <TabItem Header="Playlist">
-                    <views:SongListView DataContext="{Binding Playlist}" />
-                </TabItem>
-            </TabControl>
-            <views:LoggerView Grid.Row="1" DataContext="{Binding ViewModelHolder.LoggerViewModel}" />
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="300"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                </Grid.RowDefinitions>
+                <views:LibraryExplorerView Grid.Row="0" x:Name="LibraryExplorer" DataContext="{Binding LibraryExplorerViewModel}" />
+                <views:DiscArtView x:Name="DiscArtView"  Grid.Row="1" DataContext="{Binding ViewModelHolder.DiscArtViewModel}" BorderThickness="1,0,1,1"
+                               MouseLeftButtonDown="DiscArtView_MouseLeftButtonDown"/>
+                <views:DiscAdviserView Grid.Row="2" DataContext="{Binding ViewModelHolder.DiscAdviserViewModel}" BorderThickness="1,0,1,1" />
+                <views:MusicPlayerView Grid.Row="3" DataContext="{Binding MusicPlayerViewModel}" BorderThickness="1,0,1,0" />
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="300"/>
+                </Grid.RowDefinitions>
+                <TabControl Grid.Row="0" TabStripPlacement="Bottom" SelectedIndex="{Binding SelectedSongListIndex}" BorderThickness="0">
+                    <TabItem Header="Content">
+                        <views:SongListView DataContext="{Binding LibraryExplorerViewModel.SongListViewModel}" />
+                    </TabItem>
+                    <TabItem Header="Playlist">
+                        <views:SongListView DataContext="{Binding Playlist}" />
+                    </TabItem>
+                </TabControl>
+                <views:LoggerView Grid.Row="1" DataContext="{Binding ViewModelHolder.LoggerViewModel}" />
+            </Grid>
         </Grid>
     </Grid>
+
 </Window>
