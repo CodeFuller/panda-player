@@ -1,6 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Linq;
+using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Media;
 using CF.MusicLibrary.PandaPlayer.ViewModels;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
@@ -129,6 +133,38 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 			{
 				frameworkElement.ContextMenu = null;
 			}
+		}
+
+		private void ContentDataGrid_OnKeyDown(object sender, KeyEventArgs e)
+		{
+			var enteredText = GetTextFromKey(e.Key);
+			if (String.IsNullOrEmpty(enteredText))
+			{
+				return;
+			}
+
+			var selected = ContentDataGrid.Items.Cast<LibraryExplorerItem>()
+				.FirstOrDefault(it => it.Name.StartsWith(enteredText, StringComparison.CurrentCultureIgnoreCase));
+			if (selected != null)
+			{
+				ContentDataGrid.SelectedItem = selected;
+			}
+		}
+
+		/// <remarks>
+		/// https://stackoverflow.com/a/5826175/5740031
+		/// </remarks>
+		public static string GetTextFromKey(Key key)
+		{
+			int virtualKey = KeyInterop.VirtualKeyFromKey(key);
+			byte[] keyboardState = new byte[256];
+			NativeMethods.GetKeyboardState(keyboardState);
+
+			uint scanCode = NativeMethods.MapVirtualKey((uint)virtualKey, NativeMethods.MapType.MAPVK_VK_TO_VSC);
+			StringBuilder stringBuilder = new StringBuilder(2);
+
+			int result = NativeMethods.ToUnicode((uint)virtualKey, scanCode, keyboardState, stringBuilder, stringBuilder.Capacity, 0);
+			return result >= 1 ? stringBuilder.ToString() : String.Empty;
 		}
 	}
 }

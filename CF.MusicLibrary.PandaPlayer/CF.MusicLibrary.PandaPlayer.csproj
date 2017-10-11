@@ -208,7 +208,7 @@
     <Compile Include="Views\ClipboardAccess\IClipboardChangeTracker.cs" />
     <Compile Include="Views\ClipboardAccess\IClipboardDataProvider.cs" />
     <Compile Include="Views\ClipboardAccess\IClipboardImageExtractor.cs" />
-    <Compile Include="Views\ClipboardAccess\NativeMethods.cs" />
+    <Compile Include="Views\NativeMethods.cs" />
     <Compile Include="Views\DiscAdviserView.xaml.cs">
       <DependentUpon>DiscAdviserView.xaml</DependentUpon>
     </Compile>
