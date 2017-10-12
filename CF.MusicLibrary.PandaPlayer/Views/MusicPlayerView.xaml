@@ -16,10 +16,11 @@
             <ColumnDefinition Width="32"/>
             <ColumnDefinition Width="1"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="1"/>
+            <ColumnDefinition Width="84"/>
             <ColumnDefinition Width="1"/>
             <ColumnDefinition Width="24"/>
-            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="60"/>
         </Grid.ColumnDefinitions>
         <Button Grid.Column="0" BorderThickness="0" Command="{Binding PlayCommand}">
             <Image Source="/Views/Icons/PlayButton.png" />
@@ -55,7 +56,8 @@
         <Separator Grid.Column="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
         <ProgressBar Grid.Column="2" Foreground="Blue" Margin="5,9" Value="{Binding CurrSongProgress, Mode=OneWay}"
                      MouseLeftButtonDown="CurrSongProgressBar_OnMouseLeftButtonDown" />
-        <Label Grid.Column="3" Foreground="White">
+        <Separator Grid.Column="3" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+        <Label Grid.Column="4" Foreground="White" HorizontalAlignment="Center">
             <Label.Content>
                 <TextBlock>
                     <TextBlock.Text>
@@ -67,9 +69,9 @@
                 </TextBlock>
             </Label.Content>
         </Label>
-        <Separator Grid.Column="4" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-        <Image Grid.Column="5" Source="/Views/Icons/VolumeIcon.png" />
-        <ProgressBar Grid.Column="6" Foreground="Blue" Margin="0,9,5,9" Value="{Binding Volume, Mode=OneWay}" Maximum="1"
+        <Separator Grid.Column="5" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+        <Image Grid.Column="6" Source="/Views/Icons/VolumeIcon.png" />
+        <ProgressBar Grid.Column="7" Foreground="Blue" Margin="0,9,5,9" Value="{Binding Volume, Mode=OneWay}" Maximum="1"
                      MouseLeftButtonDown="VolumeBar_OnMouseLeftButtonDown" />
     </Grid>
 
