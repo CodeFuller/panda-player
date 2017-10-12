@@ -1,14 +1,14 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using static System.FormattableString;
 
 namespace CF.MusicLibrary.PandaPlayer
 {
 	public class SystemDefaultWebBrowser : IWebBrowser
 	{
-		public void OpenPage(Uri pageUri)
+		public void OpenPage(string pageAddress)
 		{
-			var pageAddress = Uri.EscapeUriString(pageUri.ToString());
-			Process.Start(pageAddress);
+			pageAddress = pageAddress.Replace("\"", "\\\"");
+			Process.Start(Invariant($"\"{pageAddress}\""));
 		}
 	}
 }

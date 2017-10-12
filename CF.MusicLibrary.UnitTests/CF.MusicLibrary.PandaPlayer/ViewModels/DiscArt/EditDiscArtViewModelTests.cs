@@ -225,8 +225,41 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.DiscA
 
 			//	Assert
 
-			webBrowserMock.Received(1).OpenPage(new Uri("http://google.com?search1=\"Some Artist\" and \"Some Album\""));
-			webBrowserMock.Received(1).OpenPage(new Uri("http://google.com?search2=\"Some Artist\" and \"Some Album\""));
+			webBrowserMock.Received(1).OpenPage("http://google.com?search1=\"Some%20Artist\" and \"Some%20Album\"");
+			webBrowserMock.Received(1).OpenPage("http://google.com?search2=\"Some%20Artist\" and \"Some%20Album\"");
+		}
+
+		[Test]
+		public void Load_WhenDiscCoverImageLookupPageIsOpened_EscapesSpecialCharactersInPastedData()
+		{
+			//	Arrange
+
+			var settingsProvider = Substitute.For<ISettingsProvider>();
+			settingsProvider.GetOptionalValue<string>("DiscCoverImageLookupPages1").Returns("http://google.com?search=\"{DiscArtist}\" and \"{DiscTitle}\"");
+			settingsProvider.GetOptionalValue<string>("DiscCoverImageLookupPages2").Returns((string)null);
+			AppSettings.SettingsProvider = settingsProvider;
+
+			var disc = new Disc
+			{
+				AlbumTitle = "Some Album",
+				SongsUnordered = new[] { new Song { Artist = new Artist { Name = "Some Artist & Co" } } },
+			};
+
+			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();
+			musicLibraryStub.GetDiscCoverImage(disc).Returns(Task.FromResult((string)null));
+
+			IWebBrowser webBrowserMock = Substitute.For<IWebBrowser>();
+
+			var target = new EditDiscArtViewModel(musicLibraryStub, Substitute.For<IDocumentDownloader>(),
+				Substitute.For<IDiscArtValidator>(), Substitute.For<IFileSystemFacade>(), webBrowserMock);
+
+			//	Act
+
+			target.Load(disc).Wait();
+
+			//	Assert
+
+			webBrowserMock.Received(1).OpenPage("http://google.com?search=\"Some%20Artist%20%26%20Co\" and \"Some%20Album\"");
 		}
 
 		[Test]
@@ -253,7 +286,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.DiscA
 
 			//	Assert
 
-			webBrowserMock.DidNotReceive().OpenPage(Arg.Any<Uri>());
+			webBrowserMock.DidNotReceive().OpenPage(Arg.Any<string>());
 		}
 
 		[Test]

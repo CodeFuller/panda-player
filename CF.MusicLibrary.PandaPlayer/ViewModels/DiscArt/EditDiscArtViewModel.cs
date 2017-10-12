@@ -176,9 +176,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscArt
 			foreach (var discCoverSearchPageStub in AppSettings.GetOptionalValues<string>("DiscCoverImageLookupPages"))
 			{
 				string discCoverSearchPage = discCoverSearchPageStub;
-				discCoverSearchPage = discCoverSearchPage.Replace("{DiscArtist}", Disc.Artist?.Name ?? String.Empty);
-				discCoverSearchPage = discCoverSearchPage.Replace("{DiscTitle}", Disc.AlbumTitle ?? String.Empty);
-				webBrowser.OpenPage(new Uri(discCoverSearchPage));
+				discCoverSearchPage = discCoverSearchPage.Replace("{DiscArtist}", Uri.EscapeDataString(Disc.Artist?.Name ?? String.Empty));
+				discCoverSearchPage = discCoverSearchPage.Replace("{DiscTitle}", Uri.EscapeDataString(Disc.AlbumTitle ?? String.Empty));
+				webBrowser.OpenPage(discCoverSearchPage);
 			}
 		}
 	}
