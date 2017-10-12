@@ -394,6 +394,112 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.BL.Objects
 		}
 
 		[Test]
+		public void SongsGetter_IfAllSongsHaveTrackNumbers_OrdersSongsByTrackNumber()
+		{
+			//	Arrange
+
+			var song1 = new Song
+			{
+				TrackNumber = 1,
+				Artist = new Artist { Name = "Artist 3" },
+				Title = "Title 3",
+			};
+
+			var song2 = new Song
+			{
+				TrackNumber = 2,
+				Artist = new Artist { Name = "Artist 1" },
+				Title = "Title 1",
+			};
+
+			var song3 = new Song
+			{
+				TrackNumber = 3,
+				Artist = new Artist { Name = "Artist 2" },
+				Title = "Title 2",
+			};
+
+			var disc = new Disc { SongsUnordered = new[] { song3, song2, song1 } };
+
+			//	Act & Assert
+
+			CollectionAssert.AreEqual(new[] { song1, song2, song3 }, disc.Songs);
+		}
+
+		[Test]
+		public void SongsGetter_IfSomeSongsDoNotHaveTrackNumber_ReturnsThemAtTheTailOrderedByArtistName()
+		{
+			//	Arrange
+
+			var song1 = new Song
+			{
+				TrackNumber = 1,
+				Artist = new Artist { Name = "Artist 3" },
+				Title = "Title 3",
+			};
+
+			var song2 = new Song
+			{
+				TrackNumber = null,
+				Artist = new Artist { Name = "Artist 1" },
+				Title = "Title 2",
+			};
+
+			var song3 = new Song
+			{
+				TrackNumber = null,
+				Artist = new Artist { Name = "Artist 2" },
+				Title = "Title 1",
+			};
+
+			var disc = new Disc { SongsUnordered = new[] { song3, song2, song1 } };
+
+			//	Act & Assert
+
+			CollectionAssert.AreEqual(new[] { song1, song2, song3 }, disc.Songs);
+		}
+
+		[Test]
+		public void SongsGetter_IfSomeSongsDoNotHaveTrackNumberAndArtist_ReturnsThemAtTheTailOrderedByTitle()
+		{
+			//	Arrange
+
+			var song1 = new Song
+			{
+				TrackNumber = 1,
+				Artist = new Artist { Name = "Artist 2" },
+				Title = "Title 4",
+			};
+
+			var song2 = new Song
+			{
+				TrackNumber = null,
+				Artist = new Artist { Name = "Artist 1" },
+				Title = "Title 3",
+			};
+
+			var song3 = new Song
+			{
+				TrackNumber = null,
+				Artist = null,
+				Title = "Title 1",
+			};
+
+			var song4 = new Song
+			{
+				TrackNumber = null,
+				Artist = null,
+				Title = "Title 2",
+			};
+
+			var disc = new Disc { SongsUnordered = new[] { song4, song3, song2, song1 } };
+
+			//	Act & Assert
+
+			CollectionAssert.AreEqual(new[] { song1, song2, song3, song4 }, disc.Songs);
+		}
+
+		[Test]
 		public void IsDeletedGetter_WhenSomeSongsAreNotDeleted_ReturnsFalse()
 		{
 			//	Arrange
