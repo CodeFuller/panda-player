@@ -148,7 +148,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		private void OnPlayPlaylistStartingFromSong(PlayPlaylistStartingFromSongEventArgs message)
 		{
-			MusicPlayerViewModel.PlayFromSong(message.Song);
+			MusicPlayerViewModel.Stop();
+			MusicPlayerViewModel.Play();
 			SwitchToSongPlaylist();
 		}
 

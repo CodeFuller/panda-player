@@ -141,10 +141,11 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		internal void PlayFromSong()
 		{
-			var selectedSong = SelectedSongItem?.Song;
-			if (selectedSong != null)
+			var selectedSongIndex = SongItems.IndexOf(SelectedSongItem);
+			if (selectedSongIndex != -1)
 			{
-				Messenger.Default.Send(new PlayPlaylistStartingFromSongEventArgs(selectedSong));
+				CurrentSongIndex = selectedSongIndex;
+				Messenger.Default.Send(new PlayPlaylistStartingFromSongEventArgs(CurrentSong));
 			}
 		}
 

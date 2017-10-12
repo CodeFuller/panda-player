@@ -20,5 +20,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 		void Play();
 
 		void Pause();
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop")]
+		void Stop();
 	}
 }

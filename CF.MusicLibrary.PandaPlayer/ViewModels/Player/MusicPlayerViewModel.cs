@@ -126,11 +126,14 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 			audioPlayer.Pause();
 		}
 
-		public async Task PlayFromSong(Song newSong)
+		public void Stop()
 		{
-			CurrentSong = null;
-			Playlist.SwitchToSong(newSong);
-			await Play();
+			if (IsPlaying)
+			{
+				IsPlaying = false;
+				audioPlayer.Stop();
+				CurrentSong = null;
+			}
 		}
 
 		private async void AudioPlayer_SongFinished(object sender, SongMediaFinishedEventArgs eventArgs)

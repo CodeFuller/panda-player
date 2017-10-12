@@ -98,6 +98,12 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 			OnPlaybackInterrupted();
 		}
 
+		public void Stop()
+		{
+			mediaPlayer.Stop();
+			OnPlaybackInterrupted();
+		}
+
 		protected void OnPlaybackInterrupted()
 		{
 			IsPlaying = false;

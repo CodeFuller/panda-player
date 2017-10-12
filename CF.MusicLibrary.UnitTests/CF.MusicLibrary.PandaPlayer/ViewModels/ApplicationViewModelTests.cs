@@ -498,7 +498,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		[Test]
-		public void PlayPlaylistStartingFromSongEventHandler_SwitchesPlayerSongCorrectly()
+		public void PlayPlaylistStartingFromSongEventHandler_RestartsPlayerPlaybackCorrectly()
 		{
 			//	Arrange
 
@@ -515,7 +515,11 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			//	Assert
 
-			musicPlayerViewModelMock.Received(1).PlayFromSong(song);
+			Received.InOrder(() =>
+			{
+				musicPlayerViewModelMock.Stop();
+				musicPlayerViewModelMock.Play();
+			});
 		}
 
 		[Test]

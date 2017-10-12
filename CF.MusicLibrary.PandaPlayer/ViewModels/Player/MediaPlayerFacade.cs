@@ -54,6 +54,11 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 			mediaPlayer.Pause();
 		}
 
+		public void Stop()
+		{
+			mediaPlayer.Stop();
+		}
+
 		public void Close()
 		{
 			mediaPlayer.Close();

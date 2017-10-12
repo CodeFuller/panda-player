@@ -326,162 +326,68 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Playe
 		}
 
 		[Test]
-		public void PlayFromSong_IfNoCurrentSongIsSet_StartsPlaybackFromGivenSong()
+		public void Stop_IfSomeSongIsPlayed_StopsPlayback()
 		{
 			//	Arrange
 
-			var newSong = new Song();
-
-			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();
-			musicLibraryStub.GetSongFile(newSong).Returns("NewSong.mp3");
-
-			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub(new[] { new Song(), newSong });
-			//	Sanity check
-			Assert.IsNull(songPlaylistStub.CurrentSong);
-
-			IAudioPlayer audioPlayerMock = Substitute.For<IAudioPlayer>();
-			var target = new MusicPlayerViewModel(musicLibraryStub, songPlaylistStub, audioPlayerMock, Substitute.For<ISongPlaybacksRegistrator>());
-
-			//	Act
-
-			target.PlayFromSong(newSong).Wait();
-
-			//	Assert
-
-			Assert.IsTrue(target.IsPlaying);
-			Assert.AreSame(newSong, target.CurrentSong);
-			Received.InOrder(() => {
-				audioPlayerMock.Received(1).SetCurrentSongFile("NewSong.mp3");
-				audioPlayerMock.Received(1).Play();
-			});
-		}
-
-		[Test]
-		public void PlayFromSong_IfPlayingSomeSong_StartsPlaybackFromGivenSong()
-		{
-			//	Arrange
-
-			var oldSong = new Song();
-			var newSong = new Song();
-
-			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();
-			musicLibraryStub.GetSongFile(newSong).Returns("NewSong.mp3");
-
-			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub(new[] { oldSong, new Song(), newSong });
+			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub(new[] { new Song() });
 			songPlaylistStub.SwitchToNextSong();
 
 			IAudioPlayer audioPlayerMock = Substitute.For<IAudioPlayer>();
-			var target = new MusicPlayerViewModel(musicLibraryStub, songPlaylistStub, audioPlayerMock, Substitute.For<ISongPlaybacksRegistrator>());
+			var target = new MusicPlayerViewModel(Substitute.For<IMusicLibrary>(), songPlaylistStub, audioPlayerMock, Substitute.For<ISongPlaybacksRegistrator>());
 
 			target.Play().Wait();
-			audioPlayerMock.ClearReceivedCalls();
-
-			//	Sanity check
-			Assert.IsTrue(target.IsPlaying);
-			Assert.AreSame(oldSong, target.CurrentSong);
 
 			//	Act
 
-			target.PlayFromSong(newSong).Wait();
+			target.Stop();
 
 			//	Assert
 
-			Assert.IsTrue(target.IsPlaying);
-			Assert.AreSame(newSong, target.CurrentSong);
-			Received.InOrder(() => {
-				audioPlayerMock.Received(1).SetCurrentSongFile("NewSong.mp3");
-				audioPlayerMock.Received(1).Play();
-			});
-		}
-
-		[Test]
-		public void PlayFromSong_IfPausedSomeSong_StartsPlaybackFromGivenSong()
-		{
-			//	Arrange
-
-			var oldSong = new Song();
-			var newSong = new Song();
-
-			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();
-			musicLibraryStub.GetSongFile(newSong).Returns("NewSong.mp3");
-
-			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub(new[] { oldSong, new Song(), newSong });
-			songPlaylistStub.SwitchToNextSong();
-
-			IAudioPlayer audioPlayerMock = Substitute.For<IAudioPlayer>();
-			var target = new MusicPlayerViewModel(musicLibraryStub, songPlaylistStub, audioPlayerMock, Substitute.For<ISongPlaybacksRegistrator>());
-
-			target.Play().Wait();
-			target.Pause();
-			audioPlayerMock.ClearReceivedCalls();
-
-			//	Sanity check
 			Assert.IsFalse(target.IsPlaying);
-			Assert.AreSame(oldSong, target.CurrentSong);
-
-			//	Act
-
-			target.PlayFromSong(newSong).Wait();
-
-			//	Assert
-
-			Assert.IsTrue(target.IsPlaying);
-			Assert.AreSame(newSong, target.CurrentSong);
-			Received.InOrder(() => {
-				audioPlayerMock.Received(1).SetCurrentSongFile("NewSong.mp3");
-				audioPlayerMock.Received(1).Play();
-			});
+			audioPlayerMock.Received(1).Stop();
 		}
 
 		[Test]
-		public void PlayFromSong_IfPlayingSomeSong_DoesNotRegisterPlaybackFinishForPreviousSong()
+		public void Stop_IfSomeSongIsPlayed_SetsCurrentSongToNull()
 		{
 			//	Arrange
 
-			var oldSong = new Song();
-			var newSong = new Song();
-
-			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub(new[] { oldSong, newSong });
+			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub(new[] { new Song() });
 			songPlaylistStub.SwitchToNextSong();
 
-			ISongPlaybacksRegistrator songPlaybacksRegistratorMock = Substitute.For<ISongPlaybacksRegistrator>();
-			var target = new MusicPlayerViewModel(Substitute.For<IMusicLibrary>(), songPlaylistStub, Substitute.For<IAudioPlayer>(), songPlaybacksRegistratorMock);
+			IAudioPlayer audioPlayerMock = Substitute.For<IAudioPlayer>();
+			var target = new MusicPlayerViewModel(Substitute.For<IMusicLibrary>(), songPlaylistStub, audioPlayerMock, Substitute.For<ISongPlaybacksRegistrator>());
 
 			target.Play().Wait();
-			songPlaybacksRegistratorMock.ClearReceivedCalls();
-
-			//	Sanity check
-			Assert.IsTrue(target.IsPlaying);
-			Assert.AreSame(oldSong, target.CurrentSong);
 
 			//	Act
 
-			target.PlayFromSong(newSong).Wait();
+			target.Stop();
 
 			//	Assert
 
-			songPlaybacksRegistratorMock.DidNotReceive().RegisterPlaybackFinish(Arg.Any<Song>());
+			Assert.IsNull(target.CurrentSong);
 		}
 
 		[Test]
-		public void PlayFromSong_RegistersPlaybackStart()
+		public void Stop_IfNoSongIsPlayed_DoesNothing()
 		{
 			//	Arrange
 
-			var oldSong = new Song();
-			var newSong = new Song();
+			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub(new[] { new Song() });
+			songPlaylistStub.SwitchToNextSong();
 
-			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub(new[] { oldSong, newSong });
-			ISongPlaybacksRegistrator songPlaybacksRegistratorMock = Substitute.For<ISongPlaybacksRegistrator>();
-			var target = new MusicPlayerViewModel(Substitute.For<IMusicLibrary>(), songPlaylistStub, Substitute.For<IAudioPlayer>(), songPlaybacksRegistratorMock);
+			IAudioPlayer audioPlayerMock = Substitute.For<IAudioPlayer>();
+			var target = new MusicPlayerViewModel(Substitute.For<IMusicLibrary>(), songPlaylistStub, audioPlayerMock, Substitute.For<ISongPlaybacksRegistrator>());
 
 			//	Act
 
-			target.PlayFromSong(newSong).Wait();
+			target.Stop();
 
 			//	Assert
 
-			songPlaybacksRegistratorMock.Received(1).RegisterPlaybackStart(newSong);
+			audioPlayerMock.DidNotReceive().Stop();
 		}
 	}
 }

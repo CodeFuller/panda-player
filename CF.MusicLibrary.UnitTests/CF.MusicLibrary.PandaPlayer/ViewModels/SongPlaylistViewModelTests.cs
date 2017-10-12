@@ -486,6 +486,48 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		[Test]
+		public void PlayFromSongCommand_IfSomeSongIsSelected_SetsCurrentSongToSelectedOne()
+		{
+			//	Arrange
+
+			var song = new Song();
+
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			target.SetSongs(new[] { song });
+			target.SelectedSongItem = target.SongItems[0];
+			//	Sanity check
+			Assert.IsNull(target.CurrentSong);
+
+			//	Act
+
+			target.PlayFromSong();
+
+			//	Assert
+
+			Assert.AreSame(song, target.CurrentSong);
+		}
+
+		[Test]
+		public void PlayFromSongCommand_IfSongIsAddedToPlaylistMultipleTimes_SetsCurrentSongToSelectedOne()
+		{
+			//	Arrange
+
+			var song = new Song();
+
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			target.SetSongs(new[] { song, song });
+			target.SelectedSongItem = target.SongItems[1];
+
+			//	Act
+
+			target.PlayFromSong();
+
+			//	Assert
+
+			Assert.AreEqual(1, target.CurrentSongIndex);
+		}
+
+		[Test]
 		public void PlayFromSongCommand_IfSomeSongIsSelected_SendsPlayPlaylistStartingFromSongEventForSelectedSong()
 		{
 			//	Arrange
@@ -493,7 +535,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			var song = new Song();
 
 			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
-			target.SelectedSongItem = new SongListItem(song);
+			target.SetSongs(new[] { song });
+			target.SelectedSongItem = target.SongItems[0];
 
 			PlayPlaylistStartingFromSongEventArgs receivedEvent = null;
 			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, e => receivedEvent = e);

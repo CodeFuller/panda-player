@@ -28,6 +28,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		void Pause();
 
-		Task PlayFromSong(Song newSong);
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop")]
+		void Stop();
 	}
 }
