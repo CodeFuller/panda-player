@@ -133,7 +133,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			Playlist.SetSongs(e.Songs);
 			Playlist.SwitchToNextSong();
-			MusicPlayerViewModel.Play();
+			ResetPlayer();
 			SwitchToSongPlaylist();
 		}
 
@@ -142,14 +142,13 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			var disc = message.Song.Disc;
 			Playlist.SetSongs(disc.Songs);
 			Playlist.SwitchToSong(message.Song);
-			MusicPlayerViewModel.Play();
+			ResetPlayer();
 			SwitchToSongPlaylist();
 		}
 
 		private void OnPlayPlaylistStartingFromSong(PlayPlaylistStartingFromSongEventArgs message)
 		{
-			MusicPlayerViewModel.Stop();
-			MusicPlayerViewModel.Play();
+			ResetPlayer();
 			SwitchToSongPlaylist();
 		}
 
@@ -163,6 +162,12 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 				MusicPlayerViewModel.Play();
 			}
+		}
+
+		private void ResetPlayer()
+		{
+			MusicPlayerViewModel.Stop();
+			MusicPlayerViewModel.Play();
 		}
 
 		private void OnPlaylistSongChanged()

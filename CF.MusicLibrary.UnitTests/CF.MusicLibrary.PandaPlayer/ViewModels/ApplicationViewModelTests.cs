@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CF.MusicLibrary.BL.Objects;
@@ -495,6 +496,167 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			//	Assert
 
 			Assert.AreEqual("2/3 - Some Artist - Some Song", target.Title);
+		}
+
+		[Test]
+		public void PlaySongsListEventHandler_FillsPlaylistWithNewSongs()
+		{
+			//	Arrange
+
+			var songs = new[] { new Song(), new Song() };
+
+			ISongPlaylistViewModel songPlaylistViewModelMock = Substitute.For<ISongPlaylistViewModel>();
+			IMusicPlayerViewModel musicPlayerViewModelStub = Substitute.For<IMusicPlayerViewModel>();
+			musicPlayerViewModelStub.Playlist.Returns(songPlaylistViewModelMock);
+
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
+				musicPlayerViewModelStub, Substitute.For<IViewNavigator>());
+			target.Load().Wait();
+
+			var playSongsListEvent = new PlaySongsListEventArgs(songs);
+
+			//	Act
+
+			Messenger.Default.Send(playSongsListEvent);
+
+			//	Assert
+
+			Received.InOrder(() =>
+			{
+				songPlaylistViewModelMock.Received(1).SetSongs(playSongsListEvent.Songs);
+				songPlaylistViewModelMock.Received(1).SwitchToNextSong();
+			});
+		}
+
+		[Test]
+		public void PlaySongsListEventHandler_RestartsPlayerPlaybackCorrectly()
+		{
+			//	Arrange
+
+			var songs = new[] { new Song(), new Song() };
+
+			IMusicPlayerViewModel musicPlayerViewModelMock = Substitute.For<IMusicPlayerViewModel>();
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
+				musicPlayerViewModelMock, Substitute.For<IViewNavigator>());
+			target.Load().Wait();
+
+			//	Act
+
+			Messenger.Default.Send(new PlaySongsListEventArgs(songs));
+
+			//	Assert
+
+			Received.InOrder(() =>
+			{
+				musicPlayerViewModelMock.Stop();
+				musicPlayerViewModelMock.Play();
+			});
+		}
+
+		[Test]
+		public void PlaySongsListEventHandler_SwitchesToPlaylistView()
+		{
+			//	Arrange
+
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
+				Substitute.For<IMusicPlayerViewModel>(), Substitute.For<IViewNavigator>());
+			target.Load().Wait();
+
+			//	Act
+
+			Messenger.Default.Send(new PlaySongsListEventArgs(new[] { new Song() }));
+
+			//	Assert
+
+			Assert.AreEqual(1, target.SelectedSongListIndex);
+		}
+
+		[Test]
+		public void PlayDiscFromSongEventHandler_FillsPlaylistWithDiscSongs()
+		{
+			//	Arrange
+
+			var disc = new Disc();
+			var song1 = new Song { Disc = disc };
+			var song2 = new Song { Disc = disc };
+			disc.SongsUnordered = new[] { song1, song2 };
+
+			List<Song> updatedSongs = null;
+
+			ISongPlaylistViewModel songPlaylistViewModelMock = Substitute.For<ISongPlaylistViewModel>();
+			songPlaylistViewModelMock.SetSongs(Arg.Do<IEnumerable<Song>>(arg => updatedSongs = arg.ToList()));
+
+			IMusicPlayerViewModel musicPlayerViewModelStub = Substitute.For<IMusicPlayerViewModel>();
+			musicPlayerViewModelStub.Playlist.Returns(songPlaylistViewModelMock);
+
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
+				musicPlayerViewModelStub, Substitute.For<IViewNavigator>());
+			target.Load().Wait();
+
+			var playDiscFromSongEvent = new PlayDiscFromSongEventArgs(song2);
+
+			//	Act
+
+			Messenger.Default.Send(playDiscFromSongEvent);
+
+			//	Assert
+
+			Received.InOrder(() =>
+			{
+				songPlaylistViewModelMock.Received(1).SetSongs(Arg.Any<IEnumerable<Song>>());
+				songPlaylistViewModelMock.Received(1).SwitchToSong(song2);
+			});
+			CollectionAssert.AreEqual(disc.Songs, updatedSongs);
+		}
+
+		[Test]
+		public void PlayDiscFromSongEventHandler_RestartsPlayerPlaybackCorrectly()
+		{
+			//	Arrange
+
+			var disc = new Disc();
+			var song = new Song { Disc = disc };
+			disc.SongsUnordered = new[] { song };
+
+			IMusicPlayerViewModel musicPlayerViewModelMock = Substitute.For<IMusicPlayerViewModel>();
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
+				musicPlayerViewModelMock, Substitute.For<IViewNavigator>());
+			target.Load().Wait();
+
+			//	Act
+
+			Messenger.Default.Send(new PlayDiscFromSongEventArgs(song));
+
+			//	Assert
+
+			Received.InOrder(() =>
+			{
+				musicPlayerViewModelMock.Stop();
+				musicPlayerViewModelMock.Play();
+			});
+		}
+
+		[Test]
+		public void PlayDiscFromSongEventHandler_SwitchesToPlaylistView()
+		{
+			//	Arrange
+
+			var disc = new Disc();
+			var song = new Song { Disc = disc };
+			disc.SongsUnordered = new[] { song };
+
+			IMusicPlayerViewModel musicPlayerViewModelMock = Substitute.For<IMusicPlayerViewModel>();
+			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
+				musicPlayerViewModelMock, Substitute.For<IViewNavigator>());
+			target.Load().Wait();
+
+			//	Act
+
+			Messenger.Default.Send(new PlayDiscFromSongEventArgs(song));
+
+			//	Assert
+
+			Assert.AreEqual(1, target.SelectedSongListIndex);
 		}
 
 		[Test]

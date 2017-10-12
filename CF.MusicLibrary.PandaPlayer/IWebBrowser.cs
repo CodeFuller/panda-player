@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CF.MusicLibrary.PandaPlayer
+﻿namespace CF.MusicLibrary.PandaPlayer
 {
 	public interface IWebBrowser
 	{

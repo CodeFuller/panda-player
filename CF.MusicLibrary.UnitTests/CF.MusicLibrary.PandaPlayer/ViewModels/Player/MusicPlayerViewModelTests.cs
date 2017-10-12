@@ -371,6 +371,30 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels.Playe
 		}
 
 		[Test]
+		public void Stop_IfSomeSongIsPlayed_DoesNotRegisterPlaybackFinish()
+		{
+			//	Arrange
+
+			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub(new[] { new Song() });
+			songPlaylistStub.SwitchToNextSong();
+
+			ISongPlaybacksRegistrator songPlaybacksRegistratorMock = Substitute.For<ISongPlaybacksRegistrator>();
+
+			IAudioPlayer audioPlayerMock = Substitute.For<IAudioPlayer>();
+			var target = new MusicPlayerViewModel(Substitute.For<IMusicLibrary>(), songPlaylistStub, audioPlayerMock, songPlaybacksRegistratorMock);
+
+			target.Play().Wait();
+
+			//	Act
+
+			target.Stop();
+
+			//	Assert
+
+			songPlaybacksRegistratorMock.DidNotReceive().RegisterPlaybackFinish(Arg.Any<Song>());
+		}
+
+		[Test]
 		public void Stop_IfNoSongIsPlayed_DoesNothing()
 		{
 			//	Arrange
