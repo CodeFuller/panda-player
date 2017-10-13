@@ -5,7 +5,7 @@ using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
 
-namespace CF.MusicLibrary.Core
+namespace CF.MusicLibrary.Library
 {
 	public partial class RepositoryAndStorageMusicLibrary : IMusicLibrary
 	{

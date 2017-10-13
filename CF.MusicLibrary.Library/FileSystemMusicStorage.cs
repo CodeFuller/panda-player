@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using CF.Library.Core;
 using CF.Library.Core.Extensions;
 using CF.Library.Core.Facades;
+using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
 
-namespace CF.MusicLibrary.Core
+namespace CF.MusicLibrary.Library
 {
 	public class FileSystemMusicStorage : IMusicLibraryStorage
 	{

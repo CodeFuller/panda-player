@@ -284,6 +284,10 @@
       <Project>{83AD3795-4E4A-4D32-BE5B-9D68287EF586}</Project>
       <Name>CF.MusicLibrary.Dal</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.Library\CF.MusicLibrary.Library.csproj">
+      <Project>{E27630AC-2F6F-4F2C-BFBF-3663F2C18F9C}</Project>
+      <Name>CF.MusicLibrary.Library</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.Local\CF.MusicLibrary.Local.csproj">
       <Project>{378157BA-2DA4-4E39-8AFD-59CED35B9B1F}</Project>
       <Name>CF.MusicLibrary.Local</Name>

@@ -50,7 +50,7 @@ namespace CF.MusicLibrary.Core.Objects
 		{
 		}
 
-		internal DiscLibrary(IEnumerable<Disc> libraryDiscs)
+		public DiscLibrary(IEnumerable<Disc> libraryDiscs)
 		{
 			discs = libraryDiscs.ToList();
 			FillPlaybacksPassed();

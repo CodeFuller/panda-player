@@ -83,7 +83,7 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CF.MusicLibrary.Core\DiscArtFileStorageTests.cs" />
-    <Compile Include="CF.MusicLibrary.Core\MusicLibrary.Writer.Tests.cs" />
+    <Compile Include="CF.MusicLibrary.Library\MusicLibrary.Writer.Tests.cs" />
     <Compile Include="CF.MusicLibrary.Core\Objects\DiscLibraryTests.cs" />
     <Compile Include="CF.MusicLibrary.Core\Objects\DiscTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\ArtistDiscViewItemTests.cs" />
@@ -101,7 +101,7 @@
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\SongFileFilterTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\AddToLibraryViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.Core\DiscTitleToAlbumMapperTests.cs" />
-    <Compile Include="CF.MusicLibrary.Core\FilesystemMusicStorageTests.cs" />
+    <Compile Include="CF.MusicLibrary.Library\FilesystemMusicStorageTests.cs" />
     <Compile Include="CF.MusicLibrary.Core\ItemUriPartsTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\ApplicationViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\EditDiscsDetailsViewModelTests.cs" />
@@ -148,6 +148,10 @@
     <ProjectReference Include="..\CF.MusicLibrary.LastFM\CF.MusicLibrary.LastFM.csproj">
       <Project>{7F368759-572F-41D4-A7FF-1B3898AE3918}</Project>
       <Name>CF.MusicLibrary.LastFM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CF.MusicLibrary.Library\CF.MusicLibrary.Library.csproj">
+      <Project>{E27630AC-2F6F-4F2C-BFBF-3663F2C18F9C}</Project>
+      <Name>CF.MusicLibrary.Library</Name>
     </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.PandaPlayer\CF.MusicLibrary.PandaPlayer.csproj">
       <Project>{502D59CA-7973-46C9-A2A4-9144C48CBEE4}</Project>

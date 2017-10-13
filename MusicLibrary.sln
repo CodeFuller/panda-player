@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.LibraryTool
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.Common", "CF.MusicLibrary.Common\CF.MusicLibrary.Common.csproj", "{5501311F-CBCD-40B3-95F4-F28D521E6EC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CF.MusicLibrary.Library", "CF.MusicLibrary.Library\CF.MusicLibrary.Library.csproj", "{E27630AC-2F6F-4F2C-BFBF-3663F2C18F9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{5501311F-CBCD-40B3-95F4-F28D521E6EC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5501311F-CBCD-40B3-95F4-F28D521E6EC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5501311F-CBCD-40B3-95F4-F28D521E6EC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E27630AC-2F6F-4F2C-BFBF-3663F2C18F9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E27630AC-2F6F-4F2C-BFBF-3663F2C18F9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E27630AC-2F6F-4F2C-BFBF-3663F2C18F9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E27630AC-2F6F-4F2C-BFBF-3663F2C18F9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

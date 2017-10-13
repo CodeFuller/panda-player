@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
+using CF.MusicLibrary.Library;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Core
+namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 {
 	[TestFixture]
 	public class RepositoryAndStorageMusicLibraryTests

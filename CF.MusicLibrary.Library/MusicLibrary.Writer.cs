@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using CF.Library.Core;
+using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
 
-namespace CF.MusicLibrary.Core
+namespace CF.MusicLibrary.Library
 {
 	public partial class RepositoryAndStorageMusicLibrary : IMusicLibraryWriter, IMusicLibraryReader
 	{

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}</ProjectGuid>
+    <ProjectGuid>{E27630AC-2F6F-4F2C-BFBF-3663F2C18F9C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CF.MusicLibrary.Core</RootNamespace>
-    <AssemblyName>CF.MusicLibrary.Core</AssemblyName>
+    <RootNamespace>CF.MusicLibrary.Library</RootNamespace>
+    <AssemblyName>CF.MusicLibrary.Library</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -20,12 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
-    <WarningsAsErrors>
-    </WarningsAsErrors>
-    <DocumentationFile>
-    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,12 +28,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>
-    </DocumentationFile>
-    <WarningsAsErrors>
-    </WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CF.Library.Core, Version=0.1.6486.14019, Culture=neutral, processorArchitecture=MSIL">
@@ -48,37 +36,28 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Global\GlobalAssemblyInfo.cs">
-      <Link>Properties\GlobalAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="DiscTitleToAlbumMapper.cs" />
-    <Compile Include="Interfaces\IDiscArtFileStorage.cs" />
-    <Compile Include="Interfaces\ILibraryStorageInconsistencyRegistrator.cs" />
-    <Compile Include="Media\ISongMediaInfoProvider.cs" />
-    <Compile Include="Media\SongMediaInfo.cs" />
-    <Compile Include="Objects\DiscLibrary.cs" />
-    <Compile Include="Media\ISongTagger.cs" />
-    <Compile Include="Interfaces\ILibraryStructurer.cs" />
-    <Compile Include="Interfaces\IMusicLibrary.cs" />
-    <Compile Include="Interfaces\IMusicLibraryReader.cs" />
-    <Compile Include="Interfaces\IMusicLibraryWriter.cs" />
-    <Compile Include="ItemUriParts.cs" />
-    <Compile Include="Interfaces\IMusicLibraryRepository.cs" />
-    <Compile Include="Objects\Artist.cs" />
-    <Compile Include="Media\SongTagType.cs" />
-    <Compile Include="Objects\Disc.cs" />
-    <Compile Include="Objects\Genre.cs" />
-    <Compile Include="Objects\Playback.cs" />
-    <Compile Include="Objects\Rating.cs" />
-    <Compile Include="Objects\Song.cs" />
-    <Compile Include="Media\SongTagData.cs" />
+    <Compile Include="FileSystemMusicStorage.cs" />
+    <Compile Include="IMusicLibraryStorage.cs" />
+    <Compile Include="MusicLibrary.Reader.cs" />
+    <Compile Include="MusicLibrary.Writer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UpdatedSongProperties.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CF.MusicLibrary.Core\CF.MusicLibrary.Core.csproj">
+      <Project>{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}</Project>
+      <Name>CF.MusicLibrary.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
