@@ -70,8 +70,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public override void SetSongs(IEnumerable<Song> newSongs)
 		{
-			SetSongsRaw(newSongs);
 			CurrentSongIndex = null;
+			SetSongsRaw(newSongs);
 			OnPlaylistChanged();
 		}
 

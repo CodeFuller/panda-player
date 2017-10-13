@@ -106,6 +106,28 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		[Test]
+		public void SetSongs_IfCurrentSongIndexIsGreaterThanSizeOfNewSongList_UpdatesSongListCorrectly()
+		{
+			//	Arrange
+
+			var currSong = new Song();
+			var songs1 = new List<Song> { new Song(), currSong };
+			var songs2 = new List<Song> { new Song() };
+
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			target.SetSongs(songs1);
+			target.SwitchToSong(currSong);
+
+			//	Act
+
+			target.SetSongs(songs2);
+
+			//	Assert
+
+			CollectionAssert.AreEqual(songs2, target.Songs);
+		}
+
+		[Test]
 		public void SetSongs_AfterSongListIsChanged_CallsOnPlaylistChanged()
 		{
 			//	Arrange
