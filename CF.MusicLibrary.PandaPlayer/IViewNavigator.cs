@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 
 namespace CF.MusicLibrary.PandaPlayer
 {

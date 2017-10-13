@@ -1,5 +1,5 @@
 ﻿using System;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using GalaSoft.MvvmLight;
 
 namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary

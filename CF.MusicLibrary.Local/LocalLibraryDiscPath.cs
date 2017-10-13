@@ -1,6 +1,6 @@
 ﻿using System;
-using CF.MusicLibrary.BL;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core;
+using CF.MusicLibrary.Core.Objects;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.Local

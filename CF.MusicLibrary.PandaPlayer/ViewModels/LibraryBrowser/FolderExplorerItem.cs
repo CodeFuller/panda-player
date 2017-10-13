@@ -1,5 +1,5 @@
 ﻿using System;
-using CF.MusicLibrary.BL;
+using CF.MusicLibrary.Core;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 {

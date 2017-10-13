@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using CF.MusicLibrary.BL.Media;
-using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.Common.DiscArt;
+using CF.MusicLibrary.Core.Media;
+using CF.MusicLibrary.Core.Objects;
 using static CF.Library.Core.Application;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 

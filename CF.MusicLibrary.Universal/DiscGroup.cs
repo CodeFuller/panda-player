@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 
 namespace CF.MusicLibrary.Universal
 {

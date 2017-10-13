@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces

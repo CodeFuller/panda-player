@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 using System.Data.Entity;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 
 namespace CF.MusicLibrary.Dal
 {

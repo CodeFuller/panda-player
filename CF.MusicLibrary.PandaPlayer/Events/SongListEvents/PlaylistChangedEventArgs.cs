@@ -1,4 +1,4 @@
-﻿using CF.MusicLibrary.BL.Objects;
+﻿using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace CF.MusicLibrary.PandaPlayer.Events.SongListEvents

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CF.MusicLibrary.BL;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.LibraryChecker.Registrators;
 using static CF.Library.Core.Application;
 

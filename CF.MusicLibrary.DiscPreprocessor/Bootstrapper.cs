@@ -2,11 +2,11 @@
 using CF.Library.Core.Facades;
 using CF.Library.Core.Interfaces;
 using CF.Library.Unity;
-using CF.MusicLibrary.BL;
-using CF.MusicLibrary.BL.Interfaces;
-using CF.MusicLibrary.BL.Media;
-using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.Common.DiscArt;
+using CF.MusicLibrary.Core;
+using CF.MusicLibrary.Core.Interfaces;
+using CF.MusicLibrary.Core.Media;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.DiscPreprocessor.Interfaces;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;

@@ -1,4 +1,4 @@
-﻿using CF.MusicLibrary.BL.Objects;
+﻿using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.Adviser;
 using NUnit.Framework;
 

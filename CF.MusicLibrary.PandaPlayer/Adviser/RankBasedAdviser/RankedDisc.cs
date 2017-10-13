@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 
 namespace CF.MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser;
 using CF.MusicLibrary.Universal.Interfaces;
 

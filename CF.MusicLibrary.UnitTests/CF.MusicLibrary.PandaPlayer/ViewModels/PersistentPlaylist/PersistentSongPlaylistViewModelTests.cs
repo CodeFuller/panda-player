@@ -2,7 +2,7 @@
 using System.Linq;
 using CF.Library.Core.Extensions;
 using CF.Library.Core.Logging;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events;

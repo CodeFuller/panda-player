@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CF.Library.Core.Extensions;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 
 namespace CF.MusicLibrary.PandaPlayer.Events.SongListEvents
 {

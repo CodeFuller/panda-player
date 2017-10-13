@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using CF.MusicLibrary.BL;
-using CF.MusicLibrary.BL.Interfaces;
+using CF.MusicLibrary.Core;
+using CF.MusicLibrary.Core.Interfaces;
 
 namespace CF.MusicLibrary.Local
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CF.MusicLibrary.BL.Media;
-using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.Common.DiscArt;
+using CF.MusicLibrary.Core.Media;
+using CF.MusicLibrary.Core.Objects;
 
 namespace CF.MusicLibrary.LibraryChecker.Registrators
 {

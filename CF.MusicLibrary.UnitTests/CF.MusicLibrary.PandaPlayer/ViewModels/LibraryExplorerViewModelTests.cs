@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CF.Library.Core.Enums;
 using CF.Library.Core.Interfaces;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events.DiscEvents;

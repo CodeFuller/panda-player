@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using CF.MusicLibrary.BL.Objects;
 using CF.MusicLibrary.Common.DiscArt;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 
 namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary

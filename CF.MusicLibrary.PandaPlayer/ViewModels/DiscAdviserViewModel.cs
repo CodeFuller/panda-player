@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.Adviser;
 using CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
 using CF.MusicLibrary.PandaPlayer.Events;

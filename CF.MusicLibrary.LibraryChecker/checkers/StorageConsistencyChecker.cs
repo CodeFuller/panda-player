@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using CF.MusicLibrary.BL.Interfaces;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Interfaces;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.LibraryChecker.Registrators;
 using static CF.Library.Core.Application;
 

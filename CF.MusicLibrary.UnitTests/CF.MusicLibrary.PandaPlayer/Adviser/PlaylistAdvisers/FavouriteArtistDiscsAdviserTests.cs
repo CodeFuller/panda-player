@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.Adviser;
 using CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
 using NSubstitute;

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Wpf;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels

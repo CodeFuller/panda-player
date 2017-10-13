@@ -2,7 +2,7 @@
 using System.Linq;
 using CF.Library.Core.Extensions;
 using CF.Library.Core.Facades;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.Adviser;
 using CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
 using NSubstitute;

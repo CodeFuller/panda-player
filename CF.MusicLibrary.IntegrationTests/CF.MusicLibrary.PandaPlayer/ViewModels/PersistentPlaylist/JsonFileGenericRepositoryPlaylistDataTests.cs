@@ -4,7 +4,7 @@ using System.Text;
 using CF.Library.Core.Extensions;
 using CF.Library.Core.Facades;
 using CF.Library.Core.Logging;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer;
 using CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist;
 using NSubstitute;

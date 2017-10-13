@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CF.MusicLibrary.BL;
-using CF.MusicLibrary.BL.Interfaces;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core;
+using CF.MusicLibrary.Core.Interfaces;
+using CF.MusicLibrary.Core.Objects;
 
 namespace CF.MusicLibrary.PandaPlayer.ContentUpdate
 {

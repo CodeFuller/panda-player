@@ -1,5 +1,5 @@
-﻿using CF.MusicLibrary.BL.Objects;
-using CF.MusicLibrary.Common.DiscArt;
+﻿using CF.MusicLibrary.Common.DiscArt;
+using CF.MusicLibrary.Core.Objects;
 
 namespace CF.MusicLibrary.LibraryChecker.Registrators
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CF.Library.Core.Bootstrap;
 using CF.Library.Core.Exceptions;
-using CF.MusicLibrary.BL.Interfaces;
+using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.LibraryChecker.Checkers;
 using NDesk.Options;
 using static System.FormattableString;

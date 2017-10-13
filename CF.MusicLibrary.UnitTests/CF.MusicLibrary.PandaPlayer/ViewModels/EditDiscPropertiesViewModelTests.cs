@@ -1,7 +1,7 @@
 ﻿using System;
-using CF.MusicLibrary.BL;
-using CF.MusicLibrary.BL.Interfaces;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core;
+using CF.MusicLibrary.Core.Interfaces;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.ViewModels;
 using NSubstitute;

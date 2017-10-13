@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using NUnit.Framework;

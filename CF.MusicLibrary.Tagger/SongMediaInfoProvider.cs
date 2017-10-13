@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using CF.MusicLibrary.BL.Media;
+using CF.MusicLibrary.Core.Media;
 
 namespace CF.MusicLibrary.Tagger
 {

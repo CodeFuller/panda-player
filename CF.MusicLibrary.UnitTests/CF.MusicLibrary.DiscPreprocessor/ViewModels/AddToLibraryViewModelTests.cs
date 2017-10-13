@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CF.MusicLibrary.BL.Interfaces;
-using CF.MusicLibrary.BL.Media;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Interfaces;
+using CF.MusicLibrary.Core.Media;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels;

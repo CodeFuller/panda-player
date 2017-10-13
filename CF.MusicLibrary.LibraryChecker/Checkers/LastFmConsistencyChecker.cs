@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CF.Library.Core.Configuration;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.LastFM.Objects;
 using CF.MusicLibrary.LibraryChecker.Registrators;

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using CF.Library.Core.Exceptions;
 using CF.Library.Core.Facades;
-using CF.MusicLibrary.BL;
+using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Local;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 

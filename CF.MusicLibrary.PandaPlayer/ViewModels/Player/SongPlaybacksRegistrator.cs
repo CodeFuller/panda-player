@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using CF.Library.Core.Facades;
-using CF.MusicLibrary.BL.Interfaces;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Interfaces;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.LastFM.Objects;
 

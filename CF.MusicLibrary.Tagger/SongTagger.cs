@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using CF.MusicLibrary.BL.Media;
+using CF.MusicLibrary.Core.Media;
 using TagLib;
 
 namespace CF.MusicLibrary.Tagger

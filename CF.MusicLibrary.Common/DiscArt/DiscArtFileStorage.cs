@@ -4,7 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using CF.Library.Core.Facades;
-using CF.MusicLibrary.BL.Interfaces;
+using CF.MusicLibrary.Core.Interfaces;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.Common.DiscArt

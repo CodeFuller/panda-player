@@ -82,10 +82,10 @@
     <Compile Include="..\Global\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CF.MusicLibrary.BL\DiscArtFileStorageTests.cs" />
-    <Compile Include="CF.MusicLibrary.BL\MusicLibrary.Writer.Tests.cs" />
-    <Compile Include="CF.MusicLibrary.BL\Objects\DiscLibraryTests.cs" />
-    <Compile Include="CF.MusicLibrary.BL\Objects\DiscTests.cs" />
+    <Compile Include="CF.MusicLibrary.Core\DiscArtFileStorageTests.cs" />
+    <Compile Include="CF.MusicLibrary.Core\MusicLibrary.Writer.Tests.cs" />
+    <Compile Include="CF.MusicLibrary.Core\Objects\DiscLibraryTests.cs" />
+    <Compile Include="CF.MusicLibrary.Core\Objects\DiscTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\ArtistDiscViewItemTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\CompilationDiscWithArtistInfoViewItemTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\CompilationDiscWithoutArtistInfoViewItemTests.cs" />
@@ -100,9 +100,9 @@
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ParsingContent\InputContentSplitterTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\SongFileFilterTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\AddToLibraryViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.BL\DiscTitleToAlbumMapperTests.cs" />
-    <Compile Include="CF.MusicLibrary.BL\FilesystemMusicStorageTests.cs" />
-    <Compile Include="CF.MusicLibrary.BL\ItemUriPartsTests.cs" />
+    <Compile Include="CF.MusicLibrary.Core\DiscTitleToAlbumMapperTests.cs" />
+    <Compile Include="CF.MusicLibrary.Core\FilesystemMusicStorageTests.cs" />
+    <Compile Include="CF.MusicLibrary.Core\ItemUriPartsTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\ApplicationViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\EditDiscsDetailsViewModelTests.cs" />
     <Compile Include="CF.MusicLibrary.LastFM\LastFMScrobblerTests.cs" />
@@ -141,9 +141,9 @@
       <Project>{B977EA7B-85A2-429A-B98F-E76023589321}</Project>
       <Name>CF.MusicLibrary.DiscPreprocessor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.BL\CF.MusicLibrary.BL.csproj">
+    <ProjectReference Include="..\CF.MusicLibrary.Core\CF.MusicLibrary.Core.csproj">
       <Project>{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}</Project>
-      <Name>CF.MusicLibrary.BL</Name>
+      <Name>CF.MusicLibrary.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.LastFM\CF.MusicLibrary.LastFM.csproj">
       <Project>{7F368759-572F-41D4-A7FF-1B3898AE3918}</Project>

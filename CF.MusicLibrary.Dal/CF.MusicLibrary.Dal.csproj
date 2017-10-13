@@ -59,9 +59,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CF.MusicLibrary.BL\CF.MusicLibrary.BL.csproj">
+    <ProjectReference Include="..\CF.MusicLibrary.Core\CF.MusicLibrary.Core.csproj">
       <Project>{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}</Project>
-      <Name>CF.MusicLibrary.BL</Name>
+      <Name>CF.MusicLibrary.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

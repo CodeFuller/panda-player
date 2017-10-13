@@ -1,5 +1,5 @@
 ﻿using System;
-using CF.MusicLibrary.BL.Interfaces;
+using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.DiscPreprocessor;
 using NSubstitute;
 using NUnit.Framework;

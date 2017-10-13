@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("CF.MusicLibrary.BL")]
+[assembly: AssemblyTitle("CF.MusicLibrary.Tagger")]
 [assembly: AssemblyDescription("This assembly contains logic for accessing of tag data stored in media files")]
 
 [assembly: ComVisible(false)]

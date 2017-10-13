@@ -140,9 +140,9 @@
       <Project>{B977EA7B-85A2-429A-B98F-E76023589321}</Project>
       <Name>CF.MusicLibrary.DiscPreprocessor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.BL\CF.MusicLibrary.BL.csproj">
+    <ProjectReference Include="..\CF.MusicLibrary.Core\CF.MusicLibrary.Core.csproj">
       <Project>{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}</Project>
-      <Name>CF.MusicLibrary.BL</Name>
+      <Name>CF.MusicLibrary.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\CF.MusicLibrary.LibraryChecker\CF.MusicLibrary.LibraryChecker.csproj">
       <Project>{72458EFF-83E3-4907-8161-5401AA303D93}</Project>

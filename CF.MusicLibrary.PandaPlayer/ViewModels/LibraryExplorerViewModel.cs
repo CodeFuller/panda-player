@@ -8,7 +8,7 @@ using CF.Library.Core.Enums;
 using CF.Library.Core.Extensions;
 using CF.Library.Core.Interfaces;
 using CF.Library.Wpf;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.Events.DiscEvents;

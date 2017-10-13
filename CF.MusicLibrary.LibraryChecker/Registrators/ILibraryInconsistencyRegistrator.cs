@@ -1,4 +1,4 @@
-﻿using CF.MusicLibrary.BL.Interfaces;
+﻿using CF.MusicLibrary.Core.Interfaces;
 
 namespace CF.MusicLibrary.LibraryChecker.Registrators
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CF.Library.Core.Extensions;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using GalaSoft.MvvmLight;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;

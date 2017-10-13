@@ -5,8 +5,8 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using CF.MusicLibrary.BL.Interfaces;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Interfaces;
+using CF.MusicLibrary.Core.Objects;
 
 namespace CF.MusicLibrary.Dal
 {

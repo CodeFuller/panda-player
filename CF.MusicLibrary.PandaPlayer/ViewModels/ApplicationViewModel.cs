@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Wpf;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.Events;
 using CF.MusicLibrary.PandaPlayer.Events.DiscEvents;
 using CF.MusicLibrary.PandaPlayer.Events.SongEvents;

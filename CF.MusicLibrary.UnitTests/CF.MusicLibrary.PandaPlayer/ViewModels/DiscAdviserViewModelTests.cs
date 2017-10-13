@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using CF.MusicLibrary.BL.Objects;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.Adviser;
 using CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
 using CF.MusicLibrary.PandaPlayer.Events;
