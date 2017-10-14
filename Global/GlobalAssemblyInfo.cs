@@ -13,4 +13,4 @@ using System.Reflection;
 [assembly: AssemblyConfiguration("Release")]
 #endif
 
-[assembly: AssemblyVersion("1.6.*")]
+[assembly: AssemblyVersion("2.0.*")]
