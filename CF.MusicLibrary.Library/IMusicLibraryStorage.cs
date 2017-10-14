@@ -32,6 +32,6 @@ namespace CF.MusicLibrary.Library
 
 		Task ChangeSongUri(Song song, Uri newSongUri);
 
-		Task CheckDataConsistency(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator);
+		Task CheckDataConsistency(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues);
 	}
 }

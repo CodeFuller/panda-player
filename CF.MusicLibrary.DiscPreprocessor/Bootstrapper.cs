@@ -33,6 +33,7 @@ namespace CF.MusicLibrary.DiscPreprocessor
 			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepositoryEF>(new InjectionConstructor());
 			DIContainer.RegisterType<IMusicLibraryStorage, FileSystemMusicStorage>(
 				new InjectionConstructor(typeof(IFileSystemFacade), typeof(ISongTagger), typeof(IDiscArtFileStorage), localStorageRoot));
+			DIContainer.RegisterType<IChecksumCalculator, Crc32Calculator>();
 			DIContainer.RegisterType<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
 			DIContainer.RegisterType<IFileSystemFacade, FileSystemFacade>();
 			DIContainer.RegisterType<IWorkshopMusicStorage, WorkshopMusicStorage>(new InjectionConstructor(typeof(IFileSystemFacade), workshopDirectory));

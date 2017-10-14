@@ -83,6 +83,7 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CF.MusicLibrary.Core\DiscArtFileStorageTests.cs" />
+    <Compile Include="CF.MusicLibrary.Library\MusicLibrary.Reader.Tests.cs" />
     <Compile Include="CF.MusicLibrary.Library\MusicLibrary.Writer.Tests.cs" />
     <Compile Include="CF.MusicLibrary.Core\Objects\DiscLibraryTests.cs" />
     <Compile Include="CF.MusicLibrary.Core\Objects\DiscTests.cs" />

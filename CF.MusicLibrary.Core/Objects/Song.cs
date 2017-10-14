@@ -99,6 +99,8 @@ namespace CF.MusicLibrary.Core.Objects
 
 		public int FileSize { get; set; }
 
+		public int? Checksum { get; set; }
+
 		public int? Bitrate { get; set; }
 
 		private DateTime? lastPlaybackTime;

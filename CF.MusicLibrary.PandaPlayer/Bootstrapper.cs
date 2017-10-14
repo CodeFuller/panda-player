@@ -49,6 +49,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<ISongTagger, SongTagger>();
 			DIContainer.RegisterType<IMusicLibraryStorage, FileSystemMusicStorage>(
 				new InjectionConstructor(typeof(IFileSystemFacade), typeof(ISongTagger), typeof(IDiscArtFileStorage), localStorageRoot));
+			DIContainer.RegisterType<IChecksumCalculator, Crc32Calculator>();
 			DIContainer.RegisterType<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
 			DIContainer.RegisterType<IFileSystemFacade, FileSystemFacade>();
 			DIContainer.RegisterInstance(new DiscLibrary(async () =>

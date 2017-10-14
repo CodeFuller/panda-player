@@ -10,6 +10,7 @@ using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
+using static CF.Library.Core.Application;
 
 namespace CF.MusicLibrary.Library
 {
@@ -173,7 +174,7 @@ namespace CF.MusicLibrary.Library
 			});
 		}
 
-		public async Task CheckDataConsistency(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator)
+		public async Task CheckDataConsistency(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues)
 		{
 			await Task.Run(() =>
 			{
@@ -188,6 +189,11 @@ namespace CF.MusicLibrary.Library
 					else if (!fileSystemFacade.GetReadOnlyAttribute(songFileName))
 					{
 						registrator.RegisterInconsistency_LibraryData($"Song file has no read-only attribute set: {songFileName}");
+						if (fixFoundIssues)
+						{
+							fileSystemFacade.SetReadOnlyAttribute(songFileName);
+							Logger.WriteInfo("Read-only attribute has been set for '{songFileName}'");
+						}
 					}
 				}
 

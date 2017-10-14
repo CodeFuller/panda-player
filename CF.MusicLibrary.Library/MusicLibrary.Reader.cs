@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
+using static CF.Library.Core.Application;
 
 namespace CF.MusicLibrary.Library
 {
@@ -15,7 +16,10 @@ namespace CF.MusicLibrary.Library
 
 		private readonly ILibraryStructurer libraryStructurer;
 
-		public RepositoryAndStorageMusicLibrary(IMusicLibraryRepository libraryRepository, IMusicLibraryStorage libraryStorage, ILibraryStructurer libraryStructurer)
+		private readonly IChecksumCalculator checksumCalculator;
+
+		public RepositoryAndStorageMusicLibrary(IMusicLibraryRepository libraryRepository, IMusicLibraryStorage libraryStorage,
+			ILibraryStructurer libraryStructurer, IChecksumCalculator checksumCalculator)
 		{
 			if (libraryRepository == null)
 			{
@@ -25,10 +29,19 @@ namespace CF.MusicLibrary.Library
 			{
 				throw new ArgumentNullException(nameof(libraryStorage));
 			}
+			if (libraryStructurer == null)
+			{
+				throw new ArgumentNullException(nameof(libraryStructurer));
+			}
+			if (checksumCalculator == null)
+			{
+				throw new ArgumentNullException(nameof(checksumCalculator));
+			}
 
 			this.libraryRepository = libraryRepository;
 			this.libraryStorage = libraryStorage;
 			this.libraryStructurer = libraryStructurer;
+			this.checksumCalculator = checksumCalculator;
 		}
 
 		public async Task<IEnumerable<Disc>> LoadDiscs()
@@ -60,10 +73,29 @@ namespace CF.MusicLibrary.Library
 		{
 			return await libraryStorage.GetDiscCoverImage(disc);
 		}
-		
-		public async Task CheckStorage(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator)
+
+		public async Task CheckStorage(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues)
 		{
-			await libraryStorage.CheckDataConsistency(library, registrator);
+			await libraryStorage.CheckDataConsistency(library, registrator, fixFoundIssues);
+		}
+
+		public async Task CheckStorageChecksums(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues)
+		{
+			foreach (var song in library.Songs)
+			{
+				string songFileName = await libraryStorage.GetSongFile(song);
+				var currChecksum = checksumCalculator.CalculateChecksumForFile(songFileName);
+				if (currChecksum != song.Checksum)
+				{
+					registrator.RegisterInconsistency_LibraryData($"Checksum mismatch: 0x{currChecksum:X8} != 0x{song.Checksum:X8} for song {song.Uri}");
+					if (fixFoundIssues)
+					{
+						song.Checksum = currChecksum;
+						await libraryRepository.UpdateSong(song);
+						Logger.WriteInfo($"Checksum has been updated for song '{song.Uri}'");
+					}
+				}
+			}
 		}
 	}
 }

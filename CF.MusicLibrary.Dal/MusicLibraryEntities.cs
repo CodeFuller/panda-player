@@ -40,6 +40,7 @@ namespace CF.MusicLibrary.Dal
 			modelBuilder.Entity<Song>().Property(s => s.DurationInMilliseconds).IsRequired().HasColumnName("Duration");
 			modelBuilder.Entity<Song>().Ignore(s => s.Uri);
 			modelBuilder.Entity<Song>().Property(s => s.SongUri).IsRequired().HasColumnName("Uri");
+			modelBuilder.Entity<Song>().Property(s => s.Checksum).IsRequired();
 			modelBuilder.Entity<Song>().Ignore(s => s.IsDeleted);
 			modelBuilder.Entity<Song>().Property(s => s.ArtistId).HasColumnName("Artist_Id");
 			modelBuilder.Entity<Song>().Property(s => s.GenreId).HasColumnName("Genre_Id");

@@ -13,6 +13,7 @@ namespace CF.MusicLibrary.Library
 		public async Task AddSong(Song song, string songSourceFileName)
 		{
 			await libraryStorage.AddSong(song, songSourceFileName);
+			await UpdateSongChecksum(song, false);
 			await libraryRepository.AddSong(song);
 		}
 
@@ -20,7 +21,7 @@ namespace CF.MusicLibrary.Library
 		{
 			if ((updatedProperties & SongTagData.TaggedProperties) != 0)
 			{
-				await libraryStorage.UpdateSongTagData(song, updatedProperties);
+				await UpdateSongTagData(song, updatedProperties, false);
 			}
 			await libraryRepository.UpdateSong(song);
 		}
@@ -59,7 +60,7 @@ namespace CF.MusicLibrary.Library
 			{
 				foreach (var song in disc.Songs)
 				{
-					await libraryStorage.UpdateSongTagData(song, updatedProperties);
+					await UpdateSongTagData(song, updatedProperties, true);
 				}
 			}
 			await libraryRepository.UpdateDisc(disc);
@@ -89,6 +90,24 @@ namespace CF.MusicLibrary.Library
 		public async Task FixSongTagData(Song song)
 		{
 			await libraryStorage.FixSongTagData(song);
+			await UpdateSongChecksum(song, true);
+		}
+
+		private async Task UpdateSongTagData(Song song, UpdatedSongProperties updatedProperties, bool updateInRepository)
+		{
+			await libraryStorage.UpdateSongTagData(song, updatedProperties);
+			await UpdateSongChecksum(song, updateInRepository);
+		}
+
+		private async Task UpdateSongChecksum(Song song, bool updateInRepository)
+		{
+			var songFileName = await libraryStorage.GetSongFile(song);
+			song.Checksum = checksumCalculator.CalculateChecksumForFile(songFileName);
+
+			if (updateInRepository)
+			{
+				await libraryRepository.UpdateSong(song);
+			}
 		}
 	}
 }

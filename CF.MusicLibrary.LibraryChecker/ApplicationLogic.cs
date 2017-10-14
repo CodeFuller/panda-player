@@ -62,11 +62,13 @@ namespace CF.MusicLibrary.LibraryChecker
 		{
 			LibraryCheckFlags checkFlags = LibraryCheckFlags.CheckDiscsConsistency | LibraryCheckFlags.CheckLibraryStorage;
 			LaunchCommand command = LaunchCommand.ShowHelp;
+			bool fixIssues = false;
 
 			var options = new Dictionary<string, LibraryCheckFlags>
 			{
 				{ "check-discs", LibraryCheckFlags.CheckDiscsConsistency },
 				{ "check-storage", LibraryCheckFlags.CheckLibraryStorage },
+				{ "check-checksums", LibraryCheckFlags.CheckChecksums },
 				{ "check-tags", LibraryCheckFlags.CheckTagData },
 				{ "check-arts", LibraryCheckFlags.CheckDiscArts },
 				{ "check-artists", LibraryCheckFlags.CheckArtistsOnLastFM },
@@ -80,6 +82,7 @@ namespace CF.MusicLibrary.LibraryChecker
 			}
 
 			optionSet.Add("check", s => command = LaunchCommand.Check);
+			optionSet.Add("fix", s => fixIssues = true);
 			optionSet.Add("unify-tags", s => command = LaunchCommand.UnifyTags);
 
 			optionSet.Parse(args);
@@ -91,7 +94,7 @@ namespace CF.MusicLibrary.LibraryChecker
 					break;
 
 				case LaunchCommand.Check:
-					RunChecks(checkFlags).Wait();
+					RunChecks(checkFlags, fixIssues).Wait();
 					break;
 
 				case LaunchCommand.UnifyTags:
@@ -111,10 +114,11 @@ namespace CF.MusicLibrary.LibraryChecker
 			Console.Error.WriteLine("Usage: LibraryChecker.exe <command> [command options]");
 			Console.Error.WriteLine("Supported commands:");
 			Console.Error.WriteLine();
-			Console.Error.WriteLine("  --check          Check library consistency. Possible checks");
+			Console.Error.WriteLine("  --check [--fix]  Check library consistency. Possible checks:");
 			Console.Error.WriteLine();
 			Console.Error.WriteLine("        --check-discs=yes|no        Default");
 			Console.Error.WriteLine("        --check-storage=yes|no      Default");
+			Console.Error.WriteLine("        --check-checksums=yes|no");
 			Console.Error.WriteLine("        --check-tags=yes|no");
 			Console.Error.WriteLine("        --check-arts=yes|no");
 			Console.Error.WriteLine("        --check-artists=yes|no");
@@ -144,7 +148,7 @@ namespace CF.MusicLibrary.LibraryChecker
 			return ParseSetFlag(setValue) ? (currlags | setFlag) : (currlags & ~setFlag);
 		}
 
-		private async Task RunChecks(LibraryCheckFlags checkFlags)
+		private async Task RunChecks(LibraryCheckFlags checkFlags, bool fixIssues)
 		{
 			Logger.WriteInfo("Loading library content...");
 			var discLibrary = await musicLibrary.LoadLibrary();
@@ -156,7 +160,12 @@ namespace CF.MusicLibrary.LibraryChecker
 
 			if ((checkFlags & LibraryCheckFlags.CheckLibraryStorage) != 0)
 			{
-				await storageConsistencyChecker.CheckStorage(discLibrary);
+				await storageConsistencyChecker.CheckStorage(discLibrary, fixIssues);
+			}
+
+			if ((checkFlags & LibraryCheckFlags.CheckChecksums) != 0)
+			{
+				await storageConsistencyChecker.CheckStorageChecksums(discLibrary, fixIssues);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckTagData) != 0)

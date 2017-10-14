@@ -23,6 +23,8 @@ namespace CF.MusicLibrary.Core.Interfaces
 
 		Task<string> GetDiscCoverImage(Disc disc);
 
-		Task CheckStorage(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator);
+		Task CheckStorage(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues);
+
+		Task CheckStorageChecksums(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues);
 	}
 }

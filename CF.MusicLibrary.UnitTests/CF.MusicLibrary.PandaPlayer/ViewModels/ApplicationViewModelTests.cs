@@ -736,6 +736,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
 				musicPlayerViewModelMock, Substitute.For<IViewNavigator>());
+			target.Load().Wait();
 
 			//	Act
 
@@ -757,6 +758,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 
 			var target = new ApplicationViewModel(new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>())), Substitute.For<IApplicationViewModelHolder>(),
 				musicPlayerViewModelMock, Substitute.For<IViewNavigator>());
+			target.Load().Wait();
 
 			//	Act
 

@@ -28,10 +28,16 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 			this.inconsistencyRegistrator = inconsistencyRegistrator;
 		}
 
-		public async Task CheckStorage(DiscLibrary library)
+		public async Task CheckStorage(DiscLibrary library, bool fixIssues)
 		{
 			Logger.WriteInfo("Checking library storage ...");
-			await musicLibrary.CheckStorage(library, inconsistencyRegistrator);
+			await musicLibrary.CheckStorage(library, inconsistencyRegistrator, fixIssues);
+		}
+
+		public async Task CheckStorageChecksums(DiscLibrary library, bool fixIssues)
+		{
+			Logger.WriteInfo("Checking storage checksums...");
+			await musicLibrary.CheckStorageChecksums(library, inconsistencyRegistrator, fixIssues);
 		}
 	}
 }

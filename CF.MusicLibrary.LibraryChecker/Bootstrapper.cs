@@ -30,6 +30,7 @@ namespace CF.MusicLibrary.LibraryChecker
 			DIContainer.RegisterType<IMusicLibraryStorage, FileSystemMusicStorage>(
 				new InjectionConstructor(typeof(IFileSystemFacade), typeof(ISongTagger), typeof(IDiscArtFileStorage), localStorageRoot));
 			DIContainer.RegisterType<ILibraryStructurer, MyLibraryStructurer>();
+			DIContainer.RegisterType<IChecksumCalculator, Crc32Calculator>();
 			DIContainer.RegisterType<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
 			DIContainer.RegisterType<ISongTagger, SongTagger>();
 			DIContainer.RegisterType<ITokenAuthorizer, DefaultBrowserTokenAuthorizer>();

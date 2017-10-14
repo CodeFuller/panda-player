@@ -10,6 +10,7 @@ CREATE TABLE [Songs] (
   [Rating] int NULL,
   [Uri] ntext NOT NULL,
   [FileSize] int NOT NULL,
+  [Checksum] int NOT NULL,
   [Bitrate] int NULL,
   [LastPlaybackTime] datetime NULL,
   [PlaybacksCount] int NOT NULL,
