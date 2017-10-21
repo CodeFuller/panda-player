@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
-using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
-using NSubstitute;
 using NUnit.Framework;
 
 namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
@@ -25,7 +23,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new CompilationDiscWithArtistInfoViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { artist }, Enumerable.Empty<Genre>());
+			var target = new CompilationDiscWithArtistInfoViewItem(discInfo, new[] { artist }, Enumerable.Empty<Genre>());
 
 			//	Act & Assert
 
@@ -43,7 +41,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new CompilationDiscWithArtistInfoViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
+			var target = new CompilationDiscWithArtistInfoViewItem(discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
 
 			//	Act & Assert
 
@@ -61,7 +59,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new CompilationDiscWithArtistInfoViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
+			var target = new CompilationDiscWithArtistInfoViewItem(discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
 
 			//	Act & Assert
 
@@ -79,7 +77,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Title = "Some Title",
 			};
 
-			var target = new CompilationDiscWithArtistInfoViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
+			var target = new CompilationDiscWithArtistInfoViewItem(discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
 
 			//	Act & Assert
 

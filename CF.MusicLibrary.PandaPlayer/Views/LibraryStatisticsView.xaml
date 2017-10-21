@@ -59,8 +59,8 @@
             <Label HorizontalAlignment="Right" Content="{Binding UnratedSongsPercentage, Converter={StaticResource PercentageValueConverter}}" />
         </Grid>
         <Grid>
-            <Label Content="Discs without Art:" />
-            <Label HorizontalAlignment="Right" Content="{Binding DiscsWithoutArtPercentage, Converter={StaticResource PercentageValueConverter}}" />
+            <Label Content="Discs without cover:" />
+			<Label HorizontalAlignment="Right" Content="{Binding PercentageOfDiscsWithoutCoverImage, Converter={StaticResource PercentageValueConverter}}" />
         </Grid>
         <Button Content="OK" Width="100" Margin="10" IsDefault="True" IsCancel="True" Click="OkButton_Click" />
     </StackPanel>

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CF.Library.Core.Extensions;
+using CF.MusicLibrary.Core.Objects.Images;
+using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.Core.Objects
 {
@@ -56,6 +58,27 @@ namespace CF.MusicLibrary.Core.Objects
 			.ThenBy(s => s.Title);
 
 		public ICollection<Song> SongsUnordered { get; set; } = new Collection<Song>();
+
+		public ICollection<DiscImage> Images { get; } = new Collection<DiscImage>();
+
+		public DiscImage CoverImage
+		{
+			get { return Images.SingleOrDefault(im => im.ImageType == DiscImageType.Cover); }
+			set
+			{
+				if (value != null && value.ImageType != DiscImageType.Cover)
+				{
+					throw new InvalidOperationException(Current($"Added disc image is not a cover image ({value.ImageType})"));
+				}
+
+				Images.Remove(CoverImage);
+
+				if (value != null)
+				{
+					Images.Add(value);
+				}
+			}
+		}
 
 		public bool IsDeleted => !Songs.Any();
 	}

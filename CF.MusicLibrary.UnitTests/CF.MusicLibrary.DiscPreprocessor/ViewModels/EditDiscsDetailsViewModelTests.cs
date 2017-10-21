@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using CF.Library.Core.Interfaces;
-using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
+using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels;
 using NSubstitute;
@@ -18,37 +17,21 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 		[Test]
 		public void Constructor_IfDiscLibraryArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new EditDiscsDetailsViewModel(null, Substitute.For<ILibraryStructurer>(),
-				Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IDiscArtFileStorage>()));
+			Assert.Throws<ArgumentNullException>(() => new EditDiscsDetailsViewModel(null, Substitute.For<ILibraryStructurer>()));
 		}
 
 		[Test]
 		public void Constructor_IfLibraryStructurerArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new EditDiscsDetailsViewModel(new DiscLibrary(), null,
-				Substitute.For<IObjectFactory<IDiscArtImageFile>>(), Substitute.For<IDiscArtFileStorage>()));
+			Assert.Throws<ArgumentNullException>(() => new EditDiscsDetailsViewModel(new DiscLibrary(), null));
 		}
 
 		[Test]
-		public void Constructor_IfDiscArtImageFileFactoryArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditDiscsDetailsViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(),
-				null, Substitute.For<IDiscArtFileStorage>()));
-		}
-
-		[Test]
-		public void Constructor_IfDiscArtFileStorageArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditDiscsDetailsViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(),
-				Substitute.For<IObjectFactory<IDiscArtImageFile>>(), null));
-		}
-
-		[Test]
-		public void SetDiscs_IfDiscCoverImageFileExists_SetsDiscCoverImageToThisFile()
+		public void AddedDiscs_ForNewDiscs_ReturnsDiscsWithCorrectInfo()
 		{
 			//	Arrange
 
-			var addedDisc = new AddedDiscInfo(new AddedSongInfo[] { })
+			var addedDiscInfo = new AddedDiscInfo(new AddedSongInfo[] { })
 			{
 				Title = "Some Disc",
 				SourcePath = @"Workshop\Some Artist\2000 - Some Disc",
@@ -56,170 +39,25 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 				Artist = "Some Artist",
 			};
 
-			IDiscArtImageFile discArtImageFileMock = Substitute.For<IDiscArtImageFile>();
-
-			IObjectFactory<IDiscArtImageFile> discArtImageFileFactoryStub = Substitute.For<IObjectFactory<IDiscArtImageFile>>();
-			discArtImageFileFactoryStub.CreateInstance().Returns(discArtImageFileMock);
-
-			IDiscArtFileStorage discArtFileStorageStub = Substitute.For<IDiscArtFileStorage>();
-			discArtFileStorageStub.GetDiscCoverImageFileName(@"Workshop\Some Artist\2000 - Some Disc").Returns(@"Workshop\Some Artist\2000 - Some Disc\SomeCover.img");
-
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, discArtFileStorageStub);
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>());
+			target.SetDiscs(new[] { addedDiscInfo }).Wait();
 
 			//	Act
 
-			target.SetDiscs(new[] { addedDisc }).Wait();
+			var addedDiscs = target.AddedDiscs.ToList();
 
 			//	Assert
 
-			discArtImageFileMock.Received(1).Load(@"Workshop\Some Artist\2000 - Some Disc\SomeCover.img", false);
+			Assert.AreEqual(1, addedDiscs.Count);
+			var addedDisc = addedDiscs.Single();
+			Assert.AreSame(target.Discs[0].Disc, addedDisc.Disc);
+			Assert.IsTrue(addedDisc.IsNewDisc);
+			Assert.AreEqual(@"Workshop\Some Artist\2000 - Some Disc", addedDisc.SourcePath);
 		}
 
 		[Test]
-		public void SetDiscs_IfDiscCoverImageFileDoesNotExist_DoesNotLoadDiscCoverImage()
-		{
-			//	Arrange
-
-			var addedDisc = new AddedDiscInfo(new AddedSongInfo[] { })
-			{
-				Title = "Some Disc",
-				SourcePath = @"Workshop\Some Artist\2000 - Some Disc",
-				DiscType = DsicType.ArtistDisc,
-				Artist = "Some Artist",
-			};
-
-			IDiscArtImageFile discArtImageFileMock = Substitute.For<IDiscArtImageFile>();
-
-			IObjectFactory<IDiscArtImageFile> discArtImageFileFactoryStub = Substitute.For<IObjectFactory<IDiscArtImageFile>>();
-			discArtImageFileFactoryStub.CreateInstance().Returns(discArtImageFileMock);
-
-			IDiscArtFileStorage discArtFileStorageStub = Substitute.For<IDiscArtFileStorage>();
-			discArtFileStorageStub.GetDiscCoverImageFileName(@"Workshop\Some Artist\2000 - Some Disc").Returns((string)null);
-
-			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, discArtFileStorageStub);
-
-			//	Act
-
-			target.SetDiscs(new[] { addedDisc }).Wait();
-
-			//	Assert
-
-			discArtImageFileMock.DidNotReceive().Load(Arg.Any<string>(), Arg.Any<bool>());
-		}
-
-		[Test]
-		public void RefreshContent_IfDiscCoverImageFileExists_SetsDiscCoverImageToThisFile()
-		{
-			//	Arrange
-
-			var addedDisc = new AddedDiscInfo(new AddedSongInfo[] { })
-			{
-				Title = "Some Disc",
-				SourcePath = @"Workshop\Some Artist\2000 - Some Disc",
-				DiscType = DsicType.ArtistDisc,
-				Artist = "Some Artist",
-			};
-
-			IDiscArtImageFile discArtImageFileMock = Substitute.For<IDiscArtImageFile>();
-
-			IObjectFactory<IDiscArtImageFile> discArtImageFileFactoryStub = Substitute.For<IObjectFactory<IDiscArtImageFile>>();
-			discArtImageFileFactoryStub.CreateInstance().Returns(discArtImageFileMock);
-
-			IDiscArtFileStorage discArtFileStorageStub = Substitute.For<IDiscArtFileStorage>();
-			discArtFileStorageStub.GetDiscCoverImageFileName(@"Workshop\Some Artist\2000 - Some Disc").Returns(@"Workshop\Some Artist\2000 - Some Disc\SomeCover.img");
-
-			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, discArtFileStorageStub);
-
-			//	Act
-
-			target.SetDiscs(new[] { addedDisc }).Wait();
-
-			//	Assert
-
-			discArtImageFileMock.Received(1).Load(@"Workshop\Some Artist\2000 - Some Disc\SomeCover.img", false);
-		}
-
-		[Test]
-		public void RefreshContent_IfDiscCoverImageFileDoesNotExist_UnsetsDiscCoverImage()
-		{
-			//	Arrange
-
-			var addedDisc = new AddedDiscInfo(new AddedSongInfo[] { })
-			{
-				Title = "Some Disc",
-				SourcePath = @"Workshop\Some Artist\2000 - Some Disc",
-				DiscType = DsicType.ArtistDisc,
-				Artist = "Some Artist",
-			};
-
-			IDiscArtImageFile discArtImageFileMock = Substitute.For<IDiscArtImageFile>();
-
-			IObjectFactory<IDiscArtImageFile> discArtImageFileFactoryStub = Substitute.For<IObjectFactory<IDiscArtImageFile>>();
-			discArtImageFileFactoryStub.CreateInstance().Returns(discArtImageFileMock);
-
-			IDiscArtFileStorage discArtFileStorageStub = Substitute.For<IDiscArtFileStorage>();
-			discArtFileStorageStub.GetDiscCoverImageFileName(@"Workshop\Some Artist\2000 - Some Disc").Returns((string)null);
-
-			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, discArtFileStorageStub);
-
-			//	Act
-
-			target.SetDiscs(new[] { addedDisc }).Wait();
-
-			//	Assert
-
-			discArtImageFileMock.Received(1).Unload();
-		}
-
-		[Test]
-		public void DiscCoverImages_ReturnsFilledCoverImages()
-		{
-			//	Arrange
-
-			var addedDisc1 = new AddedDiscInfo(new AddedSongInfo[] { })
-			{
-				Title = "Some Disc",
-				SourcePath = @"Workshop\Some Artist\2000 - Some Disc",
-				DiscType = DsicType.ArtistDisc,
-				Artist = "Some Artist",
-			};
-
-			var addedDisc2 = new AddedDiscInfo(new AddedSongInfo[] { })
-			{
-				Title = "Some Disc",
-				SourcePath = @"Workshop\Some Artist\2000 - Some Disc",
-				DiscType = DsicType.ArtistDisc,
-				Artist = "Some Artist",
-			};
-
-			IDiscArtImageFile discArtImageFileStub = Substitute.For<IDiscArtImageFile>();
-			discArtImageFileStub.ImageIsValid.Returns(true);
-			discArtImageFileStub.ImageFileName.Returns("DiscCover1.jpg", "DiscCover2.jpg");
-
-			IObjectFactory<IDiscArtImageFile> discArtImageFileFactoryStub = Substitute.For<IObjectFactory<IDiscArtImageFile>>();
-			discArtImageFileFactoryStub.CreateInstance().Returns(discArtImageFileStub);
-
-			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, Substitute.For<IDiscArtFileStorage>());
-			target.SetDiscs(new[] { addedDisc1, addedDisc2 }).Wait();
-
-			//	Act
-
-			var addedDiscCoverImages = target.DiscCoverImages.ToList();
-
-			//	Assert
-
-			Assert.AreEqual(2, addedDiscCoverImages.Count);
-			Assert.AreEqual("DiscCover1.jpg", addedDiscCoverImages[0].CoverImageFileName);
-			Assert.AreEqual("DiscCover2.jpg", addedDiscCoverImages[1].CoverImageFileName);
-		}
-
-		[Test]
-		public void DiscCoverImages_DoesNotReturnDiscCoverImagesForExistingDiscs()
+		public void AddedDiscs_ForExistingDiscs_ReturnsDiscsWithCorrectInfo()
 		{
 			//	Arrange
 
@@ -229,33 +67,32 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 				SongsUnordered = new[] { new Song() },
 			};
 
-			var addedDisc = new AddedDiscInfo(new AddedSongInfo[] { })
+			var addedDiscInfo = new AddedDiscInfo(new AddedSongInfo[] { })
 			{
 				Title = "Some Disc",
-				UriWithinStorage = new Uri("/Some Artist/2000 - Some Disc", UriKind.Relative),
 				SourcePath = @"Workshop\Some Artist\2000 - Some Disc",
+				UriWithinStorage = new Uri("/Some Artist/2000 - Some Disc", UriKind.Relative),
 				DiscType = DsicType.ArtistDisc,
 				Artist = "Some Artist",
 			};
 
-			IDiscArtImageFile discArtImageFileStub = Substitute.For<IDiscArtImageFile>();
-			discArtImageFileStub.ImageIsValid.Returns(true);
-			discArtImageFileStub.ImageFileName.Returns("DiscCover.jpg");
-
-			IObjectFactory<IDiscArtImageFile> discArtImageFileFactoryStub = Substitute.For<IObjectFactory<IDiscArtImageFile>>();
-			discArtImageFileFactoryStub.CreateInstance().Returns(discArtImageFileStub);
-
-			var discLibrary = new DiscLibrary(() => Task.FromResult(new [] { existingDisc }.AsEnumerable()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>(), discArtImageFileFactoryStub, Substitute.For<IDiscArtFileStorage>());
-			target.SetDiscs(new[] { addedDisc }).Wait();
+			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Repeat(existingDisc, 1)));
+			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>());
+			target.SetDiscs(new[] { addedDiscInfo }).Wait();
+			//	Sanity check.
+			Assert.IsTrue(target.Discs.Single() is ExistingDiscViewItem);
 
 			//	Act
 
-			var addedDiscCoverImages = target.DiscCoverImages.ToList();
+			var addedDiscs = target.AddedDiscs.ToList();
 
 			//	Assert
 
-			Assert.IsEmpty(addedDiscCoverImages);
+			Assert.AreEqual(1, addedDiscs.Count);
+			var addedDisc = addedDiscs.Single();
+			Assert.AreSame(target.Discs[0].Disc, addedDisc.Disc);
+			Assert.IsFalse(addedDisc.IsNewDisc);
+			Assert.AreEqual(@"Workshop\Some Artist\2000 - Some Disc", addedDisc.SourcePath);
 		}
 	}
 }

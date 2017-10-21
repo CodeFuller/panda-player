@@ -1,37 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
-using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
+using CF.MusicLibrary.Core.Objects.Images;
 
 namespace CF.MusicLibrary.Library
 {
 	public interface IMusicLibraryStorage
 	{
-		Task AddSong(Song song, string songSourceFileName);
-
-		Task DeleteSong(Song song);
-
-		Task SetDiscCoverImage(Disc disc, string coverImageFileName);
-
-		Task<string> GetDiscCoverImage(Disc disc);
-
-		Task UpdateSongTagData(Song song, UpdatedSongProperties updatedProperties);
-
-		Task FixSongTagData(Song song);
-
-		Task<SongTagData> GetSongTagData(Song song);
-
-		Task<IEnumerable<SongTagType>> GetSongTagTypes(Song song);
+		Task StoreSong(string sourceSongFileName, Song song);
 
 		Task<string> GetSongFile(Song song);
 
-		Task ChangeDiscUri(Disc disc, Uri newDiscUri);
+		Task<string> GetSongFileForWriting(Song song);
+
+		Task UpdateSongContent(string sourceSongFileName, Song song);
 
 		Task ChangeSongUri(Song song, Uri newSongUri);
 
-		Task CheckDataConsistency(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues);
+		Task DeleteSong(Song song);
+
+		Task ChangeDiscUri(Disc disc, Uri newDiscUri);
+
+		Task StoreDiscImage(string sourceImageFileName, DiscImage discImage);
+
+		Task<string> GetDiscImageFile(DiscImage discImage);
+
+		Task DeleteDiscImage(DiscImage discImage);
+
+		Task CheckDataConsistency(IEnumerable<Uri> expectedItemUris, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues);
 	}
 }

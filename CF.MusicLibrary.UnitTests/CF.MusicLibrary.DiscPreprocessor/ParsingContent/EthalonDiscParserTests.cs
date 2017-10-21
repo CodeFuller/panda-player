@@ -43,9 +43,10 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ParsingCont
 			//	Assert
 
 			Assert.AreEqual("DiscDirectory", disc.DiscDirectory);
-			Assert.AreEqual(2, disc.Songs.Count);
-			Assert.AreEqual("Song1", disc.Songs[0].Title);
-			Assert.AreEqual("Song2", disc.Songs[1].Title);
+			var songs = disc.Songs.ToList();
+			Assert.AreEqual(2, songs.Count);
+			Assert.AreEqual("Song1", songs[0].Title);
+			Assert.AreEqual("Song2", songs[1].Title);
 		}
 	}
 }

@@ -5,17 +5,13 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using CF.Library.Core.Exceptions;
-using CF.Library.Core.Interfaces;
-using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
@@ -24,16 +20,14 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 	{
 		private readonly DiscLibrary discLibrary;
 		private readonly ILibraryStructurer libraryStructurer;
-		private readonly IObjectFactory<IDiscArtImageFile> discArtImageFileFactory;
-		private readonly IDiscArtFileStorage discArtFileStorage;
 
 		public string Name => "Edit Discs Details";
 
 		public bool DataIsReady => Discs.All(a => a.RequiredDataIsFilled);
 
-		public ObservableCollection<DiscViewItem> Discs { get; private set; }
+		public ObservableCollection<DiscViewItem> Discs { get; }
 
-		public IEnumerable<AddedDiscCoverImage> DiscCoverImages => Discs.Select(disc => disc.AddedDiscCoverImage).Where(ci => ci != null);
+		public IEnumerable<AddedDisc> AddedDiscs => Discs.Select(d => new AddedDisc(d.Disc, d is NewDiscViewItem, d.SourcePath));
 
 		public IEnumerable<AddedSong> AddedSongs
 		{
@@ -50,10 +44,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			}
 		}
 
-		public ICommand RefreshContentCommand { get; }
-
-		public EditDiscsDetailsViewModel(DiscLibrary discLibrary, ILibraryStructurer libraryStructurer,
-			IObjectFactory<IDiscArtImageFile> discArtImageFileFactory, IDiscArtFileStorage discArtFileStorage)
+		public EditDiscsDetailsViewModel(DiscLibrary discLibrary, ILibraryStructurer libraryStructurer)
 		{
 			if (discLibrary == null)
 			{
@@ -63,21 +54,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			{
 				throw new ArgumentNullException(nameof(libraryStructurer));
 			}
-			if (discArtImageFileFactory == null)
-			{
-				throw new ArgumentNullException(nameof(discArtImageFileFactory));
-			}
-			if (discArtFileStorage == null)
-			{
-				throw new ArgumentNullException(nameof(discArtFileStorage));
-			}
 
 			this.discLibrary = discLibrary;
 			this.libraryStructurer = libraryStructurer;
-			this.discArtImageFileFactory = discArtImageFileFactory;
-			this.discArtFileStorage = discArtFileStorage;
 
-			RefreshContentCommand = new RelayCommand(RefreshContent);
+			Discs = new ObservableCollection<DiscViewItem>();
 		}
 
 		public async Task SetDiscs(IEnumerable<AddedDiscInfo> discs)
@@ -87,7 +68,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			var discsList = discs.ToList();
 			var availableArtists = BuildAvailableArtistsList(discsList);
 
-			Discs = new ObservableCollection<DiscViewItem>();
+			Discs.Clear();
 			foreach (var addedDiscInfo in discsList)
 			{
 				Disc existingDisc = discLibrary.Discs.SingleOrDefault(d => d.Uri == addedDiscInfo.UriWithinStorage);
@@ -103,15 +84,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 					switch (addedDiscInfo.DiscType)
 					{
 						case DsicType.ArtistDisc:
-							addedDisc = new ArtistDiscViewItem(discArtImageFileFactory.CreateInstance(), addedDiscInfo, availableArtists, discLibrary.Genres, PredictArtistGenre(addedDiscInfo.Artist));
+							addedDisc = new ArtistDiscViewItem(addedDiscInfo, availableArtists, discLibrary.Genres, PredictArtistGenre(addedDiscInfo.Artist));
 							break;
 
 						case DsicType.CompilationDiscWithArtistInfo:
-							addedDisc = new CompilationDiscWithArtistInfoViewItem(discArtImageFileFactory.CreateInstance(), addedDiscInfo, availableArtists, discLibrary.Genres);
+							addedDisc = new CompilationDiscWithArtistInfoViewItem(addedDiscInfo, availableArtists, discLibrary.Genres);
 							break;
 
 						case DsicType.CompilationDiscWithoutArtistInfo:
-							addedDisc = new CompilationDiscWithoutArtistInfoViewItem(discArtImageFileFactory.CreateInstance(), addedDiscInfo, availableArtists, discLibrary.Genres);
+							addedDisc = new CompilationDiscWithoutArtistInfoViewItem(addedDiscInfo, availableArtists, discLibrary.Genres);
 							break;
 
 						default:
@@ -121,29 +102,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 				addedDisc.PropertyChanged += Property_Changed;
 				Discs.Add(addedDisc);
-			}
-
-			LoadDiscsArt();
-		}
-
-		internal void RefreshContent()
-		{
-			LoadDiscsArt();
-		}
-
-		private void LoadDiscsArt()
-		{
-			foreach (var disc in Discs)
-			{
-				var coverImagePath = discArtFileStorage.GetDiscCoverImageFileName(disc.SourcePath);
-				if (coverImagePath != null)
-				{
-					disc.SetDiscCoverImage(coverImagePath);
-				}
-				else
-				{
-					disc.UnsetDiscCoverImage();
-				}
 			}
 		}
 

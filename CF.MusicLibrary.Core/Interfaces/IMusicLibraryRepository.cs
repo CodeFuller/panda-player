@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CF.MusicLibrary.Core.Objects;
+using CF.MusicLibrary.Core.Objects.Images;
 
 namespace CF.MusicLibrary.Core.Interfaces
 {
@@ -15,6 +16,12 @@ namespace CF.MusicLibrary.Core.Interfaces
 		Task UpdateSong(Song song);
 
 		Task UpdateDisc(Disc disc);
+
+		Task AddDiscImage(DiscImage discImage);
+
+		Task UpdateDiscImage(DiscImage discImage);
+
+		Task DeleteDiscImage(DiscImage discImage);
 
 		/// <summary>
 		/// Returns all discs including deleted.

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
@@ -34,8 +33,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			}
 		}
 
-		public ArtistDiscViewItem(IDiscArtImageFile discArtImageFile, AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres, Genre genre)
-			: base(discArtImageFile, disc, availableArtists, availableGenres)
+		public ArtistDiscViewItem(AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres, Genre genre)
+			: base(disc, availableArtists, availableGenres)
 		{
 			artist = LookupArtist(disc.Artist);
 			Genre = genre;

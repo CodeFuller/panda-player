@@ -42,8 +42,8 @@
     </WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6486.14019, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6486.14019\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6503.21069, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6503.21069\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -54,10 +54,12 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="DiscTitleToAlbumMapper.cs" />
-    <Compile Include="Interfaces\IDiscArtFileStorage.cs" />
+    <Compile Include="Interfaces\IFileStorage.cs" />
     <Compile Include="Interfaces\ILibraryStorageInconsistencyRegistrator.cs" />
     <Compile Include="Media\ISongMediaInfoProvider.cs" />
     <Compile Include="Media\SongMediaInfo.cs" />
+    <Compile Include="Objects\Images\DiscImage.cs" />
+    <Compile Include="Objects\Images\DiscImageType.cs" />
     <Compile Include="Objects\DiscLibrary.cs" />
     <Compile Include="Media\ISongTagger.cs" />
     <Compile Include="Interfaces\ILibraryStructurer.cs" />
@@ -70,6 +72,9 @@
     <Compile Include="Media\SongTagType.cs" />
     <Compile Include="Objects\Disc.cs" />
     <Compile Include="Objects\Genre.cs" />
+    <Compile Include="Objects\Images\ImageInfo.cs" />
+    <Compile Include="Objects\Images\ItemImage.cs" />
+    <Compile Include="Objects\Images\ImageFormatType.cs" />
     <Compile Include="Objects\Playback.cs" />
     <Compile Include="Objects\Rating.cs" />
     <Compile Include="Objects\Song.cs" />

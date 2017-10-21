@@ -2,7 +2,7 @@
 using CF.Library.Core.Facades;
 using CF.Library.Core.Interfaces;
 using CF.Library.Unity;
-using CF.MusicLibrary.Common.DiscArt;
+using CF.MusicLibrary.Common.Images;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
@@ -31,8 +31,8 @@ namespace CF.MusicLibrary.DiscPreprocessor
 			bool deleteSourceContentAfterAdding = AppSettings.GetRequiredValue<bool>("DeleteSourceContentAfterAdding");
 
 			DIContainer.RegisterType<IMusicLibraryRepository, MusicLibraryRepositoryEF>(new InjectionConstructor());
-			DIContainer.RegisterType<IMusicLibraryStorage, FileSystemMusicStorage>(
-				new InjectionConstructor(typeof(IFileSystemFacade), typeof(ISongTagger), typeof(IDiscArtFileStorage), localStorageRoot));
+			DIContainer.RegisterType<IFileStorage, FileSystemStorage>(new InjectionConstructor(typeof(IFileSystemFacade), localStorageRoot));
+			DIContainer.RegisterType<IMusicLibraryStorage, FileSystemMusicStorage>();
 			DIContainer.RegisterType<IChecksumCalculator, Crc32Calculator>();
 			DIContainer.RegisterType<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
 			DIContainer.RegisterType<IFileSystemFacade, FileSystemFacade>();
@@ -52,16 +52,17 @@ namespace CF.MusicLibrary.DiscPreprocessor
 			DIContainer.RegisterType<ISongTagger, SongTagger>();
 			DIContainer.RegisterType<ISongMediaInfoProvider, SongMediaInfoProvider>();
 			DIContainer.RegisterType<ILibraryStructurer, MyLibraryStructurer>();
-			DIContainer.RegisterType<IDiscArtValidator, DiscArtValidator>();
-			DIContainer.RegisterType<IDiscArtImageFile, DiscArtImageFile>();
-			DIContainer.RegisterType<IObjectFactory<IDiscArtImageFile>, UnityBasedObjectFactory<IDiscArtImageFile>>(new InjectionConstructor(DIContainer));
-			DIContainer.RegisterType<IDiscArtFileStorage, DiscArtFileStorage>();
-			DIContainer.RegisterType<IDiscCrawler, DiscCrawler>();
-			DIContainer.RegisterType<ISongFileFilter, SongFileFilter>();
+			DIContainer.RegisterType<IDiscImageValidator, DiscImageValidator>();
+			DIContainer.RegisterType<IImageFile, ImageFile>();
+			DIContainer.RegisterType<IObjectFactory<IImageFile>, UnityBasedObjectFactory<IImageFile>>(new InjectionConstructor(DIContainer));
+			DIContainer.RegisterType<IContentCrawler, ContentCrawler>();
+			DIContainer.RegisterType<ISourceFileTypeResolver, SourceFileTypeResolver>();
 			DIContainer.RegisterType<IImageFacade, ImageFacade>();
+			DIContainer.RegisterType<IImageInfoProvider, ImageInfoProvider>();
 
 			DIContainer.RegisterType<IEditSourceContentViewModel, EditSourceContentViewModel>();
 			DIContainer.RegisterType<IEditDiscsDetailsViewModel, EditDiscsDetailsViewModel>();
+			DIContainer.RegisterType<IEditSourceDiscImagesViewModel, EditSourceDiscImagesViewModel>();
 			DIContainer.RegisterType<IEditSongsDetailsViewModel, EditSongsDetailsViewModel>();
 			DIContainer.RegisterType<IAddToLibraryViewModel, AddToLibraryViewModel>(new InjectionConstructor(
 				typeof(IMusicLibrary), typeof(ISongMediaInfoProvider), typeof(IWorkshopMusicStorage), deleteSourceContentAfterAdding));

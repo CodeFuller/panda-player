@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
+using CF.MusicLibrary.Core.Objects.Images;
 
 namespace CF.MusicLibrary.LibraryChecker.Registrators
 {
@@ -114,34 +114,44 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 			inconsistencyRegistrator.RegisterInconsistency_NoListensForSong(song);
 		}
 
-		public void RegisterInconsistency_MissingSongData(Song song)
+		public void RegisterInconsistency_MissingStorageData(Uri itemUri)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_MissingSongData(song);
+			inconsistencyRegistrator.RegisterInconsistency_MissingStorageData(itemUri);
 		}
 
-		public void RegisterInconsistency_LibraryData(string inconsistencyMessage)
+		public void RegisterInconsistency_UnexpectedStorageData(string itemPath, string itemType)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_LibraryData(inconsistencyMessage);
+			inconsistencyRegistrator.RegisterInconsistency_UnexpectedStorageData(itemPath, itemType);
 		}
 
-		public void RegisterInconsistency_DiscCoverIsTooSmall(Disc disc, DiscArtImageInfo imageInfo)
+		public void RegisterInconsistency_ErrorInStorageData(string errorMessage)
+		{
+			inconsistencyRegistrator.RegisterInconsistency_ErrorInStorageData(errorMessage);
+		}
+
+		public void RegisterInconsistency_DiscCoverIsTooSmall(Disc disc, ImageInfo imageInfo)
 		{
 			inconsistencyRegistrator.RegisterInconsistency_DiscCoverIsTooSmall(disc, imageInfo);
 		}
 
-		public void RegisterInconsistency_DiscCoverIsTooBig(Disc disc, DiscArtImageInfo imageInfo)
+		public void RegisterInconsistency_DiscCoverIsTooBig(Disc disc, ImageInfo imageInfo)
 		{
 			inconsistencyRegistrator.RegisterInconsistency_DiscCoverIsTooBig(disc, imageInfo);
 		}
 
-		public void RegisterInconsistency_ImageFileIsTooBig(Disc disc, DiscArtImageInfo imageInfo)
+		public void RegisterInconsistency_ImageFileIsTooBig(Disc disc, ImageInfo imageInfo)
 		{
 			inconsistencyRegistrator.RegisterInconsistency_ImageFileIsTooBig(disc, imageInfo);
 		}
 
-		public void RegisterInconsistency_ImageHasUnsupportedFormat(Disc disc, DiscArtImageInfo imageInfo)
+		public void RegisterInconsistency_ImageHasUnsupportedFormat(Disc disc, ImageInfo imageInfo)
 		{
 			inconsistencyRegistrator.RegisterInconsistency_ImageHasUnsupportedFormat(disc, imageInfo);
+		}
+
+		public void RegisterFix_ErrorInStorageData(string fixMessage)
+		{
+			inconsistencyRegistrator.RegisterFix_ErrorInStorageData(fixMessage);
 		}
 	}
 }

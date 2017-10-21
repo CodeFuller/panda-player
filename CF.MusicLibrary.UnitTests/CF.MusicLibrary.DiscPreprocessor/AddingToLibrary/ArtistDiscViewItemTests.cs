@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
-using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
-using NSubstitute;
 using NUnit.Framework;
 
 namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
@@ -45,7 +43,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 
 			//	Act
 
-			var disc = new ArtistDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { new Artist { Name = "Nightwish" } }, Enumerable.Empty<Genre>(), null);
+			var disc = new ArtistDiscViewItem(discInfo, new[] { new Artist { Name = "Nightwish" } }, Enumerable.Empty<Genre>(), null);
 
 			//	Assert
 
@@ -88,7 +86,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 
 			//	Act
 
-			var disc = new ArtistDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo,
+			var disc = new ArtistDiscViewItem(discInfo,
 				new[]
 				{
 					new Artist { Name = "AC/DC" },
@@ -123,7 +121,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 
 			//	Act
 
-			var target = new ArtistDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { artist1, artist2, artist3 }, Enumerable.Empty<Genre>(), null);
+			var target = new ArtistDiscViewItem(discInfo, new[] { artist1, artist2, artist3 }, Enumerable.Empty<Genre>(), null);
 
 			//	Assert
 
@@ -144,7 +142,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 
 			//	Act & Assert
 
-			Assert.Throws<InvalidOperationException>(() =>new ArtistDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { new Artist { Name = "Nightwish" } }, Enumerable.Empty<Genre>(), null));
+			Assert.Throws<InvalidOperationException>(() =>new ArtistDiscViewItem(discInfo, new[] { new Artist { Name = "Nightwish" } }, Enumerable.Empty<Genre>(), null));
 		}
 
 		[Test]
@@ -161,7 +159,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 
 			//	Act & Assert
 
-			Assert.Throws<InvalidOperationException>(() => new ArtistDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { new Artist { Name = "Nightwish" } }, Enumerable.Empty<Genre>(), null));
+			Assert.Throws<InvalidOperationException>(() => new ArtistDiscViewItem(discInfo, new[] { new Artist { Name = "Nightwish" } }, Enumerable.Empty<Genre>(), null));
 		}
 
 		[Test]
@@ -178,7 +176,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Artist = "Some Artist",
 			};
 
-			var target = new ArtistDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { artist }, Enumerable.Empty<Genre>(), null);
+			var target = new ArtistDiscViewItem(discInfo, new[] { artist }, Enumerable.Empty<Genre>(), null);
 
 			//	Act & Assert
 
@@ -197,7 +195,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Artist = "Some Artist",
 			};
 
-			var target = new ArtistDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>(), null);
+			var target = new ArtistDiscViewItem(discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>(), null);
 
 			//	Act & Assert
 
@@ -216,7 +214,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Artist = "Some Artist",
 			};
 
-			var target = new ArtistDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>(), null);
+			var target = new ArtistDiscViewItem(discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>(), null);
 
 			//	Act & Assert
 
@@ -235,7 +233,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Artist = "Some Artist",
 			};
 
-			var target = new ArtistDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>(), null);
+			var target = new ArtistDiscViewItem(discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>(), null);
 
 			//	Act & Assert
 
@@ -254,7 +252,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 				Artist = "Some Artist",
 			};
 
-			var target = new ArtistDiscViewItem(Substitute.For<IDiscArtImageFile>(), discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>(), null);
+			var target = new ArtistDiscViewItem(discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>(), null);
 
 			//	Act & Assert
 

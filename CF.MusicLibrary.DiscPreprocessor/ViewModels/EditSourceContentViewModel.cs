@@ -23,7 +23,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 	{
 		public string Name => "Edit Source Content";
 
-		private readonly IDiscCrawler discCrawler;
+		private readonly IContentCrawler contentCrawler;
 		private readonly IDiscContentParser discContentParser;
 		private readonly IDiscContentComparer discContentComparer;
 		private readonly IWorkshopMusicStorage workshopMusicStorage;
@@ -45,12 +45,12 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			set { Set(ref dataIsReady, value); }
 		}
 
-		public EditSourceContentViewModel(IDiscCrawler discCrawler, IDiscContentParser discContentParser, IDiscContentComparer discContentComparer,
+		public EditSourceContentViewModel(IContentCrawler contentCrawler, IDiscContentParser discContentParser, IDiscContentComparer discContentComparer,
 			IWorkshopMusicStorage workshopMusicStorage, IFileSystemFacade fileSystemFacade)
 		{
-			if (discCrawler == null)
+			if (contentCrawler == null)
 			{
-				throw new ArgumentNullException(nameof(discCrawler));
+				throw new ArgumentNullException(nameof(contentCrawler));
 			}
 			if (discContentParser == null)
 			{
@@ -69,7 +69,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 				throw new ArgumentNullException(nameof(fileSystemFacade));
 			}
 
-			this.discCrawler = discCrawler;
+			this.contentCrawler = contentCrawler;
 			this.discContentParser = discContentParser;
 			this.discContentComparer = discContentComparer;
 			this.workshopMusicStorage = workshopMusicStorage;
@@ -116,7 +116,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 		public void LoadCurrentDiscs()
 		{
-			var discs = discCrawler.LoadDiscs(AppSettings.GetRequiredValue<string>("WorkshopDirectory")).ToList();
+			var discs = contentCrawler.LoadDiscs(AppSettings.GetRequiredValue<string>("WorkshopDirectory")).ToList();
 
 			UpdateDiscs(CurrentDiscs, discs);
 		}

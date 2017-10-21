@@ -45,12 +45,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 			}
 		}
 
-		private readonly List<AddedSongInfo> songs;
-		public IReadOnlyCollection<AddedSongInfo> Songs => songs;
+		public IReadOnlyCollection<AddedSongInfo> Songs { get; }
 
 		public AddedDiscInfo(IEnumerable<AddedSongInfo> songs)
 		{
-			this.songs = songs.ToList();
+			Songs = songs.ToList();
 		}
 	}
 }

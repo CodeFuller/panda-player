@@ -10,9 +10,9 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.Interfaces
 	{
 		ObservableCollection<DiscViewItem> Discs { get; }
 
-		IEnumerable<AddedSong> AddedSongs { get; }
+		IEnumerable<AddedDisc> AddedDiscs { get; }
 
-		IEnumerable<AddedDiscCoverImage> DiscCoverImages { get; }
+		IEnumerable<AddedSong> AddedSongs { get; }
 
 		Task SetDiscs(IEnumerable<AddedDiscInfo> discs);
 	}

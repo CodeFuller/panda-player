@@ -1,15 +1,19 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
+using CF.MusicLibrary.Core.Objects.Images;
 
 namespace CF.MusicLibrary.Local
 {
 	public class MyLibraryStructurer : ILibraryStructurer
 	{
+		private const string DiscCoverImageFileName = "cover";
+
 		public Uri BuildSongUri(Uri discUri, string songFileName)
 		{
-			return ItemUriParts.Join(discUri, songFileName);
+			return BuildDiscFileUri(discUri, songFileName);
 		}
 
 		public Uri ReplaceDiscPartInUri(Uri discUri, string discPart)
@@ -21,7 +25,12 @@ namespace CF.MusicLibrary.Local
 
 		public Uri ReplaceDiscPartInSongUri(Uri newDiscUri, Uri songUri)
 		{
-			return BuildSongUri(newDiscUri, GetSongFileName(songUri));
+			return BuildDiscFileUri(newDiscUri, GetFileNameFromUri(songUri));
+		}
+
+		public Uri ReplaceDiscPartInImageUri(Uri newDiscUri, Uri imageUri)
+		{
+			return BuildDiscFileUri(newDiscUri, GetFileNameFromUri(imageUri));
 		}
 
 		public string GetDiscFolderName(Uri discUri)
@@ -30,10 +39,20 @@ namespace CF.MusicLibrary.Local
 			return parts[parts.Count - 1];
 		}
 
-		public string GetSongFileName(Uri songUri)
+		public string GetFileNameFromUri(Uri songUri)
 		{
 			var parts = (new ItemUriParts(songUri)).ToList();
 			return parts[parts.Count - 1];
+		}
+
+		public Uri GetDiscCoverImageUri(Uri discUri, ImageInfo imageInfo)
+		{
+			return ItemUriParts.Join(discUri, Path.ChangeExtension(DiscCoverImageFileName, imageInfo.GetFileNameExtension()));
+		}
+
+		private static Uri BuildDiscFileUri(Uri discUri, string fileName)
+		{
+			return ItemUriParts.Join(discUri, fileName);
 		}
 	}
 }

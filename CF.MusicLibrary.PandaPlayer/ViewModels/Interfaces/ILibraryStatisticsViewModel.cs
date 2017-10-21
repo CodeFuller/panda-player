@@ -24,6 +24,6 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		double UnratedSongsPercentage { get; }
 
-		double DiscsWithoutArtPercentage { get; }
+		double PercentageOfDiscsWithoutCoverImage { get; }
 	}
 }

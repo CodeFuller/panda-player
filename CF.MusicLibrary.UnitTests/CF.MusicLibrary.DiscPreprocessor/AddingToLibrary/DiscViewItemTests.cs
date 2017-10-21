@@ -18,34 +18,25 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 			public ConcreteDiscViewItem(AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
 				: base(disc, availableArtists, availableGenres)
 			{
+				Disc = new Disc
+				{
+					Uri = disc.UriWithinStorage,
+					Title = disc.Title,
+				};
 			}
 
 			public override string DiscTypeTitle { get; }
 			public override Artist Artist { get; set; }
 			public override bool ArtistIsEditable { get; }
 			public override bool ArtistIsNotFilled { get; }
-			public override string DiscTitle { get; }
 			public override string AlbumTitle { get; set; }
 			public override bool AlbumTitleIsEditable { get; }
 			public override bool YearIsEditable { get; }
-			public override bool DiscArtIsValid { get; }
-			public override string DiscArtInfo { get; }
 			public override bool RequiredDataIsFilled { get; }
-			protected override Disc Disc { get; }
-			public override AddedDiscCoverImage AddedDiscCoverImage { get; }
 
 			protected override Artist GetSongArtist(AddedSongInfo song)
 			{
 				return null;
-			}
-
-			public override void SetDiscCoverImage(string imageFileName)
-			{
-			}
-
-			public override void UnsetDiscCoverImage()
-			{
-
 			}
 
 			public Artist CallLookupArtist(string artistName)
@@ -184,6 +175,23 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 			Assert.IsFalse(target.ArtistIsNew);
 		}
 
+		[Test]
+		public void TitleGetter_ReturnsTitleOfInnerDisc()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				Title = "Some Disc Title",
+			};
+
+			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+
+			//	Act & Assert
+
+			Assert.AreEqual("Some Disc Title", target.DiscTitle);
+		}
+
 		[TestCase(2017)]
 		[TestCase(null)]
 		public void YearGetter_ReturnsCorrectYearValue(short? year)
@@ -229,6 +237,23 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 			//	Act & Assert
 
 			Assert.IsTrue(target.GenreIsNotFilled);
+		}
+
+		[Test]
+		public void DestinationUri_ReturnsUriOfInnerDisc()
+		{
+			//	Arrange
+
+			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
+			{
+				UriWithinStorage = new Uri("/SomeDiscUri", UriKind.Relative),
+			};
+
+			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
+
+			//	Act & Assert
+
+			Assert.AreEqual(new Uri("/SomeDiscUri", UriKind.Relative), target.DestinationUri);
 		}
 
 		[Test]

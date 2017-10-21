@@ -8,7 +8,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.Interfaces
 	{
 		void SetSongs(IEnumerable<AddedSong> songs);
 
-		void SetDiscsCoverImages(IEnumerable<AddedDiscCoverImage> coverImages);
+		void SetDiscsImages(IEnumerable<AddedDiscImage> images);
 
 		Task AddContentToLibrary();
 	}

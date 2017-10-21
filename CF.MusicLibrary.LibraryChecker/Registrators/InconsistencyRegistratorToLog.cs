@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
+using CF.MusicLibrary.Core.Objects.Images;
 using static CF.Library.Core.Application;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
@@ -80,32 +80,42 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 			LogInconsistency(Current($"No listens for song on Last.fm: '{song.Uri}'"));
 		}
 
-		public void RegisterInconsistency_MissingSongData(Song song)
+		public void RegisterInconsistency_MissingStorageData(Uri itemUri)
 		{
-			LogInconsistency(Current($"Missing song data: '{song.Uri}'"));
+			LogInconsistency(Current($"Missing storage data: '{itemUri}'"));
 		}
 
-		public void RegisterInconsistency_LibraryData(string inconsistencyMessage)
+		public void RegisterInconsistency_UnexpectedStorageData(string itemPath, string itemType)
 		{
-			LogInconsistency(inconsistencyMessage);
+			LogInconsistency(Current($"Detected unexpected {itemType} withing the storage: '{itemPath}'"));
 		}
 
-		public void RegisterInconsistency_DiscCoverIsTooSmall(Disc disc, DiscArtImageInfo imageInfo)
+		public void RegisterInconsistency_ErrorInStorageData(string errorMessage)
+		{
+			LogInconsistency(errorMessage);
+		}
+
+		public void RegisterFix_ErrorInStorageData(string fixMessage)
+		{
+			LogFix(fixMessage);
+		}
+
+		public void RegisterInconsistency_DiscCoverIsTooSmall(Disc disc, ImageInfo imageInfo)
 		{
 			LogInconsistency(Current($"Disc cover is too small: {imageInfo.Width} x {imageInfo.Height} for {disc.Uri}"));
 		}
 
-		public void RegisterInconsistency_DiscCoverIsTooBig(Disc disc, DiscArtImageInfo imageInfo)
+		public void RegisterInconsistency_DiscCoverIsTooBig(Disc disc, ImageInfo imageInfo)
 		{
 			LogInconsistency(Current($"Disc cover is too big: {imageInfo.Width} x {imageInfo.Height} for {disc.Uri}"));
 		}
 
-		public void RegisterInconsistency_ImageFileIsTooBig(Disc disc, DiscArtImageInfo imageInfo)
+		public void RegisterInconsistency_ImageFileIsTooBig(Disc disc, ImageInfo imageInfo)
 		{
 			LogInconsistency(Current($"Disc cover file is too big: {imageInfo.FileSize:n0} for {disc.Uri}"));
 		}
 
-		public void RegisterInconsistency_ImageHasUnsupportedFormat(Disc disc, DiscArtImageInfo imageInfo)
+		public void RegisterInconsistency_ImageHasUnsupportedFormat(Disc disc, ImageInfo imageInfo)
 		{
 			LogInconsistency(Current($"Disc cover has unsupported format '{imageInfo.FormatName}' for {disc.Uri}"));
 		}
@@ -113,6 +123,11 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 		private static void LogInconsistency(string inconsistencyMessage)
 		{
 			Logger.WriteWarning(inconsistencyMessage);
+		}
+
+		private static void LogFix(string fixMessage)
+		{
+			Logger.WriteInfo(fixMessage);
 		}
 	}
 }

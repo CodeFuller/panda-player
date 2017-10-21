@@ -18,20 +18,25 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		public ICommand SwitchToNextPageCommand { get; }
 
 		private readonly IEditSourceContentViewModel editSourceContentViewModel;
-		private readonly IEditDiscsDetailsViewModel editDiscsesDetailsViewModel;
+		private readonly IEditDiscsDetailsViewModel editDiscsDetailsViewModel;
+		private readonly IEditSourceDiscImagesViewModel editSourceDiscImagesViewModel;
 		private readonly IEditSongsDetailsViewModel editSongsDetailsViewModel;
 		private readonly IAddToLibraryViewModel addToLibraryViewModel;
 
-		public ApplicationViewModel(IEditSourceContentViewModel editSourceContentViewModel, IEditDiscsDetailsViewModel editDiscsesDetailsViewModel,
-			IEditSongsDetailsViewModel editSongsDetailsViewModel, IAddToLibraryViewModel addToLibraryViewModel)
+		public ApplicationViewModel(IEditSourceContentViewModel editSourceContentViewModel, IEditDiscsDetailsViewModel editDiscsDetailsViewModel,
+			IEditSourceDiscImagesViewModel editSourceDiscImagesViewModel, IEditSongsDetailsViewModel editSongsDetailsViewModel, IAddToLibraryViewModel addToLibraryViewModel)
 		{
 			if (editSourceContentViewModel == null)
 			{
 				throw new ArgumentNullException(nameof(editSourceContentViewModel));
 			}
-			if (editDiscsesDetailsViewModel == null)
+			if (editDiscsDetailsViewModel == null)
 			{
-				throw new ArgumentNullException(nameof(editDiscsesDetailsViewModel));
+				throw new ArgumentNullException(nameof(editDiscsDetailsViewModel));
+			}
+			if (editSourceDiscImagesViewModel == null)
+			{
+				throw new ArgumentNullException(nameof(editSourceDiscImagesViewModel));
 			}
 			if (editSongsDetailsViewModel == null)
 			{
@@ -43,7 +48,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			}
 
 			this.editSourceContentViewModel = editSourceContentViewModel;
-			this.editDiscsesDetailsViewModel = editDiscsesDetailsViewModel;
+			this.editDiscsDetailsViewModel = editDiscsDetailsViewModel;
+			this.editSourceDiscImagesViewModel = editSourceDiscImagesViewModel;
 			this.editSongsDetailsViewModel = editSongsDetailsViewModel;
 			this.addToLibraryViewModel = addToLibraryViewModel;
 
@@ -58,12 +64,13 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			}
 		}
 
-		IEnumerable<IPageViewModel> ViewModels
+		private IEnumerable<IPageViewModel> ViewModels
 		{
 			get
 			{
 				yield return editSourceContentViewModel;
-				yield return editDiscsesDetailsViewModel;
+				yield return editDiscsDetailsViewModel;
+				yield return editSourceDiscImagesViewModel;
 				yield return editSongsDetailsViewModel;
 				yield return addToLibraryViewModel;
 			}
@@ -107,14 +114,19 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		{
 			get
 			{
-				if (CurrPage == editDiscsesDetailsViewModel)
+				if (CurrPage == editDiscsDetailsViewModel)
 				{
 					return editSourceContentViewModel;
 				}
 
+				if (CurrPage == editSourceDiscImagesViewModel)
+				{
+					return editDiscsDetailsViewModel;
+				}
+
 				if (CurrPage == editSongsDetailsViewModel)
 				{
-					return editDiscsesDetailsViewModel;
+					return editSourceDiscImagesViewModel;
 				}
 
 				return null;
@@ -127,10 +139,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			{
 				if (CurrPage == editSourceContentViewModel)
 				{
-					return editDiscsesDetailsViewModel;
+					return editDiscsDetailsViewModel;
 				}
 
-				if (CurrPage == editDiscsesDetailsViewModel)
+				if (CurrPage == editDiscsDetailsViewModel)
+				{
+					return editSourceDiscImagesViewModel;
+				}
+
+				if (CurrPage == editSourceDiscImagesViewModel)
 				{
 					return editSongsDetailsViewModel;
 				}
@@ -163,18 +180,23 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 				throw new InvalidOperationException(Current($"Could not switch forward from the page {CurrPage.Name}"));
 			}
 
-			if (nextPage == editDiscsesDetailsViewModel)
+			if (nextPage == editDiscsDetailsViewModel)
 			{
-				await editDiscsesDetailsViewModel.SetDiscs(editSourceContentViewModel.AddedDiscs);
+				await editDiscsDetailsViewModel.SetDiscs(editSourceContentViewModel.AddedDiscs);
+			}
+			else if (nextPage == editSourceDiscImagesViewModel)
+			{
+				editSourceDiscImagesViewModel.LoadImages(editDiscsDetailsViewModel.AddedDiscs);
 			}
 			else if (nextPage == editSongsDetailsViewModel)
 			{
-				editSongsDetailsViewModel.SetSongs(editDiscsesDetailsViewModel.AddedSongs);
+				editSongsDetailsViewModel.SetSongs(editDiscsDetailsViewModel.AddedSongs);
 			}
 			else if (nextPage == addToLibraryViewModel)
 			{
-				addToLibraryViewModel.SetSongs(editSongsDetailsViewModel.Songs.Select(s => s.AddedSong));
-				addToLibraryViewModel.SetDiscsCoverImages(editDiscsesDetailsViewModel.DiscCoverImages);
+				var addedSongs = editSongsDetailsViewModel.Songs.Select(s => s.AddedSong).ToList();
+				addToLibraryViewModel.SetSongs(addedSongs);
+				addToLibraryViewModel.SetDiscsImages(editSourceDiscImagesViewModel.AddedImages);
 			}
 			else if (nextPage == editSourceContentViewModel)
 			{

@@ -199,7 +199,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		private string GetSongFileName(Song song)
 		{
-			return libraryStructurer.GetSongFileName(song.Uri);
+			return libraryStructurer.GetFileNameFromUri(song.Uri);
 		}
 	}
 }

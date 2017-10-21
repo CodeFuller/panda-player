@@ -8,7 +8,7 @@
 
 		IRateDiscViewModel RateDiscViewModel { get; }
 
-		IEditDiscArtViewModel EditDiscArtViewModel { get; }
+		IEditDiscImageViewModel EditDiscImageViewModel { get; }
 
 		ILibraryStatisticsViewModel LibraryStatisticsViewModel { get; }
 	}

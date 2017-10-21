@@ -24,7 +24,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public Collection<Artist> AvailableArtists { get; }
 
-		public abstract string DiscTitle { get; }
+		public string DiscTitle => Disc.Title;
 
 		public abstract string AlbumTitle { get; set; }
 		public abstract bool AlbumTitleIsEditable { get; }
@@ -50,26 +50,21 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public Collection<Genre> AvailableGenres { get; }
 
-		public Uri DestinationUri { get; }
-
-		public abstract bool DiscArtIsValid { get; }
-
-		public abstract string DiscArtInfo { get; }
+		public Uri DestinationUri => Disc.Uri;
 
 		public abstract bool RequiredDataIsFilled { get; }
 
 		protected IReadOnlyCollection<AddedSongInfo> SourceSongs { get; }
 
-		protected abstract  Disc Disc { get; }
+		public Disc Disc { get; protected set; }
 
 		public IEnumerable<AddedSong> Songs
 		{
 			get
 			{
-				var disc = Disc;
 				var songs = SourceSongs.Select(s => new AddedSong(new Song
 				{
-					Disc = disc,
+					Disc = Disc,
 					Artist = GetSongArtist(s),
 					TrackNumber = s.Track,
 					Year = Year,
@@ -86,13 +81,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			}
 		}
 
-		public abstract AddedDiscCoverImage AddedDiscCoverImage { get; }
-
 		protected DiscViewItem(AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
 		{
 			SourcePath = disc.SourcePath;
 			AvailableArtists = availableArtists.OrderBy(a => a.Name).ToCollection();
-			DestinationUri = disc.UriWithinStorage;
 			SourceSongs = disc.Songs.ToList();
 			AvailableGenres = availableGenres.OrderBy(a => a.Name).ToCollection();
 		}
@@ -109,9 +101,5 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 			return artist;
 		}
-
-		public abstract void SetDiscCoverImage(string imageFileName);
-
-		public abstract void UnsetDiscCoverImage();
 	}
 }

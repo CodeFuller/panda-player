@@ -10,16 +10,15 @@ namespace CF.MusicLibrary.Core.Interfaces
 		/// <summary>
 		/// Loads all library discs including deleted.
 		/// </summary>
-		/// <returns></returns>
 		Task<IEnumerable<Disc>> LoadDiscs();
 
 		Task<DiscLibrary> LoadLibrary();
 
+		Task<string> GetSongFile(Song song);
+
 		Task<SongTagData> GetSongTagData(Song song);
 
 		Task<IEnumerable<SongTagType>> GetSongTagTypes(Song song);
-
-		Task<string> GetSongFile(Song song);
 
 		Task<string> GetDiscCoverImage(Disc disc);
 

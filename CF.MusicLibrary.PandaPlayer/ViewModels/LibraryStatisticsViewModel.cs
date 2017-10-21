@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
@@ -10,8 +9,6 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 	public class LibraryStatisticsViewModel : ViewModelBase, ILibraryStatisticsViewModel
 	{
 		private readonly DiscLibrary discLibrary;
-
-		private readonly IMusicLibrary musicLibrary;
 
 		public int ArtistsNumber => discLibrary.Artists.Count();
 
@@ -51,30 +48,25 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		private int DiscsWithoutArtNumber => discLibrary.Discs.Count(disc => musicLibrary.GetDiscCoverImage(disc).Result == null);
+		private int NumberOfDiscsWithoutCoverImage => discLibrary.Discs.Count(disc => disc.CoverImage == null);
 
-		public double DiscsWithoutArtPercentage
+		public double PercentageOfDiscsWithoutCoverImage
 		{
 			get
 			{
 				var totalDiscsNumber = DiscsNumber;
-				return totalDiscsNumber > 0 ? (double)DiscsWithoutArtNumber / totalDiscsNumber : 0;
+				return totalDiscsNumber > 0 ? (double)NumberOfDiscsWithoutCoverImage / totalDiscsNumber : 0;
 			}
 		}
 
-		public LibraryStatisticsViewModel(DiscLibrary discLibrary, IMusicLibrary musicLibrary)
+		public LibraryStatisticsViewModel(DiscLibrary discLibrary)
 		{
 			if (discLibrary == null)
 			{
 				throw new ArgumentNullException(nameof(discLibrary));
 			}
-			if (musicLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(musicLibrary));
-			}
 
 			this.discLibrary = discLibrary;
-			this.musicLibrary = musicLibrary;
 		}
 	}
 }

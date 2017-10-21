@@ -39,8 +39,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 
 		public AddedDiscInfo GetAddedDiscInfo(string discPath, IEnumerable<string> songFiles)
 		{
-			List<AddedSongInfo> songs = songFiles.Select(GetSongInfo).ToList();
-
 			ItemUriParts uriParts = new ItemUriParts(discPath, workshopRootPath);
 			if (uriParts.Count == 0)
 			{
@@ -50,6 +48,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 			short? year;
 			string title;
 			ParseDiscData(uriParts[uriParts.Count - 1], out year, out title);
+
+			List<AddedSongInfo> songs = songFiles.Select(GetSongInfo).ToList();
 
 			AddedDiscInfo discInfo = new AddedDiscInfo(songs)
 			{

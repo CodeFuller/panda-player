@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CF.MusicLibrary.Core.Objects;
+using CF.MusicLibrary.Core.Objects.Images;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels.Interfaces;
@@ -18,28 +19,35 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 		public void Constructor_IfEditSourceContentViewModelArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(null, Substitute.For<IEditDiscsDetailsViewModel>(),
-				Substitute.For<IEditSongsDetailsViewModel>(), Substitute.For<IAddToLibraryViewModel>()));
+				Substitute.For<IEditSourceDiscImagesViewModel>(), Substitute.For<IEditSongsDetailsViewModel>(), Substitute.For<IAddToLibraryViewModel>()));
 		}
 
 		[Test]
-		public void Constructor_IfEditDiscsesDetailsViewModelArgumentIsNull_ThrowsArgumentNullException()
+		public void Constructor_IfEditDiscsDetailsViewModelArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(Substitute.For<IEditSourceContentViewModel>(), null,
-				Substitute.For<IEditSongsDetailsViewModel>(), Substitute.For<IAddToLibraryViewModel>()));
+				Substitute.For<IEditSourceDiscImagesViewModel>(), Substitute.For<IEditSongsDetailsViewModel>(), Substitute.For<IAddToLibraryViewModel>()));
+		}
+
+		[Test]
+		public void Constructor_IfEditSourceDiscImagesViewModelArgumentIsNull_ThrowsArgumentNullException()
+		{
+			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(Substitute.For<IEditSourceContentViewModel>(), Substitute.For<IEditDiscsDetailsViewModel>(),
+				null, Substitute.For<IEditSongsDetailsViewModel>(), Substitute.For<IAddToLibraryViewModel>()));
 		}
 
 		[Test]
 		public void Constructor_IfEditSongsDetailsViewModelArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(Substitute.For<IEditSourceContentViewModel>(), Substitute.For<IEditDiscsDetailsViewModel>(),
-				null, Substitute.For<IAddToLibraryViewModel>()));
+				Substitute.For<IEditSourceDiscImagesViewModel>(), null, Substitute.For<IAddToLibraryViewModel>()));
 		}
 
 		[Test]
 		public void Constructor_IfAddToLibraryViewModelArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(Substitute.For<IEditSourceContentViewModel>(), Substitute.For<IEditDiscsDetailsViewModel>(),
-				Substitute.For<IEditSongsDetailsViewModel>(), null));
+				Substitute.For<IEditSourceDiscImagesViewModel>(), Substitute.For<IEditSongsDetailsViewModel>(), null));
 		}
 
 		[Test]
@@ -64,9 +72,11 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 			addToLibraryViewModelMock.SetSongs(Arg.Do<IEnumerable<AddedSong>>(arg => setSongs = arg.ToList()));
 
 			var target = new ApplicationViewModel(Substitute.For<IEditSourceContentViewModel>(), Substitute.For<IEditDiscsDetailsViewModel>(),
-				editSongsDetailsViewModelStub, addToLibraryViewModelMock);
+				Substitute.For<IEditSourceDiscImagesViewModel>(), editSongsDetailsViewModelStub, addToLibraryViewModelMock);
 
 			//	Switch to IEditDiscsDetailsViewModel
+			target.SwitchToNextPage().Wait();
+			//	Switch to IEditSourceDiscImagesViewModel
 			target.SwitchToNextPage().Wait();
 			//	Switch to IEditSongsDetailsViewModel
 			target.SwitchToNextPage().Wait();
@@ -82,27 +92,29 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 		}
 
 		[Test]
-		public void SwitchToNextPage_WhenSwitchesToAddToLibraryViewModel_SetDiscsCoverImagesFromEditDiscsesDetailsViewModel()
+		public void SwitchToNextPage_WhenSwitchesToAddToLibraryViewModel_SetDiscsImagesFromEditSourceDiscsImagesViewModel()
 		{
 			//	Arrange
 
-			AddedDiscCoverImage discCoverImage1 = new AddedDiscCoverImage(new Disc(), "SomeCover1.jpg");
-			AddedDiscCoverImage discCoverImage2 = new AddedDiscCoverImage(new Disc(), "SomeCover2.jpg");
+			AddedDiscImage discImage1 = new AddedDiscImage(new Disc(), new ImageInfo());
+			AddedDiscImage discImage2 = new AddedDiscImage(new Disc(), new ImageInfo());
 
-			IEditDiscsDetailsViewModel editDiscsDetailsViewModelStub = Substitute.For<IEditDiscsDetailsViewModel>();
-			editDiscsDetailsViewModelStub.DiscCoverImages.Returns(new[] { discCoverImage1, discCoverImage2 });
+			IEditSourceDiscImagesViewModel editSourceDiscsImagesViewModelStub = Substitute.For<IEditSourceDiscImagesViewModel>();
+			editSourceDiscsImagesViewModelStub.AddedImages.Returns(new[] { discImage1, discImage2 });
 
 			IEditSongsDetailsViewModel editSongsDetailsViewModelStub = Substitute.For<IEditSongsDetailsViewModel>();
 			editSongsDetailsViewModelStub.Songs.Returns(new ObservableCollection<SongViewItem>());
 
-			List<AddedDiscCoverImage> setCoverImages = null;
+			List<AddedDiscImage> setImages = null;
 			IAddToLibraryViewModel addToLibraryViewModelMock = Substitute.For<IAddToLibraryViewModel>();
-			addToLibraryViewModelMock.SetDiscsCoverImages(Arg.Do<IEnumerable<AddedDiscCoverImage>>(arg => setCoverImages = arg.ToList()));
+			addToLibraryViewModelMock.SetDiscsImages(Arg.Do<IEnumerable<AddedDiscImage>>(arg => setImages = arg.ToList()));
 
-			var target = new ApplicationViewModel(Substitute.For<IEditSourceContentViewModel>(), editDiscsDetailsViewModelStub,
-				editSongsDetailsViewModelStub, addToLibraryViewModelMock);
+			var target = new ApplicationViewModel(Substitute.For<IEditSourceContentViewModel>(), Substitute.For<IEditDiscsDetailsViewModel>(),
+				editSourceDiscsImagesViewModelStub, editSongsDetailsViewModelStub, addToLibraryViewModelMock);
 
 			//	Switch to IEditDiscsDetailsViewModel
+			target.SwitchToNextPage().Wait();
+			//	Switch to IEditSourceDiscImagesViewModel
 			target.SwitchToNextPage().Wait();
 			//	Switch to IEditSongsDetailsViewModel
 			target.SwitchToNextPage().Wait();
@@ -113,8 +125,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 			//	Assert
 
-			Assert.IsNotNull(setCoverImages);
-			CollectionAssert.AreEqual(new[] { discCoverImage1, discCoverImage2 }, setCoverImages);
+			Assert.IsNotNull(setImages);
+			CollectionAssert.AreEqual(new[] { discImage1, discImage2 }, setImages);
 		}
 	}
 }

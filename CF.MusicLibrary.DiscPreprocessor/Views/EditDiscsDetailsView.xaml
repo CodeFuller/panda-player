@@ -6,10 +6,6 @@
         mc:Ignorable="d"
         d:DesignWidth="800" d:DesignHeight="400">
 
-    <UserControl.InputBindings>
-        <KeyBinding Key="F5" Command="{Binding RefreshContentCommand}" />
-    </UserControl.InputBindings>
-
     <DataGrid x:Name="ContentDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding Discs}">
         <DataGrid.ColumnHeaderStyle>
             <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -103,17 +99,6 @@
                     </Style>
                 </DataGridComboBoxColumn.EditingElementStyle>
             </DataGridComboBoxColumn>
-            <DataGridTextColumn Header="Cover Image" Width="*" IsReadOnly="True" Binding="{Binding DiscArtInfo}">
-                <DataGridTextColumn.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding DiscArtIsValid}" Value="False">
-                                <Setter Property="Background" Value="Red" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGridTextColumn.CellStyle>
-            </DataGridTextColumn>
         </DataGrid.Columns>
     </DataGrid>
 </UserControl>

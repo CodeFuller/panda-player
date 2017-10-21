@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CF.Library.Core.Attributes;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
@@ -11,8 +10,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 	{
 		public override string DiscTypeTitle => "Existing Disc";
 		public override bool WarnAboutDiscType => true;
-
-		public override string DiscTitle => Disc.Title;
 
 		public override string AlbumTitle
 		{
@@ -46,15 +43,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		}
 		public override bool YearIsEditable => false;
 
-		public override bool DiscArtIsValid => true;
-
-		public override string DiscArtInfo => String.Empty;
-
 		public override bool RequiredDataIsFilled => true;
-
-		protected override Disc Disc { get; }
-
-		public override AddedDiscCoverImage AddedDiscCoverImage => null;
 
 		public ExistingDiscViewItem(Disc existingDisc, AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
 			: base(disc, availableArtists, availableGenres)
@@ -66,16 +55,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		protected override Artist GetSongArtist(AddedSongInfo song)
 		{
 			return String.IsNullOrEmpty(song.Artist) ? Disc.Artist : LookupArtist(song.Artist);
-		}
-
-		[ExcludeFromTestCoverage("Empty stub of base abstract method")]
-		public override void SetDiscCoverImage(string imageFileName)
-		{
-		}
-
-		[ExcludeFromTestCoverage("Empty stub of base abstract method")]
-		public override void UnsetDiscCoverImage()
-		{
 		}
 	}
 }

@@ -45,8 +45,8 @@
                     <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
                 <views:LibraryExplorerView Grid.Row="0" x:Name="LibraryExplorer" DataContext="{Binding LibraryExplorerViewModel}" />
-                <views:DiscArtView x:Name="DiscArtView"  Grid.Row="1" DataContext="{Binding ViewModelHolder.DiscArtViewModel}" BorderThickness="1,0,1,1"
-                               MouseLeftButtonDown="DiscArtView_MouseLeftButtonDown"/>
+				<views:DiscImageView x:Name="DiscImageView"  Grid.Row="1" DataContext="{Binding ViewModelHolder.DiscImageViewModel}" BorderThickness="1,0,1,1"
+                               MouseLeftButtonDown="DiscImageView_MouseLeftButtonDown"/>
                 <views:DiscAdviserView Grid.Row="2" DataContext="{Binding ViewModelHolder.DiscAdviserViewModel}" BorderThickness="1,0,1,1" />
                 <views:MusicPlayerView Grid.Row="3" DataContext="{Binding MusicPlayerViewModel}" BorderThickness="1,0,1,0" />
             </Grid>

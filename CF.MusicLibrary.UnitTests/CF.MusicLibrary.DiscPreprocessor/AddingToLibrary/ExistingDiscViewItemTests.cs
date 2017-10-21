@@ -352,40 +352,6 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 		}
 
 		[Test]
-		public void DiscArtIsValidGetter_ReturnsTrue()
-		{
-			//	Arrange
-
-			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
-			{
-				DiscType = DsicType.ArtistDisc,
-			};
-
-			var target = new ExistingDiscViewItem(new Disc(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
-
-			//	Act & Assert
-
-			Assert.IsTrue(target.DiscArtIsValid);
-		}
-
-		[Test]
-		public void DiscArtInfoGetter_ReturnsEmptyString()
-		{
-			//	Arrange
-
-			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
-			{
-				DiscType = DsicType.ArtistDisc,
-			};
-
-			var target = new ExistingDiscViewItem(new Disc(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
-
-			//	Act & Assert
-
-			Assert.AreEqual(String.Empty, target.DiscArtInfo);
-		}
-
-		[Test]
 		public void RequiredDataIsFilledGetter_ReturnsTrue()
 		{
 			//	Arrange
@@ -400,23 +366,6 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.AddingToLib
 			//	Act & Assert
 
 			Assert.IsTrue(target.RequiredDataIsFilled);
-		}
-
-		[Test]
-		public void AddedDiscCoverImageGetter_ReturnsNull()
-		{
-			//	Arrange
-
-			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
-			{
-				DiscType = DsicType.ArtistDisc,
-			};
-
-			var target = new ExistingDiscViewItem(new Disc(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
-
-			//	Act & Assert
-
-			Assert.IsNull(target.AddedDiscCoverImage);
 		}
 
 		[Test]

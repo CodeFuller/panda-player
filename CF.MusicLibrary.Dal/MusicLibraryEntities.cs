@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using System.Data.Entity;
 using CF.MusicLibrary.Core.Objects;
+using CF.MusicLibrary.Core.Objects.Images;
 
 namespace CF.MusicLibrary.Dal
 {
@@ -32,6 +33,7 @@ namespace CF.MusicLibrary.Dal
 			modelBuilder.Entity<Disc>().Ignore(d => d.PlaybacksPassed);
 			modelBuilder.Entity<Disc>().Ignore(d => d.Songs);
 			modelBuilder.Entity<Disc>().Ignore(d => d.IsDeleted);
+			modelBuilder.Entity<Disc>().Ignore(d => d.CoverImage);
 
 			modelBuilder.Entity<Genre>().Property(g => g.Name).IsRequired();
 
@@ -44,6 +46,9 @@ namespace CF.MusicLibrary.Dal
 			modelBuilder.Entity<Song>().Ignore(s => s.IsDeleted);
 			modelBuilder.Entity<Song>().Property(s => s.ArtistId).HasColumnName("Artist_Id");
 			modelBuilder.Entity<Song>().Property(s => s.GenreId).HasColumnName("Genre_Id");
+
+			modelBuilder.Entity<DiscImage>().Ignore(image => image.Uri);
+			modelBuilder.Entity<DiscImage>().Property(image => image.ImageUri).IsRequired().HasColumnName("Uri");
 		}
 
 		public DbSet<Artist> Artists { get; set; }

@@ -8,16 +8,16 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public IDiscAdviserViewModel DiscAdviserViewModel { get; }
 
-		public IDiscArtViewModel DiscArtViewModel { get; }
+		public IDiscImageViewModel DiscImageViewModel { get; }
 
 		public ILoggerViewModel LoggerViewModel { get; }
 
 		public ApplicationViewModelHolder(ILibraryExplorerViewModel libraryExplorerViewModel, IDiscAdviserViewModel discAdviserViewModel,
-			IDiscArtViewModel discArtViewModel, ILoggerViewModel loggerViewModel)
+			IDiscImageViewModel discImageViewModel, ILoggerViewModel loggerViewModel)
 		{
 			LibraryExplorerViewModel = libraryExplorerViewModel;
 			DiscAdviserViewModel = discAdviserViewModel;
-			DiscArtViewModel = discArtViewModel;
+			DiscImageViewModel = discImageViewModel;
 			LoggerViewModel = loggerViewModel;
 		}
 	}

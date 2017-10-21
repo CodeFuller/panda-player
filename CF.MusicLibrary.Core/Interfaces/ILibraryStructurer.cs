@@ -1,4 +1,5 @@
 ﻿using System;
+using CF.MusicLibrary.Core.Objects.Images;
 
 namespace CF.MusicLibrary.Core.Interfaces
 {
@@ -10,8 +11,12 @@ namespace CF.MusicLibrary.Core.Interfaces
 
 		Uri ReplaceDiscPartInSongUri(Uri newDiscUri, Uri songUri);
 
+		Uri ReplaceDiscPartInImageUri(Uri newDiscUri, Uri imageUri);
+
 		string GetDiscFolderName(Uri discUri);
 
-		string GetSongFileName(Uri songUri);
+		string GetFileNameFromUri(Uri songUri);
+
+		Uri GetDiscCoverImageUri(Uri discUri, ImageInfo imageInfo);
 	}
 }

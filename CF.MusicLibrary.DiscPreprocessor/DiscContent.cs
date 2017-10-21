@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using CF.Library.Core.Extensions;
 
 namespace CF.MusicLibrary.DiscPreprocessor
 {
@@ -9,12 +7,12 @@ namespace CF.MusicLibrary.DiscPreprocessor
 	{
 		public string DiscDirectory { get; set; }
 
-		public Collection<SongContent> Songs { get; }
+		public IReadOnlyCollection<SongContent> Songs { get; }
 
-		public DiscContent(string discDirectory, IEnumerable<string> songContent)
+		public DiscContent(string discDirectory, IEnumerable<string> songFiles)
 		{
 			DiscDirectory = discDirectory;
-			Songs = songContent.Select(s => new SongContent(s)).ToCollection();
+			Songs = songFiles.Select(s => new SongContent(s)).ToList();
 		}
 	}
 }

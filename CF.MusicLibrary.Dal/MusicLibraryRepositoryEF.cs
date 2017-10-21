@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
+using CF.MusicLibrary.Core.Objects.Images;
 
 namespace CF.MusicLibrary.Dal
 {
@@ -91,6 +92,39 @@ namespace CF.MusicLibrary.Dal
 			}
 		}
 
+		public async Task AddDiscImage(DiscImage discImage)
+		{
+			if (discImage.Disc == null)
+			{
+				throw new InvalidOperationException("Can't add disc image not assigned to any disc");
+			}
+
+			using (var ctx = GetContext())
+			{
+				ctx.Entry(discImage.Disc).State = EntityState.Unchanged;
+				ctx.Entry(discImage).State = EntityState.Added;
+				await ctx.SaveChangesAsync();
+			}
+		}
+
+		public async Task UpdateDiscImage(DiscImage discImage)
+		{
+			using (var ctx = GetContext())
+			{
+				ctx.Entry(discImage).State = EntityState.Modified;
+				await ctx.SaveChangesAsync();
+			}
+		}
+
+		public async Task DeleteDiscImage(DiscImage discImage)
+		{
+			using (var ctx = GetContext())
+			{
+				ctx.Entry(discImage).State = EntityState.Deleted;
+				await ctx.SaveChangesAsync();
+			}
+		}
+
 		public async Task<IEnumerable<Disc>> GetDiscs()
 		{
 			using (var ctx = GetContext())
@@ -98,6 +132,7 @@ namespace CF.MusicLibrary.Dal
 				return await ctx.Discs
 					.Include(d => d.SongsUnordered.Select(s => s.Artist))
 					.Include(d => d.SongsUnordered.Select(s => s.Genre))
+					.Include(d => d.Images)
 					.ToArrayAsync();
 			}
 		}

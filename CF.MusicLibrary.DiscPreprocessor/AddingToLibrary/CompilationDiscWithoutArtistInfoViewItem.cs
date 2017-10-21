@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using CF.MusicLibrary.Common.DiscArt;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 
@@ -23,8 +22,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		public override bool ArtistIsEditable => true;
 		public override bool ArtistIsNotFilled => Artist == null;
 
-		public CompilationDiscWithoutArtistInfoViewItem(IDiscArtImageFile discArtImageFile, AddedDiscInfo discInfo, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
-			: base(discArtImageFile, discInfo, availableArtists, availableGenres)
+		public CompilationDiscWithoutArtistInfoViewItem(AddedDiscInfo discInfo, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
+			: base(discInfo, availableArtists, availableGenres)
 		{
 		}
 

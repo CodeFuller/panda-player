@@ -129,7 +129,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			var genre = new Genre();
 
 			var libraryStructurer = Substitute.For<ILibraryStructurer>();
-			libraryStructurer.GetSongFileName(new Uri("/SomeDisc/Uri/SomeFileName.mp3", UriKind.Relative)).Returns("SomeFileName.mp3");
+			libraryStructurer.GetFileNameFromUri(new Uri("/SomeDisc/Uri/SomeFileName.mp3", UriKind.Relative)).Returns("SomeFileName.mp3");
 
 			var target = new EditSongPropertiesViewModel(new DiscLibrary(), libraryStructurer, Substitute.For<ILibraryContentUpdater>());
 			target.Load(new[]
@@ -164,7 +164,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			var genre = new Genre();
 
 			var libraryStructurer = Substitute.For<ILibraryStructurer>();
-			libraryStructurer.GetSongFileName(new Uri("/SomeDisc/Uri/SomeFileName.mp3", UriKind.Relative)).Returns("SomeFileName.mp3");
+			libraryStructurer.GetFileNameFromUri(new Uri("/SomeDisc/Uri/SomeFileName.mp3", UriKind.Relative)).Returns("SomeFileName.mp3");
 
 			var target = new EditSongPropertiesViewModel(new DiscLibrary(), libraryStructurer, Substitute.For<ILibraryContentUpdater>());
 			target.Load(new[]
@@ -206,7 +206,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer.ViewModels
 			//	Arrange
 
 			var libraryStructurer = Substitute.For<ILibraryStructurer>();
-			libraryStructurer.GetSongFileName(new Uri("/SomeDisc/Uri/SomeFileName.mp3", UriKind.Relative)).Returns("SomeFileName.mp3");
+			libraryStructurer.GetFileNameFromUri(new Uri("/SomeDisc/Uri/SomeFileName.mp3", UriKind.Relative)).Returns("SomeFileName.mp3");
 
 			var target = new EditSongPropertiesViewModel(new DiscLibrary(), libraryStructurer, Substitute.For<ILibraryContentUpdater>());
 			target.Load(new[]

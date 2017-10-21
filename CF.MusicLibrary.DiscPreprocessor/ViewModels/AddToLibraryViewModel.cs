@@ -23,12 +23,12 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		private readonly bool deleteSourceContent;
 
 		private List<AddedSong> addedSongs;
-		private List<AddedDiscCoverImage> discsCoverImages;
+		private List<AddedDiscImage> addedDiscImages;
 
 		public string Name => "Add To Library";
 
 		private bool dataIsReady;
-		public bool DataIsReady 
+		public bool DataIsReady
 		{
 			get { return dataIsReady; }
 			set { Set(ref dataIsReady, value); }
@@ -57,16 +57,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			set { Set(ref progressMessages, value); }
 		}
 
-		public void SetSongs(IEnumerable<AddedSong> songs)
-		{
-			addedSongs = songs.ToList();
-		}
-
-		public void SetDiscsCoverImages(IEnumerable<AddedDiscCoverImage> coverImages)
-		{
-			discsCoverImages = coverImages.ToList();
-		}
-
 		public AddToLibraryViewModel(IMusicLibrary musicLibrary, ISongMediaInfoProvider songMediaInfoProvider, IWorkshopMusicStorage workshopMusicStorage, bool deleteSourceContent)
 		{
 			if (musicLibrary == null)
@@ -90,6 +80,16 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			AddToLibraryCommand = new AsyncRelayCommand(AddContentToLibrary);
 		}
 
+		public void SetSongs(IEnumerable<AddedSong> songs)
+		{
+			addedSongs = songs.ToList();
+		}
+
+		public void SetDiscsImages(IEnumerable<AddedDiscImage> images)
+		{
+			addedDiscImages = images.ToList();
+		}
+
 		public async Task AddContentToLibrary()
 		{
 			if (addedSongs == null)
@@ -109,7 +109,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			if (deleteSourceContent)
 			{
 				ProgressMessages += Current($"Deleting source content...\n");
-				workshopMusicStorage.DeleteSourceContent(addedSongs.Select(s => s.SourceFileName).Concat(discsCoverImages.Select(c => c.CoverImageFileName)));
+				workshopMusicStorage.DeleteSourceContent(addedSongs.Select(s => s.SourceFileName).Concat(addedDiscImages.Select(im => im.ImageInfo.FileName)));
 				ProgressMessages += Current($"Source content was deleted successfully\n");
 			}
 
@@ -157,14 +157,14 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 				taskProgressSize += progressIncrement;
 			}
 
-			if (discsCoverImages != null)
+			if (addedDiscImages != null)
 			{
-				foreach (AddedDiscCoverImage coverImage in discsCoverImages)
+				foreach (AddedDiscImage image in addedDiscImages)
 				{
 					if (!onlyCountProgressSize)
 					{
-						ProgressMessages += Current($"Adding disc cover image '{coverImage.CoverImageFileName}'...\n");
-						await musicLibrary.SetDiscCoverImage(coverImage.Disc, coverImage.CoverImageFileName);
+						ProgressMessages += Current($"Adding disc image '{image.ImageInfo.FileName}'...\n");
+						await musicLibrary.SetDiscCoverImage(image.Disc, image.ImageInfo);
 						CurrProgress += progressIncrement;
 					}
 

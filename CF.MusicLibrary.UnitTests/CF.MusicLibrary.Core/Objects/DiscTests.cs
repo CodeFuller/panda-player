@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CF.MusicLibrary.Core.Objects;
+using CF.MusicLibrary.Core.Objects.Images;
 using NUnit.Framework;
 
 namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Core.Objects
@@ -497,6 +498,125 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Core.Objects
 			//	Act & Assert
 
 			CollectionAssert.AreEqual(new[] { song1, song2, song3, song4 }, disc.Songs);
+		}
+
+		[Test]
+		public void CoverImageGetter_IfDiscContainsCoverImage_ReturnsThisImage()
+		{
+			//	Arrange
+
+			var otherImage = new DiscImage { ImageType = DiscImageType.None };
+			var coverImage = new DiscImage { ImageType = DiscImageType.Cover };
+			var target = new Disc
+			{
+				Images = { otherImage, coverImage },
+			};
+
+			//	Act & Assert
+
+			Assert.AreSame(coverImage, target.CoverImage);
+		}
+
+		[Test]
+		public void CoverImageGetter_IfDiscContainsNoCoverImage_ReturnsNull()
+		{
+			//	Arrange
+
+			var target = new Disc
+			{
+				Images = { new DiscImage { ImageType = DiscImageType.None } },
+			};
+
+			//	Act & Assert
+
+			Assert.IsNull(target.CoverImage);
+		}
+
+		[Test]
+		public void CoverImageSetter_IfDiscContainsCoverImage_ReplacesCoverImageWithNewValue()
+		{
+			//	Arrange
+
+			var coverImage = new DiscImage { ImageType = DiscImageType.Cover };
+			var newCoverImage = new DiscImage { ImageType = DiscImageType.Cover };
+
+			var target = new Disc
+			{
+				Images =
+				{
+					new DiscImage { ImageType = DiscImageType.None },
+					coverImage,
+				},
+			};
+
+			//	Act
+
+			target.CoverImage = newCoverImage;
+
+			//	Assert
+
+			Assert.AreSame(newCoverImage, target.CoverImage);
+			Assert.AreEqual(2, target.Images.Count);
+		}
+
+		[Test]
+		public void CoverImageSetter_IfDiscContainsNoCoverImage_AddsNewCoverImage()
+		{
+			//	Arrange
+
+			var newCoverImage = new DiscImage { ImageType = DiscImageType.Cover };
+
+			var target = new Disc
+			{
+				Images = { new DiscImage { ImageType = DiscImageType.None } },
+			};
+
+			//	Act
+
+			target.CoverImage = newCoverImage;
+
+			//	Assert
+
+			Assert.AreSame(newCoverImage, target.CoverImage);
+			Assert.AreEqual(2, target.Images.Count);
+		}
+
+		[Test]
+		public void CoverImageSetter_IfNewImageIsNotCoverImage_ThrowsInvalidOperationException()
+		{
+			//	Arrange
+
+			var newCoverImage = new DiscImage { ImageType = DiscImageType.None };
+
+			var target = new Disc();
+
+			//	Act & Assert
+
+			Assert.Throws<InvalidOperationException>(() => target.CoverImage = newCoverImage);
+		}
+
+		[Test]
+		public void CoverImageSetter_IfValueIsNull_RemovesExistingDiscCoverImage()
+		{
+			//	Arrange
+
+			var target = new Disc
+			{
+				Images =
+				{
+					new DiscImage { ImageType = DiscImageType.Cover },
+					new DiscImage { ImageType = DiscImageType.None }
+				},
+			};
+
+			//	Act
+
+			target.CoverImage = null;
+
+			//	Assert
+
+			Assert.IsNull(target.CoverImage);
+			Assert.AreEqual(1, target.Images.Count);
 		}
 
 		[Test]

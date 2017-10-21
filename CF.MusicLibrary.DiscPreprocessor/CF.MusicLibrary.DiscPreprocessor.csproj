@@ -44,8 +44,8 @@
     <ApplicationIcon>DiscPreprocessor.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6486.14019, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6486.14019\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6503.21069, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6503.21069\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CF.Library.Unity, Version=0.1.6472.39381, Culture=neutral, processorArchitecture=MSIL">
@@ -126,8 +126,10 @@
     <Compile Include="..\Global\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AddingToLibrary\AddedDisc.cs" />
+    <Compile Include="AddingToLibrary\DiscImageViewItem.cs" />
     <Compile Include="AddingToLibrary\DiscViewItem.cs" />
-    <Compile Include="AddingToLibrary\AddedDiscCoverImage.cs" />
+    <Compile Include="AddingToLibrary\AddedDiscImage.cs" />
     <Compile Include="AddingToLibrary\ArtistDiscViewItem.cs" />
     <Compile Include="AddingToLibrary\CompilationDiscViewItem.cs" />
     <Compile Include="AddingToLibrary\CompilationDiscWithArtistInfoViewItem.cs" />
@@ -140,7 +142,7 @@
     <Compile Include="Events\SongTitleChangedEventArgs.cs" />
     <Compile Include="Events\SongTitleChangeEventArgs.cs" />
     <Compile Include="Events\SongTitleChangingEventArgs.cs" />
-    <Compile Include="IDiscCrawler.cs" />
+    <Compile Include="IContentCrawler.cs" />
     <Compile Include="MusicStorage\AddedDiscInfo.cs" />
     <Compile Include="MusicStorage\DsicType.cs" />
     <Compile Include="MusicStorage\WorkshopMusicStorage.cs" />
@@ -160,20 +162,23 @@
     <Compile Include="ParsingSong\IEthalonSongParser.cs" />
     <Compile Include="ParsingContent\IInputContentSplitter.cs" />
     <Compile Include="ParsingContent\InputContentSplitter.cs" />
-    <Compile Include="Interfaces\ISongFileFilter.cs" />
+    <Compile Include="Interfaces\ISourceFileTypeResolver.cs" />
     <Compile Include="ParsingSong\SongParsingTest.cs" />
     <Compile Include="ParsingSong\SongTitleMatch.cs" />
     <Compile Include="ParsingSong\SongTitlePattern.cs" />
     <Compile Include="SongContent.cs" />
-    <Compile Include="SongFileFilter.cs" />
+    <Compile Include="SourceFileType.cs" />
+    <Compile Include="SourceFileTypeResolver.cs" />
     <Compile Include="ViewModels\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\EditDiscsDetailsViewModel.cs" />
     <Compile Include="ViewModels\EditSongsDetailsViewModel.cs" />
     <Compile Include="ViewModels\EditSourceContentViewModel.cs" />
+    <Compile Include="ViewModels\EditSourceDiscImagesViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IAddToLibraryViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEditDiscsDetailsViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEditSourceContentViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IEditSongsDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IEditSourceDiscImagesViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IPageViewModel.cs" />
     <Compile Include="AddingToLibrary\SongViewItem.cs" />
     <Compile Include="Views\AddToLibraryView.xaml.cs">
@@ -190,6 +195,9 @@
     </Compile>
     <Compile Include="Views\EditSourceContentView.xaml.cs">
       <DependentUpon>EditSourceContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditSourceDiscImagesView.xaml.cs">
+      <DependentUpon>EditSourceDiscImagesView.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\AddToLibraryView.xaml">
       <SubType>Designer</SubType>
@@ -216,7 +224,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="DiscContent.cs" />
-    <Compile Include="DiscCrawler.cs" />
+    <Compile Include="ContentCrawler.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -230,6 +238,10 @@
     <Compile Include="Views\DiscTreeView.xaml.cs">
       <DependentUpon>DiscTreeView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\EditSourceDiscImagesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

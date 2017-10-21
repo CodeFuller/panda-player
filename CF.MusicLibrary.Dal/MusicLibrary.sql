@@ -47,6 +47,18 @@ CREATE TABLE [Discs] (
   CONSTRAINT [sqlite_master_UC_Discs] UNIQUE (Uri)
 );
 
+CREATE TABLE [DiscImages] (
+  [Id] INTEGER NOT NULL,
+  [Disc_Id] int NOT NULL,
+  [ImageType] int NOT NULL,
+  [Uri] ntext NOT NULL,
+  [FileSize] int NOT NULL,
+  [Checksum] int NOT NULL,
+  CONSTRAINT [sqlite_master_PK_Discs] PRIMARY KEY ([Id]),
+  CONSTRAINT [sqlite_master_UC_Discs] UNIQUE (Uri),
+  FOREIGN KEY ([Disc_Id]) REFERENCES [Discs] ([Id]) ON DELETE CASCADE ON UPDATE NO ACTION
+);
+
 CREATE TABLE [Artists] (
   [Id] INTEGER NOT NULL,
   [Name] ntext NOT NULL,

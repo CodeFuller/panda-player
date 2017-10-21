@@ -34,8 +34,8 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6486.14019, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6486.14019\lib\net462\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=0.1.6503.21069, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.0.1.6503.21069\lib\net462\CF.Library.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
@@ -61,27 +61,21 @@
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Global\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="DiscArt\DiscArtFileStorage.cs" />
-    <Compile Include="DiscArt\DiscArtImageFile.cs" />
-    <Compile Include="DiscArt\DiscArtImageInfo.cs" />
-    <Compile Include="DiscArt\DiscArtValidationResults.cs" />
-    <Compile Include="DiscArt\DiscArtValidator.cs" />
-    <Compile Include="DiscArt\IDiscArtImageFile.cs" />
-    <Compile Include="DiscArt\IDiscArtValidator.cs" />
-    <Compile Include="DiscArt\IImageFacade.cs" />
-    <Compile Include="DiscArt\ImageFacade.cs" />
+    <Compile Include="Images\IImageInfoProvider.cs" />
+    <Compile Include="Images\ImageFile.cs" />
+    <Compile Include="Images\ImageInfoProvider.cs" />
+    <Compile Include="Images\ImageValidationResults.cs" />
+    <Compile Include="Images\DiscImageValidator.cs" />
+    <Compile Include="Images\IDiscImageValidator.cs" />
+    <Compile Include="Images\IImageFacade.cs" />
+    <Compile Include="Images\ImageFacade.cs" />
     <Compile Include="FileSizeFormatter.cs" />
+    <Compile Include="Images\IImageFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +87,7 @@
       <Name>CF.MusicLibrary.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

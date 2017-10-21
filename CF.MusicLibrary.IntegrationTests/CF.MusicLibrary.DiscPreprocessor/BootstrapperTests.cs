@@ -1,6 +1,6 @@
 ﻿using CF.Library.Core.Configuration;
 using CF.Library.Core.Interfaces;
-using CF.MusicLibrary.Common.DiscArt;
+using CF.MusicLibrary.Common.Images;
 using CF.MusicLibrary.DiscPreprocessor;
 using Microsoft.Practices.Unity;
 using NSubstitute;
@@ -34,8 +34,8 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor
 
 			Assert.DoesNotThrow(() => target.Run());
 
-			var discArtImageFileFactory = target.Container.Resolve<IObjectFactory<IDiscArtImageFile>>();
-			Assert.DoesNotThrow(() => discArtImageFileFactory.CreateInstance());
+			var imageFileFactory = target.Container.Resolve<IObjectFactory<IImageFile>>();
+			Assert.DoesNotThrow(() => imageFileFactory.CreateInstance());
 		}
 	}
 }

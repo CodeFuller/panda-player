@@ -11,6 +11,12 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.LastFM
 	[TestFixture]
 	public class LastFMScrobblerTests
 	{
+		[SetUp]
+		public void SetUp()
+		{
+			Logger = Substitute.For<IMessageLogger>();
+		}
+
 		[Test]
 		public void Constructor_WhenLastFMApiClientArgumentIsNull_ThrowsArgumentNullException()
 		{
@@ -30,7 +36,6 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.LastFM
 				Album = new Album("Some Artist", "Some Album"),
 			};
 
-			Logger = Substitute.For<IMessageLogger>();
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock);
 
@@ -57,7 +62,6 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.LastFM
 				Album = new Album("Some Artist", "Some Album"),
 			};
 
-			Logger = Substitute.For<IMessageLogger>();
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock);
 
@@ -84,7 +88,6 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.LastFM
 				Album = new Album(artist, "Some Album"),
 			};
 
-			Logger = Substitute.For<IMessageLogger>();
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock);
 
@@ -110,7 +113,6 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.LastFM
 				Album = new Album("Some Artist", "Some Album"),
 			};
 
-			Logger = Substitute.For<IMessageLogger>();
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock);
 
@@ -136,7 +138,6 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.LastFM
 				Album = new Album("Some Artist", "Some Album"),
 			}, new DateTime(2017, 09, 18));
 
-			Logger = Substitute.For<IMessageLogger>();
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock);
 
@@ -163,7 +164,6 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.LastFM
 				Album = new Album("Some Artist", "Some Album"),
 			}, new DateTime(2017, 09, 18));
 
-			Logger = Substitute.For<IMessageLogger>();
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock);
 
@@ -190,7 +190,6 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.LastFM
 				Album = new Album(artist, "Some Album"),
 			}, new DateTime(2017, 09, 18));
 
-			Logger = Substitute.For<IMessageLogger>();
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock);
 
@@ -216,7 +215,6 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.LastFM
 				Album = new Album("Some Artist", "Some Album"),
 			}, new DateTime(2017, 09, 18));
 
-			Logger = Substitute.For<IMessageLogger>();
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock);
 

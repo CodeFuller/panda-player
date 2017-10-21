@@ -70,11 +70,11 @@ namespace CF.MusicLibrary.PandaPlayer
 			ShowDialog<EditSongPropertiesView>(viewModel);
 		}
 
-		public async Task ShowEditDiscArtView(Disc disc)
+		public async Task ShowEditDiscImageView(Disc disc)
 		{
-			var viewModel = viewModelHolder.EditDiscArtViewModel;
+			var viewModel = viewModelHolder.EditDiscImageViewModel;
 			await viewModel.Load(disc);
-			ShowDialog<EditDiscArtView>(viewModel);
+			ShowDialog<EditDiscImageView>(viewModel);
 		}
 
 		public void ShowLibraryStatisticsView()

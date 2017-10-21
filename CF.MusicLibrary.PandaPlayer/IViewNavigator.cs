@@ -12,7 +12,7 @@ namespace CF.MusicLibrary.PandaPlayer
 
 		void ShowSongPropertiesView(IEnumerable<Song> songs);
 
-		Task ShowEditDiscArtView(Disc disc);
+		Task ShowEditDiscImageView(Disc disc);
 
 		void ShowLibraryStatisticsView();
 	}

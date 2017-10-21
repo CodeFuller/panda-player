@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
+using CF.MusicLibrary.Core.Objects.Images;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels;
@@ -68,14 +69,16 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 		}
 
 		[Test]
-		public void AddContentToLibrary_StoresDiscsCoverImagesCorrectly()
+		public void AddContentToLibrary_StoresDiscsImagesCorrectly()
 		{
 			//	Arrange
 
 			Disc disc1 = new Disc();
 			Disc disc2 = new Disc();
-			AddedDiscCoverImage addedCover1 = new AddedDiscCoverImage(disc1, "DiscCoverImage1.jpg");
-			AddedDiscCoverImage addedCover2 = new AddedDiscCoverImage(disc2, "DiscCoverImage2.jpg");
+			ImageInfo imageInfo1 = new ImageInfo();
+			ImageInfo imageInfo2 = new ImageInfo();
+			AddedDiscImage addedImage1 = new AddedDiscImage(disc1, imageInfo1);
+			AddedDiscImage addedImage2 = new AddedDiscImage(disc2, imageInfo2);
 
 			IMusicLibrary musicLibraryMock = Substitute.For<IMusicLibrary>();
 
@@ -83,8 +86,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 			mediaInfoProviderStub.GetSongMediaInfo(Arg.Any<string>()).Returns(Task.FromResult(new SongMediaInfo()));
 
 			AddToLibraryViewModel target = new AddToLibraryViewModel(musicLibraryMock, mediaInfoProviderStub, Substitute.For<IWorkshopMusicStorage>(), false);
-			target.SetSongs(new[] { new AddedSong(new Song(), @"SomeSongPath\SomeSongFile.mp3") });
-			target.SetDiscsCoverImages(new[] { addedCover1, addedCover2 });
+			target.SetSongs(new AddedSong[] { });
+			target.SetDiscsImages(new[] { addedImage1, addedImage2 });
 
 			//	Act
 
@@ -92,14 +95,17 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 			//	Assert
 
-			musicLibraryMock.Received(1).SetDiscCoverImage(disc1, "DiscCoverImage1.jpg");
-			musicLibraryMock.Received(1).SetDiscCoverImage(disc2, "DiscCoverImage2.jpg");
+			musicLibraryMock.Received(1).SetDiscCoverImage(disc1, imageInfo1);
+			musicLibraryMock.Received(1).SetDiscCoverImage(disc2, imageInfo2);
 		}
 
 		[Test]
 		public void AddContentToLibrary_IfDeleteSourceContentIsTrue_DeletesSourceContentCorrectly()
 		{
 			//	Arrange
+
+			ImageInfo imageInfo1 = new ImageInfo { FileName = "DiscCoverImage1.img" };
+			ImageInfo imageInfo2 = new ImageInfo { FileName = "DiscCoverImage2.img" };
 
 			ISongMediaInfoProvider mediaInfoProviderStub = Substitute.For<ISongMediaInfoProvider>();
 			mediaInfoProviderStub.GetSongMediaInfo(Arg.Any<string>()).Returns(Task.FromResult(new SongMediaInfo()));
@@ -114,10 +120,10 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 				new AddedSong(new Song(), @"SomeSongPath\SomeSongFile1.mp3"),
 				new AddedSong(new Song(), @"SomeSongPath\SomeSongFile2.mp3"),
 			});
-			target.SetDiscsCoverImages(new[]
+			target.SetDiscsImages(new[]
 			{
-				new AddedDiscCoverImage(new Disc(), @"DiscCoverImage1.jpg"),
-				new AddedDiscCoverImage(new Disc(), @"DiscCoverImage2.jpg"),
+				new AddedDiscImage(new Disc(), imageInfo1),
+				new AddedDiscImage(new Disc(), imageInfo2),
 			});
 
 			//	Act
@@ -131,8 +137,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 			{
 				@"SomeSongPath\SomeSongFile1.mp3",
 				@"SomeSongPath\SomeSongFile2.mp3",
-				@"DiscCoverImage1.jpg",
-				@"DiscCoverImage2.jpg",
+				"DiscCoverImage1.img",
+				"DiscCoverImage2.img",
 			}, deletedFiles);
 		}
 
@@ -148,6 +154,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), mediaInfoProviderStub, workshopMusicStorageMock, false);
 			target.SetSongs(new[] { new AddedSong(new Song(), @"SomeSongPath\SomeSongFile.mp3") });
+			target.SetDiscsImages(new[] { new AddedDiscImage(new Disc(), new ImageInfo()) });
 
 			//	Act
 
