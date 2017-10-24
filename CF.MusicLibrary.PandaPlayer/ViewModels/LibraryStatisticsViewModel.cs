@@ -18,7 +18,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public int SongsNumber => discLibrary.Songs.Count();
 
-		public long StorageSize => discLibrary.Songs.Sum(s => (long)s.FileSize);
+		public long StorageSize => discLibrary.Songs.Sum(s => (long)s.FileSize) + discLibrary.Discs.SelectMany(d => d.Images).Sum(im => (long)im.FileSize);
 
 		public TimeSpan TotalDuration => discLibrary.Songs.Aggregate(TimeSpan.Zero, (currSum, currSong) => currSum + currSong.Duration);
 
