@@ -40,7 +40,7 @@
                 </Label.Style>
             </Label>
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Search" Width="80" Margin="10" IsCancel="true" Command="{Binding LaunchSearchForDiscImageCommand}" />
+                <Button Content="Search" Width="80" Margin="10" Command="{Binding LaunchSearchForDiscImageCommand}" />
                 <Button Name="SaveButton" Content="Save" Width="80" Margin="10" IsDefault="True" Click="SaveButton_Click">
                     <Button.IsEnabled>
                         <MultiBinding Converter="{StaticResource BooleanAndConverter}">
