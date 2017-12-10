@@ -2,12 +2,21 @@
 using CF.MusicLibrary.LibraryChecker;
 using NSubstitute;
 using NUnit.Framework;
+using Unity;
 
 namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.LibraryChecker
 {
 	[TestFixture]
 	public class BootstrapperTests
 	{
+		private class BootstrapperHelper : Bootstrapper
+		{
+			protected override void OnDependenciesRegistering()
+			{
+				DIContainer.RegisterInstance(Substitute.For<ISettingsProvider>());
+			}
+		}
+
 		[TearDown]
 		public void TearDown()
 		{
@@ -19,8 +28,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.LibraryChecker
 		{
 			//	Arrange
 
-			AppSettings.SettingsProvider = Substitute.For<ISettingsProvider>();
-			var target = new Bootstrapper();
+			var target = new BootstrapperHelper();
 
 			//	Act & Assert
 

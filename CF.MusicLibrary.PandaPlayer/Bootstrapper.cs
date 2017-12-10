@@ -26,13 +26,20 @@ using CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Player;
 using CF.MusicLibrary.Tagger;
 using CF.MusicLibrary.Universal.Interfaces;
-using Microsoft.Practices.Unity;
+using Unity;
+using Unity.Injection;
+using Unity.Lifetime;
 
 namespace CF.MusicLibrary.PandaPlayer
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "It's ok for Composition Root")]
 	internal class Bootstrapper : UnityBootstrapper<ApplicationViewModel>
 	{
+		protected override void OnDependenciesRegistering()
+		{
+			DIContainer.RegisterType<ISettingsProvider, FileSettingsProvider>();
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "It's ok for Composition Root")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope", Justification = "LifetimeManager is disposed by DI Container.")]
 		protected override void RegisterDependencies()

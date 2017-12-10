@@ -2,9 +2,9 @@
 using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.Common.Images;
 using CF.MusicLibrary.DiscPreprocessor;
-using Microsoft.Practices.Unity;
 using NSubstitute;
 using NUnit.Framework;
+using Unity;
 
 namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor
 {
@@ -14,6 +14,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor
 		private class BootstrapperHelper : Bootstrapper
 		{
 			public IUnityContainer Container => DIContainer;
+
+			protected override void OnDependenciesRegistering()
+			{
+				DIContainer.RegisterInstance(Substitute.For<ISettingsProvider>());
+			}
 		}
 
 		[TearDown]
@@ -27,7 +32,6 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor
 		{
 			//	Arrange
 
-			AppSettings.SettingsProvider = Substitute.For<ISettingsProvider>();
 			var target = new BootstrapperHelper();
 
 			//	Act & Assert

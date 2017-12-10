@@ -16,12 +16,18 @@ using CF.MusicLibrary.DiscPreprocessor.ViewModels.Interfaces;
 using CF.MusicLibrary.Library;
 using CF.MusicLibrary.Local;
 using CF.MusicLibrary.Tagger;
-using Microsoft.Practices.Unity;
+using Unity;
+using Unity.Injection;
 
 namespace CF.MusicLibrary.DiscPreprocessor
 {
 	internal class Bootstrapper : UnityBootstrapper<ApplicationViewModel>
 	{
+		protected override void OnDependenciesRegistering()
+		{
+			DIContainer.RegisterType<ISettingsProvider, FileSettingsProvider>();
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "It's ok for Composition Root")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope", Justification = "LifetimeManager is disposed by DI Container.")]
 		protected override void RegisterDependencies()

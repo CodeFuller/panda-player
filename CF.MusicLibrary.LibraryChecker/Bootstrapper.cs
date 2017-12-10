@@ -13,12 +13,19 @@ using CF.MusicLibrary.LibraryChecker.Checkers;
 using CF.MusicLibrary.LibraryChecker.Registrators;
 using CF.MusicLibrary.Local;
 using CF.MusicLibrary.Tagger;
-using Microsoft.Practices.Unity;
+using Unity;
+using Unity.Injection;
+using Unity.Lifetime;
 
 namespace CF.MusicLibrary.LibraryChecker
 {
 	internal class Bootstrapper : UnityBootstrapper<IApplicationLogic>
 	{
+		protected override void OnDependenciesRegistering()
+		{
+			DIContainer.RegisterType<ISettingsProvider, FileSettingsProvider>();
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "It's ok for Composition Root")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Object lifetime equals to the host process lifetime")]
 		protected override void RegisterDependencies()

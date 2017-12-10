@@ -35,12 +35,16 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6503.21069, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6503.21069\lib\net462\CF.Library.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="CF.Library.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.1.0.0\lib\netstandard2.0\CF.Library.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.4.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Global\GlobalAssemblyInfo.cs">

@@ -34,9 +34,8 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=0.1.6503.21069, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.0.1.6503.21069\lib\net462\CF.Library.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="CF.Library.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.1.0.0\lib\netstandard2.0\CF.Library.Core.dll</HintPath>
     </Reference>
     <Reference Include="CF.Library.Http, Version=0.1.6472.39375, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CF.Library.Http.0.1.6472.39375\lib\net462\CF.Library.Http.dll</HintPath>
@@ -47,10 +46,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.4.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Global\GlobalAssemblyInfo.cs">
