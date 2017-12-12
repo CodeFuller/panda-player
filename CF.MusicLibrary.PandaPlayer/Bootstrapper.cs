@@ -75,7 +75,6 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<IMusicPlayerViewModel, MusicPlayerViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<IDiscAdviserViewModel, DiscAdviserViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<IRateDiscViewModel, RateDiscViewModel>(new ContainerControlledLifetimeManager());
-			DIContainer.RegisterType<ILoggerViewModel, LoggerViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<IDiscImageViewModel, DiscImageViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<IEditDiscImageViewModel, EditDiscImageViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<ILibraryStatisticsViewModel, LibraryStatisticsViewModel>(new ContainerControlledLifetimeManager());
@@ -86,7 +85,6 @@ namespace CF.MusicLibrary.PandaPlayer
 			DIContainer.RegisterType<ITokenAuthorizer, DefaultBrowserTokenAuthorizer>();
 			DIContainer.RegisterType<ILastFMApiClient, LastFMApiClient>(new InjectionConstructor(typeof(ITokenAuthorizer), lastFMApiKey, lastFMSharedSecret, lastFMSessionKey));
 			DIContainer.RegisterType<IScrobbler, LastFMScrobbler>(new InjectionConstructor(typeof(ILastFMApiClient)));
-			DIContainer.RegisterType<IMessageLogger, LoggerViewModel>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<ILibraryContentUpdater, LibraryContentUpdater>();
 			DIContainer.RegisterType<IViewNavigator, ViewNavigator>(new ContainerControlledLifetimeManager());
 			DIContainer.RegisterType<IDiscGroupper, MyLibraryDiscGroupper>();
@@ -119,6 +117,11 @@ namespace CF.MusicLibrary.PandaPlayer
 				new InjectionConstructor(typeof(IFileSystemFacade), Path.Combine(appDataPath, "Playlist.json")));
 			DIContainer.RegisterType<IGenericDataRepository<PlaylistAdviserMemo>, JsonFileGenericRepository<PlaylistAdviserMemo>>(
 				new InjectionConstructor(typeof(IFileSystemFacade), Path.Combine(appDataPath, "AdviserMemo.json")));
+
+			//	The same instance should be shared for IMessageLogger and ILoggerViewModel
+			var loggerViewModel = new LoggerViewModel();
+			DIContainer.RegisterInstance<IMessageLogger>(loggerViewModel);
+			DIContainer.RegisterInstance<ILoggerViewModel>(loggerViewModel);
 		}
 	}
 }
