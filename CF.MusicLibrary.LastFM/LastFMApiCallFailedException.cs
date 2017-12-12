@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Runtime.Serialization;
-using CF.Library.Http.Exceptions;
+using CF.Library.Core.Exceptions;
 
 namespace CF.MusicLibrary.LastFM
 {
@@ -13,8 +13,10 @@ namespace CF.MusicLibrary.LastFM
 		}
 
 		internal LastFMApiCallFailedException(HttpResponseMessage response)
-			: base(response)
+			: base(response.ReasonPhrase ?? String.Empty)
 		{
+			RequestUri = response.RequestMessage.RequestUri;
+			HttpStatusCode = (int)(response.StatusCode);
 		}
 
 		public LastFMApiCallFailedException(string message)

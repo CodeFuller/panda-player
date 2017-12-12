@@ -40,8 +40,8 @@
     <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.1.0.0\lib\netstandard2.0\CF.Library.Core.dll</HintPath>
+    <Reference Include="CF.Library.Core, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CF.Library.Core.1.1.1\lib\netstandard2.0\CF.Library.Core.dll</HintPath>
     </Reference>
     <Reference Include="CF.Library.Unity, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CF.Library.Unity.1.0.1\lib\netstandard2.0\CF.Library.Unity.dll</HintPath>
