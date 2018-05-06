@@ -1,187 +1,35 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{917EE041-0D0D-4468-A08E-23E8A4D4D648}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CF.MusicLibrary.UnitTests</RootNamespace>
-    <AssemblyName>CF.MusicLibrary.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>net462</TargetFramework>
+
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>..\..\CodeFuller.Tests.ruleset</CodeAnalysisRuleSet>
+
+  <PropertyGroup>
+    <Description>Contains Unit tests for MusicLibrary assemblies</Description>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>..\..\CodeFuller.Tests.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.1.1.1\lib\netstandard2.0\CF.Library.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NSubstitute, Version=2.0.3.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\NSubstitute.2.0.3\lib\net45\NSubstitute.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.6.1\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="policy.2.0.taglib-sharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
-      <HintPath>..\packages\taglib.2.1.0.0\lib\policy.2.0.taglib-sharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.4.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="taglib-sharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
-      <HintPath>..\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="NUnit" Version="3.6.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\Global\GlobalAssemblyInfo.cs">
-      <Link>Properties\GlobalAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="CF.MusicLibrary.Common\Images\ImageInfoProviderTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\DiscImageViewItemTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ContentCrawlerTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\EditSourceDiscImagesViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.Library\FileSystemStorageTests.cs" />
-    <Compile Include="CF.MusicLibrary.Library\MusicLibrary.Reader.Tests.cs" />
-    <Compile Include="CF.MusicLibrary.Library\MusicLibrary.Writer.Tests.cs" />
-    <Compile Include="CF.MusicLibrary.Core\Objects\DiscLibraryTests.cs" />
-    <Compile Include="CF.MusicLibrary.Core\Objects\DiscTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\ArtistDiscViewItemTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\CompilationDiscWithArtistInfoViewItemTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\CompilationDiscWithoutArtistInfoViewItemTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\DiscViewItemTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\ExistingDiscViewItemTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\NewDiscViewItemTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\AddingToLibrary\SongTaggerTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\MusicStorage\WorkshopMusicStorageTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ParsingContent\DiscContentParserTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ParsingContent\EthalonDiscParserTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ParsingSong\EthalonSongParserTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ParsingContent\InputContentSplitterTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\SourceFileTypeResolverTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\AddToLibraryViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.Core\DiscTitleToAlbumMapperTests.cs" />
-    <Compile Include="CF.MusicLibrary.Library\FilesystemMusicStorageTests.cs" />
-    <Compile Include="CF.MusicLibrary.Core\ItemUriPartsTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\ApplicationViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.DiscPreprocessor\ViewModels\EditDiscsDetailsViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.LastFM\LastFMScrobblerTests.cs" />
-    <Compile Include="CF.MusicLibrary.Local\MyLibraryStructurerTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\Adviser\AdvisedPlaylistTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\Adviser\PlaylistAdviserMemoTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\Adviser\PlaylistAdvisers\FavouriteArtistDiscsAdviserTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\Adviser\PlaylistAdvisers\HighlyRatedSongsAdviserTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\Adviser\PlaylistAdvisers\CompositePlaylistAdviserTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\ApplicationViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscAdviserViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.Common\Images\ImageFileTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscImages\DiscImageViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\DiscImages\EditDiscImageViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\EditDiscPropertiesViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\EditSongPropertiesViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\LibraryExplorerViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\Player\MusicPlayerViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\JsonFilePlaylistDataRepositoryTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\PersistentPlaylist\PersistentSongPlaylistViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\Player\SongPlaybacksRegistratorTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\SongListViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.PandaPlayer\ViewModels\SongPlaylistViewModelTests.cs" />
-    <Compile Include="CF.MusicLibrary.Common\Images\DiscImageValidatorTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <ProjectReference Include="..\CF.MusicLibrary.Common\CF.MusicLibrary.Common.csproj" />
+    <ProjectReference Include="..\CF.MusicLibrary.Core\CF.MusicLibrary.Core.csproj" />
+    <ProjectReference Include="..\CF.MusicLibrary.DiscPreprocessor\CF.MusicLibrary.DiscPreprocessor.csproj" />
+    <ProjectReference Include="..\CF.MusicLibrary.LastFM\CF.MusicLibrary.LastFM.csproj" />
+    <ProjectReference Include="..\CF.MusicLibrary.Library\CF.MusicLibrary.Library.csproj" />
+    <ProjectReference Include="..\CF.MusicLibrary.Local\CF.MusicLibrary.Local.csproj" />
+    <ProjectReference Include="..\CF.MusicLibrary.PandaPlayer\CF.MusicLibrary.PandaPlayer.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
+    <PackageReference Include="NSubstitute" Version="2.0.3" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CF.MusicLibrary.Common\CF.MusicLibrary.Common.csproj">
-      <Project>{5501311F-CBCD-40B3-95F4-F28D521E6EC5}</Project>
-      <Name>CF.MusicLibrary.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.DiscPreprocessor\CF.MusicLibrary.DiscPreprocessor.csproj">
-      <Project>{B977EA7B-85A2-429A-B98F-E76023589321}</Project>
-      <Name>CF.MusicLibrary.DiscPreprocessor</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.Core\CF.MusicLibrary.Core.csproj">
-      <Project>{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}</Project>
-      <Name>CF.MusicLibrary.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.LastFM\CF.MusicLibrary.LastFM.csproj">
-      <Project>{7F368759-572F-41D4-A7FF-1B3898AE3918}</Project>
-      <Name>CF.MusicLibrary.LastFM</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.Library\CF.MusicLibrary.Library.csproj">
-      <Project>{E27630AC-2F6F-4F2C-BFBF-3663F2C18F9C}</Project>
-      <Name>CF.MusicLibrary.Library</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.Local\CF.MusicLibrary.Local.csproj">
-      <Project>{378157BA-2DA4-4E39-8AFD-59CED35B9B1F}</Project>
-      <Name>CF.MusicLibrary.Local</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.PandaPlayer\CF.MusicLibrary.PandaPlayer.csproj">
-      <Project>{502D59CA-7973-46C9-A2A4-9144C48CBEE4}</Project>
-      <Name>CF.MusicLibrary.PandaPlayer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.Tagger\CF.MusicLibrary.Tagger.csproj">
-      <Project>{931CDE55-D545-47AF-B525-06AB15E74C3E}</Project>
-      <Name>CF.MusicLibrary.Tagger</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

@@ -4,9 +4,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle("PandaPlayer")]
-[assembly: AssemblyDescription("Audio Player for discs from Music Library")]
-
 [assembly: ComVisible(false)]
 
 [assembly: Guid("99DD3691-4BE7-4E32-8081-70560AF7867E")]

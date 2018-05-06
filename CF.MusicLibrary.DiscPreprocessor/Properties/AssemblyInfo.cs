@@ -4,9 +4,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle("DiscPreprocessor")]
-[assembly: AssemblyDescription("Tool for preprocessing music discs before adding to the collection")]
-
 [assembly: ComVisible(false)]
 
 [assembly: Guid("41420BD8-3820-404D-BB8A-CF98EDF70873")]

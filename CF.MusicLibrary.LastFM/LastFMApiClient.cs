@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CF.MusicLibrary.LastFM.DataContracts;
 using CF.MusicLibrary.LastFM.Objects;
+using Newtonsoft.Json;
 using static System.FormattableString;
 using static CF.Library.Core.Application;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
@@ -258,7 +259,8 @@ namespace CF.MusicLibrary.LastFM
 		{
 			try
 			{
-				var responseData = await response.Content.ReadAsAsync<TData>();
+				var responseContent = await response.Content.ReadAsStringAsync();
+				var responseData = JsonConvert.DeserializeObject<TData>(responseContent);
 				if (response.IsSuccessStatusCode)
 				{
 					return responseData;

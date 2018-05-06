@@ -1,482 +1,68 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{502D59CA-7973-46C9-A2A4-9144C48CBEE4}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CF.MusicLibrary.PandaPlayer</RootNamespace>
-    <AssemblyName>PandaPlayer</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>..\..\CodeFuller.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup>
+    <LanguageTargets>$(MSBuildExtensionsPath)\$(VisualStudioVersion)\Bin\Microsoft.CSharp.targets</LanguageTargets>
+    <TargetFramework>net462</TargetFramework>
+    <OutputType>winexe</OutputType>
+    <OutputTypeEx>winexe</OutputTypeEx>
     <ApplicationIcon>Views\Icons\PandaPlayer.ico</ApplicationIcon>
+    <AssemblyName>PandaPlayer</AssemblyName>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>Audio Player for discs from Music Library</Description>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="CF.Library.Core, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Core.1.1.1\lib\netstandard2.0\CF.Library.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="CF.Library.Unity, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Unity.1.0.1\lib\netstandard2.0\CF.Library.Unity.dll</HintPath>
-    </Reference>
-    <Reference Include="CF.Library.Wpf, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CF.Library.Wpf.1.0.0\lib\net462\CF.Library.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="CommonServiceLocator, Version=2.0.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.3.2\lib\net45\CommonServiceLocator.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.8\lib\net451\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.ConfigurationManager, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Configuration.ConfigurationManager.4.4.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.SQLite, Version=1.0.105.2, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Core.1.0.105.2\lib\net46\System.Data.SQLite.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Data.SQLite.EF6, Version=1.0.105.2, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.105.2\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.105.2, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.105.2\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="Unity.Abstractions, Version=2.3.1.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.3.2\lib\net45\Unity.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Configuration, Version=5.1.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.3.2\lib\net45\Unity.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Container, Version=5.3.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.3.2\lib\net45\Unity.Container.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Interception, Version=5.1.0.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.3.2\lib\net45\Unity.Interception.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Interception.Configuration, Version=5.1.0.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.3.2\lib\net45\Unity.Interception.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RegistrationByConvention, Version=2.1.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.3.2\lib\net45\Unity.RegistrationByConvention.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.ServiceLocation, Version=2.0.8.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.3.2\lib\net45\Unity.ServiceLocation.dll</HintPath>
-    </Reference>
-    <Reference Include="WindowsBase" />
+    <Compile Include="..\Common\GlobalAssemblyInfo.cs" Link="GlobalAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" />
+    <PackageReference Include="MvvmLightLibs" Version="5.3.0.0" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.108" />
+    <PackageReference Include="CF.Library.Unity" Version="1.0.1" />
+    <PackageReference Include="CF.Library.Wpf" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CF.MusicLibrary.Common\CF.MusicLibrary.Common.csproj" />
+    <ProjectReference Include="..\CF.MusicLibrary.Core\CF.MusicLibrary.Core.csproj" />
+    <ProjectReference Include="..\CF.MusicLibrary.Dal\CF.MusicLibrary.Dal.csproj" />
+    <ProjectReference Include="..\CF.MusicLibrary.LastFM\CF.MusicLibrary.LastFM.csproj" />
+    <ProjectReference Include="..\CF.MusicLibrary.Library\CF.MusicLibrary.Library.csproj" />
+    <ProjectReference Include="..\CF.MusicLibrary.Local\CF.MusicLibrary.Local.csproj" />
+    <ProjectReference Include="..\CF.MusicLibrary.Tagger\CF.MusicLibrary.Tagger.csproj" />
+    <ProjectReference Include="..\CF.MusicLibrary.Universal\CF.MusicLibrary.Universal.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
+
   <ItemGroup>
+
+    <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
+    <Compile Update="Properties\Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
+
+    <Page Include="**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" Exclude="App.xaml" />
+    <Compile Update="**\*.xaml.cs" SubType="Designer" DependentUpon="%(Filename)" />
+
+    <Resource Include="Views\Icons\*.*" />
+    <Resource Include="Views\Icons\Ratings\*.*" />
+
     <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
+      <Generator>MsBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="..\Global\GlobalAssemblyInfo.cs">
-      <Link>Properties\GlobalAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Bootstrapper.cs" />
-    <Compile Include="Adviser\AdvisedPlaylist.cs" />
-    <Compile Include="Adviser\AdvisedPlaylistType.cs" />
-    <Compile Include="Adviser\AdviseFactorsProvider.cs" />
-    <Compile Include="Adviser\PlaylistAdvisers\FavouriteArtistDiscsAdviser.cs" />
-    <Compile Include="Adviser\PlaylistAdvisers\HighlyRatedSongsAdviser.cs" />
-    <Compile Include="Adviser\PlaylistAdvisers\ICompositePlaylistAdviser.cs" />
-    <Compile Include="Adviser\IAdviseFactorsProvider.cs" />
-    <Compile Include="Adviser\RankBasedAdviser\IDiscAdviser.cs" />
-    <Compile Include="Adviser\RankBasedAdviser\IDiscGroupSorter.cs" />
-    <Compile Include="Adviser\PlaylistAdvisers\IPlaylistAdviser.cs" />
-    <Compile Include="Adviser\PlaylistAdvisers\CompositePlaylistAdviser.cs" />
-    <Compile Include="Adviser\PlaylistAdviserMemo.cs" />
-    <Compile Include="Adviser\PlaylistAdvisers\RankBasedDiscAdviser.cs" />
-    <Compile Include="Adviser\RankBasedAdviser\RankBasedDiscGroupSorter.cs" />
-    <Compile Include="Adviser\RankBasedAdviser\RankedDisc.cs" />
-    <Compile Include="Adviser\RankBasedAdviser\RankedDiscGroup.cs" />
-    <Compile Include="Events\DiscEvents\ActiveDiscChangedEventArgs.cs" />
-    <Compile Include="Events\SongEvents\BaseSongEventArgs.cs" />
-    <Compile Include="Events\SongListEvents\AddingSongsToPlaylistEventArgs.cs" />
-    <Compile Include="Events\SongListEvents\AddingSongsToPlaylistLastEventArgs.cs" />
-    <Compile Include="Events\SongListEvents\AddingSongsToPlaylistNextEventArgs.cs" />
-    <Compile Include="Events\DiscEvents\BaseDiscEventArgs.cs" />
-    <Compile Include="Events\SongListEvents\BaseSongListEventArgs.cs" />
-    <Compile Include="Events\DiscEvents\DiscImageChangedEventArgs.cs" />
-    <Compile Include="Events\DiscEvents\LibraryExplorerDiscChangedEventArgs.cs" />
-    <Compile Include="Events\LibraryLoadedEventArgs.cs" />
-    <Compile Include="Events\DiscEvents\NavigateLibraryExplorerToDiscEventArgs.cs" />
-    <Compile Include="Events\SongListEvents\PlaylistChangedEventArgs.cs" />
-    <Compile Include="Events\SongListEvents\PlaylistLoadedEventArgs.cs" />
-    <Compile Include="Events\SongEvents\PlayPlaylistStartingFromSongEventArgs.cs" />
-    <Compile Include="Events\SongListEvents\PlaySongsListEventArgs.cs" />
-    <Compile Include="IGenericDataRepository.cs" />
-    <Compile Include="IWebBrowser.cs" />
-    <Compile Include="JsonFileGenericRepository.cs" />
-    <Compile Include="SystemDefaultWebBrowser.cs" />
-    <Compile Include="ViewModels\DiscImages\DocumentDownloadFailedException.cs" />
-    <Compile Include="ViewModels\DiscImages\HttpDocumentDownloader.cs" />
-    <Compile Include="ViewModels\DiscImages\IDocumentDownloader.cs" />
-    <Compile Include="ViewModels\Interfaces\IEditDiscImageViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\ILibraryStatisticsViewModel.cs" />
-    <Compile Include="ViewModels\LibraryStatisticsViewModel.cs" />
-    <Compile Include="ViewModels\PersistentPlaylist\PlaylistData.cs" />
-    <Compile Include="ViewModels\DiscAdviserViewModel.cs" />
-    <Compile Include="ViewModels\DiscImages\DiscImageViewModel.cs" />
-    <Compile Include="ViewModels\EditDiscPropertiesViewModel.cs" />
-    <Compile Include="ViewModels\EditedSongProperty.cs" />
-    <Compile Include="ViewModels\EditSongPropertiesViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IDiscImageViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IEditDiscPropertiesViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IDiscAdviserViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IEditSongPropertiesViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\INavigatedViewModelHolder.cs" />
-    <Compile Include="ViewModels\Interfaces\IRateDiscViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IApplicationViewModelHolder.cs" />
-    <Compile Include="ViewModels\ApplicationViewModelHolder.cs" />
-    <Compile Include="ViewModels\NavigatedViewModelHolder.cs" />
-    <Compile Include="ViewModels\PersistentPlaylist\PersistentSongPlaylistViewModel.cs" />
-    <Compile Include="ViewModels\PersistentPlaylist\PlaylistSongData.cs" />
-    <Compile Include="ViewModels\Player\IAudioPlayer.cs" />
-    <Compile Include="ViewModels\Player\IMediaPlayerFacade.cs" />
-    <Compile Include="ViewModels\Player\ISongPlaybacksRegistrator.cs" />
-    <Compile Include="ViewModels\Player\MediaPlayerFacade.cs" />
-    <Compile Include="ViewModels\Player\AudioPlayer.cs" />
-    <Compile Include="ViewModels\Player\SongMediaFinishedEventArgs.cs" />
-    <Compile Include="ViewModels\Player\SongPlaybacksRegistrator.cs" />
-    <Compile Include="ViewModels\DiscImages\EditDiscImageViewModel.cs" />
-    <Compile Include="Views\ClipboardAccess\ClipboardChangeTracker.cs" />
-    <Compile Include="Views\ClipboardAccess\ClipboardDataProvider.cs" />
-    <Compile Include="Views\ClipboardAccess\ClipboardImageExtractor.cs" />
-    <Compile Include="Views\ClipboardAccess\IClipboardChangeTracker.cs" />
-    <Compile Include="Views\ClipboardAccess\IClipboardDataProvider.cs" />
-    <Compile Include="Views\ClipboardAccess\IClipboardImageExtractor.cs" />
-    <Compile Include="Views\NativeMethods.cs" />
-    <Compile Include="Views\DiscAdviserView.xaml.cs">
-      <DependentUpon>DiscAdviserView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\DiscImageView.xaml.cs">
-      <DependentUpon>DiscImageView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EditDiscPropertiesView.xaml.cs">
-      <DependentUpon>EditDiscPropertiesView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EditSongPropertiesView.xaml.cs">
-      <DependentUpon>EditSongPropertiesView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EditDiscImageView.xaml.cs">
-      <DependentUpon>EditDiscImageView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ClipboardAccess\ClipboardContentChangedEventArgs.cs" />
-    <Compile Include="Views\LibraryStatisticsView.xaml.cs">
-      <DependentUpon>LibraryStatisticsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ValidationRules\NotEmptyStringValidationRule.cs" />
-    <Compile Include="Views\ValueConverters\BooleanAndConverter.cs" />
-    <Compile Include="Views\ValueConverters\CommaSeparatedNumberValueConverter.cs" />
-    <Compile Include="Views\ValueConverters\EditedSongPropertyValueConverter.cs" />
-    <Compile Include="ViewNavigator.cs" />
-    <Compile Include="Events\SongEvents\PlayDiscFromSongEventArgs.cs" />
-    <Compile Include="Events\SongListEvents\PlaylistFinishedEventArgs.cs" />
-    <Compile Include="ContentUpdate\ILibraryContentUpdater.cs" />
-    <Compile Include="ContentUpdate\LibraryContentUpdater.cs" />
-    <Compile Include="IViewNavigator.cs" />
-    <Compile Include="ViewModels\RatingsHelper.cs" />
-    <Compile Include="Views\RateDiscView.xaml.cs">
-      <DependentUpon>RateDiscView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\ExplorerSongListViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IExplorerSongListViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\ILibraryExplorerViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\ILoggerViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\ISongListViewModel.cs" />
-    <Compile Include="ViewModels\LibraryBrowser\FileSystemLibraryBrowser.cs" />
-    <Compile Include="ViewModels\LibraryBrowser\FolderItemComparer.cs" />
-    <Compile Include="ViewModels\LibraryBrowser\ILibraryBrowser.cs" />
-    <Compile Include="ViewModels\LibraryBrowser\DiscExplorerItem.cs" />
-    <Compile Include="ViewModels\LibraryBrowser\FolderExplorerItem.cs" />
-    <Compile Include="ViewModels\LibraryBrowser\LibraryExplorerItem.cs" />
-    <Compile Include="ViewModels\Interfaces\ISongPlaylistViewModel.cs" />
-    <Compile Include="ViewModels\RateDiscViewModel.cs" />
-    <Compile Include="ViewModels\SongListItem.cs" />
-    <Compile Include="ViewModels\SongPlaylistViewModel.cs" />
-    <Compile Include="ViewModels\ApplicationViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IMusicPlayerViewModel.cs" />
-    <Compile Include="ViewModels\LibraryExplorerViewModel.cs" />
-    <Compile Include="ViewModels\LoggerViewModel.cs" />
-    <Compile Include="ViewModels\Logging\LogMessage.cs" />
-    <Compile Include="ViewModels\Logging\LogMessageLevel.cs" />
-    <Compile Include="ViewModels\Player\MusicPlayerViewModel.cs" />
-    <Compile Include="ViewModels\SetRatingMenuItem.cs" />
-    <Compile Include="ViewModels\SongListViewModel.cs" />
-    <Compile Include="Views\ValueConverters\BooleanToVisibilityValueConverter.cs" />
-    <Compile Include="Views\ValueConverters\ImageSourceValueConverter.cs" />
-    <Compile Include="Views\ValueConverters\PercentageValueConverter.cs" />
-    <Compile Include="Views\ValueConverters\RatingToImageNameValueConverter.cs" />
-    <Compile Include="Views\ValueConverters\SongBitrateValueConverter.cs" />
-    <Compile Include="Views\ValueConverters\SongDurationValueConverter.cs" />
-    <Compile Include="Views\ValueConverters\SongFileSizeValueConverter.cs" />
-    <Compile Include="Views\ValueConverters\SongLastPlaybackValueConverter.cs" />
-    <Compile Include="Views\LibraryExplorerView.xaml.cs">
-      <DependentUpon>LibraryExplorerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\LoggerView.xaml.cs">
-      <DependentUpon>LoggerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MultiSelectionDataGrid.cs" />
-    <Compile Include="Views\MusicPlayerView.xaml.cs">
-      <DependentUpon>MusicPlayerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SongListView.xaml.cs">
-      <DependentUpon>SongListView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ValueConverters\SongsTotalDurationValueConverter.cs" />
-    <Compile Include="Views\ViewModelExtensions.cs" />
-    <Page Include="Views\DiscAdviserView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\DiscImageView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\EditDiscPropertiesView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\EditSongPropertiesView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\LibraryStatisticsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\RateDiscView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ApplicationView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\ApplicationView.xaml.cs">
-      <DependentUpon>ApplicationView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Views\LibraryExplorerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\LoggerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MusicPlayerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\EditDiscImageView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SongListView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Theme.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="App.Debug.config">
-      <DependentUpon>App.config</DependentUpon>
-      <IsTransformFile>True</IsTransformFile>
-    </None>
-    <None Include="App.Release.config">
-      <DependentUpon>App.config</DependentUpon>
-      <IsTransformFile>True</IsTransformFile>
-    </None>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <AppDesigner Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config">
-      <TransformOnBuild>true</TransformOnBuild>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CF.MusicLibrary.Core\CF.MusicLibrary.Core.csproj">
-      <Project>{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}</Project>
-      <Name>CF.MusicLibrary.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.Common\CF.MusicLibrary.Common.csproj">
-      <Project>{5501311F-CBCD-40B3-95F4-F28D521E6EC5}</Project>
-      <Name>CF.MusicLibrary.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.Dal\CF.MusicLibrary.Dal.csproj">
-      <Project>{83AD3795-4E4A-4D32-BE5B-9D68287EF586}</Project>
-      <Name>CF.MusicLibrary.Dal</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.LastFM\CF.MusicLibrary.LastFM.csproj">
-      <Project>{7F368759-572F-41D4-A7FF-1B3898AE3918}</Project>
-      <Name>CF.MusicLibrary.LastFM</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.Library\CF.MusicLibrary.Library.csproj">
-      <Project>{E27630AC-2F6F-4F2C-BFBF-3663F2C18F9C}</Project>
-      <Name>CF.MusicLibrary.Library</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.Local\CF.MusicLibrary.Local.csproj">
-      <Project>{378157BA-2DA4-4E39-8AFD-59CED35B9B1F}</Project>
-      <Name>CF.MusicLibrary.Local</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.Tagger\CF.MusicLibrary.Tagger.csproj">
-      <Project>{931CDE55-D545-47AF-B525-06AB15E74C3E}</Project>
-      <Name>CF.MusicLibrary.Tagger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CF.MusicLibrary.Universal\CF.MusicLibrary.Universal.csproj">
-      <Project>{C82EEE4A-B797-40A5-B733-34DF2DA02A85}</Project>
-      <Name>CF.MusicLibrary.Universal</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\Icons\PlayButton.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\Icons\VolumeIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\Icons\PauseButton.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\Icons\PandaPlayer.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\Icons\Ratings\Rating01.png" />
-    <Resource Include="Views\Icons\Ratings\Rating02.png" />
-    <Resource Include="Views\Icons\Ratings\Rating03.png" />
-    <Resource Include="Views\Icons\Ratings\Rating04.png" />
-    <Resource Include="Views\Icons\Ratings\Rating05.png" />
-    <Resource Include="Views\Icons\Ratings\Rating06.png" />
-    <Resource Include="Views\Icons\Ratings\Rating07.png" />
-    <Resource Include="Views\Icons\Ratings\Rating08.png" />
-    <Resource Include="Views\Icons\Ratings\Rating09.png" />
-    <Resource Include="Views\Icons\Ratings\Rating10.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\Icons\NextAdviseButton.png" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets'))" />
-    <Error Condition="!Exists('..\packages\SlowCheetah.2.5.48\build\SlowCheetah.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SlowCheetah.2.5.48\build\SlowCheetah.targets'))" />
-  </Target>
-  <Import Project="..\packages\SlowCheetah.2.5.48\build\SlowCheetah.targets" Condition="Exists('..\packages\SlowCheetah.2.5.48\build\SlowCheetah.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
+
 </Project>
