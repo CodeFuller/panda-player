@@ -1,43 +1,32 @@
 ﻿using System;
 using System.Data;
-using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
-using CF.Library.Core.Bootstrap;
+using CF.Library.Bootstrap;
 using CF.Library.Core.Exceptions;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.Dal;
+using Microsoft.Extensions.Logging;
 using NDesk.Options;
 using static System.FormattableString;
-using static CF.Library.Core.Application;
 
 namespace CF.MusicLibrary.LibraryToolkit
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Class is instantiated by DI Container.")]
 	internal class ApplicationLogic : IApplicationLogic
 	{
-		private const string ProviderName = "System.Data.SQLite";
-
 		private readonly IFileSystemFacade fileSystemFacade;
+		private readonly ILogger<ApplicationLogic> logger;
 
-		public ApplicationLogic(IFileSystemFacade fileSystemFacade)
+		public ApplicationLogic(IFileSystemFacade fileSystemFacade, ILogger<ApplicationLogic> logger)
 		{
-			if (fileSystemFacade == null)
-			{
-				throw new ArgumentNullException(nameof(fileSystemFacade));
-			}
-
-			this.fileSystemFacade = fileSystemFacade;
+			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public int Run(string[] args)
-		{
-			RunAsync(args).Wait();
-			return 0;
-		}
-
-		public async Task RunAsync(string[] args)
+		public async Task<int> Run(string[] args, CancellationToken cancellationToken)
 		{
 			LaunchCommand command = LaunchCommand.ShowHelp;
 
@@ -51,7 +40,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 			{
 				case LaunchCommand.ShowHelp:
 					ShowHelp();
-					break;
+					return 1;
 
 				case LaunchCommand.MigrateDatabase:
 					if (restArgs.Count != 2)
@@ -65,6 +54,8 @@ namespace CF.MusicLibrary.LibraryToolkit
 				default:
 					throw new UnexpectedEnumValueException(command);
 			}
+
+			return 0;
 		}
 
 		private void ShowHelp()
@@ -88,21 +79,21 @@ namespace CF.MusicLibrary.LibraryToolkit
 			//	Checking that target database is empty
 			if (fileSystemFacade.FileExists(targetDatabaseFileName))
 			{
-				Logger.WriteError($"Target database file should not exist: '{targetDatabaseFileName}'");
+				logger.LogError($"Target database file should not exist: '{targetDatabaseFileName}'");
 				return;
 			}
 
-			Logger.WriteInfo($"Creating database schema from '{sqlFile}'...");
+			logger.LogInformation($"Creating database schema from '{sqlFile}'...");
 			CreateDatabaseSchema(sqlFile, targetDBConnectionString);
 
-			Logger.WriteInfo("Copying the data...");
+			logger.LogInformation("Copying the data...");
 			using (var sourceConnection = new SQLiteConnection(sourceDBConnectionString))
 			using (var targetConnection = new SQLiteConnection(targetDBConnectionString))
 			{
 				await MusicLibraryRepositoryEF.CopyData(sourceConnection, targetConnection);
 			}
 
-			Logger.WriteInfo("Data was migrated successfully");
+			logger.LogInformation("Data was migrated successfully");
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "Application logic requires execution of SQL commands from the file")]
@@ -110,7 +101,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 		{
 			var commandText = File.ReadAllText(sqlScriptFileName);
 
-			using (IDbConnection connection = DbProviderFactories.GetFactory(ProviderName).CreateConnection())
+			using (IDbConnection connection = new SQLiteConnection(targetDBConnectionString))
 			{
 				connection.ConnectionString = targetDBConnectionString;
 				connection.Open();
@@ -127,7 +118,13 @@ namespace CF.MusicLibrary.LibraryToolkit
 
 		private static string BuildConnectionString(string databaseFileName)
 		{
-			return Invariant($"Data Source={databaseFileName};Foreign Keys=True");
+			SQLiteConnectionStringBuilder builder = new SQLiteConnectionStringBuilder
+			{
+				DataSource = databaseFileName,
+				ForeignKeys = true
+			};
+
+			return builder.ConnectionString;
 		}
 	}
 }

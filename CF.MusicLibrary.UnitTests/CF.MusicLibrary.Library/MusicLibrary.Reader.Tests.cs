@@ -6,6 +6,7 @@ using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.Core.Objects.Images;
 using CF.MusicLibrary.Library;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -18,35 +19,35 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 		public void Constructor_IfLibraryRepositoryArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new RepositoryAndStorageMusicLibrary(null, Substitute.For<IMusicLibraryStorage>(),
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>()));
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>()));
 		}
 
 		[Test]
 		public void Constructor_IfLibraryStorageArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), null,
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>()));
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>()));
 		}
 
 		[Test]
 		public void Constructor_IfSongTaggerArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), Substitute.For<IMusicLibraryStorage>(),
-				null, Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>()));
+				null, Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>()));
 		}
 
 		[Test]
 		public void Constructor_IfLibraryStructurerArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), Substitute.For<IMusicLibraryStorage>(),
-				Substitute.For<ISongTagger>(), null, Substitute.For<IChecksumCalculator>()));
+				Substitute.For<ISongTagger>(), null, Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>()));
 		}
 
 		[Test]
 		public void Constructor_IfChecksumCalculatorArgumentIsNull_ThrowsArgumentNullException()
 		{
 			Assert.Throws<ArgumentNullException>(() => new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), Substitute.For<IMusicLibraryStorage>(),
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), null));
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), null, Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>()));
 		}
 
 		[Test]
@@ -60,7 +61,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			musicLibraryRepositoryStub.GetDiscs().Returns(discs.AsEnumerable());
 
 			var target = new RepositoryAndStorageMusicLibrary(musicLibraryRepositoryStub, Substitute.For<IMusicLibraryStorage>(),
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>());
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			//	Act
 
@@ -82,7 +83,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			musicLibraryRepositoryStub.GetDiscs().Returns(discs.AsEnumerable());
 
 			var target = new RepositoryAndStorageMusicLibrary(musicLibraryRepositoryStub, Substitute.For<IMusicLibraryStorage>(),
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>());
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			//	Act
 
@@ -104,7 +105,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			storageStub.GetSongFile(song).Returns("SomeSong.mp3");
 
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>());
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			//	Act
 
@@ -130,7 +131,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			songTaggerStub.GetTagData("SomeSong.mp3").Returns(tagData);
 
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
-				songTaggerStub, Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>());
+				songTaggerStub, Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			//	Act
 
@@ -160,7 +161,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			songTaggerStub.GetTagTypes("SomeSong.mp3").Returns(tagTypes);
 
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
-				songTaggerStub, Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>());
+				songTaggerStub, Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			//	Act
 
@@ -183,7 +184,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			storageStub.GetDiscImageFile(discImage).Returns("SomeImage.img");
 
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>());
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			//	Act
 
@@ -203,7 +204,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			storageStub.GetDiscImageFile(Arg.Any<DiscImage>()).Returns("SomeImage.img");
 
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>());
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			//	Act
 
@@ -244,7 +245,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			musicLibraryStorageMock.CheckDataConsistency(Arg.Do<IEnumerable<Uri>>(arg => passedUris = arg.ToList()), registrator, false);
 
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), musicLibraryStorageMock,
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>());
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			//	Act
 
@@ -294,7 +295,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			musicLibraryStorageMock.CheckDataConsistency(Arg.Do<IEnumerable<Uri>>(arg => passedUris = arg.ToList()), registrator, false);
 
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), musicLibraryStorageMock,
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>());
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			//	Act
 
@@ -326,7 +327,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			checksumCalculatorStub.CalculateChecksumForFile("SomeSongFile.mp3").Returns(54321);
 
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub);
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub, Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
@@ -359,7 +360,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			checksumCalculatorStub.CalculateChecksumForFile("SomeSongFile.mp3").Returns(12345);
 
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub);
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub, Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
@@ -396,7 +397,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			repositoryMock.UpdateSong(Arg.Do<Song>(arg => savedChecksum = arg.Checksum));
 
 			var target = new RepositoryAndStorageMusicLibrary(repositoryMock, storageStub,
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub);
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub, Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			//	Act
 
@@ -430,7 +431,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			IMusicLibraryRepository repositoryMock = Substitute.For<IMusicLibraryRepository>();
 
 			var target = new RepositoryAndStorageMusicLibrary(repositoryMock, storageStub,
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub);
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub, Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			//	Act
 
@@ -473,7 +474,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			checksumCalculatorStub.CalculateChecksumForFile("SomeImage.img").Returns(54321);
 
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub);
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub, Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
@@ -517,7 +518,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			checksumCalculatorStub.CalculateChecksumForFile("SomeImage.img").Returns(12345);
 
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub);
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub, Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
@@ -565,7 +566,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			repositoryMock.UpdateDiscImage(Arg.Do<DiscImage>(arg => savedChecksum = arg.Checksum));
 
 			var target = new RepositoryAndStorageMusicLibrary(repositoryMock, storageStub,
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub);
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub, Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			//	Act
 
@@ -610,7 +611,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.Library
 			IMusicLibraryRepository repositoryMock = Substitute.For<IMusicLibraryRepository>();
 
 			var target = new RepositoryAndStorageMusicLibrary(repositoryMock, storageStub,
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub);
+				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub, Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			//	Act
 

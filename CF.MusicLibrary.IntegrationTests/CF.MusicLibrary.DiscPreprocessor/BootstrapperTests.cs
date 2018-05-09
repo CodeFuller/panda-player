@@ -1,30 +1,31 @@
-﻿using CF.Library.Core.Configuration;
+﻿using System.Collections.Generic;
 using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.Common.Images;
 using CF.MusicLibrary.DiscPreprocessor;
-using NSubstitute;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
-using Unity;
 
 namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor
 {
 	[TestFixture]
 	public class BootstrapperTests
 	{
-		private class BootstrapperHelper : Bootstrapper
+		private class ApplicationBootstrapperHelper : ApplicationBootstrapper
 		{
-			public IUnityContainer Container => DIContainer;
-
-			protected override void OnDependenciesRegistering()
+			public T ResolveDependency<T>()
 			{
-				DIContainer.RegisterInstance(Substitute.For<ISettingsProvider>());
+				return Resolve<T>();
 			}
-		}
 
-		[TearDown]
-		public void TearDown()
-		{
-			AppSettings.ResetSettingsProvider();
+			protected override void BootstrapConfiguration(IConfigurationBuilder configurationBuilder, string[] commandLineArgs)
+			{
+				configurationBuilder.AddInMemoryCollection(new Dictionary<string, string>
+				{
+					{ "dataStoragePath", @"c:\temp" },
+					{ "workshopStoragePath", @"c:\temp" },
+					{ "fileSystemStorage:root", @"c:\temp" },
+				});
+			}
 		}
 
 		[Test]
@@ -32,13 +33,13 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor
 		{
 			//	Arrange
 
-			var target = new BootstrapperHelper();
+			var target = new ApplicationBootstrapperHelper();
 
 			//	Act & Assert
 
-			Assert.DoesNotThrow(() => target.Run());
+			Assert.DoesNotThrow(() => target.Bootstrap(new string[0]));
 
-			var imageFileFactory = target.Container.Resolve<IObjectFactory<IImageFile>>();
+			var imageFileFactory = target.ResolveDependency<IObjectFactory<IImageFile>>();
 			Assert.DoesNotThrow(() => imageFileFactory.CreateInstance());
 		}
 	}

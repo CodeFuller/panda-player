@@ -15,14 +15,9 @@ namespace CF.MusicLibrary.Dal
 	{
 		private readonly Func<MusicLibraryEntities> contextFactory;
 
-		public MusicLibraryRepositoryEF()
+		public MusicLibraryRepositoryEF(IConfiguredDbConnectionFactory dbConnectionFactory)
 		{
-			contextFactory = () => new MusicLibraryEntities();
-		}
-
-		public MusicLibraryRepositoryEF(DbConnection dbConnection)
-		{
-			contextFactory = () => new MusicLibraryEntities(dbConnection);
+			contextFactory = () => new MusicLibraryEntities(dbConnectionFactory.CreateConnection());
 		}
 
 		private MusicLibraryEntities GetContext()

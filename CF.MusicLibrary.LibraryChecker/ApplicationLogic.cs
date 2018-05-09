@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using CF.Library.Core.Bootstrap;
+using CF.Library.Bootstrap;
 using CF.Library.Core.Exceptions;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.LibraryChecker.Checkers;
+using Microsoft.Extensions.Logging;
 using NDesk.Options;
 using static System.FormattableString;
-using static CF.Library.Core.Application;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.LibraryChecker
@@ -20,45 +21,23 @@ namespace CF.MusicLibrary.LibraryChecker
 		private readonly ILastFMConsistencyChecker lastFMConsistencyChecker;
 		private readonly IDiscImagesConsistencyChecker discImagesConsistencyChecker;
 		private readonly IMusicLibrary musicLibrary;
+		private readonly ILogger<ApplicationLogic> logger;
 
 		public ApplicationLogic(IDiscConsistencyChecker discConsistencyChecker, IStorageConsistencyChecker storageConsistencyChecker,
-			ITagDataConsistencyChecker tagDataChecker, ILastFMConsistencyChecker lastFMConsistencyChecker, IDiscImagesConsistencyChecker discImagesConsistencyChecker,
-			IMusicLibrary musicLibrary)
+			ITagDataConsistencyChecker tagDataChecker, ILastFMConsistencyChecker lastFMConsistencyChecker,
+			IDiscImagesConsistencyChecker discImagesConsistencyChecker, IMusicLibrary musicLibrary,
+			ILogger<ApplicationLogic> logger)
 		{
-			if (discConsistencyChecker == null)
-			{
-				throw new ArgumentNullException(nameof(discConsistencyChecker));
-			}
-			if (storageConsistencyChecker == null)
-			{
-				throw new ArgumentNullException(nameof(storageConsistencyChecker));
-			}
-			if (tagDataChecker == null)
-			{
-				throw new ArgumentNullException(nameof(tagDataChecker));
-			}
-			if (lastFMConsistencyChecker == null)
-			{
-				throw new ArgumentNullException(nameof(lastFMConsistencyChecker));
-			}
-			if (discImagesConsistencyChecker == null)
-			{
-				throw new ArgumentNullException(nameof(discImagesConsistencyChecker));
-			}
-			if (musicLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(musicLibrary));
-			}
-
-			this.discConsistencyChecker = discConsistencyChecker;
-			this.storageConsistencyChecker = storageConsistencyChecker;
-			this.tagDataChecker = tagDataChecker;
-			this.lastFMConsistencyChecker = lastFMConsistencyChecker;
-			this.discImagesConsistencyChecker = discImagesConsistencyChecker;
-			this.musicLibrary = musicLibrary;
+			this.discConsistencyChecker = discConsistencyChecker ?? throw new ArgumentNullException(nameof(discConsistencyChecker));
+			this.storageConsistencyChecker = storageConsistencyChecker ?? throw new ArgumentNullException(nameof(storageConsistencyChecker));
+			this.tagDataChecker = tagDataChecker ?? throw new ArgumentNullException(nameof(tagDataChecker));
+			this.lastFMConsistencyChecker = lastFMConsistencyChecker ?? throw new ArgumentNullException(nameof(lastFMConsistencyChecker));
+			this.discImagesConsistencyChecker = discImagesConsistencyChecker ?? throw new ArgumentNullException(nameof(discImagesConsistencyChecker));
+			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public int Run(string[] args)
+		public async Task<int> Run(string[] args, CancellationToken cancellationToken)
 		{
 			LibraryCheckFlags checkFlags = LibraryCheckFlags.CheckDiscsConsistency | LibraryCheckFlags.CheckLibraryStorage;
 			LaunchCommand command = LaunchCommand.ShowHelp;
@@ -91,14 +70,14 @@ namespace CF.MusicLibrary.LibraryChecker
 			{
 				case LaunchCommand.ShowHelp:
 					ShowHelp();
-					break;
+					return 1;
 
 				case LaunchCommand.Check:
-					RunChecks(checkFlags, fixIssues).Wait();
+					await RunChecks(checkFlags, fixIssues, cancellationToken);
 					break;
 
 				case LaunchCommand.UnifyTags:
-					UnifyTags().Wait();
+					await UnifyTags(cancellationToken);
 					break;
 
 				default:
@@ -148,60 +127,60 @@ namespace CF.MusicLibrary.LibraryChecker
 			return ParseSetFlag(setValue) ? (currlags | setFlag) : (currlags & ~setFlag);
 		}
 
-		private async Task RunChecks(LibraryCheckFlags checkFlags, bool fixIssues)
+		private async Task RunChecks(LibraryCheckFlags checkFlags, bool fixIssues, CancellationToken cancellationToken)
 		{
-			Logger.WriteInfo("Loading library content...");
+			logger.LogInformation("Loading library content...");
 			var discLibrary = await musicLibrary.LoadLibrary();
 
 			if ((checkFlags & LibraryCheckFlags.CheckDiscsConsistency) != 0)
 			{
-				await discConsistencyChecker.CheckDiscsConsistency(discLibrary.Discs);
+				await discConsistencyChecker.CheckDiscsConsistency(discLibrary.Discs, cancellationToken);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckLibraryStorage) != 0)
 			{
-				await storageConsistencyChecker.CheckStorage(discLibrary, fixIssues);
+				await storageConsistencyChecker.CheckStorage(discLibrary, fixIssues, cancellationToken);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckChecksums) != 0)
 			{
-				await storageConsistencyChecker.CheckStorageChecksums(discLibrary, fixIssues);
+				await storageConsistencyChecker.CheckStorageChecksums(discLibrary, fixIssues, cancellationToken);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckTagData) != 0)
 			{
-				await tagDataChecker.CheckTagData(discLibrary.Songs);
+				await tagDataChecker.CheckTagData(discLibrary.Songs, cancellationToken);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckImages) != 0)
 			{
-				await discImagesConsistencyChecker.CheckDiscImagesConsistency(discLibrary.Discs);
+				await discImagesConsistencyChecker.CheckDiscImagesConsistency(discLibrary.Discs, cancellationToken);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckArtistsOnLastFM) != 0)
 			{
-				await lastFMConsistencyChecker.CheckArtists(discLibrary);
+				await lastFMConsistencyChecker.CheckArtists(discLibrary, cancellationToken);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckAlbumsOnLastFM) != 0)
 			{
-				await lastFMConsistencyChecker.CheckAlbums(discLibrary.Discs);
+				await lastFMConsistencyChecker.CheckAlbums(discLibrary.Discs, cancellationToken);
 			}
 
 			if ((checkFlags & LibraryCheckFlags.CheckSongsOnLastFM) != 0)
 			{
-				await lastFMConsistencyChecker.CheckSongs(discLibrary.Songs);
+				await lastFMConsistencyChecker.CheckSongs(discLibrary.Songs, cancellationToken);
 			}
 
-			Logger.WriteInfo("Library check has finished");
+			logger.LogInformation("Library check has finished");
 		}
 
-		private async Task UnifyTags()
+		private async Task UnifyTags(CancellationToken cancellationToken)
 		{
-			Logger.WriteInfo("Loading library content...");
+			logger.LogInformation("Loading library content...");
 			var discLibrary = await musicLibrary.LoadLibrary();
 
-			await tagDataChecker.UnifyTags(discLibrary.Songs);
+			await tagDataChecker.UnifyTags(discLibrary.Songs, cancellationToken);
 		}
 	}
 }

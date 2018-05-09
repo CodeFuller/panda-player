@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using CF.Library.Core;
 using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.LibraryChecker.Registrators;
+using Microsoft.Extensions.Logging;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.LibraryChecker.Checkers
@@ -16,25 +17,19 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 	{
 		private readonly IMusicLibrary musicLibrary;
 		private readonly ILibraryInconsistencyRegistrator inconsistencyRegistrator;
+		private readonly ILogger<TagDataConsistencyChecker> logger;
 
-		public TagDataConsistencyChecker(IMusicLibrary musicLibrary, ILibraryInconsistencyRegistrator inconsistencyRegistrator)
+		public TagDataConsistencyChecker(IMusicLibrary musicLibrary, ILibraryInconsistencyRegistrator inconsistencyRegistrator,
+			ILogger<TagDataConsistencyChecker> logger)
 		{
-			if (musicLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(musicLibrary));
-			}
-			if (inconsistencyRegistrator == null)
-			{
-				throw new ArgumentNullException(nameof(inconsistencyRegistrator));
-			}
-
-			this.musicLibrary = musicLibrary;
-			this.inconsistencyRegistrator = inconsistencyRegistrator;
+			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.inconsistencyRegistrator = inconsistencyRegistrator ?? throw new ArgumentNullException(nameof(inconsistencyRegistrator));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task CheckTagData(IEnumerable<Song> songs)
+		public async Task CheckTagData(IEnumerable<Song> songs, CancellationToken cancellationToken)
 		{
-			Application.Logger.WriteInfo("Checking tag data ...");
+			logger.LogInformation("Checking tag data ...");
 
 			foreach (var song in songs)
 			{
@@ -82,15 +77,15 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 			}
 		}
 
-		public async Task UnifyTags(IEnumerable<Song> songs)
+		public async Task UnifyTags(IEnumerable<Song> songs, CancellationToken cancellationToken)
 		{
 			foreach (var song in songs)
 			{
-				Application.Logger.WriteInfo(Current($"Unifying tag data for song '{song.Uri}'..."));
+				logger.LogInformation(Current($"Unifying tag data for song '{song.Uri}'..."));
 				await musicLibrary.FixSongTagData(song);
 			}
 
-			Application.Logger.WriteInfo("Tags unification has finished successfully");
+			logger.LogInformation("Tags unification has finished successfully");
 		}
 	}
 }

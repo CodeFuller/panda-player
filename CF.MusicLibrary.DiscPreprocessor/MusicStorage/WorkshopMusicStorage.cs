@@ -8,6 +8,7 @@ using CF.Library.Core.Exceptions;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Local;
+using Microsoft.Extensions.Options;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
@@ -26,15 +27,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 
 		private readonly string workshopRootPath;
 
-		public WorkshopMusicStorage(IFileSystemFacade fileSystemFacade, string workshopRootPath)
+		public WorkshopMusicStorage(IFileSystemFacade fileSystemFacade, IOptions<DiscPreprocessorSettings> options)
 		{
-			if (fileSystemFacade == null)
-			{
-				throw new ArgumentNullException(nameof(fileSystemFacade));
-			}
-
-			this.fileSystemFacade = fileSystemFacade;
-			this.workshopRootPath = workshopRootPath;
+			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
+			this.workshopRootPath = options?.Value?.WorkshopStoragePath ?? throw new ArgumentNullException(nameof(options));
 		}
 
 		public AddedDiscInfo GetAddedDiscInfo(string discPath, IEnumerable<string> songFiles)

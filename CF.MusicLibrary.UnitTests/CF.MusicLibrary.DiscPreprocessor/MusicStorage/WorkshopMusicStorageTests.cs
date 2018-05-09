@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using CF.Library.Core.Facades;
+using CF.MusicLibrary.DiscPreprocessor;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using NSubstitute;
 using NUnit.Framework;
@@ -13,7 +14,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.MusicStorag
 		[Test]
 		public void Constructor_IfFileSystemFacadeArgumentIsNull_ThrowsArgumentIsNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new WorkshopMusicStorage(null, "SomeStorage"));
+			Assert.Throws<ArgumentNullException>(() => new WorkshopMusicStorage(null, new DiscPreprocessorSettings().StubOptions()));
 		}
 
 		[Test]
@@ -28,7 +29,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.MusicStorag
 			};
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
-			var target = new WorkshopMusicStorage(fileSystemMock, "SomeStorage");
+			var settings = new DiscPreprocessorSettings { WorkshopStoragePath = "SomeStorage" };
+			var target = new WorkshopMusicStorage(fileSystemMock, settings.StubOptions());
 
 			//	Act
 
@@ -55,7 +57,9 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.MusicStorag
 			fileSystemMock.EnumerateFiles("SubDirectory1").Returns(Enumerable.Empty<string>());
 			fileSystemMock.EnumerateDirectories("SubDirectory1").Returns(new[] { @"SubDirectory1\SubDirectory11" });
 
-			var target = new WorkshopMusicStorage(fileSystemMock, "SomeStorage");
+			var settings = new DiscPreprocessorSettings { WorkshopStoragePath = "SomeStorage" };
+
+			var target = new WorkshopMusicStorage(fileSystemMock, settings.StubOptions());
 
 			//	Act
 
@@ -75,7 +79,9 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.MusicStorag
 			fileSystemMock.EnumerateDirectories("SomeStorage").Returns(new[] { "SubDirectory1" });
 			fileSystemMock.EnumerateFiles("SubDirectory1").Returns(new[] { "SomeFile" });
 
-			var target = new WorkshopMusicStorage(fileSystemMock, "SomeStorage");
+			var settings = new DiscPreprocessorSettings { WorkshopStoragePath = "SomeStorage" };
+
+			var target = new WorkshopMusicStorage(fileSystemMock, settings.StubOptions());
 
 			//	Act
 
@@ -97,7 +103,9 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.MusicStorag
 			fileSystemMock.EnumerateDirectories("SubDirectory1").Returns(new[] { @"SubDirectory1\SubDirectory11" });
 			fileSystemMock.EnumerateFiles(@"SubDirectory1\SubDirectory11").Returns(new[] { "SomeFile" });
 
-			var target = new WorkshopMusicStorage(fileSystemMock, "SomeStorage");
+			var settings = new DiscPreprocessorSettings { WorkshopStoragePath = "SomeStorage" };
+
+			var target = new WorkshopMusicStorage(fileSystemMock, settings.StubOptions());
 
 			//	Act
 

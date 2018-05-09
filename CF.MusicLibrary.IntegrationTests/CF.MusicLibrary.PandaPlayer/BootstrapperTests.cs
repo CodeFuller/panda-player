@@ -1,30 +1,23 @@
-﻿using CF.Library.Core.Configuration;
-using CF.Library.Core.Logging;
+﻿using System.Collections.Generic;
 using CF.MusicLibrary.PandaPlayer;
-using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
-using NSubstitute;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
-using Unity;
 
 namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.PandaPlayer
 {
 	[TestFixture]
 	public class BootstrapperTests
 	{
-		private class BootstrapperHelper : Bootstrapper
+		private class ApplicationBootstrapperHelper : ApplicationBootstrapper
 		{
-			public IUnityContainer Container => DIContainer;
-
-			protected override void OnDependenciesRegistering()
+			protected override void BootstrapConfiguration(IConfigurationBuilder configurationBuilder, string[] commandLineArgs)
 			{
-				DIContainer.RegisterInstance(Substitute.For<ISettingsProvider>());
+				configurationBuilder.AddInMemoryCollection(new Dictionary<string, string>
+				{
+					{ "dataStoragePath", @"c:\temp" },
+					{ "fileSystemStorage:root", @"c:\temp" },
+				});
 			}
-		}
-
-		[TearDown]
-		public void TearDown()
-		{
-			AppSettings.ResetSettingsProvider();
 		}
 
 		[Test]
@@ -32,29 +25,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.PandaPlayer
 		{
 			//	Arrange
 
-			var target = new BootstrapperHelper();
+			var target = new ApplicationBootstrapperHelper();
 
 			//	Act & Assert
 
-			Assert.DoesNotThrow(() => target.Run());
-		}
-
-		[Test]
-		public void RegisterDependencies_RegistersSameInstanceForILoggerViewModelAndIMessageLoggerInterfaces()
-		{
-			//	Arrange
-
-			var target = new BootstrapperHelper();
-
-			//	Act
-
-			target.Run();
-
-			//	Assert
-
-			var loggerViewModel = target.Container.Resolve<ILoggerViewModel>();
-			var messageLogger = target.Container.Resolve<IMessageLogger>();
-			Assert.AreSame(loggerViewModel, messageLogger);
+			Assert.DoesNotThrow(() => target.Bootstrap(new string[0]));
 		}
 	}
 }

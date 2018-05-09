@@ -1,31 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.LibraryChecker.Registrators;
-using static CF.Library.Core.Application;
+using Microsoft.Extensions.Logging;
 
 namespace CF.MusicLibrary.LibraryChecker.Checkers
 {
 	public class DiscConsistencyChecker : IDiscConsistencyChecker
 	{
 		private readonly ILibraryInconsistencyRegistrator inconsistencyRegistrator;
+		private readonly ILogger<DiscConsistencyChecker> logger;
 
-		public DiscConsistencyChecker(ILibraryInconsistencyRegistrator inconsistencyRegistrator)
+		public DiscConsistencyChecker(ILibraryInconsistencyRegistrator inconsistencyRegistrator, ILogger<DiscConsistencyChecker> logger)
 		{
-			if (inconsistencyRegistrator == null)
-			{
-				throw new ArgumentNullException(nameof(inconsistencyRegistrator));
-			}
-
-			this.inconsistencyRegistrator = inconsistencyRegistrator;
+			this.inconsistencyRegistrator = inconsistencyRegistrator ?? throw new ArgumentNullException(nameof(inconsistencyRegistrator));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task CheckDiscsConsistency(IEnumerable<Disc> discs)
+		public async Task CheckDiscsConsistency(IEnumerable<Disc> discs, CancellationToken cancellationToken)
 		{
-			Logger.WriteInfo("Checking discs consistency ...");
+			logger.LogInformation("Checking discs consistency ...");
 
 			foreach (var disc in discs)
 			{

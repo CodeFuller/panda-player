@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using CF.MusicLibrary.Common.Images;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.Core.Objects.Images;
 using CF.MusicLibrary.LibraryChecker.Registrators;
-using static CF.Library.Core.Application;
+using Microsoft.Extensions.Logging;
 
 namespace CF.MusicLibrary.LibraryChecker.Checkers
 {
@@ -16,44 +17,29 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 		private readonly IImageInfoProvider imageInfoProvider;
 		private readonly IDiscImageValidator discImageValidator;
 		private readonly ILibraryInconsistencyRegistrator inconsistencyRegistrator;
-		
-		public DiscImagesConsistencyChecker(IMusicLibrary musicLibrary, IImageInfoProvider imageInfoProvider,
-			IDiscImageValidator discImageValidator, ILibraryInconsistencyRegistrator inconsistencyRegistrator)
-		{
-			if (musicLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(musicLibrary));
-			}
-			if (imageInfoProvider == null)
-			{
-				throw new ArgumentNullException(nameof(imageInfoProvider));
-			}
-			if (discImageValidator == null)
-			{
-				throw new ArgumentNullException(nameof(discImageValidator));
-			}
-			if (inconsistencyRegistrator == null)
-			{
-				throw new ArgumentNullException(nameof(inconsistencyRegistrator));
-			}
+		private readonly ILogger<DiscImagesConsistencyChecker> logger;
 
-			this.musicLibrary = musicLibrary;
-			this.imageInfoProvider = imageInfoProvider;
-			this.discImageValidator = discImageValidator;
-			this.inconsistencyRegistrator = inconsistencyRegistrator;
+		public DiscImagesConsistencyChecker(IMusicLibrary musicLibrary, IImageInfoProvider imageInfoProvider, IDiscImageValidator discImageValidator,
+			ILibraryInconsistencyRegistrator inconsistencyRegistrator, ILogger<DiscImagesConsistencyChecker> logger)
+		{
+			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.imageInfoProvider = imageInfoProvider ?? throw new ArgumentNullException(nameof(imageInfoProvider));
+			this.discImageValidator = discImageValidator ?? throw new ArgumentNullException(nameof(discImageValidator));
+			this.inconsistencyRegistrator = inconsistencyRegistrator ?? throw new ArgumentNullException(nameof(inconsistencyRegistrator));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task CheckDiscImagesConsistency(IEnumerable<Disc> discs)
+		public async Task CheckDiscImagesConsistency(IEnumerable<Disc> discs, CancellationToken cancellationToken)
 		{
-			Logger.WriteInfo("Checking discs images consistency ...");
+			logger.LogInformation("Checking discs images consistency ...");
 
 			foreach (var disc in discs)
 			{
-				await CheckDiscImagesConsistency(disc);
+				await CheckDiscImagesConsistency(disc, cancellationToken);
 			}
 		}
 
-		private async Task CheckDiscImagesConsistency(Disc disc)
+		private async Task CheckDiscImagesConsistency(Disc disc, CancellationToken cancellationToken)
 		{
 			var discCoverImageFile = await musicLibrary.GetDiscCoverImage(disc);
 			if (discCoverImageFile == null)

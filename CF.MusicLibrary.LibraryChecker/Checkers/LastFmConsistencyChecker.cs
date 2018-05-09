@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using CF.Library.Core.Configuration;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.LastFM.Objects;
 using CF.MusicLibrary.LibraryChecker.Registrators;
-using static CF.Library.Core.Application;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace CF.MusicLibrary.LibraryChecker.Checkers
 {
@@ -15,31 +16,25 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 	{
 		private readonly ILastFMApiClient lastFmApiClient;
 		private readonly ILibraryInconsistencyRegistrator inconsistencyRegistrator;
+		private readonly ILogger<LastFMConsistencyChecker> logger;
+		private readonly CheckingSettings settings;
 
-		public LastFMConsistencyChecker(ILastFMApiClient lastFMApiClient, ILibraryInconsistencyRegistrator inconsistencyRegistrator)
+		public LastFMConsistencyChecker(ILastFMApiClient lastFMApiClient, ILibraryInconsistencyRegistrator inconsistencyRegistrator,
+			ILogger<LastFMConsistencyChecker> logger, IOptions<CheckingSettings> options)
 		{
-			if (lastFMApiClient == null)
-			{
-				throw new ArgumentNullException(nameof(lastFMApiClient));
-			}
-			if (inconsistencyRegistrator == null)
-			{
-				throw new ArgumentNullException(nameof(inconsistencyRegistrator));
-			}
-
-			this.lastFmApiClient = lastFMApiClient;
-			this.inconsistencyRegistrator = inconsistencyRegistrator;
+			this.lastFmApiClient = lastFMApiClient ?? throw new ArgumentNullException(nameof(lastFMApiClient));
+			this.inconsistencyRegistrator = inconsistencyRegistrator ?? throw new ArgumentNullException(nameof(inconsistencyRegistrator));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
 
-		public async Task CheckArtists(DiscLibrary library)
+		public async Task CheckArtists(DiscLibrary library, CancellationToken cancellationToken)
 		{
-			Logger.WriteInfo("Checking Last.fm artists ...");
-
-			var username = AppSettings.GetRequiredValue<string>("LastFmUsername");
+			logger.LogInformation("Checking Last.fm artists ...");
 
 			foreach (var artist in library.Artists)
 			{
-				var artistInfo = await lastFmApiClient.GetArtistInfo(artist.Name, username);
+				var artistInfo = await lastFmApiClient.GetArtistInfo(artist.Name, settings.LastFmUsername);
 
 				if (artistInfo.Artist == null)
 				{
@@ -61,11 +56,9 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 			}
 		}
 
-		public async Task CheckAlbums(IEnumerable<Disc> discs)
+		public async Task CheckAlbums(IEnumerable<Disc> discs, CancellationToken cancellationToken)
 		{
-			Logger.WriteInfo("Checking Last.fm albums ...");
-
-			var username = AppSettings.GetRequiredValue<string>("LastFmUsername");
+			logger.LogInformation("Checking Last.fm albums ...");
 
 			//	Several disc could map to one album.
 			//	That's why we remember what albums weere already checked.
@@ -82,7 +75,7 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 				}
 				checkedAlbums.Add(album);
 
-				var albumInfo = await lastFmApiClient.GetAlbumInfo(album, username);
+				var albumInfo = await lastFmApiClient.GetAlbumInfo(album, settings.LastFmUsername);
 				if (albumInfo.Album == null)
 				{
 					inconsistencyRegistrator.RegisterInconsistency_AlbumNotFound(disc);
@@ -95,11 +88,9 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 			}
 		}
 
-		public async Task CheckSongs(IEnumerable<Song> songs)
+		public async Task CheckSongs(IEnumerable<Song> songs, CancellationToken cancellationToken)
 		{
-			Logger.WriteInfo("Checking Last.fm songs ...");
-
-			var username = AppSettings.GetRequiredValue<string>("LastFmUsername");
+			logger.LogInformation("Checking Last.fm songs ...");
 
 			//	Several songs could map to one track.
 			//	That's why we remember what tracks weere already checked.
@@ -121,7 +112,7 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 				}
 				checkedTracks.Add(track);
 
-				var trackInfo = await lastFmApiClient.GetTrackInfo(track, username);
+				var trackInfo = await lastFmApiClient.GetTrackInfo(track, settings.LastFmUsername);
 				if (trackInfo.Track == null)
 				{
 					inconsistencyRegistrator.RegisterInconsistency_SongNotFound(song);

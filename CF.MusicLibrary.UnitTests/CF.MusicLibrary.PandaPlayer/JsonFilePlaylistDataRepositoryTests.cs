@@ -1,33 +1,27 @@
 ﻿using System;
 using System.Text;
 using CF.Library.Core.Facades;
-using CF.Library.Core.Logging;
 using CF.MusicLibrary.PandaPlayer;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NUnit.Framework;
-using static CF.Library.Core.Application;
 
 namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer
 {
 	[TestFixture]
 	public class JsonFileGenericRepositoryTests
 	{
-		[SetUp]
-		public void SetUp()
-		{
-			Logger = Substitute.For<IMessageLogger>();
-		}
-
 		[Test]
 		public void Constructor_IfFileSystemFacadeArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new JsonFileGenericRepository<Object>(null, "SomeFile.json"));
+			Assert.Throws<ArgumentNullException>(() => new JsonFileGenericRepository<Object>(null, Substitute.For<ILogger<JsonFileGenericRepository<Object>>>(), "SomeFile.json"));
 		}
 
 		[Test]
 		public void Constructor_IfDataFileNameArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new JsonFileGenericRepository<Object>(Substitute.For<IFileSystemFacade>(), null));
+			Assert.Throws<ArgumentNullException>(() => new JsonFileGenericRepository<Object>(Substitute.For<IFileSystemFacade>(),
+				Substitute.For<ILogger<JsonFileGenericRepository<Object>>>(), null));
 		}
 
 		[Test]
@@ -36,7 +30,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer
 			//	Arrange
 
 			IFileSystemFacade fileSystemFacadeMock = Substitute.For<IFileSystemFacade>();
-			var target = new JsonFileGenericRepository<Object>(fileSystemFacadeMock, "SomeFile.json");
+			var target = new JsonFileGenericRepository<Object>(fileSystemFacadeMock, Substitute.For<ILogger<JsonFileGenericRepository<Object>>>(), "SomeFile.json");
 
 			//	Act
 
@@ -54,7 +48,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer
 
 			IFileSystemFacade fileSystemFacadeStub = Substitute.For<IFileSystemFacade>();
 			fileSystemFacadeStub.FileExists("SomeFile.json").Returns(false);
-			var target = new JsonFileGenericRepository<Object>(fileSystemFacadeStub, "SomeFile.json");
+			var target = new JsonFileGenericRepository<Object>(fileSystemFacadeStub, Substitute.For<ILogger<JsonFileGenericRepository<Object>>>(), "SomeFile.json");
 
 			//	Act
 
@@ -73,7 +67,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer
 			IFileSystemFacade fileSystemFacadeStub = Substitute.For<IFileSystemFacade>();
 			fileSystemFacadeStub.FileExists("SomeFile.json").Returns(true);
 			fileSystemFacadeStub.ReadAllText("SomeFile.json", Encoding.UTF8).Returns("{\"SomeProperty\": \"SomeValue\"}");
-			var target = new JsonFileGenericRepository<Object>(fileSystemFacadeStub, "SomeFile.json");
+			var target = new JsonFileGenericRepository<Object>(fileSystemFacadeStub, Substitute.For<ILogger<JsonFileGenericRepository<Object>>>(), "SomeFile.json");
 
 			//	Act
 
@@ -91,7 +85,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer
 
 			IFileSystemFacade fileSystemFacadeMock = Substitute.For<IFileSystemFacade>();
 			fileSystemFacadeMock.FileExists("SomeFile.json").Returns(false);
-			var target = new JsonFileGenericRepository<Object>(fileSystemFacadeMock, "SomeFile.json");
+			var target = new JsonFileGenericRepository<Object>(fileSystemFacadeMock, Substitute.For<ILogger<JsonFileGenericRepository<Object>>>(), "SomeFile.json");
 
 			//	Act
 
@@ -109,7 +103,7 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.PandaPlayer
 
 			IFileSystemFacade fileSystemFacadeMock = Substitute.For<IFileSystemFacade>();
 			fileSystemFacadeMock.FileExists("SomeFile.json").Returns(true);
-			var target = new JsonFileGenericRepository<Object>(fileSystemFacadeMock, "SomeFile.json");
+			var target = new JsonFileGenericRepository<Object>(fileSystemFacadeMock, Substitute.For<ILogger<JsonFileGenericRepository<Object>>>(), "SomeFile.json");
 
 			//	Act
 

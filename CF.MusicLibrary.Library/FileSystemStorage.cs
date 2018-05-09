@@ -5,6 +5,7 @@ using System.Linq;
 using CF.Library.Core.Extensions;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.Core.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace CF.MusicLibrary.Library
 {
@@ -14,19 +15,10 @@ namespace CF.MusicLibrary.Library
 
 		private readonly string storageRootDirectory;
 
-		public FileSystemStorage(IFileSystemFacade fileSystemFacade, string storageRootDirectory)
+		public FileSystemStorage(IFileSystemFacade fileSystemFacade, IOptions<FileSystemStorageSettings> options)
 		{
-			if (fileSystemFacade == null)
-			{
-				throw new ArgumentNullException(nameof(fileSystemFacade));
-			}
-			if (storageRootDirectory == null)
-			{
-				throw new ArgumentNullException(nameof(storageRootDirectory));
-			}
-
-			this.fileSystemFacade = fileSystemFacade;
-			this.storageRootDirectory = storageRootDirectory;
+			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
+			this.storageRootDirectory = options?.Value?.Root ?? throw new ArgumentNullException(nameof(options));
 		}
 
 		public void StoreFile(string sourceFileName, Uri fileUri)

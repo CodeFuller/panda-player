@@ -1,17 +1,14 @@
-﻿using CF.Library.Core.Bootstrap;
+﻿using System.Threading.Tasks;
+using CF.Library.Bootstrap;
 
 namespace CF.MusicLibrary.LibraryToolkit
 {
 	public static class Program
 	{
-		/// <summary>
-		/// Property Injection for Console Application.
-		/// </summary>
-		public static IConsoleApplication Application { get; set; } = new ConsoleApplication(new Bootstrapper());
-
-		static void Main(string[] args)
+		static async Task Main(string[] args)
 		{
-			Application.Run(args);
+			var application = new ConsoleApplication(new ApplicationBootstrapper());
+			await application.Run(args);
 		}
 	}
 }

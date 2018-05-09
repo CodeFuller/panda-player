@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.LibraryChecker.Registrators;
-using static CF.Library.Core.Application;
+using Microsoft.Extensions.Logging;
 
 namespace CF.MusicLibrary.LibraryChecker.Checkers
 {
@@ -13,30 +14,25 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 
 		private readonly ILibraryInconsistencyRegistrator inconsistencyRegistrator;
 
-		public StorageConsistencyChecker(IMusicLibrary musicLibrary, ILibraryInconsistencyRegistrator inconsistencyRegistrator)
-		{
-			if (musicLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(musicLibrary));
-			}
-			if (inconsistencyRegistrator == null)
-			{
-				throw new ArgumentNullException(nameof(inconsistencyRegistrator));
-			}
+		private readonly ILogger<StorageConsistencyChecker> logger;
 
-			this.musicLibrary = musicLibrary;
-			this.inconsistencyRegistrator = inconsistencyRegistrator;
+		public StorageConsistencyChecker(IMusicLibrary musicLibrary, ILibraryInconsistencyRegistrator inconsistencyRegistrator,
+			ILogger<StorageConsistencyChecker> logger)
+		{
+			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.inconsistencyRegistrator = inconsistencyRegistrator ?? throw new ArgumentNullException(nameof(inconsistencyRegistrator));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task CheckStorage(DiscLibrary library, bool fixIssues)
+		public async Task CheckStorage(DiscLibrary library, bool fixIssues, CancellationToken cancellationToken)
 		{
-			Logger.WriteInfo("Checking library storage ...");
+			logger.LogInformation("Checking library storage ...");
 			await musicLibrary.CheckStorage(library, inconsistencyRegistrator, fixIssues);
 		}
 
-		public async Task CheckStorageChecksums(DiscLibrary library, bool fixIssues)
+		public async Task CheckStorageChecksums(DiscLibrary library, bool fixIssues, CancellationToken cancellationToken)
 		{
-			Logger.WriteInfo("Checking storage checksums...");
+			logger.LogInformation("Checking storage checksums...");
 			await musicLibrary.CheckStorageChecksums(library, inconsistencyRegistrator, fixIssues);
 		}
 	}

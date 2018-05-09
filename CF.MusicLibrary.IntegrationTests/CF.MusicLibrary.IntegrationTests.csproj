@@ -31,4 +31,10 @@
     <ProjectReference Include="..\CF.MusicLibrary.PandaPlayer\CF.MusicLibrary.PandaPlayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="MusicLibrary.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

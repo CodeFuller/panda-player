@@ -12,11 +12,17 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
   <ItemGroup>
+    <PackageReference Include="CF.Library.Bootstrap" Version="1.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.0.0" />
     <PackageReference Include="NDesk.Options" Version="0.2.1" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.108" />
-    <PackageReference Include="CF.Library.Core" Version="1.1.1" />
-    <PackageReference Include="CF.Library.Unity" Version="1.0.1" />
+    <PackageReference Include="CF.Library.Core" Version="3.0.0" />
+    <PackageReference Include="CF.Library.Logging" Version="2.2.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +37,15 @@
     <ProjectReference Include="..\CF.MusicLibrary.Library\CF.MusicLibrary.Library.csproj" />
     <ProjectReference Include="..\CF.MusicLibrary.Local\CF.MusicLibrary.Local.csproj" />
     <ProjectReference Include="..\CF.MusicLibrary.Tagger\CF.MusicLibrary.Tagger.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="AppSettings.Dev.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AppSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

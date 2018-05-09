@@ -3,13 +3,12 @@ using System.Linq;
 using System.Text;
 using CF.Library.Core.Extensions;
 using CF.Library.Core.Facades;
-using CF.Library.Core.Logging;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer;
 using CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NUnit.Framework;
-using static CF.Library.Core.Application;
 
 namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 {
@@ -30,15 +29,13 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.PandaPlayer.ViewModel
 				CurrentSongIndex = 1,
 			};
 
-			Logger = Substitute.For<IMessageLogger>();
-
 			string writtenData = null;
 			IFileSystemFacade fileSystemFacadeStub = Substitute.For<IFileSystemFacade>();
 			fileSystemFacadeStub.FileExists("SomeFile.json").Returns(true);
 			fileSystemFacadeStub.WriteAllText("SomeFile.json", Arg.Do<string>(arg => writtenData = arg), Encoding.UTF8);
 			fileSystemFacadeStub.ReadAllText("SomeFile.json", Encoding.UTF8).Returns(x => writtenData);
 
-			var target = new JsonFileGenericRepository<PlaylistData>(fileSystemFacadeStub, "SomeFile.json");
+			var target = new JsonFileGenericRepository<PlaylistData>(fileSystemFacadeStub, Substitute.For<ILogger<JsonFileGenericRepository<PlaylistData>>>(), "SomeFile.json");
 
 			//	Act
 

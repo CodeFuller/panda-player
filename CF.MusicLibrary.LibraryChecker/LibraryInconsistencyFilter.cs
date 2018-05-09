@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using CF.Library.Core.Configuration;
 using CF.Library.Core.Exceptions;
 using CF.MusicLibrary.Core.Objects;
-using static CF.Library.Core.Application;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.LibraryChecker
@@ -45,10 +45,15 @@ namespace CF.MusicLibrary.LibraryChecker
 		private readonly Lazy<List<AllowedArtistCorrection>> allowedArtistCorrections;
 		private readonly Lazy<List<AllowedSongCorrection>> allowedSongsCorrections;
 
-		public LibraryInconsistencyFilter()
+		private readonly ILogger<LibraryInconsistencyFilter> logger;
+		private readonly CheckingSettings settings;
+
+		public LibraryInconsistencyFilter(ILogger<LibraryInconsistencyFilter> logger, IOptions<CheckingSettings> options)
 		{
 			allowedArtistCorrections = new Lazy<List<AllowedArtistCorrection>>(LoadAllowedArtistCorrection);
 			allowedSongsCorrections = new Lazy<List<AllowedSongCorrection>>(LoadAllowedSongsCorrection);
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
 
 		public bool SkipInconsistency_DifferentGenresForDisc(Disc disc, IEnumerable<Genre> genres)
@@ -91,8 +96,8 @@ namespace CF.MusicLibrary.LibraryChecker
 
 		private List<AllowedArtistCorrection> LoadAllowedArtistCorrection()
 		{
-			var allowedArtistCorrectionsFileName = Path.Combine(AppSettings.GetRequiredValue<string>("AppDataPath"), "AllowedLastFmArtistCorrections.txt");
-			Logger.WriteInfo(Current($"Loading artist corrections from '${allowedArtistCorrectionsFileName}'..."));
+			var allowedArtistCorrectionsFileName = settings.AllowedArtistCorrectionsFileName;
+			logger.LogInformation(Current($"Loading artist corrections from '${allowedArtistCorrectionsFileName}'..."));
 
 			var allowedCorrections = new List<AllowedArtistCorrection>();
 			Regex allowedArtistCorrectionRegex = new Regex("^(.+?)\\t+(.+?)$", RegexOptions.Compiled);
@@ -112,15 +117,15 @@ namespace CF.MusicLibrary.LibraryChecker
 				allowedCorrections.Add(new AllowedArtistCorrection(match.Groups[1].Value, match.Groups[2].Value));
 			}
 
-			Logger.WriteInfo(Current($"Loaded {allowedCorrections.Count} artist name corrections"));
+			logger.LogInformation(Current($"Loaded {allowedCorrections.Count} artist name corrections"));
 
 			return allowedCorrections;
 		}
 
 		private List<AllowedSongCorrection> LoadAllowedSongsCorrection()
 		{
-			var allowedSongsCorrectionsFileName = Path.Combine(AppSettings.GetRequiredValue<string>("AppDataPath"), "AllowedSongCorrections.txt");
-			Logger.WriteInfo(Current($"Loading songs corrections from '${allowedSongsCorrectionsFileName}'..."));
+			var allowedSongsCorrectionsFileName = settings.AllowedSongCorrectionsFileName;
+			logger.LogInformation(Current($"Loading songs corrections from '${allowedSongsCorrectionsFileName}'..."));
 
 			var allowedCorrections = new List<AllowedSongCorrection>();
 			Regex allowedArtistCorrectionRegex = new Regex("^(.+?)\\t+(.+?)\\t+(.+?)$", RegexOptions.Compiled);
@@ -140,7 +145,7 @@ namespace CF.MusicLibrary.LibraryChecker
 				allowedCorrections.Add(new AllowedSongCorrection(match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value));
 			}
 
-			Logger.WriteInfo(Current($"Loaded {allowedCorrections.Count} songs corrections"));
+			logger.LogInformation(Current($"Loaded {allowedCorrections.Count} songs corrections"));
 
 			return allowedCorrections;
 		}

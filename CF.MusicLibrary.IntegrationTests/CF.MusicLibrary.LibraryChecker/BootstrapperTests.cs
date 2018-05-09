@@ -1,26 +1,22 @@
-﻿using CF.Library.Core.Configuration;
+﻿using System.Collections.Generic;
 using CF.MusicLibrary.LibraryChecker;
-using NSubstitute;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
-using Unity;
 
 namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.LibraryChecker
 {
 	[TestFixture]
 	public class BootstrapperTests
 	{
-		private class BootstrapperHelper : Bootstrapper
+		private class ApplicationBootstrapperHelper : ApplicationBootstrapper
 		{
-			protected override void OnDependenciesRegistering()
+			protected override void BootstrapConfiguration(IConfigurationBuilder configurationBuilder, string[] commandLineArgs)
 			{
-				DIContainer.RegisterInstance(Substitute.For<ISettingsProvider>());
+				configurationBuilder.AddInMemoryCollection(new Dictionary<string, string>
+				{
+					{ "fileSystemStorage:root", @"c:\temp" },
+				});
 			}
-		}
-
-		[TearDown]
-		public void TearDown()
-		{
-			AppSettings.ResetSettingsProvider();
 		}
 
 		[Test]
@@ -28,11 +24,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.LibraryChecker
 		{
 			//	Arrange
 
-			var target = new BootstrapperHelper();
+			var target = new ApplicationBootstrapperHelper();
 
 			//	Act & Assert
 
-			Assert.DoesNotThrow(() => target.Run());
+			Assert.DoesNotThrow(() => target.Bootstrap(new string[0]));
 		}
 	}
 }

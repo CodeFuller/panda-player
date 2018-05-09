@@ -6,7 +6,7 @@ using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.Core.Objects.Images;
-using static CF.Library.Core.Application;
+using Microsoft.Extensions.Logging;
 
 namespace CF.MusicLibrary.Library
 {
@@ -81,11 +81,11 @@ namespace CF.MusicLibrary.Library
 
 		public async Task DeleteDisc(Disc disc)
 		{
-			Logger.WriteInfo($"Deleting disc '{disc.Title}'");
+			logger.LogInformation($"Deleting disc '{disc.Title}'");
 			var deleteTime = DateTimeFacade.Now;
 			foreach (var song in disc.Songs)
 			{
-				Logger.WriteInfo($"Deleting song '{song.Uri}'");
+				logger.LogInformation($"Deleting song '{song.Uri}'");
 				await DeleteSong(song, deleteTime);
 			}
 
@@ -93,12 +93,12 @@ namespace CF.MusicLibrary.Library
 			//	That's why we preserve original images collection with .ToList().
 			foreach (var image in disc.Images.ToList())
 			{
-				Logger.WriteInfo($"Deleting disc image '{image.Uri}'");
+				logger.LogInformation($"Deleting disc image '{image.Uri}'");
 				await libraryStorage.DeleteDiscImage(image);
 				await libraryRepository.DeleteDiscImage(image);
 			}
 
-			Logger.WriteInfo($"Disc '{disc.Title}' was deleted successfully");
+			logger.LogInformation($"Disc '{disc.Title}' was deleted successfully");
 		}
 
 		public async Task SetDiscCoverImage(Disc disc, ImageInfo imageInfo)

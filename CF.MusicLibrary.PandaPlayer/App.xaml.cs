@@ -12,7 +12,7 @@ namespace CF.MusicLibrary.PandaPlayer
 	public partial class App : WpfApplication<ApplicationViewModel>
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Object lifetime equals to the host process lifetime")]
-		public App() : base(new Bootstrapper())
+		public App() : base(new ApplicationBootstrapper())
 		{
 		}
 

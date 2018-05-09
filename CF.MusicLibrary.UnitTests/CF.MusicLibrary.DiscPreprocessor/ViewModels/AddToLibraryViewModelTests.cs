@@ -6,6 +6,7 @@ using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.Core.Objects.Images;
+using CF.MusicLibrary.DiscPreprocessor;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels;
@@ -20,19 +21,22 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 		[Test]
 		public void Constructor_IfMusicLibraryArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(null, Substitute.For<ISongMediaInfoProvider>(), Substitute.For<IWorkshopMusicStorage>(), false));
+			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(null, Substitute.For<ISongMediaInfoProvider>(),
+				Substitute.For<IWorkshopMusicStorage>(), new DiscPreprocessorSettings().StubOptions()));
 		}
 
 		[Test]
 		public void Constructor_IfSongMediaInfoProviderArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), null, Substitute.For<IWorkshopMusicStorage>(), false));
+			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), null,
+				Substitute.For<IWorkshopMusicStorage>(), new DiscPreprocessorSettings().StubOptions()));
 		}
 
 		[Test]
 		public void Constructor_IfWorkshopMusicStorageArgumentIsNull_ThrowsArgumentNullException()
 		{
-			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<ISongMediaInfoProvider>(), null, false));
+			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(),
+				Substitute.For<ISongMediaInfoProvider>(), null, new DiscPreprocessorSettings().StubOptions()));
 		}
 
 		[Test]
@@ -54,7 +58,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 				Duration = TimeSpan.FromSeconds(3600),
 			}));
 
-			AddToLibraryViewModel target = new AddToLibraryViewModel(musicLibraryMock, mediaInfoProviderStub, Substitute.For<IWorkshopMusicStorage>(), false);
+			AddToLibraryViewModel target = new AddToLibraryViewModel(musicLibraryMock, mediaInfoProviderStub,
+				Substitute.For<IWorkshopMusicStorage>(), new DiscPreprocessorSettings().StubOptions());
 			target.SetSongs(new[] { new AddedSong(new Song(), @"SomeSongPath\SomeSongFile.mp3") });
 
 			//	Act
@@ -85,7 +90,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 			ISongMediaInfoProvider mediaInfoProviderStub = Substitute.For<ISongMediaInfoProvider>();
 			mediaInfoProviderStub.GetSongMediaInfo(Arg.Any<string>()).Returns(Task.FromResult(new SongMediaInfo()));
 
-			AddToLibraryViewModel target = new AddToLibraryViewModel(musicLibraryMock, mediaInfoProviderStub, Substitute.For<IWorkshopMusicStorage>(), false);
+			AddToLibraryViewModel target = new AddToLibraryViewModel(musicLibraryMock, mediaInfoProviderStub,
+				Substitute.For<IWorkshopMusicStorage>(), new DiscPreprocessorSettings().StubOptions());
 			target.SetSongs(new AddedSong[] { });
 			target.SetDiscsImages(new[] { addedImage1, addedImage2 });
 
@@ -114,7 +120,13 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 			IWorkshopMusicStorage workshopMusicStorageMock = Substitute.For<IWorkshopMusicStorage>();
 			workshopMusicStorageMock.DeleteSourceContent(Arg.Do<IEnumerable<string>>(arg => deletedFiles = arg.ToList()));
 
-			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), mediaInfoProviderStub, workshopMusicStorageMock, true);
+			var settings = new DiscPreprocessorSettings
+			{
+				DeleteSourceContentAfterAdding = true
+			};
+
+			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(),
+				mediaInfoProviderStub, workshopMusicStorageMock, settings.StubOptions());
 			target.SetSongs(new[]
 			{
 				new AddedSong(new Song(), @"SomeSongPath\SomeSongFile1.mp3"),
@@ -152,7 +164,8 @@ namespace CF.MusicLibrary.UnitTests.CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 			IWorkshopMusicStorage workshopMusicStorageMock = Substitute.For<IWorkshopMusicStorage>();
 
-			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), mediaInfoProviderStub, workshopMusicStorageMock, false);
+			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(),
+				mediaInfoProviderStub, workshopMusicStorageMock, new DiscPreprocessorSettings().StubOptions());
 			target.SetSongs(new[] { new AddedSong(new Song(), @"SomeSongPath\SomeSongFile.mp3") });
 			target.SetDiscsImages(new[] { new AddedDiscImage(new Disc(), new ImageInfo()) });
 

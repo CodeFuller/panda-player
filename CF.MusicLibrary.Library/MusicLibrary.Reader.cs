@@ -7,7 +7,7 @@ using CF.Library.Core.Facades;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
-using static CF.Library.Core.Application;
+using Microsoft.Extensions.Logging;
 
 namespace CF.MusicLibrary.Library
 {
@@ -18,41 +18,22 @@ namespace CF.MusicLibrary.Library
 		private readonly ISongTagger songTagger;
 		private readonly ILibraryStructurer libraryStructurer;
 		private readonly IChecksumCalculator checksumCalculator;
+		private readonly ILogger<RepositoryAndStorageMusicLibrary> logger;
 
 		/// <summary>
 		/// Properoty injection for IClock.
 		/// </summary>
 		public IClock DateTimeFacade { get; set; } = new SystemClock();
 
-		public RepositoryAndStorageMusicLibrary(IMusicLibraryRepository libraryRepository, IMusicLibraryStorage libraryStorage,
-			ISongTagger songTagger, ILibraryStructurer libraryStructurer, IChecksumCalculator checksumCalculator)
+		public RepositoryAndStorageMusicLibrary(IMusicLibraryRepository libraryRepository, IMusicLibraryStorage libraryStorage, ISongTagger songTagger,
+			ILibraryStructurer libraryStructurer, IChecksumCalculator checksumCalculator, ILogger<RepositoryAndStorageMusicLibrary> logger)
 		{
-			if (libraryRepository == null)
-			{
-				throw new ArgumentNullException(nameof(libraryRepository));
-			}
-			if (libraryStorage == null)
-			{
-				throw new ArgumentNullException(nameof(libraryStorage));
-			}
-			if (songTagger == null)
-			{
-				throw new ArgumentNullException(nameof(songTagger));
-			}
-			if (libraryStructurer == null)
-			{
-				throw new ArgumentNullException(nameof(libraryStructurer));
-			}
-			if (checksumCalculator == null)
-			{
-				throw new ArgumentNullException(nameof(checksumCalculator));
-			}
-
-			this.libraryRepository = libraryRepository;
-			this.libraryStorage = libraryStorage;
-			this.songTagger = songTagger;
-			this.libraryStructurer = libraryStructurer;
-			this.checksumCalculator = checksumCalculator;
+			this.libraryRepository = libraryRepository ?? throw new ArgumentNullException(nameof(libraryRepository));
+			this.libraryStorage = libraryStorage ?? throw new ArgumentNullException(nameof(libraryStorage));
+			this.songTagger = songTagger ?? throw new ArgumentNullException(nameof(songTagger));
+			this.libraryStructurer = libraryStructurer ?? throw new ArgumentNullException(nameof(libraryStructurer));
+			this.checksumCalculator = checksumCalculator ?? throw new ArgumentNullException(nameof(checksumCalculator));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		public async Task<IEnumerable<Disc>> LoadDiscs()
@@ -115,7 +96,7 @@ namespace CF.MusicLibrary.Library
 						{
 							song.Checksum = currChecksum;
 							await libraryRepository.UpdateSong(song);
-							Logger.WriteInfo($"Checksum has been updated for song '{song.Uri}'");
+							logger.LogInformation($"Checksum has been updated for song '{song.Uri}'");
 						}
 					}
 				}
@@ -131,7 +112,7 @@ namespace CF.MusicLibrary.Library
 						{
 							image.Checksum = currChecksum;
 							await libraryRepository.UpdateDiscImage(image);
-							Logger.WriteInfo($"Checksum has been updated for image '{image.Uri}'");
+							logger.LogInformation($"Checksum has been updated for image '{image.Uri}'");
 						}
 					}
 				}

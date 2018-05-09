@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
-using CF.Library.Core.Configuration;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.DiscPreprocessor.Events;
 using CF.MusicLibrary.DiscPreprocessor.Interfaces;
@@ -15,6 +14,7 @@ using CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Extensions.Options;
 using static System.FormattableString;
 
 namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
@@ -27,6 +27,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		private readonly IDiscContentParser discContentParser;
 		private readonly IDiscContentComparer discContentComparer;
 		private readonly IWorkshopMusicStorage workshopMusicStorage;
+
+		private readonly DiscPreprocessorSettings settings;
 
 		public EthalonContentViewModel RawEthalonDiscs { get; }
 
@@ -46,39 +48,23 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		}
 
 		public EditSourceContentViewModel(IContentCrawler contentCrawler, IDiscContentParser discContentParser, IDiscContentComparer discContentComparer,
-			IWorkshopMusicStorage workshopMusicStorage, IFileSystemFacade fileSystemFacade)
+			IWorkshopMusicStorage workshopMusicStorage, IFileSystemFacade fileSystemFacade, IOptions<DiscPreprocessorSettings> options)
 		{
-			if (contentCrawler == null)
-			{
-				throw new ArgumentNullException(nameof(contentCrawler));
-			}
-			if (discContentParser == null)
-			{
-				throw new ArgumentNullException(nameof(discContentParser));
-			}
-			if (discContentComparer == null)
-			{
-				throw new ArgumentNullException(nameof(discContentComparer));
-			}
-			if (workshopMusicStorage == null)
-			{
-				throw new ArgumentNullException(nameof(workshopMusicStorage));
-			}
 			if (fileSystemFacade == null)
 			{
 				throw new ArgumentNullException(nameof(fileSystemFacade));
 			}
 
-			this.contentCrawler = contentCrawler;
-			this.discContentParser = discContentParser;
-			this.discContentComparer = discContentComparer;
-			this.workshopMusicStorage = workshopMusicStorage;
+			this.contentCrawler = contentCrawler ?? throw new ArgumentNullException(nameof(contentCrawler));
+			this.discContentParser = discContentParser ?? throw new ArgumentNullException(nameof(discContentParser));
+			this.discContentComparer = discContentComparer ?? throw new ArgumentNullException(nameof(discContentComparer));
+			this.workshopMusicStorage = workshopMusicStorage ?? throw new ArgumentNullException(nameof(workshopMusicStorage));
+			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
 			EthalonDiscs = new DiscTreeViewModel();
 			CurrentDiscs = new DiscTreeViewModel();
 
-			string appDataPath = AppSettings.GetRequiredValue<string>("AppDataPath");
-			RawEthalonDiscs = new EthalonContentViewModel(fileSystemFacade, appDataPath);
+			RawEthalonDiscs = new EthalonContentViewModel(fileSystemFacade, settings.DataStoragePath);
 			RawEthalonDiscs.PropertyChanged += OnRawEthalonDiscsPropertyChanged;
 
 			ReloadRawContentCommand = new RelayCommand(ReloadRawContent);
@@ -116,7 +102,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 		public void LoadCurrentDiscs()
 		{
-			var discs = contentCrawler.LoadDiscs(AppSettings.GetRequiredValue<string>("WorkshopDirectory")).ToList();
+			var discs = contentCrawler.LoadDiscs(settings.WorkshopStoragePath).ToList();
 
 			UpdateDiscs(CurrentDiscs, discs);
 		}

@@ -10,6 +10,7 @@ using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
+using Microsoft.Extensions.Options;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
@@ -57,25 +58,13 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 			set { Set(ref progressMessages, value); }
 		}
 
-		public AddToLibraryViewModel(IMusicLibrary musicLibrary, ISongMediaInfoProvider songMediaInfoProvider, IWorkshopMusicStorage workshopMusicStorage, bool deleteSourceContent)
+		public AddToLibraryViewModel(IMusicLibrary musicLibrary, ISongMediaInfoProvider songMediaInfoProvider,
+			IWorkshopMusicStorage workshopMusicStorage, IOptions<DiscPreprocessorSettings> options)
 		{
-			if (musicLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(musicLibrary));
-			}
-			if (songMediaInfoProvider == null)
-			{
-				throw new ArgumentNullException(nameof(songMediaInfoProvider));
-			}
-			if (workshopMusicStorage == null)
-			{
-				throw new ArgumentNullException(nameof(workshopMusicStorage));
-			}
-
-			this.musicLibrary = musicLibrary;
-			this.songMediaInfoProvider = songMediaInfoProvider;
-			this.workshopMusicStorage = workshopMusicStorage;
-			this.deleteSourceContent = deleteSourceContent;
+			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.songMediaInfoProvider = songMediaInfoProvider ?? throw new ArgumentNullException(nameof(songMediaInfoProvider));
+			this.workshopMusicStorage = workshopMusicStorage ?? throw new ArgumentNullException(nameof(workshopMusicStorage));
+			this.deleteSourceContent = options?.Value?.DeleteSourceContentAfterAdding ?? throw new ArgumentNullException(nameof(options));
 
 			AddToLibraryCommand = new AsyncRelayCommand(AddContentToLibrary);
 		}

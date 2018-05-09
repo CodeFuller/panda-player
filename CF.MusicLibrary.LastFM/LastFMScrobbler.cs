@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using CF.Library.Core;
 using CF.MusicLibrary.LastFM.Objects;
+using Microsoft.Extensions.Logging;
 
 namespace CF.MusicLibrary.LastFM
 {
@@ -10,15 +10,12 @@ namespace CF.MusicLibrary.LastFM
 		private static TimeSpan MinScrobbledTrackDuration => TimeSpan.FromSeconds(30);
 
 		private readonly ILastFMApiClient lastFMApiClient;
+		private readonly ILogger<LastFMScrobbler> logger;
 
-		public LastFMScrobbler(ILastFMApiClient lastFMApiClient)
+		public LastFMScrobbler(ILastFMApiClient lastFMApiClient, ILogger<LastFMScrobbler> logger)
 		{
-			if (lastFMApiClient == null)
-			{
-				throw new ArgumentNullException(nameof(lastFMApiClient));
-			}
-
-			this.lastFMApiClient = lastFMApiClient;
+			this.lastFMApiClient = lastFMApiClient ?? throw new ArgumentNullException(nameof(lastFMApiClient));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		public async Task UpdateNowPlaying(Track track)
@@ -41,23 +38,23 @@ namespace CF.MusicLibrary.LastFM
 			await lastFMApiClient.Scrobble(trackScrobble);
 		}
 
-		private static bool TrackCouldBeScrobbled(Track track)
+		private bool TrackCouldBeScrobbled(Track track)
 		{
 			if (String.IsNullOrEmpty(track.Title))
 			{
-				Application.Logger.WriteInfo("Track will not be scrobbled because it does not have a Title");
+				logger.LogInformation("Track will not be scrobbled because it does not have a Title");
 				return false;
 			}
 
 			if (String.IsNullOrEmpty(track.Artist))
 			{
-				Application.Logger.WriteInfo("Track will not be scrobbled because it does not have an Artist");
+				logger.LogInformation("Track will not be scrobbled because it does not have an Artist");
 				return false;
 			}
 
 			if (track.Duration < MinScrobbledTrackDuration)
 			{
-				Application.Logger.WriteInfo("Track will not be scrobbled because it is too short");
+				logger.LogInformation("Track will not be scrobbled because it is too short");
 				return false;
 			}
 

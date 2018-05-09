@@ -1,36 +1,43 @@
 ﻿using System;
 using CF.Library.Core.Exceptions;
+using Microsoft.Extensions.Logging;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.Logging
 {
 	public class LogMessage
 	{
-		public LogMessageLevel Level { get; set; }
+		public LogLevel Level { get; set; }
 
 		public string Message { get; set; }
 
-		public LogMessage(LogMessageLevel level, string message)
+		public LogMessage(LogLevel level, string message)
 		{
 			Level = level;
 			Message = Current($"{DateTime.Now:yyyy-MM-dd  HH:mm:ss}    {GetLevelString(level)}    {message}");
 		}
 
-		private static string GetLevelString(LogMessageLevel level)
+		private static string GetLevelString(LogLevel level)
 		{
 			switch (level)
 			{
-				case LogMessageLevel.Error:
+				case LogLevel.Critical:
+					return "CRITICAL:";
+
+				case LogLevel.Error:
 					return "ERROR:  ";
 
-				case LogMessageLevel.Warning:
+				case LogLevel.Warning:
 					return "WARNING:";
 
-				case LogMessageLevel.Info:
+				case LogLevel.Information:
 					return "INFO:   ";
 
-				case LogMessageLevel.Debug:
+				case LogLevel.Debug:
 					return "DEBUG:  ";
+
+				case LogLevel.Trace:
+					return "TRACE:  ";
 
 				default:
 					throw new UnexpectedEnumValueException(level);

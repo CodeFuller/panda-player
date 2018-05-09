@@ -21,10 +21,10 @@
 
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.0.0" />
     <PackageReference Include="MvvmLightLibs" Version="5.3.0.0" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.108" />
-    <PackageReference Include="CF.Library.Unity" Version="1.0.1" />
-    <PackageReference Include="CF.Library.Wpf" Version="1.0.0" />
+    <PackageReference Include="CF.Library.Wpf" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,6 +61,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
 
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="AppSettings.Dev.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="AppSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

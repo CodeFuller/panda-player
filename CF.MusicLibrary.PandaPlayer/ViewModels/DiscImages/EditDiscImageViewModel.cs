@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CF.Library.Core.Configuration;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.Common.Images;
 using CF.MusicLibrary.Core.Interfaces;
@@ -12,6 +11,7 @@ using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Extensions.Options;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscImages
 {
@@ -22,6 +22,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscImages
 		private readonly IImageFile imageFile;
 		private readonly IFileSystemFacade fileSystemFacade;
 		private readonly IWebBrowser webBrowser;
+		private readonly PandaPlayerSettings settings;
 
 		public Disc Disc { get; private set; }
 
@@ -43,34 +44,14 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscImages
 		public ICommand LaunchSearchForDiscImageCommand { get; }
 
 		public EditDiscImageViewModel(IMusicLibrary musicLibrary, IDocumentDownloader documentDownloader, IImageFile imageFile,
-			IFileSystemFacade fileSystemFacade, IWebBrowser webBrowser)
+			IFileSystemFacade fileSystemFacade, IWebBrowser webBrowser, IOptions<PandaPlayerSettings> options)
 		{
-			if (musicLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(musicLibrary));
-			}
-			if (documentDownloader == null)
-			{
-				throw new ArgumentNullException(nameof(documentDownloader));
-			}
-			if (imageFile == null)
-			{
-				throw new ArgumentNullException(nameof(imageFile));
-			}
-			if (fileSystemFacade == null)
-			{
-				throw new ArgumentNullException(nameof(fileSystemFacade));
-			}
-			if (webBrowser == null)
-			{
-				throw new ArgumentNullException(nameof(webBrowser));
-			}
-
-			this.musicLibrary = musicLibrary;
-			this.documentDownloader = documentDownloader;
-			this.imageFile = imageFile;
-			this.fileSystemFacade = fileSystemFacade;
-			this.webBrowser = webBrowser;
+			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.documentDownloader = documentDownloader ?? throw new ArgumentNullException(nameof(documentDownloader));
+			this.imageFile = imageFile ?? throw new ArgumentNullException(nameof(imageFile));
+			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
+			this.webBrowser = webBrowser ?? throw new ArgumentNullException(nameof(webBrowser));
+			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
 			imageFile.PropertyChanged += ImageFile_PropertyChanged;
 
@@ -152,7 +133,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscImages
 
 		internal void LaunchSearchForDiscCoverImage()
 		{
-			foreach (var discCoverSearchPageStub in AppSettings.GetOptionalValues<string>("DiscCoverImageLookupPages"))
+			foreach (var discCoverSearchPageStub in settings.DiscCoverImageLookupPages)
 			{
 				string discCoverSearchPage = discCoverSearchPageStub;
 				discCoverSearchPage = discCoverSearchPage.Replace("{DiscArtist}", Uri.EscapeDataString(Disc.Artist?.Name ?? String.Empty));

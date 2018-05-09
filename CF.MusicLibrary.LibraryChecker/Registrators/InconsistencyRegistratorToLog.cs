@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.Core.Objects.Images;
-using static CF.Library.Core.Application;
+using Microsoft.Extensions.Logging;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.LibraryChecker.Registrators
 {
 	public class InconsistencyRegistratorToLog : ILibraryInconsistencyRegistrator
 	{
+		private readonly ILogger<InconsistencyRegistratorToLog> logger;
+
+		public InconsistencyRegistratorToLog(ILogger<InconsistencyRegistratorToLog> logger)
+		{
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+		}
+
 		public void RegisterInconsistency_SuspiciousAlbumTitle(Disc disc)
 		{
 			LogInconsistency(Current($"Album title looks suspicious for {disc.Uri}: '{disc.AlbumTitle}'"));
@@ -120,14 +127,14 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 			LogInconsistency(Current($"Disc cover has unsupported format '{imageInfo.FormatName}' for {disc.Uri}"));
 		}
 
-		private static void LogInconsistency(string inconsistencyMessage)
+		private void LogInconsistency(string inconsistencyMessage)
 		{
-			Logger.WriteWarning(inconsistencyMessage);
+			logger.LogWarning(inconsistencyMessage);
 		}
 
-		private static void LogFix(string fixMessage)
+		private void LogFix(string fixMessage)
 		{
-			Logger.WriteInfo(fixMessage);
+			logger.LogWarning(fixMessage);
 		}
 	}
 }

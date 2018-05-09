@@ -10,9 +10,10 @@ using System.Text;
 using System.Threading.Tasks;
 using CF.MusicLibrary.LastFM.DataContracts;
 using CF.MusicLibrary.LastFM.Objects;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using static System.FormattableString;
-using static CF.Library.Core.Application;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.LastFM
@@ -21,39 +22,26 @@ namespace CF.MusicLibrary.LastFM
 	{
 		private static readonly Uri ApiBaseUri = new Uri(@"http://ws.audioscrobbler.com/2.0/");
 
-		private readonly string apiKey;
-		private readonly string sharedSecret;
-		private string sessionKey;
 		private readonly ITokenAuthorizer tokenAuthorizer;
+		private readonly ILogger<LastFMApiClient> logger;
+		private readonly LastFmClientSettings settings;
 
-		public LastFMApiClient(ITokenAuthorizer tokenAuthorizer, string apiKey, string sharedSecret)
+		public LastFMApiClient(ITokenAuthorizer tokenAuthorizer, ILogger<LastFMApiClient> logger, IOptions<LastFmClientSettings> options)
 		{
-			if (tokenAuthorizer == null)
-			{
-				throw new ArgumentNullException(nameof(tokenAuthorizer));
-			}
-
-			this.tokenAuthorizer = tokenAuthorizer;
-			this.apiKey = apiKey;
-			this.sharedSecret = sharedSecret;
-			this.sessionKey = null;
-		}
-
-		public LastFMApiClient(ITokenAuthorizer tokenAuthorizer, string apiKey, string sharedSecret, string sessionKey) :
-			this(tokenAuthorizer, apiKey, sharedSecret)
-		{
-			this.sessionKey = sessionKey;
+			this.tokenAuthorizer = tokenAuthorizer ?? throw new ArgumentNullException(nameof(tokenAuthorizer));
+			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		public async Task OpenSession()
 		{
-			if (sessionKey != null)
+			if (!String.IsNullOrEmpty(settings.SessionKey))
 			{
 				return;
 			}
 
 			var token = await ObtainRequestToken();
-			sessionKey = await ObtainSession(token);
+			settings.SessionKey = await ObtainSession(token);
 		}
 
 		public async Task UpdateNowPlaying(Track track)
@@ -62,7 +50,7 @@ namespace CF.MusicLibrary.LastFM
 
 			CheckSession();
 
-			Logger.WriteInfo($"Updating current track: [Title: {track.Title}][Artist: {track.Artist}][Album: {track.Album.Title}]");
+			logger.LogInformation($"Updating current track: [Title: {track.Title}][Artist: {track.Artist}][Album: {track.Album.Title}]");
 
 			var requestParams = new NameValueCollection
 			{
@@ -90,7 +78,7 @@ namespace CF.MusicLibrary.LastFM
 
 			CheckSession();
 
-			Logger.WriteInfo($"Scrobbling track: [Title: {trackScrobble.Track.Title}][Artist: {trackScrobble.Track.Artist}][Album: {trackScrobble.Track.Album.Title}]");
+			logger.LogInformation($"Scrobbling track: [Title: {trackScrobble.Track.Title}][Artist: {trackScrobble.Track.Artist}][Album: {trackScrobble.Track.Album.Title}]");
 
 			var requestParams = new NameValueCollection
 			{
@@ -113,7 +101,7 @@ namespace CF.MusicLibrary.LastFM
 			ScrobbleTrackResponse response = await PerformPostRequest<ScrobbleTrackResponse>(requestParams, true);
 			if (response.Scrobbles.Statistics.Ignored > 0)
 			{
-				Logger.WriteWarning($"{response.Scrobbles.Statistics.Ignored} tracks ignored");
+				logger.LogWarning($"{response.Scrobbles.Statistics.Ignored} tracks ignored");
 			}
 			LogCorrections(trackScrobble.Track, response.Scrobbles.Scrobble);
 		}
@@ -172,23 +160,23 @@ namespace CF.MusicLibrary.LastFM
 			}
 		}
 
-		private static void LogCorrections(Track track, TrackProcessingInfo trackInfo)
+		private void LogCorrections(Track track, TrackProcessingInfo trackInfo)
 		{
 			if (trackInfo.Artist.Corrected)
 			{
-				Logger.WriteWarning(Current($"Corrected artist: '{track.Artist}' -> '{trackInfo.Artist.Text}'"));
+				logger.LogWarning(Current($"Corrected artist: '{track.Artist}' -> '{trackInfo.Artist.Text}'"));
 			}
 			if (trackInfo.Album.Corrected)
 			{
-				Logger.WriteWarning(Current($"Corrected album: '{track.Album}' -> '{trackInfo.Album.Text}'"));
+				logger.LogWarning(Current($"Corrected album: '{track.Album}' -> '{trackInfo.Album.Text}'"));
 			}
 			if (trackInfo.Track.Corrected)
 			{
-				Logger.WriteWarning(Current($"Corrected track: '{track.Title}' -> '{trackInfo.Track.Text}'"));
+				logger.LogWarning(Current($"Corrected track: '{track.Title}' -> '{trackInfo.Track.Text}'"));
 			}
 			if (!String.IsNullOrEmpty(trackInfo.IgnoredMessage.Text))
 			{
-				Logger.WriteWarning(Current($"Ignored track message: '{trackInfo.IgnoredMessage.Text}'"));
+				logger.LogWarning(Current($"Ignored track message: '{trackInfo.IgnoredMessage.Text}'"));
 			}
 		}
 
@@ -207,7 +195,7 @@ namespace CF.MusicLibrary.LastFM
 
 			GetTokenResponse response = await PerformGetRequest<GetTokenResponse>(requestParams, false);
 			var token = response.Token;
-			return new UnauthorizedToken(token, $@"http://www.last.fm/api/auth/?api_key={apiKey}&token={token}");
+			return new UnauthorizedToken(token, $@"http://www.last.fm/api/auth/?api_key={settings.ApiKey}&token={token}");
 		}
 
 		private async Task<string> ObtainSession(string token)
@@ -224,7 +212,7 @@ namespace CF.MusicLibrary.LastFM
 
 		private void CheckSession()
 		{
-			if (sessionKey == null)
+			if (String.IsNullOrEmpty(settings.SessionKey))
 			{
 				throw new InvalidOperationException("Last.fm API Session is not opened");
 			}
@@ -309,14 +297,11 @@ namespace CF.MusicLibrary.LastFM
 		private NameValueCollection BuildApiMethodRequestParams(NameValueCollection requestParams, bool requiresAuthentication)
 		{
 			var requestParamsWithSignature = new NameValueCollection(requestParams);
-			requestParamsWithSignature.Add("api_key", apiKey);
+			requestParamsWithSignature.Add("api_key", settings.ApiKey);
 			if (requiresAuthentication)
 			{
-				if (sessionKey == null)
-				{
-					throw new InvalidOperationException("The Last.fm API call requires authentication");
-				}
-				requestParamsWithSignature.Add("sk", sessionKey);
+				CheckSession();
+				requestParamsWithSignature.Add("sk", settings.SessionKey);
 			}
 			requestParamsWithSignature.Add("api_sig", CalcCallSign(requestParamsWithSignature));
 
@@ -348,7 +333,7 @@ namespace CF.MusicLibrary.LastFM
 							   select Invariant($"{key}{value}");
 
 			var signedData = String.Join(String.Empty, paramsValues);
-			signedData += sharedSecret;
+			signedData += settings.SharedSecret;
 
 			return CalcMD5(signedData);
 		}

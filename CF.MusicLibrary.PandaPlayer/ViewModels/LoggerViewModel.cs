@@ -1,39 +1,40 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows;
-using CF.Library.Core.Logging;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Logging;
 using GalaSoft.MvvmLight;
+using Microsoft.Extensions.Logging;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels
 {
-	public class LoggerViewModel : ViewModelBase, IMessageLogger, ILoggerViewModel
+	public class LoggerViewModel : ViewModelBase, ILoggerViewModel, ILogger
 	{
+		private sealed class EmptyDisposable : IDisposable
+		{
+			public static IDisposable Instance { get; } = new EmptyDisposable();
+
+			public void Dispose()
+			{
+			}
+		}
+
 		public ObservableCollection<LogMessage> Messages { get; } = new ObservableCollection<LogMessage>();
 
-		public void WriteDebug(string message)
+		public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
 		{
-			AddMessage(new LogMessage(LogMessageLevel.Debug, message));
-		}
-
-		public void WriteInfo(string message)
-		{
-			AddMessage(new LogMessage(LogMessageLevel.Info, message));
-		}
-
-		public void WriteWarning(string message)
-		{
-			AddMessage(new LogMessage(LogMessageLevel.Warning, message));
-		}
-
-		public void WriteError(string message)
-		{
-			AddMessage(new LogMessage(LogMessageLevel.Error, message));
-		}
-
-		private void AddMessage(LogMessage logMessage)
-		{
+			var logMessage = new LogMessage(logLevel, formatter(state, exception));
 			Application.Current.Dispatcher.Invoke(() => Messages.Add(logMessage));
+		}
+
+		public bool IsEnabled(LogLevel logLevel)
+		{
+			return true;
+		}
+
+		public IDisposable BeginScope<TState>(TState state)
+		{
+			return EmptyDisposable.Instance;
 		}
 	}
 }
