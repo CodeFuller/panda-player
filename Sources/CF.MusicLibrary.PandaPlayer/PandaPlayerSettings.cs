@@ -5,6 +5,6 @@ namespace CF.MusicLibrary.PandaPlayer
 {
 	public class PandaPlayerSettings
 	{
-		public IReadOnlyCollection<string> DiscCoverImageLookupPages { get; set; } = new Collection<string>();
+		public ICollection<string> DiscCoverImageLookupPages { get; set; } = new Collection<string>();
 	}
 }

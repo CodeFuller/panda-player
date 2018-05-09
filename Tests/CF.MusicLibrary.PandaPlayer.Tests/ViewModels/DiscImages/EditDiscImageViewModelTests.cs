@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using CF.Library.Core.Facades;
@@ -173,7 +172,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 
 			var settings = new PandaPlayerSettings
 			{
-				DiscCoverImageLookupPages = new Collection<string>
+				DiscCoverImageLookupPages =
 				{
 					"http://google.com?search1=\"{DiscArtist}\" and \"{DiscTitle}\"",
 					"http://google.com?search2=\"{DiscArtist}\" and \"{DiscTitle}\"",
@@ -211,7 +210,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 
 			var settings = new PandaPlayerSettings
 			{
-				DiscCoverImageLookupPages = new Collection<string>
+				DiscCoverImageLookupPages =
 				{
 					"http://google.com?search=\"{DiscArtist}\" and \"{DiscTitle}\"",
 				}
@@ -247,7 +246,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 
 			var settings = new PandaPlayerSettings
 			{
-				DiscCoverImageLookupPages = new Collection<string>
+				DiscCoverImageLookupPages =
 				{
 					"http://google.com?search1=\"{DiscArtist}\" and \"{DiscTitle}\"",
 				}
