@@ -41,6 +41,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			services.Configure<SqLiteConnectionSettings>(options => configuration.Bind("database", options));
 			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("fileSystemStorage", options));
 			services.Configure<LastFmClientSettings>(options => configuration.Bind("lastFmClient", options));
+			services.Configure<PandaPlayerSettings>(configuration.Bind);
 
 			var dataStoragePath = configuration["dataStoragePath"];
 			if (String.IsNullOrEmpty(dataStoragePath))

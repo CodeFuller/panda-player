@@ -14,7 +14,6 @@ namespace CF.MusicLibrary.LibraryToolkit
 		{
 			services.AddTransient<IFileSystemFacade, FileSystemFacade>();
 			services.AddTransient<IApplicationLogic, ApplicationLogic>();
-
 		}
 
 		protected override void BootstrapConfiguration(IConfigurationBuilder configurationBuilder, string[] commandLineArgs)
