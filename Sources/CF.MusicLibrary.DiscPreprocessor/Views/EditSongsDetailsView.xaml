@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="CF.MusicLibrary.DiscPreprocessor.Views.EditSongsDetailsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        d:DesignWidth="800" d:DesignHeight="400">
+    <DataGrid x:Name="ContentDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding Songs}">
+        <DataGrid.ColumnHeaderStyle>
+            <Style TargetType="{x:Type DataGridColumnHeader}">
+                <Setter Property="FontWeight"  Value="Bold" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+            </Style>
+        </DataGrid.ColumnHeaderStyle>
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Storage URI" Width="*"
+                                    IsReadOnly="True" Binding="{Binding StorageUri}" />
+            <DataGridTextColumn Header="Track" Binding="{Binding Track}" >
+                <DataGridTextColumn.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                    </Style>
+                </DataGridTextColumn.CellStyle>
+            </DataGridTextColumn>
+            <DataGridTextColumn Header="Title" Binding="{Binding Title}" />
+            <!-- Artist column is set to read-only currently.
+                When artist name is changed, Song.Artist.Name property is updated,
+                that causes changes for all other songs assigned to this artist.
+                Also Artist object in the database is also updated.
+                That's probably not a desired behavior.
+                If it's required to change artist for one song, Song.Artist should be set to a new object -->
+            <DataGridTextColumn Header="Artist" IsReadOnly="True" Binding="{Binding ArtistName}" />
+            <!-- Album column is set to read-only currently.
+                If Album title should be modified, it's better to edit it on previous EditDiscsDetails page -->
+            <DataGridTextColumn Header="Album" IsReadOnly="True" Binding="{Binding AlbumTitle}" />
+            <DataGridTextColumn Header="Year" Binding="{Binding Year}" >
+                <DataGridTextColumn.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                    </Style>
+                </DataGridTextColumn.CellStyle>
+            </DataGridTextColumn>
+            <!-- Genre column is set to read-only currently.
+                If it should editable, combo with available genres should be used -->
+            <DataGridTextColumn Header="Genre" MinWidth="150" IsReadOnly="True" Binding="{Binding Genre}" />
+        </DataGrid.Columns>
+    </DataGrid>
+</UserControl>

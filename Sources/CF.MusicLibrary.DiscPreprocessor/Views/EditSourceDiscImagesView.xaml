@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="CF.MusicLibrary.DiscPreprocessor.Views.EditSourceDiscImagesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignWidth="800" d:DesignHeight="400">
+
+    <UserControl.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding RefreshContentCommand}" />
+    </UserControl.InputBindings>
+
+    <DataGrid x:Name="ContentDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding ImageItems}">
+        <DataGrid.ColumnHeaderStyle>
+            <Style TargetType="{x:Type DataGridColumnHeader}">
+                <Setter Property="FontWeight"  Value="Bold" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+            </Style>
+        </DataGrid.ColumnHeaderStyle>
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Disc URI" Width="*" IsReadOnly="True" Binding="{Binding DiscUri}" />
+            <DataGridTextColumn Header="Image Type" IsReadOnly="True" Binding="{Binding ImageType}" />
+            <DataGridTextColumn Header="Image Status" Width="*" IsReadOnly="True" Binding="{Binding ImageStatus}">
+                <DataGridTextColumn.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ImageIsValid}" Value="False">
+                                <Setter Property="Background" Value="Red" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGridTextColumn.CellStyle>
+            </DataGridTextColumn>
+        </DataGrid.Columns>
+    </DataGrid>
+</UserControl>
