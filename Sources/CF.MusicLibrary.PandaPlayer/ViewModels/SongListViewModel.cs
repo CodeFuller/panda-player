@@ -31,8 +31,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private SongListItem selectedSongItem;
 		public SongListItem SelectedSongItem
 		{
-			get { return selectedSongItem; }
-			set { Set(ref selectedSongItem, value); }
+			get => selectedSongItem;
+			set => Set(ref selectedSongItem, value);
 		}
 
 		public bool HasSongs => SongsNumber > 0;
@@ -46,8 +46,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private IList selectedSongItems;
 		public IList SelectedSongItems
 		{
-			get { return selectedSongItems; }
-			set { Set(ref selectedSongItems, value); }
+			get => selectedSongItems;
+			set => Set(ref selectedSongItems, value);
 		}
 
 		public IEnumerable<Song> SelectedSongs => SelectedSongItems.OfType<SongListItem>().Select(it => it.Song);
@@ -63,17 +63,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		protected SongListViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
 		{
-			if (libraryContentUpdater == null)
-			{
-				throw new ArgumentNullException(nameof(libraryContentUpdater));
-			}
-			if (viewNavigator == null)
-			{
-				throw new ArgumentNullException(nameof(viewNavigator));
-			}
-
-			this.libraryContentUpdater = libraryContentUpdater;
-			this.viewNavigator = viewNavigator;
+			this.libraryContentUpdater = libraryContentUpdater ?? throw new ArgumentNullException(nameof(libraryContentUpdater));
+			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 
 			songItems = new ObservableCollection<SongListItem>();
 			SongItems = new ReadOnlyObservableCollection<SongListItem>(songItems);

@@ -19,7 +19,7 @@ namespace CF.MusicLibrary.Common.Images
 		private ImageInfo imageInfo;
 		public ImageInfo ImageInfo
 		{
-			get { return imageInfo; }
+			get => imageInfo;
 			private set
 			{
 				Set(ref imageInfo, value);
@@ -52,22 +52,9 @@ namespace CF.MusicLibrary.Common.Images
 
 		public ImageFile(IDiscImageValidator discImageValidator, IImageInfoProvider imageInfoProvider, IFileSystemFacade fileSystemFacade)
 		{
-			if (discImageValidator == null)
-			{
-				throw new ArgumentNullException(nameof(discImageValidator));
-			}
-			if (imageInfoProvider == null)
-			{
-				throw new ArgumentNullException(nameof(imageInfoProvider));
-			}
-			if (fileSystemFacade == null)
-			{
-				throw new ArgumentNullException(nameof(fileSystemFacade));
-			}
-
-			this.discImageValidator = discImageValidator;
-			this.imageInfoProvider = imageInfoProvider;
-			this.fileSystemFacade = fileSystemFacade;
+			this.discImageValidator = discImageValidator ?? throw new ArgumentNullException(nameof(discImageValidator));
+			this.imageInfoProvider = imageInfoProvider ?? throw new ArgumentNullException(nameof(imageInfoProvider));
+			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
 		}
 
 		public void Load(string fileName, bool isTemporaryFile)

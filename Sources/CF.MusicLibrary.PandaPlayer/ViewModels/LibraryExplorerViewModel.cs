@@ -40,7 +40,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private FolderExplorerItem selectedItem;
 		public FolderExplorerItem SelectedItem
 		{
-			get { return selectedItem; }
+			get => selectedItem;
 			set
 			{
 				Set(ref selectedItem, value);
@@ -71,32 +71,11 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public LibraryExplorerViewModel(ILibraryBrowser libraryBrowser, IExplorerSongListViewModel songListViewModel, ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
 		{
-			if (libraryBrowser == null)
-			{
-				throw new ArgumentNullException(nameof(libraryBrowser));
-			}
-			if (songListViewModel == null)
-			{
-				throw new ArgumentNullException(nameof(songListViewModel));
-			}
-			if (libraryContentUpdater == null)
-			{
-				throw new ArgumentNullException(nameof(libraryContentUpdater));
-			}
-			if (viewNavigator == null)
-			{
-				throw new ArgumentNullException(nameof(viewNavigator));
-			}
-			if (windowService == null)
-			{
-				throw new ArgumentNullException(nameof(windowService));
-			}
-
-			this.libraryBrowser = libraryBrowser;
-			SongListViewModel = songListViewModel;
-			this.libraryContentUpdater = libraryContentUpdater;
-			this.viewNavigator = viewNavigator;
-			this.windowService = windowService;
+			this.libraryBrowser = libraryBrowser ?? throw new ArgumentNullException(nameof(libraryBrowser));
+			SongListViewModel = songListViewModel ?? throw new ArgumentNullException(nameof(songListViewModel));
+			this.libraryContentUpdater = libraryContentUpdater ?? throw new ArgumentNullException(nameof(libraryContentUpdater));
+			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
+			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
 
 			ChangeFolderCommand = new RelayCommand(ChangeFolder);
 			PlayDiscCommand = new RelayCommand(PlayDisc);

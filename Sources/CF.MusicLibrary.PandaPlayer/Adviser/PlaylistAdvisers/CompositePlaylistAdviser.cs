@@ -20,27 +20,10 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 		public CompositePlaylistAdviser(IPlaylistAdviser usualDiscsAdviser, IPlaylistAdviser highlyRatedSongsAdviser, IPlaylistAdviser favouriteArtistDiscsAdviser,
 			IGenericDataRepository<PlaylistAdviserMemo> memoRepository)
 		{
-			if (usualDiscsAdviser == null)
-			{
-				throw new ArgumentNullException(nameof(usualDiscsAdviser));
-			}
-			if (highlyRatedSongsAdviser == null)
-			{
-				throw new ArgumentNullException(nameof(highlyRatedSongsAdviser));
-			}
-			if (favouriteArtistDiscsAdviser == null)
-			{
-				throw new ArgumentNullException(nameof(favouriteArtistDiscsAdviser));
-			}
-			if (memoRepository == null)
-			{
-				throw new ArgumentNullException(nameof(memoRepository));
-			}
-
-			this.usualDiscsAdviser = usualDiscsAdviser;
-			this.highlyRatedSongsAdviser = highlyRatedSongsAdviser;
-			this.favouriteArtistDiscsAdviser = favouriteArtistDiscsAdviser;
-			this.memoRepository = memoRepository;
+			this.usualDiscsAdviser = usualDiscsAdviser ?? throw new ArgumentNullException(nameof(usualDiscsAdviser));
+			this.highlyRatedSongsAdviser = highlyRatedSongsAdviser ?? throw new ArgumentNullException(nameof(highlyRatedSongsAdviser));
+			this.favouriteArtistDiscsAdviser = favouriteArtistDiscsAdviser ?? throw new ArgumentNullException(nameof(favouriteArtistDiscsAdviser));
+			this.memoRepository = memoRepository ?? throw new ArgumentNullException(nameof(memoRepository));
 
 			memo = new Lazy<PlaylistAdviserMemo>(() => memoRepository.Load() ??
 			new PlaylistAdviserMemo

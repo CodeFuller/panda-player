@@ -27,7 +27,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser
 				return disc;
 			}
 
-			private set { disc = value; }
+			private set => disc = value;
 		}
 
 		private AdvisedPlaylist()

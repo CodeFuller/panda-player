@@ -13,21 +13,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public override string AlbumTitle
 		{
-			get { return Disc.AlbumTitle; }
-			set
-			{
-				throw new InvalidOperationException(Current($"Album title could not be changed for '{DiscTitle}' disc"));
-			}
+			get => Disc.AlbumTitle;
+			set => throw new InvalidOperationException(Current($"Album title could not be changed for '{DiscTitle}' disc"));
 		}
 		public override bool AlbumTitleIsEditable => false;
 
 		public override Artist Artist
 		{
-			get { return Disc.Artist; }
-			set
-			{
-				throw new InvalidOperationException(Current($"Artist could not be changed for '{DiscTitle}' disc"));
-			}
+			get => Disc.Artist;
+			set => throw new InvalidOperationException(Current($"Artist could not be changed for '{DiscTitle}' disc"));
 		}
 
 		public override bool ArtistIsEditable => false;
@@ -35,11 +29,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public override short? Year
 		{
-			get { return Disc.Year; }
-			set
-			{
-				throw new InvalidOperationException(Current($"Year could not be changed for '{DiscTitle}' disc"));
-			}
+			get => Disc.Year;
+			set => throw new InvalidOperationException(Current($"Year could not be changed for '{DiscTitle}' disc"));
 		}
 		public override bool YearIsEditable => false;
 

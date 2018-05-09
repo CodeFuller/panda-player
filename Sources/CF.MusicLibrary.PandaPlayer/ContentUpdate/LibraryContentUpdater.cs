@@ -14,12 +14,7 @@ namespace CF.MusicLibrary.PandaPlayer.ContentUpdate
 
 		public LibraryContentUpdater(IMusicLibrary musicLibrary)
 		{
-			if (musicLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(musicLibrary));
-			}
-
-			this.musicLibrary = musicLibrary;
+			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
 		}
 
 		public async Task SetSongsRating(IEnumerable<Song> songs, Rating newRating)

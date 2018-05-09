@@ -11,17 +11,8 @@ namespace CF.MusicLibrary.Common.Images
 
 		public ImageInfoProvider(IImageFacade imageFacade, IFileSystemFacade fileSystemFacade)
 		{
-			if (imageFacade == null)
-			{
-				throw new ArgumentNullException(nameof(imageFacade));
-			}
-			if (fileSystemFacade == null)
-			{
-				throw new ArgumentNullException(nameof(fileSystemFacade));
-			}
-
-			this.imageFacade = imageFacade;
-			this.fileSystemFacade = fileSystemFacade;
+			this.imageFacade = imageFacade ?? throw new ArgumentNullException(nameof(imageFacade));
+			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
 		}
 
 		public ImageInfo GetImageInfo(string imageFileName)

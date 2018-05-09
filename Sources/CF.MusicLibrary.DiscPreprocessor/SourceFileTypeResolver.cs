@@ -12,12 +12,7 @@ namespace CF.MusicLibrary.DiscPreprocessor
 
 		public SourceFileTypeResolver(IDiscImageValidator discImageValidator)
 		{
-			if (discImageValidator == null)
-			{
-				throw new ArgumentNullException(nameof(discImageValidator));
-			}
-
-			this.discImageValidator = discImageValidator;
+			this.discImageValidator = discImageValidator ?? throw new ArgumentNullException(nameof(discImageValidator));
 		}
 
 		public SourceFileType GetSourceFileType(string filePath)

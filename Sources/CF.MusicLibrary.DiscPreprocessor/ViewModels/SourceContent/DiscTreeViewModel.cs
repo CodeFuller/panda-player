@@ -12,11 +12,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 		private Collection<DiscTreeViewItem> discs;
 		public Collection<DiscTreeViewItem> Discs
 		{
-			get { return discs; }
-			set
-			{
-				Set(ref discs, value);
-			}
+			get => discs;
+			set => Set(ref discs, value);
 		}
 
 		public bool ContentIsIncorrect => Discs.Any(s => s.ContentIsIncorrect);

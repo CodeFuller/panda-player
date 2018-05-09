@@ -19,25 +19,25 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public short? Year
 		{
-			get { return Song.Year; }
+			get => Song.Year;
 			set { Song.Year = value; RaisePropertyChanged(); }
 		}
 
 		public Genre Genre
 		{
-			get { return Song.Genre; }
+			get => Song.Genre;
 			set { Song.Genre = value; RaisePropertyChanged(); }
 		}
 
 		public short? Track
 		{
-			get { return Song.TrackNumber; }
+			get => Song.TrackNumber;
 			set { Song.TrackNumber = value; RaisePropertyChanged(); }
 		}
 
 		public string Title
 		{
-			get { return Song.Title; }
+			get => Song.Title;
 			set { Song.Title = value; RaisePropertyChanged(); }
 		}
 

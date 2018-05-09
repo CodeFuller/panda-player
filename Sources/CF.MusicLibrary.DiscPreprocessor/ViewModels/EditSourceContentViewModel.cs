@@ -43,8 +43,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		private bool dataIsReady;
 		public bool DataIsReady
 		{
-			get { return dataIsReady; }
-			set { Set(ref dataIsReady, value); }
+			get => dataIsReady;
+			set => Set(ref dataIsReady, value);
 		}
 
 		public EditSourceContentViewModel(IContentCrawler contentCrawler, IDiscContentParser discContentParser, IDiscContentComparer discContentComparer,

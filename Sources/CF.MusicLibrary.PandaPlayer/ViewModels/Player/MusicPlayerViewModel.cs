@@ -22,8 +22,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 		private bool isPlaying;
 		public bool IsPlaying
 		{
-			get { return isPlaying; }
-			set { Set(ref isPlaying, value); }
+			get => isPlaying;
+			set => Set(ref isPlaying, value);
 		}
 
 		public TimeSpan CurrSongLength => audioPlayer.CurrSongLength;
@@ -54,7 +54,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 
 		public double Volume
 		{
-			get { return audioPlayer.Volume; }
+			get => audioPlayer.Volume;
 			set
 			{
 				audioPlayer.Volume = value;
@@ -74,27 +74,10 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 
 		public MusicPlayerViewModel(IMusicLibrary musicLibrary, ISongPlaylistViewModel playlist, IAudioPlayer audioPlayer, ISongPlaybacksRegistrator playbacksRegistrator)
 		{
-			if (musicLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(musicLibrary));
-			}
-			if (playlist == null)
-			{
-				throw new ArgumentNullException(nameof(playlist));
-			}
-			if (audioPlayer == null)
-			{
-				throw new ArgumentNullException(nameof(audioPlayer));
-			}
-			if (playbacksRegistrator == null)
-			{
-				throw new ArgumentNullException(nameof(playbacksRegistrator));
-			}
-
-			this.musicLibrary = musicLibrary;
-			this.Playlist = playlist;
-			this.audioPlayer = audioPlayer;
-			this.playbacksRegistrator = playbacksRegistrator;
+			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.Playlist = playlist ?? throw new ArgumentNullException(nameof(playlist));
+			this.audioPlayer = audioPlayer ?? throw new ArgumentNullException(nameof(audioPlayer));
+			this.playbacksRegistrator = playbacksRegistrator ?? throw new ArgumentNullException(nameof(playbacksRegistrator));
 
 			this.audioPlayer.PropertyChanged += AudioPlayer_PropertyChanged;
 			this.audioPlayer.SongMediaFinished += AudioPlayer_SongFinished;

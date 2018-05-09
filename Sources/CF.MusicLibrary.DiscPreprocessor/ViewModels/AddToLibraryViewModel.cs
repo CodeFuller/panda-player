@@ -31,8 +31,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		private bool dataIsReady;
 		public bool DataIsReady
 		{
-			get { return dataIsReady; }
-			set { Set(ref dataIsReady, value); }
+			get => dataIsReady;
+			set => Set(ref dataIsReady, value);
 		}
 
 		public ICommand AddToLibraryCommand { get; }
@@ -40,22 +40,22 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		private int currProgress;
 		public int CurrProgress
 		{
-			get { return currProgress; }
-			set { Set(ref currProgress, value); }
+			get => currProgress;
+			set => Set(ref currProgress, value);
 		}
 
 		private int progressSize;
 		public int ProgressSize
 		{
-			get { return progressSize; }
-			set { Set(ref progressSize, value); }
+			get => progressSize;
+			set => Set(ref progressSize, value);
 		}
 
 		private string progressMessages;
 		public string ProgressMessages
 		{
-			get { return progressMessages; }
-			set { Set(ref progressMessages, value); }
+			get => progressMessages;
+			set => Set(ref progressMessages, value);
 		}
 
 		public AddToLibraryViewModel(IMusicLibrary musicLibrary, ISongMediaInfoProvider songMediaInfoProvider,

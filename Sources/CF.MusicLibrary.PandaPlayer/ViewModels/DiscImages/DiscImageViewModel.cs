@@ -17,7 +17,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscImages
 		private Disc currentDisc;
 		private Disc CurrentDisc
 		{
-			get {return currentDisc;}
+			get => currentDisc;
 			set
 			{
 				Set(ref currentDisc, value);
@@ -28,7 +28,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscImages
 		private string currImageFileName;
 		public string CurrImageFileName
 		{
-			get { return currImageFileName; }
+			get => currImageFileName;
 			private set
 			{
 				//	Why don't we use ViewModelBase.Set(ref currImageFileName, value) ?
@@ -43,17 +43,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscImages
 
 		public DiscImageViewModel(IMusicLibrary musicLibrary, IViewNavigator viewNavigator)
 		{
-			if (musicLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(musicLibrary));
-			}
-			if (viewNavigator == null)
-			{
-				throw new ArgumentNullException(nameof(viewNavigator));
-			}
-
-			this.musicLibrary = musicLibrary;
-			this.viewNavigator = viewNavigator;
+			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 
 			Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => CurrentDisc = e.Disc);
 			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));

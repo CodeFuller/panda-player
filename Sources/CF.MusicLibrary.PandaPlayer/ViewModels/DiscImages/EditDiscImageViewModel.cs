@@ -33,8 +33,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscImages
 		private bool imageWasChanged;
 		public bool ImageWasChanged
 		{
-			get { return imageWasChanged; }
-			set { Set(ref imageWasChanged, value); }
+			get => imageWasChanged;
+			set => Set(ref imageWasChanged, value);
 		}
 
 		public string ImageProperties => imageFile.ImageProperties;

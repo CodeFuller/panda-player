@@ -9,8 +9,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		// Seal the method for calling it in constructor.
 		public sealed override short? Year
 		{
-			get { return base.Year; }
-			set { base.Year = value; }
+			get => base.Year;
+			set => base.Year = value;
 		}
 
 		protected CompilationDiscViewItem(AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)

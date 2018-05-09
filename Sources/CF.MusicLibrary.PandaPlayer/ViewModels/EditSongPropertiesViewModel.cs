@@ -37,7 +37,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private string fileName;
 		public string FileName
 		{
-			get { return fileName; }
+			get => fileName;
 			set
 			{
 				if (!SingleSongMode)
@@ -70,7 +70,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private string title;
 		public string Title
 		{
-			get { return title; }
+			get => title;
 			set
 			{
 				if (!SingleSongMode)
@@ -100,22 +100,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public EditSongPropertiesViewModel(DiscLibrary library, ILibraryStructurer libraryStructurer, ILibraryContentUpdater libraryContentUpdater)
 		{
-			if (library == null)
-			{
-				throw new ArgumentNullException(nameof(library));
-			}
-			if (libraryStructurer == null)
-			{
-				throw new ArgumentNullException(nameof(libraryStructurer));
-			}
-			if (libraryContentUpdater == null)
-			{
-				throw new ArgumentNullException(nameof(libraryContentUpdater));
-			}
-
-			this.library = library;
-			this.libraryStructurer = libraryStructurer;
-			this.libraryContentUpdater = libraryContentUpdater;
+			this.library = library ?? throw new ArgumentNullException(nameof(library));
+			this.libraryStructurer = libraryStructurer ?? throw new ArgumentNullException(nameof(libraryStructurer));
+			this.libraryContentUpdater = libraryContentUpdater ?? throw new ArgumentNullException(nameof(libraryContentUpdater));
 		}
 
 		public void Load(IEnumerable<Song> songs)

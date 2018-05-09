@@ -11,8 +11,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private bool isCurrentlyPlayed;
 		public bool IsCurrentlyPlayed
 		{
-			get { return isCurrentlyPlayed; }
-			set { Set(ref isCurrentlyPlayed, value); }
+			get => isCurrentlyPlayed;
+			set => Set(ref isCurrentlyPlayed, value);
 		}
 
 		public DateTime? LastPlaybackTime => Song.LastPlaybackTime;

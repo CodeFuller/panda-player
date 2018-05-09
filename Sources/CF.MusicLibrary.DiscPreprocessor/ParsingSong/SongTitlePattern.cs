@@ -15,10 +15,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 
 		public string Pattern
 		{
-			get
-			{
-				return pattern;
-			}
+			get => pattern;
 			set
 			{
 				pattern = value;

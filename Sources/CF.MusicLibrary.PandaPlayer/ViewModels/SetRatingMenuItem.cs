@@ -17,12 +17,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public SetRatingMenuItem(ISongListViewModel parentViewModel, Rating rating)
 		{
-			if (parentViewModel == null)
-			{
-				throw new ArgumentNullException(nameof(parentViewModel));
-			}
-
-			this.parentViewModel = parentViewModel;
+			this.parentViewModel = parentViewModel ?? throw new ArgumentNullException(nameof(parentViewModel));
 			this.Rating = rating;
 			Command = new AsyncRelayCommand(() => SetRating(rating));
 		}

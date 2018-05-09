@@ -26,7 +26,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private int currAdviseIndex;
 		private int CurrAdviseIndex
 		{
-			get { return currAdviseIndex; }
+			get => currAdviseIndex;
 			set
 			{
 				currAdviseIndex = value;
@@ -44,17 +44,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public DiscAdviserViewModel(DiscLibrary discLibrary, ICompositePlaylistAdviser playlistAdviser)
 		{
-			if (discLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(discLibrary));
-			}
-			if (playlistAdviser == null)
-			{
-				throw new ArgumentNullException(nameof(playlistAdviser));
-			}
-
-			this.discLibrary = discLibrary;
-			this.playlistAdviser = playlistAdviser;
+			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
+			this.playlistAdviser = playlistAdviser ?? throw new ArgumentNullException(nameof(playlistAdviser));
 
 			PlayCurrentAdviseCommand = new RelayCommand(PlayCurrentAdvise);
 			SwitchToNextAdviseCommand = new RelayCommand(SwitchToNextAdvise);

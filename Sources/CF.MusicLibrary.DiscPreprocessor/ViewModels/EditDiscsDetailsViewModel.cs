@@ -46,17 +46,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 		public EditDiscsDetailsViewModel(DiscLibrary discLibrary, ILibraryStructurer libraryStructurer)
 		{
-			if (discLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(discLibrary));
-			}
-			if (libraryStructurer == null)
-			{
-				throw new ArgumentNullException(nameof(libraryStructurer));
-			}
-
-			this.discLibrary = discLibrary;
-			this.libraryStructurer = libraryStructurer;
+			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
+			this.libraryStructurer = libraryStructurer ?? throw new ArgumentNullException(nameof(libraryStructurer));
 
 			Discs = new ObservableCollection<DiscViewItem>();
 		}

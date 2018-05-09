@@ -11,7 +11,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 		private string title;
 		public string Title
 		{
-			get { return title; }
+			get => title;
 			set
 			{
 				string prevValue = title;
@@ -31,11 +31,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 		private bool contentIsIncorrect;
 		public bool ContentIsIncorrect
 		{
-			get { return contentIsIncorrect; }
-			set
-			{
-				Set(ref contentIsIncorrect, value);
-			}
+			get => contentIsIncorrect;
+			set => Set(ref contentIsIncorrect, value);
 		}
 
 		public SongTreeViewItem(SongContent song)

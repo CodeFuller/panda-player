@@ -17,17 +17,8 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 
 		public HighlyRatedSongsAdviser(IAdviseFactorsProvider adviseFactorsProvider, IClock dateTimeFacade)
 		{
-			if (adviseFactorsProvider == null)
-			{
-				throw new ArgumentNullException(nameof(adviseFactorsProvider));
-			}
-			if (dateTimeFacade == null)
-			{
-				throw new ArgumentNullException(nameof(dateTimeFacade));
-			}
-
-			this.adviseFactorsProvider = adviseFactorsProvider;
-			this.dateTimeFacade = dateTimeFacade;
+			this.adviseFactorsProvider = adviseFactorsProvider ?? throw new ArgumentNullException(nameof(adviseFactorsProvider));
+			this.dateTimeFacade = dateTimeFacade ?? throw new ArgumentNullException(nameof(dateTimeFacade));
 
 			highlyRatedSongsMaxUnlistenedTerms = new Dictionary<Rating, TimeSpan>();
 			highlyRatedSongsMaxUnlistenedTerms.Add(Rating.R10, TimeSpan.FromDays(30));

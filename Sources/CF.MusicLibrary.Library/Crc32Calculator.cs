@@ -10,12 +10,7 @@ namespace CF.MusicLibrary.Library
 
 		public Crc32Calculator(IFileSystemFacade fileSystemFacade)
 		{
-			if (fileSystemFacade == null)
-			{
-				throw new ArgumentNullException(nameof(fileSystemFacade));
-			}
-
-			this.fileSystemFacade = fileSystemFacade;
+			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
 		}
 
 		public int CalculateChecksumForFile(string fileName)

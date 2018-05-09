@@ -11,7 +11,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		private Artist artist;
 		public override Artist Artist
 		{
-			get { return artist; }
+			get => artist;
 			set
 			{
 				Set(ref artist, value);

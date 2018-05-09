@@ -13,12 +13,7 @@ namespace CF.MusicLibrary.DiscPreprocessor
 
 		public ContentCrawler(ISourceFileTypeResolver sourceFileTypeResolver)
 		{
-			if (sourceFileTypeResolver == null)
-			{
-				throw new ArgumentNullException(nameof(sourceFileTypeResolver));
-			}
-
-			this.sourceFileTypeResolver = sourceFileTypeResolver;
+			this.sourceFileTypeResolver = sourceFileTypeResolver ?? throw new ArgumentNullException(nameof(sourceFileTypeResolver));
 		}
 
 		public IEnumerable<DiscContent> LoadDiscs(string discsDirectory)

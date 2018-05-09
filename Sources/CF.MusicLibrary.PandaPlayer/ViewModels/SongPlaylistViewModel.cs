@@ -19,7 +19,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private int? currentSongIndex;
 		public int? CurrentSongIndex
 		{
-			get { return currentSongIndex; }
+			get => currentSongIndex;
 			protected set
 			{
 				if (currentSongIndex == value)

@@ -14,8 +14,8 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 
 		public IList SelectedItemsList
 		{
-			get { return (IList)GetValue(SelectedItemsListProperty); }
-			set { SetValue(SelectedItemsListProperty, value); }
+			get => (IList)GetValue(SelectedItemsListProperty);
+			set => SetValue(SelectedItemsListProperty, value);
 		}
 
 		public MultiSelectionDataGrid()

@@ -22,17 +22,8 @@ namespace CF.MusicLibrary.PandaPlayer
 
 		public ViewNavigator(INavigatedViewModelHolder viewModelHolder, IWindowService windowService)
 		{
-			if (viewModelHolder == null)
-			{
-				throw new ArgumentNullException(nameof(viewModelHolder));
-			}
-			if (windowService == null)
-			{
-				throw new ArgumentNullException(nameof(windowService));
-			}
-
-			this.viewModelHolder = viewModelHolder;
-			this.windowService = windowService;
+			this.viewModelHolder = viewModelHolder ?? throw new ArgumentNullException(nameof(viewModelHolder));
+			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
 		}
 
 		public void ShowRateDiscView(Disc disc)

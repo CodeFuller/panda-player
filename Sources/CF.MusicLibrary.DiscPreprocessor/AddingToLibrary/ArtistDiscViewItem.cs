@@ -14,11 +14,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		private readonly Artist artist;
 		public override Artist Artist
 		{
-			get { return artist; }
-			set
-			{
-				throw new InvalidOperationException(Current($"Artist could not be changed for '{DiscTitle}' disc"));
-			}
+			get => artist;
+			set => throw new InvalidOperationException(Current($"Artist could not be changed for '{DiscTitle}' disc"));
 		}
 		public override bool ArtistIsEditable => false;
 		public override bool ArtistIsNotFilled => false;
@@ -26,11 +23,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		private readonly short? year;
 		public override short? Year
 		{
-			get { return year; }
-			set
-			{
-				throw new InvalidOperationException(Current($"Year could not be set for '{DiscTitle}' disc"));
-			}
+			get => year;
+			set => throw new InvalidOperationException(Current($"Year could not be set for '{DiscTitle}' disc"));
 		}
 
 		public ArtistDiscViewItem(AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres, Genre genre)

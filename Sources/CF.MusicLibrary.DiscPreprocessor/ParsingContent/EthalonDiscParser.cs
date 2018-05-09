@@ -12,12 +12,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingContent
 
 		public EthalonDiscParser(IEthalonSongParser ethalonSongParser)
 		{
-			if (ethalonSongParser == null)
-			{
-				throw new ArgumentNullException(nameof(ethalonSongParser));
-			}
-
-			this.ethalonSongParser = ethalonSongParser;
+			this.ethalonSongParser = ethalonSongParser ?? throw new ArgumentNullException(nameof(ethalonSongParser));
 		}
 
 		public DiscContent Parse(IEnumerable<string> discContent)

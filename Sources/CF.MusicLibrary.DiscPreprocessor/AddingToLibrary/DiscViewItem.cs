@@ -37,7 +37,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		private Genre genre;
 		public Genre Genre
 		{
-			get { return genre; }
+			get => genre;
 			set
 			{
 				Set(ref genre, value);

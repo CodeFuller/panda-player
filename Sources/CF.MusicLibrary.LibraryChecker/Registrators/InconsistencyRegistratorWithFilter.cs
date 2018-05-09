@@ -15,17 +15,8 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 		public InconsistencyRegistratorWithFilter(ILibraryInconsistencyRegistrator inconsistencyRegistrator,
 			ILibraryInconsistencyFilter inconsistencyFilter)
 		{
-			if (inconsistencyRegistrator == null)
-			{
-				throw new ArgumentNullException(nameof(inconsistencyRegistrator));
-			}
-			if (inconsistencyFilter == null)
-			{
-				throw new ArgumentNullException(nameof(inconsistencyFilter));
-			}
-
-			this.inconsistencyRegistrator = inconsistencyRegistrator;
-			this.inconsistencyFilter = inconsistencyFilter;
+			this.inconsistencyRegistrator = inconsistencyRegistrator ?? throw new ArgumentNullException(nameof(inconsistencyRegistrator));
+			this.inconsistencyFilter = inconsistencyFilter ?? throw new ArgumentNullException(nameof(inconsistencyFilter));
 		}
 
 		public void RegisterInconsistency_SuspiciousAlbumTitle(Disc disc)

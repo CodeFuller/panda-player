@@ -8,8 +8,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private bool hasValue;
 		public bool HasValue
 		{
-			get { return hasValue; }
-			set { Set(ref hasValue, value); }
+			get => hasValue;
+			set => Set(ref hasValue, value);
 		}
 
 		private T propertyValue;

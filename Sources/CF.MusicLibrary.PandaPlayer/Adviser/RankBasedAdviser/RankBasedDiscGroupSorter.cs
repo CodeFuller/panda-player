@@ -12,12 +12,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser
 
 		public RankBasedDiscGroupSorter(IAdviseFactorsProvider adviseFactorsProvider)
 		{
-			if (adviseFactorsProvider == null)
-			{
-				throw new ArgumentNullException(nameof(adviseFactorsProvider));
-			}
-
-			this.adviseFactorsProvider = adviseFactorsProvider;
+			this.adviseFactorsProvider = adviseFactorsProvider ?? throw new ArgumentNullException(nameof(adviseFactorsProvider));
 		}
 
 		public IEnumerable<DiscGroup> SortDiscGroups(IEnumerable<DiscGroup> discGroups)

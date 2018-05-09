@@ -25,7 +25,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 		private TimeSpan currSongLength;
 		public TimeSpan CurrSongLength
 		{
-			get { return currSongLength; }
+			get => currSongLength;
 			private set
 			{
 				currSongLength = value;
@@ -35,7 +35,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 
 		public TimeSpan CurrSongPosition
 		{
-			get { return IsPlaying ? mediaPlayer.Position : TimeSpan.Zero; }
+			get => IsPlaying ? mediaPlayer.Position : TimeSpan.Zero;
 			set
 			{
 				if (IsPlaying)
@@ -48,23 +48,14 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 
 		public double Volume
 		{
-			get { return mediaPlayer.Volume; }
-			set { mediaPlayer.Volume = value; }
+			get => mediaPlayer.Volume;
+			set => mediaPlayer.Volume = value;
 		}
 
 		public AudioPlayer(IMediaPlayerFacade mediaPlayer, ITimerFacade timer)
 		{
-			if (mediaPlayer == null)
-			{
-				throw new ArgumentNullException(nameof(mediaPlayer));
-			}
-			if (timer == null)
-			{
-				throw new ArgumentNullException(nameof(timer));
-			}
-
-			this.mediaPlayer = mediaPlayer;
-			this.timer = timer;
+			this.mediaPlayer = mediaPlayer ?? throw new ArgumentNullException(nameof(mediaPlayer));
+			this.timer = timer ?? throw new ArgumentNullException(nameof(timer));
 
 			this.timer = timer;
 			this.timer.Elapsed += Timer_Elapsed;

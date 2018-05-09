@@ -15,17 +15,8 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 
 		public RankBasedDiscAdviser(IDiscGroupper discGroupper, IDiscGroupSorter discGroupSorter)
 		{
-			if (discGroupper == null)
-			{
-				throw new ArgumentNullException(nameof(discGroupper));
-			}
-			if (discGroupSorter == null)
-			{
-				throw new ArgumentNullException(nameof(discGroupSorter));
-			}
-
-			this.discGroupper = discGroupper;
-			this.discGroupSorter = discGroupSorter;
+			this.discGroupper = discGroupper ?? throw new ArgumentNullException(nameof(discGroupper));
+			this.discGroupSorter = discGroupSorter ?? throw new ArgumentNullException(nameof(discGroupSorter));
 		}
 
 		public IEnumerable<AdvisedPlaylist> Advise(DiscLibrary discLibrary)

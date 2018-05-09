@@ -19,7 +19,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 		private string discDirectory;
 		public string DiscDirectory
 		{
-			get { return discDirectory; }
+			get => discDirectory;
 			set
 			{
 				//	Value has changed or just initialized?
@@ -52,11 +52,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 		private bool contentIsIncorrect;
 		public bool ContentIsIncorrect
 		{
-			get { return contentIsIncorrect; }
-			set
-			{
-				Set(ref contentIsIncorrect, value);
-			}
+			get => contentIsIncorrect;
+			set => Set(ref contentIsIncorrect, value);
 		}
 
 		public DiscTreeViewItem(DiscContent disc)

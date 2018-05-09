@@ -12,12 +12,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 
 		public FileSystemLibraryBrowser(DiscLibrary discLibrary)
 		{
-			if (discLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(discLibrary));
-			}
-
-			this.discLibrary = discLibrary;
+			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
 		}
 
 		public IEnumerable<FolderExplorerItem> GetChildFolderItems(FolderExplorerItem folderItem)

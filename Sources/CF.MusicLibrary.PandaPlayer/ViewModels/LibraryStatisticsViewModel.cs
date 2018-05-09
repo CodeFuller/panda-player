@@ -61,12 +61,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public LibraryStatisticsViewModel(DiscLibrary discLibrary)
 		{
-			if (discLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(discLibrary));
-			}
-
-			this.discLibrary = discLibrary;
+			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
 		}
 	}
 }

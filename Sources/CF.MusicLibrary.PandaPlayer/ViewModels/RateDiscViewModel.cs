@@ -21,18 +21,13 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private Rating selectedRating;
 		public Rating SelectedRating
 		{
-			get { return selectedRating;}
-			set { Set(ref selectedRating, value); }
+			get => selectedRating;
+			set => Set(ref selectedRating, value);
 		}
 
 		public RateDiscViewModel(ILibraryContentUpdater libraryContentUpdater)
 		{
-			if (libraryContentUpdater == null)
-			{
-				throw new ArgumentNullException(nameof(libraryContentUpdater));
-			}
-
-			this.libraryContentUpdater = libraryContentUpdater;
+			this.libraryContentUpdater = libraryContentUpdater ?? throw new ArgumentNullException(nameof(libraryContentUpdater));
 		}
 
 		public void Load(Disc disc)

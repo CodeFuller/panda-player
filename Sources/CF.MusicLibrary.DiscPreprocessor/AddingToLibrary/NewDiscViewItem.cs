@@ -10,7 +10,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 	{
 		public override string AlbumTitle
 		{
-			get { return Disc.AlbumTitle; }
+			get => Disc.AlbumTitle;
 			set
 			{
 				Disc.AlbumTitle = value;
@@ -23,7 +23,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		private short? year;
 		public override short? Year
 		{
-			get { return year; }
+			get => year;
 			set
 			{
 				Set(ref year, value);

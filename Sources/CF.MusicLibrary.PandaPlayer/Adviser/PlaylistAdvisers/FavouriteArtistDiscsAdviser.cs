@@ -11,12 +11,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 
 		public FavouriteArtistDiscsAdviser(IPlaylistAdviser discAdviser)
 		{
-			if (discAdviser == null)
-			{
-				throw new ArgumentNullException(nameof(discAdviser));
-			}
-
-			this.discAdviser = discAdviser;
+			this.discAdviser = discAdviser ?? throw new ArgumentNullException(nameof(discAdviser));
 		}
 
 		public IEnumerable<AdvisedPlaylist> Advise(DiscLibrary discLibrary)

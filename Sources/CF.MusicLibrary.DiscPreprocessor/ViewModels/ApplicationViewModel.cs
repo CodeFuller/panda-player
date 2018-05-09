@@ -26,32 +26,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		public ApplicationViewModel(IEditSourceContentViewModel editSourceContentViewModel, IEditDiscsDetailsViewModel editDiscsDetailsViewModel,
 			IEditSourceDiscImagesViewModel editSourceDiscImagesViewModel, IEditSongsDetailsViewModel editSongsDetailsViewModel, IAddToLibraryViewModel addToLibraryViewModel)
 		{
-			if (editSourceContentViewModel == null)
-			{
-				throw new ArgumentNullException(nameof(editSourceContentViewModel));
-			}
-			if (editDiscsDetailsViewModel == null)
-			{
-				throw new ArgumentNullException(nameof(editDiscsDetailsViewModel));
-			}
-			if (editSourceDiscImagesViewModel == null)
-			{
-				throw new ArgumentNullException(nameof(editSourceDiscImagesViewModel));
-			}
-			if (editSongsDetailsViewModel == null)
-			{
-				throw new ArgumentNullException(nameof(editSongsDetailsViewModel));
-			}
-			if (addToLibraryViewModel == null)
-			{
-				throw new ArgumentNullException(nameof(addToLibraryViewModel));
-			}
-
-			this.editSourceContentViewModel = editSourceContentViewModel;
-			this.editDiscsDetailsViewModel = editDiscsDetailsViewModel;
-			this.editSourceDiscImagesViewModel = editSourceDiscImagesViewModel;
-			this.editSongsDetailsViewModel = editSongsDetailsViewModel;
-			this.addToLibraryViewModel = addToLibraryViewModel;
+			this.editSourceContentViewModel = editSourceContentViewModel ?? throw new ArgumentNullException(nameof(editSourceContentViewModel));
+			this.editDiscsDetailsViewModel = editDiscsDetailsViewModel ?? throw new ArgumentNullException(nameof(editDiscsDetailsViewModel));
+			this.editSourceDiscImagesViewModel = editSourceDiscImagesViewModel ?? throw new ArgumentNullException(nameof(editSourceDiscImagesViewModel));
+			this.editSongsDetailsViewModel = editSongsDetailsViewModel ?? throw new ArgumentNullException(nameof(editSongsDetailsViewModel));
+			this.addToLibraryViewModel = addToLibraryViewModel ?? throw new ArgumentNullException(nameof(addToLibraryViewModel));
 
 			SwitchToPrevPageCommand = new RelayCommand(SwitchToPrevPage);
 			SwitchToNextPageCommand = new AsyncRelayCommand(SwitchToNextPage);
@@ -97,7 +76,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		private IPageViewModel currPage;
 		public IPageViewModel CurrPage
 		{
-			get { return currPage; }
+			get => currPage;
 			set
 			{
 				Set(ref currPage, value);
@@ -208,12 +187,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 		private void SwitchToPrevPage()
 		{
-			if (PrevPage == null)
-			{
-				throw new InvalidOperationException(Current($"Could not switch back from the page {CurrPage.Name}"));
-			}
-
-			CurrPage = PrevPage;
+			CurrPage = PrevPage ?? throw new InvalidOperationException(Current($"Could not switch back from the page {CurrPage.Name}"));
 		}
 
 		private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

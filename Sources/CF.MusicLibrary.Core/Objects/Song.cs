@@ -20,7 +20,7 @@ namespace CF.MusicLibrary.Core.Objects
 		private Artist artist;
 		public Artist Artist
 		{
-			get { return artist; }
+			get => artist;
 			set
 			{
 				artist = value;
@@ -32,7 +32,7 @@ namespace CF.MusicLibrary.Core.Objects
 		private short? trackNumber;
 		public short? TrackNumber
 		{
-			get { return trackNumber; }
+			get => trackNumber;
 			set
 			{
 				trackNumber = value;
@@ -43,7 +43,7 @@ namespace CF.MusicLibrary.Core.Objects
 		private short? year;
 		public short? Year
 		{
-			get { return year; }
+			get => year;
 			set
 			{
 				year = value;
@@ -58,7 +58,7 @@ namespace CF.MusicLibrary.Core.Objects
 		private Genre genre;
 		public Genre Genre
 		{
-			get { return genre; }
+			get => genre;
 			set
 			{
 				genre = value;
@@ -71,14 +71,14 @@ namespace CF.MusicLibrary.Core.Objects
 
 		public double DurationInMilliseconds
 		{
-			get { return Duration.TotalMilliseconds; }
-			set { Duration = TimeSpan.FromMilliseconds(value); }
+			get => Duration.TotalMilliseconds;
+			set => Duration = TimeSpan.FromMilliseconds(value);
 		}
 
 		private Rating? rating;
 		public Rating? Rating
 		{
-			get { return rating; }
+			get => rating;
 			set
 			{
 				rating = value;
@@ -93,8 +93,8 @@ namespace CF.MusicLibrary.Core.Objects
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Support property for Uri field. It's required because Uri type is not supported by used Data Provider.")]
 		public string SongUri
 		{
-			get { return Uri.ToString(); }
-			set { Uri = new Uri(value, UriKind.Relative);}
+			get => Uri.ToString();
+			set => Uri = new Uri(value, UriKind.Relative);
 		}
 
 		public int FileSize { get; set; }
@@ -106,7 +106,7 @@ namespace CF.MusicLibrary.Core.Objects
 		private DateTime? lastPlaybackTime;
 		public DateTime? LastPlaybackTime
 		{
-			get { return lastPlaybackTime; }
+			get => lastPlaybackTime;
 			set
 			{
 				lastPlaybackTime = value;
@@ -117,7 +117,7 @@ namespace CF.MusicLibrary.Core.Objects
 		private int playbacksCount;
 		public int PlaybacksCount
 		{
-			get { return playbacksCount; }
+			get => playbacksCount;
 			set
 			{
 				playbacksCount = value;

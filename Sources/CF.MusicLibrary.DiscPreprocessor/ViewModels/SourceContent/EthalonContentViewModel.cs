@@ -16,18 +16,13 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 
 		public EthalonContentViewModel(IFileSystemFacade fileSystemFacade, string appDataPath)
 		{
-			if (fileSystemFacade == null)
-			{
-				throw  new ArgumentNullException(nameof(fileSystemFacade));
-			}
-
-			this.fileSystemFacade = fileSystemFacade;
+			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
 			contentSaveFilePath = Path.Combine(appDataPath, ContentSaveFilename);
 		}
 
 		public string Content
 		{
-			get { return rawEthalonDiscsContent; }
+			get => rawEthalonDiscsContent;
 			set
 			{
 				Set(ref rawEthalonDiscsContent, value);

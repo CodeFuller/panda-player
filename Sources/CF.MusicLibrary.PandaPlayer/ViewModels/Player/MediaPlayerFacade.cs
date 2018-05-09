@@ -10,28 +10,28 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 
 		public event EventHandler MediaOpened
 		{
-			add { mediaPlayer.MediaOpened += value; }
-			remove { mediaPlayer.MediaOpened -= value; }
+			add => mediaPlayer.MediaOpened += value;
+			remove => mediaPlayer.MediaOpened -= value;
 		}
 
 		public event EventHandler MediaEnded
 		{
-			add { mediaPlayer.MediaEnded += value; }
-			remove { mediaPlayer.MediaEnded -= value; }
+			add => mediaPlayer.MediaEnded += value;
+			remove => mediaPlayer.MediaEnded -= value;
 		}
 
 		public TimeSpan Position
 		{
-			get { return mediaPlayer.Position; }
-			set { mediaPlayer.Position = value; }
+			get => mediaPlayer.Position;
+			set => mediaPlayer.Position = value;
 		}
 
 		public Duration NaturalDuration => mediaPlayer.NaturalDuration;
 
 		public double Volume
 		{
-			get { return mediaPlayer.Volume; }
-			set { mediaPlayer.Volume = value; }
+			get => mediaPlayer.Volume;
+			set => mediaPlayer.Volume = value;
 		}
 
 		public MediaPlayerFacade()

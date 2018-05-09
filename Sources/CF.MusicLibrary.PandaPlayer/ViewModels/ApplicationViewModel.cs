@@ -30,8 +30,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private string title = DefaultTitle;
 		public string Title
 		{
-			get { return title; }
-			set { Set(ref title, value); }
+			get => title;
+			set => Set(ref title, value);
 		}
 
 		public IApplicationViewModelHolder ViewModelHolder { get; }
@@ -45,7 +45,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private int selectedSongListIndex;
 		public int SelectedSongListIndex
 		{
-			get { return selectedSongListIndex; }
+			get => selectedSongListIndex;
 			set
 			{
 				Set(ref selectedSongListIndex, value);
@@ -76,27 +76,10 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public ApplicationViewModel(DiscLibrary discLibrary, IApplicationViewModelHolder viewModelHolder, IMusicPlayerViewModel musicPlayerViewModel, IViewNavigator viewNavigator)
 		{
-			if (discLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(discLibrary));
-			}
-			if (viewModelHolder == null)
-			{
-				throw new ArgumentNullException(nameof(viewModelHolder));
-			}
-			if (musicPlayerViewModel == null)
-			{
-				throw new ArgumentNullException(nameof(musicPlayerViewModel));
-			}
-			if (viewNavigator == null)
-			{
-				throw new ArgumentNullException(nameof(viewNavigator));
-			}
-
-			this.discLibrary = discLibrary;
-			ViewModelHolder = viewModelHolder;
-			MusicPlayerViewModel = musicPlayerViewModel;
-			this.viewNavigator = viewNavigator;
+			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
+			ViewModelHolder = viewModelHolder ?? throw new ArgumentNullException(nameof(viewModelHolder));
+			MusicPlayerViewModel = musicPlayerViewModel ?? throw new ArgumentNullException(nameof(musicPlayerViewModel));
+			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 
 			LoadCommand = new AsyncRelayCommand(Load);
 			ReversePlayingCommand = new RelayCommand(ReversePlaying);

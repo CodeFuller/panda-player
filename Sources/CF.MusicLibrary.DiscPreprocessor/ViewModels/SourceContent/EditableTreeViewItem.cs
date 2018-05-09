@@ -7,21 +7,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 		private bool isSelected;
 		public bool IsSelected
 		{
-			get { return isSelected; }
-			set
-			{
-				Set(ref isSelected, value);
-			}
+			get => isSelected;
+			set => Set(ref isSelected, value);
 		}
 
 		private bool isExpanded;
 		public bool IsExpanded
 		{
-			get { return isExpanded; }
-			set
-			{
-				Set(ref isExpanded, value);
-			}
+			get => isExpanded;
+			set => Set(ref isExpanded, value);
 		}
 	}
 }

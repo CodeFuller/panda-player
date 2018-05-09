@@ -33,17 +33,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 		public EditSourceDiscImagesViewModel(IContentCrawler contentCrawler, IObjectFactory<IImageFile> imageFileFactory)
 		{
-			if (contentCrawler == null)
-			{
-				throw new ArgumentNullException(nameof(contentCrawler));
-			}
-			if (imageFileFactory == null)
-			{
-				throw new ArgumentNullException(nameof(imageFileFactory));
-			}
-
-			this.contentCrawler = contentCrawler;
-			this.imageFileFactory = imageFileFactory;
+			this.contentCrawler = contentCrawler ?? throw new ArgumentNullException(nameof(contentCrawler));
+			this.imageFileFactory = imageFileFactory ?? throw new ArgumentNullException(nameof(imageFileFactory));
 
 			ImageItems = new ObservableCollection<DiscImageViewItem>();
 

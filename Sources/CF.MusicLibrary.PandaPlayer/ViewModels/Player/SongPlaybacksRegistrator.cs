@@ -16,22 +16,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 
 		public SongPlaybacksRegistrator(IMusicLibrary musicLibrary, IScrobbler scrobbler, IClock clock)
 		{
-			if (musicLibrary == null)
-			{
-				throw new ArgumentNullException(nameof(musicLibrary));
-			}
-			if (scrobbler == null)
-			{
-				throw new ArgumentNullException(nameof(scrobbler));
-			}
-			if (clock == null)
-			{
-				throw new ArgumentNullException(nameof(clock));
-			}
-
-			this.musicLibrary = musicLibrary;
-			this.scrobbler = scrobbler;
-			this.clock = clock;
+			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.scrobbler = scrobbler ?? throw new ArgumentNullException(nameof(scrobbler));
+			this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
 		}
 
 		public async Task RegisterPlaybackStart(Song song)

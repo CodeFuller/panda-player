@@ -13,12 +13,7 @@ namespace CF.MusicLibrary.Library
 
 		public FileSystemMusicStorage(IFileStorage fileStorage)
 		{
-			if (fileStorage == null)
-			{
-				throw new ArgumentNullException(nameof(fileStorage));
-			}
-
-			this.fileStorage = fileStorage;
+			this.fileStorage = fileStorage ?? throw new ArgumentNullException(nameof(fileStorage));
 		}
 
 		public async Task StoreSong(string sourceSongFileName, Song song)

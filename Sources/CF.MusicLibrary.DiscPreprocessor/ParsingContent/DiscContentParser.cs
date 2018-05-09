@@ -11,17 +11,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingContent
 
 		public DiscContentParser(IInputContentSplitter inputContentSplitter, IEthalonDiscParser ethalonDiscParser)
 		{
-			if (inputContentSplitter == null)
-			{
-				throw new ArgumentNullException(nameof(inputContentSplitter));
-			}
-			if (ethalonDiscParser == null)
-			{
-				throw new ArgumentNullException(nameof(ethalonDiscParser));
-			}
-
-			this.inputContentSplitter = inputContentSplitter;
-			this.ethalonDiscParser = ethalonDiscParser;
+			this.inputContentSplitter = inputContentSplitter ?? throw new ArgumentNullException(nameof(inputContentSplitter));
+			this.ethalonDiscParser = ethalonDiscParser ?? throw new ArgumentNullException(nameof(ethalonDiscParser));
 		}
 
 		public IEnumerable<DiscContent> Parse(string content)

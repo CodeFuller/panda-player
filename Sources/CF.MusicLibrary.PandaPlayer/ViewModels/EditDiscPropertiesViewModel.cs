@@ -19,7 +19,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private string folderName;
 		public string FolderName
 		{
-			get { return folderName; }
+			get => folderName;
 			set
 			{
 				if (String.IsNullOrWhiteSpace(value))
@@ -33,7 +33,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private string discTitle;
 		public string DiscTitle
 		{
-			get { return discTitle; }
+			get => discTitle;
 			set
 			{
 				if (String.IsNullOrWhiteSpace(value))
@@ -47,7 +47,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private string albumTitle;
 		public string AlbumTitle
 		{
-			get { return albumTitle; }
+			get => albumTitle;
 			set
 			{
 				if (value?.Length == 0)
@@ -60,17 +60,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public EditDiscPropertiesViewModel(ILibraryStructurer libraryStructurer, ILibraryContentUpdater libraryContentUpdater)
 		{
-			if (libraryStructurer == null)
-			{
-				throw new ArgumentNullException(nameof(libraryStructurer));
-			}
-			if (libraryContentUpdater == null)
-			{
-				throw new ArgumentNullException(nameof(libraryContentUpdater));
-			}
-
-			this.libraryStructurer = libraryStructurer;
-			this.libraryContentUpdater = libraryContentUpdater;
+			this.libraryStructurer = libraryStructurer ?? throw new ArgumentNullException(nameof(libraryStructurer));
+			this.libraryContentUpdater = libraryContentUpdater ?? throw new ArgumentNullException(nameof(libraryContentUpdater));
 		}
 
 		public void Load(Disc disc)
