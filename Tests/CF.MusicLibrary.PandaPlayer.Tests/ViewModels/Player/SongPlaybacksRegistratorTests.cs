@@ -35,7 +35,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void RegisterPlaybackStart_CallsScrobblerUpdateNowPlayingCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song
 			{
@@ -52,11 +52,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 			scrobblerMock.UpdateNowPlaying(Arg.Do<Track>(arg => scrobbledTrack = arg));
 			var target = new SongPlaybacksRegistrator(Substitute.For<IMusicLibrary>(), scrobblerMock, Substitute.For<IClock>());
 
-			//	Act
+			// Act
 
 			target.RegisterPlaybackStart(song).Wait();
 
-			//	Assert
+			// Assert
 
 			scrobblerMock.Received(1).UpdateNowPlaying(Arg.Any<Track>());
 			Assert.AreEqual(5, scrobbledTrack.Number);
@@ -70,7 +70,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void RegisterPlaybackFinish_AddsSongPlaybackCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song { Disc = new Disc() };
 
@@ -79,11 +79,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 			clockStub.Now.Returns(new DateTime(2017, 09, 23, 12, 36, 29));
 			var target = new SongPlaybacksRegistrator(musicLibraryMock, Substitute.For<IScrobbler>(), clockStub);
 
-			//	Act
+			// Act
 
 			target.RegisterPlaybackFinish(song).Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, song.Playbacks.Count);
 			var playback = song.Playbacks.Single();
@@ -95,7 +95,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void RegisterPlaybackFinish_ScrobblesTrackCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song
 			{
@@ -114,11 +114,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 			clockStub.Now.Returns(new DateTime(2017, 09, 23, 12, 36, 29));
 			var target = new SongPlaybacksRegistrator(Substitute.For<IMusicLibrary>(), scrobblerMock, clockStub);
 
-			//	Act
+			// Act
 
 			target.RegisterPlaybackFinish(song).Wait();
 
-			//	Assert
+			// Assert
 
 			scrobblerMock.Received(1).Scrobble(Arg.Any<TrackScrobble>());
 			var scrobbledTrack = trackScrobble.Track;

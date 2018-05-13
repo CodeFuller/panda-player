@@ -14,7 +14,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.Dal
 		[Test]
 		public void GetDiscs_LoadsDiscsDataCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var binPath = AppDomain.CurrentDomain.BaseDirectory;
 			var settings = new SqLiteConnectionSettings
@@ -27,11 +27,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.Dal
 			var connectionFactory = new SqLiteConnectionFactory(options);
 			var target = new MusicLibraryRepositoryEF(connectionFactory);
 
-			//	Act
+			// Act
 
 			var discs = target.GetDiscs().Result.ToList();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotEmpty(discs);
 			Assert.IsNotEmpty(discs.SelectMany(d => d.Songs));

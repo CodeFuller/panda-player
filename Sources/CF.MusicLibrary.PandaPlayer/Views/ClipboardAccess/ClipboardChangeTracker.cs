@@ -4,9 +4,7 @@ using System.Windows.Interop;
 
 namespace CF.MusicLibrary.PandaPlayer.Views.ClipboardAccess
 {
-	/// <remarks>
-	/// https://blogs.msdn.microsoft.com/codefx/2012/03/07/sample-of-mar-7th-monitor-windows-clipboard-changes-in-wpf/
-	/// </remarks>>
+	// https://blogs.msdn.microsoft.com/codefx/2012/03/07/sample-of-mar-7th-monitor-windows-clipboard-changes-in-wpf/
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable", Justification = "The class does not own IntPtr resource")]
 	internal class ClipboardChangeTracker : Window, IClipboardChangeTracker
 	{
@@ -54,7 +52,7 @@ namespace CF.MusicLibrary.PandaPlayer.Views.ClipboardAccess
 			RemoveClipboardHook();
 			isStarted = false;
 
-			//	Without this call Application process will not close properly because background Window still exist.
+			// Without this call Application process will not close properly because background Window still exist.
 			Close();
 		}
 
@@ -81,10 +79,12 @@ namespace CF.MusicLibrary.PandaPlayer.Views.ClipboardAccess
 						// Pass the message to the next viewer.
 						NativeMethods.SendMessage(nextClipboardViewer, msg, wParam, lParam);
 					}
+
 					break;
 
 				case NativeMethods.WM_DRAWCLIPBOARD:
 					OnClipboardContentChanged(new ClipboardContentChangedEventArgs());
+
 					// Pass the message to the next viewer.
 					NativeMethods.SendMessage(nextClipboardViewer, msg, wParam, lParam);
 					break;

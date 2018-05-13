@@ -57,6 +57,7 @@ namespace CF.MusicLibrary.Library
 					await UpdateSongTagData(song);
 				}
 			}
+
 			await libraryRepository.UpdateDisc(disc);
 		}
 
@@ -89,8 +90,8 @@ namespace CF.MusicLibrary.Library
 				await DeleteSong(song, deleteTime);
 			}
 
-			//	Deleting image from repository modifies disc.Images.
-			//	That's why we preserve original images collection with .ToList().
+			// Deleting image from repository modifies disc.Images.
+			// That's why we preserve original images collection with .ToList().
 			foreach (var image in disc.Images.ToList())
 			{
 				logger.LogInformation($"Deleting disc image '{image.Uri}'");

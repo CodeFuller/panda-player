@@ -37,18 +37,18 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void Constructor_IfDiscTitleIsCorrect_InitializesDiscTitleCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				Title = "Some Title",
 			};
 
-			//	Act
+			// Act
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("Some Title", target.Disc.Title);
 		}
@@ -58,14 +58,14 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[TestCase(" ")]
 		public void Constructor_IfDiscTitleIsEmpty_ThrowsInvalidOperationException(string discTitle)
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				Title = discTitle,
 			};
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>()));
 		}
@@ -74,18 +74,18 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[TestCase("Broken Crown Halo", "Broken Crown Halo")]
 		public void Constructor_InitializesAlbumTitleCorrectly(string discTitle, string expectedAlbumTitle)
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				Title = discTitle,
 			};
 
-			//	Act
+			// Act
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(expectedAlbumTitle, target.AlbumTitle);
 		}
@@ -93,7 +93,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void Constructor_InitializesDiscPropertiesCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -101,11 +101,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 				UriWithinStorage = new Uri("/SomeDiscUri", UriKind.Relative),
 			};
 
-			//	Act
+			// Act
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("Some Title", target.Disc.Title);
 			Assert.AreEqual("Some Title", target.Disc.AlbumTitle);
@@ -115,7 +115,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void AlbumTitleSetter_UpdatesAlbumTitleCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -124,11 +124,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act
+			// Act
 
 			target.AlbumTitle = "New Album Title";
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("New Album Title", target.AlbumTitle);
 			Assert.AreEqual("New Album Title", target.Disc.AlbumTitle);
@@ -137,7 +137,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void AlbumTitleIsEditableGetter_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -146,7 +146,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsTrue(target.AlbumTitleIsEditable);
 		}
@@ -154,7 +154,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void WarnAboutUnequalAlbumTitleGetter_WhenAlbumTitleEqualsDiscTitle_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -163,10 +163,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Sanity check
+			// Sanity check
 			Assert.AreEqual(target.DiscTitle, target.AlbumTitle);
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.WarnAboutUnequalAlbumTitle);
 		}
@@ -174,7 +174,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void WarnAboutUnequalAlbumTitleGetter_WhenAlbumTitleDoesNotEqualDiscTitle_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -184,10 +184,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 			target.AlbumTitle = "Album Title";
 
-			//	Sanity check
+			// Sanity check
 			Assert.AreNotEqual(target.DiscTitle, target.AlbumTitle);
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsTrue(target.WarnAboutUnequalAlbumTitle);
 		}
@@ -195,7 +195,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void YearIsEditableGetter_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -204,7 +204,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsTrue(target.YearIsEditable);
 		}
@@ -212,7 +212,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void WarnAboutNotFilledYearGetter_IfYearIsSet_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -223,7 +223,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			target.Year = 2017;
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.WarnAboutNotFilledYear);
 		}
@@ -231,7 +231,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void WarnAboutNotFilledYearGetter_IfYearIsNotSet_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -240,16 +240,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsTrue(target.WarnAboutNotFilledYear);
 		}
 
-
 		[Test]
 		public void RequiredDataIsFilledGetter_WhenAllRequiredDataIsSet_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			Genre genre = new Genre();
 
@@ -261,7 +260,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), new[] { genre });
 			target.Genre = genre;
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsTrue(target.RequiredDataIsFilled);
 		}
@@ -269,7 +268,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void RequiredDataIsFilledGetter_WhenGenreIsNotSet_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -278,7 +277,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), new[] { new Genre() });
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.RequiredDataIsFilled);
 		}
@@ -286,7 +285,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void DiscGetter_WhenCalledMultipleTimes_ReturnsSameDiscObject()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -296,12 +295,12 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act
+			// Act
 
 			var disc1 = target.Disc;
 			var disc2 = target.Disc;
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(disc1, disc2);
 		}
@@ -309,7 +308,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void SongsGetter_FillsSongsDataCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var genre = new Genre();
 
@@ -331,11 +330,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			target.Genre = genre;
 			target.Year = 2017;
 
-			//	Act
+			// Act
 
 			var songs = target.Songs.ToList();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, songs.Count);
 			var songInfo = songs.Single();
@@ -355,4 +354,3 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		}
 	}
 }
-

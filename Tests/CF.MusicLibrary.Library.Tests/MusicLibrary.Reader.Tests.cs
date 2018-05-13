@@ -52,7 +52,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void LoadDiscs_ReturnsDiscsFromRepository()
 		{
-			//	Arrange
+			// Arrange
 
 			var discs = new[] { new Disc(), new Disc() };
 
@@ -62,11 +62,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var target = new RepositoryAndStorageMusicLibrary(musicLibraryRepositoryStub, Substitute.For<IMusicLibraryStorage>(),
 				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
-			//	Act
+			// Act
 
 			var returnedDiscs = target.LoadDiscs().Result;
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(discs, returnedDiscs);
 		}
@@ -74,7 +74,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void LoadLibrary_ReturnsLibraryWithDiscsFromRepository()
 		{
-			//	Arrange
+			// Arrange
 
 			var discs = new[] { new Disc(), new Disc() };
 
@@ -84,11 +84,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var target = new RepositoryAndStorageMusicLibrary(musicLibraryRepositoryStub, Substitute.For<IMusicLibraryStorage>(),
 				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
-			//	Act
+			// Act
 
 			var library = target.LoadLibrary().Result;
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(discs, library.AllDiscs);
 		}
@@ -96,7 +96,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void GetSongFile_ReturnsSongFileFromStorage()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song();
 
@@ -106,11 +106,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
 				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
-			//	Act
+			// Act
 
 			var songFileName = target.GetSongFile(song).Result;
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("SomeSong.mp3", songFileName);
 		}
@@ -118,7 +118,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void GetSongTagData_ReturnsTagDataFromSongFile()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song();
 			var tagData = new SongTagData();
@@ -132,11 +132,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
 				songTaggerStub, Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
-			//	Act
+			// Act
 
 			var returnedTagData = target.GetSongTagData(song).Result;
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(tagData, returnedTagData);
 		}
@@ -144,7 +144,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void GetSongTagTypes_ReturnsTagTypesFromSongFile()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song();
 			var tagTypes = new[]
@@ -162,11 +162,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
 				songTaggerStub, Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
-			//	Act
+			// Act
 
 			var returnedTagTypes = target.GetSongTagTypes(song).Result;
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(tagTypes, returnedTagTypes);
 		}
@@ -174,7 +174,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void GetDiscCoverImage_IfDiscHasCoverImage_ReturnsCoverImageFileFromStorage()
 		{
-			//	Arrange
+			// Arrange
 
 			var discImage = new DiscImage { ImageType = DiscImageType.Cover };
 			var disc = new Disc { CoverImage = discImage };
@@ -185,11 +185,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
 				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
-			//	Act
+			// Act
 
 			var imageFileName = target.GetDiscCoverImage(disc).Result;
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("SomeImage.img", imageFileName);
 		}
@@ -197,7 +197,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void GetDiscCoverImage_IfDiscHasNoCoverImage_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			IMusicLibraryStorage storageStub = Substitute.For<IMusicLibraryStorage>();
 			storageStub.GetDiscImageFile(Arg.Any<DiscImage>()).Returns("SomeImage.img");
@@ -205,11 +205,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
 				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
-			//	Act
+			// Act
 
 			var imageFileName = target.GetDiscCoverImage(new Disc()).Result;
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(imageFileName);
 		}
@@ -217,14 +217,14 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckStorage_ChecksStorageDataConsistencyForAllSongs()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc1 = new Disc
 			{
 				SongsUnordered = new[]
 				{
-					new Song {Uri = new Uri("/SomeSong11.mp3", UriKind.Relative)},
-					new Song {Uri = new Uri("/SomeSong12.mp3", UriKind.Relative)},
+					new Song { Uri = new Uri("/SomeSong11.mp3", UriKind.Relative) },
+					new Song { Uri = new Uri("/SomeSong12.mp3", UriKind.Relative) },
 				}
 			};
 
@@ -232,7 +232,7 @@ namespace CF.MusicLibrary.Library.Tests
 			{
 				SongsUnordered = new[]
 				{
-					new Song {Uri = new Uri("/SomeSong21.mp3", UriKind.Relative)},
+					new Song { Uri = new Uri("/SomeSong21.mp3", UriKind.Relative) },
 				}
 			};
 
@@ -246,11 +246,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), musicLibraryStorageMock,
 				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
-			//	Act
+			// Act
 
 			target.CheckStorage(discLibrary, registrator, false).Wait();
 
-			//	Assert
+			// Assert
 
 			var expectedUris = new[]
 			{
@@ -265,7 +265,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckStorage_ChecksStorageDataConsistencyForAllDiscImages()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc1 = new Disc
 			{
@@ -296,11 +296,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), musicLibraryStorageMock,
 				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
-			//	Act
+			// Act
 
 			target.CheckStorage(discLibrary, registrator, false).Wait();
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.Contains(passedUris, new Uri("/SomeImage1.img", UriKind.Relative));
 			CollectionAssert.Contains(passedUris, new Uri("/SomeImage2.img", UriKind.Relative));
@@ -309,7 +309,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckStorageChecksums_IfSongChecksumDiffersFromStoredInRepository_RegistersStorageInconsistency()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song
 			{
@@ -330,11 +330,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
-			//	Act
+			// Act
 
 			target.CheckStorageChecksums(library, registratorMock, false).Wait();
 
-			//	Assert
+			// Assert
 
 			registratorMock.Received(1).RegisterInconsistency_ErrorInStorageData(Arg.Any<string>());
 		}
@@ -342,7 +342,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckStorageChecksums_IfSongChecksumEqualsToStoredInRepository_DoesNotRegisterStorageInconsistency()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song
 			{
@@ -363,11 +363,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
-			//	Act
+			// Act
 
 			target.CheckStorageChecksums(library, registratorMock, false).Wait();
 
-			//	Assert
+			// Assert
 
 			registratorMock.DidNotReceive().RegisterInconsistency_ErrorInStorageData(Arg.Any<string>());
 		}
@@ -375,7 +375,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckStorageChecksums_IfSongChecksumsDifferAndFixFoundIssuesIsTrue_UpdatesSongChecksum()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song
 			{
@@ -398,11 +398,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var target = new RepositoryAndStorageMusicLibrary(repositoryMock, storageStub,
 				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub, Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
-			//	Act
+			// Act
 
 			target.CheckStorageChecksums(library, Substitute.For<ILibraryStorageInconsistencyRegistrator>(), true).Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(54321, song.Checksum);
 			Assert.AreEqual(54321, savedChecksum);
@@ -411,7 +411,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckStorageChecksums_IfSongChecksumsDifferAndFixFoundIssuesIsFalse_DoesNotUpdateSongChecksum()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song
 			{
@@ -432,11 +432,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var target = new RepositoryAndStorageMusicLibrary(repositoryMock, storageStub,
 				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub, Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
-			//	Act
+			// Act
 
 			target.CheckStorageChecksums(library, Substitute.For<ILibraryStorageInconsistencyRegistrator>(), false).Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(12345, song.Checksum);
 			repositoryMock.DidNotReceive().UpdateSong(Arg.Any<Song>());
@@ -445,7 +445,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckStorageChecksums_IfDiscImageChecksumDiffersFromStoredInRepository_RegistersStorageInconsistency()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song
 			{
@@ -477,11 +477,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
-			//	Act
+			// Act
 
 			target.CheckStorageChecksums(library, registratorMock, false).Wait();
 
-			//	Assert
+			// Assert
 
 			registratorMock.Received(1).RegisterInconsistency_ErrorInStorageData(Arg.Any<string>());
 		}
@@ -489,7 +489,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckStorageChecksums_IfDiscImageChecksumEqualsToStoredInRepository_DoesNotRegisterStorageInconsistency()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song
 			{
@@ -521,11 +521,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
-			//	Act
+			// Act
 
 			target.CheckStorageChecksums(library, registratorMock, false).Wait();
 
-			//	Assert
+			// Assert
 
 			registratorMock.DidNotReceive().RegisterInconsistency_ErrorInStorageData(Arg.Any<string>());
 		}
@@ -533,7 +533,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckStorageChecksums_IfDiscImageChecksumsDifferAndFixFoundIssuesIsTrue_UpdatesSongChecksum()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song
 			{
@@ -567,11 +567,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var target = new RepositoryAndStorageMusicLibrary(repositoryMock, storageStub,
 				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub, Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
-			//	Act
+			// Act
 
 			target.CheckStorageChecksums(library, Substitute.For<ILibraryStorageInconsistencyRegistrator>(), true).Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(54321, image.Checksum);
 			Assert.AreEqual(54321, savedChecksum);
@@ -580,7 +580,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckStorageChecksums_IfDiscImageChecksumsDifferAndFixFoundIssuesIsFalse_DoesNotUpdateSongChecksum()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song
 			{
@@ -612,11 +612,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var target = new RepositoryAndStorageMusicLibrary(repositoryMock, storageStub,
 				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), checksumCalculatorStub, Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
-			//	Act
+			// Act
 
 			target.CheckStorageChecksums(library, Substitute.For<ILibraryStorageInconsistencyRegistrator>(), false).Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(12345, image.Checksum);
 			repositoryMock.DidNotReceive().UpdateDiscImage(Arg.Any<DiscImage>());

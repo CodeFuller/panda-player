@@ -10,18 +10,18 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		[Test]
 		public void RegisterPlayback_IfPlaybackAdviseIsFavouriteArtistDisc_SetsPlaybacksSinceFavouriteArtistDiscToZero()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new PlaylistAdviserMemo
 			{
 				PlaybacksSinceFavouriteArtistDisc = 5,
 			};
 
-			//	Act
+			// Act
 
 			target.RegisterPlayback(AdvisedPlaylist.ForFavouriteArtistDisc(new Disc()));
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(0, target.PlaybacksSinceFavouriteArtistDisc);
 		}
@@ -29,18 +29,18 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		[Test]
 		public void RegisterPlayback_IfPlaybackAdviseIsHighlyRatedSongs_SetsPlaybacksSinceHighlyRatedSongsPlaylistToZero()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new PlaylistAdviserMemo
 			{
 				PlaybacksSinceFavouriteArtistDisc = 5,
 			};
 
-			//	Act
+			// Act
 
 			target.RegisterPlayback(AdvisedPlaylist.ForHighlyRatedSongs(new[] { new Song() }));
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(0, target.PlaybacksSinceHighlyRatedSongsPlaylist);
 		}
@@ -48,7 +48,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		[Test]
 		public void RegisterPlayback_IfPlaybackIsNotSpeciallyTracked_IncrementsAllPlaybacksCounters()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new PlaylistAdviserMemo
 			{
@@ -56,11 +56,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 				PlaybacksSinceFavouriteArtistDisc = 5,
 			};
 
-			//	Act
+			// Act
 
 			target.RegisterPlayback(AdvisedPlaylist.ForDisc(new Disc()));
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(8, target.PlaybacksSinceHighlyRatedSongsPlaylist);
 			Assert.AreEqual(6, target.PlaybacksSinceFavouriteArtistDisc);
@@ -69,7 +69,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		[Test]
 		public void Clone_CreatesExactObjectCopy()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new PlaylistAdviserMemo
 			{
@@ -77,11 +77,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 				PlaybacksSinceFavouriteArtistDisc = 5,
 			};
 
-			//	Act
+			// Act
 
 			var copy = target.Clone();
 
-			//	Assert
+			// Assert
 
 			var memoCopy = copy as PlaylistAdviserMemo;
 			Assert.IsNotNull(memoCopy);

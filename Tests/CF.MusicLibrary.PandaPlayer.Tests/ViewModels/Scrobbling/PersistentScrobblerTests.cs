@@ -15,7 +15,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 		[Test]
 		public void UpdateNowPlaying_InvokesScrobblerCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var track = new Track();
 
@@ -23,11 +23,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 
 			var target = new PersistentScrobbler(scrobblerMock, Substitute.For<IScrobblesProcessor>(), Substitute.For<ILogger<PersistentScrobbler>>());
 
-			//	Act
+			// Act
 
 			target.UpdateNowPlaying(track).Wait();
 
-			//	Assert
+			// Assert
 
 			scrobblerMock.Received(1).UpdateNowPlaying(track);
 		}
@@ -35,14 +35,14 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 		[Test]
 		public void UpdateNowPlaying_IfScrobblerThrows_DoesNotThrow()
 		{
-			//	Arrange
+			// Arrange
 
 			var scrobblerStub = Substitute.For<IScrobbler>();
 			scrobblerStub.UpdateNowPlaying(Arg.Any<Track>()).Throws(new InvalidOperationException());
 
 			var target = new PersistentScrobbler(scrobblerStub, Substitute.For<IScrobblesProcessor>(), Substitute.For<ILogger<PersistentScrobbler>>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.DoesNotThrow(() => target.UpdateNowPlaying(new Track()).Wait());
 		}
@@ -50,7 +50,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 		[Test]
 		public void Scrobble_InvokesScrobblesProcessorCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var trackScrobble = new TrackScrobble();
 
@@ -59,11 +59,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 
 			var target = new PersistentScrobbler(scrobbler, scrobblesProcessorMock, Substitute.For<ILogger<PersistentScrobbler>>());
 
-			//	Act
+			// Act
 
 			target.Scrobble(trackScrobble).Wait();
 
-			//	Assert
+			// Assert
 
 			scrobblesProcessorMock.Received(1).ProcessScrobble(trackScrobble, scrobbler);
 		}

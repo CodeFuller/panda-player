@@ -21,7 +21,7 @@ namespace CF.MusicLibrary.Library
 		private readonly ILogger<RepositoryAndStorageMusicLibrary> logger;
 
 		/// <summary>
-		/// Properoty injection for IClock.
+		/// Gets or sets IClock dependency.
 		/// </summary>
 		public IClock DateTimeFacade { get; set; } = new SystemClock();
 
@@ -66,7 +66,7 @@ namespace CF.MusicLibrary.Library
 		public async Task<string> GetDiscCoverImage(Disc disc)
 		{
 			var coverImage = disc.CoverImage;
-			return coverImage  == null ? null : await libraryStorage.GetDiscImageFile(disc.CoverImage);
+			return coverImage == null ? null : await libraryStorage.GetDiscImageFile(disc.CoverImage);
 		}
 
 		public async Task CheckStorage(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues)

@@ -33,6 +33,7 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 				{
 					ViewModel.SetImage(imageUri);
 				}
+
 				return;
 			}
 

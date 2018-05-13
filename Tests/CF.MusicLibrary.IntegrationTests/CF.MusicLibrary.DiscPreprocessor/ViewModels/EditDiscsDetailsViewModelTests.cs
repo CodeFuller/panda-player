@@ -22,9 +22,9 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 		[Test]
 		public void SetDiscs_ForAddedArtistDisc_FillsDiscDataCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
-			var addedDisc = new AddedDiscInfo(new AddedSongInfo[] {})
+			var addedDisc = new AddedDiscInfo(Array.Empty<AddedSongInfo>())
 			{
 				Year = 2000,
 				Title = "Some Disc (CD 1)",
@@ -37,11 +37,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
 			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>());
 
-			//	Act
+			// Act
 
 			target.SetDiscs(Enumerable.Repeat(addedDisc, 1)).Wait();
 
-			//	Assert
+			// Assert
 
 			var discItem = target.Discs.Single() as ArtistDiscViewItem;
 			Assert.IsNotNull(discItem);
@@ -57,7 +57,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 		[Test]
 		public void SetDiscs_ForArtistDiscOfKnownArtist_CopiesGenreFromLastArtistDisc()
 		{
-			//	Arrange
+			// Arrange
 
 			var artist = new Artist
 			{
@@ -105,11 +105,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			var discLibrary = new DiscLibrary(() => Task.FromResult(new[] { disc1, disc2 }.Select(d => d)));
 			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>());
 
-			//	Act
+			// Act
 
 			target.SetDiscs(Enumerable.Repeat(addedDisc, 1)).Wait();
 
-			//	Assert
+			// Assert
 
 			var discItem = target.Discs.Single();
 			Assert.AreSame(genre1, discItem.Genre);
@@ -118,7 +118,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 		[Test]
 		public void SetDiscs_ForAddedCompilationDiscWithArtistInfo_FillsDiscDataCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var addedSongs = new[]
 			{
@@ -137,11 +137,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
 			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>());
 
-			//	Act
+			// Act
 
 			target.SetDiscs(Enumerable.Repeat(addedDisc, 1)).Wait();
 
-			//	Assert
+			// Assert
 
 			var discItem = target.Discs.Single() as CompilationDiscWithArtistInfoViewItem;
 			Assert.IsNotNull(discItem);
@@ -157,7 +157,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 		[Test]
 		public void SetDiscs_ForAddedCompilationDiscWithoutArtistInfo_FillsDiscDataCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var addedSongs = new[]
 			{
@@ -176,11 +176,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Empty<Disc>()));
 			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>());
 
-			//	Act
+			// Act
 
 			target.SetDiscs(Enumerable.Repeat(addedDisc, 1)).Wait();
 
-			//	Assert
+			// Assert
 
 			var discItem = target.Discs.Single() as CompilationDiscWithoutArtistInfoViewItem;
 			Assert.IsNotNull(discItem);
@@ -196,7 +196,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 		[Test]
 		public void SetDiscs_ForExistingDisc_FillsDiscDataCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var existingArtist = new Artist();
 			var existingGenre = new Genre();
@@ -226,14 +226,14 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 				Artist = "Some Artist",
 			};
 
-			var discLibrary = new DiscLibrary(() => Task.FromResult(new[] {existingDisc}.AsEnumerable()));
+			var discLibrary = new DiscLibrary(() => Task.FromResult(new[] { existingDisc }.AsEnumerable()));
 			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>());
 
-			//	Act
+			// Act
 
 			target.SetDiscs(Enumerable.Repeat(addedDisc, 1)).Wait();
 
-			//	Assert
+			// Assert
 
 			var discItem = target.Discs.Single() as ExistingDiscViewItem;
 			Assert.IsNotNull(discItem);
@@ -249,7 +249,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 		[Test]
 		public void Songs_ReturnsCorrectSongsData()
 		{
-			//	Arrange
+			// Arrange
 
 			var existingArtist = new Artist();
 			var existingGenre = new Genre();
@@ -353,20 +353,20 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 
 			target.SetDiscs(discs).Wait();
 
-			//	Emulating editing of disc data by the user.
+			// Emulating editing of disc data by the user.
 			target.Discs[0].Genre = new Genre { Name = "Gothic Metal" };
 			target.Discs[1].Genre = new Genre { Name = "Soundtrack" };
 			target.Discs[1].Artist = new Artist { Name = "Hans Zimmer" };
 			target.Discs[1].Year = 2000;
 			target.Discs[2].Genre = new Genre { Name = "Soundtrack" };
 
-			//	Act
+			// Act
 
 			var songs = target.AddedSongs.ToList();
 
-			//	Assert
+			// Assert
 
-			//	Sanity check
+			// Sanity check
 			Assert.IsTrue(target.DataIsReady);
 
 			Assert.AreEqual(5, songs.Count);

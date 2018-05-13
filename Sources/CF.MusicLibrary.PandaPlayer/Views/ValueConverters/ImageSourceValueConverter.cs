@@ -8,10 +8,9 @@ using System.Windows.Media.Imaging;
 
 namespace CF.MusicLibrary.PandaPlayer.Views.ValueConverters
 {
-	/// <remarks>
-	/// https://stackoverflow.com/a/5628347/5740031, https://stackoverflow.com/a/29625691/5740031
-	/// </remarks>>
-	public class ImageSourceValueConverter :  IValueConverter
+	// https://stackoverflow.com/a/5628347/5740031
+	// https://stackoverflow.com/a/29625691/5740031
+	public class ImageSourceValueConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{

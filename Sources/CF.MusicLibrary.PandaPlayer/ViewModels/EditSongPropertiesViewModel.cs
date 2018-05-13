@@ -35,6 +35,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		private string fileName;
+
 		public string FileName
 		{
 			get => fileName;
@@ -44,6 +45,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				{
 					throw new InvalidOperationException("File name could not be edited in multi-song mode");
 				}
+
 				if (String.IsNullOrWhiteSpace(value))
 				{
 					throw new InvalidOperationException("Value of song file name could not be empty");
@@ -68,6 +70,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		private string title;
+
 		public string Title
 		{
 			get => title;
@@ -77,6 +80,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				{
 					throw new InvalidOperationException("Title could not be edited in multi-song mode");
 				}
+
 				if (String.IsNullOrWhiteSpace(value))
 				{
 					throw new InvalidOperationException("Value of song title could not be empty");
@@ -126,7 +130,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public async Task Save()
 		{
-			//	Should we rename a song?
+			// Should we rename a song?
 			if (editedSongs.Count == 1)
 			{
 				Uri newSongUri = UpdatedSongUri;
@@ -161,14 +165,17 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				{
 					song.Artist = Artist.Value;
 				}
+
 				if (Genre.HasValue)
 				{
 					song.Genre = Genre.Value;
 				}
+
 				if (Year.HasValue)
 				{
 					song.Year = Year.Value;
 				}
+
 				if (TrackNumber.HasValue)
 				{
 					song.TrackNumber = TrackNumber.Value;

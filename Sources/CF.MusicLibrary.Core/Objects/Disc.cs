@@ -63,7 +63,7 @@ namespace CF.MusicLibrary.Core.Objects
 
 		public DiscImage CoverImage
 		{
-			get { return Images.SingleOrDefault(im => im.ImageType == DiscImageType.Cover); }
+			get => Images.SingleOrDefault(im => im.ImageType == DiscImageType.Cover);
 			set
 			{
 				if (value != null && value.ImageType != DiscImageType.Cover)

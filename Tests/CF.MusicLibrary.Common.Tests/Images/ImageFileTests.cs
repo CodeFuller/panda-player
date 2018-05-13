@@ -32,7 +32,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void Load_IfPreviousFileWasSetToTemporaryFile_DeletesPreviousFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			IImageInfoProvider imageInfoProviderStub = Substitute.For<IImageInfoProvider>();
@@ -41,11 +41,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 
 			target.Load("PreviousImageFile.jpg", true);
 
-			//	Act
+			// Act
 
 			target.Load("NewImageFile.jpg", true);
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.Received(1).DeleteFile("PreviousImageFile.jpg");
 		}
@@ -53,18 +53,18 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void Load_IfPreviousFileWasSetToNonTemporaryFile_DoesNotDeletePreviousFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			var target = new ImageFile(Substitute.For<IDiscImageValidator>(), Substitute.For<IImageInfoProvider>(), fileSystemMock);
 
 			target.Load("PreviousImageFile.jpg", false);
 
-			//	Act
+			// Act
 
 			target.Load("NewImageFile.jpg", true);
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.DidNotReceive().DeleteFile(Arg.Any<string>());
 		}
@@ -72,7 +72,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void Load_SetsPropertiesCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			ImageInfo imageInfo = new ImageInfo
 			{
@@ -83,11 +83,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 
 			var target = new ImageFile(Substitute.For<IDiscImageValidator>(), imageInfoProviderStub, Substitute.For<IFileSystemFacade>());
 
-			//	Act
+			// Act
 
 			target.Load("DiscImageFile.jpg", true);
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(imageInfo, target.ImageInfo);
 			Assert.AreSame("DiscImageFile.jpg", target.ImageFileName);
@@ -97,7 +97,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void Load_RaisesPropertyChangedEventForAffectedProperties()
 		{
-			//	Arrange
+			// Arrange
 
 			IImageInfoProvider imageInfoProviderStub = Substitute.For<IImageInfoProvider>();
 			imageInfoProviderStub.GetImageInfo("DiscImageFile.jpg").Returns(x => new ImageInfo { FileName = "DiscImageFile.jpg" });
@@ -106,11 +106,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 			var changedProperties = new List<string>();
 			target.PropertyChanged += (sender, e) => changedProperties.Add(e.PropertyName);
 
-			//	Act
+			// Act
 
 			target.Load("DiscImageFile.jpg", true);
 
-			//	Assert
+			// Assert
 
 			Assert.Contains(nameof(ImageFile.ImageInfo), changedProperties);
 			Assert.Contains(nameof(ImageFile.ImageFileName), changedProperties);
@@ -122,7 +122,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void Unload_IfPreviousFileWasSetToTemporaryFile_DeletesPreviousFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			IImageInfoProvider imageInfoProviderStub = Substitute.For<IImageInfoProvider>();
@@ -131,11 +131,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 
 			target.Load("PreviousImageFile.jpg", true);
 
-			//	Act
+			// Act
 
 			target.Unload();
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.Received(1).DeleteFile("PreviousImageFile.jpg");
 		}
@@ -143,7 +143,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void Unload_IfPreviousFileWasSetToNonTemporaryFile_DoesNotDeletePreviousFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			IImageInfoProvider imageInfoProviderStub = Substitute.For<IImageInfoProvider>();
@@ -152,11 +152,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 
 			target.Load("PreviousImageFile.jpg", false);
 
-			//	Act
+			// Act
 
 			target.Unload();
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.DidNotReceive().DeleteFile(Arg.Any<string>());
 		}
@@ -164,11 +164,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void ImageIsValidGetter_IfImageIsNotSet_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new ImageFile(Substitute.For<IDiscImageValidator>(), Substitute.For<IImageInfoProvider>(), Substitute.For<IFileSystemFacade>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.ImageIsValid);
 		}
@@ -176,7 +176,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void ImageIsValidGetter_IfCurrentImageIsValid_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			ImageInfo imageInfo = new ImageInfo();
 			IImageInfoProvider imageInfoProviderStub = Substitute.For<IImageInfoProvider>();
@@ -188,7 +188,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 			var target = new ImageFile(discImageValidatorStub, imageInfoProviderStub, Substitute.For<IFileSystemFacade>());
 			target.Load("DiscImageFile.jpg", true);
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsTrue(target.ImageIsValid);
 		}
@@ -196,7 +196,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void ImageIsValidGetter_IfCurrentImageIsNotValid_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			ImageInfo imageInfo = new ImageInfo();
 			IImageInfoProvider imageInfoProviderStub = Substitute.For<IImageInfoProvider>();
@@ -208,7 +208,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 			var target = new ImageFile(discImageValidatorStub, imageInfoProviderStub, Substitute.For<IFileSystemFacade>());
 			target.Load("DiscImageFile.jpg", true);
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.ImageIsValid);
 		}
@@ -216,11 +216,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void ImagePropertiesGetter_IfImageIsNotSet_ReturnsNotNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new ImageFile(Substitute.For<IDiscImageValidator>(), Substitute.For<IImageInfoProvider>(), Substitute.For<IFileSystemFacade>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsNotNull(target.ImageProperties);
 		}
@@ -228,11 +228,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void ImageStatusGetter_IfImageIsNotSet_ReturnsNotNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new ImageFile(Substitute.For<IDiscImageValidator>(), Substitute.For<IImageInfoProvider>(), Substitute.For<IFileSystemFacade>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsNotNull(target.ImageStatus);
 		}
@@ -240,7 +240,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void ImageStatusGetter_ReturnsSemicolonSeparatedListOfValidationHints()
 		{
-			//	Arrange
+			// Arrange
 
 			ImageInfo imageInfo = new ImageInfo();
 			IImageInfoProvider imageInfoProviderStub = Substitute.For<IImageInfoProvider>();
@@ -248,12 +248,13 @@ namespace CF.MusicLibrary.Common.Tests.Images
 
 			IDiscImageValidator discImageValidatorStub = Substitute.For<IDiscImageValidator>();
 			discImageValidatorStub.ValidateDiscCoverImage(imageInfo).Returns(ImageValidationResults.ImageIsTooSmall | ImageValidationResults.UnsupportedFormat);
-			discImageValidatorStub.GetValidationResultsHints(ImageValidationResults.ImageIsTooSmall | ImageValidationResults.UnsupportedFormat).Returns(new []{ "Hint1", "Hint2" });
+			discImageValidatorStub.GetValidationResultsHints(ImageValidationResults.ImageIsTooSmall | ImageValidationResults.UnsupportedFormat)
+				.Returns(new[] { "Hint1", "Hint2" });
 
 			var target = new ImageFile(discImageValidatorStub, imageInfoProviderStub, Substitute.For<IFileSystemFacade>());
 			target.Load("DiscImageFile.jpg", true);
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual("Hint1; Hint2", target.ImageStatus);
 		}

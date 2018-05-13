@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CF.MusicLibrary.LibraryChecker.Checkers
 {
-	class StorageConsistencyChecker : IStorageConsistencyChecker
+	internal class StorageConsistencyChecker : IStorageConsistencyChecker
 	{
 		private readonly IMusicLibrary musicLibrary;
 

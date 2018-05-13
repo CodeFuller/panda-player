@@ -9,6 +9,12 @@ namespace CF.MusicLibrary.Common.Images
 {
 	public class DiscImageValidator : IDiscImageValidator
 	{
+		private const int MinWidthAndHeight = 300;
+
+		private const int MaxWidthAndHeight = 5000;
+
+		private const long MaxFileSize = 10 * 1024 * 1024;
+
 		private class SupportedImageFormat
 		{
 			public ImageFormatType ImageFormat { get; }
@@ -27,12 +33,6 @@ namespace CF.MusicLibrary.Common.Images
 			new SupportedImageFormat(ImageFormatType.Jpeg, ".jpg"),
 			new SupportedImageFormat(ImageFormatType.Png, ".png"),
 		};
-
-		private const int MinWidthAndHeight = 300;
-
-		private const int MaxWidthAndHeight = 5000;
-
-		private const long MaxFileSize = 10 * 1024 * 1024;
 
 		public ImageValidationResults ValidateDiscCoverImage(ImageInfo imageInfo)
 		{

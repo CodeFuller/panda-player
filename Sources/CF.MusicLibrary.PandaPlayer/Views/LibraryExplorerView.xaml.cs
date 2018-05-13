@@ -21,9 +21,7 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 			InitializeComponent();
 		}
 
-		/// <remarks>
-		/// https://stackoverflow.com/a/29081353/5740031
-		/// </remarks>
+		// https://stackoverflow.com/a/29081353/5740031
 		private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			DataGrid dg = sender as DataGrid;
@@ -38,7 +36,8 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 		private static void SelectRowByIndex(DataGrid dataGrid, int rowIndex)
 		{
 			DataGridRow row = dataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) as DataGridRow;
-			//	https://stackoverflow.com/a/27792628/5740031
+
+			// https://stackoverflow.com/a/27792628/5740031
 			if (row == null)
 			{
 				dataGrid.UpdateLayout();
@@ -58,9 +57,9 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 			DataGridCellsPresenter presenter = FindVisualChild<DataGridCellsPresenter>(rowContainer);
 			if (presenter == null)
 			{
-				//	If the row has been virtualized away, call its ApplyTemplate() method
-				//	to build its visual tree in order for the DataGridCellsPresenter
-				//	and the DataGridCells to be created
+				// If the row has been virtualized away, call its ApplyTemplate() method
+				// to build its visual tree in order for the DataGridCellsPresenter
+				// and the DataGridCells to be created
 				rowContainer.ApplyTemplate();
 				presenter = FindVisualChild<DataGridCellsPresenter>(rowContainer);
 			}
@@ -70,7 +69,7 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 				DataGridCell cell = presenter.ItemContainerGenerator.ContainerFromIndex(column) as DataGridCell;
 				if (cell == null)
 				{
-					//	Bring the column into view in case it has been virtualized away
+					// Bring the column into view in case it has been virtualized away
 					dataGrid.ScrollIntoView(rowContainer, dataGrid.Columns[column]);
 					cell = presenter.ItemContainerGenerator.ContainerFromIndex(column) as DataGridCell;
 				}
@@ -151,9 +150,7 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 			}
 		}
 
-		/// <remarks>
-		/// https://stackoverflow.com/a/5826175/5740031
-		/// </remarks>
+		// https://stackoverflow.com/a/5826175/5740031
 		public static string GetTextFromKey(Key key)
 		{
 			int virtualKey = KeyInterop.VirtualKeyFromKey(key);

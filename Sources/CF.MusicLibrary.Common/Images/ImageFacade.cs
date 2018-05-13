@@ -8,6 +8,7 @@ namespace CF.MusicLibrary.Common.Images
 	public sealed class ImageFacade : IImageFacade
 	{
 		private readonly Image image;
+
 		private Image Image
 		{
 			get

@@ -12,7 +12,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void ArtistGetter_WhenAllSongsHaveSameArtist_ReturnsThisArtist()
 		{
-			//	Arrange
+			// Arrange
 
 			var artist = new Artist();
 
@@ -25,11 +25,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				}
 			};
 
-			//	Act
+			// Act
 
 			var returnedArtist = disc.Artist;
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(artist, returnedArtist);
 		}
@@ -37,7 +37,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void ArtistGetter_WhenSongsHaveDifferentArtists_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -48,11 +48,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				}
 			};
 
-			//	Act
+			// Act
 
 			var returnedArtist = disc.Artist;
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(returnedArtist);
 		}
@@ -60,7 +60,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void ArtistGetter_WhenSomeSongsHaveNullArtist_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -71,11 +71,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				}
 			};
 
-			//	Act
+			// Act
 
 			var returnedArtist = disc.Artist;
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(returnedArtist);
 		}
@@ -83,32 +83,32 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void GenreGetter_WhenAllSongsHaveSameGenre_ReturnsThisGenre()
 		{
-			//	Arrange
+			// Arrange
 
-			var Genre = new Genre();
+			var genre = new Genre();
 
 			var disc = new Disc
 			{
 				SongsUnordered = new List<Song>
 				{
-					new Song { Genre = Genre },
-					new Song { Genre = Genre },
+					new Song { Genre = genre },
+					new Song { Genre = genre },
 				}
 			};
 
-			//	Act
+			// Act
 
 			var returnedGenre = disc.Genre;
 
-			//	Assert
+			// Assert
 
-			Assert.AreSame(Genre, returnedGenre);
+			Assert.AreSame(genre, returnedGenre);
 		}
 
 		[Test]
 		public void GenreGetter_WhenSongsHaveDifferentGenres_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -119,11 +119,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				}
 			};
 
-			//	Act
+			// Act
 
 			var returnedGenre = disc.Genre;
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(returnedGenre);
 		}
@@ -131,7 +131,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void GenreGetter_WhenSomeSongsHaveNullGenre_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -142,11 +142,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				}
 			};
 
-			//	Act
+			// Act
 
 			var returnedGenre = disc.Artist;
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(returnedGenre);
 		}
@@ -154,7 +154,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void YearGetter_WhenAllSongsHaveSameYear_ReturnsThisYear()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -165,11 +165,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				}
 			};
 
-			//	Act
+			// Act
 
 			var returnedYear = disc.Year;
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(2017, returnedYear);
 		}
@@ -177,7 +177,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void YearGetter_WhenSongsHaveDifferentYears_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -188,11 +188,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				}
 			};
 
-			//	Act
+			// Act
 
 			var returnedYear = disc.Year;
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(returnedYear);
 		}
@@ -200,7 +200,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void YearGetter_WhenSomeSongsHaveNullYear_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -211,11 +211,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				}
 			};
 
-			//	Act
+			// Act
 
 			var returnedYear = disc.Year;
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(returnedYear);
 		}
@@ -223,7 +223,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void LastPlaybackTimeGetter_WhenAllSongsHaveLastPlaybackTime_ReturnsEarliestSongLastPlaybackTime()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -235,11 +235,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				}
 			};
 
-			//	Act
+			// Act
 
 			var lastPlaybackTime = disc.LastPlaybackTime;
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(new DateTime(2017, 04, 03), lastPlaybackTime);
 		}
@@ -247,7 +247,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void LastPlaybackTimeGetter_WhenSomeSongsHaveNoLastPlaybackTime_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -258,11 +258,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				}
 			};
 
-			//	Act
+			// Act
 
 			var lastPlaybackTime = disc.LastPlaybackTime;
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(lastPlaybackTime);
 		}
@@ -270,7 +270,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void LastPlaybackTimeGetter_IfDiscIsDeleted_ReturnsEarliestSongLastPlaybackTime()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -282,11 +282,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				}
 			};
 
-			//	Act
+			// Act
 
 			var lastPlaybackTime = disc.LastPlaybackTime;
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(new DateTime(2017, 04, 03), lastPlaybackTime);
 		}
@@ -294,7 +294,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void LastPlaybackTimeGetter_IfDiscIsDeletedAndSomeSongsHaveNoLastPlaybackTime_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -305,11 +305,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				}
 			};
 
-			//	Act
+			// Act
 
 			var lastPlaybackTime = disc.LastPlaybackTime;
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(lastPlaybackTime);
 		}
@@ -317,7 +317,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void LastPlaybackTimeGetter_IfSomeSongsAreDeleted_ReturnsEarliestSongLastPlaybackTimeAmongActiveSongs()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -330,11 +330,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				}
 			};
 
-			//	Act
+			// Act
 
 			var lastPlaybackTime = disc.LastPlaybackTime;
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(new DateTime(2017, 04, 03), lastPlaybackTime);
 		}
@@ -342,7 +342,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void LastPlaybackTimeGetter_IfSomeSongsAreDeletedAndSomeActiveSongsHaveNoLastPlaybackTime_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -354,11 +354,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				}
 			};
 
-			//	Act
+			// Act
 
 			var lastPlaybackTime = disc.LastPlaybackTime;
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(lastPlaybackTime);
 		}
@@ -366,18 +366,18 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void SongsGetter_ReturnsAllActiveSongs()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
 
 			var disc = new Disc { SongsUnordered = new[] { song1, song2 } };
 
-			//	Act
+			// Act
 
 			var songs = disc.Songs;
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(new[] { song1, song2 }, songs);
 		}
@@ -385,11 +385,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void SongsGetter_DoesNotReturnDeletedSongs()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc { SongsUnordered = new[] { new Song { DeleteDate = new DateTime(2017, 09, 30) } } };
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsEmpty(disc.Songs);
 		}
@@ -397,7 +397,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void SongsGetter_IfAllSongsHaveTrackNumbers_OrdersSongsByTrackNumber()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song
 			{
@@ -422,7 +422,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 
 			var disc = new Disc { SongsUnordered = new[] { song3, song2, song1 } };
 
-			//	Act & Assert
+			// Act & Assert
 
 			CollectionAssert.AreEqual(new[] { song1, song2, song3 }, disc.Songs);
 		}
@@ -430,7 +430,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void SongsGetter_IfSomeSongsDoNotHaveTrackNumber_ReturnsThemAtTheTailOrderedByArtistName()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song
 			{
@@ -455,7 +455,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 
 			var disc = new Disc { SongsUnordered = new[] { song3, song2, song1 } };
 
-			//	Act & Assert
+			// Act & Assert
 
 			CollectionAssert.AreEqual(new[] { song1, song2, song3 }, disc.Songs);
 		}
@@ -463,7 +463,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void SongsGetter_IfSomeSongsDoNotHaveTrackNumberAndArtist_ReturnsThemAtTheTailOrderedByTitle()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song
 			{
@@ -495,7 +495,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 
 			var disc = new Disc { SongsUnordered = new[] { song4, song3, song2, song1 } };
 
-			//	Act & Assert
+			// Act & Assert
 
 			CollectionAssert.AreEqual(new[] { song1, song2, song3, song4 }, disc.Songs);
 		}
@@ -503,7 +503,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void CoverImageGetter_IfDiscContainsCoverImage_ReturnsThisImage()
 		{
-			//	Arrange
+			// Arrange
 
 			var otherImage = new DiscImage { ImageType = DiscImageType.None };
 			var coverImage = new DiscImage { ImageType = DiscImageType.Cover };
@@ -512,7 +512,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				Images = { otherImage, coverImage },
 			};
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreSame(coverImage, target.CoverImage);
 		}
@@ -520,14 +520,14 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void CoverImageGetter_IfDiscContainsNoCoverImage_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new Disc
 			{
 				Images = { new DiscImage { ImageType = DiscImageType.None } },
 			};
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsNull(target.CoverImage);
 		}
@@ -535,7 +535,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void CoverImageSetter_IfDiscContainsCoverImage_ReplacesCoverImageWithNewValue()
 		{
-			//	Arrange
+			// Arrange
 
 			var coverImage = new DiscImage { ImageType = DiscImageType.Cover };
 			var newCoverImage = new DiscImage { ImageType = DiscImageType.Cover };
@@ -549,11 +549,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				},
 			};
 
-			//	Act
+			// Act
 
 			target.CoverImage = newCoverImage;
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(newCoverImage, target.CoverImage);
 			Assert.AreEqual(2, target.Images.Count);
@@ -562,7 +562,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void CoverImageSetter_IfDiscContainsNoCoverImage_AddsNewCoverImage()
 		{
-			//	Arrange
+			// Arrange
 
 			var newCoverImage = new DiscImage { ImageType = DiscImageType.Cover };
 
@@ -571,11 +571,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				Images = { new DiscImage { ImageType = DiscImageType.None } },
 			};
 
-			//	Act
+			// Act
 
 			target.CoverImage = newCoverImage;
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(newCoverImage, target.CoverImage);
 			Assert.AreEqual(2, target.Images.Count);
@@ -584,13 +584,13 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void CoverImageSetter_IfNewImageIsNotCoverImage_ThrowsInvalidOperationException()
 		{
-			//	Arrange
+			// Arrange
 
 			var newCoverImage = new DiscImage { ImageType = DiscImageType.None };
 
 			var target = new Disc();
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.CoverImage = newCoverImage);
 		}
@@ -598,7 +598,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void CoverImageSetter_IfValueIsNull_RemovesExistingDiscCoverImage()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new Disc
 			{
@@ -609,11 +609,11 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				},
 			};
 
-			//	Act
+			// Act
 
 			target.CoverImage = null;
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(target.CoverImage);
 			Assert.AreEqual(1, target.Images.Count);
@@ -622,18 +622,18 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void IsDeletedGetter_WhenSomeSongsAreNotDeleted_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
 				SongsUnordered = new[]
 				{
-					new Song { DeleteDate = null},
-					new Song { DeleteDate = new DateTime(2017, 09, 30)},
+					new Song { DeleteDate = null },
+					new Song { DeleteDate = new DateTime(2017, 09, 30) },
 				}
 			};
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(disc.IsDeleted);
 		}
@@ -641,18 +641,18 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		[Test]
 		public void IsDeletedGetter_WhenAllSongsAreDeleted_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
 				SongsUnordered = new[]
 				{
-					new Song { DeleteDate = new DateTime(2017, 09, 30)},
-					new Song { DeleteDate = new DateTime(2017, 09, 30)},
+					new Song { DeleteDate = new DateTime(2017, 09, 30) },
+					new Song { DeleteDate = new DateTime(2017, 09, 30) },
 				}
 			};
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsTrue(disc.IsDeleted);
 		}

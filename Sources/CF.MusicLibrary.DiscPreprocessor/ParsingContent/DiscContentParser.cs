@@ -22,7 +22,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingContent
 				throw new ArgumentNullException(nameof(content));
 			}
 
-			return Parse(content.Split(new [] { "\r\n", "\n" }, StringSplitOptions.None));
+			return Parse(content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None));
 		}
 
 		private IEnumerable<DiscContent> Parse(IEnumerable<string> content)

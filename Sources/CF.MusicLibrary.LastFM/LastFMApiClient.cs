@@ -13,8 +13,8 @@ using CF.MusicLibrary.LastFM.Objects;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using static System.FormattableString;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
+using static System.FormattableString;
 
 namespace CF.MusicLibrary.LastFM
 {
@@ -54,15 +54,17 @@ namespace CF.MusicLibrary.LastFM
 
 			var requestParams = new NameValueCollection
 			{
-				{ "method", "track.updateNowPlaying"},
+				{ "method", "track.updateNowPlaying" },
 				{ "artist", track.Artist },
 				{ "track", track.Title },
 				{ "duration", track.Duration.TotalSeconds.ToString(CultureInfo.InvariantCulture) },
 			};
+
 			if (!String.IsNullOrEmpty(track.Album.Title))
 			{
 				requestParams.Add("album", track.Album.Title);
 			}
+
 			if (track.Number.HasValue)
 			{
 				requestParams.Add("trackNumber", track.Number.Value.ToString(CultureInfo.InvariantCulture));
@@ -93,6 +95,7 @@ namespace CF.MusicLibrary.LastFM
 			{
 				requestParams.Add("album", trackScrobble.Track.Album.Title);
 			}
+
 			if (trackScrobble.Track.Number.HasValue)
 			{
 				requestParams.Add("trackNumber", trackScrobble.Track.Number.Value.ToString(CultureInfo.InvariantCulture));
@@ -103,6 +106,7 @@ namespace CF.MusicLibrary.LastFM
 			{
 				logger.LogWarning($"{response.Scrobbles.Statistics.Ignored} tracks ignored");
 			}
+
 			LogCorrections(trackScrobble.Track, response.Scrobbles.Scrobble);
 		}
 
@@ -166,14 +170,17 @@ namespace CF.MusicLibrary.LastFM
 			{
 				logger.LogWarning(Current($"Corrected artist: '{track.Artist}' -> '{trackInfo.Artist.Text}'"));
 			}
+
 			if (trackInfo.Album.Corrected)
 			{
 				logger.LogWarning(Current($"Corrected album: '{track.Album}' -> '{trackInfo.Album.Text}'"));
 			}
+
 			if (trackInfo.Track.Corrected)
 			{
 				logger.LogWarning(Current($"Corrected track: '{track.Title}' -> '{trackInfo.Track.Text}'"));
 			}
+
 			if (!String.IsNullOrEmpty(trackInfo.IgnoredMessage.Text))
 			{
 				logger.LogWarning(Current($"Ignored track message: '{trackInfo.IgnoredMessage.Text}'"));
@@ -190,7 +197,7 @@ namespace CF.MusicLibrary.LastFM
 		{
 			var requestParams = new NameValueCollection
 				{
-					{ "method", "auth.getToken"},
+					{ "method", "auth.getToken" },
 				};
 
 			GetTokenResponse response = await PerformGetRequest<GetTokenResponse>(requestParams, false);
@@ -202,7 +209,7 @@ namespace CF.MusicLibrary.LastFM
 		{
 			var requestParams = new NameValueCollection
 				{
-					{ "method", "auth.getSession"},
+					{ "method", "auth.getSession" },
 					{ "token", token },
 				};
 
@@ -303,10 +310,11 @@ namespace CF.MusicLibrary.LastFM
 				CheckSession();
 				requestParamsWithSignature.Add("sk", settings.SessionKey);
 			}
+
 			requestParamsWithSignature.Add("api_sig", CalcCallSign(requestParamsWithSignature));
 
-			//	'format' is not a part of method signature.
-			//	That's why it's not in signed part.
+			// 'format' is not a part of method signature.
+			// That's why it's not in signed part.
 			requestParamsWithSignature.Add("format", "json");
 
 			return requestParamsWithSignature;
@@ -316,7 +324,7 @@ namespace CF.MusicLibrary.LastFM
 		{
 			return BuildQueryString(BuildApiMethodRequestParams(requestParams, requiresAuthentication));
 		}
-		
+
 		private static string BuildQueryString(NameValueCollection requestParams)
 		{
 			var paramsValues = from key in requestParams.AllKeys
@@ -328,7 +336,8 @@ namespace CF.MusicLibrary.LastFM
 
 		private string CalcCallSign(NameValueCollection requestParams)
 		{
-			var paramsValues = from key in requestParams.AllKeys orderby key
+			var paramsValues = from key in requestParams.AllKeys
+							   orderby key
 							   from value in requestParams.GetValues(key)
 							   select Invariant($"{key}{value}");
 

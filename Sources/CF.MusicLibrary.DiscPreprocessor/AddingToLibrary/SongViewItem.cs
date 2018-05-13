@@ -12,7 +12,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public Uri StorageUri => Song.Uri;
 
-		//	See comment in XAML why Artist column is read-only
+		// See comment in XAML why Artist column is read-only.
 		public string ArtistName => Song.Artist?.Name;
 
 		public string AlbumTitle => Song.Disc.AlbumTitle;
@@ -20,25 +20,41 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		public short? Year
 		{
 			get => Song.Year;
-			set { Song.Year = value; RaisePropertyChanged(); }
+			set
+			{
+				Song.Year = value;
+				RaisePropertyChanged();
+			}
 		}
 
 		public Genre Genre
 		{
 			get => Song.Genre;
-			set { Song.Genre = value; RaisePropertyChanged(); }
+			set
+			{
+				Song.Genre = value;
+				RaisePropertyChanged();
+			}
 		}
 
 		public short? Track
 		{
 			get => Song.TrackNumber;
-			set { Song.TrackNumber = value; RaisePropertyChanged(); }
+			set
+			{
+				Song.TrackNumber = value;
+				RaisePropertyChanged();
+			}
 		}
 
 		public string Title
 		{
 			get => Song.Title;
-			set { Song.Title = value; RaisePropertyChanged(); }
+			set
+			{
+				Song.Title = value;
+				RaisePropertyChanged();
+			}
 		}
 
 		public SongViewItem(AddedSong addedSong)

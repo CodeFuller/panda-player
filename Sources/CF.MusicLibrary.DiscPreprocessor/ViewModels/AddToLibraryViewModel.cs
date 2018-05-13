@@ -29,6 +29,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		public string Name => "Add To Library";
 
 		private bool dataIsReady;
+
 		public bool DataIsReady
 		{
 			get => dataIsReady;
@@ -38,6 +39,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		public ICommand AddToLibraryCommand { get; }
 
 		private int currProgress;
+
 		public int CurrProgress
 		{
 			get => currProgress;
@@ -45,6 +47,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		}
 
 		private int progressSize;
+
 		public int ProgressSize
 		{
 			get => progressSize;
@@ -52,6 +55,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		}
 
 		private string progressMessages;
+
 		public string ProgressMessages
 		{
 			get => progressMessages;

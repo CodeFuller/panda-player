@@ -15,11 +15,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		public string SourcePath { get; }
 
 		public abstract string DiscTypeTitle { get; }
+
 		public virtual bool WarnAboutDiscType => false;
 
 		public abstract Artist Artist { get; set; }
+
 		public abstract bool ArtistIsEditable { get; }
+
 		public abstract bool ArtistIsNotFilled { get; }
+
 		public bool ArtistIsNew => Artist?.Id == 0;
 
 		public Collection<Artist> AvailableArtists { get; }
@@ -27,14 +31,19 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		public string DiscTitle => Disc.Title;
 
 		public abstract string AlbumTitle { get; set; }
+
 		public abstract bool AlbumTitleIsEditable { get; }
+
 		public bool WarnAboutUnequalAlbumTitle => AlbumTitleIsEditable && !String.Equals(AlbumTitle, DiscTitle, StringComparison.OrdinalIgnoreCase);
 
 		public virtual short? Year { get; set; }
+
 		public abstract bool YearIsEditable { get; }
+
 		public bool WarnAboutNotFilledYear => YearIsEditable && !Year.HasValue;
 
 		private Genre genre;
+
 		public Genre Genre
 		{
 			get => genre;
@@ -62,21 +71,22 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		{
 			get
 			{
-				var songs = SourceSongs.Select(s => new AddedSong(new Song
-				{
-					Disc = Disc,
-					Artist = GetSongArtist(s),
-					TrackNumber = s.Track,
-					Year = Year,
-					Title = s.Title,
-					Genre = Genre,
-					Rating = null,
-					LastPlaybackTime = null,
-					PlaybacksCount = 0,
-				}, s.SourcePath)).ToCollection();
+				var songs = SourceSongs.Select(s => new AddedSong(
+					new Song
+					{
+						Disc = Disc,
+						Artist = GetSongArtist(s),
+						TrackNumber = s.Track,
+						Year = Year,
+						Title = s.Title,
+						Genre = Genre,
+						Rating = null,
+						LastPlaybackTime = null,
+						PlaybacksCount = 0,
+					}, s.SourcePath))
+					.ToCollection();
 
-				//	We do not fill Disc.Songs collection as MusicLibraryRepository.AddSong() requries
-
+				// We do not fill Disc.Songs collection as MusicLibraryRepository.AddSong() requries
 				return songs;
 			}
 		}

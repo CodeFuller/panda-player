@@ -5,17 +5,17 @@ using CF.MusicLibrary.DiscPreprocessor.Behaviors;
 
 namespace CF.MusicLibrary.DiscPreprocessor.Extensions
 {
-	/// <summary>
-	/// Extension methods fo the DependencyObject objects
-	/// </summary>
-	/// <remarks>
-	/// Copy/paste from https://treeviewinplaceedit.codeplex.com
-	/// </remarks>>
+	// Copy/paste from https://treeviewinplaceedit.codeplex.com
 	public static class DependencyObjectExtension
 	{
 		/// <summary>
 		/// Find a sequence of children of type T
 		/// </summary>
+		/// <typeparam name="T">Type of control to search.</typeparam>
+		/// <param name="control">Child control.</param>
+		/// <returns>
+		/// First parent control of type T.
+		/// </returns>
 		public static T ParentOfType<T>(this DependencyObject control) where T : DependencyObject
 		{
 			return ParentOfType<T>(control, null);
@@ -24,6 +24,12 @@ namespace CF.MusicLibrary.DiscPreprocessor.Extensions
 		/// <summary>
 		/// Find a sequence of children of type T and apply filter if applicable
 		/// </summary>
+		/// <typeparam name="T">Type of control to search.</typeparam>
+		/// <param name="control">Child control.</param>
+		/// <param name="filter">Filter that should be met.</param>
+		/// <returns>
+		/// First parent control of type T that satisfies given filter.
+		/// </returns>
 		public static T ParentOfType<T>(this DependencyObject control, Predicate<T> filter) where T : DependencyObject
 		{
 			var parent = VisualTreeHelper.GetParent(control);

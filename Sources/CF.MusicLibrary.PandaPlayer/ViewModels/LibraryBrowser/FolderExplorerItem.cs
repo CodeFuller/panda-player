@@ -11,8 +11,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 
 		public bool IsParentItem { get; set; }
 
-		public FolderExplorerItem(Uri uri) :
-			base(uri)
+		public FolderExplorerItem(Uri uri)
+			: base(uri)
 		{
 		}
 	}

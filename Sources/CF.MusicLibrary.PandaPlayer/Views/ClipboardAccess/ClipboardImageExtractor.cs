@@ -1,76 +1,30 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace CF.MusicLibrary.PandaPlayer.Views.ClipboardAccess
 {
-	public static class BinaryStructConverter
-	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes")]
-		public static T FromByteArray<T>(byte[] bytes) where T : struct
-		{
-			IntPtr ptr = IntPtr.Zero;
-			try
-			{
-				int size = Marshal.SizeOf(typeof(T));
-				ptr = Marshal.AllocHGlobal(size);
-				Marshal.Copy(bytes, 0, ptr, size);
-				object obj = Marshal.PtrToStructure(ptr, typeof(T));
-				return (T)obj;
-			}
-			finally
-			{
-				if (ptr != IntPtr.Zero)
-				{
-					Marshal.FreeHGlobal(ptr);
-				}
-			}
-		}
-
-		public static byte[] ToByteArray<T>(T obj) where T : struct
-		{
-			IntPtr ptr = IntPtr.Zero;
-			try
-			{
-				int size = Marshal.SizeOf(typeof(T));
-				ptr = Marshal.AllocHGlobal(size);
-				Marshal.StructureToPtr(obj, ptr, true);
-				byte[] bytes = new byte[size];
-				Marshal.Copy(ptr, bytes, 0, size);
-				return bytes;
-			}
-			finally
-			{
-				if (ptr != IntPtr.Zero)
-				{
-					Marshal.FreeHGlobal(ptr);
-				}
-			}
-		}
-	}
-
-	/// <remarks>
-	/// https://www.thomaslevesque.com/2009/02/05/wpf-paste-an-image-from-the-clipboard/
-	/// </remarks>>
+	// https://www.thomaslevesque.com/2009/02/05/wpf-paste-an-image-from-the-clipboard/
 	internal class ClipboardImageExtractor : IClipboardImageExtractor
 	{
 		[StructLayout(LayoutKind.Sequential, Pack = 2)]
 		private struct BITMAPFILEHEADER
 		{
 			public const short BM = 0x4d42;
-
+#pragma warning disable SA1307 // Accessible fields must begin with upper-case letter
 			public short bfType;
 			public int bfSize;
 			public short bfReserved1;
 			public short bfReserved2;
 			public int bfOffBits;
+#pragma warning restore SA1307 // Accessible fields must begin with upper-case letter
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
 		private struct BITMAPINFOHEADER
 		{
+#pragma warning disable SA1307 // Accessible fields must begin with upper-case letter
 			public int biSize;
 			public int biWidth;
 			public int biHeight;
@@ -82,6 +36,7 @@ namespace CF.MusicLibrary.PandaPlayer.Views.ClipboardAccess
 			public int biYPelsPerMeter;
 			public int biClrUsed;
 			public int biClrImportant;
+#pragma warning restore SA1307 // Accessible fields must begin with upper-case letter
 		}
 
 		public BitmapFrame GetImageFromClipboard()
@@ -112,7 +67,7 @@ namespace CF.MusicLibrary.PandaPlayer.Views.ClipboardAccess
 				bfSize = fileSize,
 				bfReserved1 = 0,
 				bfReserved2 = 0,
-				bfOffBits = fileHeaderSize + infoHeaderSize + infoHeader.biClrUsed * 4
+				bfOffBits = fileHeaderSize + infoHeaderSize + (infoHeader.biClrUsed * 4)
 			};
 
 			byte[] fileHeaderBytes = BinaryStructConverter.ToByteArray<BITMAPFILEHEADER>(fileHeader);

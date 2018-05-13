@@ -18,7 +18,7 @@ namespace CF.MusicLibrary.Local
 
 		public Uri ReplaceDiscPartInUri(Uri discUri, string discPart)
 		{
-			var parts = (new ItemUriParts(discUri)).ToList();
+			var parts = new ItemUriParts(discUri).ToList();
 			parts[parts.Count - 1] = discPart;
 			return ItemUriParts.Join(parts);
 		}
@@ -35,13 +35,13 @@ namespace CF.MusicLibrary.Local
 
 		public string GetDiscFolderName(Uri discUri)
 		{
-			var parts = (new ItemUriParts(discUri)).ToList();
+			var parts = new ItemUriParts(discUri).ToList();
 			return parts[parts.Count - 1];
 		}
 
 		public string GetFileNameFromUri(Uri songUri)
 		{
-			var parts = (new ItemUriParts(songUri)).ToList();
+			var parts = new ItemUriParts(songUri).ToList();
 			return parts[parts.Count - 1];
 		}
 

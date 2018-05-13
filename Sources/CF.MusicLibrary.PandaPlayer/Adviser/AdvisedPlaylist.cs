@@ -15,6 +15,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser
 		public IReadOnlyCollection<Song> Songs { get; private set; }
 
 		private Disc disc;
+
 		public Disc Disc
 		{
 			get

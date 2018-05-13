@@ -34,16 +34,16 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 		[Test]
 		public void RegisterDependencies_RegistersAllDependenciesForApplicationLogic()
 		{
-			//	Arrange
+			// Arrange
 
 			var settingValues = new Dictionary<string, string>
 			{
-				{"dataStoragePath", @"c:\temp"},
-				{"fileSystemStorage:root", @"c:\temp"},
+				{ "dataStoragePath", @"c:\temp" },
+				{ "fileSystemStorage:root", @"c:\temp" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.DoesNotThrow(() => target.Bootstrap(new string[0]));
 		}
@@ -51,21 +51,21 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 		[Test]
 		public void RegisterDependencies_BindsSqLiteConnectionSettingsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var settingValues = new Dictionary<string, string>
 			{
-				{"dataStoragePath", @"c:\temp"},
-				{"fileSystemStorage:root", @"c:\temp"},
-				{"database:dataSource", @"Some DataSource"},
+				{ "dataStoragePath", @"c:\temp" },
+				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "database:dataSource", @"Some DataSource" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
-			//	Act
+			// Act
 
 			target.Bootstrap(new string[0]);
 
-			//	Assert
+			// Assert
 
 			var options = target.ResolveDependency<IOptions<SqLiteConnectionSettings>>();
 			var settings = options.Value;
@@ -76,20 +76,20 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 		[Test]
 		public void RegisterDependencies_BindsFileSystemStorageSettingsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var settingValues = new Dictionary<string, string>
 			{
-				{"dataStoragePath", @"c:\temp"},
-				{"fileSystemStorage:root", @"Some FileSystemStorage Root"},
+				{ "dataStoragePath", @"c:\temp" },
+				{ "fileSystemStorage:root", @"Some FileSystemStorage Root" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
-			//	Act
+			// Act
 
 			target.Bootstrap(new string[0]);
 
-			//	Assert
+			// Assert
 
 			var options = target.ResolveDependency<IOptions<FileSystemStorageSettings>>();
 			var settings = options.Value;
@@ -100,23 +100,23 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 		[Test]
 		public void RegisterDependencies_BindsLastFmClientSettingsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var settingValues = new Dictionary<string, string>
 			{
-				{"dataStoragePath", @"c:\temp"},
-				{"fileSystemStorage:root", @"c:\temp"},
-				{"lastFmClient:apiKey", @"Some API Key"},
-				{"lastFmClient:sharedSecret", @"Some Shared Secret"},
-				{"lastFmClient:sessionKey", @"Some Session Key"},
+				{ "dataStoragePath", @"c:\temp" },
+				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "lastFmClient:apiKey", @"Some API Key" },
+				{ "lastFmClient:sharedSecret", @"Some Shared Secret" },
+				{ "lastFmClient:sessionKey", @"Some Session Key" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
-			//	Act
+			// Act
 
 			target.Bootstrap(new string[0]);
 
-			//	Assert
+			// Assert
 
 			var options = target.ResolveDependency<IOptions<LastFmClientSettings>>();
 			var settings = options.Value;
@@ -129,22 +129,22 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 		[Test]
 		public void RegisterDependencies_BindsPandaPlayerSettingsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var settingValues = new Dictionary<string, string>
 			{
-				{"dataStoragePath", @"c:\temp"},
-				{"fileSystemStorage:root", @"c:\temp"},
-				{"discCoverImageLookupPages:0", @"http://www.page1.com/"},
-				{"discCoverImageLookupPages:1", @"http://www.page2.com/"},
+				{ "dataStoragePath", @"c:\temp" },
+				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "discCoverImageLookupPages:0", @"http://www.page1.com/" },
+				{ "discCoverImageLookupPages:1", @"http://www.page2.com/" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
-			//	Act
+			// Act
 
 			target.Bootstrap(new string[0]);
 
-			//	Assert
+			// Assert
 
 			var options = target.ResolveDependency<IOptions<PandaPlayerSettings>>();
 			var settings = options.Value;

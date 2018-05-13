@@ -21,6 +21,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			public int OnPlaylistChangedCallsNumber { get; set; }
 
 			private List<Song> songsWhenOnPlaylistChangedCalled;
+
 			public IReadOnlyCollection<Song> SongsWhenOnPlaylistChangedCalled => songsWhenOnPlaylistChangedCalled;
 
 			public Song CurrentSongWhenOnPlaylistChangedCalled { get; set; }
@@ -60,7 +61,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void PlayedDiscGetter_IfAllSongsBelongToOneDisc_ReturnsThisDisc()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc();
 			var songs = new List<Song>
@@ -72,11 +73,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(songs);
 
-			//	Act
+			// Act
 
 			var playedDisc = target.PlayedDisc;
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(disc, playedDisc);
 		}
@@ -84,7 +85,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void PlayedDiscGetter_IfSongsBelongToDifferentDiscs_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var songs = new List<Song>
 			{
@@ -95,11 +96,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(songs);
 
-			//	Act
+			// Act
 
 			var playedDisc = target.PlayedDisc;
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(playedDisc);
 		}
@@ -107,7 +108,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SetSongs_IfCurrentSongIndexIsGreaterThanSizeOfNewSongList_UpdatesSongListCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var currSong = new Song();
 			var songs1 = new List<Song> { new Song(), currSong };
@@ -117,11 +118,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			target.SetSongs(songs1);
 			target.SwitchToSong(currSong);
 
-			//	Act
+			// Act
 
 			target.SetSongs(songs2);
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(songs2, target.Songs);
 		}
@@ -129,16 +130,16 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SetSongs_AfterSongListIsChanged_CallsOnPlaylistChanged()
 		{
-			//	Arrange
+			// Arrange
 
 			var songs = new List<Song> { new Song() };
 			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
-			//	Act
+			// Act
 
 			target.SetSongs(songs);
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(songs, target.SongsWhenOnPlaylistChangedCalled);
 		}
@@ -146,18 +147,18 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SetSongs_WhenSongListIsChanged_CallsOnPlaylistChangedOnlyOnce()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(new[] { new Song() });
 			target.SwitchToNextSong();
 			target.OnPlaylistChangedCallsNumber = 0;
 
-			//	Act
+			// Act
 
 			target.SetSongs(new[] { new Song(), new Song() });
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, target.OnPlaylistChangedCallsNumber);
 		}
@@ -165,7 +166,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SwitchToNextSong_IfCurrentSongIsNotSet_SetsFirstSongAsCurrent()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
@@ -173,11 +174,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			target.SetSongs(new List<Song> { song1, song2 });
 
-			//	Act
+			// Act
 
 			target.SwitchToNextSong();
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(song1, target.CurrentSong);
 			Assert.AreEqual(0, target.CurrentSongIndex);
@@ -186,7 +187,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SwitchToNextSong_IfCurrentSongIsSet_SetsNextSongAsCurrent()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
@@ -195,11 +196,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			target.SetSongs(new List<Song> { song1, song2 });
 			target.SwitchToNextSong();
 
-			//	Act
+			// Act
 
 			target.SwitchToNextSong();
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(song2, target.CurrentSong);
 			Assert.AreEqual(1, target.CurrentSongIndex);
@@ -208,7 +209,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SwitchToNextSong_WhenSwitchingToNextSong_SetsItsIsCurrentlyPlayedPropertyToTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
@@ -216,11 +217,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			target.SetSongs(new List<Song> { song1, song2 });
 
-			//	Act
+			// Act
 
 			target.SwitchToNextSong();
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue(target.SongItems[0].IsCurrentlyPlayed);
 		}
@@ -228,7 +229,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SwitchToNextSong_WhenSwitchingFromCurrentSong_SetsItsIsCurrentlyPlayedPropertyToFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
@@ -237,11 +238,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			target.SetSongs(new List<Song> { song1, song2 });
 			target.SwitchToNextSong();
 
-			//	Act
+			// Act
 
 			target.SwitchToNextSong();
 
-			//	Assert
+			// Assert
 
 			Assert.IsFalse(target.SongItems[0].IsCurrentlyPlayed);
 		}
@@ -249,7 +250,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SwitchToNextSong_WhenSwitchingToNextSong_CallsOnPlaylistChangedCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
@@ -259,11 +260,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			target.SwitchToNextSong();
 			target.CurrentSongWhenOnPlaylistChangedCalled = null;
 
-			//	Act
+			// Act
 
 			target.SwitchToNextSong();
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(song2, target.CurrentSongWhenOnPlaylistChangedCalled);
 		}
@@ -271,18 +272,18 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SwitchToNextSong_IfCurrentSongIsTheLast_SetsCurrentSongToNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
 			target.SetSongs(new List<Song> { new Song() });
 			target.SwitchToNextSong();
 
-			//	Act
+			// Act
 
 			target.SwitchToNextSong();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(target.CurrentSong);
 			Assert.IsNull(target.CurrentSongIndex);
@@ -291,7 +292,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SwitchToSong_WhenSongPresetnInPlaylist_SwitchesToSpecifiedSong()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
@@ -299,11 +300,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			target.SetSongs(new List<Song> { song1, song2 });
 
-			//	Act
+			// Act
 
 			target.SwitchToSong(song2);
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(song2, target.CurrentSong);
 			Assert.AreEqual(1, target.CurrentSongIndex);
@@ -312,7 +313,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SwitchToSong_WhenSwitchingToSpecifiedSong_CallsOnPlaylistChangedCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
@@ -321,11 +322,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			target.SetSongs(new List<Song> { song1, song2 });
 			target.CurrentSongWhenOnPlaylistChangedCalled = null;
 
-			//	Act
+			// Act
 
 			target.SwitchToSong(song2);
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(song2, target.CurrentSongWhenOnPlaylistChangedCalled);
 		}
@@ -333,7 +334,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SwitchToSong_WhenMultipleSongsMatchInPlaylist_ThrowsInvalidOperatioException()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
@@ -341,7 +342,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			target.SetSongs(new List<Song> { song1, song2, song2 });
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.SwitchToSong(song2));
 		}
@@ -349,12 +350,12 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SwitchToSong_WhenNoSongsMatchInPlaylist_ThrowsInvalidOperatioException()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(new List<Song> { new Song() });
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.SwitchToSong(new Song()));
 		}
@@ -362,7 +363,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void AddingSongsToPlaylistNextEventHandler_WhenSongListIsNotEmptyAndCurrentSongIsSet_AddsNewSongsAfterCurrentSong()
 		{
-			//	Arrange
+			// Arrange
 
 			Song oldSong1 = new Song();
 			Song oldSong2 = new Song();
@@ -373,11 +374,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			target.SetSongs(new[] { oldSong1, oldSong2 });
 			target.SwitchToNextSong();
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(new[] { newSong1, newSong2 }));
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(target.Songs, new[] { oldSong1, newSong1, newSong2, oldSong2 });
 			Assert.AreSame(target.CurrentSong, oldSong1);
@@ -386,7 +387,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void AddingSongsToPlaylistNextEventHandler_WhenSongListIsNotEmptyAndCurrentSongIsNotSet_AddsNewSongsAtListTop()
 		{
-			//	Arrange
+			// Arrange
 
 			Song oldSong1 = new Song();
 			Song oldSong2 = new Song();
@@ -396,11 +397,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(new[] { oldSong1, oldSong2 });
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(new[] { newSong1, newSong2 }));
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(target.Songs, new[] { newSong1, newSong2, oldSong1, oldSong2 });
 			Assert.AreSame(target.CurrentSong, newSong1);
@@ -409,18 +410,18 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void AddingSongsToPlaylistNextEventHandler_WhenSongListIsEmpty_FillsListWithNewSongs()
 		{
-			//	Arrange
+			// Arrange
 
 			Song newSong1 = new Song();
 			Song newSong2 = new Song();
 
 			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(new[] { newSong1, newSong2 }));
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(target.Songs, new[] { newSong1, newSong2 });
 			Assert.AreSame(target.CurrentSong, newSong1);
@@ -429,17 +430,17 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void AddingSongsToPlaylistNextEventHandler_AfterUpdatingPlaylist_CallsOnPlaylistChangedCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var newSongs = new[] { new Song() };
 
 			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(newSongs));
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(newSongs, target.SongsWhenOnPlaylistChangedCalled);
 		}
@@ -447,7 +448,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void AddingSongsToPlaylistLastEventHandler_WhenSongListIsNotEmpty_AddsNewSongsAtListEnd()
 		{
-			//	Arrange
+			// Arrange
 
 			Song oldSong1 = new Song();
 			Song oldSong2 = new Song();
@@ -458,11 +459,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			target.SetSongs(new[] { oldSong1, oldSong2 });
 			target.SwitchToNextSong();
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(new[] { newSong1, newSong2 }));
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(target.Songs, new[] { oldSong1, oldSong2, newSong1, newSong2 });
 			Assert.AreSame(target.CurrentSong, oldSong1);
@@ -471,18 +472,18 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void AddingSongsToPlaylistLastEventHandler_WhenSongListIsEmpty_FillsListWithNewSongs()
 		{
-			//	Arrange
+			// Arrange
 
 			Song newSong1 = new Song();
 			Song newSong2 = new Song();
 
 			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(new[] { newSong1, newSong2 }));
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(target.Songs, new[] { newSong1, newSong2 });
 			Assert.AreSame(target.CurrentSong, newSong1);
@@ -491,17 +492,17 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void AddingSongsToPlaylistLastEventHandler_AfterUpdatingPlaylist_CallsOnPlaylistChangedCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
-			var newSongs = new[] {new Song()};
+			var newSongs = new[] { new Song() };
 
 			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(newSongs));
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(newSongs, target.SongsWhenOnPlaylistChangedCalled);
 		}
@@ -509,21 +510,22 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void PlayFromSongCommand_IfSomeSongIsSelected_SetsCurrentSongToSelectedOne()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song();
 
 			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(new[] { song });
 			target.SelectedSongItem = target.SongItems[0];
-			//	Sanity check
+
+			// Sanity check
 			Assert.IsNull(target.CurrentSong);
 
-			//	Act
+			// Act
 
 			target.PlayFromSong();
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(song, target.CurrentSong);
 		}
@@ -531,7 +533,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void PlayFromSongCommand_IfSongIsAddedToPlaylistMultipleTimes_SetsCurrentSongToSelectedOne()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song();
 
@@ -539,11 +541,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			target.SetSongs(new[] { song, song });
 			target.SelectedSongItem = target.SongItems[1];
 
-			//	Act
+			// Act
 
 			target.PlayFromSong();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, target.CurrentSongIndex);
 		}
@@ -551,7 +553,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void PlayFromSongCommand_IfSomeSongIsSelected_SendsPlayPlaylistStartingFromSongEventForSelectedSong()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song();
 
@@ -562,11 +564,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			PlayPlaylistStartingFromSongEventArgs receivedEvent = null;
 			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, e => receivedEvent = e);
 
-			//	Act
+			// Act
 
 			target.PlayFromSong();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(receivedEvent);
 			Assert.AreSame(song, receivedEvent.Song);
@@ -575,39 +577,40 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void PlayFromSongCommand_IfNoSongIsSelected_DoesNotSendPlayPlaylistStartingFromSongEvent()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
 			PlayPlaylistStartingFromSongEventArgs receivedEvent = null;
 			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, e => receivedEvent = e);
 
-			//	Act
+			// Act
 
 			target.PlayFromSong();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(receivedEvent);
-			//	Avoiding uncovered lambda code (e => receivedEvent = e)
+
+			// Avoiding uncovered lambda code (e => receivedEvent = e)
 			Messenger.Default.Send(new PlayPlaylistStartingFromSongEventArgs(null));
 		}
 
 		[Test]
 		public void OnPlaylistChanged_SendsPlaylistChangedEvent()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
 			PlaylistChangedEventArgs receivedEvent = null;
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => receivedEvent = e);
 
-			//	Act
+			// Act
 
 			target.InvokeOnPlaylistChanged();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(receivedEvent);
 		}
@@ -615,7 +618,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void NavigateToSongDiscCommand_IfSomeSongIsSelected_SendsNavigateLibraryExplorerToDiscEventForDiscOfThisSong()
 		{
-			//	Arrange
+			// Arrange
 
 			var currentDisc = new Disc();
 			var selectedDisc = new Disc();
@@ -631,11 +634,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			NavigateLibraryExplorerToDiscEventArgs receivedEvent = null;
 			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => receivedEvent = e);
 
-			//	Act
+			// Act
 
 			target.NavigateToSongDisc();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(receivedEvent);
 			Assert.AreSame(selectedDisc, receivedEvent.Disc);
@@ -644,7 +647,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void NavigateToSongDiscCommand_IfNoSongIsSelected_SendsNavigateLibraryExplorerToDiscEventForDiscOfCurrentSong()
 		{
-			//	Arrange
+			// Arrange
 
 			var currentDisc = new Disc();
 			Song currentSong = new Song { Disc = currentDisc };
@@ -656,11 +659,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			NavigateLibraryExplorerToDiscEventArgs receivedEvent = null;
 			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => receivedEvent = e);
 
-			//	Act
+			// Act
 
 			target.NavigateToSongDisc();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(receivedEvent);
 			Assert.AreSame(currentDisc, receivedEvent.Disc);
@@ -669,7 +672,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void NavigateToSongDiscCommand_IfThereIsNoSelectedOrCurrentSong_DoesNothing()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(new[] { new Song() });
@@ -677,14 +680,15 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			bool receivedEvent = false;
 			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => receivedEvent = true);
 
-			//	Act
+			// Act
 
 			target.NavigateToSongDisc();
 
-			//	Assert
+			// Assert
 
 			Assert.IsFalse(receivedEvent);
-			//	Avoiding uncovered lambda code (e => receivedEvent = true)
+
+			// Avoiding uncovered lambda code (e => receivedEvent = true)
 			Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(null));
 		}
 	}

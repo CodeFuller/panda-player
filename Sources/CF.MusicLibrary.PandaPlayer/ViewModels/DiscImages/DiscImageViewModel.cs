@@ -15,6 +15,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscImages
 		private readonly IViewNavigator viewNavigator;
 
 		private Disc currentDisc;
+
 		private Disc CurrentDisc
 		{
 			get => currentDisc;
@@ -26,16 +27,17 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscImages
 		}
 
 		private string currImageFileName;
+
 		public string CurrImageFileName
 		{
 			get => currImageFileName;
 			private set
 			{
-				//	Why don't we use ViewModelBase.Set(ref currImageFileName, value) ?
-				//	When disc image is updated with new file, CurrImageFileName is not actually changed, however
-				//	we need PropertyChanged event to be fired so that Image control updated image in the view.
-				//	Seems like ViewModelBase.Set() has some internal check whether new value equals to the old one
-				//	and don't fire the event in this case. That's why we should raise event manually.
+				// Why don't we use ViewModelBase.Set(ref currImageFileName, value) ?
+				// When disc image is updated with new file, CurrImageFileName is not actually changed, however
+				// we need PropertyChanged event to be fired so that Image control updated image in the view.
+				// Seems like ViewModelBase.Set() has some internal check whether new value equals to the old one
+				// and don't fire the event in this case. That's why we should raise event manually.
 				currImageFileName = value;
 				RaisePropertyChanged();
 			}

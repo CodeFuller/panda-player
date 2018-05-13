@@ -17,15 +17,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 		[Test]
 		public void GetSourceFileType_IfFileHasMP3Extension_ReturnsSourceFileTypeSong()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new SourceFileTypeResolver(Substitute.For<IDiscImageValidator>());
 
-			//	Act
+			// Act
 
 			SourceFileType fileType = target.GetSourceFileType("SomeFilePath.mp3");
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(SourceFileType.Song, fileType);
 		}
@@ -33,18 +33,18 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 		[Test]
 		public void GetSourceFileType_IfFileHasSupportedDiscImageFormat_ReturnsSourceFileTypeImage()
 		{
-			//	Arrange
+			// Arrange
 
 			IDiscImageValidator discImageValidatorStub = Substitute.For<IDiscImageValidator>();
 			discImageValidatorStub.IsSupportedFileFormat("SomeFilePath").Returns(true);
 
 			var target = new SourceFileTypeResolver(discImageValidatorStub);
 
-			//	Act
+			// Act
 
 			SourceFileType fileType = target.GetSourceFileType("SomeFilePath");
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(SourceFileType.Image, fileType);
 		}

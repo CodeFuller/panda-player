@@ -27,12 +27,13 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void ItemsGetter_ReturnsItemsSortedByName()
 		{
-			//	Arrange
+			// Arrange
 
 			var item1 = new FolderExplorerItem(new Uri("/SomeFolder/Item 1", UriKind.Relative));
 			var item2 = new FolderExplorerItem(new Uri("/SomeFolder/Item 2", UriKind.Relative));
 			var item3 = new FolderExplorerItem(new Uri("/SomeFolder/Item 3", UriKind.Relative));
-			//	Sanity check
+
+			// Sanity check
 			Assert.AreEqual("Item 1", item1.Name);
 
 			var unsortedItems = new[] { item2, item1, item3 };
@@ -48,7 +49,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			target.SelectedItem = parentItem;
 			target.ChangeFolder();
 
-			//	Act & Assert
+			// Act & Assert
 
 			CollectionAssert.AreEqual(sortedItems, target.Items);
 		}
@@ -56,7 +57,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SelectedItemSetter_WhenNewItemIsDisc_LoadsSongListWithSongsFromNewDisc()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -71,11 +72,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			LibraryExplorerViewModel target = new LibraryExplorerViewModel(Substitute.For<ILibraryBrowser>(), explorerSongListMock,
 				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
-			//	Act
+			// Act
 
 			target.SelectedItem = new DiscExplorerItem(disc);
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(newSongs);
 			CollectionAssert.AreEqual(disc.Songs, newSongs);
@@ -84,7 +85,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SelectedItemSetter_WhenNewItemIsDisc_SendsLibraryExplorerDiscChangedEventForNewDisc()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc { Uri = new Uri("/SomeDisc", UriKind.Relative) };
 
@@ -94,11 +95,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			LibraryExplorerDiscChangedEventArgs receivedEvent = null;
 			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => receivedEvent = e);
 
-			//	Act
+			// Act
 
 			target.SelectedItem = new DiscExplorerItem(disc);
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(receivedEvent);
 			Assert.AreSame(disc, receivedEvent.Disc);
@@ -107,7 +108,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SelectedItemSetter_WhenNewItemIsNotDisc_ClearsSongsList()
 		{
-			//	Arrange
+			// Arrange
 
 			List<Song> newSongs = null;
 			IExplorerSongListViewModel explorerSongListMock = Substitute.For<IExplorerSongListViewModel>();
@@ -116,11 +117,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			LibraryExplorerViewModel target = new LibraryExplorerViewModel(Substitute.For<ILibraryBrowser>(), explorerSongListMock,
 				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
-			//	Act
+			// Act
 
 			target.SelectedItem = new FolderExplorerItem(new Uri("/SomeFolder", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(newSongs);
 			CollectionAssert.IsEmpty(newSongs);
@@ -129,7 +130,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SelectedItemSetter_WhenNewItemIsNotDisc_SendsLibraryExplorerDiscChangedEventWithNullDisc()
 		{
-			//	Arrange
+			// Arrange
 
 			LibraryExplorerViewModel target = new LibraryExplorerViewModel(Substitute.For<ILibraryBrowser>(), Substitute.For<IExplorerSongListViewModel>(),
 				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
@@ -137,11 +138,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			LibraryExplorerDiscChangedEventArgs receivedEvent = null;
 			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => receivedEvent = e);
 
-			//	Act
+			// Act
 
 			target.SelectedItem = new FolderExplorerItem(new Uri("/SomeFolder", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(receivedEvent);
 			Assert.IsNull(receivedEvent.Disc);
@@ -150,7 +151,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void DeleteDisc_IfSelectedItemIsNotADisc_ReturnsWithNoAction()
 		{
-			//	Arrange
+			// Arrange
 
 			IWindowService windowServiceStub = Substitute.For<IWindowService>();
 			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);
@@ -160,11 +161,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 				libraryContentUpdaterMock, Substitute.For<IViewNavigator>(), windowServiceStub);
 			target.SelectedItem = new FolderExplorerItem(new Uri("/SomeFolder", UriKind.Relative));
 
-			//	Act
+			// Act
 
 			target.DeleteDisc().Wait();
 
-			//	Assert
+			// Assert
 
 			libraryContentUpdaterMock.DidNotReceive().DeleteDisc(Arg.Any<Disc>());
 		}
@@ -172,7 +173,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void DeleteDisc_IfUserCancelsDeletion_ReturnsWithNoAction()
 		{
-			//	Arrange
+			// Arrange
 
 			IWindowService windowServiceStub = Substitute.For<IWindowService>();
 			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.No);
@@ -184,13 +185,13 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			{
 				Title = "Some title",
 				Uri = new Uri("/SomeFolder", UriKind.Relative),
-			} );
+			});
 
-			//	Act
+			// Act
 
 			target.DeleteDisc().Wait();
 
-			//	Assert
+			// Assert
 
 			libraryContentUpdaterMock.DidNotReceive().DeleteDisc(Arg.Any<Disc>());
 		}
@@ -198,7 +199,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void DeleteDisc_IfUserConfirmsDeletion_DeletesDiscCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var discItem = new DiscExplorerItem(new Disc
 			{
@@ -221,11 +222,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			target.ChangeFolder();
 			target.SelectedItem = discItem;
 
-			//	Act
+			// Act
 
 			target.DeleteDisc().Wait();
 
-			//	Assert
+			// Assert
 
 			libraryContentUpdaterMock.Received(1).DeleteDisc(discItem.Disc);
 		}
@@ -233,7 +234,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void DeleteDisc_IfDiscIsDeleted_SendsLibraryExplorerDiscChangedEventBeforeDiscDeletion()
 		{
-			//	Arrange
+			// Arrange
 
 			var discItem = new DiscExplorerItem(new Disc
 			{
@@ -265,11 +266,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			currCallOrder = 1;
 
-			//	Act
+			// Act
 
 			target.DeleteDisc().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, receivedEventOrder);
 			Assert.AreEqual(2, deleteDiscOrder);
@@ -278,7 +279,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void DeleteDisc_IfDiscIsDeleted_RemovesDiscFromItemsList()
 		{
-			//	Arrange
+			// Arrange
 
 			var discItem = new DiscExplorerItem(new Disc
 			{
@@ -300,11 +301,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			target.ChangeFolder();
 			target.SelectedItem = discItem;
 
-			//	Act
+			// Act
 
 			target.DeleteDisc().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(0, target.Items.Count);
 		}
@@ -312,7 +313,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void DeleteDisc_IfCurrentFolderContainsOtherDiscs_DoesNotChangeCurrentFolder()
 		{
-			//	Arrange
+			// Arrange
 
 			var folderItem1 = new FolderExplorerItem(new Uri("/SomeFolder1", UriKind.Relative));
 			var folderItem21 = new FolderExplorerItem(new Uri("/SomeFolder1/SomeFolder21", UriKind.Relative));
@@ -339,11 +340,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			target.ChangeFolder();
 			target.SelectedItem = discItem;
 
-			//	Act
+			// Act
 
 			target.DeleteDisc().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(folderItem1, target.CurrentFolder);
 		}
@@ -351,7 +352,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void DeleteDisc_IfCurrentFolderBecomesEmpty_SwitchesToParentFolder()
 		{
-			//	Arrange
+			// Arrange
 
 			var folderItem1 = new FolderExplorerItem(new Uri("/SomeFolder1", UriKind.Relative));
 			var folderItem2 = new FolderExplorerItem(new Uri("/SomeFolder1/SomeFolder21", UriKind.Relative));
@@ -382,11 +383,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			target.ChangeFolder();
 			target.SelectedItem = discItem1;
 
-			//	Act
+			// Act
 
 			target.DeleteDisc().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(folderItem2, target.CurrentFolder);
 		}

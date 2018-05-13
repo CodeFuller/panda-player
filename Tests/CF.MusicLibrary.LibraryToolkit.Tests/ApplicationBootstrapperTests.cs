@@ -8,11 +8,11 @@ namespace CF.MusicLibrary.LibraryToolkit.Tests
 		[Test]
 		public void RegisterDependencies_RegistersAllDependenciesForApplicationLogic()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new ApplicationBootstrapper();
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.DoesNotThrow(() => target.Bootstrap(new string[0]));
 		}

@@ -81,7 +81,7 @@ namespace CF.MusicLibrary.Library
 			string fileName = GetPathForUri(fileUri);
 			DeleteFile(fileName);
 
-			//	Deleting current and parent directories within storage that became empty.
+			// Deleting current and parent directories within storage that became empty.
 			foreach (var currDirectoryPath in GetParentDirectoriesWithinStorage(fileSystemFacade.GetParentDirectory(fileName))
 												.TakeWhile(dir => fileSystemFacade.DirectoryIsEmpty(dir)))
 			{

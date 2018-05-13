@@ -24,11 +24,13 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public abstract bool DisplayTrackNumbers { get; }
 
 		private readonly ObservableCollection<SongListItem> songItems;
+
 		public ReadOnlyObservableCollection<SongListItem> SongItems { get; }
 
 		public IEnumerable<Song> Songs => SongItems.Select(s => s.Song);
 
 		private SongListItem selectedSongItem;
+
 		public SongListItem SelectedSongItem
 		{
 			get => selectedSongItem;
@@ -44,6 +46,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public TimeSpan TotalSongsDuration => Songs.Aggregate(TimeSpan.Zero, (currSum, currSong) => currSum + currSong.Duration);
 
 		private IList selectedSongItems;
+
 		public IList SelectedSongItems
 		{
 			get => selectedSongItems;
@@ -53,6 +56,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public IEnumerable<Song> SelectedSongs => SelectedSongItems.OfType<SongListItem>().Select(it => it.Song);
 
 		public ICommand PlaySongsNextCommand { get; }
+
 		public ICommand PlaySongsLastCommand { get; }
 
 		public ICommand EditSongsPropertiesCommand { get; }
@@ -110,6 +114,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			{
 				songItems.Insert(index++, new SongListItem(song));
 			}
+
 			OnSongItemsChanged();
 		}
 

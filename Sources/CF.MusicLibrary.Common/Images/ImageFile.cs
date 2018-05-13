@@ -17,6 +17,7 @@ namespace CF.MusicLibrary.Common.Images
 		public bool IsTemporaryFile { get; private set; }
 
 		private ImageInfo imageInfo;
+
 		public ImageInfo ImageInfo
 		{
 			get => imageInfo;

@@ -2,7 +2,7 @@
 
 namespace CF.MusicLibrary.PandaPlayer.Views.ClipboardAccess
 {
-	interface IClipboardImageExtractor
+	internal interface IClipboardImageExtractor
 	{
 		BitmapFrame GetImageFromClipboard();
 	}

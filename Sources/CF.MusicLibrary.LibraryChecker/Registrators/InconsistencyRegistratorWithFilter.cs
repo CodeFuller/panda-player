@@ -12,8 +12,7 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 		private readonly ILibraryInconsistencyRegistrator inconsistencyRegistrator;
 		private readonly ILibraryInconsistencyFilter inconsistencyFilter;
 
-		public InconsistencyRegistratorWithFilter(ILibraryInconsistencyRegistrator inconsistencyRegistrator,
-			ILibraryInconsistencyFilter inconsistencyFilter)
+		public InconsistencyRegistratorWithFilter(ILibraryInconsistencyRegistrator inconsistencyRegistrator, ILibraryInconsistencyFilter inconsistencyFilter)
 		{
 			this.inconsistencyRegistrator = inconsistencyRegistrator ?? throw new ArgumentNullException(nameof(inconsistencyRegistrator));
 			this.inconsistencyFilter = inconsistencyFilter ?? throw new ArgumentNullException(nameof(inconsistencyFilter));

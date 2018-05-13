@@ -26,17 +26,17 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void StoreFile_BeforeStoringFile_CreatesDestinationDirectory()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.StoreFile("SourceFileName", new Uri("/SomeDir/SomeFile", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			Received.InOrder(() =>
 			{
@@ -48,17 +48,17 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void StoreFile_CopiesFileCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.StoreFile("SourceFileName", new Uri("/SomeDir/SomeFile", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.CopyFile("SourceFileName", @"RootDir\SomeDir\SomeFile");
 		}
@@ -66,17 +66,17 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void StoreFile_SetsReadOnlyAttributeForDestinationFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.StoreFile("SourceFileName", new Uri("/SomeDir/SomeFile", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.SetReadOnlyAttribute(@"RootDir\SomeDir\SomeFile");
 		}
@@ -84,18 +84,18 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void GetFile_IfFileExists_ReturnsCorrectPathToStorageFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			var fileName = target.GetFile(new Uri("/SomeDir/SomeFile", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(@"RootDir\SomeDir\SomeFile", fileName);
 		}
@@ -103,14 +103,14 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void GetFile_IfFileDoesNotExist_ThrowsInvalidOperationException()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(false);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.GetFile(new Uri("/SomeDir/SomeFile", UriKind.Relative)));
 		}
@@ -118,18 +118,18 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void GetFileForWriting_IfFileExists_ReturnsCorrectPathToStorageFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			var fileName = target.GetFileForWriting(new Uri("/SomeDir/SomeFile", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(@"RootDir\SomeDir\SomeFile", fileName);
 		}
@@ -137,18 +137,18 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void GetFileForWriting_IfFileExists_ClearsReadOnlyAttributeForFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.GetFileForWriting(new Uri("/SomeDir/SomeFile", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.Received(1).ClearReadOnlyAttribute(@"RootDir\SomeDir\SomeFile");
 		}
@@ -156,14 +156,14 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void GetFileForWriting_IfFileDoesNotExist_ThrowsInvalidOperationException()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(false);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.GetFileForWriting(new Uri("/SomeDir/SomeFile", UriKind.Relative)));
 		}
@@ -171,14 +171,14 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void UpdateFileContent_IfDestinationFileDoesNotExist_ThrowsInvalidOperationException()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(false);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.UpdateFileContent(@"RootDir\SomeDir\SomeFile", new Uri("/SomeDir/SomeFile", UriKind.Relative)));
 		}
@@ -186,18 +186,18 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void UpdateFileContent_IfSourceAndDestinationFilePathsAreEqual_JustSetsReadOnlyAttributeForFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.UpdateFileContent(@"RootDir\SomeDir\SomeFile", new Uri("/SomeDir/SomeFile", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.Received(1).SetReadOnlyAttribute(@"RootDir\SomeDir\SomeFile");
 			fileSystemMock.DidNotReceive().CopyFile(Arg.Any<string>(), Arg.Any<string>());
@@ -206,18 +206,18 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void UpdateFileContent_IfSourceAndDestinationFilePathsDiffer_DeletesExistingFileBeforeCopyingNew()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.UpdateFileContent("SomeSourceFile", new Uri("/SomeDir/SomeFile", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			Received.InOrder(() =>
 			{
@@ -230,18 +230,18 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void UpdateFileContent_IfSourceAndDestinationFilePathsDiffer_StoresNewFileCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.UpdateFileContent("SomeSourceFile", new Uri("/SomeDir/SomeFile", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.Received(1).CopyFile("SomeSourceFile", @"RootDir\SomeDir\SomeFile");
 		}
@@ -249,17 +249,17 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void MoveFile_MovesFileCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.MoveFile(new Uri("/SomeDir1/SomeOldName", UriKind.Relative), new Uri("/SomeDir2/SomeNewName", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.Received(1).MoveFile(@"RootDir\SomeDir1\SomeOldName", @"RootDir\SomeDir2\SomeNewName");
 		}
@@ -267,17 +267,17 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void MoveFile_MovesDirectoryCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.MoveDirectory(new Uri("/SomeDir/SubDir1", UriKind.Relative), new Uri("/SomeDir/SubDir2", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.Received(1).MoveDirectory(@"RootDir\SomeDir\SubDir1", @"RootDir\SomeDir\SubDir2");
 		}
@@ -285,18 +285,18 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void DeleteFile_IfFileDirectoryContainsOtherFiles_DoesNotDeleteFileDirectory()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
 			fileSystemMock.DirectoryIsEmpty(@"RootDir\SomeDir").Returns(false);
 
-			//	Act
+			// Act
 
 			target.DeleteFile(new Uri("/SomeDir/SomeFile", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.DidNotReceive().DeleteDirectory(Arg.Any<string>());
 		}
@@ -304,7 +304,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void DeleteFile_IfFileDirectoryBecomesEmpty_DeletesFileDirectory()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.GetFullPath(Arg.Any<string>()).Returns(x => (string)x[0]);
@@ -313,11 +313,11 @@ namespace CF.MusicLibrary.Library.Tests
 			fileSystemMock.DirectoryIsEmpty(@"RootDir\SomeDir").Returns(true);
 			fileSystemMock.GetParentDirectory(@"RootDir\SomeDir\SomeFile").Returns(@"RootDir\SomeDir");
 
-			//	Act
+			// Act
 
 			target.DeleteFile(new Uri("/SomeDir/SomeFile", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.Received(1).DeleteDirectory(@"RootDir\SomeDir");
 		}
@@ -325,7 +325,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void DeleteFile_IfFileDirectoryBecomesEmpty_DeletesAllEmptyParentDirectories()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.GetFullPath(Arg.Any<string>()).Returns(x => (string)x[0]);
@@ -343,11 +343,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.DeleteFile(new Uri("/Folder1/Folder2/Folder3/Folder4/SomeFile", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.Received(1).DeleteDirectory(@"RootDir\Folder1\Folder2\Folder3\Folder4");
 			fileSystemMock.Received(1).DeleteDirectory(@"RootDir\Folder1\Folder2\Folder3");
@@ -357,7 +357,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void DeleteFile_WhenDeletingEmptyDirectories_DoesNotGoOutsideLibraryRoot()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.GetFullPath(Arg.Any<string>()).Returns(x => (string)x[0]);
@@ -371,11 +371,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.DeleteFile(new Uri(@"/SubFolder/SomeFile", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.Received(1).DeleteDirectory(@"SomeOuterDir\RootDir\SubFolder");
 			fileSystemMock.Received(1).DeleteDirectory(Arg.Any<string>());
@@ -384,7 +384,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckDataConsistency_IfExpectedFileDoesNotExist_RegistersStorageInconsistency()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(false);
@@ -393,11 +393,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
-			//	Act
+			// Act
 
-			target.CheckDataConsistency(new [] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, registratorMock, false);
+			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, registratorMock, false);
 
-			//	Assert
+			// Assert
 
 			registratorMock.RegisterInconsistency_MissingStorageData(new Uri("/SomeDir/SomeFile", UriKind.Relative));
 		}
@@ -405,7 +405,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckDataConsistency_IfExpectedFileExists_DoesNotRegisterStorageInconsistency()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
@@ -414,11 +414,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
-			//	Act
+			// Act
 
 			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, registratorMock, false);
 
-			//	Assert
+			// Assert
 
 			registratorMock.DidNotReceive().RegisterInconsistency_MissingStorageData(Arg.Any<Uri>());
 		}
@@ -426,7 +426,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckDataConsistency_IfExpectedFileHasNoReadOnlyAttributeSet_RegistersStorageInconsistency()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
@@ -438,11 +438,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
-			//	Act
+			// Act
 
 			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, registratorMock, false);
 
-			//	Assert
+			// Assert
 
 			registratorMock.RegisterInconsistency_ErrorInStorageData(Arg.Any<string>());
 		}
@@ -450,7 +450,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckDataConsistency_IfExpectedFileHasReadOnlyAttributeSet_DoesNotRegistersStorageInconsistency()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
@@ -460,11 +460,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
-			//	Act
+			// Act
 
 			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, registratorMock, false);
 
-			//	Assert
+			// Assert
 
 			registratorMock.DidNotReceive().RegisterInconsistency_ErrorInStorageData(Arg.Any<string>());
 		}
@@ -472,7 +472,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckDataConsistency_IfExpectedFileHasNoReadOnlyAttributeSetAndFixFoundIssuesIsTrue_SetsReadOnlyAttributeForFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
@@ -480,11 +480,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, Substitute.For<ILibraryStorageInconsistencyRegistrator>(), true);
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.SetReadOnlyAttribute(@"RootDir\SomeDir\SomeFile");
 		}
@@ -492,7 +492,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckDataConsistency_IfExpectedFileHasNoReadOnlyAttributeSetAndFixFoundIssuesIsFalse_DoesNotSetReadOnlyAttributeForFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
@@ -500,11 +500,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, Substitute.For<ILibraryStorageInconsistencyRegistrator>(), false);
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.DidNotReceive().SetReadOnlyAttribute(Arg.Any<string>());
 		}
@@ -512,7 +512,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckDataConsistency_ForExpectedStorageFiles_DoesNotRegistersUnexpectedStorageDataInconsistency()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.EnumerateFiles(@"RootDir", "*.*", SearchOption.AllDirectories).Returns(new[] { @"RootDir\SomeDir\SomeFile" });
@@ -521,11 +521,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
-			//	Act
+			// Act
 
 			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, registratorMock, false);
 
-			//	Assert
+			// Assert
 
 			registratorMock.DidNotReceive().RegisterInconsistency_UnexpectedStorageData(Arg.Any<string>(), Arg.Any<string>());
 		}
@@ -533,7 +533,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckDataConsistency_IfUnexpectedFileExistsNotListedInIgnoreList_RegistersStorageInconsistency()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.EnumerateFiles(@"RootDir", "*.*", SearchOption.AllDirectories).Returns(new[] { @"RootDir\SomeDir\SomeFile" });
@@ -542,11 +542,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
-			//	Act
+			// Act
 
 			target.CheckDataConsistency(new Uri[] { }, new Uri[] { }, registratorMock, false);
 
-			//	Assert
+			// Assert
 
 			registratorMock.RegisterInconsistency_UnexpectedStorageData(@"RootDir\SomeDir\SomeFile", "file");
 		}
@@ -554,7 +554,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckDataConsistency_IfUnexpectedFileExistsListedInIgnoreList_DoesNotRegisterStorageInconsistency()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.EnumerateFiles(@"RootDir", "*.*", SearchOption.AllDirectories).Returns(new[] { @"RootDir\SomeDir\SomeFile" });
@@ -563,11 +563,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
-			//	Act
+			// Act
 
 			target.CheckDataConsistency(new Uri[] { }, new[] { new Uri("/SomeDir", UriKind.Relative) }, registratorMock, false);
 
-			//	Assert
+			// Assert
 
 			registratorMock.DidNotReceive().RegisterInconsistency_UnexpectedStorageData(Arg.Any<string>(), Arg.Any<string>());
 		}
@@ -575,7 +575,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckDataConsistency_ForExpectedStorageDirectories_DoesNotRegistersUnexpectedStorageDataInconsistency()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.EnumerateDirectories(@"RootDir", "*.*", SearchOption.AllDirectories).Returns(new[] { @"RootDir\SomeDir" });
@@ -584,11 +584,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
-			//	Act
+			// Act
 
 			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, registratorMock, false);
 
-			//	Assert
+			// Assert
 
 			registratorMock.DidNotReceive().RegisterInconsistency_UnexpectedStorageData(Arg.Any<string>(), Arg.Any<string>());
 		}
@@ -596,7 +596,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckDataConsistency_IfUnexpectedDirectoryExistsNotListedInIgnoreList_RegistersStorageInconsistency()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.EnumerateDirectories(@"RootDir", "*.*", SearchOption.AllDirectories).Returns(new[] { @"RootDir\SomeDir" });
@@ -605,11 +605,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
-			//	Act
+			// Act
 
 			target.CheckDataConsistency(new Uri[] { }, new Uri[] { }, registratorMock, false);
 
-			//	Assert
+			// Assert
 
 			registratorMock.RegisterInconsistency_UnexpectedStorageData(@"RootDir\SomeDir", "folder");
 		}
@@ -617,7 +617,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckDataConsistency_IfUnexpectedDirectoryExistsListedInIgnoreList_DoesNotRegisterStorageInconsistency()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.EnumerateDirectories(@"RootDir", "*.*", SearchOption.AllDirectories).Returns(new[] { @"RootDir\SomeDir\SubDir" });
@@ -626,11 +626,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			ILibraryStorageInconsistencyRegistrator registratorMock = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
-			//	Act
+			// Act
 
 			target.CheckDataConsistency(new Uri[] { }, new[] { new Uri("/SomeDir", UriKind.Relative) }, registratorMock, false);
 
-			//	Assert
+			// Assert
 
 			registratorMock.DidNotReceive().RegisterInconsistency_UnexpectedStorageData(Arg.Any<string>(), Arg.Any<string>());
 		}

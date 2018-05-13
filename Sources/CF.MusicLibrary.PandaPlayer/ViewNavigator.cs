@@ -42,8 +42,8 @@ namespace CF.MusicLibrary.PandaPlayer
 			}
 			else
 			{
-				windowService.ShowMessageBox(Current($"You've just finished listening of disc '{disc.Title}' that have some songs still unrated. Please devote some time and rate them."),
-					"Rate listened disc", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation);
+				var message = Current($"You've just finished listening of disc '{disc.Title}' that have some songs still unrated. Please devote some time and rate them.");
+				windowService.ShowMessageBox(message, "Rate listened disc", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation);
 			}
 		}
 

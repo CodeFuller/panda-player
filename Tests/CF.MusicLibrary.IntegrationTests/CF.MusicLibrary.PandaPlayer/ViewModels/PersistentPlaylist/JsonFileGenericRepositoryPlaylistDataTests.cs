@@ -18,7 +18,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.PandaPlayer.ViewModel
 		[Test]
 		public void Load_LoadsSavedPlaylistDataCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song { Id = 1, Uri = new Uri("/SongUri1", UriKind.Relative) };
 			var song2 = new Song { Id = 2, Uri = new Uri("/SongUri2", UriKind.Relative) };
@@ -37,12 +37,12 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.PandaPlayer.ViewModel
 
 			var target = new JsonFileGenericRepository<PlaylistData>(fileSystemFacadeStub, Substitute.For<ILogger<JsonFileGenericRepository<PlaylistData>>>(), "SomeFile.json");
 
-			//	Act
+			// Act
 
 			target.Save(playlistData);
 			var loadedPlaylistData = target.Load();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(loadedPlaylistData);
 			var loadedSongs = loadedPlaylistData.Songs.ToList();

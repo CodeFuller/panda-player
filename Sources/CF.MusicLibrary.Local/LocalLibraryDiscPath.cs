@@ -9,8 +9,8 @@ namespace CF.MusicLibrary.Local
 	{
 		private readonly ItemUriParts pathParts;
 
-		public LocalLibraryDiscPath(Disc disc) :
-			this(disc.Uri)
+		public LocalLibraryDiscPath(Disc disc)
+			: this(disc.Uri)
 		{
 		}
 

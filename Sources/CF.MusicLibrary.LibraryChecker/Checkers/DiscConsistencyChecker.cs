@@ -27,20 +27,20 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 
 			foreach (var disc in discs)
 			{
-				//	Checking album title
+				// Checking album title
 				if (DiscTitleToAlbumMapper.AlbumTitleIsSuspicious(disc.AlbumTitle))
 				{
 					inconsistencyRegistrator.RegisterInconsistency_SuspiciousAlbumTitle(disc);
 				}
 
-				//	Check that disc has some songs
+				// Check that disc has some songs
 				if (!disc.Songs.Any())
 				{
 					inconsistencyRegistrator.RegisterInconsistency_DiscWithoutSongs(disc);
 					continue;
 				}
 
-				//	Checking songs order & track numbers
+				// Checking songs order & track numbers
 				var trackNumbers = disc.Songs.Select(s => s.TrackNumber).ToList();
 				if (trackNumbers.Any(n => n != null))
 				{
@@ -50,7 +50,7 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 					}
 				}
 
-				//	Checking that all disc songs has equal genre
+				// Checking that all disc songs has equal genre
 				var genres = disc.Songs.Select(s => s.Genre).Distinct().ToList();
 				if (genres.Count > 1)
 				{

@@ -6,6 +6,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 	public class EditedSongProperty<T> : ViewModelBase
 	{
 		private bool hasValue;
+
 		public bool HasValue
 		{
 			get => hasValue;
@@ -13,6 +14,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		private T propertyValue;
+
 		public T Value
 		{
 			get
@@ -21,8 +23,10 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				{
 					throw new InvalidOperationException("Song property is not set");
 				}
+
 				return propertyValue;
 			}
+
 			set
 			{
 				Set(ref propertyValue, value);
@@ -87,11 +91,12 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			unchecked
 			{
 				int hash = 17;
-				hash = hash * 23 + HasValue.GetHashCode();
+				hash = (hash * 23) + HasValue.GetHashCode();
 				if (HasValue && Value != null)
 				{
-					hash = hash * 23 + Value.GetHashCode();
+					hash = (hash * 23) + Value.GetHashCode();
 				}
+
 				return hash;
 			}
 		}

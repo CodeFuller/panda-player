@@ -62,17 +62,17 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void Load_SetsDiscProperty()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc();
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
 				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
-			//	Act
+			// Act
 
 			target.Load(disc).Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(disc, target.Disc);
 		}
@@ -80,18 +80,18 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void Load_UnloadsPreviousImageFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IImageFile imageFileMock = Substitute.For<IImageFile>();
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
 				imageFileMock, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
-			//	Act
+			// Act
 
 			target.Load(new Disc()).Wait();
 
-			//	Assert
+			// Assert
 
 			imageFileMock.Received(1).Unload();
 		}
@@ -99,7 +99,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void Load_WhenDiscHasNoDiscCover_DoesNotLoadDiscCoverImageFile()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc();
 			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();
@@ -110,11 +110,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			var target = new EditDiscImageViewModel(musicLibraryStub, Substitute.For<IDocumentDownloader>(),
 				imageFileMock, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
-			//	Act
+			// Act
 
 			target.Load(disc).Wait();
 
-			//	Assert
+			// Assert
 
 			imageFileMock.DidNotReceive().Load(Arg.Any<string>(), Arg.Any<bool>());
 		}
@@ -122,7 +122,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void Load_WhenDiscHasDiscCover_LoadDiscCoverImageFileCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc();
 			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();
@@ -133,11 +133,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			var target = new EditDiscImageViewModel(musicLibraryStub, Substitute.For<IDocumentDownloader>(),
 				imageFileMock, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
-			//	Act
+			// Act
 
 			target.Load(disc).Wait();
 
-			//	Assert
+			// Assert
 
 			imageFileMock.Received(1).Load("SomeExistingCover.jpg", false);
 		}
@@ -145,22 +145,23 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void Load_SetsImageWasChangedToFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc();
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
 				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
 			target.Load(disc).Wait();
-			target.SetImage(new byte[] {});
-			//	Paranoic check.
+			target.SetImage(new byte[] { });
+
+			// Paranoic check.
 			Assert.IsTrue(target.ImageWasChanged);
 
-			//	Act
+			// Act
 
 			target.Load(disc).Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.IsFalse(target.ImageWasChanged);
 		}
@@ -168,7 +169,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void Load_IfDiscHasNoCoverAndDiscCoverImageLookupPagesAreConfigured_OpensDiscCoverImageLookupPagesCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var settings = new PandaPlayerSettings
 			{
@@ -193,11 +194,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			var target = new EditDiscImageViewModel(musicLibraryStub, Substitute.For<IDocumentDownloader>(),
 				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), webBrowserMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.Load(disc).Wait();
 
-			//	Assert
+			// Assert
 
 			webBrowserMock.Received(1).OpenPage("http://google.com?search1=\"Some%20Artist\" and \"Some%20Album\"");
 			webBrowserMock.Received(1).OpenPage("http://google.com?search2=\"Some%20Artist\" and \"Some%20Album\"");
@@ -206,7 +207,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void Load_WhenDiscCoverImageLookupPageIsOpened_EscapesSpecialCharactersInPastedData()
 		{
-			//	Arrange
+			// Arrange
 
 			var settings = new PandaPlayerSettings
 			{
@@ -230,11 +231,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			var target = new EditDiscImageViewModel(musicLibraryStub, Substitute.For<IDocumentDownloader>(),
 				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), webBrowserMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.Load(disc).Wait();
 
-			//	Assert
+			// Assert
 
 			webBrowserMock.Received(1).OpenPage("http://google.com?search=\"Some%20Artist%20%26%20Co\" and \"Some%20Album\"");
 		}
@@ -242,7 +243,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void Load_IfDiscHasCover_DoesNotOpenDiscCoverImageLookupPages()
 		{
-			//	Arrange
+			// Arrange
 
 			var settings = new PandaPlayerSettings
 			{
@@ -260,11 +261,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			var target = new EditDiscImageViewModel(musicLibraryStub, Substitute.For<IDocumentDownloader>(),
 				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), webBrowserMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.Load(new Disc()).Wait();
 
-			//	Assert
+			// Assert
 
 			webBrowserMock.DidNotReceive().OpenPage(Arg.Any<string>());
 		}
@@ -272,20 +273,21 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void Unload_SetsDiscPropertyToNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
 				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
 			target.Load(new Disc()).Wait();
-			//	Paranoic check
+
+			// Paranoic check
 			Assert.IsNotNull(target.Disc);
 
-			//	Act
+			// Act
 
 			target.Unload();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(target.Disc);
 		}
@@ -293,18 +295,18 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void Unload_UnloadsPreviousImageFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IImageFile imageFileMock = Substitute.For<IImageFile>();
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
 				imageFileMock, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
-			//	Act
+			// Act
 
 			target.Unload();
 
-			//	Assert
+			// Assert
 
 			imageFileMock.Received(1).Unload();
 		}
@@ -312,12 +314,12 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void Save_IfViewModelIsNotLoaded_Throws()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
 				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<AggregateException>(() => target.Save().Wait());
 		}
@@ -325,7 +327,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void Save_IfImageIsNotValid_Throws()
 		{
-			//	Arrange
+			// Arrange
 
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 			imageFileStub.ImageIsValid.Returns(false);
@@ -334,10 +336,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
 			target.Load(new Disc()).Wait();
-			//	Setting ImageWasChanged to true
+
+			// Setting ImageWasChanged to true
 			target.SetImage(new byte[] { });
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<AggregateException>(() => target.Save().Wait());
 		}
@@ -345,7 +348,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void Save_IfImageWasNotChanged_Throws()
 		{
-			//	Arrange
+			// Arrange
 
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 			imageFileStub.ImageIsValid.Returns(true);
@@ -355,7 +358,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 
 			target.Load(new Disc()).Wait();
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<AggregateException>(() => target.Save().Wait());
 		}
@@ -363,7 +366,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void Save_IfImageIsValid_UpdatesDiscCoverImageInLibrary()
 		{
-			//	Arrange
+			// Arrange
 
 			ImageInfo imageInfo = new ImageInfo();
 
@@ -379,14 +382,15 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
 			target.Load(disc).Wait();
-			//	Setting ImageWasChanged to true.
+
+			// Setting ImageWasChanged to true.
 			target.SetImage(new byte[] { });
 
-			//	Act
+			// Act
 
 			target.Save().Wait();
 
-			//	Assert
+			// Assert
 
 			musicLibraryMock.Received(1).SetDiscCoverImage(disc, imageInfo);
 		}
@@ -394,7 +398,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void Save_IfImageIsValid_SendsDiscImageChangedEvent()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc();
 
@@ -402,20 +406,21 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			imageFileStub.ImageIsValid.Returns(true);
 
 			bool receivedEvent = false;
-			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => receivedEvent = (e.Disc == disc));
+			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => receivedEvent = e.Disc == disc);
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
 				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
 			target.Load(disc).Wait();
-			//	Setting ImageWasChanged to true
+
+			// Setting ImageWasChanged to true
 			target.SetImage(new byte[] { });
 
-			//	Act
+			// Act
 
 			target.Save().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue(receivedEvent);
 		}
@@ -423,7 +428,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void SetImage1_WhenUriPointsToExistingLocalFile_LoadsImageFileCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists("c:\\SomeCover.jpg").Returns(true);
@@ -433,11 +438,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
 				imageFileMock, fileSystemStub, Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
-			//	Act
+			// Act
 
 			target.SetImage(new Uri("c:\\SomeCover.jpg")).Wait();
 
-			//	Assert
+			// Assert
 
 			imageFileMock.Received(1).Load("c:\\SomeCover.jpg", false);
 		}
@@ -445,7 +450,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void SetImage1_WhenUriPointsToExistingLocalFile_SetsImageWasChangedToTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists("c:\\SomeCover.jpg").Returns(true);
@@ -455,11 +460,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
 				imageFileMock, fileSystemStub, Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
-			//	Act
+			// Act
 
 			target.SetImage(new Uri("c:\\SomeCover.jpg")).Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue(target.ImageWasChanged);
 		}
@@ -467,7 +472,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void SetImage1_WhenUriPointsToUnexistingLocalFile_DoesNotLoadImageFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists("c:\\SomeCover.jpg").Returns(false);
@@ -477,11 +482,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
 				imageFileMock, fileSystemStub, Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
-			//	Act
+			// Act
 
 			target.SetImage(new Uri("c:\\SomeCover.jpg")).Wait();
 
-			//	Assert
+			// Assert
 
 			imageFileMock.DidNotReceive().Load(Arg.Any<string>(), Arg.Any<bool>());
 		}
@@ -489,7 +494,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void SetImage1_WhenUriIsRemote_DownloadsDataToTemporaryFileCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			byte[] downloadedData = { };
 			var documentDownloaderStub = Substitute.For<IDocumentDownloader>();
@@ -501,11 +506,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), documentDownloaderStub,
 				Substitute.For<IImageFile>(), fileSystemFacadeMock, Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
-			//	Act
+			// Act
 
 			target.SetImage(new Uri("http://www.test.com/")).Wait();
 
-			//	Assert
+			// Assert
 
 			fileSystemFacadeMock.Received(1).WriteAllBytes("SomeTempFile.tmp", downloadedData);
 		}
@@ -513,7 +518,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void SetImage1_WhenUriIsRemote_LoadsImageFileCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemFacadeStub = Substitute.For<IFileSystemFacade>();
 			fileSystemFacadeStub.GetTempFileName().Returns("SomeTempFile.tmp");
@@ -523,11 +528,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
 				imageFileMock, fileSystemFacadeStub, Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
-			//	Act
+			// Act
 
 			target.SetImage(new Uri("http://www.test.com/")).Wait();
 
-			//	Assert
+			// Assert
 
 			imageFileMock.Received(1).Load("SomeTempFile.tmp", true);
 		}
@@ -535,16 +540,16 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void SetImage1_WhenUriIsRemote_SetsImageWasChangedToTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
 				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
-			//	Act
+			// Act
 
 			target.SetImage(new Uri("http://www.test.com/")).Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue(target.ImageWasChanged);
 		}
@@ -552,7 +557,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void SetImage2_SavesDataToTemporaryFileCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemFacadeMock = Substitute.For<IFileSystemFacade>();
 			fileSystemFacadeMock.GetTempFileName().Returns("SomeTempFile.tmp");
@@ -562,11 +567,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 
 			byte[] imageData = { };
 
-			//	Act
+			// Act
 
 			target.SetImage(imageData);
 
-			//	Assert
+			// Assert
 
 			fileSystemFacadeMock.Received(1).WriteAllBytes("SomeTempFile.tmp", imageData);
 		}
@@ -574,7 +579,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void SetImage2_LoadsImageFileCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemFacadeStub = Substitute.For<IFileSystemFacade>();
 			fileSystemFacadeStub.GetTempFileName().Returns("SomeTempFile.tmp");
@@ -586,11 +591,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 
 			byte[] imageData = { };
 
-			//	Act
+			// Act
 
 			target.SetImage(imageData);
 
-			//	Assert
+			// Assert
 
 			imageFileMock.Received(1).Load("SomeTempFile.tmp", true);
 		}
@@ -598,16 +603,16 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void SetImage2_SetsImageWasChangedToTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
 				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
-			//	Act
+			// Act
 
-			target.SetImage(new byte[] {});
+			target.SetImage(new byte[] { });
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue(target.ImageWasChanged);
 		}
@@ -615,7 +620,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void PropertiesGetters_ReturnCorrespondingPropertiesFromImageFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 			imageFileStub.ImageFileName.Returns("SomeImageFileName");
@@ -626,7 +631,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
 				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual("SomeImageFileName", target.ImageFileName);
 			Assert.AreEqual(true, target.ImageIsValid);
@@ -637,7 +642,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void ImageFilePropertyChangedEventHandler_WhenImageFileNamePropertyIsChanged_RaisesPropertyChangedEventForImageFileNameProperty()
 		{
-			//	Arrange
+			// Arrange
 
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 
@@ -647,11 +652,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			string changedPropertyName = null;
 			target.PropertyChanged += (sender, e) => changedPropertyName = e.PropertyName;
 
-			//	Act
+			// Act
 
 			imageFileStub.PropertyChanged += Raise.Event<PropertyChangedEventHandler>(imageFileStub, new PropertyChangedEventArgs(nameof(IImageFile.ImageFileName)));
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(nameof(EditDiscImageViewModel.ImageFileName), changedPropertyName);
 		}
@@ -659,7 +664,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void ImageFilePropertyChangedEventHandler_WhenImageIsValidPropertyIsChanged_RaisesPropertyChangedEventForImageIsValidProperty()
 		{
-			//	Arrange
+			// Arrange
 
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 
@@ -669,11 +674,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			string changedPropertyName = null;
 			target.PropertyChanged += (sender, e) => changedPropertyName = e.PropertyName;
 
-			//	Act
+			// Act
 
 			imageFileStub.PropertyChanged += Raise.Event<PropertyChangedEventHandler>(imageFileStub, new PropertyChangedEventArgs(nameof(IImageFile.ImageIsValid)));
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(nameof(EditDiscImageViewModel.ImageIsValid), changedPropertyName);
 		}
@@ -681,7 +686,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void ImageFilePropertyChangedEventHandler_WhenImagePropertiesPropertyIsChanged_RaisesPropertyChangedEventForImagePropertiesProperty()
 		{
-			//	Arrange
+			// Arrange
 
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 
@@ -691,11 +696,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			string changedPropertyName = null;
 			target.PropertyChanged += (sender, e) => changedPropertyName = e.PropertyName;
 
-			//	Act
+			// Act
 
 			imageFileStub.PropertyChanged += Raise.Event<PropertyChangedEventHandler>(imageFileStub, new PropertyChangedEventArgs(nameof(IImageFile.ImageProperties)));
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(nameof(EditDiscImageViewModel.ImageProperties), changedPropertyName);
 		}
@@ -703,7 +708,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void ImageFilePropertyChangedEventHandler_WhenImageStatusPropertyIsChanged_RaisesPropertyChangedEventForImageStatusProperty()
 		{
-			//	Arrange
+			// Arrange
 
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 
@@ -713,11 +718,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			string changedPropertyName = null;
 			target.PropertyChanged += (sender, e) => changedPropertyName = e.PropertyName;
 
-			//	Act
+			// Act
 
 			imageFileStub.PropertyChanged += Raise.Event<PropertyChangedEventHandler>(imageFileStub, new PropertyChangedEventArgs(nameof(IImageFile.ImageStatus)));
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(nameof(EditDiscImageViewModel.ImageStatus), changedPropertyName);
 		}

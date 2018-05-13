@@ -15,7 +15,9 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 			get => null;
 			set => throw new InvalidOperationException(Current($"Artist could not be set for '{DiscTitle}' disc"));
 		}
+
 		public override bool ArtistIsEditable => false;
+
 		public override bool ArtistIsNotFilled => false;
 
 		public CompilationDiscWithArtistInfoViewItem(AddedDiscInfo discInfo, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)

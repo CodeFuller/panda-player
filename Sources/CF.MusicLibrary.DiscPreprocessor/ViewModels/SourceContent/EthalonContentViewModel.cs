@@ -9,8 +9,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 	{
 		private const string ContentSaveFilename = "RawDiscsContent.txt";
 
-		private string rawEthalonDiscsContent;
-
 		private readonly IFileSystemFacade fileSystemFacade;
 		private readonly string contentSaveFilePath;
 
@@ -19,6 +17,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
 			contentSaveFilePath = Path.Combine(appDataPath, ContentSaveFilename);
 		}
+
+		private string rawEthalonDiscsContent;
 
 		public string Content
 		{

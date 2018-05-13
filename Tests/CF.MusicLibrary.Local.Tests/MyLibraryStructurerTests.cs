@@ -10,15 +10,15 @@ namespace CF.MusicLibrary.Local.Tests
 		[Test]
 		public void ReplaceDiscPartInImageUri_ReturnsCorrectUri()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new MyLibraryStructurer();
 
-			//	Act
+			// Act
 
 			var imageUri = target.ReplaceDiscPartInImageUri(new Uri("/SomeDir/SubDir/NewDisc", UriKind.Relative), new Uri("/SomeDir/OldDisc/SomeImage.img", UriKind.Relative));
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(new Uri("/SomeDir/SubDir/NewDisc/SomeImage.img", UriKind.Relative), imageUri);
 		}
@@ -26,7 +26,7 @@ namespace CF.MusicLibrary.Local.Tests
 		[Test]
 		public void GetDiscCoverImageUri_ReturnsCorrectUri()
 		{
-			//	Arrange
+			// Arrange
 
 			var imageInfo = new ImageInfo
 			{
@@ -35,11 +35,11 @@ namespace CF.MusicLibrary.Local.Tests
 
 			var target = new MyLibraryStructurer();
 
-			//	Act
+			// Act
 
 			var imageUri = target.GetDiscCoverImageUri(new Uri("/SomeDir/SomeDisc", UriKind.Relative), imageInfo);
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(new Uri("/SomeDir/SomeDisc/cover.jpg", UriKind.Relative), imageUri);
 		}

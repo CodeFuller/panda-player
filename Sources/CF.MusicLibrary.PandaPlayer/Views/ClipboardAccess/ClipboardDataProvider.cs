@@ -3,7 +3,7 @@ using System.Windows.Media.Imaging;
 
 namespace CF.MusicLibrary.PandaPlayer.Views.ClipboardAccess
 {
-	class ClipboardDataProvider : IClipboardDataProvider
+	internal class ClipboardDataProvider : IClipboardDataProvider
 	{
 		private readonly ClipboardImageExtractor clipboardImageExtractor = new ClipboardImageExtractor();
 

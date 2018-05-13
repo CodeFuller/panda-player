@@ -11,8 +11,8 @@ namespace CF.MusicLibrary.Universal
 
 		public Collection<Disc> Discs { get; } = new Collection<Disc>();
 
-		public DiscGroup(string idAndName) :
-			this(idAndName, idAndName)
+		public DiscGroup(string idAndName)
+			: this(idAndName, idAndName)
 		{
 		}
 

@@ -12,7 +12,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 		TimeSpan CurrSongLength { get; }
 
 		TimeSpan CurrSongPosition { get; set; }
-		
+
 		double Volume { get; set; }
 
 		void SetCurrentSongFile(string fileName);
@@ -21,7 +21,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 
 		void Pause();
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", Justification = "'Stop' is the best name in current semantics")]
 		void Stop();
 	}
 }

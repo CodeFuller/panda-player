@@ -17,6 +17,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private Disc Disc { get; set; }
 
 		private string folderName;
+
 		public string FolderName
 		{
 			get => folderName;
@@ -26,11 +27,13 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				{
 					throw new InvalidOperationException("Value of Disc folder name could not be empty");
 				}
+
 				Set(ref folderName, value);
 			}
 		}
 
 		private string discTitle;
+
 		public string DiscTitle
 		{
 			get => discTitle;
@@ -40,11 +43,13 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				{
 					throw new InvalidOperationException("Value of Disc title could not be empty");
 				}
+
 				Set(ref discTitle, value);
 			}
 		}
 
 		private string albumTitle;
+
 		public string AlbumTitle
 		{
 			get => albumTitle;
@@ -54,6 +59,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				{
 					value = null;
 				}
+
 				Set(ref albumTitle, value);
 			}
 		}

@@ -13,17 +13,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 
 		public string SongTitle { get; }
 
-		/// <summary>
-		/// Constructs not-matched SongTitleMatch.
-		/// </summary>
 		private SongTitleMatch()
 		{
 			Success = false;
 		}
 
-		/// <summary>
-		/// Constructs matched SongTitleMatch with specified title and payload.
-		/// </summary>
 		public SongTitleMatch(string rawTitle, string payload)
 		{
 			Success = true;
@@ -34,11 +28,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 				: Invariant($"{CapitalizeTitle(adjustedTitle)} {payload}");
 		}
 
-		/// <summary>
-		/// Constructs matched SongTitleMatch with specified title and empty payload.
-		/// </summary>
-		public SongTitleMatch(string rawTitle) :
-			this(rawTitle, String.Empty)
+		public SongTitleMatch(string rawTitle)
+			: this(rawTitle, String.Empty)
 		{
 		}
 
@@ -56,12 +47,12 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 				return rawTitle;
 			}
 
-			//	CultureInfo.CurrentCulture.TextInfo.ToTitleCase() doesn't work good for titles like 'RockStar',
-			//	where middle letters should be in upper case. That's why we reinvent this wheels.
-			//var title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rawTitle);
+			// CultureInfo.CurrentCulture.TextInfo.ToTitleCase() doesn't work good for titles like 'RockStar',
+			// where middle letters should be in upper case. That's why we reinvent these wheels.
+			// var title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rawTitle);
 			var title = ToTitleCase(rawTitle);
 
-			//	Handling numeric ordinals, 1st, 2nd, 12th
+			// Handling numeric ordinals, 1st, 2nd, 12th
 			return Regex.Replace(title, "(1st)|(2nd)|(3rd)|([0-9]th)",
 				m => m.Captures[0].Value.ToLower(CultureInfo.CurrentCulture), RegexOptions.IgnoreCase);
 		}
@@ -86,7 +77,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 			}
 		}
 
-		static string CapitalizeFirstLetter(string str)
+		private static string CapitalizeFirstLetter(string str)
 		{
 			if (String.IsNullOrEmpty(str))
 			{

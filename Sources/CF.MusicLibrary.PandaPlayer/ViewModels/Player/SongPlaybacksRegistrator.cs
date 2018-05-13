@@ -49,11 +49,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 				Number = song.TrackNumber,
 				Title = song.Title,
 				Artist = song.Artist?.Name,
-				Album = new Album
-				{
-					Artist = song.Artist?.Name,
-					Title = song.Disc.AlbumTitle,
-				},
+				Album = new Album(song.Artist?.Name, song.Disc.AlbumTitle),
 				Duration = song.Duration,
 			};
 		}

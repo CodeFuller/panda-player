@@ -21,7 +21,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ParsingContent
 		[Test]
 		public void Parse_ForValidContent_ReturnsCorrectDiscContent()
 		{
-			//	Arrange
+			// Arrange
 
 			string[] content =
 			{
@@ -35,11 +35,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ParsingContent
 			songParserStub.ParseSongTitle("DiscSongContent2").Returns("Song2");
 			EthalonDiscParser target = new EthalonDiscParser(songParserStub);
 
-			//	Act
+			// Act
 
 			DiscContent disc = target.Parse(content);
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("DiscDirectory", disc.DiscDirectory);
 			var songs = disc.Songs.ToList();

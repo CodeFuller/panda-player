@@ -41,6 +41,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		public ICommand ReloadRawContentCommand { get; }
 
 		private bool dataIsReady;
+
 		public bool DataIsReady
 		{
 			get => dataIsReady;

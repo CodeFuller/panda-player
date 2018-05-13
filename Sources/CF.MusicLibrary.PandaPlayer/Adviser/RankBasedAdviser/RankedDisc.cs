@@ -9,7 +9,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser
 
 		public int PlaybacksPassed => Disc.PlaybacksPassed.Value;
 
-		public double Rating => Disc.Songs.Select(s => (double) s.SafeRating).Average();
+		public double Rating => Disc.Songs.Select(s => (double)s.SafeRating).Average();
 
 		public RankedDisc(Disc disc)
 		{

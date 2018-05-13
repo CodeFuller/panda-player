@@ -19,6 +19,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public static IEnumerable<Rating> AvailableRatings => RatingsHelper.AllowedRatingsDesc;
 
 		private Rating selectedRating;
+
 		public Rating SelectedRating
 		{
 			get => selectedRating;

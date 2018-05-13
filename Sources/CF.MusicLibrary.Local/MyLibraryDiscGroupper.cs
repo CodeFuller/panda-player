@@ -4,8 +4,8 @@ using System.Linq;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.Universal;
 using CF.MusicLibrary.Universal.Interfaces;
-using static System.FormattableString;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
+using static System.FormattableString;
 
 namespace CF.MusicLibrary.Local
 {
@@ -34,21 +34,21 @@ namespace CF.MusicLibrary.Local
 		{
 			LocalLibraryDiscPath localLibraryDiscPath = new LocalLibraryDiscPath(disc);
 
-			//	Discs from "Belarussian", "Foreign" or "Russian" categories are groupped by 2nd folder.
-			//	This covers cases when Artist directory contains side-project discs (e.g. Гражданская Оборона/Егор Летов).
+			// Discs from "Belarussian", "Foreign" or "Russian" categories are groupped by 2nd folder.
+			// This covers cases when Artist directory contains side-project discs (e.g. Гражданская Оборона/Егор Летов).
 			if (MyLocalLibraryNames.IsArtistCategory(localLibraryDiscPath.Category))
 			{
 				string artistName = localLibraryDiscPath.NestedDirectory;
 				return new DiscGroup(Invariant($"{localLibraryDiscPath.Category} / {artistName}"), artistName);
 			}
 
-			//	All discs from "Soundtracks" category fall into one group.
+			// All discs from "Soundtracks" category fall into one group.
 			if (localLibraryDiscPath.Category == MyLocalLibraryNames.Soundtracks)
 			{
 				return new DiscGroup(localLibraryDiscPath.Category);
 			}
 
-			//	Disc from "Collections" category are groupped by compilation type
+			// Disc from "Collections" category are groupped by compilation type
 			if (localLibraryDiscPath.Category == MyLocalLibraryNames.Collections)
 			{
 				return GetCompilationDiscGroup(localLibraryDiscPath.NestedDirectory);

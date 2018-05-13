@@ -7,8 +7,8 @@ namespace CF.MusicLibrary.Dal
 {
 	public class MusicLibraryEntities : DbContext
 	{
-		public MusicLibraryEntities(DbConnection dbConnection) :
-			base(dbConnection, true)
+		public MusicLibraryEntities(DbConnection dbConnection)
+			: base(dbConnection, true)
 		{
 		}
 

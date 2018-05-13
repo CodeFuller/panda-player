@@ -20,15 +20,11 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		double Volume { get; set; }
 
-		/// <summary>
-		/// Starts or resumes song playback.
-		/// </summary>
-		/// <returns></returns>
 		Task Play();
 
 		void Pause();
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is the best name in current semantics")]
 		void Stop();
 	}
 }

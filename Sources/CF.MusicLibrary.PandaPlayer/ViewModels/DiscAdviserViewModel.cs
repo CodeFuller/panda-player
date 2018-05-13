@@ -24,6 +24,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private readonly List<AdvisedPlaylist> currAdvises = new List<AdvisedPlaylist>();
 
 		private int currAdviseIndex;
+
 		private int CurrAdviseIndex
 		{
 			get => currAdviseIndex;
@@ -94,9 +95,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		{
 			List<Song> finishedSongsList = finishedSongs.ToList();
 
-			//	Removing advises that could be covered by just finished playlist.
+			// Removing advises that could be covered by just finished playlist.
 			bool currAdviseChanged = false;
-			for (var i = currAdviseIndex; i < currAdvises.Count; )
+			for (var i = currAdviseIndex; i < currAdvises.Count;)
 			{
 				if (SongListCoversAdvise(finishedSongsList, currAdvises[i]))
 				{

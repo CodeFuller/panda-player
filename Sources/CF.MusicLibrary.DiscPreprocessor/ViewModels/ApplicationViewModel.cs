@@ -56,6 +56,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		}
 
 		public bool CanSwitchToPrevPage => PrevPage != null;
+
 		public bool CanSwitchToNextPage => NextPage != null && CurrPage.DataIsReady;
 
 		public string PrevPageName => PrevPage?.Name ?? "N/A";
@@ -74,6 +75,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 		}
 
 		private IPageViewModel currPage;
+
 		public IPageViewModel CurrPage
 		{
 			get => currPage;

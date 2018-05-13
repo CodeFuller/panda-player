@@ -53,7 +53,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void SwitchToNextPage_WhenSwitchesToAddToLibraryViewModel_SetSongsFromEditSongsDetailsViewModel()
 		{
-			//	Arrange
+			// Arrange
 
 			var addedSong1 = new AddedSong(new Song(), "SomeSong1.mp3");
 			var addedSong2 = new AddedSong(new Song(), "SomeSong2.mp3");
@@ -74,27 +74,29 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 			var target = new ApplicationViewModel(Substitute.For<IEditSourceContentViewModel>(), Substitute.For<IEditDiscsDetailsViewModel>(),
 				Substitute.For<IEditSourceDiscImagesViewModel>(), editSongsDetailsViewModelStub, addToLibraryViewModelMock);
 
-			//	Switch to IEditDiscsDetailsViewModel
-			target.SwitchToNextPage().Wait();
-			//	Switch to IEditSourceDiscImagesViewModel
-			target.SwitchToNextPage().Wait();
-			//	Switch to IEditSongsDetailsViewModel
+			// Switch to IEditDiscsDetailsViewModel
 			target.SwitchToNextPage().Wait();
 
-			//	Act
+			// Switch to IEditSourceDiscImagesViewModel
+			target.SwitchToNextPage().Wait();
+
+			// Switch to IEditSongsDetailsViewModel
+			target.SwitchToNextPage().Wait();
+
+			// Act
 
 			target.SwitchToNextPage().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(setSongs);
-			CollectionAssert.AreEqual(new[] { addedSong1, addedSong2}, setSongs);
+			CollectionAssert.AreEqual(new[] { addedSong1, addedSong2 }, setSongs);
 		}
 
 		[Test]
 		public void SwitchToNextPage_WhenSwitchesToAddToLibraryViewModel_SetDiscsImagesFromEditSourceDiscsImagesViewModel()
 		{
-			//	Arrange
+			// Arrange
 
 			AddedDiscImage discImage1 = new AddedDiscImage(new Disc(), new ImageInfo());
 			AddedDiscImage discImage2 = new AddedDiscImage(new Disc(), new ImageInfo());
@@ -112,18 +114,20 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 			var target = new ApplicationViewModel(Substitute.For<IEditSourceContentViewModel>(), Substitute.For<IEditDiscsDetailsViewModel>(),
 				editSourceDiscsImagesViewModelStub, editSongsDetailsViewModelStub, addToLibraryViewModelMock);
 
-			//	Switch to IEditDiscsDetailsViewModel
-			target.SwitchToNextPage().Wait();
-			//	Switch to IEditSourceDiscImagesViewModel
-			target.SwitchToNextPage().Wait();
-			//	Switch to IEditSongsDetailsViewModel
+			// Switch to IEditDiscsDetailsViewModel
 			target.SwitchToNextPage().Wait();
 
-			//	Act
+			// Switch to IEditSourceDiscImagesViewModel
+			target.SwitchToNextPage().Wait();
+
+			// Switch to IEditSongsDetailsViewModel
+			target.SwitchToNextPage().Wait();
+
+			// Act
 
 			target.SwitchToNextPage().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(setImages);
 			CollectionAssert.AreEqual(new[] { discImage1, discImage2 }, setImages);

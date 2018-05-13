@@ -28,6 +28,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		private readonly IViewNavigator viewNavigator;
 
 		private string title = DefaultTitle;
+
 		public string Title
 		{
 			get => title;
@@ -43,6 +44,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public IMusicPlayerViewModel MusicPlayerViewModel { get; }
 
 		private int selectedSongListIndex;
+
 		public int SelectedSongListIndex
 		{
 			get => selectedSongListIndex;
@@ -54,6 +56,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		}
 
 		private Disc activeDisc;
+
 		private Disc ActiveDisc
 		{
 			set
@@ -100,7 +103,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			await discLibrary.Load();
 			Messenger.Default.Send(new LibraryLoadedEventArgs(discLibrary));
 
-			//	Setting playlist active if some previous playlist was loaded.
+			// Setting playlist active if some previous playlist was loaded.
 			if (Playlist.Songs.Any())
 			{
 				SwitchToSongPlaylist();

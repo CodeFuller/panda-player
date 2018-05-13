@@ -14,6 +14,7 @@ namespace CF.MusicLibrary.DiscPreprocessor
 			{
 				throw new ArgumentNullException(nameof(ethalonDiscs));
 			}
+
 			if (currentDiscs == null)
 			{
 				throw new ArgumentNullException(nameof(currentDiscs));
@@ -99,6 +100,7 @@ namespace CF.MusicLibrary.DiscPreprocessor
 			{
 				song.ContentIsIncorrect = true;
 			}
+
 			disc.ContentIsIncorrect = true;
 		}
 	}

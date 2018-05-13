@@ -13,7 +13,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void DiscTypeTitleGetter_ReturnsCorrectDiscTypeTitle()
 		{
-			//	Arrange
+			// Arrange
 
 			var existingDisc = new Disc();
 
@@ -24,7 +24,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ExistingDiscViewItem(existingDisc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual("Existing Disc", target.DiscTypeTitle);
 		}
@@ -32,7 +32,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void WarnAboutDiscTypeGetter_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var existingDisc = new Disc();
 
@@ -43,7 +43,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ExistingDiscViewItem(existingDisc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsTrue(target.WarnAboutDiscType);
 		}
@@ -51,7 +51,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void DiscTitleGetter_ReturnsTitleOfExistingDisc()
 		{
-			//	Arrange
+			// Arrange
 
 			var existingDisc = new Disc
 			{
@@ -66,7 +66,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ExistingDiscViewItem(existingDisc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual("Existing Title", target.DiscTitle);
 		}
@@ -74,7 +74,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void AlbumTitleGetter_ReturnsAlbumTitleOfExistingDisc()
 		{
-			//	Arrange
+			// Arrange
 
 			var existingDisc = new Disc
 			{
@@ -89,7 +89,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ExistingDiscViewItem(existingDisc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual("Existing Album Title", target.AlbumTitle);
 		}
@@ -97,7 +97,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void AlbumTitleSetter_ThrowsInvalidOperationException()
 		{
-			//	Arrange
+			// Arrange
 
 			var existingDisc = new Disc
 			{
@@ -112,7 +112,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ExistingDiscViewItem(existingDisc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.AlbumTitle = "Very New Title");
 		}
@@ -120,12 +120,12 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void AlbumTitleIsEditableGetter_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
 			var target = new ExistingDiscViewItem(new Disc(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.AlbumTitleIsEditable);
 		}
@@ -133,7 +133,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void WarnAboutUnequalAlbumTitleGetter_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -144,10 +144,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
 			var target = new ExistingDiscViewItem(disc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Sanity check
+			// Sanity check
 			Assert.AreNotEqual(target.DiscTitle, target.AlbumTitle);
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.WarnAboutUnequalAlbumTitle);
 		}
@@ -155,12 +155,12 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void YearIsEditableGetter_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
 			var target = new ExistingDiscViewItem(new Disc(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.YearIsEditable);
 		}
@@ -168,7 +168,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void WarnAboutNotFilledYearGetter_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -179,10 +179,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
 			var target = new ExistingDiscViewItem(disc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Sanity check
+			// Sanity check
 			Assert.IsNull(target.Year);
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.WarnAboutNotFilledYear);
 		}
@@ -190,7 +190,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ArtistGetter_IfExistingDiscHasArtist_ReturnsThisArtist()
 		{
-			//	Arrange
+			// Arrange
 
 			var existingArtist = new Artist();
 			var existingDisc = new Disc
@@ -205,7 +205,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ExistingDiscViewItem(existingDisc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreSame(existingArtist, target.Artist);
 		}
@@ -213,7 +213,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ArtistGetter_IfExistingDiscDoesNotHaveArtist_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var existingDisc = new Disc
 			{
@@ -231,7 +231,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ExistingDiscViewItem(existingDisc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsNull(target.Artist);
 		}
@@ -239,7 +239,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ArtistSetter_ThrowsInvalidOperationException()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -248,7 +248,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ExistingDiscViewItem(new Disc(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.Artist = new Artist());
 		}
@@ -256,7 +256,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ArtistIsEditableGetter_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -265,7 +265,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ExistingDiscViewItem(new Disc(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.ArtistIsEditable);
 		}
@@ -273,7 +273,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ArtistIsNotFilledGetter_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -282,7 +282,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ExistingDiscViewItem(new Disc(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.ArtistIsNotFilled);
 		}
@@ -290,7 +290,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void YearGetter_IfExistingDiscHasYear_ReturnsThisYear()
 		{
-			//	Arrange
+			// Arrange
 
 			var existingDisc = new Disc
 			{
@@ -304,7 +304,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ExistingDiscViewItem(existingDisc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual(2017, target.Year);
 		}
@@ -312,7 +312,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void YearGetter_IfExistingDiscDoesNotHaveYear_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var existingDisc = new Disc
 			{
@@ -330,14 +330,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ExistingDiscViewItem(existingDisc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsNull(target.Year);
 		}
+
 		[Test]
 		public void YearSetter_ThrowsInvalidOperationException()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -346,7 +347,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ExistingDiscViewItem(new Disc(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.Year = 2017);
 		}
@@ -354,7 +355,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void RequiredDataIsFilledGetter_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -363,7 +364,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ExistingDiscViewItem(new Disc(), discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsTrue(target.RequiredDataIsFilled);
 		}
@@ -371,7 +372,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void Songs_IfParsedSongArtistIsNull_FillsArtistFromExistingDisc()
 		{
-			//	Arrange
+			// Arrange
 
 			var existingArtist = new Artist();
 			var existingDisc = new Disc
@@ -389,11 +390,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ExistingDiscViewItem(existingDisc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act
+			// Act
 
 			var addedSongs = target.Songs.ToList();
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(existingArtist, addedSongs.Single().Song.Artist);
 		}
@@ -401,7 +402,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void Songs_IfParsedSongArtistIsNotNull_LookupsArtistInArtistsList()
 		{
-			//	Arrange
+			// Arrange
 
 			var existingArtist = new Artist();
 			var someNewArtist = new Artist { Name = "Some New Artist" };
@@ -418,13 +419,13 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 				DiscType = DsicType.ArtistDisc,
 			};
 
-			var target = new ExistingDiscViewItem(existingDisc, discInfo, new [] { someNewArtist }, Enumerable.Empty<Genre>());
+			var target = new ExistingDiscViewItem(existingDisc, discInfo, new[] { someNewArtist }, Enumerable.Empty<Genre>());
 
-			//	Act
+			// Act
 
 			var addedSongs = target.Songs.ToList();
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(someNewArtist, addedSongs.Single().Song.Artist);
 		}

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using CF.MusicLibrary.DiscPreprocessor.ParsingContent;
 using NUnit.Framework;
 
@@ -20,7 +21,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ParsingContent
 		[Test]
 		public void Split_ForContentWithOneChunk_ReturnsCorrectContent()
 		{
-			//	Arrange
+			// Arrange
 
 			string[] inputContent =
 			{
@@ -30,11 +31,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ParsingContent
 
 			InputContentSplitter target = new InputContentSplitter();
 
-			//	Act
+			// Act
 
 			var content = target.Split(inputContent).ToList();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, content.Count);
 			CollectionAssert.AreEqual(inputContent, content[0]);
@@ -43,24 +44,24 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ParsingContent
 		[Test]
 		public void Split_ForContentWithSeveralChunks_ReturnsCorrectContent()
 		{
-			//	Arrange
+			// Arrange
 
 			string[] inputContent =
 			{
 				"Data_11",
 				"Data_12",
-				"",
+				String.Empty,
 				"Data_21",
 				"Data_22",
 			};
 
 			InputContentSplitter target = new InputContentSplitter();
 
-			//	Act
+			// Act
 
 			var content = target.Split(inputContent).ToList();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(2, content.Count);
 			CollectionAssert.AreEqual(new[] { "Data_11", "Data_12" }, content[0]);
@@ -70,25 +71,25 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ParsingContent
 		[Test]
 		public void Split_ForContentWithExtraEmptyLines_SkipsExtraEmptyLines()
 		{
-			//	Arrange
+			// Arrange
 
 			string[] inputContent =
 			{
-				"",
+				String.Empty,
 				"Data_1",
-				"",
-				"",
+				String.Empty,
+				String.Empty,
 				"Data_2",
-				"",
+				String.Empty,
 			};
 
 			InputContentSplitter target = new InputContentSplitter();
 
-			//	Act
+			// Act
 
 			var content = target.Split(inputContent).ToList();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(2, content.Count);
 			CollectionAssert.AreEqual(new[] { "Data_1" }, content[0]);

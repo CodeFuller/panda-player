@@ -20,6 +20,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 		private readonly IAudioPlayer audioPlayer;
 
 		private bool isPlaying;
+
 		public bool IsPlaying
 		{
 			get => isPlaying;
@@ -65,11 +66,12 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 		public ISongPlaylistViewModel Playlist { get; }
 
 		/// <summary>
-		/// The song that is currently loaded into audio player.
+		/// Gets the song, which is currently loaded into audio player.
 		/// </summary>
 		public Song CurrentSong { get; private set; }
 
 		public ICommand PlayCommand { get; }
+
 		public ICommand PauseCommand { get; }
 
 		public MusicPlayerViewModel(IMusicLibrary musicLibrary, ISongPlaylistViewModel playlist, IAudioPlayer audioPlayer, ISongPlaybacksRegistrator playbacksRegistrator)
@@ -132,13 +134,13 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 			Playlist.SwitchToNextSong();
 			if (Playlist.CurrentSong == null)
 			{
-				//	We finished the end of playlist.
+				// We have reached the end of playlist.
 				IsPlaying = false;
 				Messenger.Default.Send(new PlaylistFinishedEventArgs(Playlist));
 				return;
 			}
 
-			//	Play next song from the playlist.
+			// Play next song from the playlist.
 			await Play();
 		}
 

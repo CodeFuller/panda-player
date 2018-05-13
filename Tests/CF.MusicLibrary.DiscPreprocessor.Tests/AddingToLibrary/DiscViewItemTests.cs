@@ -26,12 +26,19 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			}
 
 			public override string DiscTypeTitle { get; }
+
 			public override Artist Artist { get; set; }
+
 			public override bool ArtistIsEditable { get; }
+
 			public override bool ArtistIsNotFilled { get; }
+
 			public override string AlbumTitle { get; set; }
+
 			public override bool AlbumTitleIsEditable { get; }
+
 			public override bool YearIsEditable { get; }
+
 			public override bool RequiredDataIsFilled { get; }
 
 			protected override Artist GetSongArtist(AddedSongInfo song)
@@ -48,18 +55,18 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void Constructor_InitializesSourcePathCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				SourcePath = "Some Source Path",
 			};
 
-			//	Act
+			// Act
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("Some Source Path", target.SourcePath);
 		}
@@ -67,7 +74,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void Constructor_InitializesAvailableArtistsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
 
@@ -77,11 +84,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 				new Artist(),
 			};
 
-			//	Act
+			// Act
 
 			var target = new ConcreteDiscViewItem(discInfo, artists, Enumerable.Empty<Genre>());
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(artists, target.AvailableArtists);
 		}
@@ -89,7 +96,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void Constructor_InitializesAvailableGenresCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -102,11 +109,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 				new Genre(),
 			};
 
-			//	Act
+			// Act
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), genres);
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(genres, target.AvailableGenres);
 		}
@@ -114,18 +121,18 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void Constructor_InitializesDestinationUriCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				UriWithinStorage = new Uri("/Some/Disc/Uri", UriKind.Relative),
 			};
 
-			//	Act
+			// Act
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(new Uri("/Some/Disc/Uri", UriKind.Relative), target.DestinationUri);
 		}
@@ -133,14 +140,14 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void WarnAboutDiscTypeGetter_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 			target.Artist = new Artist { Id = 0 };
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.WarnAboutDiscType);
 		}
@@ -148,14 +155,14 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ArtistIsNewGetter_ForNewArtist_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 			target.Artist = new Artist { Id = 0 };
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsTrue(target.ArtistIsNew);
 		}
@@ -163,14 +170,14 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ArtistIsNewGetter_ForExistingArtist_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 			target.Artist = new Artist { Id = 1 };
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.ArtistIsNew);
 		}
@@ -178,7 +185,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void TitleGetter_ReturnsTitleOfInnerDisc()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -187,7 +194,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual("Some Disc Title", target.DiscTitle);
 		}
@@ -196,14 +203,14 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[TestCase(null)]
 		public void YearGetter_ReturnsCorrectYearValue(short? year)
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 			target.Year = year;
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual(year, target.Year);
 		}
@@ -211,7 +218,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void GenreIsNotFilledGetter_WhenGenreIsSet_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			Genre genre = new Genre();
 
@@ -220,7 +227,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), new[] { genre });
 			target.Genre = genre;
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.GenreIsNotFilled);
 		}
@@ -228,13 +235,13 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void GenreIsNotFilledGetter_WhenGenreIsNotSet_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), new[] { new Genre() });
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsTrue(target.GenreIsNotFilled);
 		}
@@ -242,7 +249,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void DestinationUri_ReturnsUriOfInnerDisc()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -251,7 +258,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual(new Uri("/SomeDiscUri", UriKind.Relative), target.DestinationUri);
 		}
@@ -259,7 +266,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void LookupArtist_IfArtistPresentsInAvailableArtists_ReturnsCorrectArtist()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
 
@@ -269,11 +276,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new ConcreteDiscViewItem(discInfo, artists, new[] { new Genre() });
 
-			//	Act
+			// Act
 
 			var returnedArtist = target.CallLookupArtist("Artist 2");
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreSame(artist2, returnedArtist);
 		}
@@ -281,13 +288,13 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void LookupArtist_IfArtistDoesNotPresentsnAvailableArtists_ThrowsInvalidOperationException()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>());
 
 			var target = new ConcreteDiscViewItem(discInfo, new[] { new Artist { Name = "Some Artist" } }, new[] { new Genre() });
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.CallLookupArtist("Another Artist"));
 		}

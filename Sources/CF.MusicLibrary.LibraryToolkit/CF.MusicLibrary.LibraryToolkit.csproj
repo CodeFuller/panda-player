@@ -12,19 +12,26 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <CodeAnalysisRuleSet>..\..\MusicLibrary.Sources.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <PropertyGroup>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CF.Library.Bootstrap" Version="1.0.0" />
-    <PackageReference Include="NDesk.Options" Version="0.2.1" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.108" />
-    <PackageReference Include="CF.Library.Core" Version="3.0.0" />
-    <PackageReference Include="CF.Library.Logging" Version="2.2.2" />
+    <Compile Include="..\GlobalAssemblyInfo.cs" Link="GlobalAssemblyInfo.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\GlobalAssemblyInfo.cs" Link="GlobalAssemblyInfo.cs" />
+    <PackageReference Include="CF.Library.Bootstrap" Version="1.0.0" />
+    <PackageReference Include="CF.Library.Core" Version="3.0.0" />
+    <PackageReference Include="CF.Library.Logging" Version="2.2.2" />
+    <PackageReference Include="NDesk.Options" Version="0.2.1" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.108" />
   </ItemGroup>
 
   <ItemGroup>

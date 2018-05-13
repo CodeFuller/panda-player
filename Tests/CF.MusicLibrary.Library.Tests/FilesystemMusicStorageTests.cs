@@ -21,7 +21,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void StoreSong_StoresSongFileCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileStorage fileStorageMock = Substitute.For<IFileStorage>();
 			FileSystemMusicStorage target = new FileSystemMusicStorage(fileStorageMock);
@@ -31,11 +31,11 @@ namespace CF.MusicLibrary.Library.Tests
 				Uri = new Uri("/SomeSongName.mp3", UriKind.Relative),
 			};
 
-			//	Act
+			// Act
 
 			target.StoreSong("SourceSongFile.mp3", song).Wait();
 
-			//	Assert
+			// Assert
 
 			fileStorageMock.Received(1).StoreFile("SourceSongFile.mp3", new Uri("/SomeSongName.mp3", UriKind.Relative));
 		}
@@ -43,7 +43,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void GetSongFile_ReturnsSongFileFromStorage()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileStorage fileStorageStub = Substitute.For<IFileStorage>();
 			fileStorageStub.GetFile(new Uri("/SomeSongName.mp3", UriKind.Relative)).Returns("SomeSongFile.mp3");
@@ -54,11 +54,11 @@ namespace CF.MusicLibrary.Library.Tests
 				Uri = new Uri("/SomeSongName.mp3", UriKind.Relative),
 			};
 
-			//	Act
+			// Act
 
 			var songFile = target.GetSongFile(song).Result;
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("SomeSongFile.mp3", songFile);
 		}
@@ -66,7 +66,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void GetSongFileForWriting_ReturnsFileForWritingFromStorage()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileStorage fileStorageStub = Substitute.For<IFileStorage>();
 			fileStorageStub.GetFileForWriting(new Uri("/SomeSongName.mp3", UriKind.Relative)).Returns("SomeSongFileForWriting.mp3");
@@ -77,11 +77,11 @@ namespace CF.MusicLibrary.Library.Tests
 				Uri = new Uri("/SomeSongName.mp3", UriKind.Relative),
 			};
 
-			//	Act
+			// Act
 
 			var songFile = target.GetSongFileForWriting(song).Result;
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("SomeSongFileForWriting.mp3", songFile);
 		}
@@ -89,7 +89,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void UpdateSongContent_UpdatesSongFileContentCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileStorage fileStorageMock = Substitute.For<IFileStorage>();
 			FileSystemMusicStorage target = new FileSystemMusicStorage(fileStorageMock);
@@ -99,11 +99,11 @@ namespace CF.MusicLibrary.Library.Tests
 				Uri = new Uri("/SomeSongName.mp3", UriKind.Relative),
 			};
 
-			//	Act
+			// Act
 
 			target.UpdateSongContent("SourceSongFile.mp3", song).Wait();
 
-			//	Assert
+			// Assert
 
 			fileStorageMock.Received(1).UpdateFileContent("SourceSongFile.mp3", new Uri("/SomeSongName.mp3", UriKind.Relative));
 		}
@@ -111,7 +111,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void ChangeSongUri_MovesSongFileCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileStorage fileStorageMock = Substitute.For<IFileStorage>();
 			FileSystemMusicStorage target = new FileSystemMusicStorage(fileStorageMock);
@@ -121,11 +121,11 @@ namespace CF.MusicLibrary.Library.Tests
 				Uri = new Uri("/SomeSongName.mp3", UriKind.Relative),
 			};
 
-			//	Act
+			// Act
 
 			target.ChangeSongUri(song, new Uri("/NewSongName.mp3", UriKind.Relative)).Wait();
 
-			//	Assert
+			// Assert
 
 			fileStorageMock.Received(1).MoveFile(new Uri("/SomeSongName.mp3", UriKind.Relative), new Uri("/NewSongName.mp3", UriKind.Relative));
 		}
@@ -133,7 +133,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void DeleteSong_DeletesSongFileCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileStorage fileStorageMock = Substitute.For<IFileStorage>();
 			FileSystemMusicStorage target = new FileSystemMusicStorage(fileStorageMock);
@@ -143,11 +143,11 @@ namespace CF.MusicLibrary.Library.Tests
 				Uri = new Uri("/SomeSongName.mp3", UriKind.Relative),
 			};
 
-			//	Act
+			// Act
 
 			target.DeleteSong(song).Wait();
 
-			//	Assert
+			// Assert
 
 			fileStorageMock.Received(1).DeleteFile(new Uri("/SomeSongName.mp3", UriKind.Relative));
 		}
@@ -155,7 +155,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void ChangeDiscUri_MovesDiscDirectoryCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileStorage fileStorageMock = Substitute.For<IFileStorage>();
 			FileSystemMusicStorage target = new FileSystemMusicStorage(fileStorageMock);
@@ -165,11 +165,11 @@ namespace CF.MusicLibrary.Library.Tests
 				Uri = new Uri("/SomeDisc", UriKind.Relative),
 			};
 
-			//	Act
+			// Act
 
 			target.ChangeDiscUri(disc, new Uri("/NewDiscUri", UriKind.Relative)).Wait();
 
-			//	Assert
+			// Assert
 
 			fileStorageMock.Received(1).MoveDirectory(new Uri("/SomeDisc", UriKind.Relative), new Uri("/NewDiscUri", UriKind.Relative));
 		}
@@ -177,7 +177,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void StoreDiscImage_StoresDiscImageFileCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileStorage fileStorageMock = Substitute.For<IFileStorage>();
 			FileSystemMusicStorage target = new FileSystemMusicStorage(fileStorageMock);
@@ -187,11 +187,11 @@ namespace CF.MusicLibrary.Library.Tests
 				Uri = new Uri("/SomeDiscImage", UriKind.Relative),
 			};
 
-			//	Act
+			// Act
 
 			target.StoreDiscImage("SomeImageFile.img", discImage).Wait();
 
-			//	Assert
+			// Assert
 
 			fileStorageMock.Received(1).StoreFile("SomeImageFile.img", new Uri("/SomeDiscImage", UriKind.Relative));
 		}
@@ -199,7 +199,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void GetDiscImageFile_ReturnsDiscImageFileFromStorage()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileStorage fileStorageStub = Substitute.For<IFileStorage>();
 			fileStorageStub.GetFile(new Uri("/SomeDiscImage", UriKind.Relative)).Returns("SomeImageFile.img");
@@ -210,11 +210,11 @@ namespace CF.MusicLibrary.Library.Tests
 				Uri = new Uri("/SomeDiscImage", UriKind.Relative),
 			};
 
-			//	Act
+			// Act
 
 			var imageFile = target.GetDiscImageFile(discImage).Result;
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("SomeImageFile.img", imageFile);
 		}
@@ -222,7 +222,7 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void DeleteDiscImage_DeletesDiscImageFileCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileStorage fileStorageMock = Substitute.For<IFileStorage>();
 			FileSystemMusicStorage target = new FileSystemMusicStorage(fileStorageMock);
@@ -232,11 +232,11 @@ namespace CF.MusicLibrary.Library.Tests
 				Uri = new Uri("/SomeDiscImage", UriKind.Relative),
 			};
 
-			//	Act
+			// Act
 
 			target.DeleteDiscImage(discImage).Wait();
 
-			//	Assert
+			// Assert
 
 			fileStorageMock.Received(1).DeleteFile(new Uri("/SomeDiscImage", UriKind.Relative));
 		}
@@ -244,11 +244,11 @@ namespace CF.MusicLibrary.Library.Tests
 		[Test]
 		public void CheckDataConsistency_ChecksStorageConsistencyExcludingSyncDirectory()
 		{
-			//	Arrange
+			// Arrange
 
 			var expectedItemUris = new Uri[] { };
 			List<Uri> passedIgnoreList = null;
-			
+
 			ILibraryStorageInconsistencyRegistrator registrator = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
 			IFileStorage fileStorageMock = Substitute.For<IFileStorage>();
@@ -257,11 +257,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			FileSystemMusicStorage target = new FileSystemMusicStorage(fileStorageMock);
 
-			//	Act
+			// Act
 
 			target.CheckDataConsistency(expectedItemUris, registrator, false).Wait();
 
-			//	Assert
+			// Assert
 
 			fileStorageMock.Received(1).CheckDataConsistency(expectedItemUris, Arg.Any<IEnumerable<Uri>>(), registrator, false);
 			Assert.AreEqual(new[] { new Uri("/.sync", UriKind.Relative) }, passedIgnoreList);

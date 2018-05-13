@@ -25,7 +25,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void GetImageInfo_ReturnsCorrectImageInfo()
 		{
-			//	Arrange
+			// Arrange
 
 			IImageFacade imageStub = Substitute.For<IImageFacade>();
 			imageStub.FromFile("SomeImageFile").Returns(imageStub);
@@ -38,11 +38,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 
 			var target = new ImageInfoProvider(imageStub, fileSystemStub);
 
-			//	Act
+			// Act
 
 			var imageInfo = target.GetImageInfo("SomeImageFile");
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("SomeImageFile", imageInfo.FileName);
 			Assert.AreEqual(800, imageInfo.Width);

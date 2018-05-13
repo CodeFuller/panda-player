@@ -16,7 +16,7 @@ namespace CF.MusicLibrary.LastFM
 			: base(response.ReasonPhrase ?? String.Empty)
 		{
 			RequestUri = response.RequestMessage.RequestUri;
-			HttpStatusCode = (int)(response.StatusCode);
+			HttpStatusCode = (int)response.StatusCode;
 		}
 
 		public LastFMApiCallFailedException(string message)

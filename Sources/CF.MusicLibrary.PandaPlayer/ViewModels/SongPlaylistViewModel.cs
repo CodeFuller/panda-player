@@ -17,6 +17,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 	public class SongPlaylistViewModel : SongListViewModel, ISongPlaylistViewModel
 	{
 		private int? currentSongIndex;
+
 		public int? CurrentSongIndex
 		{
 			get => currentSongIndex;

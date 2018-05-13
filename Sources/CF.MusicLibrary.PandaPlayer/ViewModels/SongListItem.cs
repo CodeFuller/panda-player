@@ -9,6 +9,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public Song Song { get; }
 
 		private bool isCurrentlyPlayed;
+
 		public bool IsCurrentlyPlayed
 		{
 			get => isCurrentlyPlayed;

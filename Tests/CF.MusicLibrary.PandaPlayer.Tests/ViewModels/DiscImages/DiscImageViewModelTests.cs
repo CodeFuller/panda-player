@@ -33,17 +33,17 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void CurrImageFileName_IfNoActiveDiscSet_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();
 			musicLibraryStub.GetDiscCoverImage(Arg.Any<Disc>()).Returns("SomeCover.jpg");
 			var target = new DiscImageViewModel(musicLibraryStub, Substitute.For<IViewNavigator>());
 
-			//	Act
+			// Act
 
 			var currImageFileName = target.CurrImageFileName;
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(currImageFileName);
 		}
@@ -51,7 +51,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void ActiveDiscChangedEventHandler_IfNewActiveDiscHasCoverImage_SetsCurrImageFileNameToNewDiscCoverImage()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc();
 
@@ -59,11 +59,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			musicLibraryStub.GetDiscCoverImage(disc).Returns("SomeDiscCover.jpg");
 			var target = new DiscImageViewModel(musicLibraryStub, Substitute.For<IViewNavigator>());
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc));
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("SomeDiscCover.jpg", target.CurrImageFileName);
 		}
@@ -71,7 +71,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void ActiveDiscChangedEventHandler_IfNewActiveDiscHasNoCoverImage_SetsCurrImageFileNameToNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc();
 
@@ -79,11 +79,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			musicLibraryStub.GetDiscCoverImage(disc).Returns((string)null);
 			var target = new DiscImageViewModel(musicLibraryStub, Substitute.For<IViewNavigator>());
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc));
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(target.CurrImageFileName);
 		}
@@ -91,16 +91,16 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void EditDiscImage_IfNoActiveDiscSet_ReturnsWithNoAction()
 		{
-			//	Arrange
+			// Arrange
 
 			IViewNavigator viewNavigatorMock = Substitute.For<IViewNavigator>();
 			var target = new DiscImageViewModel(Substitute.For<IMusicLibrary>(), viewNavigatorMock);
 
-			//	Act
+			// Act
 
 			target.EditDiscImage().Wait();
 
-			//	Assert
+			// Assert
 
 			viewNavigatorMock.DidNotReceive().ShowEditDiscImageView(Arg.Any<Disc>());
 		}
@@ -108,7 +108,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void EditDiscImage_IfActiveDiscIsSet_ShowsEditDiscImageViewForActiveDisc()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc();
 
@@ -117,11 +117,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 
 			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc));
 
-			//	Act
+			// Act
 
 			target.EditDiscImage().Wait();
 
-			//	Assert
+			// Assert
 
 			viewNavigatorMock.Received(1).ShowEditDiscImageView(disc);
 		}
@@ -129,20 +129,20 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		[Test]
 		public void DiscImageChangedEventHandler_IfChangedDiscIsActiveDisc_RaisesPropertyChangedEventForCurrImageFileName()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc();
 			var target = new DiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IViewNavigator>());
 			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc));
 
 			bool raisedPropertyChangedEvent = false;
-			target.PropertyChanged += (sender, e) => raisedPropertyChangedEvent = (e.PropertyName == nameof(DiscImageViewModel.CurrImageFileName) || raisedPropertyChangedEvent);
+			target.PropertyChanged += (sender, e) => raisedPropertyChangedEvent = e.PropertyName == nameof(DiscImageViewModel.CurrImageFileName) || raisedPropertyChangedEvent;
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new DiscImageChangedEventArgs(disc));
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue(raisedPropertyChangedEvent);
 		}

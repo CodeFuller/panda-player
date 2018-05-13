@@ -10,7 +10,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void ValidateDiscCoverImage_IfImageIsValid_ReturnsImageIsOk()
 		{
-			//	Arrange
+			// Arrange
 
 			var imageInfo = new ImageInfo
 			{
@@ -22,11 +22,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 
 			var target = new DiscImageValidator();
 
-			//	Act
+			// Act
 
 			var validationResults = target.ValidateDiscCoverImage(imageInfo);
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(ImageValidationResults.ImageIsOk, validationResults);
 		}
@@ -34,7 +34,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void ValidateDiscCoverImage_IfImageWidthIsTooSmall_SetsImageIsTooSmallValue()
 		{
-			//	Arrange
+			// Arrange
 
 			var imageInfo = new ImageInfo
 			{
@@ -46,11 +46,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 
 			var target = new DiscImageValidator();
 
-			//	Act
+			// Act
 
 			var validationResults = target.ValidateDiscCoverImage(imageInfo);
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue((validationResults & ImageValidationResults.ImageIsTooSmall) != 0);
 		}
@@ -58,7 +58,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void ValidateDiscCoverImage_IfImageHeightIsTooSmall_SetsImageIsTooSmallValue()
 		{
-			//	Arrange
+			// Arrange
 
 			var imageInfo = new ImageInfo
 			{
@@ -70,11 +70,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 
 			var target = new DiscImageValidator();
 
-			//	Act
+			// Act
 
 			var validationResults = target.ValidateDiscCoverImage(imageInfo);
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue((validationResults & ImageValidationResults.ImageIsTooSmall) != 0);
 		}
@@ -82,7 +82,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void ValidateDiscCoverImage_IfImageWidthIsTooBig_SetsImageIsTooBigValue()
 		{
-			//	Arrange
+			// Arrange
 
 			var imageInfo = new ImageInfo
 			{
@@ -94,11 +94,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 
 			var target = new DiscImageValidator();
 
-			//	Act
+			// Act
 
 			var validationResults = target.ValidateDiscCoverImage(imageInfo);
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue((validationResults & ImageValidationResults.ImageIsTooBig) != 0);
 		}
@@ -106,7 +106,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void ValidateDiscCoverImage_IfImageHeightIsTooBig_SetsImageIsTooBigValue()
 		{
-			//	Arrange
+			// Arrange
 
 			var imageInfo = new ImageInfo
 			{
@@ -118,11 +118,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 
 			var target = new DiscImageValidator();
 
-			//	Act
+			// Act
 
 			var validationResults = target.ValidateDiscCoverImage(imageInfo);
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue((validationResults & ImageValidationResults.ImageIsTooBig) != 0);
 		}
@@ -130,7 +130,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void ValidateDiscCoverImage_IfImageFileSizeIsTooBig_SetsFileSizeIsTooBigValue()
 		{
-			//	Arrange
+			// Arrange
 
 			var imageInfo = new ImageInfo
 			{
@@ -142,11 +142,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 
 			var target = new DiscImageValidator();
 
-			//	Act
+			// Act
 
 			var validationResults = target.ValidateDiscCoverImage(imageInfo);
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue((validationResults & ImageValidationResults.FileSizeIsTooBig) != 0);
 		}
@@ -154,7 +154,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void ValidateDiscCoverImage_IfImageHasUnsupportedFormat_SetsUnsupportedFormatValue()
 		{
-			//	Arrange
+			// Arrange
 
 			var imageInfo = new ImageInfo
 			{
@@ -166,11 +166,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 
 			var target = new DiscImageValidator();
 
-			//	Act
+			// Act
 
 			var validationResults = target.ValidateDiscCoverImage(imageInfo);
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue((validationResults & ImageValidationResults.UnsupportedFormat) != 0);
 		}
@@ -178,7 +178,7 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void ValidateDiscCoverImage_IfMultipleValidationsFail_SetsAllValidationResults()
 		{
-			//	Arrange
+			// Arrange
 
 			var imageInfo = new ImageInfo
 			{
@@ -190,11 +190,11 @@ namespace CF.MusicLibrary.Common.Tests.Images
 
 			var target = new DiscImageValidator();
 
-			//	Act
+			// Act
 
 			var validationResults = target.ValidateDiscCoverImage(imageInfo);
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue((validationResults & ImageValidationResults.ImageIsTooSmall) != 0);
 			Assert.IsTrue((validationResults & ImageValidationResults.ImageIsTooBig) != 0);
@@ -205,15 +205,15 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void IsSupportedFileFormat_ForFileNameWithExtensionOfSupportedFormat_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new DiscImageValidator();
 
-			//	Act
+			// Act
 
 			bool isSupportedFormat = target.IsSupportedFileFormat("SomeFile.jpg");
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue(isSupportedFormat);
 		}
@@ -221,15 +221,15 @@ namespace CF.MusicLibrary.Common.Tests.Images
 		[Test]
 		public void IsSupportedFileFormat_ForFileNameWithExtensionOfUnsupportedFormat_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new DiscImageValidator();
 
-			//	Act
+			// Act
 
 			bool isSupportedFormat = target.IsSupportedFileFormat("SomeFile.ico");
 
-			//	Assert
+			// Assert
 
 			Assert.IsFalse(isSupportedFormat);
 		}

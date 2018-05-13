@@ -29,7 +29,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void AddedDiscs_ForNewDiscs_ReturnsDiscsWithCorrectInfo()
 		{
-			//	Arrange
+			// Arrange
 
 			var addedDiscInfo = new AddedDiscInfo(new AddedSongInfo[] { })
 			{
@@ -43,11 +43,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>());
 			target.SetDiscs(new[] { addedDiscInfo }).Wait();
 
-			//	Act
+			// Act
 
 			var addedDiscs = target.AddedDiscs.ToList();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, addedDiscs.Count);
 			var addedDisc = addedDiscs.Single();
@@ -59,7 +59,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void AddedDiscs_ForExistingDiscs_ReturnsDiscsWithCorrectInfo()
 		{
-			//	Arrange
+			// Arrange
 
 			var existingDisc = new Disc
 			{
@@ -79,14 +79,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 			var discLibrary = new DiscLibrary(() => Task.FromResult(Enumerable.Repeat(existingDisc, 1)));
 			var target = new EditDiscsDetailsViewModel(discLibrary, Substitute.For<ILibraryStructurer>());
 			target.SetDiscs(new[] { addedDiscInfo }).Wait();
-			//	Sanity check.
+
+			// Sanity check
 			Assert.IsTrue(target.Discs.Single() is ExistingDiscViewItem);
 
-			//	Act
+			// Act
 
 			var addedDiscs = target.AddedDiscs.ToList();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, addedDiscs.Count);
 			var addedDisc = addedDiscs.Single();

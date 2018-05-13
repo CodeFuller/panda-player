@@ -10,7 +10,7 @@ namespace CF.MusicLibrary.Core.Tests
 		[Test]
 		public void Join_ForNonEmptyParts_ReturnsCorrectUri()
 		{
-			Uri uri = ItemUriParts.Join(new[] {"part1", "part2"});
+			Uri uri = ItemUriParts.Join(new[] { "part1", "part2" });
 			Assert.AreEqual("/part1/part2", uri.ToString());
 		}
 
@@ -24,16 +24,16 @@ namespace CF.MusicLibrary.Core.Tests
 		[Test]
 		public void IsBaseOf_ForDirectChildUri_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var parts1 = new ItemUriParts(new Uri("/part1/part2", UriKind.Relative));
 			var parts2 = new ItemUriParts(new Uri("/part1/part2/part3", UriKind.Relative));
 
-			//	Act
+			// Act
 
 			var result = parts1.IsBaseOf(parts2);
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue(result);
 		}
@@ -41,16 +41,16 @@ namespace CF.MusicLibrary.Core.Tests
 		[Test]
 		public void IsBaseOf_ForNonDirectChildUri_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var parts1 = new ItemUriParts(new Uri("/part1", UriKind.Relative));
 			var parts2 = new ItemUriParts(new Uri("/part1/part2/part3", UriKind.Relative));
 
-			//	Act
+			// Act
 
 			var result = parts1.IsBaseOf(parts2);
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue(result);
 		}
@@ -58,16 +58,16 @@ namespace CF.MusicLibrary.Core.Tests
 		[Test]
 		public void IsBaseOf_ForNonChildUri_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var parts1 = new ItemUriParts(new Uri("/part0", UriKind.Relative));
 			var parts2 = new ItemUriParts(new Uri("/part1/part2/part3", UriKind.Relative));
 
-			//	Act
+			// Act
 
 			var result = parts1.IsBaseOf(parts2);
 
-			//	Assert
+			// Assert
 
 			Assert.IsFalse(result);
 		}
@@ -75,16 +75,16 @@ namespace CF.MusicLibrary.Core.Tests
 		[Test]
 		public void IsBaseOf_OnRootUri_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var parts1 = new ItemUriParts(new Uri("/", UriKind.Relative));
 			var parts2 = new ItemUriParts(new Uri("/part1", UriKind.Relative));
 
-			//	Act
+			// Act
 
 			var result = parts1.IsBaseOf(parts2);
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue(result);
 		}

@@ -31,6 +31,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscImages
 		public bool ImageIsValid => imageFile.ImageIsValid;
 
 		private bool imageWasChanged;
+
 		public bool ImageWasChanged
 		{
 			get => imageWasChanged;
@@ -88,10 +89,12 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscImages
 			{
 				throw new InvalidOperationException("EditDiscImageViewModel is not loaded");
 			}
+
 			if (!ImageIsValid)
 			{
 				throw new InvalidOperationException("Current disc image is not valid");
 			}
+
 			if (!ImageWasChanged)
 			{
 				throw new InvalidOperationException("Image was not changed");
@@ -111,6 +114,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscImages
 					imageFile.Load(imageFileName, false);
 					ImageWasChanged = true;
 				}
+
 				return;
 			}
 

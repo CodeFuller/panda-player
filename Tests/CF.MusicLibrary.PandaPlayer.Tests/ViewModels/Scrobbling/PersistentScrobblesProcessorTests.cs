@@ -16,7 +16,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 		[Test]
 		public void ProcessScrobble_OnFirstCall_LoadsQueue()
 		{
-			//	Arrange
+			// Arrange
 
 			var prevScrobble1 = new TrackScrobble();
 			var prevScrobble2 = new TrackScrobble();
@@ -24,15 +24,15 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 
 			var queueMock = Substitute.For<Queue<TrackScrobble>>();
 			var repositoryStub = Substitute.For<IScrobblesQueueRepository>();
-			repositoryStub.Load().Returns(new Queue<TrackScrobble>(new [] { prevScrobble1, prevScrobble2 } ));
+			repositoryStub.Load().Returns(new Queue<TrackScrobble>(new[] { prevScrobble1, prevScrobble2 }));
 
 			var target = new PersistentScrobblesProcessor(queueMock, repositoryStub, Substitute.For<ILogger<PersistentScrobblesProcessor>>());
 
-			//	Act
+			// Act
 
 			target.ProcessScrobble(newScrobble, Substitute.For<IScrobbler>()).Wait();
 
-			//	Assert
+			// Assert
 
 			Received.InOrder(() =>
 			{
@@ -45,7 +45,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 		[Test]
 		public void ProcessScrobble_OnFirstCallIfRepositoryDoesNotProvideData_InitializesEmptyQueue()
 		{
-			//	Arrange
+			// Arrange
 
 			var newScrobble = new TrackScrobble();
 
@@ -55,11 +55,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 
 			var target = new PersistentScrobblesProcessor(queueMock, repositoryStub, Substitute.For<ILogger<PersistentScrobblesProcessor>>());
 
-			//	Act
+			// Act
 
 			target.ProcessScrobble(newScrobble, Substitute.For<IScrobbler>()).Wait();
 
-			//	Assert
+			// Assert
 
 			queueMock.Received(1).Enqueue(Arg.Any<TrackScrobble>());
 			queueMock.Received(1).Enqueue(newScrobble);
@@ -68,7 +68,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 		[Test]
 		public void ProcessScrobble_OnSubsequentCalls_DoesNotLoadQueue()
 		{
-			//	Arrange
+			// Arrange
 
 			var repositoryMock = Substitute.For<IScrobblesQueueRepository>();
 			var target = new PersistentScrobblesProcessor(new Queue<TrackScrobble>(), repositoryMock, Substitute.For<ILogger<PersistentScrobblesProcessor>>());
@@ -76,11 +76,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 			target.ProcessScrobble(new TrackScrobble(), Substitute.For<IScrobbler>()).Wait();
 			repositoryMock.ClearReceivedCalls();
 
-			//	Act
+			// Act
 
 			target.ProcessScrobble(new TrackScrobble(), Substitute.For<IScrobbler>()).Wait();
 
-			//	Assert
+			// Assert
 
 			repositoryMock.DidNotReceive().Load();
 		}
@@ -88,17 +88,17 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 		[Test]
 		public void ProcessScrobble_IfQueueIsEmpty_ProcessesNewScrobble()
 		{
-			//	Arrange
+			// Arrange
 
 			var scrobble = new TrackScrobble();
 			var scrobblerMock = Substitute.For<IScrobbler>();
 			var target = new PersistentScrobblesProcessor(new Queue<TrackScrobble>(), Substitute.For<IScrobblesQueueRepository>(), Substitute.For<ILogger<PersistentScrobblesProcessor>>());
 
-			//	Act
+			// Act
 
 			target.ProcessScrobble(scrobble, scrobblerMock).Wait();
 
-			//	Assert
+			// Assert
 
 			scrobblerMock.Received(1).Scrobble(scrobble);
 		}
@@ -106,21 +106,21 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 		[Test]
 		public void ProcessScrobble_IfQueueIsNotEmpty_ProcessesScrobblesInCorrectOrder()
 		{
-			//	Arrange
+			// Arrange
 
 			var prevScrobble1 = new TrackScrobble();
 			var prevScrobble2 = new TrackScrobble();
 			var newScrobble = new TrackScrobble();
 
 			var scrobblerMock = Substitute.For<IScrobbler>();
-			var target = new PersistentScrobblesProcessor(new Queue<TrackScrobble>(new[] { prevScrobble1, prevScrobble2 } ),
+			var target = new PersistentScrobblesProcessor(new Queue<TrackScrobble>(new[] { prevScrobble1, prevScrobble2 }),
 				Substitute.For<IScrobblesQueueRepository>(), Substitute.For<ILogger<PersistentScrobblesProcessor>>());
 
-			//	Act
+			// Act
 
 			target.ProcessScrobble(newScrobble, scrobblerMock).Wait();
 
-			//	Assert
+			// Assert
 
 			Received.InOrder(() =>
 			{
@@ -133,7 +133,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 		[Test]
 		public void ProcessScrobble_IfScrobblerThrows_DoesNotThrow()
 		{
-			//	Arrange
+			// Arrange
 
 			var scrobblerStub = Substitute.For<IScrobbler>();
 			scrobblerStub.Scrobble(Arg.Any<TrackScrobble>()).Throws<InvalidOperationException>();
@@ -141,7 +141,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 			var target = new PersistentScrobblesProcessor(new Queue<TrackScrobble>(),
 				Substitute.For<IScrobblesQueueRepository>(), Substitute.For<ILogger<PersistentScrobblesProcessor>>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.DoesNotThrow(() => target.ProcessScrobble(new TrackScrobble(), scrobblerStub).Wait());
 		}
@@ -149,18 +149,18 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 		[Test]
 		public void ProcessScrobble_IfAllScrobblesAreProcessed_PurgesRepositoryData()
 		{
-			//	Arrange
+			// Arrange
 
 			var repositoryMock = Substitute.For<IScrobblesQueueRepository>();
 
 			var target = new PersistentScrobblesProcessor(new Queue<TrackScrobble>(new[] { new TrackScrobble() }),
 				repositoryMock, Substitute.For<ILogger<PersistentScrobblesProcessor>>());
 
-			//	Act
+			// Act
 
 			target.ProcessScrobble(new TrackScrobble(), Substitute.For<IScrobbler>()).Wait();
 
-			//	Assert
+			// Assert
 
 			repositoryMock.Received(1).Purge();
 			repositoryMock.DidNotReceive().Save(Arg.Any<Queue<TrackScrobble>>());
@@ -169,7 +169,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 		[Test]
 		public void ProcessScrobble_IfSomeScrobblesLeftUnprocessed_SavesThoseScrobblesInRepository()
 		{
-			//	Arrange
+			// Arrange
 
 			var processedScrobble = new TrackScrobble();
 			var failedScrobble = new TrackScrobble();
@@ -186,11 +186,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 
 			var target = new PersistentScrobblesProcessor(queue, repositoryMock, Substitute.For<ILogger<PersistentScrobblesProcessor>>());
 
-			//	Act
+			// Act
 
 			target.ProcessScrobble(newScrobble, scrobblerStub).Wait();
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(new[] { failedScrobble, newScrobble }, savedData);
 			CollectionAssert.AreEqual(new[] { failedScrobble, newScrobble }, queue);

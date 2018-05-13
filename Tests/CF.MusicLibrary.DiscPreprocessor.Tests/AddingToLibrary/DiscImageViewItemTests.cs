@@ -14,17 +14,17 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void Constructor_FillsPropertiesCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc();
 
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 
-			//	Act
+			// Act
 
 			var target = new DiscImageViewItem(disc, DiscImageType.Cover, imageFileStub);
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(disc, target.Disc);
 			Assert.AreEqual(DiscImageType.Cover, target.ImageType);
@@ -33,7 +33,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void DiscUriGetter_ReturnsUriOfInnerDisc()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -42,7 +42,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new DiscImageViewItem(disc, DiscImageType.Cover, Substitute.For<IImageFile>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual(new Uri("/Some/Disc/Uri", UriKind.Relative), target.DiscUri);
 		}
@@ -50,14 +50,14 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ImageIsValidGetter_IfImageFileIsValid_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 			imageFileStub.ImageIsValid.Returns(true);
 
 			var target = new DiscImageViewItem(new Disc(), DiscImageType.Cover, imageFileStub);
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsTrue(target.ImageIsValid);
 		}
@@ -65,14 +65,14 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ImageIsValidGetter_IfImageFileIsNotValid_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 			imageFileStub.ImageIsValid.Returns(false);
 
 			var target = new DiscImageViewItem(new Disc(), DiscImageType.Cover, imageFileStub);
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.ImageIsValid);
 		}
@@ -80,7 +80,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ImageStatusGetter_IfImageIsValid_ReturnsPropertiesOfInnerImageFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 			imageFileStub.ImageIsValid.Returns(true);
@@ -88,7 +88,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new DiscImageViewItem(new Disc(), DiscImageType.Cover, imageFileStub);
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual("Some Properties", target.ImageStatus);
 		}
@@ -96,7 +96,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ImageStatusGetter_IfImageIsNotValid_ReturnsStatusOfInnerImageFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 			imageFileStub.ImageIsValid.Returns(false);
@@ -104,7 +104,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new DiscImageViewItem(new Disc(), DiscImageType.Cover, imageFileStub);
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual("Some Status", target.ImageStatus);
 		}
@@ -112,7 +112,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ImageInfoGetter_ReturnsImageInfoOfInnerImageFile()
 		{
-			//	Arrange
+			// Arrange
 
 			var imageInfo = new ImageInfo();
 
@@ -121,7 +121,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new DiscImageViewItem(new Disc(), DiscImageType.Cover, imageFileStub);
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreSame(imageInfo, target.ImageInfo);
 		}

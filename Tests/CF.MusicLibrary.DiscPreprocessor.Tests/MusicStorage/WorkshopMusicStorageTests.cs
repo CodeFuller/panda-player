@@ -20,7 +20,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 		[Test]
 		public void DeleteSourceContent_DeletesContentFilesCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var contentFiles = new[]
 			{
@@ -32,11 +32,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 			var settings = new DiscPreprocessorSettings { WorkshopStoragePath = "SomeStorage" };
 			var target = new WorkshopMusicStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.DeleteSourceContent(contentFiles);
 
-			//	Assert
+			// Assert
 
 			Received.InOrder(() =>
 			{
@@ -50,7 +50,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 		[Test]
 		public void DeleteSourceContent_IfSubDirectoryContainsNoFiles_DeletesSubDirectory()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.EnumerateDirectories("SomeStorage").Returns(new[] { "SubDirectory1" });
@@ -61,11 +61,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 
 			var target = new WorkshopMusicStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.DeleteSourceContent(Enumerable.Empty<string>());
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.Received(1).DeleteDirectory("SubDirectory1", true);
 		}
@@ -73,7 +73,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 		[Test]
 		public void DeleteSourceContent_IfSubDirectoryContainsSomeFiles_DoesNotDeleteSubDirectory()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.EnumerateDirectories("SomeStorage").Returns(new[] { "SubDirectory1" });
@@ -83,11 +83,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 
 			var target = new WorkshopMusicStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.DeleteSourceContent(Enumerable.Empty<string>());
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.DidNotReceive().DeleteDirectory(Arg.Any<string>(), Arg.Any<bool>());
 		}
@@ -95,7 +95,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 		[Test]
 		public void DeleteSourceContent_IfSubDirectoryContainsSomeFilesOnDeepLevels_DoesNotDeleteSubDirectory()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.EnumerateDirectories("SomeStorage").Returns(new[] { "SubDirectory1" });
@@ -107,11 +107,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 
 			var target = new WorkshopMusicStorage(fileSystemMock, settings.StubOptions());
 
-			//	Act
+			// Act
 
 			target.DeleteSourceContent(Enumerable.Empty<string>());
 
-			//	Assert
+			// Assert
 
 			fileSystemMock.DidNotReceive().DeleteDirectory(Arg.Any<string>(), Arg.Any<bool>());
 		}

@@ -8,8 +8,8 @@ using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.LibraryChecker.Checkers;
 using Microsoft.Extensions.Logging;
 using NDesk.Options;
-using static System.FormattableString;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
+using static System.FormattableString;
 
 namespace CF.MusicLibrary.LibraryChecker
 {

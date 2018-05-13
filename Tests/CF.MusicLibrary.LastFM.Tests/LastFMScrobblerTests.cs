@@ -18,28 +18,24 @@ namespace CF.MusicLibrary.LastFM.Tests
 		[Test]
 		public void UpdateNowPlaying_ForValidTrack_CallsLastFMApiCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var track = new Track
 			{
 				Title = "Some Title",
 				Artist = "Some Artist",
 				Duration = TimeSpan.FromMinutes(5),
-				Album = new Album
-				{
-					Artist = "Some Artist",
-					Title = "Some Album",
-				},
+				Album = new Album("Some Artist", "Some Album"),
 			};
 
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock, Substitute.For<ILogger<LastFMScrobbler>>());
 
-			//	Act
+			// Act
 
 			target.UpdateNowPlaying(track).Wait();
 
-			//	Assert
+			// Assert
 
 			lastFMApiClientMock.Received(1).UpdateNowPlaying(track);
 		}
@@ -48,28 +44,24 @@ namespace CF.MusicLibrary.LastFM.Tests
 		[TestCase("")]
 		public void UpdateNowPlaying_WhenTrackDoesNotHaveTitle_DoesNotCallLastFMApi(string title)
 		{
-			//	Arrange
+			// Arrange
 
 			var track = new Track
 			{
 				Title = title,
 				Artist = "Some Artist",
 				Duration = TimeSpan.FromMinutes(5),
-				Album = new Album
-				{
-					Artist = "Some Artist",
-					Title = "Some Album",
-				},
+				Album = new Album("Some Artist", "Some Album"),
 			};
 
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock, Substitute.For<ILogger<LastFMScrobbler>>());
 
-			//	Act
+			// Act
 
 			target.UpdateNowPlaying(track).Wait();
 
-			//	Assert
+			// Assert
 
 			lastFMApiClientMock.DidNotReceive().UpdateNowPlaying(Arg.Any<Track>());
 		}
@@ -78,28 +70,24 @@ namespace CF.MusicLibrary.LastFM.Tests
 		[TestCase("")]
 		public void UpdateNowPlaying_WhenTrackDoesNotHaveArtist_DoesNotCallLastFMApi(string artist)
 		{
-			//	Arrange
+			// Arrange
 
 			var track = new Track
 			{
 				Title = "Some Title",
 				Artist = artist,
 				Duration = TimeSpan.FromMinutes(5),
-				Album = new Album
-				{
-					Artist = artist,
-					Title = "Some Album",
-				},
+				Album = new Album(artist, "Some Album"),
 			};
 
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock, Substitute.For<ILogger<LastFMScrobbler>>());
 
-			//	Act
+			// Act
 
 			target.UpdateNowPlaying(track).Wait();
 
-			//	Assert
+			// Assert
 
 			lastFMApiClientMock.DidNotReceive().UpdateNowPlaying(Arg.Any<Track>());
 		}
@@ -107,28 +95,24 @@ namespace CF.MusicLibrary.LastFM.Tests
 		[Test]
 		public void UpdateNowPlaying_WhenTrackIsTooShort_DoesNotCallLastFMApi()
 		{
-			//	Arrange
+			// Arrange
 
 			var track = new Track
 			{
 				Title = "Some Title",
 				Artist = "Some Artist",
 				Duration = TimeSpan.FromSeconds(15),
-				Album = new Album
-				{
-					Artist = "Some Artist",
-					Title = "Some Album",
-				},
+				Album = new Album("Some Artist", "Some Album"),
 			};
 
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock, Substitute.For<ILogger<LastFMScrobbler>>());
 
-			//	Act
+			// Act
 
 			target.UpdateNowPlaying(track).Wait();
 
-			//	Assert
+			// Assert
 
 			lastFMApiClientMock.DidNotReceive().UpdateNowPlaying(Arg.Any<Track>());
 		}
@@ -136,7 +120,7 @@ namespace CF.MusicLibrary.LastFM.Tests
 		[Test]
 		public void Scrobble_ForValidTrack_CallsLastFMApiCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var trackScrobble = new TrackScrobble
 			{
@@ -145,11 +129,7 @@ namespace CF.MusicLibrary.LastFM.Tests
 					Title = "Some Title",
 					Artist = "Some Artist",
 					Duration = TimeSpan.FromMinutes(5),
-					Album = new Album
-					{
-						Artist = "Some Artist",
-						Title = "Some Album",
-					},
+					Album = new Album("Some Artist", "Some Album"),
 				},
 
 				PlayStartTimestamp = new DateTime(2017, 09, 18),
@@ -158,11 +138,11 @@ namespace CF.MusicLibrary.LastFM.Tests
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock, Substitute.For<ILogger<LastFMScrobbler>>());
 
-			//	Act
+			// Act
 
 			target.Scrobble(trackScrobble).Wait();
 
-			//	Assert
+			// Assert
 
 			lastFMApiClientMock.Received(1).Scrobble(trackScrobble);
 		}
@@ -171,7 +151,7 @@ namespace CF.MusicLibrary.LastFM.Tests
 		[TestCase("")]
 		public void Scrobble_WhenTrackDoesNotHaveTitle_DoesNotCallLastFMApi(string title)
 		{
-			//	Arrange
+			// Arrange
 
 			var trackScrobble = new TrackScrobble
 			{
@@ -180,11 +160,7 @@ namespace CF.MusicLibrary.LastFM.Tests
 					Title = title,
 					Artist = "Some Artist",
 					Duration = TimeSpan.FromMinutes(5),
-					Album = new Album
-					{
-						Artist = "Some Artist",
-						Title = "Some Album",
-					},
+					Album = new Album("Some Artist", "Some Album"),
 				},
 
 				PlayStartTimestamp = new DateTime(2017, 09, 18),
@@ -193,11 +169,11 @@ namespace CF.MusicLibrary.LastFM.Tests
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock, Substitute.For<ILogger<LastFMScrobbler>>());
 
-			//	Act
+			// Act
 
 			target.Scrobble(trackScrobble).Wait();
 
-			//	Assert
+			// Assert
 
 			lastFMApiClientMock.DidNotReceive().Scrobble(Arg.Any<TrackScrobble>());
 		}
@@ -206,7 +182,7 @@ namespace CF.MusicLibrary.LastFM.Tests
 		[TestCase("")]
 		public void Scrobble_WhenTrackDoesNotHaveArtist_DoesNotCallLastFMApi(string artist)
 		{
-			//	Arrange
+			// Arrange
 
 			var trackScrobble = new TrackScrobble
 			{
@@ -215,11 +191,7 @@ namespace CF.MusicLibrary.LastFM.Tests
 					Title = "Some Title",
 					Artist = artist,
 					Duration = TimeSpan.FromMinutes(5),
-					Album = new Album
-					{
-						Artist = artist,
-						Title = "Some Album",
-					},
+					Album = new Album(artist, "Some Album"),
 				},
 
 				PlayStartTimestamp = new DateTime(2017, 09, 18),
@@ -228,11 +200,11 @@ namespace CF.MusicLibrary.LastFM.Tests
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock, Substitute.For<ILogger<LastFMScrobbler>>());
 
-			//	Act
+			// Act
 
 			target.Scrobble(trackScrobble).Wait();
 
-			//	Assert
+			// Assert
 
 			lastFMApiClientMock.DidNotReceive().Scrobble(Arg.Any<TrackScrobble>());
 		}
@@ -240,7 +212,7 @@ namespace CF.MusicLibrary.LastFM.Tests
 		[Test]
 		public void Scrobble_WhenTrackIsTooShort_DoesNotCallLastFMApi()
 		{
-			//	Arrange
+			// Arrange
 
 			var trackScrobble = new TrackScrobble
 			{
@@ -249,11 +221,7 @@ namespace CF.MusicLibrary.LastFM.Tests
 					Title = "Some Title",
 					Artist = "Some Artist",
 					Duration = TimeSpan.FromSeconds(15),
-					Album = new Album
-					{
-						Artist = "Some Artist",
-						Title = "Some Album",
-					},
+					Album = new Album("Some Artist", "Some Album"),
 				},
 
 				PlayStartTimestamp = new DateTime(2017, 09, 18),
@@ -262,11 +230,11 @@ namespace CF.MusicLibrary.LastFM.Tests
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock, Substitute.For<ILogger<LastFMScrobbler>>());
 
-			//	Act
+			// Act
 
 			target.Scrobble(trackScrobble).Wait();
 
-			//	Assert
+			// Assert
 
 			lastFMApiClientMock.DidNotReceive().Scrobble(Arg.Any<TrackScrobble>());
 		}

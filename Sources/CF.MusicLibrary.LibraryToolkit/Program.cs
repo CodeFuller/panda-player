@@ -5,7 +5,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 {
 	public static class Program
 	{
-		static async Task Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 			var application = new ConsoleApplication(new ApplicationBootstrapper());
 			await application.Run(args);

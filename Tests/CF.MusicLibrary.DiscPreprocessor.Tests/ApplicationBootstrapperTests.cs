@@ -34,7 +34,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 		[Test]
 		public void RegisterDependencies_RegistersAllDependenciesForApplicationLogic()
 		{
-			//	Arrange
+			// Arrange
 
 			var settingValues = new Dictionary<string, string>
 			{
@@ -44,7 +44,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.DoesNotThrow(() => target.Bootstrap(new string[0]));
 
@@ -55,7 +55,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 		[Test]
 		public void RegisterDependencies_BindsFileSystemStorageSettingsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var settingValues = new Dictionary<string, string>
 			{
@@ -65,11 +65,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
-			//	Act
+			// Act
 
 			target.Bootstrap(new string[0]);
 
-			//	Assert
+			// Assert
 
 			var options = target.ResolveDependency<IOptions<FileSystemStorageSettings>>();
 			var settings = options.Value;
@@ -80,7 +80,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 		[Test]
 		public void RegisterDependencies_BindsDiscPreprocessorSettingsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var settingValues = new Dictionary<string, string>
 			{
@@ -91,11 +91,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
-			//	Act
+			// Act
 
 			target.Bootstrap(new string[0]);
 
-			//	Assert
+			// Assert
 
 			var options = target.ResolveDependency<IOptions<DiscPreprocessorSettings>>();
 			var settings = options.Value;
@@ -104,6 +104,5 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 			Assert.AreEqual(@"Some WorkshopStoragePath", settings.WorkshopStoragePath);
 			Assert.IsTrue(settings.DeleteSourceContentAfterAdding);
 		}
-
 	}
 }

@@ -12,7 +12,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ArtistIsEditableGetter_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -22,7 +22,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new CompilationDiscWithoutArtistInfoViewItem(discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsTrue(target.ArtistIsEditable);
 		}
@@ -30,7 +30,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ArtistIsNotFilledGetter_IfArtistIsNotSet_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			var artist = new Artist { Name = "Some Artist" };
 
@@ -42,7 +42,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new CompilationDiscWithoutArtistInfoViewItem(discInfo, new[] { artist }, Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsTrue(target.ArtistIsNotFilled);
 		}
@@ -50,7 +50,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ArtistIsNotFilledGetter_IfArtistIsSet_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var artist = new Artist { Name = "Some Artist" };
 
@@ -63,7 +63,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var target = new CompilationDiscWithoutArtistInfoViewItem(discInfo, new[] { artist }, Enumerable.Empty<Genre>());
 			target.Artist = artist;
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.ArtistIsNotFilled);
 		}
@@ -71,7 +71,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void DiscTypeTitleGetter_ReturnsCorrectDiscTypeTitle()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -81,7 +81,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new CompilationDiscWithoutArtistInfoViewItem(discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual("Compilation without Artists", target.DiscTypeTitle);
 		}

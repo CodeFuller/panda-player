@@ -27,13 +27,13 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Load_FillsInitialPropertiesCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			ILibraryStructurer libraryStructurerStub = Substitute.For<ILibraryStructurer>();
 			libraryStructurerStub.GetDiscFolderName(new Uri("/SomeDiscStorage/SomeDiscFolder", UriKind.Relative)).Returns("SomeDiscFolder");
 			var target = new EditDiscPropertiesViewModel(libraryStructurerStub, Substitute.For<ILibraryContentUpdater>());
 
-			//	Act
+			// Act
 
 			target.Load(new Disc
 			{
@@ -42,7 +42,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 				AlbumTitle = "Some Album",
 			});
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("SomeDiscFolder", target.FolderName);
 			Assert.AreEqual("Some Disc", target.DiscTitle);
@@ -52,7 +52,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Save_IfFolderNameWasChanged_ChangesDiscUri()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -71,12 +71,12 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			target.Load(disc);
 
-			//	Act
+			// Act
 
 			target.FolderName = "SomeNewDiscFolder";
 			target.Save().Wait();
 
-			//	Assert
+			// Assert
 
 			libraryContentUpdaterMock.Received(1).ChangeDiscUri(disc, new Uri("/SomeDiscStorage/SomeNewDiscFolder", UriKind.Relative));
 		}
@@ -84,7 +84,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Save_IfFolderNameWasNotChanged_DoesNotChangeDiscUri()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -101,11 +101,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			target.Load(disc);
 
-			//	Act
+			// Act
 
 			target.Save().Wait();
 
-			//	Assert
+			// Assert
 
 			libraryContentUpdaterMock.DidNotReceive().ChangeDiscUri(Arg.Any<Disc>(), Arg.Any<Uri>());
 		}
@@ -113,7 +113,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Save_WhenAlbumTitleWasChanged_UpdatesDiscCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -130,12 +130,12 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			target.Load(disc);
 
-			//	Act
+			// Act
 
 			target.AlbumTitle = "Some New Album";
 			target.Save().Wait();
 
-			//	Assert
+			// Assert
 
 			libraryContentUpdaterMock.Received(1).UpdateDisc(disc, UpdatedSongProperties.Album);
 		}
@@ -143,7 +143,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Save_WhenAlbumTitleWasNotChanged_UpdatesDiscCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -160,11 +160,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			target.Load(disc);
 
-			//	Act
+			// Act
 
 			target.Save().Wait();
 
-			//	Assert
+			// Assert
 
 			libraryContentUpdaterMock.Received(1).UpdateDisc(disc, UpdatedSongProperties.None);
 		}
@@ -174,11 +174,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[TestCase(" ")]
 		public void FolderNameSetter_WhenFolderNameIsEmpty_ThrowsInvalidOperationException(string newFolderName)
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new EditDiscPropertiesViewModel(Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.FolderName = newFolderName);
 		}
@@ -188,11 +188,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[TestCase(" ")]
 		public void DiscTitleSetter_WhenDiscTitleIsEmpty_ThrowsInvalidOperationException(string newDiscTitle)
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new EditDiscPropertiesViewModel(Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.DiscTitle = newDiscTitle);
 		}
@@ -200,15 +200,15 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void AlbumTitleSetter_WhenAlbumTitleIsEmpty_SetsTitleToNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new EditDiscPropertiesViewModel(Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
 
-			//	Act
+			// Act
 
-			target.AlbumTitle = "";
+			target.AlbumTitle = String.Empty;
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(target.AlbumTitle);
 		}

@@ -60,24 +60,20 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 		{
 			logger.LogInformation("Checking Last.fm albums ...");
 
-			//	Several disc could map to one album.
-			//	That's why we remember what albums weere already checked.
+			// Several disc could map to one album.
+			// That's why we remember what albums weere already checked.
 			HashSet<Album> checkedAlbums = new HashSet<Album>();
 
 			foreach (var disc in discs
 				.Where(disc => disc.Artist != null)
 				.Where(disc => disc.AlbumTitle != null))
 			{
-				var album = new Album
-				{
-					Artist = disc.Artist.Name,
-					Title = disc.AlbumTitle,
-				};
-
+				var album = new Album(disc.Artist.Name, disc.AlbumTitle);
 				if (checkedAlbums.Contains(album))
 				{
 					continue;
 				}
+
 				checkedAlbums.Add(album);
 
 				var albumInfo = await lastFmApiClient.GetAlbumInfo(album, settings.LastFmUsername);
@@ -97,8 +93,8 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 		{
 			logger.LogInformation("Checking Last.fm songs ...");
 
-			//	Several songs could map to one track.
-			//	That's why we remember what tracks weere already checked.
+			// Several songs could map to one track.
+			// That's why we remember what tracks weere already checked.
 			HashSet<Track> checkedTracks = new HashSet<Track>();
 
 			foreach (var song in songs
@@ -115,6 +111,7 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 				{
 					continue;
 				}
+
 				checkedTracks.Add(track);
 
 				var trackInfo = await lastFmApiClient.GetTrackInfo(track, settings.LastFmUsername);

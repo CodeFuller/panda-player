@@ -28,7 +28,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 			memo = new Lazy<PlaylistAdviserMemo>(() => memoRepository.Load() ??
 			new PlaylistAdviserMemo
 			{
-				//	Initializing memo with threshold values so that promoted advises go first.
+				// Initializing memo with threshold values so that promoted advises go first.
 				PlaybacksSinceHighlyRatedSongsPlaylist = PlaybacksBetweenHighlyRatedSongsPlaylists,
 				PlaybacksSinceFavouriteArtistDisc = PlaybacksBetweenFavouriteArtistDiscs,
 			});
@@ -63,6 +63,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 					{
 						continue;
 					}
+
 					advisedDiscs.Add(currAdvise.Disc);
 				}
 

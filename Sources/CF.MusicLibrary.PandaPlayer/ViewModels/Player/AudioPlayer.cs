@@ -6,7 +6,7 @@ using CF.Library.Core.Facades;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 {
-	class AudioPlayer : IAudioPlayer
+	internal class AudioPlayer : IAudioPlayer
 	{
 		private const double SongPostionUpdateInterval = 200;
 
@@ -23,6 +23,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 		public bool IsPlaying { get; private set; }
 
 		private TimeSpan currSongLength;
+
 		public TimeSpan CurrSongLength
 		{
 			get => currSongLength;
@@ -42,6 +43,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 				{
 					mediaPlayer.Position = value;
 				}
+
 				OnPropertyChanged();
 			}
 		}

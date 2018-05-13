@@ -32,7 +32,7 @@ namespace CF.MusicLibrary.Dal
 				throw new InvalidOperationException("Added song could not contain any playbacks");
 			}
 
-			//	Adding will not work correctly if songs collection is filled for the Disc.
+			// Adding will not work correctly if songs collection is filled for the Disc.
 			var disc = song.Disc;
 			ICollection<Song> discSongs = disc.SongsUnordered;
 			disc.SongsUnordered = new Collection<Song>();
@@ -43,16 +43,16 @@ namespace CF.MusicLibrary.Dal
 
 				using (var ctx = GetContext())
 				{
-					//	Is it a new Genre?
+					// Is it a new Genre?
 					if (genre != null)
 					{
 						ctx.Entry(genre).State = genre.Id == 0 ? EntityState.Added : EntityState.Unchanged;
 					}
 
-					//	Is it a new Disc?
+					// Is it a new Disc?
 					ctx.Entry(disc).State = disc.Id == 0 ? EntityState.Added : EntityState.Unchanged;
 
-					//	Is it a new Artist?
+					// Is it a new Artist?
 					if (artist != null)
 					{
 						ctx.Entry(artist).State = artist.Id == 0 ? EntityState.Added : EntityState.Unchanged;
@@ -139,7 +139,7 @@ namespace CF.MusicLibrary.Dal
 				ctx.Entry(song).State = EntityState.Modified;
 				ctx.Entry(song.Playbacks.Last()).State = EntityState.Added;
 				await ctx.SaveChangesAsync();
-			};
+			}
 		}
 
 		public static async Task CopyData(DbConnection sourceConnection, DbConnection targetConnection)

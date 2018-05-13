@@ -13,7 +13,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ArtistSetter_ThrowsInvalidOperationException()
 		{
-			//	Arrange
+			// Arrange
 
 			var artist = new Artist { Name = "Some Artist" };
 
@@ -25,7 +25,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new CompilationDiscWithArtistInfoViewItem(discInfo, new[] { artist }, Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.Artist = artist);
 		}
@@ -33,7 +33,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ArtistIsEditableGetter_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -43,7 +43,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new CompilationDiscWithArtistInfoViewItem(discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.ArtistIsEditable);
 		}
@@ -51,7 +51,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void ArtistIsNotFilledGetter_ReturnsFalse()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -61,7 +61,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new CompilationDiscWithArtistInfoViewItem(discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.ArtistIsNotFilled);
 		}
@@ -69,7 +69,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 		[Test]
 		public void DiscTypeTitleGetter_ReturnsCorrectDiscTypeTitle()
 		{
-			//	Arrange
+			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
@@ -79,7 +79,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var target = new CompilationDiscWithArtistInfoViewItem(discInfo, new[] { new Artist { Name = "Some Artist" } }, Enumerable.Empty<Genre>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual("Compilation with Artists", target.DiscTypeTitle);
 		}

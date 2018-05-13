@@ -26,6 +26,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 		TimeSpan TotalSongsDuration { get; }
 
 		ICommand PlaySongsNextCommand { get; }
+
 		ICommand PlaySongsLastCommand { get; }
 
 		ICommand EditSongsPropertiesCommand { get; }

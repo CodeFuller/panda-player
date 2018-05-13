@@ -38,6 +38,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public FolderExplorerItem CurrentFolder { get; private set; }
 
 		private FolderExplorerItem selectedItem;
+
 		public FolderExplorerItem SelectedItem
 		{
 			get => selectedItem;
@@ -63,10 +64,15 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public IExplorerSongListViewModel SongListViewModel { get; }
 
 		public ICommand ChangeFolderCommand { get; }
+
 		public ICommand PlayDiscCommand { get; }
+
 		public ICommand DeleteDiscCommand { get; }
+
 		public ICommand JumpToFirstItemCommand { get; }
+
 		public ICommand JumpToLastItemCommand { get; }
+
 		public ICommand EditDiscPropertiesCommand { get; }
 
 		public LibraryExplorerViewModel(ILibraryBrowser libraryBrowser, IExplorerSongListViewModel songListViewModel, ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
@@ -142,13 +148,13 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				return;
 			}
 
-			//	We're sending this event to release any disc images hold by DiscImageViewModel.
+			// We're sending this event to release any disc images hold by DiscImageViewModel.
 			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null));
 			await libraryContentUpdater.DeleteDisc(discItem.Disc);
 
 			Items.Remove(discItem);
 
-			//	If only '..' item remains
+			// If only '..' item remains
 			if (Items.Count == 1)
 			{
 				FolderExplorerItem currFolder = discItem;
@@ -156,7 +162,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				{
 					currFolder = libraryBrowser.GetParentFolder(currFolder);
 				}
-				while (currFolder != null && !libraryBrowser.GetChildFolderItems(currFolder).Any()) ;
+				while (currFolder != null && !libraryBrowser.GetChildFolderItems(currFolder).Any());
 
 				if (currFolder != null)
 				{
@@ -187,34 +193,36 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 				return;
 			}
 
-			//	Remember current directory if we're moving up
+			// Remember current directory if we're moving up
 			FolderExplorerItem prevFolder = null;
 			if (newFolder.IsParentItem)
 			{
 				prevFolder = CurrentFolder;
 			}
+
 			CurrentFolder = newFolder;
 
-			//	Getting a parent of new folder
+			// Getting a parent of new folder
 			ParentFolder = libraryBrowser.GetParentFolder(newFolder);
 			if (ParentFolder != null)
 			{
 				ParentFolder.IsParentItem = true;
 			}
 
-			//	Building new items list
+			// Building new items list
 			SetItems(childFolderItems);
 			if (ParentFolder != null)
 			{
 				Items.Insert(0, ParentFolder);
 			}
 
-			//	Setting selected item
+			// Setting selected item
 			FolderExplorerItem newSelectedItem = null;
 			if (prevFolder != null)
 			{
 				newSelectedItem = Items.FirstOrDefault(f => new FolderItemComparer().Equals(f, prevFolder));
 			}
+
 			SelectedItem = newSelectedItem ?? Items.FirstOrDefault();
 		}
 

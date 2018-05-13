@@ -17,21 +17,22 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 		public IEnumerable<string> SongFileNames => Songs.Select(s => GetSongFileName(s.Title));
 
 		private string discDirectory;
+
 		public string DiscDirectory
 		{
 			get => discDirectory;
 			set
 			{
-				//	Value has changed or just initialized?
-				bool valueChanged = (discDirectory != null);
+				// Value has changed or just initialized?
+				bool valueChanged = discDirectory != null;
 
 				if (valueChanged)
 				{
-					//	Exception, thrown at this point, won't blow up,
-					//	because exceptions thrown from binding properties are treated as validation failures.
-					//	http://stackoverflow.com/questions/12658220/exceptions-thrown-during-a-set-operation-in-a-property-are-not-being-caught
-					//	http://stackoverflow.com/questions/1488472/best-practices-throwing-exceptions-from-properties
-					//	It's not a big problem because directory title will not be updated and still will be marked as incorrect.
+					// Exception, thrown at this point, won't blow up,
+					// because exceptions thrown from binding properties are treated as validation failures.
+					// http://stackoverflow.com/questions/12658220/exceptions-thrown-during-a-set-operation-in-a-property-are-not-being-caught
+					// http://stackoverflow.com/questions/1488472/best-practices-throwing-exceptions-from-properties
+					// It's not a big problem because directory title will not be updated and still will be marked as incorrect.
 					Directory.Move(discDirectory, value);
 				}
 
@@ -50,6 +51,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 		}
 
 		private bool contentIsIncorrect;
+
 		public bool ContentIsIncorrect
 		{
 			get => contentIsIncorrect;

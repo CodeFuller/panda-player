@@ -42,7 +42,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void AddContentToLibrary_FillsSongMediaInfoCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			Song addedSong = null;
 
@@ -62,11 +62,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 				Substitute.For<IWorkshopMusicStorage>(), new DiscPreprocessorSettings().StubOptions());
 			target.SetSongs(new[] { new AddedSong(new Song(), @"SomeSongPath\SomeSongFile.mp3") });
 
-			//	Act
+			// Act
 
 			target.AddContentToLibrary().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(12345, addedSong.FileSize);
 			Assert.AreEqual(256000, addedSong.Bitrate);
@@ -76,7 +76,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void AddContentToLibrary_StoresDiscsImagesCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			Disc disc1 = new Disc();
 			Disc disc2 = new Disc();
@@ -95,11 +95,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 			target.SetSongs(new AddedSong[] { });
 			target.SetDiscsImages(new[] { addedImage1, addedImage2 });
 
-			//	Act
+			// Act
 
 			target.AddContentToLibrary().Wait();
 
-			//	Assert
+			// Assert
 
 			musicLibraryMock.Received(1).SetDiscCoverImage(disc1, imageInfo1);
 			musicLibraryMock.Received(1).SetDiscCoverImage(disc2, imageInfo2);
@@ -108,7 +108,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void AddContentToLibrary_IfDeleteSourceContentIsTrue_DeletesSourceContentCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			ImageInfo imageInfo1 = new ImageInfo { FileName = "DiscCoverImage1.img" };
 			ImageInfo imageInfo2 = new ImageInfo { FileName = "DiscCoverImage2.img" };
@@ -138,11 +138,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 				new AddedDiscImage(new Disc(), imageInfo2),
 			});
 
-			//	Act
+			// Act
 
 			target.AddContentToLibrary().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(deletedFiles);
 			CollectionAssert.AreEqual(new[]
@@ -157,7 +157,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void AddContentToLibrary_IfDeleteSourceContentIsFalse_DoesNotDeleteSourceContent()
 		{
-			//	Arrange
+			// Arrange
 
 			ISongMediaInfoProvider mediaInfoProviderStub = Substitute.For<ISongMediaInfoProvider>();
 			mediaInfoProviderStub.GetSongMediaInfo(Arg.Any<string>()).Returns(Task.FromResult(new SongMediaInfo()));
@@ -169,11 +169,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 			target.SetSongs(new[] { new AddedSong(new Song(), @"SomeSongPath\SomeSongFile.mp3") });
 			target.SetDiscsImages(new[] { new AddedDiscImage(new Disc(), new ImageInfo()) });
 
-			//	Act
+			// Act
 
 			target.AddContentToLibrary().Wait();
 
-			//	Assert
+			// Assert
 
 			workshopMusicStorageMock.DidNotReceiveWithAnyArgs().DeleteSourceContent(Arg.Any<IEnumerable<string>>());
 		}

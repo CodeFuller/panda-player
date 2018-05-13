@@ -102,8 +102,9 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 			var discsList = discs.ToList();
 			foreach (var songArtistName in discsList.Where(d => d.HasArtist).Select(d => d.Artist)
-				//	We're adding Song artists even if disc.HasArtist is true,
-				//	so that individual song artists are also get into artist list.
+
+				// We're adding Song artists even if disc.HasArtist is true,
+				// so that individual song artists are also get into artist list.
 				.Concat(discsList.SelectMany(d => d.Songs).Select(s => s.Artist).Where(a => !String.IsNullOrEmpty(a)))
 				.Distinct())
 			{
@@ -158,7 +159,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 
 		private Genre PredictArtistGenre(string artist)
 		{
-			//	Selecting genre of the most recent disc
+			// Selecting genre of the most recent disc
 			return discLibrary.AllDiscs
 				.OrderByDescending(d => d.Year)
 				.Where(d => d.Artist?.Name == artist)

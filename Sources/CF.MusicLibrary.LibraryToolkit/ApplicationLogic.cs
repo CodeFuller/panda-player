@@ -48,6 +48,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 						ShowHelp();
 						break;
 					}
+
 					await MigrateDatabase(restArgs[0], restArgs[1]);
 					break;
 
@@ -76,7 +77,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 			var sourceDBConnectionString = BuildConnectionString(sourceDatabaseFileName);
 			var targetDBConnectionString = BuildConnectionString(targetDatabaseFileName);
 
-			//	Checking that target database is empty
+			// Checking that target database file does not exist.
 			if (fileSystemFacade.FileExists(targetDatabaseFileName))
 			{
 				logger.LogError($"Target database file should not exist: '{targetDatabaseFileName}'");

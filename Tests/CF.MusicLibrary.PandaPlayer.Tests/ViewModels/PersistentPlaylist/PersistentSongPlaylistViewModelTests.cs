@@ -25,7 +25,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 
 			public void InvokeOnPlaylistChanged()
 			{
-				base.OnPlaylistChanged();
+				OnPlaylistChanged();
 			}
 		}
 
@@ -59,7 +59,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 		[Test]
 		public void LibraryLoadedEventHandler_IfPlaylistDataRepositoryReturnsNoData_ReturnsWithNoAction()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song();
 			var disc = new Disc { SongsUnordered = new[] { song } };
@@ -70,11 +70,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(),
 				Substitute.For<IViewNavigator>(), playlistDataRepositoryStub, Substitute.For<ILogger<PersistentSongPlaylistViewModel>>());
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new LibraryLoadedEventArgs(new DiscLibrary(Enumerable.Repeat(disc, 1))));
 
-			//	Assert
+			// Assert
 
 			Assert.IsEmpty(target.Songs);
 		}
@@ -82,7 +82,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 		[Test]
 		public void LibraryLoadedEventHandler_IfPlaylistDataIsCorrect_LoadsPlaylistSongsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song { Id = 1 };
 			var song2 = new Song { Id = 2 };
@@ -100,11 +100,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(),
 				Substitute.For<IViewNavigator>(), playlistDataRepositoryStub, Substitute.For<ILogger<PersistentSongPlaylistViewModel>>());
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new LibraryLoadedEventArgs(new DiscLibrary(Enumerable.Repeat(disc, 1))));
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(new[] { song1, song2 }, target.Songs);
 			Assert.AreSame(song2, target.CurrentSong);
@@ -113,7 +113,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 		[Test]
 		public void LibraryLoadedEventHandler_IfCurrentSongIsNotSet_LoadsPlaylistCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song { Id = 1 };
 			var disc = new Disc { SongsUnordered = new[] { song } };
@@ -130,11 +130,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(),
 				Substitute.For<IViewNavigator>(), playlistDataRepositoryStub, Substitute.For<ILogger<PersistentSongPlaylistViewModel>>());
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new LibraryLoadedEventArgs(new DiscLibrary(Enumerable.Repeat(disc, 1))));
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(new[] { song }, target.Songs);
 			Assert.IsNull(target.CurrentSong);
@@ -143,7 +143,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 		[Test]
 		public void LibraryLoadedEventHandler_IfPlaylistDataContainsSomeUnexistingSongs_ReturnsWithNoAction()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song { Id = 1 };
 			var disc = new Disc { SongsUnordered = new[] { song } };
@@ -160,11 +160,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(),
 				Substitute.For<IViewNavigator>(), playlistDataRepositoryStub, Substitute.For<ILogger<PersistentSongPlaylistViewModel>>());
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new LibraryLoadedEventArgs(new DiscLibrary(Enumerable.Repeat(disc, 1))));
 
-			//	Assert
+			// Assert
 
 			Assert.IsEmpty(target.Songs);
 		}
@@ -173,7 +173,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 		[TestCase(1)]
 		public void LibraryLoadedEventHandler_IfCurrentSongIndexIsInvalid_ReturnsWithNoAction(int savedSongIndex)
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song { Id = 1 };
 			var disc = new Disc { SongsUnordered = new[] { song } };
@@ -190,11 +190,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(),
 				Substitute.For<IViewNavigator>(), playlistDataRepositoryStub, Substitute.For<ILogger<PersistentSongPlaylistViewModel>>());
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new LibraryLoadedEventArgs(new DiscLibrary(Enumerable.Repeat(disc, 1))));
 
-			//	Assert
+			// Assert
 
 			Assert.IsEmpty(target.Songs);
 		}
@@ -202,7 +202,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 		[Test]
 		public void LibraryLoadedEventHandler_IfPlaylistDataWasLoaded_DoesNotSaveUpdatedPlaylist()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song { Id = 1 };
 			var disc = new Disc { SongsUnordered = new[] { song } };
@@ -219,13 +219,13 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(),
 Substitute.For<IViewNavigator>(), playlistDataRepositoryMock, Substitute.For<ILogger<PersistentSongPlaylistViewModel>>());
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new LibraryLoadedEventArgs(new DiscLibrary(Enumerable.Repeat(disc, 1))));
 
-			//	Assert
+			// Assert
 
-			//	Paranoick check
+			// Paranoick check
 			Assert.IsNotEmpty(target.Songs);
 			playlistDataRepositoryMock.DidNotReceive().Save(Arg.Any<PlaylistData>());
 		}
@@ -233,7 +233,7 @@ Substitute.For<IViewNavigator>(), playlistDataRepositoryMock, Substitute.For<ILo
 		[Test]
 		public void LibraryLoadedEventHandler_IfPlaylistDataWasLoaded_SendsPlaylistLoadedEvent()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song { Id = 1 };
 			var disc = new Disc { SongsUnordered = new[] { song } };
@@ -253,11 +253,11 @@ Substitute.For<IViewNavigator>(), playlistDataRepositoryMock, Substitute.For<ILo
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(),
 				Substitute.For<IViewNavigator>(), playlistDataRepositoryStub, Substitute.For<ILogger<PersistentSongPlaylistViewModel>>());
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new LibraryLoadedEventArgs(new DiscLibrary(Enumerable.Repeat(disc, 1))));
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue(receivedEvent);
 		}
@@ -265,7 +265,7 @@ Substitute.For<IViewNavigator>(), playlistDataRepositoryMock, Substitute.For<ILo
 		[Test]
 		public void OnPlaylistChanged_SavesPlaylistDataCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song { Id = 1, Uri = new Uri("/SongUri1", UriKind.Relative) };
 			var song2 = new Song { Id = 2, Uri = new Uri("/SongUri2", UriKind.Relative) };
@@ -281,11 +281,11 @@ Substitute.For<IViewNavigator>(), playlistDataRepositoryMock, Substitute.For<ILo
 			playlistDataRepositoryMock.ClearReceivedCalls();
 			playlistDataRepositoryMock.Save(Arg.Do<PlaylistData>(arg => savedPlaylistData = arg));
 
-			//	Act
+			// Act
 
 			target.InvokeOnPlaylistChanged();
 
-			//	Assert
+			// Assert
 
 			playlistDataRepositoryMock.Received(1).Save(Arg.Any<PlaylistData>());
 			var savedSongs = savedPlaylistData.Songs.ToList();
@@ -300,7 +300,7 @@ Substitute.For<IViewNavigator>(), playlistDataRepositoryMock, Substitute.For<ILo
 		[Test]
 		public void OnPlaylistChanged_WhenPlaylistCurrentSongIsNotSet_SavesPlaylistDataCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var songs = new[] { new Song() };
 
@@ -313,11 +313,11 @@ Substitute.For<IViewNavigator>(), playlistDataRepositoryMock, Substitute.For<ILo
 			playlistDataRepositoryMock.ClearReceivedCalls();
 			playlistDataRepositoryMock.Save(Arg.Do<PlaylistData>(arg => savedPlaylistData = arg));
 
-			//	Act
+			// Act
 
 			target.InvokeOnPlaylistChanged();
 
-			//	Assert
+			// Assert
 
 			playlistDataRepositoryMock.Received(1).Save(Arg.Any<PlaylistData>());
 			Assert.IsNull(savedPlaylistData.CurrentSongIndex);
@@ -326,18 +326,18 @@ Substitute.For<IViewNavigator>(), playlistDataRepositoryMock, Substitute.For<ILo
 		[Test]
 		public void PlaylistFinishedEventHandler_PurgesPlaylistData()
 		{
-			//	Arrange
+			// Arrange
 
 			IGenericDataRepository<PlaylistData> playlistDataRepositoryMock = Substitute.For<IGenericDataRepository<PlaylistData>>();
 
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(),
 				Substitute.For<IViewNavigator>(), playlistDataRepositoryMock, Substitute.For<ILogger<PersistentSongPlaylistViewModel>>());
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new PlaylistFinishedEventArgs(target));
 
-			//	Assert
+			// Assert
 
 			playlistDataRepositoryMock.Received(1).Purge();
 		}

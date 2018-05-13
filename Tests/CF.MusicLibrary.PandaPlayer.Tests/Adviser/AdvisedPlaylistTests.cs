@@ -11,7 +11,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		[Test]
 		public void ForDisc_IfDiscHasArtist_FillsTitleCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -19,11 +19,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 				SongsUnordered = new[] { new Song { Artist = new Artist { Name = "Some Artist" } } },
 			};
 
-			//	Act
+			// Act
 
 			var target = AdvisedPlaylist.ForDisc(disc);
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("Some Artist - Some Disc", target.Title);
 		}
@@ -31,7 +31,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		[Test]
 		public void ForDisc_IfDiscHasNoArtist_FillsTitleCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -39,11 +39,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 				SongsUnordered = new[] { new Song { Artist = new Artist() }, new Song { Artist = new Artist() } },
 			};
 
-			//	Act
+			// Act
 
 			var target = AdvisedPlaylist.ForDisc(disc);
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("Some Disc", target.Title);
 		}
@@ -51,7 +51,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		[Test]
 		public void ForDisc_FillsSongsWithAllActiveDiscSongs()
 		{
-			//	Arrange
+			// Arrange
 
 			var activeSong1 = new Song();
 			var activeSong2 = new Song();
@@ -62,27 +62,27 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 				SongsUnordered = new[] { deletedSong, activeSong1, activeSong2 },
 			};
 
-			//	Act
+			// Act
 
 			var target = AdvisedPlaylist.ForDisc(disc);
 
-			//	Assert
+			// Assert
 
-			CollectionAssert.AreEqual(new[] {activeSong1, activeSong2}, target.Songs);
+			CollectionAssert.AreEqual(new[] { activeSong1, activeSong2 }, target.Songs);
 		}
 
 		[Test]
 		public void ForDisc_FillsDiscCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc { SongsUnordered = new Song[0] };
 
-			//	Act
+			// Act
 
 			var target = AdvisedPlaylist.ForDisc(disc);
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(disc, target.Disc);
 		}
@@ -90,7 +90,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		[Test]
 		public void ForFavouriteArtistDisc_IfDiscHasArtist_FillsTitleCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -98,11 +98,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 				SongsUnordered = new[] { new Song { Artist = new Artist { Name = "Some Artist" } } },
 			};
 
-			//	Act
+			// Act
 
 			var target = AdvisedPlaylist.ForFavouriteArtistDisc(disc);
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("*** Some Artist - Some Disc", target.Title);
 		}
@@ -110,7 +110,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		[Test]
 		public void ForFavouriteArtistDisc_IfDiscHasNoArtist_FillsTitleCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc
 			{
@@ -118,11 +118,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 				SongsUnordered = new[] { new Song { Artist = new Artist() }, new Song { Artist = new Artist() } },
 			};
 
-			//	Act
+			// Act
 
 			var target = AdvisedPlaylist.ForFavouriteArtistDisc(disc);
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("*** Some Disc", target.Title);
 		}
@@ -130,7 +130,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		[Test]
 		public void ForFavouriteArtistDisc_FillsSongsWithAllActiveDiscSongs()
 		{
-			//	Arrange
+			// Arrange
 
 			var activeSong1 = new Song();
 			var activeSong2 = new Song();
@@ -141,11 +141,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 				SongsUnordered = new[] { deletedSong, activeSong1, activeSong2 },
 			};
 
-			//	Act
+			// Act
 
 			var target = AdvisedPlaylist.ForFavouriteArtistDisc(disc);
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(new[] { activeSong1, activeSong2 }, target.Songs);
 		}
@@ -153,15 +153,15 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		[Test]
 		public void ForFavouriteArtistDisc_FillsDiscCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc { SongsUnordered = new Song[0] };
 
-			//	Act
+			// Act
 
 			var target = AdvisedPlaylist.ForFavouriteArtistDisc(disc);
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(disc, target.Disc);
 		}
@@ -169,13 +169,13 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		[Test]
 		public void ForHighlyRatedSongs_FillsTitleCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
-			//	Act
+			// Act
 
 			var target = AdvisedPlaylist.ForHighlyRatedSongs(new[] { new Song() });
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual("Highly Rated Songs", target.Title);
 		}
@@ -183,16 +183,16 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		[Test]
 		public void ForHighlyRatedSongs_FillsSongsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
 
-			//	Act
+			// Act
 
 			var target = AdvisedPlaylist.ForHighlyRatedSongs(new[] { song1, song2 });
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(new[] { song1, song2 }, target.Songs);
 		}
@@ -200,13 +200,13 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		[Test]
 		public void DiscGetter_ForForHighlyRatedSongsPlaylist_ThrowsInvalidOperationException()
 		{
-			//	Arrange
+			// Arrange
 
-			//	Act
+			// Act
 
 			var target = AdvisedPlaylist.ForHighlyRatedSongs(new[] { new Song() });
 
-			//	Assert
+			// Assert
 
 			Disc disc;
 			Assert.Throws<InvalidOperationException>(() => disc = target.Disc);

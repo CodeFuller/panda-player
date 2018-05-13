@@ -11,35 +11,6 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.LibraryChecker
 {
-	internal struct AllowedArtistCorrection
-	{
-		public string OriginalArtistName { get; }
-
-		public string CorrectedArtistName { get; }
-
-		public AllowedArtistCorrection(string originalArtistName, string correctedArtistName)
-		{
-			OriginalArtistName = originalArtistName;
-			CorrectedArtistName = correctedArtistName;
-		}
-	}
-
-	internal struct AllowedSongCorrection
-	{
-		public string Artist { get; }
-
-		public string OriginalSongTitle { get; }
-
-		public string CorrectedSongTitle { get; }
-
-		public AllowedSongCorrection(string artist, string originalSongTitle, string correctedSongTitle)
-		{
-			Artist = artist;
-			OriginalSongTitle = originalSongTitle;
-			CorrectedSongTitle = correctedSongTitle;
-		}
-	}
-
 	public class LibraryInconsistencyFilter : ILibraryInconsistencyFilter
 	{
 		private readonly Lazy<List<AllowedArtistCorrection>> allowedArtistCorrections;
@@ -76,14 +47,14 @@ namespace CF.MusicLibrary.LibraryChecker
 				return true;
 			}
 
-			//	Sometimes Last.fm replaces ’ with '
+			// Sometimes Last.fm replaces ’ with '
 			correctedSongTitle = correctedSongTitle.Replace("’", "'");
 			if (String.Equals(originalSongTitle, correctedSongTitle, StringComparison.OrdinalIgnoreCase))
 			{
 				return true;
 			}
 
-			//	Sometimes Last.fm mistakenly replaces 'ё' with 'е'
+			// Sometimes Last.fm mistakenly replaces 'ё' with 'е'
 			originalSongTitle = originalSongTitle.Replace("ё", "е");
 			if (String.Equals(originalSongTitle, correctedSongTitle, StringComparison.OrdinalIgnoreCase))
 			{

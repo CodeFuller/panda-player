@@ -11,7 +11,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser
 
 		public Collection<RankedDisc> RankedDiscs { get; }
 
-		//	Deleted discs are also included
+		// Deleted discs are also included
 		public int PlaybacksPassed => RankedDiscs.Select(d => d.PlaybacksPassed).Min();
 
 		public double Rating => RankedDiscs.Where(rd => !rd.Disc.IsDeleted).Select(rd => rd.Rating).Average();

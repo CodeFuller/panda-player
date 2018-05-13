@@ -17,18 +17,14 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 		[Test]
 		public void Load_ForCorrectlyStoredScrobble_LoadsScrobbleCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var track = new Track
 			{
 				Number = 5,
 				Title = "Some Title",
 				Artist = "Some Artist",
-				Album = new Album
-				{
-					Artist = "Some Artist",
-					Title = "Some Album",
-				},
+				Album = new Album("Some Artist", "Some Album"),
 				Duration = new TimeSpan(1, 2, 3),
 			};
 
@@ -41,12 +37,12 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 
 			var target = new ScrobblesQueueRepository(GetFileSystemStub("SomeFile.txt"), Substitute.For<ILogger<ScrobblesQueueRepository>>(), "SomeFile.txt");
 
-			//	Act
+			// Act
 
 			target.Save(new Queue<TrackScrobble>(new[] { trackScrobble }));
 			var loadedScrobbles = target.Load();
 
-			//	Assert
+			// Assert
 
 			var loadedTrackScrobble = loadedScrobbles?.FirstOrDefault();
 			Assert.IsNotNull(loadedTrackScrobble);

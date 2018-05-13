@@ -10,10 +10,10 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Scrobbling
 {
 	public class PersistentScrobblesProcessor : IScrobblesProcessor
 	{
-		private bool loaded;
 		private readonly Queue<TrackScrobble> scrobblesQueue;
 		private readonly IScrobblesQueueRepository repository;
 		private readonly ILogger<PersistentScrobblesProcessor> logger;
+		private bool loaded;
 
 		public PersistentScrobblesProcessor(Queue<TrackScrobble> scrobblesQueue, IScrobblesQueueRepository repository, ILogger<PersistentScrobblesProcessor> logger)
 		{

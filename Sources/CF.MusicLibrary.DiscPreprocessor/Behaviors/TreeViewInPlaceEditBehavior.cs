@@ -6,13 +6,9 @@ using CF.MusicLibrary.DiscPreprocessor.Extensions;
 
 namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 {
-	/// <remarks>
-	/// Copy/paste from https://treeviewinplaceedit.codeplex.com
-	/// </remarks>>
+	// Copy/paste from https://treeviewinplaceedit.codeplex.com
 	public static class TreeViewInPlaceEditBehavior
 	{
-		#region Attached Properties
-		#region IsEditable
 		public static readonly DependencyProperty IsEditableProperty = DependencyProperty.RegisterAttached(
 		  "IsEditable", typeof(bool), typeof(TreeViewInPlaceEditBehavior), new PropertyMetadata(OnIsEditableChanged));
 
@@ -22,6 +18,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 			{
 				throw new ArgumentNullException(nameof(obj));
 			}
+
 			return (bool)obj.GetValue(IsEditableProperty);
 		}
 
@@ -31,11 +28,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 			{
 				throw new ArgumentNullException(nameof(obj));
 			}
+
 			obj.SetValue(IsEditableProperty, value);
 		}
-		#endregion IsEditable
 
-		#region IsEditing
 		public static readonly DependencyProperty IsEditingProperty = DependencyProperty.RegisterAttached(
 		  "IsEditing", typeof(bool), typeof(TreeViewInPlaceEditBehavior));
 
@@ -45,6 +41,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 			{
 				throw new ArgumentNullException(nameof(obj));
 			}
+
 			return (bool)obj.GetValue(IsEditingProperty);
 		}
 
@@ -54,11 +51,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 			{
 				throw new ArgumentNullException(nameof(obj));
 			}
+
 			obj.SetValue(IsEditingProperty, value);
 		}
-		#endregion IsEditing
 
-		#region IsEditConfirmed
 		public static readonly DependencyProperty IsEditConfirmedProperty = DependencyProperty.RegisterAttached(
 		  "IsEditConfirmed", typeof(bool), typeof(TreeViewInPlaceEditBehavior));
 
@@ -68,6 +64,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 			{
 				throw new ArgumentNullException(nameof(obj));
 			}
+
 			return (bool)obj.GetValue(IsEditConfirmedProperty);
 		}
 
@@ -77,11 +74,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 			{
 				throw new ArgumentNullException(nameof(obj));
 			}
+
 			obj.SetValue(IsEditConfirmedProperty, value);
 		}
-		#endregion IsEditConfirmed
 
-		#region IsEditCanceled
 		public static readonly DependencyProperty IsEditCanceledProperty = DependencyProperty.RegisterAttached(
 		  "IsEditCanceled", typeof(bool), typeof(TreeViewInPlaceEditBehavior));
 
@@ -91,6 +87,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 			{
 				throw new ArgumentNullException(nameof(obj));
 			}
+
 			return (bool)obj.GetValue(IsEditCanceledProperty);
 		}
 
@@ -100,11 +97,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 			{
 				throw new ArgumentNullException(nameof(obj));
 			}
+
 			obj.SetValue(IsEditCanceledProperty, value);
 		}
-		#endregion IsEditCanceled
 
-		#region LastSelectedItem
 		private static readonly DependencyProperty LastSelectedItemProperty = DependencyProperty.RegisterAttached(
 		  "LastSelectedItem", typeof(object), typeof(TreeViewInPlaceEditBehavior));
 
@@ -117,9 +113,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 		{
 			obj.SetValue(LastSelectedItemProperty, value);
 		}
-		#endregion LastSelectedItem
 
-		#region LastSelectedTime
 		private static readonly DependencyProperty LastSelectedTimeProperty = DependencyProperty.RegisterAttached(
 		  "LastSelectedTime", typeof(DateTime), typeof(TreeViewInPlaceEditBehavior));
 
@@ -132,10 +126,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 		{
 			obj.SetValue(LastSelectedTimeProperty, value);
 		}
-		#endregion LastSelectedTime
-		#endregion Attached Properties
 
-		#region Event Handlers
 		private static void OnIsEditableChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
 		{
 			var treeView = obj as TreeView;
@@ -163,17 +154,21 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 				case Key.F2:
 					treeView.BeginEdit();
 					break;
+
 				case Key.Escape:
 					if (treeView.IsEditing())
 					{
 						treeView.EndEdit(true);
 					}
+
 					break;
+
 				case Key.Return:
 					if (treeView.IsEditing())
 					{
 						treeView.EndEdit(false);
 					}
+
 					break;
 			}
 		}
@@ -214,10 +209,9 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 			var interval = DateTime.Now.Subtract(lastSelctedTime).TotalMilliseconds;
 			if (interval >= 400 && interval <= 1200)
 			{
-				////It's long double click, consider it as a edit sign 
+				// It's long double click, consider it as a edit sign.
 				treeView.BeginEdit();
 			}
 		}
-		#endregion Event Handlers
 	}
 }

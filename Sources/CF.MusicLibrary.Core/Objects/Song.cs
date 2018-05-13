@@ -18,6 +18,7 @@ namespace CF.MusicLibrary.Core.Objects
 		public int? ArtistId { get; set; }
 
 		private Artist artist;
+
 		public Artist Artist
 		{
 			get => artist;
@@ -30,6 +31,7 @@ namespace CF.MusicLibrary.Core.Objects
 		}
 
 		private short? trackNumber;
+
 		public short? TrackNumber
 		{
 			get => trackNumber;
@@ -41,6 +43,7 @@ namespace CF.MusicLibrary.Core.Objects
 		}
 
 		private short? year;
+
 		public short? Year
 		{
 			get => year;
@@ -56,6 +59,7 @@ namespace CF.MusicLibrary.Core.Objects
 		public int? GenreId { get; set; }
 
 		private Genre genre;
+
 		public Genre Genre
 		{
 			get => genre;
@@ -76,6 +80,7 @@ namespace CF.MusicLibrary.Core.Objects
 		}
 
 		private Rating? rating;
+
 		public Rating? Rating
 		{
 			get => rating;
@@ -104,6 +109,7 @@ namespace CF.MusicLibrary.Core.Objects
 		public int? Bitrate { get; set; }
 
 		private DateTime? lastPlaybackTime;
+
 		public DateTime? LastPlaybackTime
 		{
 			get => lastPlaybackTime;
@@ -115,6 +121,7 @@ namespace CF.MusicLibrary.Core.Objects
 		}
 
 		private int playbacksCount;
+
 		public int PlaybacksCount
 		{
 			get => playbacksCount;

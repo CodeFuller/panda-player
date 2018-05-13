@@ -18,6 +18,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingContent
 		public DiscContent Parse(IEnumerable<string> discContent)
 		{
 			var content = discContent.ToList();
+
 			// Disc content should contain at least disc directory
 			if (content.Count < 1)
 			{

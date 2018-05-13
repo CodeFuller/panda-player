@@ -20,7 +20,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 		[Test]
 		public void AdviseDiscs_AdvisesOnlyDiscsOfFavouriteArtists()
 		{
-			//	Arrange
+			// Arrange
 
 			var favouriteArtist1 = new Artist { IsFavourite = true };
 			var favouriteArtist2 = new Artist { IsFavourite = true };
@@ -42,11 +42,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var target = new FavouriteArtistDiscsAdviser(discAdviserStub);
 
-			//	Act
+			// Act
 
 			var advisedDiscs = target.Advise(library);
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(new[] { favouriteDisc1, favouriteDisc2, favouriteDisc3 }, advisedDiscs.Select(a => a.Disc));
 		}
@@ -54,7 +54,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 		[Test]
 		public void AdviseDiscs_ConvertsFromDiscAdviseToFavouriteArtistDiscAdviseCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var library = new DiscLibrary();
 
@@ -64,11 +64,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var target = new FavouriteArtistDiscsAdviser(discAdviserStub);
 
-			//	Act
+			// Act
 
 			var advisedDiscs = target.Advise(library);
 
-			//	Assert
+			// Assert
 
 			var advise = advisedDiscs.Single();
 			Assert.AreEqual(AdvisedPlaylistType.FavouriteArtistDisc, advise.AdvisedPlaylistType);

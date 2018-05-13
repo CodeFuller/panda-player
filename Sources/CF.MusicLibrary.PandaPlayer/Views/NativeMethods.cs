@@ -7,13 +7,13 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 	internal static class NativeMethods
 	{
 		/// <summary>
-		/// The WM_DRAWCLIPBOARD message notifies a clipboard viewer window that 
-		/// the content of the clipboard has changed. 
+		/// The WM_DRAWCLIPBOARD message notifies a clipboard viewer window that
+		/// the content of the clipboard has changed.
 		/// </summary>
 		internal const int WM_DRAWCLIPBOARD = 0x0308;
 
 		/// <summary>
-		/// A clipboard viewer window receives the WM_CHANGECBCHAIN message when 
+		/// A clipboard viewer window receives the WM_CHANGECBCHAIN message when
 		/// another window is removing itself from the clipboard viewer chain.
 		/// </summary>
 		internal const int WM_CHANGECBCHAIN = 0x030D;
@@ -45,8 +45,7 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 			uint wVirtKey,
 			uint wScanCode,
 			byte[] lpKeyState,
-			[Out, MarshalAs(UnmanagedType.LPWStr, SizeParamIndex = 4)]
-			StringBuilder pwszBuff,
+			[Out, MarshalAs(UnmanagedType.LPWStr, SizeParamIndex = 4)] StringBuilder pwszBuff,
 			int cchBuff,
 			uint wFlags);
 

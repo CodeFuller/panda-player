@@ -29,7 +29,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void LoadImages_FillsImageItemsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc = new Disc();
 			var imageInfo = new ImageInfo();
@@ -46,11 +46,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 
 			var target = new EditSourceDiscImagesViewModel(contentCrawlerStub, imageFileFactoryStub);
 
-			//	Act
+			// Act
 
 			target.LoadImages(new[] { addedDisc });
 
-			//	Assert
+			// Assert
 
 			var imageItems = target.ImageItems;
 			Assert.AreEqual(1, imageItems.Count);
@@ -62,7 +62,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void LoadImages_IfDiscHasImage_LoadsImageFileCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var addedDisc = new AddedDisc(new Disc(), true, "DiscSourcePath");
 
@@ -75,11 +75,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 
 			var target = new EditSourceDiscImagesViewModel(contentCrawlerStub, imageFileFactoryStub);
 
-			//	Act
+			// Act
 
 			target.LoadImages(new[] { addedDisc });
 
-			//	Assert
+			// Assert
 
 			imageFileMock.Received(1).Load("ImagePath", false);
 		}
@@ -87,7 +87,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void LoadImages_ForExistingDiscs_DoesNotLoadImages()
 		{
-			//	Arrange
+			// Arrange
 
 			var addedDisc = new AddedDisc(new Disc(), false, "DiscSourcePath");
 
@@ -100,11 +100,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 
 			var target = new EditSourceDiscImagesViewModel(contentCrawlerStub, imageFileFactoryStub);
 
-			//	Act
+			// Act
 
 			target.LoadImages(new[] { addedDisc });
 
-			//	Assert
+			// Assert
 
 			Assert.IsEmpty(target.ImageItems);
 			imageFileMock.DidNotReceive().Load(Arg.Any<string>(), Arg.Any<bool>());
@@ -113,7 +113,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void LoadImages_IfDiscHasNoImage_DoesNotLoadImageFile()
 		{
-			//	Arrange
+			// Arrange
 
 			var addedDisc = new AddedDisc(new Disc(), true, "DiscSourcePath");
 
@@ -126,11 +126,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 
 			var target = new EditSourceDiscImagesViewModel(contentCrawlerStub, imageFileFactoryStub);
 
-			//	Act
+			// Act
 
 			target.LoadImages(new[] { addedDisc });
 
-			//	Assert
+			// Assert
 
 			imageFileMock.DidNotReceive().Load(Arg.Any<string>(), Arg.Any<bool>());
 		}
@@ -138,7 +138,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void LoadImages_IfDiscHasMultipleImages_ThrowsInvalidOperationException()
 		{
-			//	Arrange
+			// Arrange
 
 			var addedDisc = new AddedDisc(new Disc(), true, "DiscSourcePath");
 
@@ -147,7 +147,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 
 			var target = new EditSourceDiscImagesViewModel(contentCrawlerStub, Substitute.For<IObjectFactory<IImageFile>>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.LoadImages(new[] { addedDisc }));
 		}
@@ -155,7 +155,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void LoadImages_IfSomeImagesAreAlreadyLoaded_ClearsExistingImages()
 		{
-			//	Arrange
+			// Arrange
 
 			var oldAddedDisc = new AddedDisc(new Disc(), true, "OldDiscSourcePath");
 			var newAddedDisc = new AddedDisc(new Disc(), true, "NewDiscSourcePath");
@@ -174,14 +174,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 
 			var target = new EditSourceDiscImagesViewModel(contentCrawlerStub, imageFileFactoryStub);
 			target.LoadImages(new[] { oldAddedDisc });
-			//	Sanity check
+
+			// Sanity check
 			Assert.AreSame(imageInfo1, target.ImageItems.Single().ImageInfo);
 
-			//	Act
+			// Act
 
 			target.LoadImages(new[] { newAddedDisc });
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, target.ImageItems.Count);
 			Assert.AreSame(imageInfo2, target.ImageItems.Single().ImageInfo);
@@ -190,7 +191,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void RefreshContentCommand_ReloadsDiscImages()
 		{
-			//	Arrange
+			// Arrange
 
 			var addedDisc = new AddedDisc(new Disc(), true, "DiscSourcePath");
 
@@ -208,14 +209,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 
 			var target = new EditSourceDiscImagesViewModel(contentCrawlerStub, imageFileFactoryStub);
 			target.LoadImages(new[] { addedDisc });
-			//	Sanity check
+
+			// Sanity check
 			Assert.AreSame(imageInfo1, target.ImageItems.Single().ImageInfo);
 
-			//	Act
+			// Act
 
 			target.RefreshContent();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, target.ImageItems.Count);
 			Assert.AreSame(imageInfo2, target.ImageItems.Single().ImageInfo);
@@ -224,7 +226,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void RefreshContentCommand_ForExistingDiscs_DoesNotLoadImages()
 		{
-			//	Arrange
+			// Arrange
 
 			var addedDisc = new AddedDisc(new Disc(), false, "DiscSourcePath");
 
@@ -239,11 +241,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 			target.LoadImages(new[] { addedDisc });
 			imageFileMock.ClearReceivedCalls();
 
-			//	Act
+			// Act
 
 			target.RefreshContent();
 
-			//	Assert
+			// Assert
 
 			Assert.IsEmpty(target.ImageItems);
 			imageFileMock.DidNotReceive().Load(Arg.Any<string>(), Arg.Any<bool>());
@@ -252,7 +254,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void DataIsReadyGetter_IfAllImagesAreValid_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			IContentCrawler contentCrawlerStub = Substitute.For<IContentCrawler>();
 			contentCrawlerStub.LoadDiscImages(Arg.Any<string>()).Returns(new[] { "SomeImage" });
@@ -267,7 +269,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 			var target = new EditSourceDiscImagesViewModel(contentCrawlerStub, imageFileFactoryStub);
 			target.LoadImages(new[] { new AddedDisc(new Disc(), true, "DiscSourcePath1"), new AddedDisc(new Disc(), true, "DiscSourcePath2") });
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsTrue(target.DataIsReady);
 		}
@@ -275,7 +277,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void DataIsReadyGetter_IfSomeImagesAreNotValid_ReturnsTrue()
 		{
-			//	Arrange
+			// Arrange
 
 			IContentCrawler contentCrawlerStub = Substitute.For<IContentCrawler>();
 			contentCrawlerStub.LoadDiscImages(Arg.Any<string>()).Returns(new[] { "SomeImage" });
@@ -290,7 +292,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 			var target = new EditSourceDiscImagesViewModel(contentCrawlerStub, imageFileFactoryStub);
 			target.LoadImages(new[] { new AddedDisc(new Disc(), true, "DiscSourcePath1"), new AddedDisc(new Disc(), true, "DiscSourcePath2") });
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.DataIsReady);
 		}
@@ -298,7 +300,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		[Test]
 		public void AddedImagesGetter_ReturnsCorrectAddedDiscImageCollection()
 		{
-			//	Arrange
+			// Arrange
 
 			var disc1 = new Disc();
 			var imageInfo1 = new ImageInfo();
@@ -318,11 +320,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 			var target = new EditSourceDiscImagesViewModel(contentCrawlerStub, imageFileFactoryStub);
 			target.LoadImages(new[] { new AddedDisc(disc1, true, "DiscSourcePath1"), new AddedDisc(disc2, true, "DiscSourcePath2") });
 
-			//	Act
+			// Act
 
 			var addedImages = target.AddedImages.ToList();
 
-			//Assert
+			// Assert
 
 			Assert.AreEqual(2, addedImages.Count);
 			Assert.AreSame(disc1, addedImages[0].Disc);

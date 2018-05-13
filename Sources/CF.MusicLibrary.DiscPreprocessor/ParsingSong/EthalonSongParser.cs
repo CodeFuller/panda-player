@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using CF.Library.Core.Exceptions;
-using static System.FormattableString;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
+using static System.FormattableString;
 
 namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 {
@@ -164,8 +164,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 						new SongParsingTest("Mother Machine", "Mother Machine"),
 					}
 				},
-			}
-		);
+			});
 
 		public string ParseSongTitle(string rawSongTitle)
 		{
@@ -178,7 +177,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 				}
 			}
 
-			//	We shouldn't get here, any possible title should be covered by TitlePatterns
+			// We shouldn't get here, any possible title should be covered by TitlePatterns
 			throw new InternalErrorException(Current($"Title {rawSongTitle} is not covered by any pattern"));
 		}
 

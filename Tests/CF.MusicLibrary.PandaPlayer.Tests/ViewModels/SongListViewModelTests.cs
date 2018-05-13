@@ -55,17 +55,17 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SetSongs_IfCurrentSongListIsEmpty_SetsSongsToNewList()
 		{
-			//	Arrange
+			// Arrange
 
 			List<Song> newSongList = new List<Song> { new Song(), new Song() };
 
 			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
-			//	Act
+			// Act
 
 			target.SetSongs(newSongList);
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(newSongList, target.Songs);
 		}
@@ -73,7 +73,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SetSongs_IfCurrentSongListIsNotEmpty_ClearsPreviousSongList()
 		{
-			//	Arrange
+			// Arrange
 
 			List<Song> oldSongList = new List<Song> { new Song(), new Song() };
 			List<Song> newSongList = new List<Song> { new Song(), new Song() };
@@ -81,11 +81,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(oldSongList);
 
-			//	Act
+			// Act
 
 			target.SetSongs(newSongList);
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(newSongList, target.Songs);
 		}
@@ -93,18 +93,18 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SetSongs_SendsPropertyChangedEventsForAffectedProperties()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 
 			var changedProperties = new List<string>();
 			target.PropertyChanged += (sender, e) => changedProperties.Add(e.PropertyName);
 
-			//	Act
+			// Act
 
 			target.SetSongs(new[] { new Song() });
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.Contains(changedProperties, nameof(SongListViewModel.HasSongs));
 			CollectionAssert.Contains(changedProperties, nameof(SongListViewModel.SongsNumber));
@@ -115,17 +115,17 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SetSongs_CallsOnSongItemsChangedOnce()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(new[] { new Song() });
 			target.OnSongItemsChangedCallsNumber = 0;
 
-			//	Act
+			// Act
 
 			target.SetSongs(new[] { new Song(), new Song() });
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, target.OnSongItemsChangedCallsNumber);
 		}
@@ -133,7 +133,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void AddSongs_AddsSongsToSongList()
 		{
-			//	Arrange
+			// Arrange
 
 			var oldSongs = new[] { new Song(), new Song() };
 			var newSongs = new[] { new Song(), new Song() };
@@ -141,11 +141,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(oldSongs);
 
-			//	Act
+			// Act
 
 			target.InvokeAddSongs(newSongs);
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(oldSongs.Concat(newSongs), target.Songs);
 		}
@@ -153,17 +153,17 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void AddSongs_CallsOnSongItemsChangedOnce()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(new[] { new Song(), new Song() });
 			target.OnSongItemsChangedCallsNumber = 0;
 
-			//	Act
+			// Act
 
 			target.InvokeAddSongs(new[] { new Song(), new Song() });
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, target.OnSongItemsChangedCallsNumber);
 		}
@@ -171,7 +171,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void InsertSongs_InsertsSongsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var oldSong1 = new Song();
 			var oldSong2 = new Song();
@@ -181,11 +181,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(new[] { oldSong1, oldSong2 });
 
-			//	Act
+			// Act
 
 			target.InvokeInsertSongs(1, new[] { newSong1, newSong2 });
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(new[] { oldSong1, newSong1, newSong2, oldSong2 }, target.Songs);
 		}
@@ -193,17 +193,17 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void InsertSongs_CallsOnSongItemsChangedOnce()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(new[] { new Song(), new Song() });
 			target.OnSongItemsChangedCallsNumber = 0;
 
-			//	Act
+			// Act
 
 			target.InvokeInsertSongs(1, new[] { new Song(), new Song() });
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, target.OnSongItemsChangedCallsNumber);
 		}
@@ -211,7 +211,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void PlaySongsNextCommand_IfSomeSongsAreSelected_SendsAddingSongsToPlaylistNextEventWithSelectedSongs()
 		{
-			//	Arrange
+			// Arrange
 
 			Song song1 = new Song();
 			Song song2 = new Song();
@@ -224,11 +224,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			AddingSongsToPlaylistNextEventArgs receivedEvent = null;
 			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => receivedEvent = e);
 
-			//	Act
+			// Act
 
 			target.PlaySongsNext();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(receivedEvent);
 			CollectionAssert.AreEqual(new[] { song1, song2 }, receivedEvent.Songs);
@@ -237,7 +237,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void PlaySongsNextCommand_IfNoSongsAreSelected_ReturnsWithNoAction()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(new[] { new Song() });
@@ -246,21 +246,22 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			bool receivedEvent = false;
 			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => receivedEvent = true);
 
-			//	Act
+			// Act
 
 			target.PlaySongsNext();
 
-			//	Assert
+			// Assert
 
 			Assert.IsFalse(receivedEvent);
-			//	Avoiding uncovered lambda code (receivedEvent = true)
+
+			// Avoiding uncovered lambda code (receivedEvent = true)
 			Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(new Song[0]));
 		}
 
 		[Test]
 		public void PlaySongsLastCommand_IfSomeSongsAreSelected_SendsAddingSongsToPlaylistLastEventWithSelectedSongs()
 		{
-			//	Arrange
+			// Arrange
 
 			Song song1 = new Song();
 			Song song2 = new Song();
@@ -273,11 +274,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			AddingSongsToPlaylistLastEventArgs receivedEvent = null;
 			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => receivedEvent = e);
 
-			//	Act
+			// Act
 
 			target.PlaySongsLast();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(receivedEvent);
 			CollectionAssert.AreEqual(new[] { song1, song2 }, receivedEvent.Songs);
@@ -286,7 +287,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void PlaySongsLastCommand_IfNoSongsAreSelected_ReturnsWithNoAction()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(new[] { new Song() });
@@ -295,14 +296,15 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			bool receivedEvent = false;
 			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => receivedEvent = true);
 
-			//	Act
+			// Act
 
 			target.PlaySongsLast();
 
-			//	Assert
+			// Assert
 
 			Assert.IsFalse(receivedEvent);
-			//	Avoiding uncovered lambda code (receivedEvent = true)
+
+			// Avoiding uncovered lambda code (receivedEvent = true)
 			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(new Song[0]));
 		}
 	}

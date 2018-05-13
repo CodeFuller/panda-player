@@ -32,11 +32,10 @@ namespace CF.MusicLibrary.Tagger
 			file.RemoveTags(TagTypes.Id3v2);
 			file.RemoveTags(TagTypes.Ape);
 
-			//	We set only Id3v2 tag.
-			//	Id3v1 stores genres as index from predefined genre list.
-			//	This list is pretty limited and doesn't contain frequently used tags like 'Symphonic Metal' or 'Nu metal'.
-			//	The list of available genres for Id3v2 tag could be obtained from TagLib.Genres.Audio.
-
+			// We set only Id3v2 tag.
+			// Id3v1 stores genres as index from predefined genre list.
+			// This list is pretty limited and doesn't contain frequently used tags like 'Symphonic Metal' or 'Nu metal'.
+			// The list of available genres for Id3v2 tag could be obtained from TagLib.Genres.Audio.
 			var tag = file.GetTag(TagTypes.Id3v2, true);
 			FillTag(tag, tagData);
 			file.Save();
@@ -55,16 +54,16 @@ namespace CF.MusicLibrary.Tagger
 		{
 			Dictionary<TagTypes, SongTagType> tagTypesMap = new Dictionary<TagTypes, SongTagType>
 			{
-				{TagTypes.Xiph, SongTagType.Xiph},
-				{TagTypes.Id3v1, SongTagType.Id3V1},
-				{TagTypes.Id3v2, SongTagType.Id3V2},
-				{TagTypes.Ape, SongTagType.Ape},
-				{TagTypes.Apple, SongTagType.Apple},
-				{TagTypes.Asf, SongTagType.Asf},
-				{TagTypes.RiffInfo, SongTagType.Riff},
-				{TagTypes.FlacMetadata, SongTagType.Flac},
-				{TagTypes.AudibleMetadata, SongTagType.Audible},
-				{TagTypes.XMP, SongTagType.Xmp},
+				{ TagTypes.Xiph, SongTagType.Xiph },
+				{ TagTypes.Id3v1, SongTagType.Id3V1 },
+				{ TagTypes.Id3v2, SongTagType.Id3V2 },
+				{ TagTypes.Ape, SongTagType.Ape },
+				{ TagTypes.Apple, SongTagType.Apple },
+				{ TagTypes.Asf, SongTagType.Asf },
+				{ TagTypes.RiffInfo, SongTagType.Riff },
+				{ TagTypes.FlacMetadata, SongTagType.Flac },
+				{ TagTypes.AudibleMetadata, SongTagType.Audible },
+				{ TagTypes.XMP, SongTagType.Xmp },
 			};
 
 			using (TagLib.File file = TagLib.File.Create(songFileName))
@@ -119,7 +118,7 @@ namespace CF.MusicLibrary.Tagger
 			};
 		}
 
-		static void FillTag(Tag tag, SongTagData tagData)
+		private static void FillTag(Tag tag, SongTagData tagData)
 		{
 			if (!String.IsNullOrEmpty(tagData.Artist))
 			{

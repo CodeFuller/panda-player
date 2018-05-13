@@ -26,16 +26,16 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 		[Test]
 		public void Save_SavesDataToTargetDataFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemFacadeMock = Substitute.For<IFileSystemFacade>();
 			var target = new JsonFileGenericRepository<Object>(fileSystemFacadeMock, Substitute.For<ILogger<JsonFileGenericRepository<Object>>>(), "SomeFile.json");
 
-			//	Act
+			// Act
 
 			target.Save(new Object());
 
-			//	Assert
+			// Assert
 
 			fileSystemFacadeMock.Received(1).WriteAllText("SomeFile.json", Arg.Any<string>(), Encoding.UTF8);
 		}
@@ -43,17 +43,17 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 		[Test]
 		public void Load_IfDataFileDoesNotExist_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemFacadeStub = Substitute.For<IFileSystemFacade>();
 			fileSystemFacadeStub.FileExists("SomeFile.json").Returns(false);
 			var target = new JsonFileGenericRepository<Object>(fileSystemFacadeStub, Substitute.For<ILogger<JsonFileGenericRepository<Object>>>(), "SomeFile.json");
 
-			//	Act
+			// Act
 
 			var data = target.Load();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(data);
 		}
@@ -61,18 +61,18 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 		[Test]
 		public void Load_IfDataFileExists_LoadsDataFromDataFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemFacadeStub = Substitute.For<IFileSystemFacade>();
 			fileSystemFacadeStub.FileExists("SomeFile.json").Returns(true);
 			fileSystemFacadeStub.ReadAllText("SomeFile.json", Encoding.UTF8).Returns("{\"SomeProperty\": \"SomeValue\"}");
 			var target = new JsonFileGenericRepository<Object>(fileSystemFacadeStub, Substitute.For<ILogger<JsonFileGenericRepository<Object>>>(), "SomeFile.json");
 
-			//	Act
+			// Act
 
 			var data = target.Load();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(data);
 		}
@@ -80,17 +80,17 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 		[Test]
 		public void Purge_IfDataFileDoesNotExist_DoesNothing()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemFacadeMock = Substitute.For<IFileSystemFacade>();
 			fileSystemFacadeMock.FileExists("SomeFile.json").Returns(false);
 			var target = new JsonFileGenericRepository<Object>(fileSystemFacadeMock, Substitute.For<ILogger<JsonFileGenericRepository<Object>>>(), "SomeFile.json");
 
-			//	Act
+			// Act
 
 			target.Purge();
 
-			//	Assert
+			// Assert
 
 			fileSystemFacadeMock.DidNotReceive().DeleteFile(Arg.Any<string>());
 		}
@@ -98,17 +98,17 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 		[Test]
 		public void Purge_IfDataFileExists_DeletesDataFile()
 		{
-			//	Arrange
+			// Arrange
 
 			IFileSystemFacade fileSystemFacadeMock = Substitute.For<IFileSystemFacade>();
 			fileSystemFacadeMock.FileExists("SomeFile.json").Returns(true);
 			var target = new JsonFileGenericRepository<Object>(fileSystemFacadeMock, Substitute.For<ILogger<JsonFileGenericRepository<Object>>>(), "SomeFile.json");
 
-			//	Act
+			// Act
 
 			target.Purge();
 
-			//	Assert
+			// Assert
 
 			fileSystemFacadeMock.Received(1).DeleteFile("SomeFile.json");
 		}

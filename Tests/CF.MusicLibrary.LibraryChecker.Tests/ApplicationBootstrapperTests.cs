@@ -34,7 +34,7 @@ namespace CF.MusicLibrary.LibraryChecker.Tests
 		[Test]
 		public void RegisterDependencies_RegistersAllDependenciesForApplicationLogic()
 		{
-			//	Arrange
+			// Arrange
 
 			var settingValues = new Dictionary<string, string>
 			{
@@ -42,7 +42,7 @@ namespace CF.MusicLibrary.LibraryChecker.Tests
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.DoesNotThrow(() => target.Bootstrap(new string[0]));
 		}
@@ -50,23 +50,23 @@ namespace CF.MusicLibrary.LibraryChecker.Tests
 		[Test]
 		public void RegisterDependencies_BindsCheckingSettingsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var settingValues = new Dictionary<string, string>
 			{
-				{"dataStoragePath", @"c:\temp"},
-				{"fileSystemStorage:root", @"c:\temp"},
-				{"checkingSettings:lastFmUsername", @"Some Last FM Username"},
-				{"checkingSettings:allowedArtistCorrectionsFileName", @"Some AllowedArtistCorrectionsFileName"},
-				{"checkingSettings:allowedSongCorrectionsFileName", @"Some AllowedSongCorrectionsFileName"},
+				{ "dataStoragePath", @"c:\temp" },
+				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "checkingSettings:lastFmUsername", @"Some Last FM Username" },
+				{ "checkingSettings:allowedArtistCorrectionsFileName", @"Some AllowedArtistCorrectionsFileName" },
+				{ "checkingSettings:allowedSongCorrectionsFileName", @"Some AllowedSongCorrectionsFileName" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
-			//	Act
+			// Act
 
 			target.Bootstrap(new string[0]);
 
-			//	Assert
+			// Assert
 
 			var options = target.ResolveDependency<IOptions<CheckingSettings>>();
 			var settings = options.Value;
@@ -79,21 +79,21 @@ namespace CF.MusicLibrary.LibraryChecker.Tests
 		[Test]
 		public void RegisterDependencies_BindsSqLiteConnectionSettingsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var settingValues = new Dictionary<string, string>
 			{
-				{"dataStoragePath", @"c:\temp"},
-				{"fileSystemStorage:root", @"c:\temp"},
-				{"database:dataSource", @"Some DataSource"},
+				{ "dataStoragePath", @"c:\temp" },
+				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "database:dataSource", @"Some DataSource" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
-			//	Act
+			// Act
 
 			target.Bootstrap(new string[0]);
 
-			//	Assert
+			// Assert
 
 			var options = target.ResolveDependency<IOptions<SqLiteConnectionSettings>>();
 			var settings = options.Value;
@@ -104,20 +104,20 @@ namespace CF.MusicLibrary.LibraryChecker.Tests
 		[Test]
 		public void RegisterDependencies_BindsFileSystemStorageSettingsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var settingValues = new Dictionary<string, string>
 			{
-				{"dataStoragePath", @"c:\temp"},
-				{"fileSystemStorage:root", @"Some FileSystemStorage Root"},
+				{ "dataStoragePath", @"c:\temp" },
+				{ "fileSystemStorage:root", @"Some FileSystemStorage Root" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
-			//	Act
+			// Act
 
 			target.Bootstrap(new string[0]);
 
-			//	Assert
+			// Assert
 
 			var options = target.ResolveDependency<IOptions<FileSystemStorageSettings>>();
 			var settings = options.Value;
@@ -128,23 +128,23 @@ namespace CF.MusicLibrary.LibraryChecker.Tests
 		[Test]
 		public void RegisterDependencies_BindsLastFmClientSettingsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var settingValues = new Dictionary<string, string>
 			{
-				{"dataStoragePath", @"c:\temp"},
-				{"fileSystemStorage:root", @"c:\temp"},
-				{"lastFmClient:apiKey", @"Some API Key"},
-				{"lastFmClient:sharedSecret", @"Some Shared Secret"},
-				{"lastFmClient:sessionKey", @"Some Session Key"},
+				{ "dataStoragePath", @"c:\temp" },
+				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "lastFmClient:apiKey", @"Some API Key" },
+				{ "lastFmClient:sharedSecret", @"Some Shared Secret" },
+				{ "lastFmClient:sessionKey", @"Some Session Key" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
-			//	Act
+			// Act
 
 			target.Bootstrap(new string[0]);
 
-			//	Assert
+			// Assert
 
 			var options = target.ResolveDependency<IOptions<LastFmClientSettings>>();
 			var settings = options.Value;

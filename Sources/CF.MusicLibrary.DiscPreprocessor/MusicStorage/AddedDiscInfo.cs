@@ -19,9 +19,13 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 		public bool HasArtist => DiscType == DsicType.ArtistDisc;
 
 		private string artist;
+
 		/// <summary>
-		/// This value is filled only for type of ArtistDisc.
+		/// Gets or sets the Disc Artist.
 		/// </summary>
+		/// <remarks>
+		/// This value is filled only for type of ArtistDisc.
+		/// </remarks>
 		public string Artist
 		{
 			get

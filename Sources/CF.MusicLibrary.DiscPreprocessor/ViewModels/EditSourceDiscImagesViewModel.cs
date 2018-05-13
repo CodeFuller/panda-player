@@ -69,6 +69,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 				{
 					imageFile.Load(discImages.Single(), false);
 				}
+
 				ImageItems.Add(new DiscImageViewItem(discInfo.Disc, DiscImageType.Cover, imageFile));
 			}
 		}

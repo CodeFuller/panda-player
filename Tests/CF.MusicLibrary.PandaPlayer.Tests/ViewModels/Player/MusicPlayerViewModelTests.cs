@@ -14,23 +14,23 @@ using NUnit.Framework;
 
 namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 {
-	internal sealed class SongPlaylistStub : SongPlaylistViewModel
-	{
-		public SongPlaylistStub(IEnumerable<Song> songs) :
-			base(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>())
-		{
-			SetSongs(songs);
-		}
-
-		public SongPlaylistStub(Song song) :
-			this(Enumerable.Repeat(song, 1))
-		{
-		}
-	}
-
 	[TestFixture]
 	public class MusicPlayerViewModelTests
 	{
+		private sealed class SongPlaylistStub : SongPlaylistViewModel
+		{
+			public SongPlaylistStub(IEnumerable<Song> songs)
+				: base(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>())
+			{
+				SetSongs(songs);
+			}
+
+			public SongPlaylistStub(Song song)
+				: this(Enumerable.Repeat(song, 1))
+			{
+			}
+		}
+
 		[SetUp]
 		public void SetUp()
 		{
@@ -68,17 +68,17 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void Play_IfNotStartedAndPlaylistEndIsReached_ReturnsWithNoAction()
 		{
-			//	Arrange
+			// Arrange
 
 			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub((Song)null);
 			IAudioPlayer audioPlayerMock = Substitute.For<IAudioPlayer>();
 			var target = new MusicPlayerViewModel(Substitute.For<IMusicLibrary>(), songPlaylistStub, audioPlayerMock, Substitute.For<ISongPlaybacksRegistrator>());
 
-			//	Act
+			// Act
 
 			target.Play().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.IsFalse(target.IsPlaying);
 			Assert.IsNull(target.CurrentSong);
@@ -88,7 +88,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void Play_IfNotStartedAndPlaylistEndIsNotReached_StartsPlaybackOfCurrentSongInPlaylist()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song();
 
@@ -100,15 +100,16 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 			IAudioPlayer audioPlayerMock = Substitute.For<IAudioPlayer>();
 			var target = new MusicPlayerViewModel(musicLibraryStub, songPlaylistStub, audioPlayerMock, Substitute.For<ISongPlaybacksRegistrator>());
 
-			//	Act
+			// Act
 
 			target.Play().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue(target.IsPlaying);
 			Assert.AreSame(song, target.CurrentSong);
-			Received.InOrder(() => {
+			Received.InOrder(() =>
+			{
 				audioPlayerMock.Received(1).SetCurrentSongFile("SomeSong.mp3");
 				audioPlayerMock.Received(1).Play();
 			});
@@ -117,7 +118,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void Play_IfPaused_ResumesPlayback()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song();
 
@@ -130,11 +131,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 			target.Pause();
 			audioPlayerMock.ClearReceivedCalls();
 
-			//	Act
+			// Act
 
 			target.Play().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue(target.IsPlaying);
 			Assert.AreSame(song, target.CurrentSong);
@@ -144,7 +145,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void Play_WhenSwitchingToNewSong_RegistersPlaybackStart()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song();
 
@@ -154,11 +155,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 			ISongPlaybacksRegistrator songPlaybacksRegistrator = Substitute.For<ISongPlaybacksRegistrator>();
 			var target = new MusicPlayerViewModel(Substitute.For<IMusicLibrary>(), songPlaylistStub, Substitute.For<IAudioPlayer>(), songPlaybacksRegistrator);
 
-			//	Act
+			// Act
 
 			target.Play().Wait();
 
-			//	Assert
+			// Assert
 
 			songPlaybacksRegistrator.Received(1).RegisterPlaybackStart(song);
 		}
@@ -166,7 +167,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void Play_WhenSongPlaybackFinishes_RegisterPlaybackFinish()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song();
 
@@ -180,11 +181,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 
 			target.Play().Wait();
 
-			//	Act
+			// Act
 
 			audioPlayerStub.SongMediaFinished += Raise.EventWith(new SongMediaFinishedEventArgs());
 
-			//	Assert
+			// Assert
 
 			songPlaybacksRegistrator.Received(1).RegisterPlaybackFinish(song);
 		}
@@ -192,7 +193,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void Play_WhenSongPlaybackFinishes_SwitchesPlaylistToNextSong()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
@@ -205,11 +206,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 
 			target.Play().Wait();
 
-			//	Act
+			// Act
 
 			audioPlayerStub.SongMediaFinished += Raise.EventWith(new SongMediaFinishedEventArgs());
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(song2, songPlaylistMock.CurrentSong);
 		}
@@ -217,7 +218,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void Play_WhenSongPlaybackFinishes_StartsPlaybackOfNextSongInPlaylist()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
@@ -234,15 +235,16 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 			target.Play().Wait();
 			audioPlayerMock.ClearReceivedCalls();
 
-			//	Act
+			// Act
 
 			audioPlayerMock.SongMediaFinished += Raise.EventWith(new SongMediaFinishedEventArgs());
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue(target.IsPlaying);
 			Assert.AreSame(song2, target.CurrentSong);
-			Received.InOrder(() => {
+			Received.InOrder(() =>
+			{
 				audioPlayerMock.Received(1).SetCurrentSongFile("SomeSong2.mp3");
 				audioPlayerMock.Received(1).Play();
 			});
@@ -251,7 +253,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void Play_WhenPlaylistFinishIsReached_StopsPlaying()
 		{
-			//	Arrange
+			// Arrange
 
 			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub(new Song());
 			songPlaylistStub.SwitchToNextSong();
@@ -262,11 +264,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 			target.Play().Wait();
 			audioPlayerMock.ClearReceivedCalls();
 
-			//	Act
+			// Act
 
 			audioPlayerMock.SongMediaFinished += Raise.EventWith(new SongMediaFinishedEventArgs());
 
-			//	Assert
+			// Assert
 
 			Assert.IsFalse(target.IsPlaying);
 			Assert.IsNull(target.CurrentSong);
@@ -276,7 +278,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void Play_WhenPlaylistFinishIsReached_SendsPlaylistFinishedEvent()
 		{
-			//	Arrange
+			// Arrange
 
 			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub(new Song());
 			songPlaylistStub.SwitchToNextSong();
@@ -289,11 +291,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 
 			target.Play().Wait();
 
-			//	Act
+			// Act
 
 			audioPlayerStub.SongMediaFinished += Raise.EventWith(new SongMediaFinishedEventArgs());
 
-			//	Assert
+			// Assert
 
 			Assert.IsTrue(receivedEvent);
 		}
@@ -301,7 +303,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void Pause_WhenPlaying_PausesPlayback()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song();
 
@@ -313,11 +315,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 			target.Play().Wait();
 			audioPlayerMock.ClearReceivedCalls();
 
-			//	Act
+			// Act
 
 			target.Pause();
 
-			//	Assert
+			// Assert
 
 			Assert.IsFalse(target.IsPlaying);
 			Assert.AreSame(song, target.CurrentSong);
@@ -327,7 +329,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void Stop_IfSomeSongIsPlayed_StopsPlayback()
 		{
-			//	Arrange
+			// Arrange
 
 			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub(new[] { new Song() });
 			songPlaylistStub.SwitchToNextSong();
@@ -337,11 +339,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 
 			target.Play().Wait();
 
-			//	Act
+			// Act
 
 			target.Stop();
 
-			//	Assert
+			// Assert
 
 			Assert.IsFalse(target.IsPlaying);
 			audioPlayerMock.Received(1).Stop();
@@ -350,7 +352,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void Stop_IfSomeSongIsPlayed_SetsCurrentSongToNull()
 		{
-			//	Arrange
+			// Arrange
 
 			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub(new[] { new Song() });
 			songPlaylistStub.SwitchToNextSong();
@@ -360,11 +362,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 
 			target.Play().Wait();
 
-			//	Act
+			// Act
 
 			target.Stop();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNull(target.CurrentSong);
 		}
@@ -372,7 +374,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void Stop_IfSomeSongIsPlayed_DoesNotRegisterPlaybackFinish()
 		{
-			//	Arrange
+			// Arrange
 
 			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub(new[] { new Song() });
 			songPlaylistStub.SwitchToNextSong();
@@ -384,11 +386,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 
 			target.Play().Wait();
 
-			//	Act
+			// Act
 
 			target.Stop();
 
-			//	Assert
+			// Assert
 
 			songPlaybacksRegistratorMock.DidNotReceive().RegisterPlaybackFinish(Arg.Any<Song>());
 		}
@@ -396,7 +398,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		[Test]
 		public void Stop_IfNoSongIsPlayed_DoesNothing()
 		{
-			//	Arrange
+			// Arrange
 
 			ISongPlaylistViewModel songPlaylistStub = new SongPlaylistStub(new[] { new Song() });
 			songPlaylistStub.SwitchToNextSong();
@@ -404,11 +406,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 			IAudioPlayer audioPlayerMock = Substitute.For<IAudioPlayer>();
 			var target = new MusicPlayerViewModel(Substitute.For<IMusicLibrary>(), songPlaylistStub, audioPlayerMock, Substitute.For<ISongPlaybacksRegistrator>());
 
-			//	Act
+			// Act
 
 			target.Stop();
 
-			//	Assert
+			// Assert
 
 			audioPlayerMock.DidNotReceive().Stop();
 		}

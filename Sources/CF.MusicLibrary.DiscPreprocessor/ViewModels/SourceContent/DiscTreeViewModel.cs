@@ -10,6 +10,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 	public class DiscTreeViewModel : ViewModelBase, IEnumerable<DiscTreeViewItem>
 	{
 		private Collection<DiscTreeViewItem> discs;
+
 		public Collection<DiscTreeViewItem> Discs
 		{
 			get => discs;

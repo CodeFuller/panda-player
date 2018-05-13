@@ -4,9 +4,7 @@ using System.Windows.Controls;
 
 namespace CF.MusicLibrary.PandaPlayer.Views
 {
-	/// <remarks>
-	/// https://stackoverflow.com/a/22908694/5740031
-	/// </remarks>>
+	// https://stackoverflow.com/a/22908694/5740031
 	public class MultiSelectionDataGrid : DataGrid
 	{
 		public static readonly DependencyProperty SelectedItemsListProperty =

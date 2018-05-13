@@ -38,7 +38,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Load_FillsAdvisedDiscs()
 		{
-			//	Arrange
+			// Arrange
 
 			var advise = AdvisedPlaylist.ForDisc(new Disc());
 			var library = new DiscLibrary();
@@ -48,11 +48,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var target = new DiscAdviserViewModel(library, adviserStub);
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(advise, target.CurrentAdvise);
 		}
@@ -60,11 +60,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void CurrentAdviseGetter_IfCurrentAdviseIsNotSet_ReturnsNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<ICompositePlaylistAdviser>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsNull(target.CurrentAdvise);
 		}
@@ -72,20 +72,20 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void CurrentAdviseAnnouncementGetter_IfCurrentAdviseIsNotSet_DoesNotThrow()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<ICompositePlaylistAdviser>());
 
-			//	Act & Assert
+			// Act & Assert
 
 			string currAnnouncement;
-			Assert.DoesNotThrow(() => currAnnouncement =  target.CurrentAdviseAnnouncement);
+			Assert.DoesNotThrow(() => currAnnouncement = target.CurrentAdviseAnnouncement);
 		}
 
 		[Test]
 		public void CurrentAdviseAnnouncementGetter_IfCurrentAdviseIsSet_ReturnsAdviseTitle()
 		{
-			//	Arrange
+			// Arrange
 
 			var advise = AdvisedPlaylist.ForDisc(new Disc { Title = "Some Disc" });
 			var library = new DiscLibrary();
@@ -96,7 +96,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual(advise.Title, target.CurrentAdviseAnnouncement);
 		}
@@ -104,28 +104,29 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void PlayCurrentAdviseCommand_IfNoAdvisesAreMade_ReturnsWithNoAction()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new DiscAdviserViewModel(new DiscLibrary(), Substitute.For<ICompositePlaylistAdviser>());
 
 			bool receivedEvent = false;
 			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => receivedEvent = true);
 
-			//	Act
+			// Act
 
 			target.PlayCurrentAdvise();
 
-			//	Assert
+			// Assert
 
 			Assert.IsFalse(receivedEvent);
-			//	Avoiding uncovered lambda code (receivedEvent = true)
+
+			// Avoiding uncovered lambda code (receivedEvent = true)
 			Messenger.Default.Send(new PlaySongsListEventArgs(Enumerable.Empty<Song>()));
 		}
 
 		[Test]
 		public void PlayCurrentAdviseCommand_IfCurrentAdviseIsFilled_RegisterAdvicePlaybackAtAdviser()
 		{
-			//	Arrange
+			// Arrange
 
 			var library = new DiscLibrary();
 			var advise = AdvisedPlaylist.ForDisc(new Disc());
@@ -136,11 +137,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new DiscAdviserViewModel(library, adviserMock);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
-			//	Act
+			// Act
 
 			target.PlayCurrentAdvise();
 
-			//	Assert
+			// Assert
 
 			adviserMock.Received(1).RegisterAdvicePlayback(advise);
 		}
@@ -148,7 +149,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void PlayCurrentAdviseCommand_IfCurrentAdviseIsFilled_SendsPlaySongsListEventForCurrentAdvise()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
@@ -164,11 +165,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			PlaySongsListEventArgs receivedEvent = null;
 			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => receivedEvent = e);
 
-			//	Act
+			// Act
 
 			target.PlayCurrentAdvise();
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(receivedEvent);
 			CollectionAssert.AreEqual(advise.Songs, receivedEvent.Songs);
@@ -177,7 +178,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SwitchToNextAdviseCommand_IfCurrentAdviseIsNotLast_SwitchesToNextAdvise()
 		{
-			//	Arrange
+			// Arrange
 
 			var advise1 = AdvisedPlaylist.ForHighlyRatedSongs(Enumerable.Empty<Song>());
 			var advise2 = AdvisedPlaylist.ForHighlyRatedSongs(Enumerable.Empty<Song>());
@@ -189,11 +190,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
-			//	Act
+			// Act
 
 			target.SwitchToNextAdvise();
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(advise2, target.CurrentAdvise);
 		}
@@ -201,7 +202,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SwitchToNextAdviseCommand_IfCurrentAdviseIsLast_RebuildsAdvises()
 		{
-			//	Arrange
+			// Arrange
 
 			var advise1 = AdvisedPlaylist.ForHighlyRatedSongs(Enumerable.Empty<Song>());
 			var advise2 = AdvisedPlaylist.ForHighlyRatedSongs(Enumerable.Empty<Song>());
@@ -213,11 +214,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
-			//	Act
+			// Act
 
 			target.SwitchToNextAdvise();
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(advise2, target.CurrentAdvise);
 		}
@@ -225,7 +226,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void PlaylistFinishedEventHandler_IfFinshedPlaylistContainsAllSongsFromCurrentAdvise_SwitchesToNextAdvise()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
@@ -244,11 +245,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new PlaylistFinishedEventArgs(songPlaylistStub));
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(advise2, target.CurrentAdvise);
 		}
@@ -256,7 +257,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void PlaylistFinishedEventHandler_IfCurrentAdviseIsLast_RebuildsAdvises()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
@@ -274,11 +275,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new PlaylistFinishedEventArgs(songPlaylistStub));
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(advise2, target.CurrentAdvise);
 		}
@@ -286,7 +287,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void PlaylistFinishedEventHandler_IfFinshedPlaylistContainsNotAllSongsFromCurrentAdvise_DoesNotSwitchesFromCurrentAdvise()
 		{
-			//	Arrange
+			// Arrange
 
 			var song1 = new Song();
 			var song2 = new Song();
@@ -304,11 +305,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new PlaylistFinishedEventArgs(songPlaylistStub));
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(currAdvise, target.CurrentAdvise);
 		}
@@ -316,7 +317,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void PlaylistFinishedEventHandler_IfFinshedPlaylistCoversSomeFutureAdvises_RemovesThisAdvisesFromList()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song();
 
@@ -334,11 +335,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new DiscAdviserViewModel(library, adviserStub);
 			Messenger.Default.Send(new LibraryLoadedEventArgs(library));
 
-			//	Act
+			// Act
 
 			Messenger.Default.Send(new PlaylistFinishedEventArgs(songPlaylistStub));
 
-			//	Assert
+			// Assert
 
 			Assert.AreSame(currAdvise, target.CurrentAdvise);
 			target.SwitchToNextAdvise();

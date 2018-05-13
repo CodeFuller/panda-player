@@ -7,9 +7,9 @@ namespace CF.MusicLibrary.Core.Objects
 {
 	public class DiscLibrary
 	{
-		private List<Disc> discs;
-
 		private readonly Func<Task<IEnumerable<Disc>>> discsLoader;
+
+		private List<Disc> discs;
 
 		/// <summary>
 		/// Collection of library discs, excluding deleted.
@@ -45,8 +45,8 @@ namespace CF.MusicLibrary.Core.Objects
 
 		public IEnumerable<Genre> Genres => AllSongs.Select(s => s.Genre).Where(g => g != null).Distinct();
 
-		internal DiscLibrary() :
-			this(Enumerable.Empty<Disc>())
+		internal DiscLibrary()
+			: this(Enumerable.Empty<Disc>())
 		{
 		}
 

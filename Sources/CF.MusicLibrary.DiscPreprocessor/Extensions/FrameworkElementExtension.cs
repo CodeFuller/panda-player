@@ -3,9 +3,7 @@ using System.Windows;
 
 namespace CF.MusicLibrary.DiscPreprocessor.Extensions
 {
-	/// <remarks>
-	/// Copy/paste from https://treeviewinplaceedit.codeplex.com
-	/// </remarks>>
+	// Copy/paste from https://treeviewinplaceedit.codeplex.com
 	public static class FrameworkElementExtension
 	{
 		public static void UpdateBindingTarget(this FrameworkElement element, DependencyProperty property)

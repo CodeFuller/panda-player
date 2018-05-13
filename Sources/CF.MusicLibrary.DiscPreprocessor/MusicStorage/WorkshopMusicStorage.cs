@@ -40,6 +40,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 			{
 				throw new InvalidInputDataException(Current($"Could not parse disc data from '{uriParts[1]}'"));
 			}
+
 			ParseDiscData(uriParts[uriParts.Count - 1], out var year, out var title);
 
 			List<AddedSongInfo> songs = songFiles.Select(GetSongInfo).ToList();

@@ -27,6 +27,7 @@ namespace CF.MusicLibrary.Core
 			{
 				throw new ArgumentNullException(nameof(path));
 			}
+
 			if (libraryRootDirectory == null)
 			{
 				throw new ArgumentNullException(nameof(libraryRootDirectory));
@@ -39,8 +40,8 @@ namespace CF.MusicLibrary.Core
 			{
 				throw new InvalidOperationException(FormattableStringExtensions.Current($"Path '{path}' is not within library root directory {libraryRootDirectory}"));
 			}
-			string subPath = path.Substring(libraryRootDirectory.Length);
 
+			string subPath = path.Substring(libraryRootDirectory.Length);
 			parts = subPath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 		}
 

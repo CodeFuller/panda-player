@@ -35,37 +35,41 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Load_FillsCollectionOfAvailableArtistsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
-			var artist1 = new Artist {Name = "Some Artist"};
+			var artist1 = new Artist { Name = "Some Artist" };
 			var artist2 = new Artist { Name = "Another Artist" };
 
 			var discs = new List<Disc>()
 			{
-				new Disc {SongsUnordered = new[] {new Song {Artist = artist1}}},
-				new Disc {SongsUnordered = new[] {new Song {Artist = artist2}}},
+				new Disc { SongsUnordered = new[] { new Song { Artist = artist1 } } },
+				new Disc { SongsUnordered = new[] { new Song { Artist = artist2 } } },
 			};
 			var library = new DiscLibrary(discs);
 
 			var target = new EditSongPropertiesViewModel(library, Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
 
-			//	Act
+			// Act
 
 			target.Load(new[] { new Song() });
 
-			//	Assert
+			// Assert
 
 			var availableArtistsList = target.AvailableArtists.ToList();
 			Assert.AreEqual(4, availableArtistsList.Count);
-			//	'Keep value' entry
+
+			// 'Keep value' entry
 			Assert.IsFalse(availableArtistsList[0].HasValue);
-			//	'Blank' entry
+
+			// 'Blank' entry
 			Assert.IsTrue(availableArtistsList[1].HasValue);
 			Assert.IsNull(availableArtistsList[1].Value);
-			//	'Another Artist' entry
+
+			// 'Another Artist' entry
 			Assert.IsTrue(availableArtistsList[2].HasValue);
 			Assert.AreSame(artist2, availableArtistsList[2].Value);
-			//	'Some Artist' entry
+
+			// 'Some Artist' entry
 			Assert.IsTrue(availableArtistsList[3].HasValue);
 			Assert.AreSame(artist1, availableArtistsList[3].Value);
 		}
@@ -73,37 +77,41 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Load_FillsCollectionOfAvailableGenresCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var genre1 = new Genre { Name = "Some Genre" };
 			var genre2 = new Genre { Name = "Another Genre" };
 
-			var discs = new List<Disc>()
+			var discs = new List<Disc>
 			{
-				new Disc {SongsUnordered = new[] {new Song {Genre = genre1}}},
-				new Disc {SongsUnordered = new[] {new Song {Genre = genre2}}},
+				new Disc { SongsUnordered = new[] { new Song { Genre = genre1 } } },
+				new Disc { SongsUnordered = new[] { new Song { Genre = genre2 } } },
 			};
 			var library = new DiscLibrary(discs);
 
 			var target = new EditSongPropertiesViewModel(library, Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
 
-			//	Act
+			// Act
 
 			target.Load(new[] { new Song() });
 
-			//	Assert
+			// Assert
 
 			var availableGenresList = target.AvailableGenres.ToList();
 			Assert.AreEqual(4, availableGenresList.Count);
-			//	'Keep value' entry
+
+			// 'Keep value' entry
 			Assert.IsFalse(availableGenresList[0].HasValue);
-			//	'Blank' entry
+
+			// 'Blank' entry
 			Assert.IsTrue(availableGenresList[1].HasValue);
 			Assert.IsNull(availableGenresList[1].Value);
-			//	'Another Genre' entry
+
+			// 'Another Genre' entry
 			Assert.IsTrue(availableGenresList[2].HasValue);
 			Assert.AreSame(genre2, availableGenresList[2].Value);
-			//	'Some Genre' entry
+
+			// 'Some Genre' entry
 			Assert.IsTrue(availableGenresList[3].HasValue);
 			Assert.AreSame(genre1, availableGenresList[3].Value);
 		}
@@ -111,11 +119,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Load_WhenSongListIsEmpty_ThrowsInvalidOperationException()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
 
-			//	Act & Arrange
+			// Act & Arrange
 
 			Assert.Throws<InvalidOperationException>(() => target.Load(Enumerable.Empty<Song>()));
 		}
@@ -123,7 +131,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SongPropertiesGetters_ForSingleSong_ReturnCorrectValues()
 		{
-			//	Arrange
+			// Arrange
 
 			var artist = new Artist();
 			var genre = new Genre();
@@ -145,7 +153,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 				}
 			});
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.AreEqual("SomeFileName.mp3", target.FileName);
 			Assert.AreEqual("Some song", target.Title);
@@ -158,7 +166,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SongPropertiesGetters_ForMultipleSongsWithEqualProperties_ReturnCorrectValues()
 		{
-			//	Arrange
+			// Arrange
 
 			var artist = new Artist();
 			var genre = new Genre();
@@ -190,7 +198,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 				}
 			});
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsNull(target.FileName);
 			Assert.IsNull(target.Title);
@@ -203,7 +211,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void SongPropertiesGetters_ForMultipleSongsWithDifferentProperties_ReturnCorrectValues()
 		{
-			//	Arrange
+			// Arrange
 
 			var libraryStructurer = Substitute.For<ILibraryStructurer>();
 			libraryStructurer.GetFileNameFromUri(new Uri("/SomeDisc/Uri/SomeFileName.mp3", UriKind.Relative)).Returns("SomeFileName.mp3");
@@ -228,7 +236,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 				}
 			});
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.IsFalse(target.Artist.HasValue);
 			Assert.IsFalse(target.Genre.HasValue);
@@ -239,7 +247,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Save_ForSingleSongWhenNoPropertiesAreUpdated_UpdatesSongsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var artist = new Artist();
 			var genre = new Genre();
@@ -262,11 +270,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 				}
 			});
 
-			//	Act
+			// Act
 
 			target.Save().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, songsUpdate.Count);
 			var song = songsUpdate.Single();
@@ -281,7 +289,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Save_ForSingleSongWhenPropertiesAreUpdated_UpdatesSongsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var updatedArtist = new Artist();
 			var updatedGenre = new Genre();
@@ -304,7 +312,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 				}
 			});
 
-			//	Act
+			// Act
 
 			target.Title = "Updated title";
 			target.Artist = new EditedSongProperty<Artist>(updatedArtist);
@@ -314,7 +322,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			target.Save().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, songsUpdate.Count);
 			var song = songsUpdate.Single();
@@ -329,7 +337,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Save_ForSingleSongWhenPropertiesAreCleared_UpdatesSongsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			List<Song> songsUpdate = null;
 			UpdatedSongProperties? updatedProperties = null;
@@ -349,7 +357,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 				}
 			});
 
-			//	Act
+			// Act
 
 			target.Artist = new EditedSongProperty<Artist>(null);
 			target.Genre = new EditedSongProperty<Genre>(null);
@@ -358,7 +366,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			target.Save().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(1, songsUpdate.Count);
 			var song = songsUpdate.Single();
@@ -372,7 +380,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Save_ForMultipleSongsWhenPropertiesAreUpdated_UpdatesSongsCorrectly()
 		{
-			//	Arrange
+			// Arrange
 
 			var updatedArtist = new Artist();
 			var updatedGenre = new Genre();
@@ -404,7 +412,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 				},
 			});
 
-			//	Act
+			// Act
 
 			target.Artist = new EditedSongProperty<Artist>(updatedArtist);
 			target.Genre = new EditedSongProperty<Genre>(updatedGenre);
@@ -413,7 +421,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			target.Save().Wait();
 
-			//	Assert
+			// Assert
 
 			Assert.AreEqual(2, songsUpdate.Count);
 			Assert.AreSame(updatedArtist, songsUpdate[0].Artist);
@@ -430,7 +438,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Save_ForSingleSongWhenFileNameWasNotChanged_DoesNotChangeSongUri()
 		{
-			//	Arrange
+			// Arrange
 
 			ILibraryContentUpdater libraryContentUpdaterMock = Substitute.For<ILibraryContentUpdater>();
 
@@ -442,11 +450,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 				new Song { Uri = new Uri("SomeFileName.mp3", UriKind.Relative) }
 			});
 
-			//	Act
+			// Act
 
 			target.Save().Wait();
 
-			//	Assert
+			// Assert
 
 			libraryContentUpdaterMock.DidNotReceive().ChangeSongUri(Arg.Any<Song>(), Arg.Any<Uri>());
 		}
@@ -454,11 +462,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Save_ForSingleSongWhenFileNameWasChanged_ChangesSongUri()
 		{
-			//	Arrange
+			// Arrange
 
 			var song = new Song
 			{
-				Disc = new Disc {Uri = new Uri("/SomeDiscUri", UriKind.Relative)},
+				Disc = new Disc { Uri = new Uri("/SomeDiscUri", UriKind.Relative) },
 				Uri = new Uri("SomeFileName.mp3", UriKind.Relative)
 			};
 
@@ -469,12 +477,12 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new EditSongPropertiesViewModel(new DiscLibrary(), libraryStructurer, libraryContentUpdaterMock);
 			target.Load(new[] { song });
 
-			//	Act
+			// Act
 
 			target.FileName = "NewFileName.mp3";
 			target.Save().Wait();
 
-			//	Assert
+			// Assert
 
 			libraryContentUpdaterMock.Received(1).ChangeSongUri(song, new Uri("/SomeDiscUri/NewFileName.mp3", UriKind.Relative));
 		}
@@ -482,7 +490,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void Save_ForMultipleSongs_DoesNotChangeSongsUri()
 		{
-			//	Arrange
+			// Arrange
 
 			ILibraryContentUpdater libraryContentUpdaterMock = Substitute.For<ILibraryContentUpdater>();
 
@@ -493,21 +501,21 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			{
 				new Song
 				{
-					Disc = new Disc {Uri = new Uri("/SomeDiscUri", UriKind.Relative)},
+					Disc = new Disc { Uri = new Uri("/SomeDiscUri", UriKind.Relative) },
 					Uri = new Uri("SomeFileName1.mp3", UriKind.Relative)
 				},
 				new Song
 				{
-					Disc = new Disc {Uri = new Uri("/SomeDiscUri", UriKind.Relative)},
+					Disc = new Disc { Uri = new Uri("/SomeDiscUri", UriKind.Relative) },
 					Uri = new Uri("SomeFileName2.mp3", UriKind.Relative)
 				},
 			});
 
-			//	Act
+			// Act
 
 			target.Save().Wait();
 
-			//	Assert
+			// Assert
 
 			libraryContentUpdaterMock.DidNotReceive().ChangeSongUri(Arg.Any<Song>(), Arg.Any<Uri>());
 		}
@@ -515,7 +523,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void FileNameSetter_ForMultipleSongs_ThrowsInvalidOperationException()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
 			target.Load(new[]
@@ -524,7 +532,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 				new Song(),
 			});
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.FileName = "SomeFileName");
 		}
@@ -534,12 +542,12 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[TestCase(" ")]
 		public void FileNameSetter_WhenNewFileNameIsEmpty_ThrowsInvalidOperationException(string newFileName)
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
 			target.Load(new[] { new Song() });
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.FileName = newFileName);
 		}
@@ -547,7 +555,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void TitleSetter_ForMultipleSongs_ThrowsInvalidOperationException()
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
 			target.Load(new[]
@@ -556,7 +564,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 				new Song(),
 			});
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.Title = "Some Title");
 		}
@@ -566,12 +574,12 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[TestCase(" ")]
 		public void TitleSetter_WhenNewTitleIsEmpty_ThrowsInvalidOperationException(string newTitle)
 		{
-			//	Arrange
+			// Arrange
 
 			var target = new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>());
 			target.Load(new[] { new Song() });
 
-			//	Act & Assert
+			// Act & Assert
 
 			Assert.Throws<InvalidOperationException>(() => target.Title = newTitle);
 		}

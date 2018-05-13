@@ -5,6 +5,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 	public class EditableTreeViewItem : ViewModelBase
 	{
 		private bool isSelected;
+
 		public bool IsSelected
 		{
 			get => isSelected;
@@ -12,6 +13,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 		}
 
 		private bool isExpanded;
+
 		public bool IsExpanded
 		{
 			get => isExpanded;

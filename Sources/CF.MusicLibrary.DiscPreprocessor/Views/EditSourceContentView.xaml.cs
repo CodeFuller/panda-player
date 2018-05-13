@@ -3,26 +3,6 @@ using System.Windows.Controls;
 
 namespace CF.MusicLibrary.DiscPreprocessor.Views
 {
-	interface IScrollable
-	{
-		void ScrollTo(double offset);
-	}
-
-	class ScrollableTextBox : IScrollable
-	{
-		private readonly TextBox textBox;
-
-		public ScrollableTextBox(TextBox textBox)
-		{
-			this.textBox = textBox;
-		}
-
-		public void ScrollTo(double offset)
-		{
-			textBox.ScrollToVerticalOffset(offset);
-		}
-	}
-
 	/// <summary>
 	/// Interaction logic for EditSourceContentView.xaml
 	/// </summary>

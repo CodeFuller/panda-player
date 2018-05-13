@@ -18,9 +18,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 				RaisePropertyChanged(nameof(WarnAboutUnequalAlbumTitle));
 			}
 		}
+
 		public override bool AlbumTitleIsEditable => true;
 
 		private short? year;
+
 		public override short? Year
 		{
 			get => year;
@@ -30,6 +32,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 				RaisePropertyChanged(nameof(WarnAboutNotFilledYear));
 			}
 		}
+
 		public override bool YearIsEditable => true;
 
 		public override bool RequiredDataIsFilled => !GenreIsNotFilled;

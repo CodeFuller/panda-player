@@ -10,7 +10,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 		[Test]
 		public void DiscCoverImageLookupPages_IfSomeLookupPagesAreConfigured_IsCorrectlyLoadedByConfigurationBinder()
 		{
-			//	Arrange
+			// Arrange
 
 			var configurationBuilder = new ConfigurationBuilder();
 			configurationBuilder.AddInMemoryCollection(new Dictionary<string, string>
@@ -22,11 +22,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 
 			var target = new PandaPlayerSettings();
 
-			//	Act
+			// Act
 
 			configuration.Bind(target);
 
-			//	Assert
+			// Assert
 
 			CollectionAssert.AreEqual(new[] { @"http://www.page1.com/", @"http://www.page2.com/" }, target.DiscCoverImageLookupPages);
 		}
@@ -34,7 +34,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 		[Test]
 		public void DiscCoverImageLookupPages_IfNoLookupPagesAreConfigured_IsNotNull()
 		{
-			//	Arrange
+			// Arrange
 
 			var configurationBuilder = new ConfigurationBuilder();
 			configurationBuilder.AddInMemoryCollection(new Dictionary<string, string>());
@@ -42,11 +42,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 
 			var target = new PandaPlayerSettings();
 
-			//	Act
+			// Act
 
 			configuration.Bind(target);
 
-			//	Assert
+			// Assert
 
 			Assert.IsNotNull(target.DiscCoverImageLookupPages);
 			CollectionAssert.IsEmpty(target.DiscCoverImageLookupPages);
