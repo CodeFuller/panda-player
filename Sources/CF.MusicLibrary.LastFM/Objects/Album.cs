@@ -10,8 +10,7 @@ namespace CF.MusicLibrary.LastFM.Objects
 
 		public override bool Equals(Object obj)
 		{
-			Album cmp = obj as Album;
-			if (cmp == null)
+			if (!(obj is Album cmp))
 			{
 				return false;
 			}

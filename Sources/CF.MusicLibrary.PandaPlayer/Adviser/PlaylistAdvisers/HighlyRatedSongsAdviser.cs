@@ -51,8 +51,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 
 		private bool IsTimeToListenHighlyRatedSong(Song song)
 		{
-			TimeSpan maxUnlistenedTerm;
-			if (!highlyRatedSongsMaxUnlistenedTerms.TryGetValue(song.SafeRating, out maxUnlistenedTerm))
+			if (!highlyRatedSongsMaxUnlistenedTerms.TryGetValue(song.SafeRating, out var maxUnlistenedTerm))
 			{
 				return false;
 			}

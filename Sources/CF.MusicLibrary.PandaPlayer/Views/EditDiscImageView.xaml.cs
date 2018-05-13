@@ -29,8 +29,7 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 			string textData = clipboardDataProvider.GetTextData();
 			if (textData != null)
 			{
-				Uri imageUri;
-				if (Uri.TryCreate(textData, UriKind.Absolute, out imageUri))
+				if (Uri.TryCreate(textData, UriKind.Absolute, out var imageUri))
 				{
 					ViewModel.SetImage(imageUri);
 				}
