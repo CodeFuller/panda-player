@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using CF.Library.Bootstrap;
 using CF.Library.Core;
@@ -23,6 +24,7 @@ using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
 using CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Player;
+using CF.MusicLibrary.PandaPlayer.ViewModels.Scrobbling;
 using CF.MusicLibrary.Tagger;
 using CF.MusicLibrary.Universal.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -83,7 +85,6 @@ namespace CF.MusicLibrary.PandaPlayer
 			services.AddTransient<ITimerFacade, TimerFacade>(sp => new TimerFacade());
 			services.AddTransient<ITokenAuthorizer, DefaultBrowserTokenAuthorizer>();
 			services.AddTransient<ILastFMApiClient, LastFMApiClient>();
-			services.AddTransient<IScrobbler, LastFMScrobbler>();
 			services.AddTransient<ILibraryContentUpdater, LibraryContentUpdater>();
 			services.AddSingleton<IViewNavigator, ViewNavigator>();
 			services.AddTransient<IDiscGroupper, MyLibraryDiscGroupper>();
@@ -101,6 +102,12 @@ namespace CF.MusicLibrary.PandaPlayer
 			services.AddTransient<IImageFacade, ImageFacade>();
 			services.AddTransient<IImageFile, ImageFile>();
 			services.AddTransient<IImageInfoProvider, ImageInfoProvider>();
+
+			services.AddTransient<LastFMScrobbler>();
+			services.AddSingleton<IScrobbler, PersistentScrobbler>(sp =>
+				new PersistentScrobbler(sp.GetRequiredService<LastFMScrobbler>(), sp.GetRequiredService<IScrobblesProcessor>(), sp.GetRequiredService<ILogger<PersistentScrobbler>>()));
+			services.AddSingleton<IScrobblesProcessor, PersistentScrobblesProcessor>();
+			services.AddTransient(typeof(Queue<>));
 
 			services.AddTransient<RankBasedDiscAdviser>();
 			services.AddTransient<HighlyRatedSongsAdviser>();
@@ -123,6 +130,12 @@ namespace CF.MusicLibrary.PandaPlayer
 					sp.GetRequiredService<IFileSystemFacade>(),
 					sp.GetRequiredService<ILogger<JsonFileGenericRepository<PlaylistAdviserMemo>>>(),
 					Path.Combine(dataStoragePath, "AdviserMemo.json")));
+
+			services.AddTransient<IScrobblesQueueRepository, ScrobblesQueueRepository>(
+				sp => new ScrobblesQueueRepository(
+					sp.GetRequiredService<IFileSystemFacade>(),
+					sp.GetRequiredService<ILogger<ScrobblesQueueRepository>>(),
+					Path.Combine(dataStoragePath, "ScrobblesQueue.json")));
 		}
 
 		protected override void BootstrapConfiguration(IConfigurationBuilder configurationBuilder, string[] commandLineArgs)

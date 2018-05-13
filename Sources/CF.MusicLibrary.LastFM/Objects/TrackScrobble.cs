@@ -1,4 +1,5 @@
 ﻿using System;
+using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.LastFM.Objects
 {
@@ -13,11 +14,9 @@ namespace CF.MusicLibrary.LastFM.Objects
 
 		public bool ChosenByUser { get; set; }
 
-		public TrackScrobble(Track track, DateTime playStartTimestamp)
+		public override string ToString()
 		{
-			Track = track;
-			PlayStartTimestamp = playStartTimestamp;
-			ChosenByUser = true;
+			return Current($"'{Track}' on {PlayStartTimestamp:yyyy.MM.dd HH:mm:ss}");
 		}
 	}
 }

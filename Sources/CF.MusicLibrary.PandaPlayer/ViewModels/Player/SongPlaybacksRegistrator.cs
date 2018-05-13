@@ -31,7 +31,15 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 			var playbackDateTime = clock.Now;
 			song.AddPlayback(playbackDateTime);
 			await musicLibrary.AddSongPlayback(song, playbackDateTime);
-			await scrobbler.Scrobble(new TrackScrobble(GetTrackFromSong(song), playbackDateTime - song.Duration));
+
+			var scrobble = new TrackScrobble
+			{
+				Track = GetTrackFromSong(song),
+				PlayStartTimestamp = playbackDateTime - song.Duration,
+				ChosenByUser = true,
+			};
+
+			await scrobbler.Scrobble(scrobble);
 		}
 
 		private static Track GetTrackFromSong(Song song)
@@ -41,7 +49,11 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 				Number = song.TrackNumber,
 				Title = song.Title,
 				Artist = song.Artist?.Name,
-				Album = new Album(song.Artist?.Name, song.Disc.AlbumTitle),
+				Album = new Album
+				{
+					Artist = song.Artist?.Name,
+					Title = song.Disc.AlbumTitle,
+				},
 				Duration = song.Duration,
 			};
 		}

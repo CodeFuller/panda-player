@@ -25,7 +25,11 @@ namespace CF.MusicLibrary.LastFM.Tests
 				Title = "Some Title",
 				Artist = "Some Artist",
 				Duration = TimeSpan.FromMinutes(5),
-				Album = new Album("Some Artist", "Some Album"),
+				Album = new Album
+				{
+					Artist = "Some Artist",
+					Title = "Some Album",
+				},
 			};
 
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
@@ -51,7 +55,11 @@ namespace CF.MusicLibrary.LastFM.Tests
 				Title = title,
 				Artist = "Some Artist",
 				Duration = TimeSpan.FromMinutes(5),
-				Album = new Album("Some Artist", "Some Album"),
+				Album = new Album
+				{
+					Artist = "Some Artist",
+					Title = "Some Album",
+				},
 			};
 
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
@@ -77,7 +85,11 @@ namespace CF.MusicLibrary.LastFM.Tests
 				Title = "Some Title",
 				Artist = artist,
 				Duration = TimeSpan.FromMinutes(5),
-				Album = new Album(artist, "Some Album"),
+				Album = new Album
+				{
+					Artist = artist,
+					Title = "Some Album",
+				},
 			};
 
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
@@ -102,7 +114,11 @@ namespace CF.MusicLibrary.LastFM.Tests
 				Title = "Some Title",
 				Artist = "Some Artist",
 				Duration = TimeSpan.FromSeconds(15),
-				Album = new Album("Some Artist", "Some Album"),
+				Album = new Album
+				{
+					Artist = "Some Artist",
+					Title = "Some Album",
+				},
 			};
 
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
@@ -122,13 +138,22 @@ namespace CF.MusicLibrary.LastFM.Tests
 		{
 			//	Arrange
 
-			var trackScrobble = new TrackScrobble(new Track
+			var trackScrobble = new TrackScrobble
 			{
-				Title = "Some Title",
-				Artist = "Some Artist",
-				Duration = TimeSpan.FromMinutes(5),
-				Album = new Album("Some Artist", "Some Album"),
-			}, new DateTime(2017, 09, 18));
+				Track = new Track
+				{
+					Title = "Some Title",
+					Artist = "Some Artist",
+					Duration = TimeSpan.FromMinutes(5),
+					Album = new Album
+					{
+						Artist = "Some Artist",
+						Title = "Some Album",
+					},
+				},
+
+				PlayStartTimestamp = new DateTime(2017, 09, 18),
+			};
 
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock, Substitute.For<ILogger<LastFMScrobbler>>());
@@ -148,13 +173,22 @@ namespace CF.MusicLibrary.LastFM.Tests
 		{
 			//	Arrange
 
-			var trackScrobble = new TrackScrobble(new Track
+			var trackScrobble = new TrackScrobble
 			{
-				Title = title,
-				Artist = "Some Artist",
-				Duration = TimeSpan.FromMinutes(5),
-				Album = new Album("Some Artist", "Some Album"),
-			}, new DateTime(2017, 09, 18));
+				Track = new Track
+				{
+					Title = title,
+					Artist = "Some Artist",
+					Duration = TimeSpan.FromMinutes(5),
+					Album = new Album
+					{
+						Artist = "Some Artist",
+						Title = "Some Album",
+					},
+				},
+
+				PlayStartTimestamp = new DateTime(2017, 09, 18),
+			};
 
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock, Substitute.For<ILogger<LastFMScrobbler>>());
@@ -174,13 +208,22 @@ namespace CF.MusicLibrary.LastFM.Tests
 		{
 			//	Arrange
 
-			var trackScrobble = new TrackScrobble(new Track
+			var trackScrobble = new TrackScrobble
 			{
-				Title = "Some Title",
-				Artist = artist,
-				Duration = TimeSpan.FromMinutes(5),
-				Album = new Album(artist, "Some Album"),
-			}, new DateTime(2017, 09, 18));
+				Track = new Track
+				{
+					Title = "Some Title",
+					Artist = artist,
+					Duration = TimeSpan.FromMinutes(5),
+					Album = new Album
+					{
+						Artist = artist,
+						Title = "Some Album",
+					},
+				},
+
+				PlayStartTimestamp = new DateTime(2017, 09, 18),
+			};
 
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock, Substitute.For<ILogger<LastFMScrobbler>>());
@@ -199,13 +242,22 @@ namespace CF.MusicLibrary.LastFM.Tests
 		{
 			//	Arrange
 
-			var trackScrobble = new TrackScrobble(new Track
+			var trackScrobble = new TrackScrobble
 			{
-				Title = "Some Title",
-				Artist = "Some Artist",
-				Duration = TimeSpan.FromSeconds(15),
-				Album = new Album("Some Artist", "Some Album"),
-			}, new DateTime(2017, 09, 18));
+				Track = new Track
+				{
+					Title = "Some Title",
+					Artist = "Some Artist",
+					Duration = TimeSpan.FromSeconds(15),
+					Album = new Album
+					{
+						Artist = "Some Artist",
+						Title = "Some Album",
+					},
+				},
+
+				PlayStartTimestamp = new DateTime(2017, 09, 18),
+			};
 
 			ILastFMApiClient lastFMApiClientMock = Substitute.For<ILastFMApiClient>();
 			var target = new LastFMScrobbler(lastFMApiClientMock, Substitute.For<ILogger<LastFMScrobbler>>());

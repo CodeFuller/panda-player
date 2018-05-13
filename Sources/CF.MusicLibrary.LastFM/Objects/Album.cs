@@ -4,15 +4,9 @@ namespace CF.MusicLibrary.LastFM.Objects
 {
 	public class Album
 	{
-		public string Artist { get; }
+		public string Artist { get; set; }
 
-		public string Title { get; }
-
-		public Album(string artistName, string albumTitle)
-		{
-			Artist = artistName;
-			Title = albumTitle;
-		}
+		public string Title { get; set; }
 
 		public override bool Equals(Object obj)
 		{

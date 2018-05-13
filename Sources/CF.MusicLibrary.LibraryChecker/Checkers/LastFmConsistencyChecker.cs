@@ -68,7 +68,12 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 				.Where(disc => disc.Artist != null)
 				.Where(disc => disc.AlbumTitle != null))
 			{
-				var album = new Album(disc.Artist.Name, disc.AlbumTitle);
+				var album = new Album
+				{
+					Artist = disc.Artist.Name,
+					Title = disc.AlbumTitle,
+				};
+
 				if (checkedAlbums.Contains(album))
 				{
 					continue;
