@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:logging="clr-namespace:CF.MusicLibrary.PandaPlayer.ViewModels.Logging"
+             xmlns:logging="clr-namespace:Microsoft.Extensions.Logging;assembly=Microsoft.Extensions.Logging.Abstractions"
              mc:Ignorable="d" 
              d:DesignWidth="800" d:DesignHeight="300"
              Loaded="View_Loaded">
@@ -16,10 +16,10 @@
         <DataGrid.Resources>
             <Style TargetType="{x:Type DataGridRow}">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Level}" Value="{x:Static logging:LogMessageLevel.Error}">
+                    <DataTrigger Binding="{Binding Level}" Value="{x:Static logging:LogLevel.Error}">
                         <Setter Property="Foreground" Value="Red" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Level}" Value="{x:Static logging:LogMessageLevel.Warning}">
+                    <DataTrigger Binding="{Binding Level}" Value="{x:Static logging:LogLevel.Warning}">
                         <Setter Property="Foreground" Value="Yellow" />
                     </DataTrigger>
                 </Style.Triggers>
