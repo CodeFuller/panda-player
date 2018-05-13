@@ -14,7 +14,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Logging
 		public LogMessage(LogLevel level, string message)
 		{
 			Level = level;
-			Message = Current($"{DateTime.Now:yyyy-MM-dd  HH:mm:ss}    {GetLevelString(level)}    {message}");
+			Message = Current($"{DateTime.Now:yyyy-MM-dd  HH:mm:ss}  {GetLevelString(level)}  {message}");
 		}
 
 		private static string GetLevelString(LogLevel level)
