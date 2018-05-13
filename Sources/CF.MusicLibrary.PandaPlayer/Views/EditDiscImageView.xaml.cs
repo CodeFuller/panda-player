@@ -72,9 +72,15 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 		{
 			clipboardChangeTracker.ClipboardContentChanged -= ClipboardChangeTrackerOnClipboardContentChanged;
 			clipboardChangeTracker.StopTracking();
-			ViewModel.Unload();
 
 			base.OnClosing(e);
+		}
+
+		protected override void OnClosed(EventArgs e)
+		{
+			ViewModel.Unload();
+
+			base.OnClosed(e);
 		}
 	}
 }
