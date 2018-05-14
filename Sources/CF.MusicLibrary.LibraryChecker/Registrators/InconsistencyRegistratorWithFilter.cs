@@ -18,130 +18,130 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 			this.inconsistencyFilter = inconsistencyFilter ?? throw new ArgumentNullException(nameof(inconsistencyFilter));
 		}
 
-		public void RegisterInconsistency_SuspiciousAlbumTitle(Disc disc)
+		public void RegisterSuspiciousAlbumTitle(Disc disc)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_SuspiciousAlbumTitle(disc);
+			inconsistencyRegistrator.RegisterSuspiciousAlbumTitle(disc);
 		}
 
-		public void RegisterInconsistency_DiscWithoutSongs(Disc disc)
+		public void RegisterDiscWithoutSongs(Disc disc)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_DiscWithoutSongs(disc);
+			inconsistencyRegistrator.RegisterDiscWithoutSongs(disc);
 		}
 
-		public void RegisterInconsistency_BadTrackNumbersForDisc(Disc disc, IEnumerable<short?> trackNumbers)
+		public void RegisterBadTrackNumbersForDisc(Disc disc, IEnumerable<short?> trackNumbers)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_BadTrackNumbersForDisc(disc, trackNumbers);
+			inconsistencyRegistrator.RegisterBadTrackNumbersForDisc(disc, trackNumbers);
 		}
 
-		public void RegisterInconsistency_DifferentGenresForDisc(Disc disc, IEnumerable<Genre> genres)
+		public void RegisterDifferentGenresForDisc(Disc disc, IEnumerable<Genre> genres)
 		{
 			var genresList = genres.ToList();
-			if (inconsistencyFilter.SkipInconsistency_DifferentGenresForDisc(disc, genresList))
+			if (inconsistencyFilter.ShouldSkipDifferentGenresForDisc(disc, genresList))
 			{
 				return;
 			}
 
-			inconsistencyRegistrator.RegisterInconsistency_DifferentGenresForDisc(disc, genresList);
+			inconsistencyRegistrator.RegisterDifferentGenresForDisc(disc, genresList);
 		}
 
-		public void RegisterInconsistency_BadTagData(string inconsistencyMessage)
+		public void RegisterBadTagData(string inconsistencyMessage)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_BadTagData(inconsistencyMessage);
+			inconsistencyRegistrator.RegisterBadTagData(inconsistencyMessage);
 		}
 
-		public void RegisterInconsistency_BadTagData(Song song, IEnumerable<SongTagType> tagTypes)
+		public void RegisterBadTagData(Song song, IEnumerable<SongTagType> tagTypes)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_BadTagData(song, tagTypes);
+			inconsistencyRegistrator.RegisterBadTagData(song, tagTypes);
 		}
 
-		public void RegisterInconsistency_ArtistNotFound(Artist artist)
+		public void RegisterArtistNotFound(Artist artist)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_ArtistNotFound(artist);
+			inconsistencyRegistrator.RegisterArtistNotFound(artist);
 		}
 
-		public void RegisterInconsistency_ArtistNameCorrected(string originalArtistName, string correctedArtistName)
+		public void RegisterArtistNameCorrected(string originalArtistName, string correctedArtistName)
 		{
-			if (inconsistencyFilter.SkipInconsistency_ArtistNameCorrected(originalArtistName, correctedArtistName))
+			if (inconsistencyFilter.ShouldSkipArtistNameCorrection(originalArtistName, correctedArtistName))
 			{
 				return;
 			}
 
-			inconsistencyRegistrator.RegisterInconsistency_ArtistNameCorrected(originalArtistName, correctedArtistName);
+			inconsistencyRegistrator.RegisterArtistNameCorrected(originalArtistName, correctedArtistName);
 		}
 
-		public void RegisterInconsistency_NoListensForArtist(Artist artist)
+		public void RegisterNoListensForArtist(Artist artist)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_NoListensForArtist(artist);
+			inconsistencyRegistrator.RegisterNoListensForArtist(artist);
 		}
 
-		public void RegisterInconsistency_AlbumNotFound(Disc disc)
+		public void RegisterAlbumNotFound(Disc disc)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_AlbumNotFound(disc);
+			inconsistencyRegistrator.RegisterAlbumNotFound(disc);
 		}
 
-		public void RegisterInconsistency_NoListensForAlbum(Disc disc)
+		public void RegisterNoListensForAlbum(Disc disc)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_NoListensForAlbum(disc);
+			inconsistencyRegistrator.RegisterNoListensForAlbum(disc);
 		}
 
-		public void RegisterInconsistency_SongNotFound(Song song)
+		public void RegisterSongNotFound(Song song)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_SongNotFound(song);
+			inconsistencyRegistrator.RegisterSongNotFound(song);
 		}
 
-		public void RegisterInconsistency_SongTitleCorrected(Song song, string correctedSongTitle)
+		public void RegisterSongTitleCorrected(Song song, string correctedSongTitle)
 		{
-			if (inconsistencyFilter.SkipInconsistency_SongTitleCorrected(song, correctedSongTitle))
+			if (inconsistencyFilter.ShouldSkipSongTitleCorrection(song, correctedSongTitle))
 			{
 				return;
 			}
 
-			inconsistencyRegistrator.RegisterInconsistency_SongTitleCorrected(song, correctedSongTitle);
+			inconsistencyRegistrator.RegisterSongTitleCorrected(song, correctedSongTitle);
 		}
 
-		public void RegisterInconsistency_NoListensForSong(Song song)
+		public void RegisterNoListensForSong(Song song)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_NoListensForSong(song);
+			inconsistencyRegistrator.RegisterNoListensForSong(song);
 		}
 
-		public void RegisterInconsistency_MissingStorageData(Uri itemUri)
+		public void RegisterMissingStorageData(Uri itemUri)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_MissingStorageData(itemUri);
+			inconsistencyRegistrator.RegisterMissingStorageData(itemUri);
 		}
 
-		public void RegisterInconsistency_UnexpectedStorageData(string itemPath, string itemType)
+		public void RegisterUnexpectedStorageData(string itemPath, string itemType)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_UnexpectedStorageData(itemPath, itemType);
+			inconsistencyRegistrator.RegisterUnexpectedStorageData(itemPath, itemType);
 		}
 
-		public void RegisterInconsistency_ErrorInStorageData(string errorMessage)
+		public void RegisterErrorInStorageData(string errorMessage)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_ErrorInStorageData(errorMessage);
+			inconsistencyRegistrator.RegisterErrorInStorageData(errorMessage);
 		}
 
-		public void RegisterInconsistency_DiscCoverIsTooSmall(Disc disc, ImageInfo imageInfo)
+		public void RegisterDiscCoverIsTooSmall(Disc disc, ImageInfo imageInfo)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_DiscCoverIsTooSmall(disc, imageInfo);
+			inconsistencyRegistrator.RegisterDiscCoverIsTooSmall(disc, imageInfo);
 		}
 
-		public void RegisterInconsistency_DiscCoverIsTooBig(Disc disc, ImageInfo imageInfo)
+		public void RegisterDiscCoverIsTooBig(Disc disc, ImageInfo imageInfo)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_DiscCoverIsTooBig(disc, imageInfo);
+			inconsistencyRegistrator.RegisterDiscCoverIsTooBig(disc, imageInfo);
 		}
 
-		public void RegisterInconsistency_ImageFileIsTooBig(Disc disc, ImageInfo imageInfo)
+		public void RegisterImageFileIsTooBig(Disc disc, ImageInfo imageInfo)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_ImageFileIsTooBig(disc, imageInfo);
+			inconsistencyRegistrator.RegisterImageFileIsTooBig(disc, imageInfo);
 		}
 
-		public void RegisterInconsistency_ImageHasUnsupportedFormat(Disc disc, ImageInfo imageInfo)
+		public void RegisterImageHasUnsupportedFormat(Disc disc, ImageInfo imageInfo)
 		{
-			inconsistencyRegistrator.RegisterInconsistency_ImageHasUnsupportedFormat(disc, imageInfo);
+			inconsistencyRegistrator.RegisterImageHasUnsupportedFormat(disc, imageInfo);
 		}
 
-		public void RegisterFix_ErrorInStorageData(string fixMessage)
+		public void RegisterFixOfErrorInStorageData(string fixMessage)
 		{
-			inconsistencyRegistrator.RegisterFix_ErrorInStorageData(fixMessage);
+			inconsistencyRegistrator.RegisterFixOfErrorInStorageData(fixMessage);
 		}
 	}
 }

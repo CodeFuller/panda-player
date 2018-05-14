@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace CF.MusicLibrary.LibraryToolkit.Tests
 {
@@ -14,7 +15,7 @@ namespace CF.MusicLibrary.LibraryToolkit.Tests
 
 			// Act & Assert
 
-			Assert.DoesNotThrow(() => target.Bootstrap(new string[0]));
+			Assert.DoesNotThrow(() => target.Bootstrap(Array.Empty<string>()));
 		}
 	}
 }

@@ -146,7 +146,6 @@ namespace CF.MusicLibrary.Core.Objects
 			OnPropertyChanged(nameof(Playbacks));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default value is required when parameter has attribute CallerMemberName.")]
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -12,124 +12,124 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 		public static readonly DependencyProperty IsEditableProperty = DependencyProperty.RegisterAttached(
 		  "IsEditable", typeof(bool), typeof(TreeViewInPlaceEditBehavior), new PropertyMetadata(OnIsEditableChanged));
 
-		public static bool GetIsEditable(DependencyObject obj)
+		public static bool GetIsEditable(DependencyObject item)
 		{
-			if (obj == null)
+			if (item == null)
 			{
-				throw new ArgumentNullException(nameof(obj));
+				throw new ArgumentNullException(nameof(item));
 			}
 
-			return (bool)obj.GetValue(IsEditableProperty);
+			return (bool)item.GetValue(IsEditableProperty);
 		}
 
-		public static void SetIsEditable(DependencyObject obj, bool value)
+		public static void SetIsEditable(DependencyObject item, bool value)
 		{
-			if (obj == null)
+			if (item == null)
 			{
-				throw new ArgumentNullException(nameof(obj));
+				throw new ArgumentNullException(nameof(item));
 			}
 
-			obj.SetValue(IsEditableProperty, value);
+			item.SetValue(IsEditableProperty, value);
 		}
 
 		public static readonly DependencyProperty IsEditingProperty = DependencyProperty.RegisterAttached(
 		  "IsEditing", typeof(bool), typeof(TreeViewInPlaceEditBehavior));
 
-		public static bool GetIsEditing(DependencyObject obj)
+		public static bool GetIsEditing(DependencyObject item)
 		{
-			if (obj == null)
+			if (item == null)
 			{
-				throw new ArgumentNullException(nameof(obj));
+				throw new ArgumentNullException(nameof(item));
 			}
 
-			return (bool)obj.GetValue(IsEditingProperty);
+			return (bool)item.GetValue(IsEditingProperty);
 		}
 
-		public static void SetIsEditing(DependencyObject obj, bool value)
+		public static void SetIsEditing(DependencyObject item, bool value)
 		{
-			if (obj == null)
+			if (item == null)
 			{
-				throw new ArgumentNullException(nameof(obj));
+				throw new ArgumentNullException(nameof(item));
 			}
 
-			obj.SetValue(IsEditingProperty, value);
+			item.SetValue(IsEditingProperty, value);
 		}
 
 		public static readonly DependencyProperty IsEditConfirmedProperty = DependencyProperty.RegisterAttached(
 		  "IsEditConfirmed", typeof(bool), typeof(TreeViewInPlaceEditBehavior));
 
-		public static bool GetIsEditConfirmed(DependencyObject obj)
+		public static bool GetIsEditConfirmed(DependencyObject item)
 		{
-			if (obj == null)
+			if (item == null)
 			{
-				throw new ArgumentNullException(nameof(obj));
+				throw new ArgumentNullException(nameof(item));
 			}
 
-			return (bool)obj.GetValue(IsEditConfirmedProperty);
+			return (bool)item.GetValue(IsEditConfirmedProperty);
 		}
 
-		public static void SetIsEditConfirmed(DependencyObject obj, bool value)
+		public static void SetIsEditConfirmed(DependencyObject item, bool value)
 		{
-			if (obj == null)
+			if (item == null)
 			{
-				throw new ArgumentNullException(nameof(obj));
+				throw new ArgumentNullException(nameof(item));
 			}
 
-			obj.SetValue(IsEditConfirmedProperty, value);
+			item.SetValue(IsEditConfirmedProperty, value);
 		}
 
 		public static readonly DependencyProperty IsEditCanceledProperty = DependencyProperty.RegisterAttached(
 		  "IsEditCanceled", typeof(bool), typeof(TreeViewInPlaceEditBehavior));
 
-		public static bool GetIsEditCanceled(DependencyObject obj)
+		public static bool GetIsEditCanceled(DependencyObject item)
 		{
-			if (obj == null)
+			if (item == null)
 			{
-				throw new ArgumentNullException(nameof(obj));
+				throw new ArgumentNullException(nameof(item));
 			}
 
-			return (bool)obj.GetValue(IsEditCanceledProperty);
+			return (bool)item.GetValue(IsEditCanceledProperty);
 		}
 
-		public static void SetIsEditCanceled(DependencyObject obj, bool value)
+		public static void SetIsEditCanceled(DependencyObject item, bool value)
 		{
-			if (obj == null)
+			if (item == null)
 			{
-				throw new ArgumentNullException(nameof(obj));
+				throw new ArgumentNullException(nameof(item));
 			}
 
-			obj.SetValue(IsEditCanceledProperty, value);
+			item.SetValue(IsEditCanceledProperty, value);
 		}
 
 		private static readonly DependencyProperty LastSelectedItemProperty = DependencyProperty.RegisterAttached(
 		  "LastSelectedItem", typeof(object), typeof(TreeViewInPlaceEditBehavior));
 
-		private static object GetLastSelectedItem(DependencyObject obj)
+		private static object GetLastSelectedItem(DependencyObject item)
 		{
-			return obj.GetValue(LastSelectedItemProperty);
+			return item.GetValue(LastSelectedItemProperty);
 		}
 
-		private static void SetLastSelectedItem(DependencyObject obj, object value)
+		private static void SetLastSelectedItem(DependencyObject item, object value)
 		{
-			obj.SetValue(LastSelectedItemProperty, value);
+			item.SetValue(LastSelectedItemProperty, value);
 		}
 
 		private static readonly DependencyProperty LastSelectedTimeProperty = DependencyProperty.RegisterAttached(
 		  "LastSelectedTime", typeof(DateTime), typeof(TreeViewInPlaceEditBehavior));
 
-		private static DateTime GetLastSelectedTime(DependencyObject obj)
+		private static DateTime GetLastSelectedTime(DependencyObject item)
 		{
-			return (DateTime)obj.GetValue(LastSelectedTimeProperty);
+			return (DateTime)item.GetValue(LastSelectedTimeProperty);
 		}
 
-		private static void SetLastSelectedTime(DependencyObject obj, DateTime value)
+		private static void SetLastSelectedTime(DependencyObject item, DateTime value)
 		{
-			obj.SetValue(LastSelectedTimeProperty, value);
+			item.SetValue(LastSelectedTimeProperty, value);
 		}
 
-		private static void OnIsEditableChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+		private static void OnIsEditableChanged(DependencyObject item, DependencyPropertyChangedEventArgs args)
 		{
-			var treeView = obj as TreeView;
+			var treeView = item as TreeView;
 			if (treeView == null)
 			{
 				throw new ArgumentException("obj is not a TreeView");
@@ -179,7 +179,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 			var lastSelectedItem = GetLastSelectedItem(treeView);
 			if (lastSelectedItem != treeView.SelectedItem)
 			{
-				////Selection changed, let's save the selected item and the selected time
+				// Selection changed, let's save the selected item and the selected time
 				SetLastSelectedItem(treeView, treeView.SelectedItem);
 				SetLastSelectedTime(treeView, DateTime.Now);
 				treeView.EndEdit(true);
@@ -194,7 +194,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 			var selectedItem = element.ParentOfType<TreeViewItem>();
 			if (selectedItem == null)
 			{
-				////We're clicking on nowhere, let's cancel the editing
+				// We're clicking on nowhere, let's cancel the editing
 				treeView.EndEdit(true);
 				return;
 			}

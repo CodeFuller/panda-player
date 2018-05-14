@@ -336,7 +336,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Assert
 
-			registratorMock.Received(1).RegisterInconsistency_ErrorInStorageData(Arg.Any<string>());
+			registratorMock.Received(1).RegisterErrorInStorageData(Arg.Any<string>());
 		}
 
 		[Test]
@@ -369,7 +369,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Assert
 
-			registratorMock.DidNotReceive().RegisterInconsistency_ErrorInStorageData(Arg.Any<string>());
+			registratorMock.DidNotReceive().RegisterErrorInStorageData(Arg.Any<string>());
 		}
 
 		[Test]
@@ -483,7 +483,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Assert
 
-			registratorMock.Received(1).RegisterInconsistency_ErrorInStorageData(Arg.Any<string>());
+			registratorMock.Received(1).RegisterErrorInStorageData(Arg.Any<string>());
 		}
 
 		[Test]
@@ -527,7 +527,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Assert
 
-			registratorMock.DidNotReceive().RegisterInconsistency_ErrorInStorageData(Arg.Any<string>());
+			registratorMock.DidNotReceive().RegisterErrorInStorageData(Arg.Any<string>());
 		}
 
 		[Test]

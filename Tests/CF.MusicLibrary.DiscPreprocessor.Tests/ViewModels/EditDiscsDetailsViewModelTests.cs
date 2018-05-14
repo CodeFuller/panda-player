@@ -31,7 +31,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 		{
 			// Arrange
 
-			var addedDiscInfo = new AddedDiscInfo(new AddedSongInfo[] { })
+			var addedDiscInfo = new AddedDiscInfo(Array.Empty<AddedSongInfo>())
 			{
 				Title = "Some Disc",
 				SourcePath = @"Workshop\Some Artist\2000 - Some Disc",
@@ -67,7 +67,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 				SongsUnordered = new[] { new Song() },
 			};
 
-			var addedDiscInfo = new AddedDiscInfo(new AddedSongInfo[] { })
+			var addedDiscInfo = new AddedDiscInfo(Array.Empty<AddedSongInfo>())
 			{
 				Title = "Some Disc",
 				SourcePath = @"Workshop\Some Artist\2000 - Some Disc",

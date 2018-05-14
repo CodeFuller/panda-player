@@ -14,8 +14,7 @@ using static System.FormattableString;
 
 namespace CF.MusicLibrary.LibraryToolkit
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Class is instantiated by DI Container.")]
-	internal class ApplicationLogic : IApplicationLogic
+	public class ApplicationLogic : IApplicationLogic
 	{
 		private readonly IFileSystemFacade fileSystemFacade;
 		private readonly ILogger<ApplicationLogic> logger;
@@ -97,7 +96,6 @@ namespace CF.MusicLibrary.LibraryToolkit
 			logger.LogInformation("Data was migrated successfully");
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "Application logic requires execution of SQL commands from the file")]
 		private static void CreateDatabaseSchema(string sqlScriptFileName, string targetDBConnectionString)
 		{
 			var commandText = File.ReadAllText(sqlScriptFileName);

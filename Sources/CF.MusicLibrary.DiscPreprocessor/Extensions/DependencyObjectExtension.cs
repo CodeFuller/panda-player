@@ -40,21 +40,21 @@ namespace CF.MusicLibrary.DiscPreprocessor.Extensions
 					 : (parent != null ? parent.ParentOfType(filter) : null);
 		}
 
-		public static bool IsEditing(this DependencyObject obj)
+		public static bool IsEditing(this DependencyObject item)
 		{
-			return TreeViewInPlaceEditBehavior.GetIsEditing(obj);
+			return TreeViewInPlaceEditBehavior.GetIsEditing(item);
 		}
 
-		public static void BeginEdit(this DependencyObject obj)
+		public static void BeginEdit(this DependencyObject item)
 		{
-			TreeViewInPlaceEditBehavior.SetIsEditing(obj, true);
+			TreeViewInPlaceEditBehavior.SetIsEditing(item, true);
 		}
 
-		public static void EndEdit(this DependencyObject obj, bool cancel)
+		public static void EndEdit(this DependencyObject item, bool cancel)
 		{
-			TreeViewInPlaceEditBehavior.SetIsEditCanceled(obj, cancel);
-			TreeViewInPlaceEditBehavior.SetIsEditConfirmed(obj, !cancel);
-			TreeViewInPlaceEditBehavior.SetIsEditing(obj, false);
+			TreeViewInPlaceEditBehavior.SetIsEditCanceled(item, cancel);
+			TreeViewInPlaceEditBehavior.SetIsEditConfirmed(item, !cancel);
+			TreeViewInPlaceEditBehavior.SetIsEditing(item, false);
 		}
 	}
 }

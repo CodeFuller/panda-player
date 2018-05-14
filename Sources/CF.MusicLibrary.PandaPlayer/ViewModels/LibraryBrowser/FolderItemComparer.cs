@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 {
@@ -17,11 +16,6 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 
 		public int GetHashCode(FolderExplorerItem obj)
 		{
-			if (obj == null)
-			{
-				throw new ArgumentNullException(nameof(obj));
-			}
-
 			return obj.GetHashCode();
 		}
 	}

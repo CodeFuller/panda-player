@@ -395,11 +395,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, registratorMock, false);
+			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, Array.Empty<Uri>(), registratorMock, false);
 
 			// Assert
 
-			registratorMock.RegisterInconsistency_MissingStorageData(new Uri("/SomeDir/SomeFile", UriKind.Relative));
+			registratorMock.RegisterMissingStorageData(new Uri("/SomeDir/SomeFile", UriKind.Relative));
 		}
 
 		[Test]
@@ -416,11 +416,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, registratorMock, false);
+			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, Array.Empty<Uri>(), registratorMock, false);
 
 			// Assert
 
-			registratorMock.DidNotReceive().RegisterInconsistency_MissingStorageData(Arg.Any<Uri>());
+			registratorMock.DidNotReceive().RegisterMissingStorageData(Arg.Any<Uri>());
 		}
 
 		[Test]
@@ -440,11 +440,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, registratorMock, false);
+			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, Array.Empty<Uri>(), registratorMock, false);
 
 			// Assert
 
-			registratorMock.RegisterInconsistency_ErrorInStorageData(Arg.Any<string>());
+			registratorMock.RegisterErrorInStorageData(Arg.Any<string>());
 		}
 
 		[Test]
@@ -462,11 +462,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, registratorMock, false);
+			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, Array.Empty<Uri>(), registratorMock, false);
 
 			// Assert
 
-			registratorMock.DidNotReceive().RegisterInconsistency_ErrorInStorageData(Arg.Any<string>());
+			registratorMock.DidNotReceive().RegisterErrorInStorageData(Arg.Any<string>());
 		}
 
 		[Test]
@@ -482,7 +482,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, Substitute.For<ILibraryStorageInconsistencyRegistrator>(), true);
+			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, Array.Empty<Uri>(), Substitute.For<ILibraryStorageInconsistencyRegistrator>(), true);
 
 			// Assert
 
@@ -502,7 +502,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, Substitute.For<ILibraryStorageInconsistencyRegistrator>(), false);
+			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, Array.Empty<Uri>(), Substitute.For<ILibraryStorageInconsistencyRegistrator>(), false);
 
 			// Assert
 
@@ -523,11 +523,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, registratorMock, false);
+			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, Array.Empty<Uri>(), registratorMock, false);
 
 			// Assert
 
-			registratorMock.DidNotReceive().RegisterInconsistency_UnexpectedStorageData(Arg.Any<string>(), Arg.Any<string>());
+			registratorMock.DidNotReceive().RegisterUnexpectedStorageData(Arg.Any<string>(), Arg.Any<string>());
 		}
 
 		[Test]
@@ -544,11 +544,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckDataConsistency(new Uri[] { }, new Uri[] { }, registratorMock, false);
+			target.CheckDataConsistency(Array.Empty<Uri>(), Array.Empty<Uri>(), registratorMock, false);
 
 			// Assert
 
-			registratorMock.RegisterInconsistency_UnexpectedStorageData(@"RootDir\SomeDir\SomeFile", "file");
+			registratorMock.RegisterUnexpectedStorageData(@"RootDir\SomeDir\SomeFile", "file");
 		}
 
 		[Test]
@@ -565,11 +565,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckDataConsistency(new Uri[] { }, new[] { new Uri("/SomeDir", UriKind.Relative) }, registratorMock, false);
+			target.CheckDataConsistency(Array.Empty<Uri>(), new[] { new Uri("/SomeDir", UriKind.Relative) }, registratorMock, false);
 
 			// Assert
 
-			registratorMock.DidNotReceive().RegisterInconsistency_UnexpectedStorageData(Arg.Any<string>(), Arg.Any<string>());
+			registratorMock.DidNotReceive().RegisterUnexpectedStorageData(Arg.Any<string>(), Arg.Any<string>());
 		}
 
 		[Test]
@@ -586,11 +586,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, new Uri[] { }, registratorMock, false);
+			target.CheckDataConsistency(new[] { new Uri("/SomeDir/SomeFile", UriKind.Relative) }, Array.Empty<Uri>(), registratorMock, false);
 
 			// Assert
 
-			registratorMock.DidNotReceive().RegisterInconsistency_UnexpectedStorageData(Arg.Any<string>(), Arg.Any<string>());
+			registratorMock.DidNotReceive().RegisterUnexpectedStorageData(Arg.Any<string>(), Arg.Any<string>());
 		}
 
 		[Test]
@@ -607,11 +607,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckDataConsistency(new Uri[] { }, new Uri[] { }, registratorMock, false);
+			target.CheckDataConsistency(Array.Empty<Uri>(), Array.Empty<Uri>(), registratorMock, false);
 
 			// Assert
 
-			registratorMock.RegisterInconsistency_UnexpectedStorageData(@"RootDir\SomeDir", "folder");
+			registratorMock.RegisterUnexpectedStorageData(@"RootDir\SomeDir", "folder");
 		}
 
 		[Test]
@@ -628,11 +628,11 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckDataConsistency(new Uri[] { }, new[] { new Uri("/SomeDir", UriKind.Relative) }, registratorMock, false);
+			target.CheckDataConsistency(Array.Empty<Uri>(), new[] { new Uri("/SomeDir", UriKind.Relative) }, registratorMock, false);
 
 			// Assert
 
-			registratorMock.DidNotReceive().RegisterInconsistency_UnexpectedStorageData(Arg.Any<string>(), Arg.Any<string>());
+			registratorMock.DidNotReceive().RegisterUnexpectedStorageData(Arg.Any<string>(), Arg.Any<string>());
 		}
 	}
 }

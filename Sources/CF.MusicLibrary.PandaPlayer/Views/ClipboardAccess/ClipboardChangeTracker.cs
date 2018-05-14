@@ -5,12 +5,10 @@ using System.Windows.Interop;
 namespace CF.MusicLibrary.PandaPlayer.Views.ClipboardAccess
 {
 	// https://blogs.msdn.microsoft.com/codefx/2012/03/07/sample-of-mar-7th-monitor-windows-clipboard-changes-in-wpf/
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable", Justification = "The class does not own IntPtr resource")]
 	internal class ClipboardChangeTracker : Window, IClipboardChangeTracker
 	{
 		private bool isStarted;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources", Justification = "The class does not own IntPtr resource")]
 		private IntPtr nextClipboardViewer;
 
 		private HwndSource hwndSource;

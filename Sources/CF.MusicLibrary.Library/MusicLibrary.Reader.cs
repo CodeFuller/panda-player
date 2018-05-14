@@ -91,7 +91,7 @@ namespace CF.MusicLibrary.Library
 					var currChecksum = checksumCalculator.CalculateChecksumForFile(songFileName);
 					if (currChecksum != song.Checksum)
 					{
-						registrator.RegisterInconsistency_ErrorInStorageData($"Checksum mismatch: 0x{currChecksum:X8} != 0x{song.Checksum:X8} for song {song.Uri}");
+						registrator.RegisterErrorInStorageData($"Checksum mismatch: 0x{currChecksum:X8} != 0x{song.Checksum:X8} for song {song.Uri}");
 						if (fixFoundIssues)
 						{
 							song.Checksum = currChecksum;
@@ -107,7 +107,7 @@ namespace CF.MusicLibrary.Library
 					var currChecksum = checksumCalculator.CalculateChecksumForFile(imageFileName);
 					if (currChecksum != image.Checksum)
 					{
-						registrator.RegisterInconsistency_ErrorInStorageData($"Checksum mismatch: 0x{currChecksum:X8} != 0x{image.Checksum:X8} for image {image.Uri}");
+						registrator.RegisterErrorInStorageData($"Checksum mismatch: 0x{currChecksum:X8} != 0x{image.Checksum:X8} for image {image.Uri}");
 						if (fixFoundIssues)
 						{
 							image.Checksum = currChecksum;

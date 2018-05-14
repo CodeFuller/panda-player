@@ -15,7 +15,6 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 			DataContext = model;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Class is called from XAML")]
 		private void DiscImageView_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			DiscImageView.Image_MouseLeftButtonDown(sender, e);

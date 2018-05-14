@@ -6,10 +6,8 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 {
 	public interface ITagDataInconsistencyRegistrator
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Method name is unreadable without underscore")]
-		void RegisterInconsistency_BadTagData(string inconsistencyMessage);
+		void RegisterBadTagData(string inconsistencyMessage);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Method name is unreadable without underscore")]
-		void RegisterInconsistency_BadTagData(Song song, IEnumerable<SongTagType> tagTypes);
+		void RegisterBadTagData(Song song, IEnumerable<SongTagType> tagTypes);
 	}
 }

@@ -7,26 +7,17 @@ using GalaSoft.MvvmLight;
 
 namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Following ViewModel naming convention")]
 	public class DiscTreeViewModel : ViewModelBase, IEnumerable<DiscTreeViewItem>
 	{
-		private Collection<DiscTreeViewItem> discs;
-
-		public Collection<DiscTreeViewItem> Discs
-		{
-			get => discs;
-			set => Set(ref discs, value);
-		}
+		public ObservableCollection<DiscTreeViewItem> Discs { get; } = new ObservableCollection<DiscTreeViewItem>();
 
 		public bool ContentIsIncorrect => Discs.Any(s => s.ContentIsIncorrect);
 
-		public DiscTreeViewModel()
-		{
-			Discs = new Collection<DiscTreeViewItem>();
-		}
-
 		public void SetDiscs(IEnumerable<DiscContent> newDiscs)
 		{
-			Discs = newDiscs.Select(a => new DiscTreeViewItem(a)).ToCollection();
+			Discs.Clear();
+			Discs.AddRange(newDiscs.Select(a => new DiscTreeViewItem(a)));
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

@@ -45,8 +45,10 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public TimeSpan TotalSongsDuration => Songs.Aggregate(TimeSpan.Zero, (currSum, currSong) => currSum + currSong.Duration);
 
+		// Should be of type IList because of SelectedItem binding in SongListView
 		private IList selectedSongItems;
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Collection is used in two-way binding")]
 		public IList SelectedSongItems
 		{
 			get => selectedSongItems;

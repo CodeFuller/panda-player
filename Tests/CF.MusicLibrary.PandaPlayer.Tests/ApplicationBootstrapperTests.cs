@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.Library;
@@ -45,7 +46,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 
 			// Act & Assert
 
-			Assert.DoesNotThrow(() => target.Bootstrap(new string[0]));
+			Assert.DoesNotThrow(() => target.Bootstrap(Array.Empty<string>()));
 		}
 
 		[Test]
@@ -63,7 +64,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 
 			// Act
 
-			target.Bootstrap(new string[0]);
+			target.Bootstrap(Array.Empty<string>());
 
 			// Assert
 
@@ -87,7 +88,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 
 			// Act
 
-			target.Bootstrap(new string[0]);
+			target.Bootstrap(Array.Empty<string>());
 
 			// Assert
 
@@ -114,7 +115,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 
 			// Act
 
-			target.Bootstrap(new string[0]);
+			target.Bootstrap(Array.Empty<string>());
 
 			// Assert
 
@@ -142,7 +143,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 
 			// Act
 
-			target.Bootstrap(new string[0]);
+			target.Bootstrap(Array.Empty<string>());
 
 			// Assert
 

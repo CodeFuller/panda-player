@@ -1,4 +1,5 @@
-﻿using CF.Library.Bootstrap;
+﻿using System;
+using CF.Library.Bootstrap;
 using CF.Library.Configuration;
 using CF.Library.Core.Facades;
 using CF.Library.Logging;
@@ -60,7 +61,7 @@ namespace CF.MusicLibrary.LibraryChecker
 		protected override void BootstrapConfiguration(IConfigurationBuilder configurationBuilder, string[] commandLineArgs)
 		{
 			// We do not load configuration from command line, so that it does not conflict with utility commands.
-			configurationBuilder.LoadSettings("AppSettings.json", new string[0])
+			configurationBuilder.LoadSettings("AppSettings.json", Array.Empty<string>())
 				.AddJsonFile("AppSettings.Dev.json", optional: true);
 		}
 

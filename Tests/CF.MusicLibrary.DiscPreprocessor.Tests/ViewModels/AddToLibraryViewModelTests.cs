@@ -92,7 +92,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 
 			AddToLibraryViewModel target = new AddToLibraryViewModel(musicLibraryMock, mediaInfoProviderStub,
 				Substitute.For<IWorkshopMusicStorage>(), new DiscPreprocessorSettings().StubOptions());
-			target.SetSongs(new AddedSong[] { });
+			target.SetSongs(Array.Empty<AddedSong>());
 			target.SetDiscsImages(new[] { addedImage1, addedImage2 });
 
 			// Act

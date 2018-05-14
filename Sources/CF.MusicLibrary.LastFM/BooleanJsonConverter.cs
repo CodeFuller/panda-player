@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace CF.MusicLibrary.LastFM
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Class is instantiated by Json.NET")]
 	internal class BooleanJsonConverter : JsonConverter
 	{
 		public override bool CanConvert(Type objectType)

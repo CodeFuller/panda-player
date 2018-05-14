@@ -18,6 +18,8 @@
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeAnalysis.FxCopAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.FxCopAnalyzers">
     <Rule Id="CA1707" Action="None" />
+    <Rule Id="CA1806" Action="None" />
+    <Rule Id="CA1822" Action="None" />
     <Rule Id="CA2007" Action="None" />
   </Rules>
 </RuleSet>

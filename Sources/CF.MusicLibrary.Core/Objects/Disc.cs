@@ -18,11 +18,17 @@ namespace CF.MusicLibrary.Core.Objects
 
 		public short? Year => Songs.Select(s => s.Year).UniqueOrDefault();
 
+		/// <summary>
+		/// Gets or sets Disc Title.
+		/// </summary>
 		/// <example>
 		/// The Classical Conspiracy (Live) (CD 1)
 		/// </example>
 		public string Title { get; set; }
 
+		/// <summary>
+		/// Gets or sets Album Title.
+		/// </summary>
 		/// <example>
 		/// The Classical Conspiracy
 		/// </example>>

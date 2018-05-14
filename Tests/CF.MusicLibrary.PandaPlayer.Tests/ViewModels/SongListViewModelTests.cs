@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using CF.Library.Core.Attributes;
@@ -241,7 +242,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(new[] { new Song() });
-			target.SelectedSongItems = new SongListItem[0];
+			target.SelectedSongItems = Array.Empty<SongListItem>();
 
 			bool receivedEvent = false;
 			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => receivedEvent = true);
@@ -255,7 +256,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			Assert.IsFalse(receivedEvent);
 
 			// Avoiding uncovered lambda code (receivedEvent = true)
-			Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(new Song[0]));
+			Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(Array.Empty<Song>()));
 		}
 
 		[Test]
@@ -291,7 +292,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
 			target.SetSongs(new[] { new Song() });
-			target.SelectedSongItems = new SongListItem[0];
+			target.SelectedSongItems = Array.Empty<SongListItem>();
 
 			bool receivedEvent = false;
 			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => receivedEvent = true);
@@ -305,7 +306,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			Assert.IsFalse(receivedEvent);
 
 			// Avoiding uncovered lambda code (receivedEvent = true)
-			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(new Song[0]));
+			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(Array.Empty<Song>()));
 		}
 	}
 }

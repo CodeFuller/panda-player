@@ -246,7 +246,7 @@ namespace CF.MusicLibrary.Library.Tests
 		{
 			// Arrange
 
-			var expectedItemUris = new Uri[] { };
+			var expectedItemUris = Array.Empty<Uri>();
 			List<Uri> passedIgnoreList = null;
 
 			ILibraryStorageInconsistencyRegistrator registrator = Substitute.For<ILibraryStorageInconsistencyRegistrator>();

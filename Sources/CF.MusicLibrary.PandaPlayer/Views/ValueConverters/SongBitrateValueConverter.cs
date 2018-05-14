@@ -4,7 +4,6 @@ using System.Windows.Data;
 
 namespace CF.MusicLibrary.PandaPlayer.Views.ValueConverters
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Class is used from XAML")]
 	internal class SongBitrateValueConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

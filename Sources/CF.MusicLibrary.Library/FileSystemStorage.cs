@@ -118,15 +118,15 @@ namespace CF.MusicLibrary.Library
 				string fileName = GetPathForUri(expectedFileUri);
 				if (!fileSystemFacade.FileExists(fileName))
 				{
-					registrator.RegisterInconsistency_MissingStorageData(expectedFileUri);
+					registrator.RegisterMissingStorageData(expectedFileUri);
 				}
 				else if (!fileSystemFacade.GetReadOnlyAttribute(fileName))
 				{
-					registrator.RegisterInconsistency_ErrorInStorageData($"Storage file has no read-only attribute set: {fileName}");
+					registrator.RegisterErrorInStorageData($"Storage file has no read-only attribute set: {fileName}");
 					if (fixFoundIssues)
 					{
 						fileSystemFacade.SetReadOnlyAttribute(fileName);
-						registrator.RegisterFix_ErrorInStorageData($"Read-only attribute has been set for '{fileName}'");
+						registrator.RegisterFixOfErrorInStorageData($"Read-only attribute has been set for '{fileName}'");
 					}
 				}
 			}
@@ -136,7 +136,7 @@ namespace CF.MusicLibrary.Library
 				if (!ignoredPaths.Any(s => storageFileName.StartsWith(s, StringComparison.OrdinalIgnoreCase)) &&
 					!expectedFileNames.Contains(storageFileName))
 				{
-					registrator.RegisterInconsistency_UnexpectedStorageData(storageFileName, "file");
+					registrator.RegisterUnexpectedStorageData(storageFileName, "file");
 				}
 			}
 
@@ -145,7 +145,7 @@ namespace CF.MusicLibrary.Library
 				if (!ignoredPaths.Any(s => directory.StartsWith(s, StringComparison.OrdinalIgnoreCase)) &&
 					!expectedFileNames.Any(fileName => fileName.StartsWith(directory, StringComparison.OrdinalIgnoreCase)))
 				{
-					registrator.RegisterInconsistency_UnexpectedStorageData(directory, "directory");
+					registrator.RegisterUnexpectedStorageData(directory, "directory");
 				}
 			}
 		}

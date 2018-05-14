@@ -33,7 +33,6 @@ using Microsoft.Extensions.Logging;
 
 namespace CF.MusicLibrary.PandaPlayer
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "It's ok for Composition Root")]
 	public class ApplicationBootstrapper : DiApplicationBootstrapper<ApplicationViewModel>
 	{
 		private LoggerViewModel loggerViewModelInstance;

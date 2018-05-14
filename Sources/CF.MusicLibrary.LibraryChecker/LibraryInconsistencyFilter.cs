@@ -27,18 +27,18 @@ namespace CF.MusicLibrary.LibraryChecker
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
 
-		public bool SkipInconsistency_DifferentGenresForDisc(Disc disc, IEnumerable<Genre> genres)
+		public bool ShouldSkipDifferentGenresForDisc(Disc disc, IEnumerable<Genre> genres)
 		{
 			var uriString = disc.Uri.ToString();
 			return uriString == "/Сборники/Best/Foreign" || uriString == "/Сборники/Best/Russian";
 		}
 
-		public bool SkipInconsistency_ArtistNameCorrected(string originalArtistName, string correctedArtistName)
+		public bool ShouldSkipArtistNameCorrection(string originalArtistName, string correctedArtistName)
 		{
 			return allowedArtistCorrections.Value.Any(c => c.OriginalArtistName == originalArtistName && c.CorrectedArtistName == correctedArtistName);
 		}
 
-		public bool SkipInconsistency_SongTitleCorrected(Song song, string correctedSongTitle)
+		public bool ShouldSkipSongTitleCorrection(Song song, string correctedSongTitle)
 		{
 			string originalSongTitle = song.Title;
 

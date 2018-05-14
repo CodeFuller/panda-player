@@ -4,28 +4,20 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 {
 	public interface ILastFMInconsistencyRegistrator
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Method name is unreadable without underscore")]
-		void RegisterInconsistency_ArtistNotFound(Artist artist);
+		void RegisterArtistNotFound(Artist artist);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Method name is unreadable without underscore")]
-		void RegisterInconsistency_ArtistNameCorrected(string originalArtistName, string correctedArtistName);
+		void RegisterArtistNameCorrected(string originalArtistName, string correctedArtistName);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Method name is unreadable without underscore")]
-		void RegisterInconsistency_NoListensForArtist(Artist artist);
+		void RegisterNoListensForArtist(Artist artist);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Method name is unreadable without underscore")]
-		void RegisterInconsistency_AlbumNotFound(Disc disc);
+		void RegisterAlbumNotFound(Disc disc);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Method name is unreadable without underscore")]
-		void RegisterInconsistency_NoListensForAlbum(Disc disc);
+		void RegisterNoListensForAlbum(Disc disc);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Method name is unreadable without underscore")]
-		void RegisterInconsistency_SongNotFound(Song song);
+		void RegisterSongNotFound(Song song);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Method name is unreadable without underscore")]
-		void RegisterInconsistency_SongTitleCorrected(Song song, string correctedSongTitle);
+		void RegisterSongTitleCorrected(Song song, string correctedSongTitle);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Method name is unreadable without underscore")]
-		void RegisterInconsistency_NoListensForSong(Song song);
+		void RegisterNoListensForSong(Song song);
 	}
 }

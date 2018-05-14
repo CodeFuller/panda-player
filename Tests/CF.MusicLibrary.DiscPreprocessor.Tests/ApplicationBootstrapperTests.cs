@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.Common.Images;
 using CF.MusicLibrary.Library;
@@ -46,7 +47,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 
 			// Act & Assert
 
-			Assert.DoesNotThrow(() => target.Bootstrap(new string[0]));
+			Assert.DoesNotThrow(() => target.Bootstrap(Array.Empty<string>()));
 
 			var imageFileFactory = target.ResolveDependency<IObjectFactory<IImageFile>>();
 			Assert.DoesNotThrow(() => imageFileFactory.CreateInstance());
@@ -67,7 +68,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 
 			// Act
 
-			target.Bootstrap(new string[0]);
+			target.Bootstrap(Array.Empty<string>());
 
 			// Assert
 
@@ -93,7 +94,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 
 			// Act
 
-			target.Bootstrap(new string[0]);
+			target.Bootstrap(Array.Empty<string>());
 
 			// Assert
 

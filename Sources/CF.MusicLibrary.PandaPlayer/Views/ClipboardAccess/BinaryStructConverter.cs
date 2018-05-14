@@ -25,14 +25,14 @@ namespace CF.MusicLibrary.PandaPlayer.Views.ClipboardAccess
 			}
 		}
 
-		public static byte[] ToByteArray<T>(T obj) where T : struct
+		public static byte[] ToByteArray<T>(T data) where T : struct
 		{
 			IntPtr ptr = IntPtr.Zero;
 			try
 			{
 				int size = Marshal.SizeOf(typeof(T));
 				ptr = Marshal.AllocHGlobal(size);
-				Marshal.StructureToPtr(obj, ptr, true);
+				Marshal.StructureToPtr(data, ptr, true);
 				byte[] bytes = new byte[size];
 				Marshal.Copy(ptr, bytes, 0, size);
 				return bytes;

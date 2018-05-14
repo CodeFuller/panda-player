@@ -5,16 +5,12 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 {
 	public interface IDiscInconsistencyRegistrator
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Method name is unreadable without underscore")]
-		void RegisterInconsistency_SuspiciousAlbumTitle(Disc disc);
+		void RegisterSuspiciousAlbumTitle(Disc disc);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Method name is unreadable without underscore")]
-		void RegisterInconsistency_DiscWithoutSongs(Disc disc);
+		void RegisterDiscWithoutSongs(Disc disc);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Method name is unreadable without underscore")]
-		void RegisterInconsistency_BadTrackNumbersForDisc(Disc disc, IEnumerable<short?> trackNumbers);
+		void RegisterBadTrackNumbersForDisc(Disc disc, IEnumerable<short?> trackNumbers);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Method name is unreadable without underscore")]
-		void RegisterInconsistency_DifferentGenresForDisc(Disc disc, IEnumerable<Genre> genres);
+		void RegisterDifferentGenresForDisc(Disc disc, IEnumerable<Genre> genres);
 	}
 }

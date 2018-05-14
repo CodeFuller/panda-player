@@ -35,11 +35,11 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 
 			foreach (var disc in discs)
 			{
-				await CheckDiscImagesConsistency(disc, cancellationToken);
+				await CheckDiscImagesConsistency(disc);
 			}
 		}
 
-		private async Task CheckDiscImagesConsistency(Disc disc, CancellationToken cancellationToken)
+		private async Task CheckDiscImagesConsistency(Disc disc)
 		{
 			var discCoverImageFile = await musicLibrary.GetDiscCoverImage(disc);
 			if (discCoverImageFile == null)
@@ -61,22 +61,22 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 		{
 			if ((validationResults & ImageValidationResults.ImageIsTooSmall) != 0)
 			{
-				inconsistencyRegistrator.RegisterInconsistency_DiscCoverIsTooSmall(disc, imageInfo);
+				inconsistencyRegistrator.RegisterDiscCoverIsTooSmall(disc, imageInfo);
 			}
 
 			if ((validationResults & ImageValidationResults.ImageIsTooBig) != 0)
 			{
-				inconsistencyRegistrator.RegisterInconsistency_DiscCoverIsTooBig(disc, imageInfo);
+				inconsistencyRegistrator.RegisterDiscCoverIsTooBig(disc, imageInfo);
 			}
 
 			if ((validationResults & ImageValidationResults.FileSizeIsTooBig) != 0)
 			{
-				inconsistencyRegistrator.RegisterInconsistency_ImageFileIsTooBig(disc, imageInfo);
+				inconsistencyRegistrator.RegisterImageFileIsTooBig(disc, imageInfo);
 			}
 
 			if ((validationResults & ImageValidationResults.UnsupportedFormat) != 0)
 			{
-				inconsistencyRegistrator.RegisterInconsistency_ImageHasUnsupportedFormat(disc, imageInfo);
+				inconsistencyRegistrator.RegisterImageHasUnsupportedFormat(disc, imageInfo);
 			}
 		}
 	}

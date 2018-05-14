@@ -76,7 +76,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		{
 			// Arrange
 
-			var disc = new Disc { SongsUnordered = new Song[0] };
+			var disc = new Disc { SongsUnordered = Array.Empty<Song>() };
 
 			// Act
 
@@ -155,7 +155,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser
 		{
 			// Arrange
 
-			var disc = new Disc { SongsUnordered = new Song[0] };
+			var disc = new Disc { SongsUnordered = Array.Empty<Song>() };
 
 			// Act
 

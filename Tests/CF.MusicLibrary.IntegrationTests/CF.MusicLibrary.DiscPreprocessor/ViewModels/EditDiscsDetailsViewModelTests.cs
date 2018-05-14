@@ -93,7 +93,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 				}
 			};
 
-			var addedDisc = new AddedDiscInfo(new AddedSongInfo[] { })
+			var addedDisc = new AddedDiscInfo(Array.Empty<AddedSongInfo>())
 			{
 				Title = "Some Title",
 				DiscType = DsicType.ArtistDisc,
@@ -216,7 +216,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 				},
 			};
 
-			var addedDisc = new AddedDiscInfo(new AddedSongInfo[] { })
+			var addedDisc = new AddedDiscInfo(Array.Empty<AddedSongInfo>())
 			{
 				Year = 2000,
 				Title = "Some Disc",

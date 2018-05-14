@@ -268,7 +268,6 @@ namespace CF.MusicLibrary.LastFM
 			throw new LastFMApiCallFailedException(response);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Object is disposed by the caller.")]
 		private static HttpClient GetHttpClient()
 		{
 			var client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate }, true)
@@ -281,7 +280,6 @@ namespace CF.MusicLibrary.LastFM
 			return client;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Object is disposed by the caller.")]
 		private static HttpRequestMessage CreateGetHttpRequest(Uri relativeUri)
 		{
 			return new HttpRequestMessage
@@ -291,7 +289,6 @@ namespace CF.MusicLibrary.LastFM
 			};
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Object is disposed by the caller.")]
 		private HttpRequestMessage CreatePostHttpRequest(NameValueCollection requestParams, bool requiresAuthentication)
 		{
 			return new HttpRequestMessage
@@ -354,7 +351,8 @@ namespace CF.MusicLibrary.LastFM
 				select new KeyValuePair<string, string>(key, value);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "Lower case is an external requirement.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "Lower case is an external requirement")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Cryptography", "CA5351:DoNotUseBrokenCryptographicAlgorithms", Justification = "We are just clients of 3rd party API and use algorithm required by the server")]
 		private static string CalcMD5(string data)
 		{
 			using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())

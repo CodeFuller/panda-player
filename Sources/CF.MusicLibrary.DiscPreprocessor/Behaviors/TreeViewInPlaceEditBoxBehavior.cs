@@ -13,70 +13,70 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 		public static readonly DependencyProperty IsEditingProperty = DependencyProperty.RegisterAttached(
 		  "IsEditing", typeof(bool), typeof(TreeViewInPlaceEditBoxBehavior), new PropertyMetadata(OnIsEditingChanged));
 
-		public static bool GetIsEditing(DependencyObject obj)
+		public static bool GetIsEditing(DependencyObject item)
 		{
-			if (obj == null)
+			if (item == null)
 			{
-				throw new ArgumentNullException(nameof(obj));
+				throw new ArgumentNullException(nameof(item));
 			}
 
-			return (bool)obj.GetValue(IsEditingProperty);
+			return (bool)item.GetValue(IsEditingProperty);
 		}
 
-		public static void SetIsEditing(DependencyObject obj, bool value)
+		public static void SetIsEditing(DependencyObject item, bool value)
 		{
-			if (obj == null)
+			if (item == null)
 			{
-				throw new ArgumentNullException(nameof(obj));
+				throw new ArgumentNullException(nameof(item));
 			}
 
-			obj.SetValue(IsEditingProperty, value);
+			item.SetValue(IsEditingProperty, value);
 		}
 
 		public static readonly DependencyProperty IsEditConfirmedProperty = DependencyProperty.RegisterAttached(
 		  "IsEditConfirmed", typeof(bool), typeof(TreeViewInPlaceEditBoxBehavior), new PropertyMetadata(OnIsEditConfirmedChanged));
 
-		public static bool GetIsEditConfirmed(DependencyObject obj)
+		public static bool GetIsEditConfirmed(DependencyObject item)
 		{
-			if (obj == null)
+			if (item == null)
 			{
-				throw new ArgumentNullException(nameof(obj));
+				throw new ArgumentNullException(nameof(item));
 			}
 
-			return (bool)obj.GetValue(IsEditConfirmedProperty);
+			return (bool)item.GetValue(IsEditConfirmedProperty);
 		}
 
-		public static void SetIsEditConfirmed(DependencyObject obj, bool value)
+		public static void SetIsEditConfirmed(DependencyObject item, bool value)
 		{
-			if (obj == null)
+			if (item == null)
 			{
-				throw new ArgumentNullException(nameof(obj));
+				throw new ArgumentNullException(nameof(item));
 			}
 
-			obj.SetValue(IsEditConfirmedProperty, value);
+			item.SetValue(IsEditConfirmedProperty, value);
 		}
 
 		public static readonly DependencyProperty IsEditCanceledProperty = DependencyProperty.RegisterAttached(
 		  "IsEditCanceled", typeof(bool), typeof(TreeViewInPlaceEditBoxBehavior), new PropertyMetadata(OnIsEditCanceledChanged));
 
-		public static bool GetIsEditCanceled(DependencyObject obj)
+		public static bool GetIsEditCanceled(DependencyObject item)
 		{
-			if (obj == null)
+			if (item == null)
 			{
-				throw new ArgumentNullException(nameof(obj));
+				throw new ArgumentNullException(nameof(item));
 			}
 
-			return (bool)obj.GetValue(IsEditCanceledProperty);
+			return (bool)item.GetValue(IsEditCanceledProperty);
 		}
 
-		public static void SetIsEditCanceled(DependencyObject obj, bool value)
+		public static void SetIsEditCanceled(DependencyObject item, bool value)
 		{
-			if (obj == null)
+			if (item == null)
 			{
-				throw new ArgumentNullException(nameof(obj));
+				throw new ArgumentNullException(nameof(item));
 			}
 
-			obj.SetValue(IsEditCanceledProperty, value);
+			item.SetValue(IsEditCanceledProperty, value);
 		}
 
 		private static void FocusAndSelect(TextBox textBox)
@@ -85,9 +85,9 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 			textBox.SelectAll();
 		}
 
-		private static void OnIsEditingChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+		private static void OnIsEditingChanged(DependencyObject item, DependencyPropertyChangedEventArgs args)
 		{
-			var textBox = obj as TextBox;
+			var textBox = item as TextBox;
 			if (textBox == null)
 			{
 				throw new ArgumentException("obj is not a TextBox");
@@ -96,9 +96,9 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 			textBox.Dispatcher.BeginInvoke((Action)(() => FocusAndSelect(textBox)), DispatcherPriority.Loaded);
 		}
 
-		private static void OnIsEditConfirmedChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+		private static void OnIsEditConfirmedChanged(DependencyObject item, DependencyPropertyChangedEventArgs args)
 		{
-			var textBox = obj as TextBox;
+			var textBox = item as TextBox;
 			if (textBox == null)
 			{
 				throw new ArgumentException("obj is not a TextBox");
@@ -110,9 +110,9 @@ namespace CF.MusicLibrary.DiscPreprocessor.Behaviors
 			}
 		}
 
-		private static void OnIsEditCanceledChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+		private static void OnIsEditCanceledChanged(DependencyObject item, DependencyPropertyChangedEventArgs args)
 		{
-			var textBox = obj as TextBox;
+			var textBox = item as TextBox;
 			if (textBox == null)
 			{
 				throw new ArgumentException("obj is not a TextBox");

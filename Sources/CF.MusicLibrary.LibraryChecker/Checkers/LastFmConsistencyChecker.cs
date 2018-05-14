@@ -38,20 +38,20 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 
 				if (artistInfo.Artist == null)
 				{
-					inconsistencyRegistrator.RegisterInconsistency_ArtistNotFound(artist);
+					inconsistencyRegistrator.RegisterArtistNotFound(artist);
 					continue;
 				}
 
 				if (artistInfo.Artist.Name != artist.Name)
 				{
-					inconsistencyRegistrator.RegisterInconsistency_ArtistNameCorrected(artist.Name, artistInfo.Artist.Name);
+					inconsistencyRegistrator.RegisterArtistNameCorrected(artist.Name, artistInfo.Artist.Name);
 				}
 
 				if (artistInfo.Artist.Stats.UserPlayCount == 0 &&
 					library.Songs.Where(s => s.Artist?.Id == artist.Id)
 						.Any(s => s.LastPlaybackTime.HasValue && s.LastPlaybackTime >= LastFMConstants.ScrobbleStartTime))
 				{
-					inconsistencyRegistrator.RegisterInconsistency_NoListensForArtist(artist);
+					inconsistencyRegistrator.RegisterNoListensForArtist(artist);
 				}
 			}
 		}
@@ -79,12 +79,12 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 				var albumInfo = await lastFmApiClient.GetAlbumInfo(album, settings.LastFmUsername);
 				if (albumInfo.Album == null)
 				{
-					inconsistencyRegistrator.RegisterInconsistency_AlbumNotFound(disc);
+					inconsistencyRegistrator.RegisterAlbumNotFound(disc);
 				}
 				else if (albumInfo.Album.UserPlayCount == 0 &&
 					disc.Songs.Any(song => song.LastPlaybackTime.HasValue && song.LastPlaybackTime >= LastFMConstants.ScrobbleStartTime))
 				{
-					inconsistencyRegistrator.RegisterInconsistency_NoListensForAlbum(disc);
+					inconsistencyRegistrator.RegisterNoListensForAlbum(disc);
 				}
 			}
 		}
@@ -117,19 +117,19 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 				var trackInfo = await lastFmApiClient.GetTrackInfo(track, settings.LastFmUsername);
 				if (trackInfo.Track == null)
 				{
-					inconsistencyRegistrator.RegisterInconsistency_SongNotFound(song);
+					inconsistencyRegistrator.RegisterSongNotFound(song);
 					continue;
 				}
 
 				if (trackInfo.Track.Name != song.Title)
 				{
-					inconsistencyRegistrator.RegisterInconsistency_SongTitleCorrected(song, trackInfo.Track.Name);
+					inconsistencyRegistrator.RegisterSongTitleCorrected(song, trackInfo.Track.Name);
 				}
 
 				if (trackInfo.Track.UserPlayCount == 0 &&
 					(song.LastPlaybackTime.HasValue && song.LastPlaybackTime >= LastFMConstants.ScrobbleStartTime))
 				{
-					inconsistencyRegistrator.RegisterInconsistency_NoListensForSong(song);
+					inconsistencyRegistrator.RegisterNoListensForSong(song);
 				}
 			}
 		}

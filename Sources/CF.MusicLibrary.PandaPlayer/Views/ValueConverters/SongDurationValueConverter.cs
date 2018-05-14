@@ -5,7 +5,6 @@ using CF.Library.Core.Extensions;
 
 namespace CF.MusicLibrary.PandaPlayer.Views.ValueConverters
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Class is used from XAML")]
 	internal class SongDurationValueConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
