@@ -217,7 +217,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 			playlistDataRepositoryMock.Load().Returns(playlistData);
 
 			var target = new PersistentSongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(),
-Substitute.For<IViewNavigator>(), playlistDataRepositoryMock, Substitute.For<ILogger<PersistentSongPlaylistViewModel>>());
+				Substitute.For<IViewNavigator>(), playlistDataRepositoryMock, Substitute.For<ILogger<PersistentSongPlaylistViewModel>>());
 
 			// Act
 
