@@ -13,8 +13,8 @@ using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.Library;
-using CF.MusicLibrary.Local;
 using CF.MusicLibrary.PandaPlayer.Adviser;
+using CF.MusicLibrary.PandaPlayer.Adviser.Grouping;
 using CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
 using CF.MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
@@ -26,7 +26,6 @@ using CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Player;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Scrobbling;
 using CF.MusicLibrary.Tagger;
-using CF.MusicLibrary.Universal.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -42,6 +41,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			services.Configure<SqLiteConnectionSettings>(options => configuration.Bind("database", options));
 			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("fileSystemStorage", options));
 			services.Configure<LastFmClientSettings>(options => configuration.Bind("lastFmClient", options));
+			services.Configure<GroupingSettings>(options => configuration.Bind("adviser:groupings", options));
 			services.Configure<PandaPlayerSettings>(configuration.Bind);
 
 			var dataStoragePath = configuration["dataStoragePath"];
@@ -86,10 +86,10 @@ namespace CF.MusicLibrary.PandaPlayer
 			services.AddTransient<ILastFMApiClient, LastFMApiClient>();
 			services.AddTransient<ILibraryContentUpdater, LibraryContentUpdater>();
 			services.AddSingleton<IViewNavigator, ViewNavigator>();
-			services.AddTransient<IDiscGroupper, MyLibraryDiscGroupper>();
+			services.AddTransient<IDiscGroupper, LibraryDiscGroupper>();
 			services.AddTransient<IDiscGroupSorter, RankBasedDiscGroupSorter>();
 			services.AddTransient<IAdviseFactorsProvider, AdviseFactorsProvider>();
-			services.AddTransient<ILibraryStructurer, MyLibraryStructurer>();
+			services.AddTransient<ILibraryStructurer, LibraryStructurer>();
 			services.AddTransient<IWindowService, WpfWindowService>();
 			services.AddTransient<IAudioPlayer, AudioPlayer>();
 			services.AddTransient<IMediaPlayerFacade, MediaPlayerFacade>();
@@ -141,7 +141,9 @@ namespace CF.MusicLibrary.PandaPlayer
 		{
 			base.BootstrapConfiguration(configurationBuilder, commandLineArgs);
 
-			configurationBuilder.AddJsonFile("AppSettings.Dev.json", optional: true);
+			configurationBuilder
+				.AddJsonFile("AdviserSettings.json", optional: false)
+				.AddJsonFile("AppSettings.Dev.json", optional: true);
 		}
 
 		protected override void BootstrapLogging(ILoggerFactory loggerFactory, IConfiguration configuration)

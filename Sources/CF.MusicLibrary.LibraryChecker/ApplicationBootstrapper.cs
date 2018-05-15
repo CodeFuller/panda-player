@@ -11,7 +11,6 @@ using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.Library;
 using CF.MusicLibrary.LibraryChecker.Checkers;
 using CF.MusicLibrary.LibraryChecker.Registrators;
-using CF.MusicLibrary.Local;
 using CF.MusicLibrary.Tagger;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +32,7 @@ namespace CF.MusicLibrary.LibraryChecker
 			services.AddTransient<IMusicLibraryRepository, MusicLibraryRepositoryEF>();
 			services.AddTransient<IFileStorage, FileSystemStorage>();
 			services.AddTransient<IMusicLibraryStorage, FileSystemMusicStorage>();
-			services.AddTransient<ILibraryStructurer, MyLibraryStructurer>();
+			services.AddTransient<ILibraryStructurer, LibraryStructurer>();
 			services.AddTransient<IChecksumCalculator, Crc32Calculator>();
 			services.AddTransient<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
 			services.AddTransient<ISongTagger, SongTagger>();

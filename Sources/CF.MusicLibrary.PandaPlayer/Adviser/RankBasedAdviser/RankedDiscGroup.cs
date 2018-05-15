@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using CF.Library.Core.Extensions;
-using CF.MusicLibrary.Universal;
+using CF.MusicLibrary.PandaPlayer.Adviser.Grouping;
 
 namespace CF.MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser
 {
@@ -24,7 +24,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser
 
 		public DiscGroup BuildDiscGroup()
 		{
-			DiscGroup discGroup = new DiscGroup(parentDiscGroup.Id, parentDiscGroup.Title);
+			DiscGroup discGroup = new DiscGroup(parentDiscGroup.Id);
 			foreach (var rd in RankedDiscs.Select(rd => rd.Disc))
 			{
 				discGroup.Discs.Add(rd);

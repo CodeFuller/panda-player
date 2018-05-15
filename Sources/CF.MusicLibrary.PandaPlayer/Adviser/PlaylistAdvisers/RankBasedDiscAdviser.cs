@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CF.MusicLibrary.Core.Objects;
+using CF.MusicLibrary.PandaPlayer.Adviser.Grouping;
 using CF.MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser;
-using CF.MusicLibrary.Universal.Interfaces;
 
 namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 {

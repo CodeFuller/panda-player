@@ -1,0 +1,10 @@
+﻿{
+	"adviser": {
+		"groupings": [
+			{
+				"pattern": "^(.+)/([^/]+)$",
+				"groupId": "$1"
+			}
+		]
+	}
+}

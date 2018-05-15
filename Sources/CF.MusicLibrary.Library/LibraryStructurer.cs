@@ -5,9 +5,9 @@ using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects.Images;
 
-namespace CF.MusicLibrary.Local
+namespace CF.MusicLibrary.Library
 {
-	public class MyLibraryStructurer : ILibraryStructurer
+	public class LibraryStructurer : ILibraryStructurer
 	{
 		private const string DiscCoverImageFileName = "cover";
 

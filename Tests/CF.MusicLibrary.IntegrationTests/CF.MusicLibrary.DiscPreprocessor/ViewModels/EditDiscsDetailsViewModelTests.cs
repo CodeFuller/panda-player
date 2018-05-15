@@ -7,7 +7,7 @@ using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.DiscPreprocessor.AddingToLibrary;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels;
-using CF.MusicLibrary.Local;
+using CF.MusicLibrary.Library;
 using NSubstitute;
 using NUnit.Framework;
 using static System.FormattableString;
@@ -349,7 +349,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			};
 
 			var discLibrary = new DiscLibrary(() => Task.FromResult(new[] { existingDisc }.AsEnumerable()));
-			var target = new EditDiscsDetailsViewModel(discLibrary, new MyLibraryStructurer());
+			var target = new EditDiscsDetailsViewModel(discLibrary, new LibraryStructurer());
 
 			target.SetDiscs(discs).Wait();
 

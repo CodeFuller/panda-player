@@ -44,7 +44,6 @@
     <ProjectReference Include="..\CF.MusicLibrary.Dal\CF.MusicLibrary.Dal.csproj" />
     <ProjectReference Include="..\CF.MusicLibrary.LastFM\CF.MusicLibrary.LastFM.csproj" />
     <ProjectReference Include="..\CF.MusicLibrary.Library\CF.MusicLibrary.Library.csproj" />
-    <ProjectReference Include="..\CF.MusicLibrary.Local\CF.MusicLibrary.Local.csproj" />
     <ProjectReference Include="..\CF.MusicLibrary.Tagger\CF.MusicLibrary.Tagger.csproj" />
   </ItemGroup>
 

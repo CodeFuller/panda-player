@@ -2,17 +2,17 @@
 using CF.MusicLibrary.Core.Objects.Images;
 using NUnit.Framework;
 
-namespace CF.MusicLibrary.Local.Tests
+namespace CF.MusicLibrary.Library.Tests
 {
 	[TestFixture]
-	public class MyLibraryStructurerTests
+	public class LibraryStructurerTests
 	{
 		[Test]
 		public void ReplaceDiscPartInImageUri_ReturnsCorrectUri()
 		{
 			// Arrange
 
-			var target = new MyLibraryStructurer();
+			var target = new LibraryStructurer();
 
 			// Act
 
@@ -33,7 +33,7 @@ namespace CF.MusicLibrary.Local.Tests
 				Format = ImageFormatType.Jpeg,
 			};
 
-			var target = new MyLibraryStructurer();
+			var target = new LibraryStructurer();
 
 			// Act
 

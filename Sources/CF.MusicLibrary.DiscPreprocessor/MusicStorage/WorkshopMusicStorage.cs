@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using CF.Library.Core.Exceptions;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.Core;
-using CF.MusicLibrary.Local;
 using Microsoft.Extensions.Options;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
@@ -53,7 +52,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 				UriWithinStorage = uriParts.Uri,
 			};
 
-			if (MyLocalLibraryNames.IsArtistCategory(uriParts[0]) && uriParts.Count > 2)
+			if (IsArtistCategory(uriParts[0]) && uriParts.Count > 2)
 			{
 				discInfo.DiscType = DsicType.ArtistDisc;
 				discInfo.Artist = uriParts[uriParts.Count - 2];
@@ -166,6 +165,18 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 			{
 				files.Add(file);
 			}
+		}
+
+		private static bool IsArtistCategory(string category)
+		{
+			var artistCategories = new[]
+			{
+				"Belarussian",
+				"Foreign",
+				"Russian",
+			};
+
+			return artistCategories.Any(d => String.Equals(d, category, StringComparison.OrdinalIgnoreCase));
 		}
 	}
 }

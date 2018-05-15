@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.Library;
+using CF.MusicLibrary.PandaPlayer.Adviser.Grouping;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
@@ -125,6 +126,38 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 			Assert.AreEqual(@"Some API Key", settings.ApiKey);
 			Assert.AreEqual(@"Some Shared Secret", settings.SharedSecret);
 			Assert.AreEqual(@"Some Session Key", settings.SessionKey);
+		}
+
+		[Test]
+		public void RegisterDependencies_BindsGroupingSettingsCorrectly()
+		{
+			// Arrange
+
+			var settingValues = new Dictionary<string, string>
+			{
+				{ "dataStoragePath", @"c:\temp" },
+				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "adviser:groupings:0:pattern", "Pattern 1" },
+				{ "adviser:groupings:0:groupId", "GroupId 1" },
+				{ "adviser:groupings:1:pattern", "Pattern 2" },
+				{ "adviser:groupings:1:groupId", "GroupId 2" },
+			};
+			var target = new ApplicationBootstrapperHelper(settingValues);
+
+			// Act
+
+			target.Bootstrap(Array.Empty<string>());
+
+			// Assert
+
+			var options = target.ResolveDependency<IOptions<GroupingSettings>>();
+			var settings = options.Value;
+
+			Assert.AreEqual(2, settings.Count);
+			Assert.AreEqual("Pattern 1", settings[0].Pattern);
+			Assert.AreEqual("GroupId 1", settings[0].GroupId);
+			Assert.AreEqual("Pattern 2", settings[1].Pattern);
+			Assert.AreEqual("GroupId 2", settings[1].GroupId);
 		}
 
 		[Test]

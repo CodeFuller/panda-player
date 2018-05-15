@@ -13,7 +13,6 @@ using CF.MusicLibrary.DiscPreprocessor.ParsingSong;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels.Interfaces;
 using CF.MusicLibrary.Library;
-using CF.MusicLibrary.Local;
 using CF.MusicLibrary.Tagger;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,7 +48,7 @@ namespace CF.MusicLibrary.DiscPreprocessor
 			services.AddTransient<IDiscContentComparer, DiscContentComparer>();
 			services.AddTransient<ISongTagger, SongTagger>();
 			services.AddTransient<ISongMediaInfoProvider, SongMediaInfoProvider>();
-			services.AddTransient<ILibraryStructurer, MyLibraryStructurer>();
+			services.AddTransient<ILibraryStructurer, LibraryStructurer>();
 			services.AddTransient<IDiscImageValidator, DiscImageValidator>();
 			services.AddTransient<IImageFile, ImageFile>();
 			services.AddTransient<IObjectFactory<IImageFile>, ObjectFactory<IImageFile>>();
