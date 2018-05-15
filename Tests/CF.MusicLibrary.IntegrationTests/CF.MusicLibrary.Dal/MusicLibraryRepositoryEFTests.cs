@@ -2,8 +2,7 @@
 using System.IO;
 using System.Linq;
 using CF.MusicLibrary.Dal;
-using Microsoft.Extensions.Options;
-using NSubstitute;
+using CF.MusicLibrary.Tests;
 using NUnit.Framework;
 
 namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.Dal
@@ -22,9 +21,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.Dal
 				DataSource = Path.Combine(binPath, "MusicLibrary.db"),
 			};
 
-			var options = Substitute.For<IOptions<SqLiteConnectionSettings>>();
-			options.Value.Returns(settings);
-			var connectionFactory = new SqLiteConnectionFactory(options);
+			var connectionFactory = new SqLiteConnectionFactory(settings.StubOptions());
 			var target = new MusicLibraryRepositoryEF(connectionFactory);
 
 			// Act
