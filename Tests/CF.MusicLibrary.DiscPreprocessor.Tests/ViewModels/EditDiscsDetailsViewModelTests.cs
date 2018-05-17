@@ -33,7 +33,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 
 			var addedDiscInfo = new AddedDiscInfo(Array.Empty<AddedSongInfo>())
 			{
-				Title = "Some Disc",
+				DiscTitle = "Some Disc",
 				SourcePath = @"Workshop\Some Artist\2000 - Some Disc",
 				DiscType = DsicType.ArtistDisc,
 				Artist = "Some Artist",
@@ -69,7 +69,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 
 			var addedDiscInfo = new AddedDiscInfo(Array.Empty<AddedSongInfo>())
 			{
-				Title = "Some Disc",
+				DiscTitle = "Some Disc",
 				SourcePath = @"Workshop\Some Artist\2000 - Some Disc",
 				UriWithinStorage = new Uri("/Some Artist/2000 - Some Disc", UriKind.Relative),
 				DiscType = DsicType.ArtistDisc,

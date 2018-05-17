@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using CF.Library.Core.Exceptions;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.Core;
+using CF.MusicLibrary.Core.Interfaces;
 using Microsoft.Extensions.Options;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
@@ -22,12 +23,14 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 		private static readonly Regex SongWithTrackRegex = new Regex(@"^(\d{2}) - (.+)$", RegexOptions.Compiled);
 		private static readonly Regex SongWithArtistRegex = new Regex(@"^((.+) - (.+))$", RegexOptions.Compiled);
 
+		private readonly IDiscTitleToAlbumMapper discTitleToAlbumMapper;
 		private readonly IFileSystemFacade fileSystemFacade;
 
 		private readonly string workshopRootPath;
 
-		public WorkshopMusicStorage(IFileSystemFacade fileSystemFacade, IOptions<DiscPreprocessorSettings> options)
+		public WorkshopMusicStorage(IDiscTitleToAlbumMapper discTitleToAlbumMapper, IFileSystemFacade fileSystemFacade, IOptions<DiscPreprocessorSettings> options)
 		{
+			this.discTitleToAlbumMapper = discTitleToAlbumMapper ?? throw new ArgumentNullException(nameof(discTitleToAlbumMapper));
 			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
 			this.workshopRootPath = options?.Value?.WorkshopStoragePath ?? throw new ArgumentNullException(nameof(options));
 		}
@@ -47,7 +50,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 			AddedDiscInfo discInfo = new AddedDiscInfo(songs)
 			{
 				Year = year,
-				Title = title,
+				DiscTitle = title,
+				AlbumTitle = discTitleToAlbumMapper.GetAlbumTitleFromDiscTitle(title),
 				SourcePath = discPath,
 				UriWithinStorage = uriParts.Uri,
 			};

@@ -1,6 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using CF.Library.Core.Facades;
+using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using CF.MusicLibrary.Tests;
 using NSubstitute;
@@ -11,12 +11,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 	[TestFixture]
 	public class WorkshopMusicStorageTests
 	{
-		[Test]
-		public void Constructor_IfFileSystemFacadeArgumentIsNull_ThrowsArgumentIsNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new WorkshopMusicStorage(null, new DiscPreprocessorSettings().StubOptions()));
-		}
-
 		[Test]
 		public void DeleteSourceContent_DeletesContentFilesCorrectly()
 		{
@@ -30,7 +24,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			var settings = new DiscPreprocessorSettings { WorkshopStoragePath = "SomeStorage" };
-			var target = new WorkshopMusicStorage(fileSystemMock, settings.StubOptions());
+			var target = new WorkshopMusicStorage(Substitute.For<IDiscTitleToAlbumMapper>(), fileSystemMock, settings.StubOptions());
 
 			// Act
 
@@ -59,7 +53,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 
 			var settings = new DiscPreprocessorSettings { WorkshopStoragePath = "SomeStorage" };
 
-			var target = new WorkshopMusicStorage(fileSystemMock, settings.StubOptions());
+			var target = new WorkshopMusicStorage(Substitute.For<IDiscTitleToAlbumMapper>(), fileSystemMock, settings.StubOptions());
 
 			// Act
 
@@ -81,7 +75,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 
 			var settings = new DiscPreprocessorSettings { WorkshopStoragePath = "SomeStorage" };
 
-			var target = new WorkshopMusicStorage(fileSystemMock, settings.StubOptions());
+			var target = new WorkshopMusicStorage(Substitute.For<IDiscTitleToAlbumMapper>(), fileSystemMock, settings.StubOptions());
 
 			// Act
 
@@ -105,7 +99,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 
 			var settings = new DiscPreprocessorSettings { WorkshopStoragePath = "SomeStorage" };
 
-			var target = new WorkshopMusicStorage(fileSystemMock, settings.StubOptions());
+			var target = new WorkshopMusicStorage(Substitute.For<IDiscTitleToAlbumMapper>(), fileSystemMock, settings.StubOptions());
 
 			// Act
 

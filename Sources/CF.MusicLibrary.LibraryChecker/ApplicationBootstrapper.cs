@@ -4,6 +4,7 @@ using CF.Library.Configuration;
 using CF.Library.Core.Facades;
 using CF.Library.Logging;
 using CF.MusicLibrary.Common.Images;
+using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Dal;
@@ -26,6 +27,7 @@ namespace CF.MusicLibrary.LibraryChecker
 			services.Configure<SqLiteConnectionSettings>(options => configuration.Bind("database", options));
 			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("fileSystemStorage", options));
 			services.Configure<LastFmClientSettings>(options => configuration.Bind("lastFmClient", options));
+			services.Configure<DiscToAlbumMappingSettings>(options => configuration.Bind("discToAlbumMappings", options));
 
 			services.AddTransient<IApplicationLogic, ApplicationLogic>();
 			services.AddTransient<IConfiguredDbConnectionFactory, SqLiteConnectionFactory>();
@@ -48,6 +50,7 @@ namespace CF.MusicLibrary.LibraryChecker
 			services.AddTransient<ITagDataConsistencyChecker, TagDataConsistencyChecker>();
 			services.AddTransient<ILastFMConsistencyChecker, LastFMConsistencyChecker>();
 			services.AddTransient<IDiscImagesConsistencyChecker, DiscImagesConsistencyChecker>();
+			services.AddSingleton<IDiscTitleToAlbumMapper, DiscTitleToAlbumMapper>();
 
 			services.AddTransient<ILibraryInconsistencyFilter, LibraryInconsistencyFilter>();
 			services.AddTransient<InconsistencyRegistratorToLog>();
@@ -61,6 +64,7 @@ namespace CF.MusicLibrary.LibraryChecker
 		{
 			// We do not load configuration from command line, so that it does not conflict with utility commands.
 			configurationBuilder.LoadSettings("AppSettings.json", Array.Empty<string>())
+				.AddJsonFile("DiscToAlbumMappings.json", optional: false)
 				.AddJsonFile("AppSettings.Dev.json", optional: true);
 		}
 

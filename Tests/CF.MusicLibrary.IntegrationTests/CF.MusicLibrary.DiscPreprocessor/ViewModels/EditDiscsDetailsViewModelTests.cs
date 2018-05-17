@@ -27,9 +27,10 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			var addedDisc = new AddedDiscInfo(Array.Empty<AddedSongInfo>())
 			{
 				Year = 2000,
-				Title = "Some Disc (CD 1)",
-				SourcePath = Invariant($@"{TestWorkshopMusicStorage}\Some Artist\2000 - Some Disc (CD 1)"),
-				UriWithinStorage = new Uri("/Foreign/Some Artist/2000 - Some Disc (CD 1)", UriKind.Relative),
+				DiscTitle = "Some Album (CD 1)",
+				AlbumTitle = "Some Album",
+				SourcePath = Invariant($@"{TestWorkshopMusicStorage}\Some Artist\2000 - Some Album (CD 1)"),
+				UriWithinStorage = new Uri("/Foreign/Some Artist/2000 - Some Album (CD 1)", UriKind.Relative),
 				DiscType = DsicType.ArtistDisc,
 				Artist = "Some Artist",
 			};
@@ -45,11 +46,11 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 
 			var discItem = target.Discs.Single() as ArtistDiscViewItem;
 			Assert.IsNotNull(discItem);
-			Assert.AreEqual(new Uri("/Foreign/Some Artist/2000 - Some Disc (CD 1)", UriKind.Relative), discItem.DestinationUri);
-			Assert.AreEqual(Invariant($@"{TestWorkshopMusicStorage}\Some Artist\2000 - Some Disc (CD 1)"), discItem.SourcePath);
+			Assert.AreEqual(new Uri("/Foreign/Some Artist/2000 - Some Album (CD 1)", UriKind.Relative), discItem.DestinationUri);
+			Assert.AreEqual(Invariant($@"{TestWorkshopMusicStorage}\Some Artist\2000 - Some Album (CD 1)"), discItem.SourcePath);
 			Assert.AreEqual("Some Artist", discItem.Artist.Name);
-			Assert.AreEqual("Some Disc (CD 1)", discItem.DiscTitle);
-			Assert.AreEqual("Some Disc", discItem.AlbumTitle);
+			Assert.AreEqual("Some Album (CD 1)", discItem.DiscTitle);
+			Assert.AreEqual("Some Album", discItem.AlbumTitle);
 			Assert.AreEqual(2000, discItem.Year);
 			Assert.IsNull(discItem.Genre);
 		}
@@ -95,7 +96,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 
 			var addedDisc = new AddedDiscInfo(Array.Empty<AddedSongInfo>())
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 				DiscType = DsicType.ArtistDisc,
 				Artist = "Some Artist",
 				SourcePath = "DiscSourcePath",
@@ -128,7 +129,8 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 
 			var addedDisc = new AddedDiscInfo(addedSongs)
 			{
-				Title = "Some Movie (CD 1)",
+				DiscTitle = "Some Movie (CD 1)",
+				AlbumTitle = "Some Movie",
 				SourcePath = Invariant($@"{TestWorkshopMusicStorage}\Soundtracks\Some Movie (CD 1)"),
 				UriWithinStorage = new Uri("/Soundtracks/Some Movie (CD 1)", UriKind.Relative),
 				DiscType = DsicType.CompilationDiscWithArtistInfo,
@@ -167,7 +169,8 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 
 			var addedDisc = new AddedDiscInfo(addedSongs)
 			{
-				Title = "Some Movie (CD 1)",
+				DiscTitle = "Some Movie (CD 1)",
+				AlbumTitle = "Some Movie",
 				SourcePath = Invariant($@"{TestWorkshopMusicStorage}\Soundtracks\Some Movie (CD 1)"),
 				UriWithinStorage = new Uri("/Soundtracks/Some Movie (CD 1)", UriKind.Relative),
 				DiscType = DsicType.CompilationDiscWithoutArtistInfo,
@@ -219,7 +222,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 			var addedDisc = new AddedDiscInfo(Array.Empty<AddedSongInfo>())
 			{
 				Year = 2000,
-				Title = "Some Disc",
+				DiscTitle = "Some Disc",
 				SourcePath = Invariant($@"{TestWorkshopMusicStorage}\Some Artist\2000 - Some Disc"),
 				UriWithinStorage = new Uri("/Foreign/Some Artist/2000 - Some Disc", UriKind.Relative),
 				DiscType = DsicType.ArtistDisc,
@@ -282,7 +285,8 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 				})
 				{
 					Year = 2000,
-					Title = "Wishmaster (CD 1)",
+					DiscTitle = "Wishmaster (CD 1)",
+					AlbumTitle = "Wishmaster",
 					UriWithinStorage = new Uri("/Foreign/Nightwish/2000 - Wishmaster (CD 1)", UriKind.Relative),
 					DiscType = DsicType.ArtistDisc,
 					Artist = "Nightwish",
@@ -299,7 +303,8 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 					}
 				})
 				{
-					Title = "Gladiator (CD 1)",
+					DiscTitle = "Gladiator (CD 1)",
+					AlbumTitle = "Gladiator",
 					UriWithinStorage = new Uri("/Soundtracks/Gladiator (CD 1)", UriKind.Relative),
 					DiscType = DsicType.CompilationDiscWithoutArtistInfo,
 					SourcePath = "DiscSourcePath2",
@@ -323,7 +328,8 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 					}
 				})
 				{
-					Title = "The Matrix (CD 1)",
+					DiscTitle = "The Matrix (CD 1)",
+					AlbumTitle = "The Matrix",
 					UriWithinStorage = new Uri("/Soundtracks/The Matrix (CD 1)", UriKind.Relative),
 					DiscType = DsicType.CompilationDiscWithArtistInfo,
 					SourcePath = "DiscSourcePath3",
@@ -340,7 +346,8 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 				})
 				{
 					Year = 1997,
-					Title = "Proud Like A God (CD 1)",
+					DiscTitle = "Proud Like A God (CD 1)",
+					AlbumTitle = "Proud Like A God",
 					UriWithinStorage = new Uri("/Foreign/Guano Apes/1997 - Proud Like A God (CD 1)", UriKind.Relative),
 					DiscType = DsicType.ArtistDisc,
 					Artist = "Guano Apes",

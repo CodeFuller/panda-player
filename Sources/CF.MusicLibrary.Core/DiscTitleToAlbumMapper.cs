@@ -1,58 +1,61 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using CF.MusicLibrary.Core.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace CF.MusicLibrary.Core
 {
-	public static class DiscTitleToAlbumMapper
+	public class DiscTitleToAlbumMapper : IDiscTitleToAlbumMapper
 	{
-		private static readonly Regex CDRegex = new Regex(@"^(.+) \(CD ?\d+\)$", RegexOptions.Compiled);
-		private static readonly Regex SingleRegex = new Regex(@"^(.+) \((?:(?:Single)|(?:EP))\)$", RegexOptions.Compiled);
-		private static readonly Regex DemoRegex = new Regex(@"^(.+) \(Demo\)$", RegexOptions.Compiled);
-		private static readonly Regex LiveRegex = new Regex(@"^(.+) \(Live\)$", RegexOptions.Compiled);
-		private static readonly Regex BonusRegex = new Regex(@"^(.+) \(Bonus(?: CD)?\)$", RegexOptions.Compiled);
-		private static readonly Regex CompilationRegex = new Regex(@"^(.+) \(Compilation\)$", RegexOptions.Compiled);
-		private static readonly Regex BSidesRegex = new Regex(@"^(.+) \(B-Sides\)$", RegexOptions.Compiled);
-		private static readonly Regex RemixesRegex = new Regex(@"^(.+) \(Remixes\)$", RegexOptions.Compiled);
-		private static readonly Regex RussianCompilationRegex = new Regex(@"^(.+) \(Сборник\)$", RegexOptions.Compiled);
-		private static readonly Regex TributeRegex = new Regex(@"^(.+) \(Трибьют\)$", RegexOptions.Compiled);
-		private static readonly Regex SoundtrackRegex = new Regex(@"^(.+) \(Soundtrack\)$", RegexOptions.Compiled);
+		private readonly List<Regex> discToAlbumPatterns = new List<Regex>();
+		private readonly List<Regex> emptyAlbumTitlePatterns = new List<Regex>();
 
-		public static string GetAlbumTitleFromDiscTitle(string discTitle)
+		public DiscTitleToAlbumMapper(IOptions<DiscToAlbumMappingSettings> options)
+		{
+			var settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
+			foreach (var pattern in settings.AlbumTitlePatterns)
+			{
+				discToAlbumPatterns.Add(new Regex(pattern, RegexOptions.Compiled));
+			}
+
+			foreach (var pattern in settings.EmptyAlbumTitlePatterns)
+			{
+				emptyAlbumTitlePatterns.Add(new Regex(pattern, RegexOptions.Compiled));
+			}
+		}
+
+		public string GetAlbumTitleFromDiscTitle(string discTitle)
 		{
 			if (discTitle == null)
 			{
 				return null;
 			}
 
-			if (discTitle == "Rarities")
+			var albumTitle = discTitle;
+			foreach (var pattern in discToAlbumPatterns)
 			{
-				return null;
+				var match = pattern.Match(albumTitle);
+				if (match.Success)
+				{
+					albumTitle = match.Groups[1].Value;
+				}
 			}
 
-			var albumTitle = discTitle;
-			albumTitle = ProcessTitleRegex(albumTitle, CDRegex);
-			albumTitle = ProcessTitleRegex(albumTitle, SingleRegex);
-			albumTitle = ProcessTitleRegex(albumTitle, DemoRegex);
-			albumTitle = ProcessTitleRegex(albumTitle, LiveRegex);
-			albumTitle = ProcessTitleRegex(albumTitle, BonusRegex);
-			albumTitle = ProcessTitleRegex(albumTitle, CompilationRegex);
-			albumTitle = ProcessTitleRegex(albumTitle, BSidesRegex);
-			albumTitle = ProcessTitleRegex(albumTitle, RemixesRegex);
-			albumTitle = ProcessTitleRegex(albumTitle, RussianCompilationRegex);
-			albumTitle = ProcessTitleRegex(albumTitle, TributeRegex);
-			albumTitle = ProcessTitleRegex(albumTitle, SoundtrackRegex);
+			foreach (var pattern in emptyAlbumTitlePatterns)
+			{
+				if (pattern.IsMatch(albumTitle))
+				{
+					return null;
+				}
+			}
 
 			return albumTitle;
 		}
 
-		public static bool AlbumTitleIsSuspicious(string albumTitle)
+		public bool AlbumTitleIsSuspicious(string albumTitle)
 		{
-			return GetAlbumTitleFromDiscTitle(albumTitle) != albumTitle;
-		}
-
-		private static string ProcessTitleRegex(string title, Regex regex)
-		{
-			var match = regex.Match(title);
-			return match.Success ? match.Groups[1].Value : title;
+			return !String.Equals(GetAlbumTitleFromDiscTitle(albumTitle), albumTitle, StringComparison.OrdinalIgnoreCase);
 		}
 	}
 }

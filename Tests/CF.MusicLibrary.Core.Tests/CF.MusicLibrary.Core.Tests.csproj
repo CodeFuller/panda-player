@@ -13,6 +13,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\OptionsStubExtensions.cs" Link="OptionsStubExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.8.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />

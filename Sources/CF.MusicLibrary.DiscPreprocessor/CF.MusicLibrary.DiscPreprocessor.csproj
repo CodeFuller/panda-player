@@ -63,6 +63,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="..\DiscToAlbumMappings.json" Link="DiscToAlbumMappings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="AppSettings.Dev.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

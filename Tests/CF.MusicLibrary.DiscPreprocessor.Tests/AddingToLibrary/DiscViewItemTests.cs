@@ -21,7 +21,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 				Disc = new Disc
 				{
 					Uri = disc.UriWithinStorage,
-					Title = disc.Title,
+					Title = disc.DiscTitle,
 				};
 			}
 
@@ -100,7 +100,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 			};
 
 			var genres = new[]
@@ -189,7 +189,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = "Some Disc Title",
+				DiscTitle = "Some Disc Title",
 			};
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());

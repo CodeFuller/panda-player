@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
@@ -17,13 +16,15 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 	{
 		private readonly IMusicLibrary musicLibrary;
 		private readonly ILibraryInconsistencyRegistrator inconsistencyRegistrator;
+		private readonly IDiscTitleToAlbumMapper discTitleToAlbumMapper;
 		private readonly ILogger<TagDataConsistencyChecker> logger;
 
 		public TagDataConsistencyChecker(IMusicLibrary musicLibrary, ILibraryInconsistencyRegistrator inconsistencyRegistrator,
-			ILogger<TagDataConsistencyChecker> logger)
+			IDiscTitleToAlbumMapper discTitleToAlbumMapper, ILogger<TagDataConsistencyChecker> logger)
 		{
 			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
 			this.inconsistencyRegistrator = inconsistencyRegistrator ?? throw new ArgumentNullException(nameof(inconsistencyRegistrator));
+			this.discTitleToAlbumMapper = discTitleToAlbumMapper ?? throw new ArgumentNullException(nameof(discTitleToAlbumMapper));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
@@ -45,7 +46,7 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 					inconsistencyRegistrator.RegisterBadTagData(Current($"Album mismatch for {song.Uri + ":", -100} '{tagData.Album}' != '{song.Disc.AlbumTitle}'"));
 				}
 
-				if (DiscTitleToAlbumMapper.AlbumTitleIsSuspicious(tagData.Album))
+				if (discTitleToAlbumMapper.AlbumTitleIsSuspicious(tagData.Album))
 				{
 					inconsistencyRegistrator.RegisterBadTagData(Current($"Album title looks suspicious for {song.Uri + ":", -100}: '{tagData.Album}'"));
 				}

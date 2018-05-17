@@ -41,7 +41,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 			};
 
 			// Act
@@ -62,7 +62,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = discTitle,
+				DiscTitle = discTitle,
 			};
 
 			// Act & Assert
@@ -70,15 +70,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			Assert.Throws<InvalidOperationException>(() => new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>()));
 		}
 
-		[TestCase("Broken Crown Halo (CD 1)", "Broken Crown Halo")]
-		[TestCase("Broken Crown Halo", "Broken Crown Halo")]
-		public void Constructor_InitializesAlbumTitleCorrectly(string discTitle, string expectedAlbumTitle)
+		[Test]
+		public void Constructor_InitializesAlbumTitleCorrectly()
 		{
 			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = discTitle,
+				DiscTitle = "Some Disc",
+				AlbumTitle = "Some Album",
 			};
 
 			// Act
@@ -87,17 +87,17 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			// Assert
 
-			Assert.AreEqual(expectedAlbumTitle, target.AlbumTitle);
+			Assert.AreEqual("Some Album", target.AlbumTitle);
 		}
 
 		[Test]
-		public void Constructor_InitializesDiscPropertiesCorrectly()
+		public void Constructor_InitializesDiscUriCorrectly()
 		{
 			// Arrange
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 				UriWithinStorage = new Uri("/SomeDiscUri", UriKind.Relative),
 			};
 
@@ -107,8 +107,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			// Assert
 
-			Assert.AreEqual("Some Title", target.Disc.Title);
-			Assert.AreEqual("Some Title", target.Disc.AlbumTitle);
 			Assert.AreEqual(new Uri("/SomeDiscUri", UriKind.Relative), target.Disc.Uri);
 		}
 
@@ -119,7 +117,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 			};
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
@@ -141,7 +139,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 			};
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
@@ -158,13 +156,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Title",
+				AlbumTitle = "Some Title",
 			};
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
-
-			// Sanity check
-			Assert.AreEqual(target.DiscTitle, target.AlbumTitle);
 
 			// Act & Assert
 
@@ -178,14 +174,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Disc",
+				AlbumTitle = "Some Album",
 			};
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
-			target.AlbumTitle = "Album Title";
-
-			// Sanity check
-			Assert.AreNotEqual(target.DiscTitle, target.AlbumTitle);
 
 			// Act & Assert
 
@@ -199,7 +192,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 			};
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
@@ -216,7 +209,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 			};
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
@@ -235,7 +228,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 			};
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
@@ -254,7 +247,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 			};
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), new[] { genre });
@@ -272,7 +265,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 			};
 
 			var target = new ConcreteDiscViewItem(discInfo, Enumerable.Empty<Artist>(), new[] { new Genre() });
@@ -289,7 +282,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 				UriWithinStorage = new Uri("/SomeDiscUri", UriKind.Relative),
 			};
 
@@ -321,7 +314,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(new[] { addedSongInfo })
 			{
-				Title = "Disc Title (CD 1)",
+				DiscTitle = "Album Title (CD 1)",
+				AlbumTitle = "Album Title",
 				UriWithinStorage = new Uri("/Some/Disc/Uri", UriKind.Relative),
 			};
 
@@ -340,8 +334,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var songInfo = songs.Single();
 			var song = songInfo.Song;
 			var songDisc = song.Disc;
-			Assert.AreEqual("Disc Title (CD 1)", songDisc.Title);
-			Assert.AreEqual("Disc Title", songDisc.AlbumTitle);
+			Assert.AreEqual("Album Title (CD 1)", songDisc.Title);
+			Assert.AreEqual("Album Title", songDisc.AlbumTitle);
 			Assert.AreEqual(new Uri("/Some/Disc/Uri", UriKind.Relative), songDisc.Uri);
 			Assert.AreEqual(1, song.TrackNumber);
 			Assert.AreEqual(2017, song.Year);

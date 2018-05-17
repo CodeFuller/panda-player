@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 
@@ -40,15 +39,15 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 		protected NewDiscViewItem(AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
 			: base(disc, availableArtists, availableGenres)
 		{
-			if (String.IsNullOrWhiteSpace(disc.Title))
+			if (String.IsNullOrWhiteSpace(disc.DiscTitle))
 			{
 				throw new InvalidOperationException("Disc title could not be empty");
 			}
 
 			Disc = new Disc
 			{
-				Title = disc.Title,
-				AlbumTitle = DiscTitleToAlbumMapper.GetAlbumTitleFromDiscTitle(disc.Title),
+				Title = disc.DiscTitle,
+				AlbumTitle = disc.AlbumTitle,
 				Uri = disc.UriWithinStorage,
 			};
 		}

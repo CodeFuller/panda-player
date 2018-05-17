@@ -1,0 +1,17 @@
+{
+	"discToAlbumMappings": {
+		"albumTitlePatterns": [
+			"^(.+) \\(CD ?\\d+\\)$",
+			"^(.+) \\((?:(?:Single)|(?:EP))\\)$",
+			"^(.+) \\(Demo\\)$",
+			"^(.+) \\(Live\\)$",
+			"^(.+) \\(Bonus(?: CD)?\\)$",
+			"^(.+) \\(Compilation\\)$",
+			"^(.+) \\(B-Sides\\)$",
+			"^(.+) \\(Soundtrack\\)$"
+		],
+
+		"emptyAlbumTitlePatterns": [
+		]
+	}
+}

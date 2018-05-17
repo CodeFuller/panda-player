@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CF.MusicLibrary.Core;
+using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.LibraryChecker.Registrators;
 using Microsoft.Extensions.Logging;
@@ -13,11 +13,13 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 	public class DiscConsistencyChecker : IDiscConsistencyChecker
 	{
 		private readonly ILibraryInconsistencyRegistrator inconsistencyRegistrator;
+		private readonly IDiscTitleToAlbumMapper discTitleToAlbumMapper;
 		private readonly ILogger<DiscConsistencyChecker> logger;
 
-		public DiscConsistencyChecker(ILibraryInconsistencyRegistrator inconsistencyRegistrator, ILogger<DiscConsistencyChecker> logger)
+		public DiscConsistencyChecker(ILibraryInconsistencyRegistrator inconsistencyRegistrator, IDiscTitleToAlbumMapper discTitleToAlbumMapper, ILogger<DiscConsistencyChecker> logger)
 		{
 			this.inconsistencyRegistrator = inconsistencyRegistrator ?? throw new ArgumentNullException(nameof(inconsistencyRegistrator));
+			this.discTitleToAlbumMapper = discTitleToAlbumMapper ?? throw new ArgumentNullException(nameof(discTitleToAlbumMapper));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
@@ -28,7 +30,7 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 			foreach (var disc in discs)
 			{
 				// Checking album title
-				if (DiscTitleToAlbumMapper.AlbumTitleIsSuspicious(disc.AlbumTitle))
+				if (discTitleToAlbumMapper.AlbumTitleIsSuspicious(disc.AlbumTitle))
 				{
 					inconsistencyRegistrator.RegisterSuspiciousAlbumTitle(disc);
 				}

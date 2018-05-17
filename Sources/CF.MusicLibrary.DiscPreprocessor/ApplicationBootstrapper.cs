@@ -2,6 +2,7 @@
 using CF.Library.Core.Facades;
 using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.Common.Images;
+using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
@@ -25,6 +26,7 @@ namespace CF.MusicLibrary.DiscPreprocessor
 		{
 			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("fileSystemStorage", options));
 			services.Configure<DiscPreprocessorSettings>(configuration.Bind);
+			services.Configure<DiscToAlbumMappingSettings>(options => configuration.Bind("discToAlbumMappings", options));
 
 			services.AddTransient<IConfiguredDbConnectionFactory, SqLiteConnectionFactory>();
 			services.AddTransient<IMusicLibraryRepository, MusicLibraryRepositoryEF>();
@@ -56,6 +58,7 @@ namespace CF.MusicLibrary.DiscPreprocessor
 			services.AddTransient<ISourceFileTypeResolver, SourceFileTypeResolver>();
 			services.AddTransient<IImageFacade, ImageFacade>();
 			services.AddTransient<IImageInfoProvider, ImageInfoProvider>();
+			services.AddSingleton<IDiscTitleToAlbumMapper, DiscTitleToAlbumMapper>();
 
 			services.AddTransient<IEditSourceContentViewModel, EditSourceContentViewModel>();
 			services.AddTransient<IEditDiscsDetailsViewModel, EditDiscsDetailsViewModel>();
@@ -69,7 +72,8 @@ namespace CF.MusicLibrary.DiscPreprocessor
 		{
 			base.BootstrapConfiguration(configurationBuilder, commandLineArgs);
 
-			configurationBuilder.AddJsonFile("AppSettings.Dev.json", optional: true);
+			configurationBuilder.AddJsonFile("AppSettings.Dev.json", optional: true)
+				.AddJsonFile("DiscToAlbumMappings.json", optional: false);
 		}
 	}
 }

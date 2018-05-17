@@ -36,7 +36,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(songs)
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 				DiscType = DsicType.ArtistDisc,
 				Artist = "Nightwish",
 			};
@@ -79,7 +79,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(songs)
 			{
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 				DiscType = DsicType.ArtistDisc,
 				Artist = "AC/DC",
 			};
@@ -115,7 +115,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				DiscType = DsicType.ArtistDisc,
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 				Artist = "Some Artist 2",
 			};
 
@@ -136,7 +136,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				DiscType = DsicType.ArtistDisc,
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 				Artist = "Some Artist",
 			};
 
@@ -153,7 +153,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				DiscType = DsicType.ArtistDisc,
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 				Artist = null,
 			};
 
@@ -172,7 +172,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				DiscType = DsicType.ArtistDisc,
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 				Artist = "Some Artist",
 			};
 
@@ -191,7 +191,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				DiscType = DsicType.ArtistDisc,
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 				Artist = "Some Artist",
 			};
 
@@ -210,7 +210,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				DiscType = DsicType.ArtistDisc,
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 				Artist = "Some Artist",
 			};
 
@@ -229,7 +229,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				DiscType = DsicType.ArtistDisc,
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 				Artist = "Some Artist",
 			};
 
@@ -248,7 +248,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				DiscType = DsicType.ArtistDisc,
-				Title = "Some Title",
+				DiscTitle = "Some Title",
 				Artist = "Some Artist",
 			};
 

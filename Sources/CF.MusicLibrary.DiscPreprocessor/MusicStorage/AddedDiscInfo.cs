@@ -8,7 +8,9 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 	{
 		public short? Year { get; set; }
 
-		public string Title { get; set; }
+		public string DiscTitle { get; set; }
+
+		public string AlbumTitle { get; set; }
 
 		public DsicType DiscType { get; set; }
 
@@ -32,7 +34,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 			{
 				if (!HasArtist)
 				{
-					throw new InvalidOperationException("Atist property is accessible only for artist discs");
+					throw new InvalidOperationException("Artist property is accessible only for artist discs");
 				}
 
 				return artist;
@@ -42,7 +44,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.MusicStorage
 			{
 				if (!HasArtist)
 				{
-					throw new InvalidOperationException("Atist property is accessible only for artist discs");
+					throw new InvalidOperationException("Artist property is accessible only for artist discs");
 				}
 
 				artist = value;

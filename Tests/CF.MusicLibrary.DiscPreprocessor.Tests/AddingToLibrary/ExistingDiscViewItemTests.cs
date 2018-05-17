@@ -61,7 +61,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				DiscType = DsicType.ArtistDisc,
-				Title = "New Title",
+				DiscTitle = "New Title",
 			};
 
 			var target = new ExistingDiscViewItem(existingDisc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
@@ -84,7 +84,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				DiscType = DsicType.ArtistDisc,
-				Title = "New Title",
+				DiscTitle = "New Title",
 			};
 
 			var target = new ExistingDiscViewItem(existingDisc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
@@ -107,7 +107,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 			var discInfo = new AddedDiscInfo(Enumerable.Empty<AddedSongInfo>())
 			{
 				DiscType = DsicType.ArtistDisc,
-				Title = "New Title",
+				DiscTitle = "New Title",
 			};
 
 			var target = new ExistingDiscViewItem(existingDisc, discInfo, Enumerable.Empty<Artist>(), Enumerable.Empty<Genre>());
