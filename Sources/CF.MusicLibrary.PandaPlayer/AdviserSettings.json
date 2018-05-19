@@ -5,6 +5,13 @@
 				"pattern": "^(.+)/([^/]+)$",
 				"groupId": "$1"
 			}
-		]
+		],
+
+		"favouriteArtistsAdviser": {
+			"playbacksBetweenFavouriteArtistDiscs": 7,
+
+			"favouriteArtists": [
+			]
+		}
 	}
 }

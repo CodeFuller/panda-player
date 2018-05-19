@@ -29,6 +29,7 @@ using CF.MusicLibrary.Tagger;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace CF.MusicLibrary.PandaPlayer
 {
@@ -41,6 +42,8 @@ namespace CF.MusicLibrary.PandaPlayer
 			services.Configure<SqLiteConnectionSettings>(options => configuration.Bind("database", options));
 			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("fileSystemStorage", options));
 			services.Configure<LastFmClientSettings>(options => configuration.Bind("lastFmClient", options));
+			services.Configure<AdviserSettings>(options => configuration.Bind("adviser", options));
+			services.Configure<FavouriteArtistsAdviserSettings>(options => configuration.Bind("adviser:favouriteArtistsAdviser", options));
 			services.Configure<GroupingSettings>(options => configuration.Bind("adviser:groupings", options));
 			services.Configure<PandaPlayerSettings>(configuration.Bind);
 
@@ -110,13 +113,17 @@ namespace CF.MusicLibrary.PandaPlayer
 
 			services.AddTransient<RankBasedDiscAdviser>();
 			services.AddTransient<HighlyRatedSongsAdviser>();
-			services.AddTransient<FavouriteArtistDiscsAdviser>(sp => new FavouriteArtistDiscsAdviser(sp.GetRequiredService<RankBasedDiscAdviser>()));
+			services.AddTransient<FavouriteArtistDiscsAdviser>(sp => new FavouriteArtistDiscsAdviser(
+				sp.GetRequiredService<RankBasedDiscAdviser>(),
+				sp.GetRequiredService<ILogger<FavouriteArtistDiscsAdviser>>(),
+				sp.GetRequiredService<IOptions<FavouriteArtistsAdviserSettings>>()));
 
 			services.AddTransient<ICompositePlaylistAdviser, CompositePlaylistAdviser>(sp => new CompositePlaylistAdviser(
 				usualDiscsAdviser: sp.GetRequiredService<RankBasedDiscAdviser>(),
 				highlyRatedSongsAdviser: sp.GetRequiredService<HighlyRatedSongsAdviser>(),
 				favouriteArtistDiscsAdviser: sp.GetRequiredService<FavouriteArtistDiscsAdviser>(),
-				memoRepository: sp.GetRequiredService<IGenericDataRepository<PlaylistAdviserMemo>>()));
+				memoRepository: sp.GetRequiredService<IGenericDataRepository<PlaylistAdviserMemo>>(),
+				options: sp.GetRequiredService<IOptions<AdviserSettings>>()));
 
 			services.AddTransient<IGenericDataRepository<PlaylistData>, JsonFileGenericRepository<PlaylistData>>(
 				sp => new JsonFileGenericRepository<PlaylistData>(

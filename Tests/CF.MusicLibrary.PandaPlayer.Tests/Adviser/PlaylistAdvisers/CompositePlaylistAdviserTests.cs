@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.Adviser;
 using CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
+using CF.MusicLibrary.Tests;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -11,34 +11,6 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 	[TestFixture]
 	public class CompositePlaylistAdviserTests
 	{
-		[Test]
-		public void Constructor_IfUsualDiscsAdviserArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new CompositePlaylistAdviser(null, Substitute.For<IPlaylistAdviser>(),
-				Substitute.For<IPlaylistAdviser>(), Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>()));
-		}
-
-		[Test]
-		public void Constructor_IfHighlyRatedSongsAdviserArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new CompositePlaylistAdviser(Substitute.For<IPlaylistAdviser>(), null,
-				Substitute.For<IPlaylistAdviser>(), Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>()));
-		}
-
-		[Test]
-		public void Constructor_IfFavouriteArtistDiscsAdviserArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new CompositePlaylistAdviser(Substitute.For<IPlaylistAdviser>(), Substitute.For<IPlaylistAdviser>(),
-				null, Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>()));
-		}
-
-		[Test]
-		public void Constructor_IfMemoRepositoryArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new CompositePlaylistAdviser(Substitute.For<IPlaylistAdviser>(), Substitute.For<IPlaylistAdviser>(),
-				Substitute.For<IPlaylistAdviser>(), null));
-		}
-
 		[Test]
 		public void Advise_IfHighlyRatedSongsAdvisesProvided_AdvisesHighlyRatedSongsPlaylistsEveryTenthTime()
 		{
@@ -56,7 +28,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			highlyRatedSongsAdviserStub.Advise(library).Returns(new[] { highlyRatedSongsAdvise1, highlyRatedSongsAdvise2 });
 
 			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, highlyRatedSongsAdviserStub, Substitute.For<IPlaylistAdviser>(),
-				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>());
+				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>(), new AdviserSettings().StubOptions());
 
 			// Act
 
@@ -89,7 +61,8 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 				PlaybacksSinceHighlyRatedSongsPlaylist = 2
 			});
 
-			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, highlyRatedSongsAdviserStub, Substitute.For<IPlaylistAdviser>(), memoRepositoryStub);
+			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, highlyRatedSongsAdviserStub,
+				Substitute.For<IPlaylistAdviser>(), memoRepositoryStub, new AdviserSettings().StubOptions());
 
 			// Act
 
@@ -101,7 +74,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 		}
 
 		[Test]
-		public void Advise_IfFavouriteArtistDiscsAdvisesProvided_AdvisesFavouriteArtistDiscsEveryFifthTime()
+		public void Advise_IfFavouriteArtistDiscsAdvisesProvided_AdvisesFavouriteArtistDiscsInConfiguredIntervals()
 		{
 			// Arrange
 
@@ -116,8 +89,13 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			IPlaylistAdviser favouriteArtistDiscsAdviserStub = Substitute.For<IPlaylistAdviser>();
 			favouriteArtistDiscsAdviserStub.Advise(library).Returns(new[] { favouriteArtistDiscAdvise1, favouriteArtistDiscAdvise2 });
 
+			var settings = new AdviserSettings
+			{
+				FavouriteArtistsAdviser = new FavouriteArtistsAdviserSettings { PlaybacksBetweenFavouriteArtistDiscs = 5 }
+			};
+
 			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, Substitute.For<IPlaylistAdviser>(), favouriteArtistDiscsAdviserStub,
-				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>());
+				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>(), settings.StubOptions());
 
 			// Act
 
@@ -144,13 +122,19 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			IPlaylistAdviser favouriteArtistDiscsAdviserStub = Substitute.For<IPlaylistAdviser>();
 			favouriteArtistDiscsAdviserStub.Advise(library).Returns(new[] { favouriteArtistDiscAdvise });
 
+			var settings = new AdviserSettings
+			{
+				FavouriteArtistsAdviser = new FavouriteArtistsAdviserSettings { PlaybacksBetweenFavouriteArtistDiscs = 6 }
+			};
+
 			var memoRepositoryStub = Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>();
 			memoRepositoryStub.Load().Returns(new PlaylistAdviserMemo
 			{
 				PlaybacksSinceFavouriteArtistDisc = 2
 			});
 
-			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, Substitute.For<IPlaylistAdviser>(), favouriteArtistDiscsAdviserStub, memoRepositoryStub);
+			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, Substitute.For<IPlaylistAdviser>(),
+				favouriteArtistDiscsAdviserStub, memoRepositoryStub, settings.StubOptions());
 
 			// Act
 
@@ -158,7 +142,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			// Assert
 
-			Assert.AreSame(favouriteArtistDiscAdvise, advises[2]);
+			Assert.AreSame(favouriteArtistDiscAdvise, advises[3]);
 		}
 
 		[Test]
@@ -186,7 +170,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			favouriteArtistDiscsAdviserStub.Advise(library).Returns(new[] { favouriteArtistDiscAdvise1, favouriteArtistDiscAdvise2 });
 
 			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, Substitute.For<IPlaylistAdviser>(), favouriteArtistDiscsAdviserStub,
-				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>());
+				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>(), new AdviserSettings().StubOptions());
 
 			// Act
 
@@ -223,8 +207,13 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			IPlaylistAdviser favouriteArtistDiscsAdviserStub = Substitute.For<IPlaylistAdviser>();
 			favouriteArtistDiscsAdviserStub.Advise(library).Returns(new[] { favouriteArtistDiscAdvise1, favouriteArtistDiscAdvise2 });
 
+			var settings = new AdviserSettings
+			{
+				FavouriteArtistsAdviser = new FavouriteArtistsAdviserSettings { PlaybacksBetweenFavouriteArtistDiscs = 5 }
+			};
+
 			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, highlyRatedSongsAdviserStub, favouriteArtistDiscsAdviserStub,
-				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>());
+				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>(), settings.StubOptions());
 
 			// Act
 
@@ -261,7 +250,8 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 				PlaybacksSinceFavouriteArtistDisc = 5,
 			});
 
-			var target = new CompositePlaylistAdviser(Substitute.For<IPlaylistAdviser>(), Substitute.For<IPlaylistAdviser>(), Substitute.For<IPlaylistAdviser>(), memoRepositoryMock);
+			var target = new CompositePlaylistAdviser(Substitute.For<IPlaylistAdviser>(), Substitute.For<IPlaylistAdviser>(),
+				Substitute.For<IPlaylistAdviser>(), memoRepositoryMock, new AdviserSettings().StubOptions());
 
 			// Act
 

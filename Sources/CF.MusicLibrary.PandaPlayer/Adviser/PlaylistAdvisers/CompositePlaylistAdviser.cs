@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CF.MusicLibrary.Core.Objects;
+using Microsoft.Extensions.Options;
 
 namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 {
@@ -8,29 +9,29 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 	{
 		private const int PlaybacksBetweenHighlyRatedSongsPlaylists = 10;
 
-		private const int PlaybacksBetweenFavouriteArtistDiscs = 5;
-
 		private readonly IPlaylistAdviser usualDiscsAdviser;
 		private readonly IPlaylistAdviser highlyRatedSongsAdviser;
 		private readonly IPlaylistAdviser favouriteArtistDiscsAdviser;
 		private readonly IGenericDataRepository<PlaylistAdviserMemo> memoRepository;
+		private readonly AdviserSettings settings;
 
 		private readonly Lazy<PlaylistAdviserMemo> memo;
 
 		public CompositePlaylistAdviser(IPlaylistAdviser usualDiscsAdviser, IPlaylistAdviser highlyRatedSongsAdviser, IPlaylistAdviser favouriteArtistDiscsAdviser,
-			IGenericDataRepository<PlaylistAdviserMemo> memoRepository)
+			IGenericDataRepository<PlaylistAdviserMemo> memoRepository, IOptions<AdviserSettings> options)
 		{
 			this.usualDiscsAdviser = usualDiscsAdviser ?? throw new ArgumentNullException(nameof(usualDiscsAdviser));
 			this.highlyRatedSongsAdviser = highlyRatedSongsAdviser ?? throw new ArgumentNullException(nameof(highlyRatedSongsAdviser));
 			this.favouriteArtistDiscsAdviser = favouriteArtistDiscsAdviser ?? throw new ArgumentNullException(nameof(favouriteArtistDiscsAdviser));
 			this.memoRepository = memoRepository ?? throw new ArgumentNullException(nameof(memoRepository));
+			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
 			memo = new Lazy<PlaylistAdviserMemo>(() => memoRepository.Load() ??
 			new PlaylistAdviserMemo
 			{
 				// Initializing memo with threshold values so that promoted advises go first.
 				PlaybacksSinceHighlyRatedSongsPlaylist = PlaybacksBetweenHighlyRatedSongsPlaylists,
-				PlaybacksSinceFavouriteArtistDisc = PlaybacksBetweenFavouriteArtistDiscs,
+				PlaybacksSinceFavouriteArtistDisc = settings.FavouriteArtistsAdviser.PlaybacksBetweenFavouriteArtistDiscs,
 			});
 		}
 
@@ -54,7 +55,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 				else
 				{
 					var adviseQueue = favouriteArtistDiscsAdvises.Count > 0 &&
-					                        playbacksMemo.PlaybacksSinceFavouriteArtistDisc + 1 >= PlaybacksBetweenFavouriteArtistDiscs
+					                        playbacksMemo.PlaybacksSinceFavouriteArtistDisc + 1 >= settings.FavouriteArtistsAdviser.PlaybacksBetweenFavouriteArtistDiscs
 						? favouriteArtistDiscsAdvises
 						: rankedDiscsAdvises;
 
