@@ -1,18 +1,11 @@
 ﻿namespace CF.MusicLibrary.LibraryChecker
 {
-	internal struct AllowedSongCorrection
+	public class AllowedSongCorrection
 	{
-		public string Artist { get; }
+		public string Artist { get; set; }
 
-		public string OriginalSongTitle { get; }
+		public string Original { get; set; }
 
-		public string CorrectedSongTitle { get; }
-
-		public AllowedSongCorrection(string artist, string originalSongTitle, string correctedSongTitle)
-		{
-			Artist = artist;
-			OriginalSongTitle = originalSongTitle;
-			CorrectedSongTitle = correctedSongTitle;
-		}
+		public string Corrected { get; set; }
 	}
 }

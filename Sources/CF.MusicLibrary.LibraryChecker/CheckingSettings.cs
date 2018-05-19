@@ -4,8 +4,6 @@
 	{
 		public string LastFmUsername { get; set; }
 
-		public string AllowedArtistCorrectionsFileName { get; set; }
-
-		public string AllowedSongCorrectionsFileName { get; set; }
+		public InconsistencyFilterSettings InconsistencyFilter { get; } = new InconsistencyFilterSettings();
 	}
 }

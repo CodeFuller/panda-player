@@ -32,7 +32,7 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 		{
 			logger.LogInformation("Checking Last.fm artists ...");
 
-			foreach (var artist in library.Artists)
+			foreach (var artist in library.Artists.OrderBy(a => a.Name))
 			{
 				var artistInfo = await lastFmApiClient.GetArtistInfo(artist.Name, settings.LastFmUsername);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.Library;
@@ -58,8 +59,6 @@ namespace CF.MusicLibrary.LibraryChecker.Tests
 				{ "dataStoragePath", @"c:\temp" },
 				{ "fileSystemStorage:root", @"c:\temp" },
 				{ "checkingSettings:lastFmUsername", @"Some Last FM Username" },
-				{ "checkingSettings:allowedArtistCorrectionsFileName", @"Some AllowedArtistCorrectionsFileName" },
-				{ "checkingSettings:allowedSongCorrectionsFileName", @"Some AllowedSongCorrectionsFileName" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
@@ -73,8 +72,55 @@ namespace CF.MusicLibrary.LibraryChecker.Tests
 			var settings = options.Value;
 
 			Assert.AreEqual(@"Some Last FM Username", settings.LastFmUsername);
-			Assert.AreEqual(@"Some AllowedArtistCorrectionsFileName", settings.AllowedArtistCorrectionsFileName);
-			Assert.AreEqual(@"Some AllowedSongCorrectionsFileName", settings.AllowedSongCorrectionsFileName);
+		}
+
+		[Test]
+		public void RegisterDependencies_BindsInconsistencyFilterSettingsCorrectly()
+		{
+			// Arrange
+
+			var settingValues = new Dictionary<string, string>
+			{
+				{ "dataStoragePath", @"c:\temp" },
+				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "checkingSettings:inconsistencyFilter:skipDifferentGenresForDiscs:0", @"^/SomeCategory/SomeArtist" },
+				{ "checkingSettings:inconsistencyFilter:allowedLastFmArtistCorrections:0:original", @"\bOf\b" },
+				{ "checkingSettings:inconsistencyFilter:allowedLastFmArtistCorrections:0:corrected", @"of" },
+				{ "checkingSettings:inconsistencyFilter:allowedLastFmSongCorrections:0:artist", @"Lacuna Coil" },
+				{ "checkingSettings:inconsistencyFilter:allowedLastFmSongCorrections:0:original", @"1:19" },
+				{ "checkingSettings:inconsistencyFilter:allowedLastFmSongCorrections:0:corrected", @"1.19" },
+				{ "checkingSettings:inconsistencyFilter:lastFmSongTitleCharacterCorrections:0:original", @"A" },
+				{ "checkingSettings:inconsistencyFilter:lastFmSongTitleCharacterCorrections:0:corrected", @"B" },
+			};
+			var target = new ApplicationBootstrapperHelper(settingValues);
+
+			// Act
+
+			target.Bootstrap(Array.Empty<string>());
+
+			// Assert
+
+			var options = target.ResolveDependency<IOptions<CheckingSettings>>();
+			var filterSettings = options.Value.InconsistencyFilter;
+
+			Assert.AreEqual(1, filterSettings.SkipDifferentGenresForDiscs.Count);
+			Assert.AreEqual(@"^/SomeCategory/SomeArtist", filterSettings.SkipDifferentGenresForDiscs.Single());
+
+			Assert.AreEqual(1, filterSettings.AllowedLastFmArtistCorrections.Count);
+			var artistCorrection = filterSettings.AllowedLastFmArtistCorrections.Single();
+			Assert.AreEqual(@"\bOf\b", artistCorrection.Original);
+			Assert.AreEqual(@"of", artistCorrection.Corrected);
+
+			Assert.AreEqual(1, filterSettings.AllowedLastFmSongCorrections.Count);
+			var songCorrection = filterSettings.AllowedLastFmSongCorrections.Single();
+			Assert.AreEqual(@"Lacuna Coil", songCorrection.Artist);
+			Assert.AreEqual(@"1:19", songCorrection.Original);
+			Assert.AreEqual(@"1.19", songCorrection.Corrected);
+
+			Assert.AreEqual(1, filterSettings.LastFmSongTitleCharacterCorrections.Count);
+			var titleCharCorrection = filterSettings.LastFmSongTitleCharacterCorrections.Single();
+			Assert.AreEqual('A', titleCharCorrection.Original);
+			Assert.AreEqual('B', titleCharCorrection.Corrected);
 		}
 
 		[Test]

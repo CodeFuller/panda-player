@@ -1,15 +1,16 @@
-﻿namespace CF.MusicLibrary.LibraryChecker
+﻿using System.Text.RegularExpressions;
+
+namespace CF.MusicLibrary.LibraryChecker
 {
-	internal struct AllowedArtistCorrection
+	public class AllowedArtistCorrection
 	{
-		public string OriginalArtistName { get; }
+		public string Original { get; set; }
 
-		public string CorrectedArtistName { get; }
+		public string Corrected { get; set; }
 
-		public AllowedArtistCorrection(string originalArtistName, string correctedArtistName)
+		public string CorrectArtistName(string originalArtistName)
 		{
-			OriginalArtistName = originalArtistName;
-			CorrectedArtistName = correctedArtistName;
+			return new Regex(Original).Replace(originalArtistName, Corrected);
 		}
 	}
 }
