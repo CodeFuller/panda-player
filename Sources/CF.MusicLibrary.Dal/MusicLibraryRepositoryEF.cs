@@ -151,6 +151,7 @@ namespace CF.MusicLibrary.Dal
 					.Include(d => d.SongsUnordered.Select(s => s.Artist))
 					.Include(d => d.SongsUnordered.Select(s => s.Genre))
 					.Include(d => d.SongsUnordered.Select(s => s.Playbacks))
+					.Include(d => d.Images)
 					.ToArrayAsync();
 
 				targetCtx.Discs.AddRange(sourceDiscs);
