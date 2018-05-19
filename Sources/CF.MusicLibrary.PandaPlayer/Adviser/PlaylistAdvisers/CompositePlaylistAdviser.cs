@@ -7,8 +7,6 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 {
 	public class CompositePlaylistAdviser : ICompositePlaylistAdviser
 	{
-		private const int PlaybacksBetweenHighlyRatedSongsPlaylists = 10;
-
 		private readonly IPlaylistAdviser usualDiscsAdviser;
 		private readonly IPlaylistAdviser highlyRatedSongsAdviser;
 		private readonly IPlaylistAdviser favouriteArtistDiscsAdviser;
@@ -30,7 +28,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 			new PlaylistAdviserMemo
 			{
 				// Initializing memo with threshold values so that promoted advises go first.
-				PlaybacksSinceHighlyRatedSongsPlaylist = PlaybacksBetweenHighlyRatedSongsPlaylists,
+				PlaybacksSinceHighlyRatedSongsPlaylist = settings.HighlyRatedSongsAdviser.PlaybacksBetweenHighlyRatedSongs,
 				PlaybacksSinceFavouriteArtistDisc = settings.FavouriteArtistsAdviser.PlaybacksBetweenFavouriteArtistDiscs,
 			});
 		}
@@ -48,7 +46,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 			{
 				AdvisedPlaylist currAdvise;
 
-				if (highlyRatedSongsAdvises.Count > 0 && playbacksMemo.PlaybacksSinceHighlyRatedSongsPlaylist + 1 >= PlaybacksBetweenHighlyRatedSongsPlaylists)
+				if (highlyRatedSongsAdvises.Count > 0 && playbacksMemo.PlaybacksSinceHighlyRatedSongsPlaylist + 1 >= settings.HighlyRatedSongsAdviser.PlaybacksBetweenHighlyRatedSongs)
 				{
 					currAdvise = highlyRatedSongsAdvises.Dequeue();
 				}

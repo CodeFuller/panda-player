@@ -12,6 +12,23 @@
 
 			"favouriteArtists": [
 			]
+		},
+
+		"highlyRatedSongsAdviser": {
+
+			"playbacksBetweenHighlyRatedSongs": 10,
+
+			"oneAdviseSongsNumber": 12,
+			"maxUnlistenedTerms": [
+				{
+					"rating": 10,
+					"days": 30
+				},
+				{
+					"rating": 9,
+					"days": 60
+				}
+			]
 		}
 	}
 }

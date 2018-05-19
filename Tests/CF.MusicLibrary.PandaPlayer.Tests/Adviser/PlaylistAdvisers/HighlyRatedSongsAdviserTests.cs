@@ -5,6 +5,7 @@ using CF.Library.Core.Facades;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.Adviser;
 using CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
+using CF.MusicLibrary.Tests;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -14,90 +15,35 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 	public class HighlyRatedSongsAdviserTests
 	{
 		[Test]
-		public void Constructor_IfAdviseFactorsProviderIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new HighlyRatedSongsAdviser(null, Substitute.For<IClock>()));
-		}
-
-		[Test]
-		public void Constructor_IfDateTimeFacadeIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), null));
-		}
-
-		[Test]
-		public void Advise_ReturnsSongsWithRatingR10ListenedMoreThan30DaysAgo()
+		public void Advise_ReturnsSongsWithHighRatingListenedEarlierThanConfiguredTerm()
 		{
 			// Arrange
+
+			var settings = new HighlyRatedSongsAdviserSettings
+			{
+				OneAdviseSongsNumber = 12,
+				MaxUnlistenedTerms =
+				{
+					new MaxUnlistenedSongTerm
+					{
+						Rating = Rating.R10,
+						Days = 30,
+					}
+				}
+			};
 
 			var songs = Enumerable.Repeat(new Song
 			{
 				Rating = Rating.R10,
 				LastPlaybackTime = new DateTime(2017, 09, 01),
-			}, HighlyRatedSongsAdviser.OneAdviseSongsNumber).ToList();
+			}, 12).ToList();
 
 			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs.ToCollection() } });
 
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 07));
 
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub);
-
-			// Act
-
-			var advises = target.Advise(discLibrary).ToList();
-
-			// Assert
-
-			Assert.AreEqual(1, advises.Count);
-			CollectionAssert.AreEqual(songs, advises.Single().Songs);
-		}
-
-		[Test]
-		public void Advise_ReturnsSongsWithRatingR9ListenedMoreThan60DaysAgo()
-		{
-			// Arrange
-
-			var songs = Enumerable.Repeat(new Song
-			{
-				Rating = Rating.R9,
-				LastPlaybackTime = new DateTime(2017, 08, 01),
-			}, HighlyRatedSongsAdviser.OneAdviseSongsNumber).ToList();
-
-			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs.ToCollection() } });
-
-			var dateTimeStub = Substitute.For<IClock>();
-			dateTimeStub.Now.Returns(new DateTime(2017, 10, 07));
-
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub);
-
-			// Act
-
-			var advises = target.Advise(discLibrary).ToList();
-
-			// Assert
-
-			Assert.AreEqual(1, advises.Count);
-			CollectionAssert.AreEqual(songs, advises.Single().Songs);
-		}
-
-		[Test]
-		public void Advise_ReturnsSongsWithRatingR8ListenedMoreThan90DaysAgo()
-		{
-			// Arrange
-
-			var songs = Enumerable.Repeat(new Song
-			{
-				Rating = Rating.R8,
-				LastPlaybackTime = new DateTime(2017, 07, 01),
-			}, HighlyRatedSongsAdviser.OneAdviseSongsNumber).ToList();
-
-			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs.ToCollection() } });
-
-			var dateTimeStub = Substitute.For<IClock>();
-			dateTimeStub.Now.Returns(new DateTime(2017, 10, 07));
-
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub);
+			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, settings.StubOptions());
 
 			// Act
 
@@ -114,18 +60,31 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 		{
 			// Arrange
 
+			var settings = new HighlyRatedSongsAdviserSettings
+			{
+				OneAdviseSongsNumber = 12,
+				MaxUnlistenedTerms =
+				{
+					new MaxUnlistenedSongTerm
+					{
+						Rating = Rating.R10,
+						Days = 30,
+					}
+				}
+			};
+
 			var songs = Enumerable.Repeat(new Song
 			{
-				Rating = Rating.R8,
+				Rating = Rating.R10,
 				LastPlaybackTime = null,
-			}, HighlyRatedSongsAdviser.OneAdviseSongsNumber).ToList();
+			}, 12).ToList();
 
 			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs.ToCollection() } });
 
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub);
+			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, settings.StubOptions());
 
 			// Act
 
@@ -142,34 +101,31 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 		{
 			// Arrange
 
-			var song1 = new Song
+			var settings = new HighlyRatedSongsAdviserSettings
+			{
+				OneAdviseSongsNumber = 12,
+				MaxUnlistenedTerms =
+				{
+					new MaxUnlistenedSongTerm
+					{
+						Rating = Rating.R10,
+						Days = 30,
+					}
+				}
+			};
+
+			var song = new Song
 			{
 				Rating = Rating.R10,
 				LastPlaybackTime = new DateTime(2017, 09, 05),
 			};
 
-			var song2 = new Song
-			{
-				Rating = Rating.R9,
-				LastPlaybackTime = new DateTime(2017, 08, 05),
-			};
-
-			var song3 = new Song
-			{
-				Rating = Rating.R8,
-				LastPlaybackTime = new DateTime(2017, 07, 05),
-			};
-
-			var songs = Enumerable.Repeat(song1, HighlyRatedSongsAdviser.OneAdviseSongsNumber)
-				.Concat(Enumerable.Repeat(song2, HighlyRatedSongsAdviser.OneAdviseSongsNumber))
-				.Concat(Enumerable.Repeat(song3, HighlyRatedSongsAdviser.OneAdviseSongsNumber));
-
-			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs.ToCollection() } });
+			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = Enumerable.Repeat(song, 12).ToCollection() } });
 
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub);
+			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, settings.StubOptions());
 
 			// Act
 
@@ -185,18 +141,31 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 		{
 			// Arrange
 
+			var settings = new HighlyRatedSongsAdviserSettings
+			{
+				OneAdviseSongsNumber = 12,
+				MaxUnlistenedTerms =
+				{
+					new MaxUnlistenedSongTerm
+					{
+						Rating = Rating.R10,
+						Days = 30,
+					}
+				}
+			};
+
 			var songs = Enumerable.Repeat(new Song
 			{
-				Rating = Rating.R5,
+				Rating = Rating.R9,
 				LastPlaybackTime = null,
-			}, HighlyRatedSongsAdviser.OneAdviseSongsNumber);
+			}, 12);
 
 			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs.ToCollection() } });
 
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 06));
 
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub);
+			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, settings.StubOptions());
 
 			// Act
 
@@ -208,28 +177,41 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 		}
 
 		[Test]
-		public void Advise_IfAlotOfSongsAreAdvised_SplitsThemIntoSmallerPlaylists()
+		public void Advise_IfTooMuchSongsAreAdvised_SplitsThemIntoSmallerPlaylists()
 		{
 			// Arrange
+
+			var settings = new HighlyRatedSongsAdviserSettings
+			{
+				OneAdviseSongsNumber = 12,
+				MaxUnlistenedTerms =
+				{
+					new MaxUnlistenedSongTerm
+					{
+						Rating = Rating.R10,
+						Days = 30,
+					}
+				}
+			};
 
 			var songs1 = Enumerable.Repeat(new Song
 			{
 				Rating = Rating.R10,
 				LastPlaybackTime = null,
-			}, HighlyRatedSongsAdviser.OneAdviseSongsNumber).ToList();
+			}, 12).ToList();
 
 			var songs2 = Enumerable.Repeat(new Song
 			{
 				Rating = Rating.R10,
 				LastPlaybackTime = null,
-			}, HighlyRatedSongsAdviser.OneAdviseSongsNumber).ToList();
+			}, 12).ToList();
 
 			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs1.Concat(songs2).ToCollection() } });
 
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub);
+			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, settings.StubOptions());
 
 			// Act
 
@@ -243,9 +225,22 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 		}
 
 		[Test]
-		public void Advise_IfNumberOfAdvisedSongsIsNotEnough_ReturnsEmpty()
+		public void Advise_IfNumberOfAdvisedSongsIsNotEnough_ReturnsNoPlaylists()
 		{
 			// Arrange
+
+			var settings = new HighlyRatedSongsAdviserSettings
+			{
+				OneAdviseSongsNumber = 12,
+				MaxUnlistenedTerms =
+				{
+					new MaxUnlistenedSongTerm
+					{
+						Rating = Rating.R10,
+						Days = 30,
+					}
+				}
+			};
 
 			var songs = Enumerable.Repeat(new Song
 			{
@@ -258,7 +253,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub);
+			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, settings.StubOptions());
 
 			// Act
 
@@ -274,24 +269,37 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 		{
 			// Arrange
 
+			var settings = new HighlyRatedSongsAdviserSettings
+			{
+				OneAdviseSongsNumber = 12,
+				MaxUnlistenedTerms =
+				{
+					new MaxUnlistenedSongTerm
+					{
+						Rating = Rating.R10,
+						Days = 30,
+					}
+				}
+			};
+
 			var songs1 = Enumerable.Repeat(new Song
 			{
 				Rating = Rating.R10,
 				LastPlaybackTime = null,
-			}, HighlyRatedSongsAdviser.OneAdviseSongsNumber).ToList();
+			}, 12).ToList();
 
 			var songs2 = Enumerable.Repeat(new Song
 			{
 				Rating = Rating.R10,
 				LastPlaybackTime = null,
-			}, HighlyRatedSongsAdviser.OneAdviseSongsNumber - 1).ToList();
+			}, 11).ToList();
 
 			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs1.Concat(songs2).ToCollection() } });
 
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub);
+			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, settings.StubOptions());
 
 			// Act
 
@@ -308,24 +316,43 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 		{
 			// Arrange
 
+			var settings = new HighlyRatedSongsAdviserSettings
+			{
+				OneAdviseSongsNumber = 12,
+				MaxUnlistenedTerms =
+				{
+					new MaxUnlistenedSongTerm
+					{
+						Rating = Rating.R10,
+						Days = 30,
+					},
+
+					new MaxUnlistenedSongTerm
+					{
+						Rating = Rating.R9,
+						Days = 60,
+					},
+				}
+			};
+
 			var songs1 = Enumerable.Repeat(new Song
 			{
 				Rating = Rating.R9,
 				LastPlaybackTime = new DateTime(2017, 01, 01),
-			}, HighlyRatedSongsAdviser.OneAdviseSongsNumber).ToList();
+			}, 12).ToList();
 
 			var songs2 = Enumerable.Repeat(new Song
 			{
 				Rating = Rating.R10,
 				LastPlaybackTime = new DateTime(2017, 01, 01),
-			}, HighlyRatedSongsAdviser.OneAdviseSongsNumber).ToList();
+			}, 12).ToList();
 
 			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs1.Concat(songs2).ToCollection() } });
 
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(new AdviseFactorsProvider(), dateTimeStub);
+			var target = new HighlyRatedSongsAdviser(new AdviseFactorsProvider(), dateTimeStub, settings.StubOptions());
 
 			// Act
 
@@ -343,13 +370,26 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 		{
 			// Arrange
 
-			var songs1 = Enumerable.Range(1, HighlyRatedSongsAdviser.OneAdviseSongsNumber).Select(i => new Song
+			var settings = new HighlyRatedSongsAdviserSettings
+			{
+				OneAdviseSongsNumber = 12,
+				MaxUnlistenedTerms =
+				{
+					new MaxUnlistenedSongTerm
+					{
+						Rating = Rating.R10,
+						Days = 30,
+					}
+				}
+			};
+
+			var songs1 = Enumerable.Range(1, 12).Select(i => new Song
 			{
 				Rating = Rating.R10,
 				LastPlaybackTime = new DateTime(2017, 02, 1 + i),
 			}).ToList();
 
-			var songs2 = Enumerable.Range(1, HighlyRatedSongsAdviser.OneAdviseSongsNumber).Select(i => new Song
+			var songs2 = Enumerable.Range(1, 12).Select(i => new Song
 			{
 				Rating = Rating.R10,
 				LastPlaybackTime = new DateTime(2017, 01, 1 + i),
@@ -360,7 +400,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(new AdviseFactorsProvider(), dateTimeStub);
+			var target = new HighlyRatedSongsAdviser(new AdviseFactorsProvider(), dateTimeStub, settings.StubOptions());
 
 			// Act
 
@@ -377,6 +417,31 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 		public void Advise_IfSongsAreAdvised_OrdersThemByProductOfRatingAndPlaybackAgeFactors()
 		{
 			// Arrange
+
+			var settings = new HighlyRatedSongsAdviserSettings
+			{
+				OneAdviseSongsNumber = 12,
+				MaxUnlistenedTerms =
+				{
+					new MaxUnlistenedSongTerm
+					{
+						Rating = Rating.R10,
+						Days = 30,
+					},
+
+					new MaxUnlistenedSongTerm
+					{
+						Rating = Rating.R9,
+						Days = 60,
+					},
+
+					new MaxUnlistenedSongTerm
+					{
+						Rating = Rating.R8,
+						Days = 90,
+					},
+				}
+			};
 
 			// Rank = 2 * 0 = 0
 			var song01 = new Song { Rating = Rating.R10, LastPlaybackTime = new DateTime(2017, 01, 12) };
@@ -419,7 +484,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(new AdviseFactorsProvider(), dateTimeStub);
+			var target = new HighlyRatedSongsAdviser(new AdviseFactorsProvider(), dateTimeStub, settings.StubOptions());
 
 			// Act
 

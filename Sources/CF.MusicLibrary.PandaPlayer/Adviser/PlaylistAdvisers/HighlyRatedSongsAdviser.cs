@@ -3,27 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.Core.Objects;
+using Microsoft.Extensions.Options;
 
 namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 {
 	public class HighlyRatedSongsAdviser : IPlaylistAdviser
 	{
-		public static int OneAdviseSongsNumber => 12;
-
 		private readonly Dictionary<Rating, TimeSpan> highlyRatedSongsMaxUnlistenedTerms;
 
 		private readonly IAdviseFactorsProvider adviseFactorsProvider;
 		private readonly IClock dateTimeFacade;
+		private readonly HighlyRatedSongsAdviserSettings settings;
 
-		public HighlyRatedSongsAdviser(IAdviseFactorsProvider adviseFactorsProvider, IClock dateTimeFacade)
+		public HighlyRatedSongsAdviser(IAdviseFactorsProvider adviseFactorsProvider, IClock dateTimeFacade, IOptions<HighlyRatedSongsAdviserSettings> options)
 		{
 			this.adviseFactorsProvider = adviseFactorsProvider ?? throw new ArgumentNullException(nameof(adviseFactorsProvider));
 			this.dateTimeFacade = dateTimeFacade ?? throw new ArgumentNullException(nameof(dateTimeFacade));
+			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
-			highlyRatedSongsMaxUnlistenedTerms = new Dictionary<Rating, TimeSpan>();
-			highlyRatedSongsMaxUnlistenedTerms.Add(Rating.R10, TimeSpan.FromDays(30));
-			highlyRatedSongsMaxUnlistenedTerms.Add(Rating.R9, TimeSpan.FromDays(60));
-			highlyRatedSongsMaxUnlistenedTerms.Add(Rating.R8, TimeSpan.FromDays(90));
+			highlyRatedSongsMaxUnlistenedTerms = settings.MaxUnlistenedTerms
+				.ToDictionary(t => t.Rating, t => TimeSpan.FromDays(t.Days));
 		}
 
 		public IEnumerable<AdvisedPlaylist> Advise(DiscLibrary discLibrary)
@@ -43,9 +42,9 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 				.Select(s => s.Song)
 				.ToList();
 
-			for (var i = 0; i + OneAdviseSongsNumber <= songs.Count; i += OneAdviseSongsNumber)
+			for (var i = 0; i + settings.OneAdviseSongsNumber <= songs.Count; i += settings.OneAdviseSongsNumber)
 			{
-				yield return AdvisedPlaylist.ForHighlyRatedSongs(songs.Skip(i).Take(OneAdviseSongsNumber));
+				yield return AdvisedPlaylist.ForHighlyRatedSongs(songs.Skip(i).Take(settings.OneAdviseSongsNumber));
 			}
 		}
 

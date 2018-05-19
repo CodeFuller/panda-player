@@ -44,6 +44,7 @@ namespace CF.MusicLibrary.PandaPlayer
 			services.Configure<LastFmClientSettings>(options => configuration.Bind("lastFmClient", options));
 			services.Configure<AdviserSettings>(options => configuration.Bind("adviser", options));
 			services.Configure<FavouriteArtistsAdviserSettings>(options => configuration.Bind("adviser:favouriteArtistsAdviser", options));
+			services.Configure<HighlyRatedSongsAdviserSettings>(options => configuration.Bind("adviser:highlyRatedSongsAdviser", options));
 			services.Configure<GroupingSettings>(options => configuration.Bind("adviser:groupings", options));
 			services.Configure<PandaPlayerSettings>(configuration.Bind);
 
