@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events;
@@ -16,9 +17,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 		private readonly IGenericDataRepository<PlaylistData> playlistDataRepository;
 		private readonly ILogger<PersistentSongPlaylistViewModel> logger;
 
-		public PersistentSongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator,
+		public PersistentSongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService,
 			IGenericDataRepository<PlaylistData> playlistDataRepository, ILogger<PersistentSongPlaylistViewModel> logger)
-			: base(libraryContentUpdater, viewNavigator)
+			: base(libraryContentUpdater, viewNavigator, windowService)
 		{
 			this.playlistDataRepository = playlistDataRepository ?? throw new ArgumentNullException(nameof(playlistDataRepository));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using CF.Library.Core.Extensions;
+using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events.DiscEvents;
@@ -54,8 +55,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand NavigateToSongDiscCommand { get; }
 
-		public SongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
-			: base(libraryContentUpdater, viewNavigator)
+		public SongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
+			: base(libraryContentUpdater, viewNavigator, windowService)
 		{
 			PlayFromSongCommand = new RelayCommand(PlayFromSong);
 			NavigateToSongDiscCommand = new RelayCommand(NavigateToSongDisc);

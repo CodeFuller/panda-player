@@ -75,7 +75,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand EditDiscPropertiesCommand { get; }
 
-		public LibraryExplorerViewModel(ILibraryBrowser libraryBrowser, IExplorerSongListViewModel songListViewModel, ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
+		public LibraryExplorerViewModel(ILibraryBrowser libraryBrowser, IExplorerSongListViewModel songListViewModel,
+			ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
 		{
 			this.libraryBrowser = libraryBrowser ?? throw new ArgumentNullException(nameof(libraryBrowser));
 			SongListViewModel = songListViewModel ?? throw new ArgumentNullException(nameof(songListViewModel));

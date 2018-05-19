@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events.DiscEvents;
@@ -26,8 +27,8 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			public Song CurrentSongWhenOnPlaylistChangedCalled { get; set; }
 
-			public SongPlaylistViewModelInheritor(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
-				: base(libraryContentUpdater, viewNavigator)
+			public SongPlaylistViewModelInheritor(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
+				: base(libraryContentUpdater, viewNavigator, windowService)
 			{
 			}
 
@@ -53,7 +54,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		[Test]
 		public void DisplayTrackNumbersGetter_ReturnsFalse()
 		{
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			Assert.IsFalse(target.DisplayTrackNumbers);
 		}
@@ -70,7 +71,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 				new Song { Disc = disc }
 			};
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(songs);
 
 			// Act
@@ -93,7 +94,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 				new Song { Disc = new Disc() },
 			};
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(songs);
 
 			// Act
@@ -114,7 +115,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var songs1 = new List<Song> { new Song(), currSong };
 			var songs2 = new List<Song> { new Song() };
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(songs1);
 			target.SwitchToSong(currSong);
 
@@ -133,7 +134,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			// Arrange
 
 			var songs = new List<Song> { new Song() };
-			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			// Act
 
@@ -149,7 +150,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		{
 			// Arrange
 
-			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { new Song() });
 			target.SwitchToNextSong();
 			target.OnPlaylistChangedCallsNumber = 0;
@@ -170,7 +171,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var song1 = new Song();
 			var song2 = new Song();
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			target.SetSongs(new List<Song> { song1, song2 });
 
@@ -191,7 +192,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var song1 = new Song();
 			var song2 = new Song();
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			target.SetSongs(new List<Song> { song1, song2 });
 			target.SwitchToNextSong();
@@ -213,7 +214,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var song1 = new Song();
 			var song2 = new Song();
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			target.SetSongs(new List<Song> { song1, song2 });
 
@@ -233,7 +234,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var song1 = new Song();
 			var song2 = new Song();
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			target.SetSongs(new List<Song> { song1, song2 });
 			target.SwitchToNextSong();
@@ -254,7 +255,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var song1 = new Song();
 			var song2 = new Song();
-			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			target.SetSongs(new List<Song> { song1, song2 });
 			target.SwitchToNextSong();
@@ -274,7 +275,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		{
 			// Arrange
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			target.SetSongs(new List<Song> { new Song() });
 			target.SwitchToNextSong();
@@ -296,7 +297,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var song1 = new Song();
 			var song2 = new Song();
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			target.SetSongs(new List<Song> { song1, song2 });
 
@@ -317,7 +318,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var song1 = new Song();
 			var song2 = new Song();
-			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			target.SetSongs(new List<Song> { song1, song2 });
 			target.CurrentSongWhenOnPlaylistChangedCalled = null;
@@ -338,7 +339,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var song1 = new Song();
 			var song2 = new Song();
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			target.SetSongs(new List<Song> { song1, song2, song2 });
 
@@ -352,7 +353,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		{
 			// Arrange
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new List<Song> { new Song() });
 
 			// Act & Assert
@@ -370,7 +371,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			Song newSong1 = new Song();
 			Song newSong2 = new Song();
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { oldSong1, oldSong2 });
 			target.SwitchToNextSong();
 
@@ -394,7 +395,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			Song newSong1 = new Song();
 			Song newSong2 = new Song();
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { oldSong1, oldSong2 });
 
 			// Act
@@ -415,7 +416,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			Song newSong1 = new Song();
 			Song newSong2 = new Song();
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			// Act
 
@@ -434,7 +435,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var newSongs = new[] { new Song() };
 
-			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			// Act
 
@@ -455,7 +456,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			Song newSong1 = new Song();
 			Song newSong2 = new Song();
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { oldSong1, oldSong2 });
 			target.SwitchToNextSong();
 
@@ -477,7 +478,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			Song newSong1 = new Song();
 			Song newSong2 = new Song();
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			// Act
 
@@ -496,7 +497,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var newSongs = new[] { new Song() };
 
-			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			// Act
 
@@ -514,7 +515,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var song = new Song();
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { song });
 			target.SelectedSongItem = target.SongItems[0];
 
@@ -537,7 +538,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var song = new Song();
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { song, song });
 			target.SelectedSongItem = target.SongItems[1];
 
@@ -557,7 +558,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			var song = new Song();
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { song });
 			target.SelectedSongItem = target.SongItems[0];
 
@@ -579,7 +580,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		{
 			// Arrange
 
-			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			PlayPlaylistStartingFromSongEventArgs receivedEvent = null;
 			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, e => receivedEvent = e);
@@ -601,7 +602,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		{
 			// Arrange
 
-			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			PlaylistChangedEventArgs receivedEvent = null;
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => receivedEvent = e);
@@ -626,7 +627,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			Song currentSong = new Song { Disc = currentDisc };
 			Song selectedSong = new Song { Disc = selectedDisc };
 
-			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { currentSong, selectedSong });
 			target.SwitchToSong(currentSong);
 			target.SelectedSongItem = new SongListItem(selectedSong);
@@ -652,7 +653,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var currentDisc = new Disc();
 			Song currentSong = new Song { Disc = currentDisc };
 
-			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { new Song(), currentSong });
 			target.SwitchToSong(currentSong);
 
@@ -674,7 +675,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		{
 			// Arrange
 
-			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new SongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { new Song() });
 
 			bool receivedEvent = false;

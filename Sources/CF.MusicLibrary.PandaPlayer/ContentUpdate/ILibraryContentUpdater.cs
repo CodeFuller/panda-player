@@ -14,6 +14,8 @@ namespace CF.MusicLibrary.PandaPlayer.ContentUpdate
 
 		Task UpdateDisc(Disc disc, UpdatedSongProperties updatedProperties);
 
+		Task DeleteSong(Song song);
+
 		Task DeleteDisc(Disc disc);
 
 		Task ChangeDiscUri(Disc disc, Uri newDiscUri);

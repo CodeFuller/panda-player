@@ -5,7 +5,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CF.Library.Core.Enums;
 using CF.Library.Core.Extensions;
+using CF.Library.Core.Interfaces;
+using CF.Library.Wpf;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events.SongListEvents;
@@ -20,6 +23,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 	{
 		private readonly ILibraryContentUpdater libraryContentUpdater;
 		private readonly IViewNavigator viewNavigator;
+		private readonly IWindowService windowService;
 
 		public abstract bool DisplayTrackNumbers { get; }
 
@@ -61,22 +65,26 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand PlaySongsLastCommand { get; }
 
+		public ICommand DeleteSongsFromDiscCommand { get; }
+
 		public ICommand EditSongsPropertiesCommand { get; }
 
 		public abstract ICommand PlayFromSongCommand { get; }
 
 		public IReadOnlyCollection<SetRatingMenuItem> SetRatingMenuItems { get; }
 
-		protected SongListViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
+		protected SongListViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
 		{
 			this.libraryContentUpdater = libraryContentUpdater ?? throw new ArgumentNullException(nameof(libraryContentUpdater));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
+			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
 
 			songItems = new ObservableCollection<SongListItem>();
 			SongItems = new ReadOnlyObservableCollection<SongListItem>(songItems);
 
 			PlaySongsNextCommand = new RelayCommand(PlaySongsNext);
 			PlaySongsLastCommand = new RelayCommand(PlaySongsLast);
+			DeleteSongsFromDiscCommand = new AsyncRelayCommand(DeleteSongsFromDisc);
 			EditSongsPropertiesCommand = new RelayCommand(EditSongsProperties);
 			SetRatingMenuItems = RatingsHelper.AllowedRatingsDesc.Select(r => new SetRatingMenuItem(this, r)).ToList();
 		}
@@ -87,6 +95,39 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			RaisePropertyChanged(nameof(SongsNumber));
 			RaisePropertyChanged(nameof(TotalSongsFileSize));
 			RaisePropertyChanged(nameof(TotalSongsDuration));
+		}
+
+		internal async Task DeleteSongsFromDisc()
+		{
+			var selectedSongs = SelectedSongs.ToList();
+			if (!selectedSongs.Any())
+			{
+				return;
+			}
+
+			if (windowService.ShowMessageBox($"Do you really want to delete {selectedSongs.Count} selected song(s)?", "Delete song(s)",
+					ShowMessageBoxButton.YesNo, ShowMessageBoxIcon.Question) != ShowMessageBoxResult.Yes)
+			{
+				return;
+			}
+
+			foreach (var song in selectedSongs)
+			{
+				await libraryContentUpdater.DeleteSong(song);
+				for (var i = 0; i < songItems.Count;)
+				{
+					if (Object.ReferenceEquals(songItems[i].Song, song))
+					{
+						songItems.RemoveAt(i);
+					}
+					else
+					{
+						++i;
+					}
+				}
+			}
+
+			OnSongItemsChanged();
 		}
 
 		private void EditSongsProperties()

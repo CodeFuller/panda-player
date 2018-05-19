@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CF.Library.Core.Facades;
 using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
@@ -11,10 +12,12 @@ namespace CF.MusicLibrary.PandaPlayer.ContentUpdate
 	public class LibraryContentUpdater : ILibraryContentUpdater
 	{
 		private readonly IMusicLibrary musicLibrary;
+		private readonly IClock clock;
 
-		public LibraryContentUpdater(IMusicLibrary musicLibrary)
+		public LibraryContentUpdater(IMusicLibrary musicLibrary, IClock clock)
 		{
 			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
 		}
 
 		public async Task SetSongsRating(IEnumerable<Song> songs, Rating newRating)
@@ -36,24 +39,29 @@ namespace CF.MusicLibrary.PandaPlayer.ContentUpdate
 			}
 		}
 
-		public async Task UpdateDisc(Disc disc, UpdatedSongProperties updatedProperties)
+		public Task UpdateDisc(Disc disc, UpdatedSongProperties updatedProperties)
 		{
-			await musicLibrary.UpdateDisc(disc, updatedProperties);
+			return musicLibrary.UpdateDisc(disc, updatedProperties);
 		}
 
-		public async Task DeleteDisc(Disc disc)
+		public Task DeleteSong(Song song)
 		{
-			await musicLibrary.DeleteDisc(disc);
+			return musicLibrary.DeleteSong(song, clock.Now);
 		}
 
-		public async Task ChangeDiscUri(Disc disc, Uri newDiscUri)
+		public Task DeleteDisc(Disc disc)
 		{
-			await musicLibrary.ChangeDiscUri(disc, newDiscUri);
+			return musicLibrary.DeleteDisc(disc);
 		}
 
-		public async Task ChangeSongUri(Song song, Uri newSongUri)
+		public Task ChangeDiscUri(Disc disc, Uri newDiscUri)
 		{
-			await musicLibrary.ChangeSongUri(song, newSongUri);
+			return musicLibrary.ChangeDiscUri(disc, newDiscUri);
+		}
+
+		public Task ChangeSongUri(Song song, Uri newSongUri)
+		{
+			return musicLibrary.ChangeSongUri(song, newSongUri);
 		}
 	}
 }

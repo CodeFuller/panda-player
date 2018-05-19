@@ -29,6 +29,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		ICommand PlaySongsLastCommand { get; }
 
+		ICommand DeleteSongsFromDiscCommand { get; }
+
 		ICommand EditSongsPropertiesCommand { get; }
 
 		IReadOnlyCollection<SetRatingMenuItem> SetRatingMenuItems { get; }

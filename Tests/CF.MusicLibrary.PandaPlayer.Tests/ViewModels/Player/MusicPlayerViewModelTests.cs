@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
@@ -20,7 +21,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		private sealed class SongPlaylistStub : SongPlaylistViewModel
 		{
 			public SongPlaylistStub(IEnumerable<Song> songs)
-				: base(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>())
+				: base(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>())
 			{
 				SetSongs(songs);
 			}

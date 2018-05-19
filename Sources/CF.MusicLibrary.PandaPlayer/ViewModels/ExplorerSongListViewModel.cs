@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events.SongEvents;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -13,8 +14,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 
 		public override ICommand PlayFromSongCommand { get; }
 
-		public ExplorerSongListViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
-			: base(libraryContentUpdater, viewNavigator)
+		public ExplorerSongListViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
+			: base(libraryContentUpdater, viewNavigator, windowService)
 		{
 			PlayFromSongCommand = new RelayCommand(PlayDiscFromSong);
 		}

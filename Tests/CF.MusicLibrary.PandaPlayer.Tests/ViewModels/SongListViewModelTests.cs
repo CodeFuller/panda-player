@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using CF.Library.Core.Attributes;
+using CF.Library.Core.Enums;
+using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.ContentUpdate;
 using CF.MusicLibrary.PandaPlayer.Events.SongListEvents;
@@ -21,8 +23,8 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		{
 			public int OnSongItemsChangedCallsNumber { get; set; }
 
-			public ConcreteSongListViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator)
-				: base(libraryContentUpdater, viewNavigator)
+			public ConcreteSongListViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
+				: base(libraryContentUpdater, viewNavigator, windowService)
 			{
 			}
 
@@ -60,7 +62,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			List<Song> newSongList = new List<Song> { new Song(), new Song() };
 
-			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			// Act
 
@@ -79,7 +81,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			List<Song> oldSongList = new List<Song> { new Song(), new Song() };
 			List<Song> newSongList = new List<Song> { new Song(), new Song() };
 
-			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(oldSongList);
 
 			// Act
@@ -96,7 +98,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		{
 			// Arrange
 
-			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 
 			var changedProperties = new List<string>();
 			target.PropertyChanged += (sender, e) => changedProperties.Add(e.PropertyName);
@@ -118,7 +120,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		{
 			// Arrange
 
-			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { new Song() });
 			target.OnSongItemsChangedCallsNumber = 0;
 
@@ -139,7 +141,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var oldSongs = new[] { new Song(), new Song() };
 			var newSongs = new[] { new Song(), new Song() };
 
-			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(oldSongs);
 
 			// Act
@@ -156,7 +158,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		{
 			// Arrange
 
-			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { new Song(), new Song() });
 			target.OnSongItemsChangedCallsNumber = 0;
 
@@ -179,7 +181,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var newSong1 = new Song();
 			var newSong2 = new Song();
 
-			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { oldSong1, oldSong2 });
 
 			// Act
@@ -196,7 +198,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		{
 			// Arrange
 
-			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { new Song(), new Song() });
 			target.OnSongItemsChangedCallsNumber = 0;
 
@@ -218,7 +220,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			Song song2 = new Song();
 			Song song3 = new Song();
 
-			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { song1, song2, song3 });
 			target.SelectedSongItems = new[] { new SongListItem(song1), new SongListItem(song2) };
 
@@ -240,7 +242,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		{
 			// Arrange
 
-			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { new Song() });
 			target.SelectedSongItems = Array.Empty<SongListItem>();
 
@@ -268,7 +270,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			Song song2 = new Song();
 			Song song3 = new Song();
 
-			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { song1, song2, song3 });
 			target.SelectedSongItems = new[] { new SongListItem(song1), new SongListItem(song2) };
 
@@ -290,7 +292,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		{
 			// Arrange
 
-			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>());
+			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
 			target.SetSongs(new[] { new Song() });
 			target.SelectedSongItems = Array.Empty<SongListItem>();
 
@@ -307,6 +309,82 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			// Avoiding uncovered lambda code (receivedEvent = true)
 			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(Array.Empty<Song>()));
+		}
+
+		[Test]
+		public void DeleteSongsFromDiscCommand_IfNoSongsAreSelected_ReturnsWithNoAction()
+		{
+			// Arrange
+
+			var windowServiceMock = Substitute.For<IWindowService>();
+
+			var target = new ConcreteSongListViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), windowServiceMock);
+			target.SetSongs(new[] { new Song() });
+			target.SelectedSongItems = Array.Empty<SongListItem>();
+
+			// Act
+
+			target.DeleteSongsFromDisc().Wait();
+
+			// Assert
+
+			windowServiceMock.DidNotReceive().ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>());
+		}
+
+		[Test]
+		public void DeleteSongsFromDiscCommand_IfDeletionIsNotConfirmed_ReturnsWithNoAction()
+		{
+			// Arrange
+
+			Song song1 = new Song();
+			Song song2 = new Song();
+			Song song3 = new Song();
+
+			var windowServiceStub = Substitute.For<IWindowService>();
+			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.No);
+
+			var contentUpdaterMock = Substitute.For<ILibraryContentUpdater>();
+
+			var target = new ConcreteSongListViewModel(contentUpdaterMock, Substitute.For<IViewNavigator>(), windowServiceStub);
+			target.SetSongs(new[] { song1, song2, song3 });
+			target.SelectedSongItems = new[] { new SongListItem(song1), new SongListItem(song2) };
+
+			// Act
+
+			target.DeleteSongsFromDisc().Wait();
+
+			// Assert
+
+			contentUpdaterMock.DidNotReceive().DeleteSong(Arg.Any<Song>());
+		}
+
+		[Test]
+		public void DeleteSongsFromDiscCommand_IfDeletionIsConfirmed_DeletesSongsCorrectly()
+		{
+			// Arrange
+
+			Song song1 = new Song();
+			Song song2 = new Song();
+			Song song3 = new Song();
+
+			var windowServiceStub = Substitute.For<IWindowService>();
+			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);
+
+			var contentUpdaterMock = Substitute.For<ILibraryContentUpdater>();
+
+			var target = new ConcreteSongListViewModel(contentUpdaterMock, Substitute.For<IViewNavigator>(), windowServiceStub);
+			target.SetSongs(new[] { song1, song2, song3 });
+			target.SelectedSongItems = new[] { new SongListItem(song1), new SongListItem(song2) };
+
+			// Act
+
+			target.DeleteSongsFromDisc().Wait();
+
+			// Assert
+
+			contentUpdaterMock.Received(2).DeleteSong(Arg.Any<Song>());
+			contentUpdaterMock.Received(1).DeleteSong(song1);
+			contentUpdaterMock.Received(1).DeleteSong(song2);
 		}
 	}
 }
