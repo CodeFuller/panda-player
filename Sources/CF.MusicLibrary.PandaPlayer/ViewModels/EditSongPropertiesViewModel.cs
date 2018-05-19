@@ -64,7 +64,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 					throw new InvalidOperationException("Uri could not be updated in multi-song mode");
 				}
 
-				return String.Equals(FileName, GetSongFileName(SingleSong), StringComparison.OrdinalIgnoreCase) ?
+				return String.Equals(FileName, GetSongFileName(SingleSong), StringComparison.Ordinal) ?
 					null : libraryStructurer.BuildSongUri(SingleSong.Disc.Uri, FileName);
 			}
 		}

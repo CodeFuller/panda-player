@@ -55,7 +55,7 @@ namespace CF.MusicLibrary.Core
 
 		public bool AlbumTitleIsSuspicious(string albumTitle)
 		{
-			return !String.Equals(GetAlbumTitleFromDiscTitle(albumTitle), albumTitle, StringComparison.OrdinalIgnoreCase);
+			return !String.Equals(GetAlbumTitleFromDiscTitle(albumTitle), albumTitle, StringComparison.Ordinal);
 		}
 	}
 }

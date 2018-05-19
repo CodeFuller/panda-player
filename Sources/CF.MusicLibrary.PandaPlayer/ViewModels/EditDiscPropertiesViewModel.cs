@@ -81,7 +81,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		public async Task Save()
 		{
 			var updatedProperties = UpdatedSongProperties.None;
-			if (!String.Equals(Disc.AlbumTitle, AlbumTitle, StringComparison.OrdinalIgnoreCase))
+			if (!String.Equals(Disc.AlbumTitle, AlbumTitle, StringComparison.Ordinal))
 			{
 				updatedProperties |= UpdatedSongProperties.Album;
 			}
@@ -90,7 +90,7 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			Disc.AlbumTitle = AlbumTitle;
 
 			var originalDiscFolderName = libraryStructurer.GetDiscFolderName(Disc.Uri);
-			if (!String.Equals(originalDiscFolderName, FolderName, StringComparison.OrdinalIgnoreCase))
+			if (!String.Equals(originalDiscFolderName, FolderName, StringComparison.Ordinal))
 			{
 				await libraryContentUpdater.ChangeDiscUri(Disc, libraryStructurer.ReplaceDiscPartInUri(Disc.Uri, FolderName));
 			}

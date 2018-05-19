@@ -34,7 +34,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public abstract bool AlbumTitleIsEditable { get; }
 
-		public bool WarnAboutUnequalAlbumTitle => AlbumTitleIsEditable && !String.Equals(AlbumTitle, DiscTitle, StringComparison.OrdinalIgnoreCase);
+		public bool WarnAboutUnequalAlbumTitle => AlbumTitleIsEditable && !String.Equals(AlbumTitle, DiscTitle, StringComparison.Ordinal);
 
 		public virtual short? Year { get; set; }
 
