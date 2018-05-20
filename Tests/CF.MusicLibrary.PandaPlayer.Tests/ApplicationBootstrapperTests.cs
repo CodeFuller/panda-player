@@ -42,6 +42,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 			{
 				{ "dataStoragePath", @"c:\temp" },
 				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "database:dataSource", @"Some DataSource" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
@@ -84,6 +85,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 			{
 				{ "dataStoragePath", @"c:\temp" },
 				{ "fileSystemStorage:root", @"Some FileSystemStorage Root" },
+				{ "database:dataSource", @"Some DataSource" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
@@ -108,6 +110,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 			{
 				{ "dataStoragePath", @"c:\temp" },
 				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "database:dataSource", @"Some DataSource" },
 				{ "lastFmClient:apiKey", @"Some API Key" },
 				{ "lastFmClient:sharedSecret", @"Some Shared Secret" },
 				{ "lastFmClient:sessionKey", @"Some Session Key" },
@@ -137,6 +140,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 			{
 				{ "dataStoragePath", @"c:\temp" },
 				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "database:dataSource", @"Some DataSource" },
 				{ "adviser:groupings:0:pattern", "Pattern 1" },
 				{ "adviser:groupings:0:groupId", "GroupId 1" },
 				{ "adviser:groupings:1:pattern", "Pattern 2" },
@@ -169,6 +173,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 			{
 				{ "dataStoragePath", @"c:\temp" },
 				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "database:dataSource", @"Some DataSource" },
 				{ "discCoverImageLookupPages:0", @"http://www.page1.com/" },
 				{ "discCoverImageLookupPages:1", @"http://www.page2.com/" },
 			};

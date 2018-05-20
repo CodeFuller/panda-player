@@ -41,6 +41,7 @@ namespace CF.MusicLibrary.LibraryChecker.Tests
 			var settingValues = new Dictionary<string, string>
 			{
 				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "database:dataSource", @"Some DataSource" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
@@ -58,6 +59,7 @@ namespace CF.MusicLibrary.LibraryChecker.Tests
 			{
 				{ "dataStoragePath", @"c:\temp" },
 				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "database:dataSource", @"Some DataSource" },
 				{ "checkingSettings:lastFmUsername", @"Some Last FM Username" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
@@ -83,6 +85,7 @@ namespace CF.MusicLibrary.LibraryChecker.Tests
 			{
 				{ "dataStoragePath", @"c:\temp" },
 				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "database:dataSource", @"Some DataSource" },
 				{ "checkingSettings:inconsistencyFilter:skipDifferentGenresForDiscs:0", @"^/SomeCategory/SomeArtist" },
 				{ "checkingSettings:inconsistencyFilter:allowedLastFmArtistCorrections:0:original", @"\bOf\b" },
 				{ "checkingSettings:inconsistencyFilter:allowedLastFmArtistCorrections:0:corrected", @"of" },
@@ -157,6 +160,7 @@ namespace CF.MusicLibrary.LibraryChecker.Tests
 			{
 				{ "dataStoragePath", @"c:\temp" },
 				{ "fileSystemStorage:root", @"Some FileSystemStorage Root" },
+				{ "database:dataSource", @"Some DataSource" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
@@ -181,6 +185,7 @@ namespace CF.MusicLibrary.LibraryChecker.Tests
 			{
 				{ "dataStoragePath", @"c:\temp" },
 				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "database:dataSource", @"Some DataSource" },
 				{ "lastFmClient:apiKey", @"Some API Key" },
 				{ "lastFmClient:sharedSecret", @"Some Shared Secret" },
 				{ "lastFmClient:sessionKey", @"Some Session Key" },

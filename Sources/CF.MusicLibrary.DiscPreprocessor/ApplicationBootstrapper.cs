@@ -24,6 +24,7 @@ namespace CF.MusicLibrary.DiscPreprocessor
 	{
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{
+			services.Configure<SqLiteConnectionSettings>(options => configuration.Bind("database", options));
 			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("fileSystemStorage", options));
 			services.Configure<DiscPreprocessorSettings>(configuration.Bind);
 			services.Configure<DiscToAlbumMappingSettings>(options => configuration.Bind("discToAlbumMappings", options));

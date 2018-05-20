@@ -42,6 +42,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 				{ "dataStoragePath", @"c:\temp" },
 				{ "workshopStoragePath", @"c:\temp" },
 				{ "fileSystemStorage:root", @"c:\temp" },
+				{ "database:dataSource", @"Some DataSource" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
@@ -63,6 +64,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 				{ "dataStoragePath", @"c:\temp" },
 				{ "workshopStoragePath", @"c:\temp" },
 				{ "fileSystemStorage:root", @"Some FileSystemStorage Root" },
+				{ "database:dataSource", @"Some DataSource" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 
@@ -89,6 +91,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 				{ "workshopStoragePath", @"Some WorkshopStoragePath" },
 				{ "fileSystemStorage:root", @"c:\temp" },
 				{ "deleteSourceContentAfterAdding", @"True" },
+				{ "database:dataSource", @"Some DataSource" },
 			};
 			var target = new ApplicationBootstrapperHelper(settingValues);
 

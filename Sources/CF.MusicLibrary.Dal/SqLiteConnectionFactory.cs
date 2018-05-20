@@ -12,6 +12,10 @@ namespace CF.MusicLibrary.Dal
 		public SqLiteConnectionFactory(IOptions<SqLiteConnectionSettings> options)
 		{
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
+			if (String.IsNullOrEmpty(settings.DataSource))
+			{
+				throw new InvalidOperationException("SQLite database path is not set");
+			}
 		}
 
 		public DbConnection CreateConnection()
