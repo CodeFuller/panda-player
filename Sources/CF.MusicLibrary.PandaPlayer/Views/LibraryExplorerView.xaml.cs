@@ -142,11 +142,12 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 				return;
 			}
 
-			var selected = ContentDataGrid.Items.Cast<LibraryExplorerItem>()
+			DataGrid dataGrid = ContentDataGrid;
+			var selected = dataGrid.Items.Cast<LibraryExplorerItem>()
 				.FirstOrDefault(it => it.Name.StartsWith(enteredText, StringComparison.CurrentCultureIgnoreCase));
 			if (selected != null)
 			{
-				ContentDataGrid.SelectedItem = selected;
+				dataGrid.SelectedItem = selected;
 			}
 		}
 
