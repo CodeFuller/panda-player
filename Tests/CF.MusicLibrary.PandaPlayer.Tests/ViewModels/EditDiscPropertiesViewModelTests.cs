@@ -13,18 +13,6 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 	public class EditDiscPropertiesViewModelTests
 	{
 		[Test]
-		public void Constructor_WhenLibraryStructurerIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditDiscPropertiesViewModel(null, Substitute.For<ILibraryContentUpdater>()));
-		}
-
-		[Test]
-		public void Constructor_WhenLibraryContentUpdaterIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditDiscPropertiesViewModel(Substitute.For<ILibraryStructurer>(), null));
-		}
-
-		[Test]
 		public void Load_FillsInitialPropertiesCorrectly()
 		{
 			// Arrange

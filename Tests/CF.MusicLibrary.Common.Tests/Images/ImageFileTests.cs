@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CF.Library.Core.Facades;
 using CF.MusicLibrary.Common.Images;
 using CF.MusicLibrary.Core.Objects.Images;
@@ -11,24 +10,6 @@ namespace CF.MusicLibrary.Common.Tests.Images
 	[TestFixture]
 	public class ImageFileTests
 	{
-		[Test]
-		public void Constructor_IfDiscImageValidatorArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new ImageFile(null, Substitute.For<IImageInfoProvider>(), Substitute.For<IFileSystemFacade>()));
-		}
-
-		[Test]
-		public void Constructor_IfImageInfoProviderArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new ImageFile(Substitute.For<IDiscImageValidator>(), null, Substitute.For<IFileSystemFacade>()));
-		}
-
-		[Test]
-		public void Constructor_IfFileSystemFacadeArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new ImageFile(Substitute.For<IDiscImageValidator>(), Substitute.For<IImageInfoProvider>(), null));
-		}
-
 		[Test]
 		public void Load_IfPreviousFileWasSetToTemporaryFile_DeletesPreviousFile()
 		{

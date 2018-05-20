@@ -12,18 +12,6 @@ namespace CF.MusicLibrary.Library.Tests
 	public class FileSystemStorageTests
 	{
 		[Test]
-		public void Constructor_IfFileSystemFacadeArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new FileSystemStorage(null, new FileSystemStorageSettings().StubOptions()));
-		}
-
-		[Test]
-		public void Constructor_IfStorageRootDirectoryArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new FileSystemStorage(Substitute.For<IFileSystemFacade>(), null));
-		}
-
-		[Test]
 		public void StoreFile_BeforeStoringFile_CreatesDestinationDirectory()
 		{
 			// Arrange

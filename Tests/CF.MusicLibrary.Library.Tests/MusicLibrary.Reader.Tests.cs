@@ -15,41 +15,6 @@ namespace CF.MusicLibrary.Library.Tests
 	public partial class RepositoryAndStorageMusicLibraryTests
 	{
 		[Test]
-		public void Constructor_IfLibraryRepositoryArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new RepositoryAndStorageMusicLibrary(null, Substitute.For<IMusicLibraryStorage>(),
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>()));
-		}
-
-		[Test]
-		public void Constructor_IfLibraryStorageArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), null,
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>()));
-		}
-
-		[Test]
-		public void Constructor_IfSongTaggerArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), Substitute.For<IMusicLibraryStorage>(),
-				null, Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>()));
-		}
-
-		[Test]
-		public void Constructor_IfLibraryStructurerArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), Substitute.For<IMusicLibraryStorage>(),
-				Substitute.For<ISongTagger>(), null, Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>()));
-		}
-
-		[Test]
-		public void Constructor_IfChecksumCalculatorArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), Substitute.For<IMusicLibraryStorage>(),
-				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), null, Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>()));
-		}
-
-		[Test]
 		public void LoadDiscs_ReturnsDiscsFromRepository()
 		{
 			// Arrange

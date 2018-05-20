@@ -15,24 +15,6 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 	public class SongPlaybacksRegistratorTests
 	{
 		[Test]
-		public void Constructor_WhenMusicLibraryArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new SongPlaybacksRegistrator(null, Substitute.For<IScrobbler>(), Substitute.For<IClock>()));
-		}
-
-		[Test]
-		public void Constructor_WhenScrobblerArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new SongPlaybacksRegistrator(Substitute.For<IMusicLibrary>(), null, Substitute.For<IClock>()));
-		}
-
-		[Test]
-		public void Constructor_WhenClockArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new SongPlaybacksRegistrator(Substitute.For<IMusicLibrary>(), Substitute.For<IScrobbler>(), null));
-		}
-
-		[Test]
 		public void RegisterPlaybackStart_CallsScrobblerUpdateNowPlayingCorrectly()
 		{
 			// Arrange

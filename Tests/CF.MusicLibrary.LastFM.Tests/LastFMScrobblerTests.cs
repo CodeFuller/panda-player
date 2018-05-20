@@ -10,12 +10,6 @@ namespace CF.MusicLibrary.LastFM.Tests
 	public class LastFMScrobblerTests
 	{
 		[Test]
-		public void Constructor_WhenLastFMApiClientArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new LastFMScrobbler(null, Substitute.For<ILogger<LastFMScrobbler>>()));
-		}
-
-		[Test]
 		public void UpdateNowPlaying_ForValidTrack_CallsLastFMApiCorrectly()
 		{
 			// Arrange

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CF.MusicLibrary.Core.Objects;
@@ -15,41 +14,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 	[TestFixture]
 	public class ApplicationViewModelTests
 	{
-		[Test]
-		public void Constructor_IfEditSourceContentViewModelArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(null, Substitute.For<IEditDiscsDetailsViewModel>(),
-				Substitute.For<IEditSourceDiscImagesViewModel>(), Substitute.For<IEditSongsDetailsViewModel>(), Substitute.For<IAddToLibraryViewModel>()));
-		}
-
-		[Test]
-		public void Constructor_IfEditDiscsDetailsViewModelArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(Substitute.For<IEditSourceContentViewModel>(), null,
-				Substitute.For<IEditSourceDiscImagesViewModel>(), Substitute.For<IEditSongsDetailsViewModel>(), Substitute.For<IAddToLibraryViewModel>()));
-		}
-
-		[Test]
-		public void Constructor_IfEditSourceDiscImagesViewModelArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(Substitute.For<IEditSourceContentViewModel>(), Substitute.For<IEditDiscsDetailsViewModel>(),
-				null, Substitute.For<IEditSongsDetailsViewModel>(), Substitute.For<IAddToLibraryViewModel>()));
-		}
-
-		[Test]
-		public void Constructor_IfEditSongsDetailsViewModelArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(Substitute.For<IEditSourceContentViewModel>(), Substitute.For<IEditDiscsDetailsViewModel>(),
-				Substitute.For<IEditSourceDiscImagesViewModel>(), null, Substitute.For<IAddToLibraryViewModel>()));
-		}
-
-		[Test]
-		public void Constructor_IfAddToLibraryViewModelArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(Substitute.For<IEditSourceContentViewModel>(), Substitute.For<IEditDiscsDetailsViewModel>(),
-				Substitute.For<IEditSourceDiscImagesViewModel>(), Substitute.For<IEditSongsDetailsViewModel>(), null));
-		}
-
 		[Test]
 		public void SwitchToNextPage_WhenSwitchesToAddToLibraryViewModel_SetSongsFromEditSongsDetailsViewModel()
 		{

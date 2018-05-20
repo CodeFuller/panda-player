@@ -25,41 +25,6 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		}
 
 		[Test]
-		public void Constructor_IfMusicLibraryArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditDiscImageViewModel(null, Substitute.For<IDocumentDownloader>(),
-				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions()));
-		}
-
-		[Test]
-		public void Constructor_IfDocumentDownloaderArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), null,
-				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions()));
-		}
-
-		[Test]
-		public void Constructor_IfImageFileArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				null, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions()));
-		}
-
-		[Test]
-		public void Constructor_IfFileSystemFacadeArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				Substitute.For<IImageFile>(), null, Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions()));
-		}
-
-		[Test]
-		public void Constructor_IfWebBrowserArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), null, new PandaPlayerSettings().StubOptions()));
-		}
-
-		[Test]
 		public void Load_SetsDiscProperty()
 		{
 			// Arrange

@@ -1,5 +1,4 @@
-﻿using System;
-using CF.MusicLibrary.Core.Interfaces;
+﻿using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.Events.DiscEvents;
 using CF.MusicLibrary.PandaPlayer.ViewModels.DiscImages;
@@ -16,18 +15,6 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 		public void SetUp()
 		{
 			Messenger.Reset();
-		}
-
-		[Test]
-		public void Constructor_IfMusicLibraryArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new DiscImageViewModel(null, Substitute.For<IViewNavigator>()));
-		}
-
-		[Test]
-		public void Constructor_IfViewNavigatorArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new DiscImageViewModel(Substitute.For<IMusicLibrary>(), null));
 		}
 
 		[Test]

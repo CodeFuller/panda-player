@@ -15,24 +15,6 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 	public class EditSongPropertiesViewModelTests
 	{
 		[Test]
-		public void Constructor_WhenLibraryArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditSongPropertiesViewModel(null, Substitute.For<ILibraryStructurer>(), Substitute.For<ILibraryContentUpdater>()));
-		}
-
-		[Test]
-		public void Constructor_WhenLibraryStructurerArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditSongPropertiesViewModel(new DiscLibrary(), null, Substitute.For<ILibraryContentUpdater>()));
-		}
-
-		[Test]
-		public void Constructor_WhenLibraryContentUpdaterArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditSongPropertiesViewModel(new DiscLibrary(), Substitute.For<ILibraryStructurer>(), null));
-		}
-
-		[Test]
 		public void Load_FillsCollectionOfAvailableArtistsCorrectly()
 		{
 			// Arrange

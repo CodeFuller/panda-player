@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CF.MusicLibrary.Core.Objects;
@@ -22,34 +21,6 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		public void SetUp()
 		{
 			Messenger.Reset();
-		}
-
-		[Test]
-		public void Constructor_IfDiscLibraryArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(null, Substitute.For<IApplicationViewModelHolder>(),
-				Substitute.For<IMusicPlayerViewModel>(), Substitute.For<IViewNavigator>()));
-		}
-
-		[Test]
-		public void Constructor_IfViewModelHolderArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(new DiscLibrary(), null,
-				Substitute.For<IMusicPlayerViewModel>(), Substitute.For<IViewNavigator>()));
-		}
-
-		[Test]
-		public void Constructor_IfMusicPlayerViewModelArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(new DiscLibrary(), Substitute.For<IApplicationViewModelHolder>(),
-				null, Substitute.For<IViewNavigator>()));
-		}
-
-		[Test]
-		public void Constructor_IfViewNavigatorArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new ApplicationViewModel(new DiscLibrary(), Substitute.For<IApplicationViewModelHolder>(),
-				Substitute.For<IMusicPlayerViewModel>(), null));
 		}
 
 		[Test]

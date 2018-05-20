@@ -19,27 +19,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 	public class AddToLibraryViewModelTests
 	{
 		[Test]
-		public void Constructor_IfMusicLibraryArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(null, Substitute.For<ISongMediaInfoProvider>(),
-				Substitute.For<IWorkshopMusicStorage>(), new DiscPreprocessorSettings().StubOptions()));
-		}
-
-		[Test]
-		public void Constructor_IfSongMediaInfoProviderArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), null,
-				Substitute.For<IWorkshopMusicStorage>(), new DiscPreprocessorSettings().StubOptions()));
-		}
-
-		[Test]
-		public void Constructor_IfWorkshopMusicStorageArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(),
-				Substitute.For<ISongMediaInfoProvider>(), null, new DiscPreprocessorSettings().StubOptions()));
-		}
-
-		[Test]
 		public void AddContentToLibrary_FillsSongMediaInfoCorrectly()
 		{
 			// Arrange

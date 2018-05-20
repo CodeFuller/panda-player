@@ -15,18 +15,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 	public class EditSourceDiscImagesViewModelTests
 	{
 		[Test]
-		public void Constructor_IfContentCrawlerArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditSourceDiscImagesViewModel(null, Substitute.For<IObjectFactory<IImageFile>>()));
-		}
-
-		[Test]
-		public void Constructor_IfImageFileFactoryArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditSourceDiscImagesViewModel(Substitute.For<IContentCrawler>(), null));
-		}
-
-		[Test]
 		public void LoadImages_FillsImageItemsCorrectly()
 		{
 			// Arrange

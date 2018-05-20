@@ -1,5 +1,4 @@
-﻿using System;
-using CF.Library.Core.Facades;
+﻿using CF.Library.Core.Facades;
 using CF.MusicLibrary.Common.Images;
 using CF.MusicLibrary.Core.Objects.Images;
 using NSubstitute;
@@ -10,18 +9,6 @@ namespace CF.MusicLibrary.Common.Tests.Images
 	[TestFixture]
 	public class ImageInfoProviderTests
 	{
-		[Test]
-		public void Constructor_IfImageFacadeArgumentIsNull_ThrowsArgumentIsNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new ImageInfoProvider(null, Substitute.For<IFileSystemFacade>()));
-		}
-
-		[Test]
-		public void Constructor_IfFileSystemFacadeArgumentIsNull_ThrowsArgumentIsNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new ImageInfoProvider(Substitute.For<IImageFacade>(), null));
-		}
-
 		[Test]
 		public void GetImageInfo_ReturnsCorrectImageInfo()
 		{

@@ -15,18 +15,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 	public class EditDiscsDetailsViewModelTests
 	{
 		[Test]
-		public void Constructor_IfDiscLibraryArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditDiscsDetailsViewModel(null, Substitute.For<ILibraryStructurer>()));
-		}
-
-		[Test]
-		public void Constructor_IfLibraryStructurerArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new EditDiscsDetailsViewModel(new DiscLibrary(), null));
-		}
-
-		[Test]
 		public void AddedDiscs_ForNewDiscs_ReturnsDiscsWithCorrectInfo()
 		{
 			// Arrange

@@ -1,5 +1,4 @@
-﻿using System;
-using CF.MusicLibrary.Common.Images;
+﻿using CF.MusicLibrary.Common.Images;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -8,12 +7,6 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests
 	[TestFixture]
 	public class SourceFileTypeResolverTests
 	{
-		[Test]
-		public void Constructor_IfDiscImageValidatorArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new SourceFileTypeResolver(null));
-		}
-
 		[Test]
 		public void GetSourceFileType_IfFileHasMP3Extension_ReturnsSourceFileTypeSong()
 		{

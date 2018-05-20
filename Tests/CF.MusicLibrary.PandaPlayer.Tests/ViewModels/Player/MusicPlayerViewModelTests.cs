@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using CF.Library.Core.Interfaces;
 using CF.MusicLibrary.Core.Interfaces;
@@ -36,34 +35,6 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Player
 		public void SetUp()
 		{
 			Messenger.Reset();
-		}
-
-		[Test]
-		public void Constructor_IfMusicLibraryArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new MusicPlayerViewModel(null, Substitute.For<ISongPlaylistViewModel>(),
-				Substitute.For<IAudioPlayer>(), Substitute.For<ISongPlaybacksRegistrator>()));
-		}
-
-		[Test]
-		public void Constructor_IfPlaylistArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new MusicPlayerViewModel(Substitute.For<IMusicLibrary>(), null,
-				Substitute.For<IAudioPlayer>(), Substitute.For<ISongPlaybacksRegistrator>()));
-		}
-
-		[Test]
-		public void Constructor_IfAudioPlayerArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new MusicPlayerViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<ISongPlaylistViewModel>(),
-				null, Substitute.For<ISongPlaybacksRegistrator>()));
-		}
-
-		[Test]
-		public void Constructor_IfPlaybacksRegistratorArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new MusicPlayerViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<ISongPlaylistViewModel>(),
-				Substitute.For<IAudioPlayer>(), null));
 		}
 
 		[Test]

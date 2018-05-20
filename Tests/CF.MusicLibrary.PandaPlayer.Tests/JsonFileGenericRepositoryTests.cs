@@ -11,19 +11,6 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 	public class JsonFileGenericRepositoryTests
 	{
 		[Test]
-		public void Constructor_IfFileSystemFacadeArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new JsonFileGenericRepository<Object>(null, Substitute.For<ILogger<JsonFileGenericRepository<Object>>>(), "SomeFile.json"));
-		}
-
-		[Test]
-		public void Constructor_IfDataFileNameArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new JsonFileGenericRepository<Object>(Substitute.For<IFileSystemFacade>(),
-				Substitute.For<ILogger<JsonFileGenericRepository<Object>>>(), null));
-		}
-
-		[Test]
 		public void Save_SavesDataToTargetDataFile()
 		{
 			// Arrange

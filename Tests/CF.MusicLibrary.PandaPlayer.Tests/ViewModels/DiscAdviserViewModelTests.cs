@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.Adviser;
@@ -21,18 +20,6 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 		public void SetUp()
 		{
 			Messenger.Reset();
-		}
-
-		[Test]
-		public void Constructor_IfDiscLibraryArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new DiscAdviserViewModel(null, Substitute.For<ICompositePlaylistAdviser>()));
-		}
-
-		[Test]
-		public void Constructor_IfPlaylistAdviserArgumentIsNull_ThrowsArgumentNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new DiscAdviserViewModel(new DiscLibrary(), null));
 		}
 
 		[Test]
