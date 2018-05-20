@@ -44,6 +44,7 @@ namespace CF.MusicLibrary.LibraryChecker
 			services.AddTransient<IDiscImageValidator, DiscImageValidator>();
 			services.AddTransient<IImageFacade, ImageFacade>();
 			services.AddTransient<IImageInfoProvider, ImageInfoProvider>();
+			services.AddSingleton<IDiscTitleToAlbumMapper, DiscTitleToAlbumMapper>();
 
 			// CheckScope is registered as Singleton because the scope is filled from command line in ApplicationLogic and should be shared by all checkers.
 			// The same instance is registered for both ICheckScope and IUriCheckScope.
@@ -55,7 +56,7 @@ namespace CF.MusicLibrary.LibraryChecker
 			services.AddTransient<ITagDataConsistencyChecker, TagDataConsistencyChecker>();
 			services.AddTransient<ILastFMConsistencyChecker, LastFMConsistencyChecker>();
 			services.AddTransient<IDiscImagesConsistencyChecker, DiscImagesConsistencyChecker>();
-			services.AddSingleton<IDiscTitleToAlbumMapper, DiscTitleToAlbumMapper>();
+			services.AddTransient<ILibraryConsistencyChecker, LibraryConsistencyChecker>();
 
 			services.AddTransient<ILibraryInconsistencyFilter, LibraryInconsistencyFilter>();
 			services.AddTransient<InconsistencyRegistratorToLog>();

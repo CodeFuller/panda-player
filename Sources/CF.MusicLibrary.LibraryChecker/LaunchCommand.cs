@@ -1,10 +1,12 @@
-﻿namespace CF.MusicLibrary.LibraryChecker
+﻿using System;
+
+namespace CF.MusicLibrary.LibraryChecker
 {
-	internal enum LaunchCommand
+	[Flags]
+	internal enum LaunchCommandFlags
 	{
-		None,
-		ShowHelp,
-		Check,
-		UnifyTags,
+		None = 0,
+		Check = 0x01,
+		UnifyTags = 0x02,
 	}
 }

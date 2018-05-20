@@ -3,7 +3,7 @@
 namespace CF.MusicLibrary.LibraryChecker
 {
 	[Flags]
-	internal enum LibraryCheckFlags
+	public enum LibraryCheckFlags
 	{
 		None = 0,
 		CheckDiscsConsistency = 0x01,
@@ -11,8 +11,8 @@ namespace CF.MusicLibrary.LibraryChecker
 		CheckChecksums = 0x04,
 		CheckTagData = 0x08,
 		CheckImages = 0x10,
-		CheckArtistsOnLastFM = 0x20,
-		CheckAlbumsOnLastFM = 0x40,
-		CheckSongsOnLastFM = 0x80,
+		CheckArtistsOnLastFm = 0x20,
+		CheckAlbumsOnLastFm = 0x40,
+		CheckSongsOnLastFm = 0x80,
 	}
 }
