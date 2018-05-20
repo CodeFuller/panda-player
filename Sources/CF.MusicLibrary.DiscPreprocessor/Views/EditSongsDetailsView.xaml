@@ -23,13 +23,7 @@
                 </DataGridTextColumn.CellStyle>
             </DataGridTextColumn>
             <DataGridTextColumn Header="Title" Binding="{Binding Title}" />
-            <!-- Artist column is set to read-only currently.
-                When artist name is changed, Song.Artist.Name property is updated,
-                that causes changes for all other songs assigned to this artist.
-                Also Artist object in the database is also updated.
-                That's probably not a desired behavior.
-                If it's required to change artist for one song, Song.Artist should be set to a new object -->
-            <DataGridTextColumn Header="Artist" IsReadOnly="True" Binding="{Binding ArtistName}" />
+            <DataGridTextColumn Header="Artist" Binding="{Binding ArtistName}" />
             <!-- Album column is set to read-only currently.
                 If Album title should be modified, it's better to edit it on previous EditDiscsDetails page -->
             <DataGridTextColumn Header="Album" IsReadOnly="True" Binding="{Binding AlbumTitle}" />

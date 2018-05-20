@@ -12,8 +12,33 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public Uri StorageUri => Song.Uri;
 
-		// See comment in XAML why Artist column is read-only.
-		public string ArtistName => Song.Artist?.Name;
+		public string ArtistName
+		{
+			get => Song.Artist?.Name;
+			set
+			{
+				if (Song.Artist == null)
+				{
+					Song.Artist = new Artist
+					{
+						Name = value
+					};
+					RaisePropertyChanged();
+				}
+				else if (Song.Artist.Id == 0)
+				{
+					Song.Artist.Name = value;
+					RaisePropertyChanged();
+				}
+				else
+				{
+					// Changing artist name for one song will affect all other songs of this artist (because Artist object is shared).
+					// Moreover, existing Artist object in the database will also be updated.
+					// This is probably not a desired behavior.
+					throw new InvalidOperationException("Name could not be changed for the existing artist");
+				}
+			}
+		}
 
 		public string AlbumTitle => Song.Disc.AlbumTitle;
 
