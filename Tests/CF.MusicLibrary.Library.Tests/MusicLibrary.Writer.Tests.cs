@@ -281,8 +281,8 @@ namespace CF.MusicLibrary.Library.Tests
 
 			Received.InOrder(() =>
 			{
-				songTaggerMock.SetTagData("SongFileName", Arg.Any<SongTagData>());
-				checksumCalculatorMock.CalculateChecksumForFile("SongFileName");
+				songTaggerMock.Received(1).SetTagData("SongFileName", Arg.Any<SongTagData>());
+				checksumCalculatorMock.Received(1).CalculateChecksumForFile("SongFileName");
 			});
 		}
 
@@ -562,8 +562,8 @@ namespace CF.MusicLibrary.Library.Tests
 
 			Received.InOrder(() =>
 			{
-				songTaggerMock.SetTagData("SongFileName", Arg.Any<SongTagData>());
-				checksumCalculatorMock.CalculateChecksumForFile("SongFileName");
+				songTaggerMock.Received(1).SetTagData("SongFileName", Arg.Any<SongTagData>());
+				checksumCalculatorMock.Received(1).CalculateChecksumForFile("SongFileName");
 			});
 		}
 
@@ -1202,8 +1202,8 @@ namespace CF.MusicLibrary.Library.Tests
 
 			Received.InOrder(() =>
 			{
-				songTaggerMock.FixTagData("SongFileName");
-				checksumCalculatorMock.CalculateChecksumForFile("SongFileName");
+				songTaggerMock.Received(1).FixTagData("SongFileName");
+				checksumCalculatorMock.Received(1).CalculateChecksumForFile("SongFileName");
 			});
 		}
 

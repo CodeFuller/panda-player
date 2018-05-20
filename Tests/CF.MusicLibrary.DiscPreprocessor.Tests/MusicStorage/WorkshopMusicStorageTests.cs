@@ -34,10 +34,10 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 
 			Received.InOrder(() =>
 			{
-				fileSystemMock.ClearReadOnlyAttribute("Content File 1.mp3");
-				fileSystemMock.DeleteFile("Content File 1.mp3");
-				fileSystemMock.ClearReadOnlyAttribute("Content File 2.jpg");
-				fileSystemMock.DeleteFile("Content File 2.jpg");
+				fileSystemMock.Received(1).ClearReadOnlyAttribute("Content File 1.mp3");
+				fileSystemMock.Received(1).DeleteFile("Content File 1.mp3");
+				fileSystemMock.Received(1).ClearReadOnlyAttribute("Content File 2.jpg");
+				fileSystemMock.Received(1).DeleteFile("Content File 2.jpg");
 			});
 		}
 

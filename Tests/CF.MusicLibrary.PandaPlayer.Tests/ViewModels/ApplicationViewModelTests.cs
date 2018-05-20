@@ -547,8 +547,8 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			Received.InOrder(() =>
 			{
-				musicPlayerViewModelMock.Stop();
-				musicPlayerViewModelMock.Play();
+				musicPlayerViewModelMock.Received(1).Stop();
+				musicPlayerViewModelMock.Received(1).Play();
 			});
 		}
 
@@ -630,8 +630,8 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			Received.InOrder(() =>
 			{
-				musicPlayerViewModelMock.Stop();
-				musicPlayerViewModelMock.Play();
+				musicPlayerViewModelMock.Received(1).Stop();
+				musicPlayerViewModelMock.Received(1).Play();
 			});
 		}
 
@@ -678,8 +678,8 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 
 			Received.InOrder(() =>
 			{
-				musicPlayerViewModelMock.Stop();
-				musicPlayerViewModelMock.Play();
+				musicPlayerViewModelMock.Received(1).Stop();
+				musicPlayerViewModelMock.Received(1).Play();
 			});
 		}
 
