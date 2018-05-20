@@ -14,12 +14,15 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 	{
 		private readonly ILibraryInconsistencyRegistrator inconsistencyRegistrator;
 		private readonly IDiscTitleToAlbumMapper discTitleToAlbumMapper;
+		private readonly ICheckScope checkScope;
 		private readonly ILogger<DiscConsistencyChecker> logger;
 
-		public DiscConsistencyChecker(ILibraryInconsistencyRegistrator inconsistencyRegistrator, IDiscTitleToAlbumMapper discTitleToAlbumMapper, ILogger<DiscConsistencyChecker> logger)
+		public DiscConsistencyChecker(ILibraryInconsistencyRegistrator inconsistencyRegistrator, IDiscTitleToAlbumMapper discTitleToAlbumMapper,
+			ICheckScope checkScope, ILogger<DiscConsistencyChecker> logger)
 		{
 			this.inconsistencyRegistrator = inconsistencyRegistrator ?? throw new ArgumentNullException(nameof(inconsistencyRegistrator));
 			this.discTitleToAlbumMapper = discTitleToAlbumMapper ?? throw new ArgumentNullException(nameof(discTitleToAlbumMapper));
+			this.checkScope = checkScope ?? throw new ArgumentNullException(nameof(checkScope));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
@@ -27,7 +30,7 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 		{
 			logger.LogInformation("Checking discs consistency ...");
 
-			foreach (var disc in discs)
+			foreach (var disc in discs.Where(d => checkScope.Contains(d)))
 			{
 				// Checking album title
 				if (discTitleToAlbumMapper.AlbumTitleIsSuspicious(disc.AlbumTitle))

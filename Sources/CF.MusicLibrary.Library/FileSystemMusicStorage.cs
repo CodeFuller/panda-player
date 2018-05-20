@@ -66,9 +66,9 @@ namespace CF.MusicLibrary.Library
 			await Task.Run(() => fileStorage.DeleteFile(discImage.Uri));
 		}
 
-		public async Task CheckDataConsistency(IEnumerable<Uri> expectedItemUris, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues)
+		public async Task CheckDataConsistency(IEnumerable<Uri> expectedItemUris, IUriCheckScope checkScope, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues)
 		{
-			await Task.Run(() => fileStorage.CheckDataConsistency(expectedItemUris, new[] { new Uri("/.sync", UriKind.Relative) }, registrator, fixFoundIssues));
+			await Task.Run(() => fileStorage.CheckDataConsistency(expectedItemUris, new[] { new Uri("/.sync", UriKind.Relative) }, checkScope, registrator, fixFoundIssues));
 		}
 	}
 }

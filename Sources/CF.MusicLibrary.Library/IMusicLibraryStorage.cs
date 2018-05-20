@@ -29,6 +29,6 @@ namespace CF.MusicLibrary.Library
 
 		Task DeleteDiscImage(DiscImage discImage);
 
-		Task CheckDataConsistency(IEnumerable<Uri> expectedItemUris, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues);
+		Task CheckDataConsistency(IEnumerable<Uri> expectedItemUris, IUriCheckScope checkScope, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues);
 	}
 }

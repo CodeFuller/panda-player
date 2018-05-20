@@ -17,14 +17,16 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 		private readonly IMusicLibrary musicLibrary;
 		private readonly ILibraryInconsistencyRegistrator inconsistencyRegistrator;
 		private readonly IDiscTitleToAlbumMapper discTitleToAlbumMapper;
+		private readonly ICheckScope checkScope;
 		private readonly ILogger<TagDataConsistencyChecker> logger;
 
 		public TagDataConsistencyChecker(IMusicLibrary musicLibrary, ILibraryInconsistencyRegistrator inconsistencyRegistrator,
-			IDiscTitleToAlbumMapper discTitleToAlbumMapper, ILogger<TagDataConsistencyChecker> logger)
+			IDiscTitleToAlbumMapper discTitleToAlbumMapper, ICheckScope checkScope, ILogger<TagDataConsistencyChecker> logger)
 		{
 			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
 			this.inconsistencyRegistrator = inconsistencyRegistrator ?? throw new ArgumentNullException(nameof(inconsistencyRegistrator));
 			this.discTitleToAlbumMapper = discTitleToAlbumMapper ?? throw new ArgumentNullException(nameof(discTitleToAlbumMapper));
+			this.checkScope = checkScope ?? throw new ArgumentNullException(nameof(checkScope));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
@@ -32,7 +34,7 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 		{
 			logger.LogInformation("Checking tag data ...");
 
-			foreach (var song in songs)
+			foreach (var song in songs.Where(checkScope.Contains))
 			{
 				var tagData = await musicLibrary.GetSongTagData(song);
 
@@ -81,7 +83,7 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 
 		public async Task UnifyTags(IEnumerable<Song> songs, CancellationToken cancellationToken)
 		{
-			foreach (var song in songs)
+			foreach (var song in songs.Where(checkScope.Contains))
 			{
 				logger.LogInformation(Current($"Unifying tag data for song '{song.Uri}'..."));
 				await musicLibrary.FixSongTagData(song);

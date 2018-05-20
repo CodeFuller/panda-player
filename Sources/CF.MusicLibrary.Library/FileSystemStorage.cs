@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using CF.Library.Core.Extensions;
 using CF.Library.Core.Facades;
+using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
 using Microsoft.Extensions.Options;
 
@@ -107,7 +108,8 @@ namespace CF.MusicLibrary.Library
 						!String.Equals(fileSystemFacade.GetFullPath(currDirectoryPath), fileSystemFacade.GetFullPath(storageRootDirectory), StringComparison.OrdinalIgnoreCase));
 		}
 
-		public void CheckDataConsistency(IEnumerable<Uri> expectedFileUris, IEnumerable<Uri> ignoreList, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues)
+		public void CheckDataConsistency(IEnumerable<Uri> expectedFileUris, IEnumerable<Uri> ignoreList,
+			IUriCheckScope checkScope, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues)
 		{
 			var expectedFileUrisList = expectedFileUris.ToList();
 			var expectedFileNames = expectedFileUrisList.Select(GetPathForUri).ToList();
@@ -131,7 +133,9 @@ namespace CF.MusicLibrary.Library
 				}
 			}
 
-			foreach (var storageFileName in fileSystemFacade.EnumerateFiles(storageRootDirectory, "*.*", SearchOption.AllDirectories))
+			foreach (var storageFileName in fileSystemFacade
+				.EnumerateFiles(storageRootDirectory, "*.*", SearchOption.AllDirectories)
+				.Where(filePath => PathIsInScope(filePath, checkScope)))
 			{
 				if (!ignoredPaths.Any(s => storageFileName.StartsWith(s, StringComparison.OrdinalIgnoreCase)) &&
 					!expectedFileNames.Contains(storageFileName))
@@ -140,7 +144,9 @@ namespace CF.MusicLibrary.Library
 				}
 			}
 
-			foreach (string directory in fileSystemFacade.EnumerateDirectories(storageRootDirectory, "*.*", SearchOption.AllDirectories))
+			foreach (string directory in fileSystemFacade
+				.EnumerateDirectories(storageRootDirectory, "*.*", SearchOption.AllDirectories)
+				.Where(dirPath => PathIsInScope(dirPath, checkScope)))
 			{
 				if (!ignoredPaths.Any(s => directory.StartsWith(s, StringComparison.OrdinalIgnoreCase)) &&
 					!expectedFileNames.Any(fileName => fileName.StartsWith(directory, StringComparison.OrdinalIgnoreCase)))
@@ -159,6 +165,11 @@ namespace CF.MusicLibrary.Library
 			segments.AddRange(uri.SegmentsEx());
 
 			return Path.Combine(segments.ToArray());
+		}
+
+		private bool PathIsInScope(string path, IUriCheckScope scope)
+		{
+			return scope.Contains(new ItemUriParts(path, storageRootDirectory).Uri);
 		}
 	}
 }

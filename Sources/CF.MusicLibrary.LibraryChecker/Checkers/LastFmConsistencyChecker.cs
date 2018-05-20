@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.LastFM.Objects;
@@ -16,14 +17,16 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 	{
 		private readonly ILastFMApiClient lastFmApiClient;
 		private readonly ILibraryInconsistencyRegistrator inconsistencyRegistrator;
+		private readonly ICheckScope checkScope;
 		private readonly ILogger<LastFMConsistencyChecker> logger;
 		private readonly CheckingSettings settings;
 
 		public LastFMConsistencyChecker(ILastFMApiClient lastFMApiClient, ILibraryInconsistencyRegistrator inconsistencyRegistrator,
-			ILogger<LastFMConsistencyChecker> logger, IOptions<CheckingSettings> options)
+			ICheckScope checkScope, ILogger<LastFMConsistencyChecker> logger, IOptions<CheckingSettings> options)
 		{
 			this.lastFmApiClient = lastFMApiClient ?? throw new ArgumentNullException(nameof(lastFMApiClient));
 			this.inconsistencyRegistrator = inconsistencyRegistrator ?? throw new ArgumentNullException(nameof(inconsistencyRegistrator));
+			this.checkScope = checkScope ?? throw new ArgumentNullException(nameof(checkScope));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
@@ -32,7 +35,11 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 		{
 			logger.LogInformation("Checking Last.fm artists ...");
 
-			foreach (var artist in library.Artists.OrderBy(a => a.Name))
+			foreach (var artist in library.Songs
+				.Where(checkScope.Contains)
+				.Select(s => s.Artist)
+				.Where(a => a != null)
+				.OrderBy(a => a.Name))
 			{
 				var artistInfo = await lastFmApiClient.GetArtistInfo(artist.Name, settings.LastFmUsername);
 
@@ -65,6 +72,7 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 			HashSet<Album> checkedAlbums = new HashSet<Album>();
 
 			foreach (var disc in discs
+				.Where(checkScope.Contains)
 				.Where(disc => disc.Artist != null)
 				.Where(disc => disc.AlbumTitle != null))
 			{
@@ -98,6 +106,7 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 			HashSet<Track> checkedTracks = new HashSet<Track>();
 
 			foreach (var song in songs
+				.Where(checkScope.Contains)
 				.Where(song => song.Artist != null)
 				.Where(song => song.Duration >= LastFMConstants.MinScrobbledTrackLength)
 				.Where(song => song.LastPlaybackTime.HasValue && song.LastPlaybackTime >= LastFMConstants.ScrobbleStartTime))

@@ -19,6 +19,7 @@ namespace CF.MusicLibrary.Core.Interfaces
 
 		void DeleteFile(Uri fileUri);
 
-		void CheckDataConsistency(IEnumerable<Uri> expectedFileUris, IEnumerable<Uri> ignoreList, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues);
+		void CheckDataConsistency(IEnumerable<Uri> expectedFileUris, IEnumerable<Uri> ignoreList,
+			IUriCheckScope checkScope, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues);
 	}
 }

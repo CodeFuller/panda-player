@@ -13,12 +13,6 @@ namespace CF.MusicLibrary.Library.Tests
 	public class FilesystemMusicStorageTests
 	{
 		[Test]
-		public void Constructor_IfFileStorageArgumentIsNull_ThrowsArgumentIsNullException()
-		{
-			Assert.Throws<ArgumentNullException>(() => new FileSystemMusicStorage(null));
-		}
-
-		[Test]
 		public void StoreSong_StoresSongFileCorrectly()
 		{
 			// Arrange
@@ -251,19 +245,21 @@ namespace CF.MusicLibrary.Library.Tests
 
 			ILibraryStorageInconsistencyRegistrator registrator = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 
+			var checkScopeStub = Substitute.For<IUriCheckScope>();
+
 			IFileStorage fileStorageMock = Substitute.For<IFileStorage>();
 			fileStorageMock.CheckDataConsistency(Arg.Any<IEnumerable<Uri>>(), Arg.Do<IEnumerable<Uri>>(ignoreList => passedIgnoreList = ignoreList.ToList()),
-				registrator, Arg.Any<bool>());
+				checkScopeStub, registrator, Arg.Any<bool>());
 
 			FileSystemMusicStorage target = new FileSystemMusicStorage(fileStorageMock);
 
 			// Act
 
-			target.CheckDataConsistency(expectedItemUris, registrator, false).Wait();
+			target.CheckDataConsistency(expectedItemUris, checkScopeStub, registrator, false).Wait();
 
 			// Assert
 
-			fileStorageMock.Received(1).CheckDataConsistency(expectedItemUris, Arg.Any<IEnumerable<Uri>>(), registrator, false);
+			fileStorageMock.Received(1).CheckDataConsistency(expectedItemUris, Arg.Any<IEnumerable<Uri>>(), checkScopeStub, registrator, false);
 			Assert.AreEqual(new[] { new Uri("/.sync", UriKind.Relative) }, passedIgnoreList);
 		}
 	}

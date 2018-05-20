@@ -69,23 +69,23 @@ namespace CF.MusicLibrary.Library
 			return coverImage == null ? null : await libraryStorage.GetDiscImageFile(disc.CoverImage);
 		}
 
-		public async Task CheckStorage(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues)
+		public async Task CheckStorage(DiscLibrary library, IUriCheckScope checkScope, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues)
 		{
 			var expectedItems = new List<Uri>();
-			foreach (var disc in library.Discs)
+			foreach (var disc in library.Discs.Where(checkScope.Contains))
 			{
 				expectedItems.AddRange(disc.Songs.Select(s => s.Uri));
 				expectedItems.AddRange(disc.Images.Select(im => im.Uri));
 			}
 
-			await libraryStorage.CheckDataConsistency(expectedItems, registrator, fixFoundIssues);
+			await libraryStorage.CheckDataConsistency(expectedItems, checkScope, registrator, fixFoundIssues);
 		}
 
-		public async Task CheckStorageChecksums(DiscLibrary library, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues)
+		public async Task CheckStorageChecksums(DiscLibrary library, ICheckScope checkScope, ILibraryStorageInconsistencyRegistrator registrator, bool fixFoundIssues)
 		{
-			foreach (var disc in library.Discs)
+			foreach (var disc in library.Discs.Where(checkScope.Contains))
 			{
-				foreach (var song in disc.Songs)
+				foreach (var song in disc.Songs.Where(checkScope.Contains))
 				{
 					string songFileName = await libraryStorage.GetSongFile(song);
 					var currChecksum = checksumCalculator.CalculateChecksumForFile(songFileName);

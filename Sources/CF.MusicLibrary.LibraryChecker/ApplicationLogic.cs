@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CF.Library.Bootstrap;
 using CF.Library.Core.Exceptions;
+using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.LibraryChecker.Checkers;
 using Microsoft.Extensions.Logging;
@@ -21,12 +22,13 @@ namespace CF.MusicLibrary.LibraryChecker
 		private readonly ILastFMConsistencyChecker lastFMConsistencyChecker;
 		private readonly IDiscImagesConsistencyChecker discImagesConsistencyChecker;
 		private readonly IMusicLibrary musicLibrary;
+		private readonly IUriCheckScope uriCheckScope;
 		private readonly ILogger<ApplicationLogic> logger;
 
 		public ApplicationLogic(IDiscConsistencyChecker discConsistencyChecker, IStorageConsistencyChecker storageConsistencyChecker,
 			ITagDataConsistencyChecker tagDataChecker, ILastFMConsistencyChecker lastFMConsistencyChecker,
 			IDiscImagesConsistencyChecker discImagesConsistencyChecker, IMusicLibrary musicLibrary,
-			ILogger<ApplicationLogic> logger)
+			IUriCheckScope uriCheckScope, ILogger<ApplicationLogic> logger)
 		{
 			this.discConsistencyChecker = discConsistencyChecker ?? throw new ArgumentNullException(nameof(discConsistencyChecker));
 			this.storageConsistencyChecker = storageConsistencyChecker ?? throw new ArgumentNullException(nameof(storageConsistencyChecker));
@@ -34,12 +36,14 @@ namespace CF.MusicLibrary.LibraryChecker
 			this.lastFMConsistencyChecker = lastFMConsistencyChecker ?? throw new ArgumentNullException(nameof(lastFMConsistencyChecker));
 			this.discImagesConsistencyChecker = discImagesConsistencyChecker ?? throw new ArgumentNullException(nameof(discImagesConsistencyChecker));
 			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.uriCheckScope = uriCheckScope ?? throw new ArgumentNullException(nameof(uriCheckScope));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		public async Task<int> Run(string[] args, CancellationToken cancellationToken)
 		{
 			LibraryCheckFlags checkFlags = LibraryCheckFlags.CheckDiscsConsistency | LibraryCheckFlags.CheckLibraryStorage;
+			var scopeUri = ItemUriParts.RootUri;
 			LaunchCommand command = LaunchCommand.ShowHelp;
 			bool fixIssues = false;
 
@@ -60,11 +64,14 @@ namespace CF.MusicLibrary.LibraryChecker
 				optionSet.Add(Invariant($"{option.Key}="), settingValue => checkFlags = UpdateCheckFlags(settingValue, checkFlags, option.Value));
 			}
 
+			optionSet.Add("scope=", s => scopeUri = new Uri(s, UriKind.Relative));
 			optionSet.Add("check", s => command = LaunchCommand.Check);
 			optionSet.Add("fix", s => fixIssues = true);
 			optionSet.Add("unify-tags", s => command = LaunchCommand.UnifyTags);
 
 			optionSet.Parse(args);
+
+			uriCheckScope.SetScopeUri(scopeUri);
 
 			switch (command)
 			{
@@ -90,7 +97,7 @@ namespace CF.MusicLibrary.LibraryChecker
 		private static void ShowHelp()
 		{
 			Console.Error.WriteLine();
-			Console.Error.WriteLine("Usage: LibraryChecker.exe <command> [command options]");
+			Console.Error.WriteLine("Usage: LibraryChecker.exe <command> [command options] [--scope=\"/\"]");
 			Console.Error.WriteLine("Supported commands:");
 			Console.Error.WriteLine();
 			Console.Error.WriteLine("  --check [--fix]  Check library consistency. Possible checks:");

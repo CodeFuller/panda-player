@@ -215,7 +215,7 @@ namespace CF.MusicLibrary.Library.Tests
 		}
 
 		[Test]
-		public void CheckStorage_ChecksStorageDataConsistencyForAllSongs()
+		public void CheckStorage_ChecksStorageDataConsistencyForAllSongsWithinCheckScope()
 		{
 			// Arrange
 
@@ -236,19 +236,32 @@ namespace CF.MusicLibrary.Library.Tests
 				}
 			};
 
-			var discLibrary = new DiscLibrary(new[] { disc1, disc2 });
+			var disc3 = new Disc
+			{
+				SongsUnordered = new[]
+				{
+					new Song { Uri = new Uri("/SomeSong31.mp3", UriKind.Relative) },
+				}
+			};
+
+			var discLibrary = new DiscLibrary(new[] { disc1, disc2, disc3 });
+
+			var checkScopeStub = Substitute.For<IUriCheckScope>();
+			checkScopeStub.Contains(disc1).Returns(true);
+			checkScopeStub.Contains(disc2).Returns(true);
+			checkScopeStub.Contains(disc3).Returns(false);
 
 			List<Uri> passedUris = null;
 			ILibraryStorageInconsistencyRegistrator registrator = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 			IMusicLibraryStorage musicLibraryStorageMock = Substitute.For<IMusicLibraryStorage>();
-			musicLibraryStorageMock.CheckDataConsistency(Arg.Do<IEnumerable<Uri>>(arg => passedUris = arg.ToList()), registrator, false);
+			musicLibraryStorageMock.CheckDataConsistency(Arg.Do<IEnumerable<Uri>>(arg => passedUris = arg.ToList()), Arg.Any<IUriCheckScope>(), registrator, false);
 
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), musicLibraryStorageMock,
 				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			// Act
 
-			target.CheckStorage(discLibrary, registrator, false).Wait();
+			target.CheckStorage(discLibrary, checkScopeStub, registrator, false).Wait();
 
 			// Assert
 
@@ -263,7 +276,7 @@ namespace CF.MusicLibrary.Library.Tests
 		}
 
 		[Test]
-		public void CheckStorage_ChecksStorageDataConsistencyForAllDiscImages()
+		public void CheckStorage_ChecksStorageDataConsistencyForAllDiscImagesWithinCheckScope()
 		{
 			// Arrange
 
@@ -285,20 +298,34 @@ namespace CF.MusicLibrary.Library.Tests
 					Uri = new Uri("/SomeImage2.img", UriKind.Relative),
 				}
 			};
+			var disc3 = new Disc
+			{
+				SongsUnordered = new[] { new Song() },
+				CoverImage = new DiscImage
+				{
+					ImageType = DiscImageType.Cover,
+					Uri = new Uri("/SomeImage3.img", UriKind.Relative),
+				}
+			};
 
-			var discLibrary = new DiscLibrary(new[] { disc1, disc2 });
+			var discLibrary = new DiscLibrary(new[] { disc1, disc2, disc3 });
+
+			var checkScopeStub = Substitute.For<IUriCheckScope>();
+			checkScopeStub.Contains(disc1).Returns(true);
+			checkScopeStub.Contains(disc2).Returns(true);
+			checkScopeStub.Contains(disc3).Returns(false);
 
 			List<Uri> passedUris = null;
 			ILibraryStorageInconsistencyRegistrator registrator = Substitute.For<ILibraryStorageInconsistencyRegistrator>();
 			IMusicLibraryStorage musicLibraryStorageMock = Substitute.For<IMusicLibraryStorage>();
-			musicLibraryStorageMock.CheckDataConsistency(Arg.Do<IEnumerable<Uri>>(arg => passedUris = arg.ToList()), registrator, false);
+			musicLibraryStorageMock.CheckDataConsistency(Arg.Do<IEnumerable<Uri>>(arg => passedUris = arg.ToList()), Arg.Any<IUriCheckScope>(), registrator, false);
 
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), musicLibraryStorageMock,
 				Substitute.For<ISongTagger>(), Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
 
 			// Act
 
-			target.CheckStorage(discLibrary, registrator, false).Wait();
+			target.CheckStorage(discLibrary, StubFullScope(), registrator, false).Wait();
 
 			// Assert
 
@@ -332,7 +359,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckStorageChecksums(library, registratorMock, false).Wait();
+			target.CheckStorageChecksums(library, StubFullScope(), registratorMock, false).Wait();
 
 			// Assert
 
@@ -365,7 +392,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckStorageChecksums(library, registratorMock, false).Wait();
+			target.CheckStorageChecksums(library, StubFullScope(), registratorMock, false).Wait();
 
 			// Assert
 
@@ -400,7 +427,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckStorageChecksums(library, Substitute.For<ILibraryStorageInconsistencyRegistrator>(), true).Wait();
+			target.CheckStorageChecksums(library, StubFullScope(), Substitute.For<ILibraryStorageInconsistencyRegistrator>(), true).Wait();
 
 			// Assert
 
@@ -434,7 +461,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckStorageChecksums(library, Substitute.For<ILibraryStorageInconsistencyRegistrator>(), false).Wait();
+			target.CheckStorageChecksums(library, StubFullScope(), Substitute.For<ILibraryStorageInconsistencyRegistrator>(), false).Wait();
 
 			// Assert
 
@@ -443,15 +470,47 @@ namespace CF.MusicLibrary.Library.Tests
 		}
 
 		[Test]
+		public void CheckStorageChecksums_SkipsSongsOutsideCheckScope()
+		{
+			// Arrange
+
+			var song11 = new Song();
+			var song12 = new Song();
+			var disc1 = new Disc { SongsUnordered = new[] { song11, song12 } };
+
+			var song21 = new Song();
+			var disc2 = new Disc { SongsUnordered = new[] { song21 } };
+
+			var library = new DiscLibrary(new[] { disc1, disc2 });
+
+			var checkScopeStub = Substitute.For<IUriCheckScope>();
+			checkScopeStub.Contains(disc1).Returns(true);
+			checkScopeStub.Contains(song11).Returns(true);
+			checkScopeStub.Contains(song12).Returns(false);
+			checkScopeStub.Contains(disc2).Returns(false);
+			checkScopeStub.Contains(song21).Returns(true);
+
+			var storageMock = Substitute.For<IMusicLibraryStorage>();
+
+			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageMock, Substitute.For<ISongTagger>(),
+				Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
+
+			// Act
+
+			target.CheckStorageChecksums(library, checkScopeStub, Substitute.For<ILibraryStorageInconsistencyRegistrator>(), false).Wait();
+
+			// Assert
+
+			storageMock.Received(1).GetSongFile(song11);
+			storageMock.DidNotReceive().GetSongFile(song12);
+			storageMock.DidNotReceive().GetSongFile(song21);
+		}
+
+		[Test]
 		public void CheckStorageChecksums_IfDiscImageChecksumDiffersFromStoredInRepository_RegistersStorageInconsistency()
 		{
 			// Arrange
 
-			var song = new Song
-			{
-				Uri = new Uri("/SomeSong.mp3", UriKind.Relative),
-				Checksum = 12345,
-			};
 			var image = new DiscImage
 			{
 				ImageType = DiscImageType.Cover,
@@ -460,16 +519,14 @@ namespace CF.MusicLibrary.Library.Tests
 			var disc = new Disc
 			{
 				CoverImage = image,
-				SongsUnordered = new[] { song },
+				SongsUnordered = new[] { new Song { Checksum = 0 } },
 			};
 			var library = new DiscLibrary(new[] { disc });
 
 			IMusicLibraryStorage storageStub = Substitute.For<IMusicLibraryStorage>();
-			storageStub.GetSongFile(song).Returns("SomeSongFile.mp3");
 			storageStub.GetDiscImageFile(image).Returns("SomeImage.img");
 
 			IChecksumCalculator checksumCalculatorStub = Substitute.For<IChecksumCalculator>();
-			checksumCalculatorStub.CalculateChecksumForFile("SomeSongFile.mp3").Returns(12345);
 			checksumCalculatorStub.CalculateChecksumForFile("SomeImage.img").Returns(54321);
 
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
@@ -479,7 +536,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckStorageChecksums(library, registratorMock, false).Wait();
+			target.CheckStorageChecksums(library, StubFullScope(), registratorMock, false).Wait();
 
 			// Assert
 
@@ -491,11 +548,6 @@ namespace CF.MusicLibrary.Library.Tests
 		{
 			// Arrange
 
-			var song = new Song
-			{
-				Uri = new Uri("/SomeSong.mp3", UriKind.Relative),
-				Checksum = 12345,
-			};
 			var image = new DiscImage
 			{
 				ImageType = DiscImageType.Cover,
@@ -504,16 +556,14 @@ namespace CF.MusicLibrary.Library.Tests
 			var disc = new Disc
 			{
 				CoverImage = image,
-				SongsUnordered = new[] { song },
+				SongsUnordered = new[] { new Song { Checksum = 0 } },
 			};
 			var library = new DiscLibrary(new[] { disc });
 
 			IMusicLibraryStorage storageStub = Substitute.For<IMusicLibraryStorage>();
-			storageStub.GetSongFile(song).Returns("SomeSongFile.mp3");
 			storageStub.GetDiscImageFile(image).Returns("SomeImage.img");
 
 			IChecksumCalculator checksumCalculatorStub = Substitute.For<IChecksumCalculator>();
-			checksumCalculatorStub.CalculateChecksumForFile("SomeSongFile.mp3").Returns(12345);
 			checksumCalculatorStub.CalculateChecksumForFile("SomeImage.img").Returns(12345);
 
 			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageStub,
@@ -523,7 +573,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckStorageChecksums(library, registratorMock, false).Wait();
+			target.CheckStorageChecksums(library, StubFullScope(), registratorMock, false).Wait();
 
 			// Assert
 
@@ -531,15 +581,10 @@ namespace CF.MusicLibrary.Library.Tests
 		}
 
 		[Test]
-		public void CheckStorageChecksums_IfDiscImageChecksumsDifferAndFixFoundIssuesIsTrue_UpdatesSongChecksum()
+		public void CheckStorageChecksums_IfDiscImageChecksumsDifferAndFixFoundIssuesIsTrue_UpdatesImageChecksum()
 		{
 			// Arrange
 
-			var song = new Song
-			{
-				Uri = new Uri("/SomeSong.mp3", UriKind.Relative),
-				Checksum = 12345,
-			};
 			var image = new DiscImage
 			{
 				ImageType = DiscImageType.Cover,
@@ -548,12 +593,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var disc = new Disc
 			{
 				CoverImage = image,
-				SongsUnordered = new[] { song },
+				SongsUnordered = new[] { new Song() },
 			};
 			var library = new DiscLibrary(new[] { disc });
 
 			IMusicLibraryStorage storageStub = Substitute.For<IMusicLibraryStorage>();
-			storageStub.GetSongFile(song).Returns("SomeSongFile.mp3");
 			storageStub.GetDiscImageFile(image).Returns("SomeImage.img");
 
 			IChecksumCalculator checksumCalculatorStub = Substitute.For<IChecksumCalculator>();
@@ -569,7 +613,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckStorageChecksums(library, Substitute.For<ILibraryStorageInconsistencyRegistrator>(), true).Wait();
+			target.CheckStorageChecksums(library, StubFullScope(), Substitute.For<ILibraryStorageInconsistencyRegistrator>(), true).Wait();
 
 			// Assert
 
@@ -578,15 +622,10 @@ namespace CF.MusicLibrary.Library.Tests
 		}
 
 		[Test]
-		public void CheckStorageChecksums_IfDiscImageChecksumsDifferAndFixFoundIssuesIsFalse_DoesNotUpdateSongChecksum()
+		public void CheckStorageChecksums_IfDiscImageChecksumsDifferAndFixFoundIssuesIsFalse_DoesNotUpdateImageChecksum()
 		{
 			// Arrange
 
-			var song = new Song
-			{
-				Uri = new Uri("/SomeSong.mp3", UriKind.Relative),
-				Checksum = 12345,
-			};
 			var image = new DiscImage
 			{
 				ImageType = DiscImageType.Cover,
@@ -595,12 +634,11 @@ namespace CF.MusicLibrary.Library.Tests
 			var disc = new Disc
 			{
 				CoverImage = image,
-				SongsUnordered = new[] { song },
+				SongsUnordered = new[] { new Song() },
 			};
 			var library = new DiscLibrary(new[] { disc });
 
 			IMusicLibraryStorage storageStub = Substitute.For<IMusicLibraryStorage>();
-			storageStub.GetSongFile(song).Returns("SomeSongFile.mp3");
 			storageStub.GetDiscImageFile(image).Returns("SomeImage.img");
 
 			IChecksumCalculator checksumCalculatorStub = Substitute.For<IChecksumCalculator>();
@@ -614,12 +652,60 @@ namespace CF.MusicLibrary.Library.Tests
 
 			// Act
 
-			target.CheckStorageChecksums(library, Substitute.For<ILibraryStorageInconsistencyRegistrator>(), false).Wait();
+			target.CheckStorageChecksums(library, StubFullScope(), Substitute.For<ILibraryStorageInconsistencyRegistrator>(), false).Wait();
 
 			// Assert
 
 			Assert.AreEqual(12345, image.Checksum);
 			repositoryMock.DidNotReceive().UpdateDiscImage(Arg.Any<DiscImage>());
+		}
+
+		private IUriCheckScope StubFullScope()
+		{
+			var checkScopeStub = Substitute.For<IUriCheckScope>();
+			checkScopeStub.Contains(Arg.Any<Disc>()).Returns(true);
+			checkScopeStub.Contains(Arg.Any<Song>()).Returns(true);
+			return checkScopeStub;
+		}
+
+		[Test]
+		public void CheckStorageChecksums_SkipsImagesOutsideCheckScope()
+		{
+			// Arrange
+
+			var image1 = new DiscImage { ImageType = DiscImageType.Cover };
+			var disc1 = new Disc
+			{
+				CoverImage = image1,
+				SongsUnordered = new[] { new Song() },
+			};
+
+			var image2 = new DiscImage { ImageType = DiscImageType.Cover };
+			var disc2 = new Disc
+			{
+				CoverImage = image2,
+				SongsUnordered = new[] { new Song() },
+			};
+
+			var library = new DiscLibrary(new[] { disc1, disc2 });
+
+			var checkScopeStub = Substitute.For<IUriCheckScope>();
+			checkScopeStub.Contains(disc1).Returns(true);
+			checkScopeStub.Contains(disc2).Returns(false);
+
+			var storageMock = Substitute.For<IMusicLibraryStorage>();
+
+			var target = new RepositoryAndStorageMusicLibrary(Substitute.For<IMusicLibraryRepository>(), storageMock, Substitute.For<ISongTagger>(),
+				Substitute.For<ILibraryStructurer>(), Substitute.For<IChecksumCalculator>(), Substitute.For<ILogger<RepositoryAndStorageMusicLibrary>>());
+
+			// Act
+
+			target.CheckStorageChecksums(library, checkScopeStub, Substitute.For<ILibraryStorageInconsistencyRegistrator>(), false).Wait();
+
+			// Assert
+
+			storageMock.Received(1).GetDiscImageFile(image1);
+			storageMock.DidNotReceive().GetDiscImageFile(image2);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CF.MusicLibrary.Common.Images;
@@ -17,23 +18,25 @@ namespace CF.MusicLibrary.LibraryChecker.Checkers
 		private readonly IImageInfoProvider imageInfoProvider;
 		private readonly IDiscImageValidator discImageValidator;
 		private readonly ILibraryInconsistencyRegistrator inconsistencyRegistrator;
+		private readonly ICheckScope checkScope;
 		private readonly ILogger<DiscImagesConsistencyChecker> logger;
 
 		public DiscImagesConsistencyChecker(IMusicLibrary musicLibrary, IImageInfoProvider imageInfoProvider, IDiscImageValidator discImageValidator,
-			ILibraryInconsistencyRegistrator inconsistencyRegistrator, ILogger<DiscImagesConsistencyChecker> logger)
+			ILibraryInconsistencyRegistrator inconsistencyRegistrator, ICheckScope checkScope, ILogger<DiscImagesConsistencyChecker> logger)
 		{
 			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
 			this.imageInfoProvider = imageInfoProvider ?? throw new ArgumentNullException(nameof(imageInfoProvider));
 			this.discImageValidator = discImageValidator ?? throw new ArgumentNullException(nameof(discImageValidator));
 			this.inconsistencyRegistrator = inconsistencyRegistrator ?? throw new ArgumentNullException(nameof(inconsistencyRegistrator));
+			this.checkScope = checkScope ?? throw new ArgumentNullException(nameof(checkScope));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		public async Task CheckDiscImagesConsistency(IEnumerable<Disc> discs, CancellationToken cancellationToken)
 		{
-			logger.LogInformation("Checking discs images consistency ...");
+			logger.LogInformation("Checking discs images consistency...");
 
-			foreach (var disc in discs)
+			foreach (var disc in discs.Where(checkScope.Contains))
 			{
 				await CheckDiscImagesConsistency(disc);
 			}
