@@ -37,8 +37,22 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 				checkedArtists = true;
 			}
 
+			var favouriteArtistDiscs = discLibrary.Discs
+				.Where(d => d.Artist != null && favouriteArtists.Any(fa => String.Equals(fa, d.Artist.Name, StringComparison.Ordinal)));
+			var artistOrders = favouriteArtistDiscs.GroupBy(d => d.Artist)
+				.Select(g => new
+				{
+					Artist = g.Key,
+					Passed = g.Min(k => k.PlaybacksPassed)
+				})
+				.ToDictionary(k => k.Artist, k => k.Passed);
+
+			// Selecting first advised disc for each artist. Artists are ordered by last playback.
 			return discAdviser.Advise(discLibrary)
-				.Where(a => a.Disc.Artist != null && favouriteArtists.Any(fa => String.Equals(fa, a.Disc.Artist.Name, StringComparison.Ordinal)))
+				.Where(ap => ap.Disc.Artist != null && artistOrders.ContainsKey(ap.Disc.Artist))
+				.GroupBy(ap => ap.Disc.Artist)
+				.OrderByDescending(g => artistOrders[g.Key])
+				.Select(g => g.First())
 				.Select(a => AdvisedPlaylist.ForFavouriteArtistDisc(a.Disc));
 		}
 	}
