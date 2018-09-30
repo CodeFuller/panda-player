@@ -37,7 +37,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 				checkedArtists = true;
 			}
 
-			var favouriteArtistDiscs = discLibrary.Discs
+			var favouriteArtistDiscs = discLibrary.AllDiscs
 				.Where(d => d.Artist != null && favouriteArtists.Any(fa => String.Equals(fa, d.Artist.Name, StringComparison.Ordinal)));
 			var artistOrders = favouriteArtistDiscs.GroupBy(d => d.Artist)
 				.Select(g => new

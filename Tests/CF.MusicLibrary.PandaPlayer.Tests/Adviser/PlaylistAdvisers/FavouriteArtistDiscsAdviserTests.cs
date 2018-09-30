@@ -15,7 +15,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 	public class FavouriteArtistDiscsAdviserTests
 	{
 		[Test]
-		public void AdviseDiscs_AdvisesDiscsInCorrectOrder()
+		public void AdviseDiscs_IfAllDiscsAreActive_AdvisesDiscsInCorrectOrder()
 		{
 			// Arrange
 
@@ -65,6 +65,45 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			// Assert
 
 			CollectionAssert.AreEqual(new[] { disc21, disc11, disc31, }, advisedPlaylists.Select(a => a.Disc));
+		}
+
+		[Test]
+		public void AdviseDiscs_IfSomeDiscsAreDeleted_ConsidersLastPlaybackOfDeletedDiscs()
+		{
+			// Arrange
+
+			var settings = new FavouriteArtistsAdviserSettings
+			{
+				FavouriteArtists =
+				{
+					"Artist 1",
+					"Artist 2",
+				}
+			};
+
+			var artist1 = new Artist { Name = "Artist 1" };
+			var artist2 = new Artist { Name = "Artist 2" };
+
+			var disc11 = new Disc { SongsUnordered = new[] { new Song { Artist = artist1, LastPlaybackTime = new DateTime(2018, 09, 30), DeleteDate = new DateTime(2018, 09, 30) } }, };
+			var disc12 = new Disc { SongsUnordered = new[] { new Song { Artist = artist1, LastPlaybackTime = new DateTime(2018, 09, 28) } } };
+			var disc21 = new Disc { SongsUnordered = new[] { new Song { Artist = artist2, LastPlaybackTime = new DateTime(2018, 09, 29) } } };
+
+			var discs = new[] { disc11, disc12, disc21 };
+
+			var library = new DiscLibrary(discs);
+
+			IPlaylistAdviser discAdviserStub = Substitute.For<IPlaylistAdviser>();
+			discAdviserStub.Advise(library).Returns(discs.Where(d => !d.IsDeleted).Select(AdvisedPlaylist.ForDisc));
+
+			var target = new FavouriteArtistDiscsAdviser(discAdviserStub, Substitute.For<ILogger<FavouriteArtistDiscsAdviser>>(), settings.StubOptions());
+
+			// Act
+
+			var advisedPlaylists = target.Advise(library);
+
+			// Assert
+
+			CollectionAssert.AreEqual(new[] { disc21, disc12, }, advisedPlaylists.Select(a => a.Disc));
 		}
 
 		[Test]

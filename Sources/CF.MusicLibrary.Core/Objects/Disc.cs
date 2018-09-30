@@ -12,7 +12,7 @@ namespace CF.MusicLibrary.Core.Objects
 	{
 		public int Id { get; set; }
 
-		public Artist Artist => Songs.Select(s => s.Artist).UniqueOrDefault();
+		public Artist Artist => (IsDeleted ? AllSongs : Songs).Select(s => s.Artist).UniqueOrDefault();
 
 		public Genre Genre => Songs.Select(s => s.Genre).UniqueOrDefault();
 

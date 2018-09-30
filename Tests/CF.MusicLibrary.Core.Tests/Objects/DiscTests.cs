@@ -10,7 +10,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 	public class DiscTests
 	{
 		[Test]
-		public void ArtistGetter_WhenAllSongsHaveSameArtist_ReturnsThisArtist()
+		public void ArtistGetter_ForActiveDiscWhenAllSongsHaveSameArtist_ReturnsThisArtist()
 		{
 			// Arrange
 
@@ -35,7 +35,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		}
 
 		[Test]
-		public void ArtistGetter_WhenSongsHaveDifferentArtists_ReturnsNull()
+		public void ArtistGetter_ForActiveDiscWhenSongsHaveDifferentArtists_ReturnsNull()
 		{
 			// Arrange
 
@@ -58,7 +58,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 		}
 
 		[Test]
-		public void ArtistGetter_WhenSomeSongsHaveNullArtist_ReturnsNull()
+		public void ArtistGetter_ForActiveDiscWhenSomeSongsHaveNullArtist_ReturnsNull()
 		{
 			// Arrange
 
@@ -68,6 +68,77 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { Artist = new Artist() },
 					new Song { Artist = null },
+				}
+			};
+
+			// Act
+
+			var returnedArtist = disc.Artist;
+
+			// Assert
+
+			Assert.IsNull(returnedArtist);
+		}
+
+		[Test]
+		public void ArtistGetter_ForDeletedDiscWhenAllSongsHaveSameArtist_ReturnsThisArtist()
+		{
+			// Arrange
+
+			var artist = new Artist();
+
+			var disc = new Disc
+			{
+				SongsUnordered = new List<Song>
+				{
+					new Song { Artist = artist, DeleteDate = new DateTime(2018, 09, 30) },
+					new Song { Artist = artist, DeleteDate = new DateTime(2018, 09, 30) },
+				}
+			};
+
+			// Act
+
+			var returnedArtist = disc.Artist;
+
+			// Assert
+
+			Assert.AreSame(artist, returnedArtist);
+		}
+
+		[Test]
+		public void ArtistGetter_ForDeletedDiscWhenSongsHaveDifferentArtists_ReturnsNull()
+		{
+			// Arrange
+
+			var disc = new Disc
+			{
+				SongsUnordered = new List<Song>
+				{
+					new Song { Artist = new Artist(), DeleteDate = new DateTime(2018, 09, 30) },
+					new Song { Artist = new Artist(), DeleteDate = new DateTime(2018, 09, 30) },
+				}
+			};
+
+			// Act
+
+			var returnedArtist = disc.Artist;
+
+			// Assert
+
+			Assert.IsNull(returnedArtist);
+		}
+
+		[Test]
+		public void ArtistGetter_ForDeletedDiscWhenSomeSongsHaveNullArtist_ReturnsNull()
+		{
+			// Arrange
+
+			var disc = new Disc
+			{
+				SongsUnordered = new List<Song>
+				{
+					new Song { Artist = new Artist(), DeleteDate = new DateTime(2018, 09, 30) },
+					new Song { Artist = null, DeleteDate = new DateTime(2018, 09, 30) },
 				}
 			};
 
