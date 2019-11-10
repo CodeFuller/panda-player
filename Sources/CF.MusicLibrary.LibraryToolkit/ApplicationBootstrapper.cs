@@ -3,6 +3,7 @@ using CF.Library.Bootstrap;
 using CF.Library.Configuration;
 using CF.Library.Core.Facades;
 using CF.Library.Logging;
+using CF.MusicLibrary.LibraryToolkit.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -15,6 +16,8 @@ namespace CF.MusicLibrary.LibraryToolkit
 		{
 			services.AddTransient<IFileSystemFacade, FileSystemFacade>();
 			services.AddTransient<IApplicationLogic, ApplicationLogic>();
+			services.AddTransient<IMigrateDatabaseCommand, MigrateDatabaseCommand>();
+			services.AddTransient<ISeedApiDatabaseCommand, SeedApiDatabaseCommand>();
 		}
 
 		protected override void BootstrapConfiguration(IConfigurationBuilder configurationBuilder, string[] commandLineArgs)

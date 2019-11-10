@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Data;
-using System.Data.SQLite;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using CF.Library.Bootstrap;
 using CF.Library.Core.Exceptions;
 using CF.Library.Core.Facades;
-using CF.MusicLibrary.Dal;
-using Microsoft.Extensions.Logging;
+using CF.MusicLibrary.LibraryToolkit.Interfaces;
 using NDesk.Options;
 using static System.FormattableString;
 
@@ -16,13 +13,15 @@ namespace CF.MusicLibrary.LibraryToolkit
 {
 	public class ApplicationLogic : IApplicationLogic
 	{
+		private readonly IMigrateDatabaseCommand migrateDatabaseCommand;
+		private readonly ISeedApiDatabaseCommand seedApiDatabaseCommand;
 		private readonly IFileSystemFacade fileSystemFacade;
-		private readonly ILogger<ApplicationLogic> logger;
 
-		public ApplicationLogic(IFileSystemFacade fileSystemFacade, ILogger<ApplicationLogic> logger)
+		public ApplicationLogic(IMigrateDatabaseCommand migrateDatabaseCommand, ISeedApiDatabaseCommand seedApiDatabaseCommand, IFileSystemFacade fileSystemFacade)
 		{
+			this.migrateDatabaseCommand = migrateDatabaseCommand ?? throw new ArgumentNullException(nameof(migrateDatabaseCommand));
+			this.seedApiDatabaseCommand = seedApiDatabaseCommand ?? throw new ArgumentNullException(nameof(seedApiDatabaseCommand));
 			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
-			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		public async Task<int> Run(string[] args, CancellationToken cancellationToken)
@@ -32,6 +31,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 			var optionSet = new OptionSet
 			{
 				{ "migrate-database", s => command = LaunchCommand.MigrateDatabase },
+				{ "seed-api-database", s => command = LaunchCommand.SeedApiDatabase },
 			};
 			var restArgs = optionSet.Parse(args);
 
@@ -48,7 +48,17 @@ namespace CF.MusicLibrary.LibraryToolkit
 						break;
 					}
 
-					await MigrateDatabase(restArgs[0], restArgs[1]);
+					await migrateDatabaseCommand.Execute(restArgs[0], restArgs[1], cancellationToken);
+					break;
+
+				case LaunchCommand.SeedApiDatabase:
+					if (restArgs.Count != 2)
+					{
+						ShowHelp();
+						break;
+					}
+
+					await seedApiDatabaseCommand.Execute(restArgs[0], new Uri(restArgs[1], UriKind.Absolute), cancellationToken);
 					break;
 
 				default:
@@ -64,66 +74,12 @@ namespace CF.MusicLibrary.LibraryToolkit
 			Console.Error.WriteLine(Invariant($"Usage: {Path.GetFileName(fileSystemFacade.GetProcessExecutableFileName())} <command> [command options]"));
 			Console.Error.WriteLine("Supported commands:");
 			Console.Error.WriteLine();
-			Console.Error.WriteLine("  --migrate-database  <source db file>  <target db file>");
+			Console.Error.WriteLine("  --migrate-database   <source db file>  <target db file>");
 			Console.Error.WriteLine("      Creates database schema by included 'MusicLibrary.sql' and copies data from source database.");
 			Console.Error.WriteLine();
-		}
-
-		private async Task MigrateDatabase(string sourceDatabaseFileName, string targetDatabaseFileName)
-		{
-			const string sqlFile = @"MusicLibrary.sql";
-
-			var sourceDBConnectionString = BuildConnectionString(sourceDatabaseFileName);
-			var targetDBConnectionString = BuildConnectionString(targetDatabaseFileName);
-
-			// Checking that target database file does not exist.
-			if (fileSystemFacade.FileExists(targetDatabaseFileName))
-			{
-				logger.LogError($"Target database file should not exist: '{targetDatabaseFileName}'");
-				return;
-			}
-
-			logger.LogInformation($"Creating database schema from '{sqlFile}'...");
-			CreateDatabaseSchema(sqlFile, targetDBConnectionString);
-
-			logger.LogInformation("Copying the data...");
-			using (var sourceConnection = new SQLiteConnection(sourceDBConnectionString))
-			using (var targetConnection = new SQLiteConnection(targetDBConnectionString))
-			{
-				await MusicLibraryRepositoryEF.CopyData(sourceConnection, targetConnection);
-			}
-
-			logger.LogInformation("Data was migrated successfully");
-		}
-
-		private static void CreateDatabaseSchema(string sqlScriptFileName, string targetDBConnectionString)
-		{
-			var commandText = File.ReadAllText(sqlScriptFileName);
-
-			using (IDbConnection connection = new SQLiteConnection(targetDBConnectionString))
-			{
-				connection.ConnectionString = targetDBConnectionString;
-				connection.Open();
-
-				using (IDbTransaction transaction = connection.BeginTransaction())
-				using (IDbCommand cmd = connection.CreateCommand())
-				{
-					cmd.CommandText = commandText;
-					cmd.ExecuteNonQuery();
-					transaction.Commit();
-				}
-			}
-		}
-
-		private static string BuildConnectionString(string databaseFileName)
-		{
-			SQLiteConnectionStringBuilder builder = new SQLiteConnectionStringBuilder
-			{
-				DataSource = databaseFileName,
-				ForeignKeys = true
-			};
-
-			return builder.ConnectionString;
+			Console.Error.WriteLine("  --seed-api-database  <source db file>  <Music Library API base URL (e.g. http://localhost/MusicLibraryApi/)>");
+			Console.Error.WriteLine("      Copies the data to Music Library API.");
+			Console.Error.WriteLine();
 		}
 	}
 }
