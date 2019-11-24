@@ -45,7 +45,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 					if (restArgs.Count != 2)
 					{
 						ShowHelp();
-						break;
+						return 1;
 					}
 
 					await migrateDatabaseCommand.Execute(restArgs[0], restArgs[1], cancellationToken);
@@ -55,7 +55,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 					if (restArgs.Count != 2)
 					{
 						ShowHelp();
-						break;
+						return 1;
 					}
 
 					await seedApiDatabaseCommand.Execute(restArgs[0], new Uri(restArgs[1], UriKind.Absolute), cancellationToken);
