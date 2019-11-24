@@ -30,7 +30,7 @@ namespace CF.MusicLibrary.LibraryToolkit.Tests
 
 			Assert.AreEqual(0, exitCode);
 			migrateDatabaseCommandMock.Received(1).Execute("SourceDbFile.db", "TargetDbFile.db", CancellationToken.None);
-			seedApiDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<string>(), Arg.Any<Uri>(), CancellationToken.None);
+			seedApiDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<CancellationToken>());
 		}
 
 		[Test]
@@ -52,8 +52,8 @@ namespace CF.MusicLibrary.LibraryToolkit.Tests
 			// Assert
 
 			Assert.AreEqual(1, exitCode);
-			migrateDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<string>(), Arg.Any<string>(), CancellationToken.None);
-			seedApiDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<string>(), Arg.Any<Uri>(), CancellationToken.None);
+			migrateDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>());
+			seedApiDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<CancellationToken>());
 		}
 
 		[Test]
@@ -64,7 +64,7 @@ namespace CF.MusicLibrary.LibraryToolkit.Tests
 			var migrateDatabaseCommandMock = Substitute.For<IMigrateDatabaseCommand>();
 			var seedApiDatabaseCommandMock = Substitute.For<ISeedApiDatabaseCommand>();
 
-			var commandLine = new[] { "--seed-api-database", "SourceDbFile.db", "http://localhost:5000/", };
+			var commandLine = new[] { "--seed-api-database" };
 
 			var target = new ApplicationLogic(migrateDatabaseCommandMock, seedApiDatabaseCommandMock, Substitute.For<IFileSystemFacade>());
 
@@ -75,8 +75,8 @@ namespace CF.MusicLibrary.LibraryToolkit.Tests
 			// Assert
 
 			Assert.AreEqual(0, exitCode);
-			migrateDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<string>(), Arg.Any<string>(), CancellationToken.None);
-			seedApiDatabaseCommandMock.Received(1).Execute("SourceDbFile.db", new Uri("http://localhost:5000/"), CancellationToken.None);
+			migrateDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>());
+			seedApiDatabaseCommandMock.Received(1).Execute(CancellationToken.None);
 		}
 
 		[Test]
@@ -87,7 +87,7 @@ namespace CF.MusicLibrary.LibraryToolkit.Tests
 			var migrateDatabaseCommandMock = Substitute.For<IMigrateDatabaseCommand>();
 			var seedApiDatabaseCommandMock = Substitute.For<ISeedApiDatabaseCommand>();
 
-			var commandLine = new[] { "--seed-api-database", "SourceDbFile.db", "http://localhost:5000/", "Some extra argument", };
+			var commandLine = new[] { "--seed-api-database", "SourceDbFile.db", };
 
 			var target = new ApplicationLogic(migrateDatabaseCommandMock, seedApiDatabaseCommandMock, Substitute.For<IFileSystemFacade>());
 
@@ -98,8 +98,8 @@ namespace CF.MusicLibrary.LibraryToolkit.Tests
 			// Assert
 
 			Assert.AreEqual(1, exitCode);
-			migrateDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<string>(), Arg.Any<string>(), CancellationToken.None);
-			seedApiDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<string>(), Arg.Any<Uri>(), CancellationToken.None);
+			migrateDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>());
+			seedApiDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<CancellationToken>());
 		}
 
 		[Test]
@@ -121,8 +121,8 @@ namespace CF.MusicLibrary.LibraryToolkit.Tests
 			// Assert
 
 			Assert.AreEqual(1, exitCode);
-			migrateDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<string>(), Arg.Any<string>(), CancellationToken.None);
-			seedApiDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<string>(), Arg.Any<Uri>(), CancellationToken.None);
+			migrateDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>());
+			seedApiDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<CancellationToken>());
 		}
 
 		[Test]
@@ -144,8 +144,8 @@ namespace CF.MusicLibrary.LibraryToolkit.Tests
 			// Assert
 
 			Assert.AreEqual(1, exitCode);
-			migrateDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<string>(), Arg.Any<string>(), CancellationToken.None);
-			seedApiDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<string>(), Arg.Any<Uri>(), CancellationToken.None);
+			migrateDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>());
+			seedApiDatabaseCommandMock.DidNotReceive().Execute(Arg.Any<CancellationToken>());
 		}
 	}
 }

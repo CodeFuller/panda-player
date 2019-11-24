@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CF.Library.Bootstrap;
@@ -52,13 +53,13 @@ namespace CF.MusicLibrary.LibraryToolkit
 					break;
 
 				case LaunchCommand.SeedApiDatabase:
-					if (restArgs.Count != 2)
+					if (restArgs.Any())
 					{
 						ShowHelp();
 						return 1;
 					}
 
-					await seedApiDatabaseCommand.Execute(restArgs[0], new Uri(restArgs[1], UriKind.Absolute), cancellationToken);
+					await seedApiDatabaseCommand.Execute(cancellationToken);
 					break;
 
 				default:
@@ -77,7 +78,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 			Console.Error.WriteLine("  --migrate-database   <source db file>  <target db file>");
 			Console.Error.WriteLine("      Creates database schema by included 'MusicLibrary.sql' and copies data from source database.");
 			Console.Error.WriteLine();
-			Console.Error.WriteLine("  --seed-api-database  <source db file>  <Music Library API base URL (e.g. http://localhost/MusicLibraryApi/)>");
+			Console.Error.WriteLine("  --seed-api-database");
 			Console.Error.WriteLine("      Copies the data to Music Library API.");
 			Console.Error.WriteLine();
 		}

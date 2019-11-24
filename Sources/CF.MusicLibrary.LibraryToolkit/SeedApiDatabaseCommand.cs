@@ -1,15 +1,56 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CF.MusicLibrary.Core.Interfaces;
+using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.LibraryToolkit.Interfaces;
+using Microsoft.Extensions.Logging;
+using MusicLibraryApi.Client.Contracts.Genres;
+using MusicLibraryApi.Client.Interfaces;
 
 namespace CF.MusicLibrary.LibraryToolkit
 {
 	public class SeedApiDatabaseCommand : ISeedApiDatabaseCommand
 	{
-		public Task Execute(string sourceDatabaseFileName, Uri apiBaseUri, CancellationToken cancellationToken)
+		private readonly IMusicLibrary musicLibrary;
+
+		private readonly IGenresMutation genresMutation;
+
+		private readonly ILogger<SeedApiDatabaseCommand> logger;
+
+		public SeedApiDatabaseCommand(IMusicLibrary musicLibrary, IGenresMutation genresMutation, ILogger<SeedApiDatabaseCommand> logger)
 		{
-			throw new NotImplementedException();
+			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.genresMutation = genresMutation ?? throw new ArgumentNullException(nameof(genresMutation));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+		}
+
+		public async Task Execute(CancellationToken cancellationToken)
+		{
+			logger.LogInformation("Loading library content...");
+			var discLibrary = await musicLibrary.LoadLibrary();
+
+			var genres = await SeedGenres(discLibrary, cancellationToken);
+		}
+
+		private async Task<IDictionary<string, int>> SeedGenres(DiscLibrary discLibrary, CancellationToken cancellationToken)
+		{
+			logger.LogInformation("Seeding genres ...");
+
+			var genres = new Dictionary<string, int>();
+			foreach (var genre in discLibrary.Genres.OrderBy(g => g.Name))
+			{
+				var genreData = new InputGenreData(genre.Name);
+				var newGenreId = await genresMutation.CreateGenre(genreData, cancellationToken);
+
+				genres.Add(genre.Name, newGenreId);
+			}
+
+			logger.LogInformation("Seeded {GenresNumber} genres", genres.Count);
+
+			return genres;
 		}
 	}
 }
