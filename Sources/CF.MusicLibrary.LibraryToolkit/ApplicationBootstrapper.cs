@@ -8,6 +8,7 @@ using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.Library;
 using CF.MusicLibrary.LibraryToolkit.Interfaces;
+using CF.MusicLibrary.LibraryToolkit.Seeders;
 using CF.MusicLibrary.Tagger;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,10 @@ namespace CF.MusicLibrary.LibraryToolkit
 			services.AddTransient<IApplicationLogic, ApplicationLogic>();
 			services.AddTransient<IMigrateDatabaseCommand, MigrateDatabaseCommand>();
 			services.AddTransient<ISeedApiDatabaseCommand, SeedApiDatabaseCommand>();
+
+			services.AddTransient<IGenresSeeder, GenresSeeder>();
+			services.AddTransient<IArtistsSeeder, ArtistsSeeder>();
+			services.AddTransient<IFoldersSeeder, FoldersSeeder>();
 
 			services.AddTransient<IConfiguredDbConnectionFactory, SqLiteConnectionFactory>();
 			services.AddTransient<IMusicLibraryRepository, MusicLibraryRepositoryEF>();
