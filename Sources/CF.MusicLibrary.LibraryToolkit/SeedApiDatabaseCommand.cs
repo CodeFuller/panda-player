@@ -17,15 +17,18 @@ namespace CF.MusicLibrary.LibraryToolkit
 
 		private readonly IFoldersSeeder foldersSeeder;
 
+		private readonly IDiscsSeeder discsSeeder;
+
 		private readonly ILogger<SeedApiDatabaseCommand> logger;
 
 		public SeedApiDatabaseCommand(IMusicLibrary musicLibrary, IGenresSeeder genresSeeder, IArtistsSeeder artistsSeeder,
-			IFoldersSeeder foldersSeeder, ILogger<SeedApiDatabaseCommand> logger)
+			IFoldersSeeder foldersSeeder, IDiscsSeeder discsSeeder, ILogger<SeedApiDatabaseCommand> logger)
 		{
 			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
 			this.genresSeeder = genresSeeder ?? throw new ArgumentNullException(nameof(genresSeeder));
 			this.artistsSeeder = artistsSeeder ?? throw new ArgumentNullException(nameof(artistsSeeder));
 			this.foldersSeeder = foldersSeeder ?? throw new ArgumentNullException(nameof(foldersSeeder));
+			this.discsSeeder = discsSeeder ?? throw new ArgumentNullException(nameof(discsSeeder));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
@@ -37,6 +40,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 			var genres = await genresSeeder.SeedGenres(discLibrary, cancellationToken);
 			var artists = await artistsSeeder.SeedArtists(discLibrary, cancellationToken);
 			var folders = await foldersSeeder.SeedFolders(discLibrary, cancellationToken);
+			var discs = await discsSeeder.SeedDiscs(discLibrary, folders, cancellationToken);
 		}
 	}
 }

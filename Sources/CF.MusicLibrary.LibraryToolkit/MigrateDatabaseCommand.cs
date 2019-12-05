@@ -54,7 +54,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 			SQLiteConnectionStringBuilder builder = new SQLiteConnectionStringBuilder
 			{
 				DataSource = databaseFileName,
-				ForeignKeys = true
+				ForeignKeys = true,
 			};
 
 			return builder.ConnectionString;

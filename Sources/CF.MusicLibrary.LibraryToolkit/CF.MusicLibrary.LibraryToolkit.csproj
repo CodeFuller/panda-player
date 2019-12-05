@@ -31,9 +31,9 @@
     <PackageReference Include="CF.Library.Logging" Version="2.2.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.8.0" />
-    <PackageReference Include="MusicLibraryApi.Client" Version="0.6.0" />
+    <PackageReference Include="MusicLibraryApi.Client" Version="0.9.0" />
     <PackageReference Include="NDesk.Options" Version="0.2.1" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.108" />
   </ItemGroup>
 

@@ -47,7 +47,7 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 			// Full directory path -> folder id
 			var folders = new Dictionary<string, int>();
 
-			foreach (var directoryPath in fileSystemFacade.EnumerateDirectories(settings.Root, "*.*", SearchOption.AllDirectories))
+			foreach (var directoryPath in fileSystemFacade.EnumerateDirectories(settings.Root, "*.*", SearchOption.AllDirectories).OrderBy(p => p))
 			{
 				if (ignoredPaths.Any(s => directoryPath.StartsWith(s, StringComparison.OrdinalIgnoreCase)))
 				{

@@ -9,6 +9,7 @@ using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.Library;
 using CF.MusicLibrary.LibraryToolkit.Interfaces;
 using CF.MusicLibrary.LibraryToolkit.Seeders;
+using CF.MusicLibrary.LibraryToolkit.Settings;
 using CF.MusicLibrary.Tagger;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 			services.Configure<SqLiteConnectionSettings>(options => configuration.Bind("musicLibrary:database", options));
 			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("musicLibrary:fileSystemStorage", options));
 			services.Configure<ApiConnectionSettings>(options => configuration.Bind("musicLibraryApiConnection", options));
+			services.Configure<DiscSeederSettings>(options => configuration.Bind("seeders:discsSeeder", options));
 
 			services.AddTransient<IFileSystemFacade, FileSystemFacade>();
 			services.AddTransient<IApplicationLogic, ApplicationLogic>();
@@ -33,6 +35,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 			services.AddTransient<IGenresSeeder, GenresSeeder>();
 			services.AddTransient<IArtistsSeeder, ArtistsSeeder>();
 			services.AddTransient<IFoldersSeeder, FoldersSeeder>();
+			services.AddTransient<IDiscsSeeder, DiscsSeeder>();
 
 			services.AddTransient<IConfiguredDbConnectionFactory, SqLiteConnectionFactory>();
 			services.AddTransient<IMusicLibraryRepository, MusicLibraryRepositoryEF>();
