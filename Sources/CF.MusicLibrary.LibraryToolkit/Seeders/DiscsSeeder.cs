@@ -59,8 +59,11 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 					folderId = null;
 				}
 
+				var uriParts = new ItemUriParts(disc.Uri);
+				var treeTitle = uriParts.Last();
+
 				var albumInfo = discAlbumsInfo[disc.Uri];
-				var discData = new InputDiscData(disc.Year, disc.Title, disc.AlbumTitle ?? String.Empty, albumInfo.Item1, albumInfo.Item2);
+				var discData = new InputDiscData(disc.Year, disc.Title, treeTitle, disc.AlbumTitle ?? String.Empty, albumInfo.Item1, albumInfo.Item2);
 
 				var discId = await discsMutation.CreateDisc(folderId, discData, cancellationToken);
 				discs.Add(disc.Uri, discId);
