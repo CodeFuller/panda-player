@@ -12,11 +12,11 @@ namespace CF.MusicLibrary.Core.Objects
 	{
 		public int Id { get; set; }
 
-		public Artist Artist => (IsDeleted ? AllSongs : Songs).Select(s => s.Artist).UniqueOrDefault();
+		public Artist Artist => RepresentativeSongs.Select(s => s.Artist).UniqueOrDefault();
 
-		public Genre Genre => Songs.Select(s => s.Genre).UniqueOrDefault();
+		public Genre Genre => RepresentativeSongs.Select(s => s.Genre).UniqueOrDefault();
 
-		public short? Year => Songs.Select(s => s.Year).UniqueOrDefault();
+		public short? Year => RepresentativeSongs.Select(s => s.Year).UniqueOrDefault();
 
 		/// <summary>
 		/// Gets or sets Disc Title.
@@ -64,6 +64,8 @@ namespace CF.MusicLibrary.Core.Objects
 			.ThenBy(s => s.Title);
 
 		public ICollection<Song> SongsUnordered { get; set; } = new Collection<Song>();
+
+		public IEnumerable<Song> RepresentativeSongs => IsDeleted ? AllSongs : Songs;
 
 		public ICollection<DiscImage> Images { get; } = new Collection<DiscImage>();
 
