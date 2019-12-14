@@ -37,6 +37,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 			services.AddTransient<IFoldersSeeder, FoldersSeeder>();
 			services.AddTransient<IDiscsSeeder, DiscsSeeder>();
 			services.AddTransient<ISongsSeeder, SongsSeeder>();
+			services.AddTransient<IPlaybacksSeeder, PlaybacksSeeder>();
 
 			services.AddTransient<IConfiguredDbConnectionFactory, SqLiteConnectionFactory>();
 			services.AddTransient<IMusicLibraryRepository, MusicLibraryRepositoryEF>();

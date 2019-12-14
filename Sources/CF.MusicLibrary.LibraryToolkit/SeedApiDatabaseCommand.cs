@@ -21,10 +21,12 @@ namespace CF.MusicLibrary.LibraryToolkit
 
 		private readonly ISongsSeeder songsSeeder;
 
+		private readonly IPlaybacksSeeder playbacksSeeder;
+
 		private readonly ILogger<SeedApiDatabaseCommand> logger;
 
 		public SeedApiDatabaseCommand(IMusicLibrary musicLibrary, IGenresSeeder genresSeeder, IArtistsSeeder artistsSeeder,
-			IFoldersSeeder foldersSeeder, IDiscsSeeder discsSeeder, ISongsSeeder songsSeeder, ILogger<SeedApiDatabaseCommand> logger)
+			IFoldersSeeder foldersSeeder, IDiscsSeeder discsSeeder, ISongsSeeder songsSeeder, IPlaybacksSeeder playbacksSeeder, ILogger<SeedApiDatabaseCommand> logger)
 		{
 			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
 			this.genresSeeder = genresSeeder ?? throw new ArgumentNullException(nameof(genresSeeder));
@@ -32,6 +34,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 			this.foldersSeeder = foldersSeeder ?? throw new ArgumentNullException(nameof(foldersSeeder));
 			this.discsSeeder = discsSeeder ?? throw new ArgumentNullException(nameof(discsSeeder));
 			this.songsSeeder = songsSeeder ?? throw new ArgumentNullException(nameof(songsSeeder));
+			this.playbacksSeeder = playbacksSeeder ?? throw new ArgumentNullException(nameof(playbacksSeeder));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
@@ -45,6 +48,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 			var folders = await foldersSeeder.SeedFolders(discLibrary, cancellationToken);
 			var discs = await discsSeeder.SeedDiscs(discLibrary, folders, cancellationToken);
 			var songs = await songsSeeder.SeedSongs(discLibrary, discs, artists, genres, cancellationToken);
+			await playbacksSeeder.SeedPlaybacks(discLibrary, songs, cancellationToken);
 		}
 	}
 }
