@@ -7,6 +7,6 @@ namespace CF.MusicLibrary.LibraryToolkit.Interfaces
 {
 	public interface IGenresSeeder
 	{
-		Task<IDictionary<string, int>> SeedGenres(DiscLibrary discLibrary, CancellationToken cancellationToken);
+		Task<IReadOnlyDictionary<int, int>> SeedGenres(DiscLibrary discLibrary, CancellationToken cancellationToken);
 	}
 }

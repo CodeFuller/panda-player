@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Objects;
+using CF.MusicLibrary.LibraryToolkit.Extensions;
 using CF.MusicLibrary.LibraryToolkit.Interfaces;
 using CF.MusicLibrary.LibraryToolkit.Settings;
 using Microsoft.Extensions.Logging;
@@ -32,41 +33,30 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
 
-		public async Task<IDictionary<Uri, int>> SeedDiscs(DiscLibrary discLibrary, IDictionary<Uri, int> folders, CancellationToken cancellationToken)
+		public async Task<IReadOnlyDictionary<int, int>> SeedDiscs(DiscLibrary discLibrary, IReadOnlyDictionary<Uri, int> folders, CancellationToken cancellationToken)
 		{
 			logger.LogInformation("Seeding discs ...");
 
 			// Disc Uri -> (Album Id, Album Order)
 			var discAlbumsInfo = BuildDiscsAlbumsInfo(discLibrary);
 
-			var discs = new Dictionary<Uri, int>();
+			var discs = new Dictionary<int, int>();
 
 			foreach (var disc in discLibrary.AllDiscs.OrderBy(d => d.Uri.ToString()))
 			{
-				var folderUri = GetDiscFolderUri(disc);
-				int? folderId;
-				if (folders.TryGetValue(folderUri, out var knownFolderId))
-				{
-					folderId = knownFolderId;
-				}
-				else
-				{
-					if (!disc.IsDeleted)
-					{
-						throw new InvalidOperationException($"Failed to get folder id for Uri '{folderUri}'");
-					}
+				var folderId = GetDiscFolderId(disc, folders);
 
-					folderId = null;
-				}
+				var treeTitle = disc.Uri.GetLastPart();
 
-				var uriParts = new ItemUriParts(disc.Uri);
-				var treeTitle = uriParts.Last();
+				var deleteDate = disc.IsDeleted ? disc.AllSongs.Select(s => s.DeleteDate).Max() : null;
+				var deleteComment = deleteDate != null ? String.Empty : null;
 
 				var albumInfo = discAlbumsInfo[disc.Uri];
-				var discData = new InputDiscData(disc.Year, disc.Title, treeTitle, disc.AlbumTitle ?? String.Empty, albumInfo.Item1, albumInfo.Item2);
+				var discData = new InputDiscData(folderId: folderId, year: disc.Year, title: disc.Title, treeTitle: treeTitle, albumTitle: disc.AlbumTitle ?? disc.Title,
+					albumId: albumInfo.Item1, albumOrder: albumInfo.Item2, deleteDate: deleteDate, deleteComment: deleteComment);
 
-				var discId = await discsMutation.CreateDisc(folderId, discData, cancellationToken);
-				discs.Add(disc.Uri, discId);
+				var discId = await discsMutation.CreateDisc(discData, cancellationToken);
+				discs.Add(disc.Id, discId);
 			}
 
 			logger.LogInformation("Seeded {DiscsNumber} discs", discs.Count);
@@ -148,6 +138,28 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 			}
 
 			return albumsInfo;
+		}
+
+		private static int GetDiscFolderId(Disc disc, IReadOnlyDictionary<Uri, int> folders)
+		{
+			var folderUri = GetDiscFolderUri(disc);
+			if (folders.TryGetValue(folderUri, out var folderId))
+			{
+				return folderId;
+			}
+
+			if (!disc.IsDeleted)
+			{
+				throw new InvalidOperationException($"Failed to get folder id for Uri '{folderUri}'");
+			}
+
+			// We return root folder for deleted disc with missing parent folder.
+			if (folders.TryGetValue(new Uri("/", UriKind.Relative), out folderId))
+			{
+				return folderId;
+			}
+
+			throw new InvalidOperationException("Root folder id is unknown");
 		}
 
 		private static Uri GetDiscFolderUri(Disc disc)

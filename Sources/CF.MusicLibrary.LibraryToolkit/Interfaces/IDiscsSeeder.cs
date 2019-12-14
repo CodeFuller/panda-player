@@ -8,6 +8,6 @@ namespace CF.MusicLibrary.LibraryToolkit.Interfaces
 {
 	public interface IDiscsSeeder
 	{
-		Task<IDictionary<Uri, int>> SeedDiscs(DiscLibrary discLibrary, IDictionary<Uri, int> folders, CancellationToken cancellationToken);
+		Task<IReadOnlyDictionary<int, int>> SeedDiscs(DiscLibrary discLibrary, IReadOnlyDictionary<Uri, int> folders, CancellationToken cancellationToken);
 	}
 }

@@ -12,6 +12,7 @@ using CF.MusicLibrary.LibraryToolkit.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MusicLibraryApi.Client.Contracts.Folders;
+using MusicLibraryApi.Client.Fields;
 using MusicLibraryApi.Client.Interfaces;
 
 namespace CF.MusicLibrary.LibraryToolkit.Seeders
@@ -20,21 +21,25 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 	{
 		private readonly IFileSystemFacade fileSystemFacade;
 
+		private readonly IFoldersQuery foldersQuery;
+
 		private readonly IFoldersMutation foldersMutation;
 
 		private readonly ILogger<SeedApiDatabaseCommand> logger;
 
 		private readonly FileSystemStorageSettings settings;
 
-		public FoldersSeeder(IFileSystemFacade fileSystemFacade, IFoldersMutation foldersMutation, ILogger<SeedApiDatabaseCommand> logger, IOptions<FileSystemStorageSettings> options)
+		public FoldersSeeder(IFileSystemFacade fileSystemFacade, IFoldersQuery foldersQuery,
+			IFoldersMutation foldersMutation, ILogger<SeedApiDatabaseCommand> logger, IOptions<FileSystemStorageSettings> options)
 		{
 			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
+			this.foldersQuery = foldersQuery ?? throw new ArgumentNullException(nameof(foldersQuery));
 			this.foldersMutation = foldersMutation ?? throw new ArgumentNullException(nameof(foldersMutation));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
 
-		public async Task<IDictionary<Uri, int>> SeedFolders(DiscLibrary discLibrary, CancellationToken cancellationToken)
+		public async Task<IReadOnlyDictionary<Uri, int>> SeedFolders(DiscLibrary discLibrary, CancellationToken cancellationToken)
 		{
 			logger.LogInformation("Seeding folders ...");
 
@@ -46,6 +51,10 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 
 			// Full directory path -> folder id
 			var folders = new Dictionary<string, int>();
+
+			// Getting root folder id
+			var rootFolderData = await foldersQuery.GetFolder(null, FolderFields.Id, cancellationToken);
+			folders.Add(new DirectoryInfo(settings.Root).FullName, rootFolderData.Id.Value);
 
 			foreach (var directoryPath in fileSystemFacade.EnumerateDirectories(settings.Root, "*.*", SearchOption.AllDirectories).OrderBy(p => p))
 			{
@@ -66,17 +75,9 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 				var folderName = Path.GetFileName(directoryPath);
 				var parentDirectoryPath = Directory.GetParent(directoryPath).FullName;
 
-				int? parentFolderId = null;
-				if (!folders.TryGetValue(parentDirectoryPath, out var loadedParentFolderId))
+				if (!folders.TryGetValue(parentDirectoryPath, out var parentFolderId))
 				{
-					if (!String.Equals(parentDirectoryPath, settings.Root, StringComparison.OrdinalIgnoreCase))
-					{
-						throw new InvalidOperationException($"The id of parent folder is unknown - {parentDirectoryPath}");
-					}
-				}
-				else
-				{
-					parentFolderId = loadedParentFolderId;
+					throw new InvalidOperationException($"The id of parent folder is unknown - {parentDirectoryPath}");
 				}
 
 				var folderData = new InputFolderData(folderName, parentFolderId);
@@ -87,7 +88,9 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 
 			logger.LogInformation("Seeded {FoldersNumber} folders", folders.Count);
 
-			return folders.Select(p => new KeyValuePair<Uri, int>(GetUriForPath(p.Key), p.Value)).ToDictionary(p => p.Key, p => p.Value);
+			return folders
+				.Select(p => new KeyValuePair<Uri, int>(GetUriForPath(p.Key), p.Value))
+				.ToDictionary(p => p.Key, p => p.Value);
 		}
 
 		private Uri GetUriForPath(string path)
@@ -98,6 +101,11 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 			}
 
 			var relativePath = path.Substring(settings.Root.Length).Replace('\\', '/');
+			if (relativePath.Length == 0)
+			{
+				relativePath = "/";
+			}
+
 			return new Uri(relativePath, UriKind.Relative);
 		}
 

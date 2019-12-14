@@ -23,17 +23,17 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task<IDictionary<string, int>> SeedArtists(DiscLibrary discLibrary, CancellationToken cancellationToken)
+		public async Task<IReadOnlyDictionary<int, int>> SeedArtists(DiscLibrary discLibrary, CancellationToken cancellationToken)
 		{
 			logger.LogInformation("Seeding artists ...");
 
-			var artists = new Dictionary<string, int>();
+			var artists = new Dictionary<int, int>();
 			foreach (var artist in discLibrary.AllArtists.OrderBy(a => a.Name))
 			{
 				var artistData = new InputArtistData(artist.Name);
 				var newArtistId = await artistsMutation.CreateArtist(artistData, cancellationToken);
 
-				artists.Add(artist.Name, newArtistId);
+				artists.Add(artist.Id, newArtistId);
 			}
 
 			logger.LogInformation("Seeded {ArtistsNumber} artists", artists.Count);

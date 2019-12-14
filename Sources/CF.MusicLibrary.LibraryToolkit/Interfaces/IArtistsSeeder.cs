@@ -7,6 +7,6 @@ namespace CF.MusicLibrary.LibraryToolkit.Interfaces
 {
 	public interface IArtistsSeeder
 	{
-		Task<IDictionary<string, int>> SeedArtists(DiscLibrary discLibrary, CancellationToken cancellationToken);
+		Task<IReadOnlyDictionary<int, int>> SeedArtists(DiscLibrary discLibrary, CancellationToken cancellationToken);
 	}
 }
