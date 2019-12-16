@@ -52,8 +52,18 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 				var deleteComment = deleteDate != null ? String.Empty : null;
 
 				var albumInfo = discAlbumsInfo[disc.Uri];
-				var discData = new InputDiscData(folderId: folderId, year: disc.Year, title: disc.Title, treeTitle: treeTitle, albumTitle: disc.AlbumTitle ?? disc.Title,
-					albumId: albumInfo.Item1, albumOrder: albumInfo.Item2, deleteDate: deleteDate, deleteComment: deleteComment);
+				var discData = new InputDiscData
+				{
+					FolderId = folderId,
+					Year = disc.Year,
+					Title = disc.Title,
+					TreeTitle = treeTitle,
+					AlbumTitle = disc.AlbumTitle ?? disc.Title,
+					AlbumId = albumInfo.Item1,
+					AlbumOrder = albumInfo.Item2,
+					DeleteDate = deleteDate,
+					DeleteComment = deleteComment,
+				};
 
 				var discId = await discsMutation.CreateDisc(discData, cancellationToken);
 				discs.Add(disc.Id, discId);

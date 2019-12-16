@@ -63,10 +63,20 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 				var trackNumberPart = song.TrackNumber == null ? String.Empty : Invariant($"{song.TrackNumber:D2}");
 				var treeTitle = song.Uri.GetLastPart();
 
-				// Playbacks data is seeded by playbacks seeder.
-				var songData = new InputSongData(discId: discId, artistId: artistId, genreId: genreId, title: song.Title, treeTitle: treeTitle,
-					trackNumber: song.TrackNumber, duration: song.Duration, rating: ConvertRating(song.Rating), bitRate: song.Bitrate,
-					lastPlaybackTime: null, playbacksCount: 0, deleteDate: song.DeleteDate, deleteComment: song.DeleteDate != null ? String.Empty : null);
+				var songData = new InputSongData
+				{
+					DiscId = discId,
+					ArtistId = artistId,
+					GenreId = genreId,
+					Title = song.Title,
+					TreeTitle = treeTitle,
+					TrackNumber = song.TrackNumber,
+					Duration = song.Duration,
+					Rating = ConvertRating(song.Rating),
+					BitRate = song.Bitrate,
+					DeleteDate = song.DeleteDate,
+					DeleteComment = song.DeleteDate != null ? String.Empty : null,
+				};
 
 				var songId = await songsMutation.CreateSong(songData, cancellationToken);
 				songs.Add(song.Id, songId);
@@ -77,7 +87,7 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 			return songs;
 		}
 
-		private static MusicLibraryApi.Client.Contracts.Songs.Rating? ConvertRating(Core.Objects.Rating? rating)
+		private static MusicLibraryApi.Client.Contracts.Rating? ConvertRating(Core.Objects.Rating? rating)
 		{
 			switch (rating)
 			{
@@ -85,34 +95,34 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 					return null;
 
 				case Core.Objects.Rating.R1:
-					return MusicLibraryApi.Client.Contracts.Songs.Rating.R1;
+					return MusicLibraryApi.Client.Contracts.Rating.R1;
 
 				case Core.Objects.Rating.R2:
-					return MusicLibraryApi.Client.Contracts.Songs.Rating.R2;
+					return MusicLibraryApi.Client.Contracts.Rating.R2;
 
 				case Core.Objects.Rating.R3:
-					return MusicLibraryApi.Client.Contracts.Songs.Rating.R3;
+					return MusicLibraryApi.Client.Contracts.Rating.R3;
 
 				case Core.Objects.Rating.R4:
-					return MusicLibraryApi.Client.Contracts.Songs.Rating.R4;
+					return MusicLibraryApi.Client.Contracts.Rating.R4;
 
 				case Core.Objects.Rating.R5:
-					return MusicLibraryApi.Client.Contracts.Songs.Rating.R5;
+					return MusicLibraryApi.Client.Contracts.Rating.R5;
 
 				case Core.Objects.Rating.R6:
-					return MusicLibraryApi.Client.Contracts.Songs.Rating.R6;
+					return MusicLibraryApi.Client.Contracts.Rating.R6;
 
 				case Core.Objects.Rating.R7:
-					return MusicLibraryApi.Client.Contracts.Songs.Rating.R7;
+					return MusicLibraryApi.Client.Contracts.Rating.R7;
 
 				case Core.Objects.Rating.R8:
-					return MusicLibraryApi.Client.Contracts.Songs.Rating.R8;
+					return MusicLibraryApi.Client.Contracts.Rating.R8;
 
 				case Core.Objects.Rating.R9:
-					return MusicLibraryApi.Client.Contracts.Songs.Rating.R9;
+					return MusicLibraryApi.Client.Contracts.Rating.R9;
 
 				case Core.Objects.Rating.R10:
-					return MusicLibraryApi.Client.Contracts.Songs.Rating.R10;
+					return MusicLibraryApi.Client.Contracts.Rating.R10;
 
 				case Core.Objects.Rating.Invalid:
 				default:

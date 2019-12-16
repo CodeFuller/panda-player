@@ -30,7 +30,7 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 			var genres = new Dictionary<int, int>();
 			foreach (var genre in discLibrary.Genres.OrderBy(g => g.Name))
 			{
-				var genreData = new InputGenreData(genre.Name);
+				var genreData = new InputGenreData { Name = genre.Name };
 				var newGenreId = await genresMutation.CreateGenre(genreData, cancellationToken);
 
 				genres.Add(genre.Id, newGenreId);

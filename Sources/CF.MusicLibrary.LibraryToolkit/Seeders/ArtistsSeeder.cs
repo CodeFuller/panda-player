@@ -30,7 +30,7 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 			var artists = new Dictionary<int, int>();
 			foreach (var artist in discLibrary.AllArtists.OrderBy(a => a.Name))
 			{
-				var artistData = new InputArtistData(artist.Name);
+				var artistData = new InputArtistData { Name = artist.Name };
 				var newArtistId = await artistsMutation.CreateArtist(artistData, cancellationToken);
 
 				artists.Add(artist.Id, newArtistId);

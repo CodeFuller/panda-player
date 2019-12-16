@@ -80,7 +80,12 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 					throw new InvalidOperationException($"The id of parent folder is unknown - {parentDirectoryPath}");
 				}
 
-				var folderData = new InputFolderData(folderName, parentFolderId);
+				var folderData = new InputFolderData
+				{
+					Name = folderName,
+					ParentFolderId = parentFolderId,
+				};
+
 				var createdFolderId = await foldersMutation.CreateFolder(folderData, cancellationToken);
 
 				folders.Add(directoryPath, createdFolderId);

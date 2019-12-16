@@ -48,7 +48,12 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 			var playbacks = new Dictionary<int, int>();
 			foreach (var playback in discLibrary.AllSongs.SelectMany(s => s.Playbacks).OrderBy(p => p.PlaybackTime))
 			{
-				var playbackData = new InputPlaybackData(songId: playback.Song.Id, playbackTime: playback.PlaybackTime);
+				var playbackData = new InputPlaybackData
+				{
+					SongId = playback.Song.Id,
+					PlaybackTime = playback.PlaybackTime,
+				};
+
 				var playbackId = await playbacksMutation.AddSongPlayback(playbackData, cancellationToken);
 				playbacks.Add(playback.Id, playbackId);
 			}

@@ -24,7 +24,6 @@ namespace CF.MusicLibrary.LibraryToolkit
 		{
 			services.Configure<SqLiteConnectionSettings>(options => configuration.Bind("musicLibrary:database", options));
 			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("musicLibrary:fileSystemStorage", options));
-			services.Configure<ApiConnectionSettings>(options => configuration.Bind("musicLibraryApiConnection", options));
 			services.Configure<DiscSeederSettings>(options => configuration.Bind("seeders:discsSeeder", options));
 
 			services.AddTransient<IFileSystemFacade, FileSystemFacade>();
@@ -48,7 +47,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 			services.AddTransient<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
 			services.AddTransient<ISongTagger, SongTagger>();
 
-			services.AddMusicLibraryApiClient();
+			services.AddMusicLibraryApiClient(settings => configuration.Bind("musicLibraryApiConnection", settings));
 		}
 
 		protected override void BootstrapConfiguration(IConfigurationBuilder configurationBuilder, string[] commandLineArgs)
