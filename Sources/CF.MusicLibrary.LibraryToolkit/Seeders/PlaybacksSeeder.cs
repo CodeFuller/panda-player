@@ -48,9 +48,14 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 			var playbacks = new Dictionary<int, int>();
 			foreach (var playback in discLibrary.AllSongs.SelectMany(s => s.Playbacks).OrderBy(p => p.PlaybackTime))
 			{
+				if (!songs.TryGetValue(playback.Song.Id, out var songId))
+				{
+					throw new InvalidOperationException($"The new id for song {playback.Song.Title} is unknown");
+				}
+
 				var playbackData = new InputPlaybackData
 				{
-					SongId = playback.Song.Id,
+					SongId = songId,
 					PlaybackTime = playback.PlaybackTime,
 				};
 
