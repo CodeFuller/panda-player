@@ -27,9 +27,9 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 
 		private readonly ILogger<DiscsSeeder> logger;
 
-		private readonly DiscSeederSettings settings;
+		private readonly DiscsSeederSettings settings;
 
-		public DiscsSeeder(IDiscsMutation discsMutation, IMusicLibraryReader musicLibraryReader, ILogger<DiscsSeeder> logger, IOptions<DiscSeederSettings> options)
+		public DiscsSeeder(IDiscsMutation discsMutation, IMusicLibraryReader musicLibraryReader, ILogger<DiscsSeeder> logger, IOptions<DiscsSeederSettings> options)
 		{
 			this.discsMutation = discsMutation ?? throw new ArgumentNullException(nameof(discsMutation));
 			this.musicLibraryReader = musicLibraryReader ?? throw new ArgumentNullException(nameof(musicLibraryReader));

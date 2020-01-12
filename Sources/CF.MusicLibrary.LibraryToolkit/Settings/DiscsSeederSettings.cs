@@ -1,6 +1,6 @@
 ﻿namespace CF.MusicLibrary.LibraryToolkit.Settings
 {
-	public class DiscSeederSettings
+	public class DiscsSeederSettings
 	{
 		public string ExplicitAlbumsInfoFile { get; set; }
 	}

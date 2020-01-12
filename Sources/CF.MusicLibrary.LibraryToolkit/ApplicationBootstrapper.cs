@@ -24,7 +24,8 @@ namespace CF.MusicLibrary.LibraryToolkit
 		{
 			services.Configure<SqLiteConnectionSettings>(options => configuration.Bind("musicLibrary:database", options));
 			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("musicLibrary:fileSystemStorage", options));
-			services.Configure<DiscSeederSettings>(options => configuration.Bind("seeders:discsSeeder", options));
+			services.Configure<DiscsSeederSettings>(options => configuration.Bind("seeders:discsSeeder", options));
+			services.Configure<SongsSeederSettings>(options => configuration.Bind("seeders:songsSeeder", options));
 
 			services.AddTransient<IFileSystemFacade, FileSystemFacade>();
 			services.AddTransient<IApplicationLogic, ApplicationLogic>();
