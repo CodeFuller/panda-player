@@ -45,6 +45,7 @@ namespace CF.MusicLibrary.LibraryToolkit
 			services.AddTransient<ILibraryStructurer, LibraryStructurer>();
 			services.AddTransient<IChecksumCalculator, Crc32Calculator>();
 			services.AddTransient<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
+			services.AddTransient<IMusicLibraryReader, RepositoryAndStorageMusicLibrary>();
 			services.AddTransient<ISongTagger, SongTagger>();
 
 			services.AddMusicLibraryApiClient(settings => configuration.Bind("musicLibraryApiConnection", settings));

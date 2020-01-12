@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using CF.MusicLibrary.Core;
+using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.LibraryToolkit.Extensions;
 using CF.MusicLibrary.LibraryToolkit.Interfaces;
@@ -22,13 +23,16 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 	{
 		private readonly IDiscsMutation discsMutation;
 
+		private readonly IMusicLibraryReader musicLibraryReader;
+
 		private readonly ILogger<DiscsSeeder> logger;
 
 		private readonly DiscSeederSettings settings;
 
-		public DiscsSeeder(IDiscsMutation discsMutation, ILogger<DiscsSeeder> logger, IOptions<DiscSeederSettings> options)
+		public DiscsSeeder(IDiscsMutation discsMutation, IMusicLibraryReader musicLibraryReader, ILogger<DiscsSeeder> logger, IOptions<DiscSeederSettings> options)
 		{
 			this.discsMutation = discsMutation ?? throw new ArgumentNullException(nameof(discsMutation));
+			this.musicLibraryReader = musicLibraryReader ?? throw new ArgumentNullException(nameof(musicLibraryReader));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
@@ -65,7 +69,20 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 					DeleteComment = deleteComment,
 				};
 
-				var discId = await discsMutation.CreateDisc(discData, cancellationToken);
+				int discId;
+				if (!disc.IsDeleted && disc.CoverImage != null)
+				{
+					var coverImageFilePath = await musicLibraryReader.GetDiscCoverImage(disc);
+					using (var coverStream = File.OpenRead(coverImageFilePath))
+					{
+						discId = await discsMutation.CreateDisc(discData, coverStream, cancellationToken);
+					}
+				}
+				else
+				{
+					discId = await discsMutation.CreateDisc(discData, cancellationToken);
+				}
+
 				discs.Add(disc.Id, discId);
 			}
 

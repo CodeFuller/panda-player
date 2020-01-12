@@ -18,14 +18,14 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 	{
 		private readonly ISongsMutation songsMutation;
 
-		private readonly IMusicLibrary musicLibrary;
+		private readonly IMusicLibraryReader musicLibraryReader;
 
 		private readonly ILogger<SongsSeeder> logger;
 
-		public SongsSeeder(ISongsMutation songsMutation, IMusicLibrary musicLibrary, ILogger<SongsSeeder> logger)
+		public SongsSeeder(ISongsMutation songsMutation, IMusicLibraryReader musicLibraryReader, ILogger<SongsSeeder> logger)
 		{
 			this.songsMutation = songsMutation ?? throw new ArgumentNullException(nameof(songsMutation));
-			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.musicLibraryReader = musicLibraryReader ?? throw new ArgumentNullException(nameof(musicLibraryReader));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
@@ -88,7 +88,7 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 				}
 				else
 				{
-					var songFilePath = await musicLibrary.GetSongFile(song);
+					var songFilePath = await musicLibraryReader.GetSongFile(song);
 					using (var contentStream = File.OpenRead(songFilePath))
 					{
 						songId = await songsMutation.CreateSong(songData, contentStream, cancellationToken);
