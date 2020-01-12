@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.LibraryToolkit.Extensions;
 using CF.MusicLibrary.LibraryToolkit.Interfaces;
 using Microsoft.Extensions.Logging;
 using MusicLibraryApi.Client.Contracts.Songs;
 using MusicLibraryApi.Client.Interfaces;
-using static System.FormattableString;
 
 namespace CF.MusicLibrary.LibraryToolkit.Seeders
 {
@@ -17,11 +18,14 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 	{
 		private readonly ISongsMutation songsMutation;
 
+		private readonly IMusicLibrary musicLibrary;
+
 		private readonly ILogger<SongsSeeder> logger;
 
-		public SongsSeeder(ISongsMutation songsMutation, ILogger<SongsSeeder> logger)
+		public SongsSeeder(ISongsMutation songsMutation, IMusicLibrary musicLibrary, ILogger<SongsSeeder> logger)
 		{
 			this.songsMutation = songsMutation ?? throw new ArgumentNullException(nameof(songsMutation));
+			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
@@ -60,7 +64,6 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 					genreId = newGenreId;
 				}
 
-				var trackNumberPart = song.TrackNumber == null ? String.Empty : Invariant($"{song.TrackNumber:D2}");
 				var treeTitle = song.Uri.GetLastPart();
 
 				var songData = new InputSongData
@@ -78,7 +81,20 @@ namespace CF.MusicLibrary.LibraryToolkit.Seeders
 					DeleteComment = song.DeleteDate != null ? String.Empty : null,
 				};
 
-				var songId = await songsMutation.CreateSong(songData, cancellationToken);
+				int songId;
+				if (song.IsDeleted)
+				{
+					songId = await songsMutation.CreateDeletedSong(songData, cancellationToken);
+				}
+				else
+				{
+					var songFilePath = await musicLibrary.GetSongFile(song);
+					using (var contentStream = File.OpenRead(songFilePath))
+					{
+						songId = await songsMutation.CreateSong(songData, contentStream, cancellationToken);
+					}
+				}
+
 				songs.Add(song.Id, songId);
 			}
 
