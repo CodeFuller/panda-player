@@ -38,12 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\CF.MusicLibrary.Dal\MusicLibrary.sql" Link="MusicLibrary.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CF.MusicLibrary.Dal\CF.MusicLibrary.Dal.csproj" />
     <ProjectReference Include="..\CF.MusicLibrary.Library\CF.MusicLibrary.Library.csproj" />
     <ProjectReference Include="..\CF.MusicLibrary.Tagger\CF.MusicLibrary.Tagger.csproj" />
@@ -51,6 +45,9 @@
 
   <ItemGroup>
     <None Update="AppSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\CF.MusicLibrary.Dal\MusicLibrary.sql" Link="MusicLibrary.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

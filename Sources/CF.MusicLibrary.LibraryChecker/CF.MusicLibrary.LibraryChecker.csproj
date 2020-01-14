@@ -39,12 +39,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\DiscToAlbumMappings.json" Link="DiscToAlbumMappings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CF.MusicLibrary.Common\CF.MusicLibrary.Common.csproj" />
     <ProjectReference Include="..\CF.MusicLibrary.Core\CF.MusicLibrary.Core.csproj" />
     <ProjectReference Include="..\CF.MusicLibrary.Dal\CF.MusicLibrary.Dal.csproj" />
@@ -60,6 +54,9 @@
     <None Update="AppSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="..\DiscToAlbumMappings.json" Link="DiscToAlbumMappings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

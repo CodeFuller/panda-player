@@ -33,13 +33,4 @@
     <ProjectReference Include="..\CF.MusicLibrary.Core\CF.MusicLibrary.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="System.Data.SQLite">
-      <HintPath>C:\Users\cerber\.nuget\packages\system.data.sqlite.core\1.0.108\lib\net46\System.Data.SQLite.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.SQLite.EF6">
-      <HintPath>C:\Users\cerber\.nuget\packages\system.data.sqlite.ef6\1.0.108\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
