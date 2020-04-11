@@ -134,8 +134,8 @@ namespace CF.MusicLibrary.Dal
 
 		internal static async Task CopyData(Action<DbContextOptionsBuilder> sourceContextSetup, Action<DbContextOptionsBuilder> targetContextSetup)
 		{
-			using var sourceCtx = new MusicLibraryEntities(sourceContextSetup);
-			using var targetCtx = new MusicLibraryEntities(targetContextSetup);
+			using var sourceCtx = new MusicLibraryDbContext(sourceContextSetup);
+			using var targetCtx = new MusicLibraryDbContext(targetContextSetup);
 
 			var sourceDiscs = await sourceCtx.Discs
 				.Include(d => d.SongsUnordered)
@@ -149,9 +149,9 @@ namespace CF.MusicLibrary.Dal
 			await targetCtx.SaveChangesAsync();
 		}
 
-		private MusicLibraryEntities GetContext()
+		private MusicLibraryDbContext GetContext()
 		{
-			return new MusicLibraryEntities(contextSetup);
+			return new MusicLibraryDbContext(contextSetup);
 		}
 	}
 }

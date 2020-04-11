@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CF.MusicLibrary.Dal
 {
-	internal class MusicLibraryEntities : DbContext
+	internal class MusicLibraryDbContext : DbContext
 	{
 		private readonly Action<DbContextOptionsBuilder> contextSetup;
 
-		public MusicLibraryEntities(Action<DbContextOptionsBuilder> contextSetup)
+		public MusicLibraryDbContext(Action<DbContextOptionsBuilder> contextSetup)
 		{
 			this.contextSetup = contextSetup ?? throw new ArgumentNullException(nameof(contextSetup));
 		}
