@@ -21,13 +21,13 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var settings = new FavouriteArtistsAdviserSettings
 			{
-				FavouriteArtists =
+				FavouriteArtists = new[]
 				{
 					"Artist 1",
 					"Artist 2",
 					"Artist 3",
 					"Artist 4",
-				}
+				},
 			};
 
 			var artist1 = new Artist { Name = "Artist 1" };
@@ -74,11 +74,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var settings = new FavouriteArtistsAdviserSettings
 			{
-				FavouriteArtists =
+				FavouriteArtists = new[]
 				{
 					"Artist 1",
 					"Artist 2",
-				}
+				},
 			};
 
 			var artist1 = new Artist { Name = "Artist 1" };
@@ -113,10 +113,10 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var settings = new FavouriteArtistsAdviserSettings
 			{
-				FavouriteArtists =
+				FavouriteArtists = new[]
 				{
 					"Favourite Artist",
-				}
+				},
 			};
 
 			var favouriteArtist = new Artist { Name = "Favourite Artist" };
@@ -153,10 +153,10 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var settings = new FavouriteArtistsAdviserSettings
 			{
-				FavouriteArtists =
+				FavouriteArtists = new[]
 				{
 					"Favourite Artist",
-				}
+				},
 			};
 
 			var discWithoutArtist = new Disc { SongsUnordered = new[] { new Song { Artist = null } } };
@@ -184,7 +184,10 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var settings = new FavouriteArtistsAdviserSettings
 			{
-				FavouriteArtists = { "Favourite Artist" }
+				FavouriteArtists = new[]
+				{
+					"Favourite Artist",
+				},
 			};
 
 			var disc = new Disc { SongsUnordered = new[] { new Song { Artist = new Artist { Name = "Favourite Artist" } } } };
@@ -214,11 +217,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var settings = new FavouriteArtistsAdviserSettings
 			{
-				FavouriteArtists =
+				FavouriteArtists = new[]
 				{
 					"Favourite Artist 1",
 					"Favourite Artist 2",
-				}
+				},
 			};
 
 			var disc1 = new Disc { SongsUnordered = new[] { new Song { Artist = new Artist { Name = "Favourite Artist 1" } } } };
@@ -246,7 +249,10 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var settings = new FavouriteArtistsAdviserSettings
 			{
-				FavouriteArtists = { "Unknown Favourite Artist" }
+				FavouriteArtists = new[]
+				{
+					"Unknown Favourite Artist",
+				},
 			};
 
 			var disc = new Disc { SongsUnordered = new[] { new Song { Artist = new Artist { Name = "Favourite Artist" } } } };
@@ -272,7 +278,10 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var settings = new FavouriteArtistsAdviserSettings
 			{
-				FavouriteArtists = { "Unknown Favourite Artist" }
+				FavouriteArtists = new[]
+				{
+					"Unknown Favourite Artist",
+				},
 			};
 
 			var disc = new Disc { SongsUnordered = new[] { new Song { Artist = new Artist { Name = "Favourite Artist" } } } };

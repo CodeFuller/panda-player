@@ -36,7 +36,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Scrobbling
 				{
 					await scrobbler.Scrobble(currScrobble);
 				}
+#pragma warning disable CA1031 // Do not catch general exception types
 				catch (Exception e)
+#pragma warning restore CA1031 // Do not catch general exception types
 				{
 					logger.LogWarning($"Scrobble failed: {currScrobble}. Error: {e.Message}. Scrobbles queue size: {scrobblesQueue.Count}");
 					break;

@@ -67,7 +67,7 @@ namespace CF.MusicLibrary.PandaPlayer.Views.ClipboardAccess
 				bfSize = fileSize,
 				bfReserved1 = 0,
 				bfReserved2 = 0,
-				bfOffBits = fileHeaderSize + infoHeaderSize + (infoHeader.biClrUsed * 4)
+				bfOffBits = fileHeaderSize + infoHeaderSize + (infoHeader.biClrUsed * 4),
 			};
 
 			byte[] fileHeaderBytes = BinaryStructConverter.ToByteArray<BITMAPFILEHEADER>(fileHeader);

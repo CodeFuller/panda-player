@@ -7,7 +7,8 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.PandaPlayer
 {
-	public class JsonFileGenericRepository<T> : IGenericDataRepository<T> where T : class
+	public class JsonFileGenericRepository<T> : IGenericDataRepository<T>
+		where T : class
 	{
 		private readonly IFileSystemFacade fileSystemFacade;
 		private readonly ILogger<JsonFileGenericRepository<T>> logger;

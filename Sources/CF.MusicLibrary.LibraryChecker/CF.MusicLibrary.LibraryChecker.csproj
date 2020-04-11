@@ -1,8 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <ImportGroup Label="Properties">
+    <Import Project="..\..\MusicLibrary.props" />
+  </ImportGroup>
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>$(TargetAppFramework)</TargetFramework>
     <AssemblyName>LibraryChecker</AssemblyName>
   </PropertyGroup>
 
@@ -18,17 +22,13 @@
     <WarningsAsErrors />
   </PropertyGroup>
 
-  <PropertyGroup>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="CF.Library.Core" Version="3.0.0" />
     <PackageReference Include="CF.Library.Bootstrap" Version="1.0.0" />
     <PackageReference Include="CF.Library.Logging" Version="2.2.2" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(FxCopAnalyzersVersion)" PrivateAssets="all" />
     <PackageReference Include="NDesk.Options" Version="0.2.1" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="all" />
+    <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopAnalyzersVersion)" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

@@ -256,8 +256,9 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 
 			IGenericDataRepository<PlaylistData> playlistDataRepositoryMock = Substitute.For<IGenericDataRepository<PlaylistData>>();
 
-			var target = new PersistentSongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(),
-				Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>(), playlistDataRepositoryMock);
+			var target = new PersistentSongPlaylistViewModelInheritor(
+				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>(), playlistDataRepositoryMock);
+
 			target.SetSongs(songs);
 			target.SwitchToSong(song2);
 			playlistDataRepositoryMock.ClearReceivedCalls();
@@ -290,8 +291,9 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.PersistentPlaylist
 
 			IGenericDataRepository<PlaylistData> playlistDataRepositoryMock = Substitute.For<IGenericDataRepository<PlaylistData>>();
 
-			var target = new PersistentSongPlaylistViewModelInheritor(Substitute.For<ILibraryContentUpdater>(),
-				Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>(), playlistDataRepositoryMock);
+			var target = new PersistentSongPlaylistViewModelInheritor(
+				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>(), playlistDataRepositoryMock);
+
 			target.SetSongs(songs);
 			playlistDataRepositoryMock.ClearReceivedCalls();
 			playlistDataRepositoryMock.Save(Arg.Do<PlaylistData>(arg => savedPlaylistData = arg));

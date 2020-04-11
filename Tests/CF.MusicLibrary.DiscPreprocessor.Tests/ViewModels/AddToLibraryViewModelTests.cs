@@ -101,11 +101,11 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 
 			var settings = new DiscPreprocessorSettings
 			{
-				DeleteSourceContentAfterAdding = true
+				DeleteSourceContentAfterAdding = true,
 			};
 
-			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(),
-				mediaInfoProviderStub, workshopMusicStorageMock, settings.StubOptions());
+			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), mediaInfoProviderStub, workshopMusicStorageMock, settings.StubOptions());
+
 			target.SetSongs(new[]
 			{
 				new AddedSong(new Song(), @"SomeSongPath\SomeSongFile1.mp3"),
@@ -124,13 +124,14 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 			// Assert
 
 			Assert.IsNotNull(deletedFiles);
-			CollectionAssert.AreEqual(new[]
-			{
-				@"SomeSongPath\SomeSongFile1.mp3",
-				@"SomeSongPath\SomeSongFile2.mp3",
-				"DiscCoverImage1.img",
-				"DiscCoverImage2.img",
-			}, deletedFiles);
+			CollectionAssert.AreEqual(
+				new[]
+				{
+					@"SomeSongPath\SomeSongFile1.mp3",
+					@"SomeSongPath\SomeSongFile2.mp3",
+					"DiscCoverImage1.img",
+					"DiscCoverImage2.img",
+				}, deletedFiles);
 		}
 
 		[Test]
@@ -143,8 +144,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 
 			IWorkshopMusicStorage workshopMusicStorageMock = Substitute.For<IWorkshopMusicStorage>();
 
-			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(),
-				mediaInfoProviderStub, workshopMusicStorageMock, new DiscPreprocessorSettings().StubOptions());
+			AddToLibraryViewModel target = new AddToLibraryViewModel(Substitute.For<IMusicLibrary>(), mediaInfoProviderStub, workshopMusicStorageMock, new DiscPreprocessorSettings().StubOptions());
 			target.SetSongs(new[] { new AddedSong(new Song(), @"SomeSongPath\SomeSongFile.mp3") });
 			target.SetDiscsImages(new[] { new AddedDiscImage(new Disc(), new ImageInfo()) });
 

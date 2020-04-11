@@ -1,6 +1,7 @@
 ﻿namespace CF.MusicLibrary.PandaPlayer
 {
-	public interface IGenericDataRepository<T> where T : class
+	public interface IGenericDataRepository<T>
+		where T : class
 	{
 		void Save(T data);
 

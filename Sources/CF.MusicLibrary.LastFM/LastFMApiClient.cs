@@ -13,8 +13,8 @@ using CF.MusicLibrary.LastFM.Objects;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 using static System.FormattableString;
+using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.LastFM
 {
@@ -225,7 +225,8 @@ namespace CF.MusicLibrary.LastFM
 			}
 		}
 
-		private async Task<TData> PerformGetRequest<TData>(NameValueCollection requestParams, bool requiresAuth) where TData : class
+		private async Task<TData> PerformGetRequest<TData>(NameValueCollection requestParams, bool requiresAuth)
+			where TData : class
 		{
 			using (var request = CreateGetHttpRequest(new Uri("?" + BuildApiMethodQueryString(requestParams, requiresAuth), UriKind.Relative)))
 			{
@@ -233,7 +234,8 @@ namespace CF.MusicLibrary.LastFM
 			}
 		}
 
-		private async Task<TData> PerformPostRequest<TData>(NameValueCollection requestParams, bool requiresAuthentication) where TData : class
+		private async Task<TData> PerformPostRequest<TData>(NameValueCollection requestParams, bool requiresAuthentication)
+			where TData : class
 		{
 			using (var request = CreatePostHttpRequest(requestParams, requiresAuthentication))
 			{
@@ -241,16 +243,28 @@ namespace CF.MusicLibrary.LastFM
 			}
 		}
 
-		private static async Task<TData> PerformHttpRequest<TData>(HttpRequestMessage request) where TData : class
+		private static async Task<TData> PerformHttpRequest<TData>(HttpRequestMessage request)
+			where TData : class
 		{
-			using (var client = GetHttpClient())
+			using var clientHandler = new HttpClientHandler
 			{
-				var response = await client.SendAsync(request);
-				return await ParseResponseAsync<TData>(response);
-			}
+				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+			};
+
+			using var client = new HttpClient(clientHandler, true)
+			{
+				BaseAddress = ApiBaseUri,
+			};
+
+			client.DefaultRequestHeaders.Accept.Clear();
+			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+			var response = await client.SendAsync(request);
+			return await ParseResponseAsync<TData>(response);
 		}
 
-		private static async Task<TData> ParseResponseAsync<TData>(HttpResponseMessage response) where TData : class
+		private static async Task<TData> ParseResponseAsync<TData>(HttpResponseMessage response)
+			where TData : class
 		{
 			try
 			{
@@ -261,23 +275,13 @@ namespace CF.MusicLibrary.LastFM
 					return responseData;
 				}
 			}
+#pragma warning disable CA1031 // Do not catch general exception types
 			catch (Exception)
+#pragma warning restore CA1031 // Do not catch general exception types
 			{
 			}
 
 			throw new LastFMApiCallFailedException(response);
-		}
-
-		private static HttpClient GetHttpClient()
-		{
-			var client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate }, true)
-			{
-				BaseAddress = ApiBaseUri,
-			};
-			client.DefaultRequestHeaders.Accept.Clear();
-			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-			return client;
 		}
 
 		private static HttpRequestMessage CreateGetHttpRequest(Uri relativeUri)

@@ -15,8 +15,8 @@ namespace CF.MusicLibrary.Core.Tests
 			{
 				AlbumTitlePatterns =
 				{
-					@"^(.+) \(CD ?\d+\)$"
-				}
+					@"^(.+) \(CD ?\d+\)$",
+				},
 			};
 
 			var target = new DiscTitleToAlbumMapper(settings.StubOptions());
@@ -40,8 +40,8 @@ namespace CF.MusicLibrary.Core.Tests
 				AlbumTitlePatterns =
 				{
 					@"^(.+) \(CD ?\d+\)$",
-					@"^(.+) \(Live\)$"
-				}
+					@"^(.+) \(Live\)$",
+				},
 			};
 
 			var target = new DiscTitleToAlbumMapper(settings.StubOptions());
@@ -66,8 +66,8 @@ namespace CF.MusicLibrary.Core.Tests
 				AlbumTitlePatterns =
 				{
 					@"^(.+) \(CD ?\d+\)$",
-					@"^(.+) \(Live\)$"
-				}
+					@"^(.+) \(Live\)$",
+				},
 			};
 
 			var target = new DiscTitleToAlbumMapper(settings.StubOptions());
@@ -114,7 +114,7 @@ namespace CF.MusicLibrary.Core.Tests
 			{
 				AlbumTitlePatterns =
 				{
-					@"^(.+) \(CD ?\d+\)$"
+					@"^(.+) \(CD ?\d+\)$",
 				},
 
 				EmptyAlbumTitlePatterns =
@@ -179,7 +179,7 @@ namespace CF.MusicLibrary.Core.Tests
 					@"^(.+) \(B-Sides\)$",
 					@"^(.+) \(Remixes\)$",
 					@"^(.+) \(Soundtrack\)$",
-				}
+				},
 			};
 
 			var target = new DiscTitleToAlbumMapper(settings.StubOptions());
@@ -202,8 +202,8 @@ namespace CF.MusicLibrary.Core.Tests
 			{
 				AlbumTitlePatterns =
 				{
-					@"^(.+) \(CD ?\d+\)$"
-				}
+					@"^(.+) \(CD ?\d+\)$",
+				},
 			};
 
 			var target = new DiscTitleToAlbumMapper(settings.StubOptions());

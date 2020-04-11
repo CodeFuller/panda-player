@@ -120,7 +120,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ViewModels
 				{
 					artists.Add(new Artist
 					{
-						Name = songArtistName
+						Name = songArtistName,
 					});
 				}
 			}

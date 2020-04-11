@@ -135,7 +135,9 @@ namespace CF.MusicLibrary.Core.Objects
 			}
 		}
 
+#pragma warning disable CA2227 // Collection properties should be read only - Setter is required for EF Core
 		public ICollection<Playback> Playbacks { get; set; } = new Collection<Playback>();
+#pragma warning restore CA2227 // Collection properties should be read only
 
 		public DateTime? DeleteDate { get; set; }
 

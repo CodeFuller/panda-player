@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using CF.Library.Core.Exceptions;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 using static System.FormattableString;
+using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 {
@@ -19,7 +19,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 					Tests = new Collection<SongParsingTest>
 					{
 						new SongParsingTest("2.	\"Your Body Is A Battleground\" (featuring Marco Hietala)	3:50", "Your Body Is A Battleground (feat. Marco Hietala)"),
-					}
+					},
 				},
 
 				new SongTitlePattern
@@ -32,7 +32,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 						new SongParsingTest("1.	\"Mother Machine\"	Martijn Westerholt, Charlotte Wessels, Guus Eikens, Tripod	4:34", "Mother Machine"),
 						new SongParsingTest("15.	\"Shattered\" (live)	Westerholt	4:20", "Shattered (Live)"),
 						new SongParsingTest("17.	\"Come Closer\" (live)	Westerholt, Wessels", "Come Closer (Live)"),
-					}
+					},
 				},
 
 				new SongTitlePattern
@@ -43,7 +43,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 					Tests = new Collection<SongParsingTest>
 					{
 						new SongParsingTest("1.	\"Here Come The Vultures\"	6:05", "Here Come The Vultures"),
-					}
+					},
 				},
 
 				new SongTitlePattern
@@ -54,7 +54,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 					Tests = new Collection<SongParsingTest>
 					{
 						new SongParsingTest("\"Forgotten Bride\" – 4:22", "Forgotten Bride"),
-					}
+					},
 				},
 
 				new SongTitlePattern
@@ -65,7 +65,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 					Tests = new Collection<SongParsingTest>
 					{
 						new SongParsingTest("One Wish Away - 4:09", "One Wish Away"),
-					}
+					},
 				},
 
 				new SongTitlePattern
@@ -76,7 +76,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 					Tests = new Collection<SongParsingTest>
 					{
 						new SongParsingTest("1.	«Через все времена»	Маргарита Пушкина	Виталий Дубинин	5:42", "Через все времена"),
-					}
+					},
 				},
 
 				new SongTitlePattern
@@ -87,7 +87,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 					Tests = new Collection<SongParsingTest>
 					{
 						new SongParsingTest("1.	«Интро»	0:16", "Интро"),
-					}
+					},
 				},
 
 				new SongTitlePattern
@@ -98,7 +98,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 					Tests = new Collection<SongParsingTest>
 					{
 						new SongParsingTest("1	Made Of Lies	3:19", "Made Of Lies"),
-					}
+					},
 				},
 
 				new SongTitlePattern
@@ -110,7 +110,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 					{
 						new SongParsingTest("1	Scent Of Winter	", "Scent Of Winter"),
 						new SongParsingTest("1	Scent Of Winter", "Scent Of Winter"),
-					}
+					},
 				},
 
 				new SongTitlePattern
@@ -120,7 +120,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 					Tests = new Collection<SongParsingTest>
 					{
 						new SongParsingTest("1.	Schnee & Rosen	03:53	  Show lyrics", "Schnee & Rosen"),
-					}
+					},
 				},
 
 				new SongTitlePattern
@@ -131,7 +131,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 					Tests = new Collection<SongParsingTest>
 					{
 						new SongParsingTest("01. Напролом", "Напролом"),
-					}
+					},
 				},
 
 				new SongTitlePattern
@@ -142,7 +142,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 					Tests = new Collection<SongParsingTest>
 					{
 						new SongParsingTest("\"Смерти нет\" текст", "Смерти нет"),
-					}
+					},
 				},
 
 				new SongTitlePattern
@@ -152,7 +152,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 					Tests = new Collection<SongParsingTest>
 					{
 						new SongParsingTest("Along Comes Mary	live", "Along Comes Mary (Live)"),
-					}
+					},
 				},
 
 				new SongTitlePattern
@@ -162,7 +162,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.ParsingSong
 					Tests = new Collection<SongParsingTest>
 					{
 						new SongParsingTest("Mother Machine", "Mother Machine"),
-					}
+					},
 				},
 			});
 

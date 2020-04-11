@@ -21,7 +21,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.AddingToLibrary
 				{
 					Song.Artist = new Artist
 					{
-						Name = value
+						Name = value,
 					};
 					RaisePropertyChanged();
 				}

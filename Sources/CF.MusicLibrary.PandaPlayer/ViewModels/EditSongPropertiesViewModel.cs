@@ -143,7 +143,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 			await libraryContentUpdater.UpdateSongs(GetUpdatedSongs(), UpdatedSongProperties.ForceTagUpdate);
 		}
 
-		private static IEnumerable<EditedSongProperty<T>> FillAvailableValues<T>(IEnumerable<T> values, Func<T, object> sortedProperty) where T : class
+		private static IEnumerable<EditedSongProperty<T>> FillAvailableValues<T>(IEnumerable<T> values, Func<T, object> sortedProperty)
+			where T : class
 		{
 			var availableValues = new List<EditedSongProperty<T>>();
 			availableValues.Add(new EditedSongProperty<T>());

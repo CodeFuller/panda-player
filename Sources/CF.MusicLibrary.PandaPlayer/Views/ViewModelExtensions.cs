@@ -5,7 +5,8 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 {
 	public static class ViewModelExtensions
 	{
-		public static TViewModel GetViewModel<TViewModel>(this Object dataContext) where TViewModel : class
+		public static TViewModel GetViewModel<TViewModel>(this Object dataContext)
+			where TViewModel : class
 		{
 			if (dataContext == null)
 			{

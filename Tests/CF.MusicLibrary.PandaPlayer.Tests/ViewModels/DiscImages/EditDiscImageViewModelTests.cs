@@ -142,7 +142,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 				{
 					"http://google.com?search1=\"{DiscArtist}\" and \"{DiscTitle}\"",
 					"http://google.com?search2=\"{DiscArtist}\" and \"{DiscTitle}\"",
-				}
+				},
 			};
 
 			var disc = new Disc
@@ -179,7 +179,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 				DiscCoverImageLookupPages =
 				{
 					"http://google.com?search=\"{DiscArtist}\" and \"{DiscTitle}\"",
-				}
+				},
 			};
 
 			var disc = new Disc
@@ -215,7 +215,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 				DiscCoverImageLookupPages =
 				{
 					"http://google.com?search1=\"{DiscArtist}\" and \"{DiscTitle}\"",
-				}
+				},
 			};
 
 			IMusicLibrary musicLibraryStub = Substitute.For<IMusicLibrary>();

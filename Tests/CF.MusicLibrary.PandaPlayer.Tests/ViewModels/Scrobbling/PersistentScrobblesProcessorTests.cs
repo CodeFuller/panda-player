@@ -113,7 +113,8 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 			var newScrobble = new TrackScrobble();
 
 			var scrobblerMock = Substitute.For<IScrobbler>();
-			var target = new PersistentScrobblesProcessor(new Queue<TrackScrobble>(new[] { prevScrobble1, prevScrobble2 }),
+			var target = new PersistentScrobblesProcessor(
+				new Queue<TrackScrobble>(new[] { prevScrobble1, prevScrobble2 }),
 				Substitute.For<IScrobblesQueueRepository>(), Substitute.For<ILogger<PersistentScrobblesProcessor>>());
 
 			// Act
@@ -138,8 +139,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 			var scrobblerStub = Substitute.For<IScrobbler>();
 			scrobblerStub.Scrobble(Arg.Any<TrackScrobble>()).Throws<InvalidOperationException>();
 
-			var target = new PersistentScrobblesProcessor(new Queue<TrackScrobble>(),
-				Substitute.For<IScrobblesQueueRepository>(), Substitute.For<ILogger<PersistentScrobblesProcessor>>());
+			var target = new PersistentScrobblesProcessor(new Queue<TrackScrobble>(), Substitute.For<IScrobblesQueueRepository>(), Substitute.For<ILogger<PersistentScrobblesProcessor>>());
 
 			// Act & Assert
 
@@ -153,8 +153,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels.Scrobbling
 
 			var repositoryMock = Substitute.For<IScrobblesQueueRepository>();
 
-			var target = new PersistentScrobblesProcessor(new Queue<TrackScrobble>(new[] { new TrackScrobble() }),
-				repositoryMock, Substitute.For<ILogger<PersistentScrobblesProcessor>>());
+			var target = new PersistentScrobblesProcessor(new Queue<TrackScrobble>(new[] { new TrackScrobble() }), repositoryMock, Substitute.For<ILogger<PersistentScrobblesProcessor>>());
 
 			// Act
 

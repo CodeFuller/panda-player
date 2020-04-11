@@ -11,7 +11,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 	{
 		private readonly IPlaylistAdviser discAdviser;
 		private readonly ILogger<FavouriteArtistDiscsAdviser> logger;
-		private readonly ICollection<string> favouriteArtists;
+		private readonly IReadOnlyCollection<string> favouriteArtists;
 
 		private bool checkedArtists;
 
@@ -43,7 +43,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 				.Select(g => new
 				{
 					Artist = g.Key,
-					Passed = g.Min(k => k.PlaybacksPassed)
+					Passed = g.Min(k => k.PlaybacksPassed),
 				})
 				.ToDictionary(k => k.Artist, k => k.Passed);
 

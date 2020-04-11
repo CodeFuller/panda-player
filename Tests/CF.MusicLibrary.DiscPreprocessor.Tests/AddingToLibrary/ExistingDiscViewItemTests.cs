@@ -382,7 +382,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(new[]
 				{
-					new AddedSongInfo("SourcePath") { Artist = null }
+					new AddedSongInfo("SourcePath") { Artist = null },
 				})
 			{
 				DiscType = DsicType.ArtistDisc,
@@ -413,7 +413,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var discInfo = new AddedDiscInfo(new[]
 				{
-					new AddedSongInfo("SourcePath") { Artist = "Some New Artist" }
+					new AddedSongInfo("SourcePath") { Artist = "Some New Artist" },
 				})
 			{
 				DiscType = DsicType.ArtistDisc,

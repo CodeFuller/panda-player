@@ -20,7 +20,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 				new AddedSongInfo("SomeSourcePath")
 				{
 					Artist = "Lappi",
-					FullTitle = "Lappi - I. Eramaajarvi"
+					FullTitle = "Lappi - I. Eramaajarvi",
 				},
 
 				new AddedSongInfo("SomeSourcePath")
@@ -62,13 +62,13 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 				new AddedSongInfo("SomeSourcePath")
 				{
 					Artist = "Nirvana",
-					FullTitle = "Nirvana - Nevermind"
+					FullTitle = "Nirvana - Nevermind",
 				},
 
 				new AddedSongInfo("SomeSourcePath")
 				{
 					Artist = "Metallica",
-					FullTitle = "Metallica - Unforgiven"
+					FullTitle = "Metallica - Unforgiven",
 				},
 
 				new AddedSongInfo("SomeSourcePath")

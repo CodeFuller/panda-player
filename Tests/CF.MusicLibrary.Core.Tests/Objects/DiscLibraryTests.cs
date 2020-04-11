@@ -30,7 +30,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 			var discs = new[]
 			{
 				new Disc { SongsUnordered = new[] { new Song() } },
-				new Disc { SongsUnordered = new[] { new Song() } }
+				new Disc { SongsUnordered = new[] { new Song() } },
 			};
 			var target = new DiscLibrary(() => Task.FromResult(discs.AsEnumerable()));
 
@@ -223,7 +223,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 			{
 				new Disc
 				{
-					SongsUnordered = new[] { new Song { Artist = artist1 }, new Song { Artist = artist2 }, }
+					SongsUnordered = new[] { new Song { Artist = artist1 }, new Song { Artist = artist2 }, },
 				},
 			};
 
@@ -258,7 +258,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 							DeleteDate = new DateTime(2017, 09, 30),
 						},
 						new Song { Artist = artist2 },
-					}
+					},
 				},
 			};
 
@@ -338,7 +338,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 								DeleteDate = new DateTime(2017, 09, 30),
 							},
 							new Song { Artist = artist2 },
-						}
+						},
 				},
 			};
 
@@ -370,8 +370,8 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 						{
 							Artist = artist,
 							DeleteDate = new DateTime(2017, 09, 30),
-						}
-					}
+						},
+					},
 				},
 				new Disc { SongsUnordered = new[] { new Song { Artist = artist } } },
 			};
@@ -402,8 +402,8 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 						{
 							Artist = null,
 							DeleteDate = new DateTime(2017, 09, 30),
-						}
-					}
+						},
+					},
 				},
 			};
 
@@ -438,7 +438,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 							DeleteDate = new DateTime(2017, 09, 30),
 						},
 						new Song { Genre = genre2 },
-					}
+					},
 				},
 			};
 
@@ -470,8 +470,8 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 						{
 							Genre = genre,
 							DeleteDate = new DateTime(2017, 09, 30),
-						}
-					}
+						},
+					},
 				},
 				new Disc { SongsUnordered = new[] { new Song { Genre = genre } } },
 			};
@@ -502,8 +502,8 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 						{
 							Genre = null,
 							DeleteDate = new DateTime(2017, 09, 30),
-						}
-					}
+						},
+					},
 				},
 			};
 

@@ -73,7 +73,8 @@ namespace CF.MusicLibrary.PandaPlayer
 			ShowDialog<LibraryStatisticsView>(viewModelHolder.LibraryStatisticsViewModel);
 		}
 
-		private static bool ShowDialog<TDialogView>(object dataContext) where TDialogView : Window, new()
+		private static bool ShowDialog<TDialogView>(object dataContext)
+			where TDialogView : Window, new()
 		{
 			TDialogView dialogView = new TDialogView
 			{

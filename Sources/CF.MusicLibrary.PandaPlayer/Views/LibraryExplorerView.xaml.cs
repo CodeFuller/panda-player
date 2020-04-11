@@ -80,7 +80,8 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 			return null;
 		}
 
-		private static T FindVisualChild<T>(DependencyObject obj) where T : DependencyObject
+		private static T FindVisualChild<T>(DependencyObject obj)
+			where T : DependencyObject
 		{
 			for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); ++i)
 			{

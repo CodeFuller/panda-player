@@ -77,8 +77,8 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 						Year = 2005,
 						Artist = artist,
 						Genre = genre1,
-					}
-				}
+					},
+				},
 			};
 
 			var disc2 = new Disc
@@ -90,8 +90,8 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 						Year = 2000,
 						Artist = artist,
 						Genre = genre2,
-					}
-				}
+					},
+				},
 			};
 
 			var addedDisc = new AddedDiscInfo(Array.Empty<AddedSongInfo>())
@@ -215,7 +215,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 						Year = 1995,
 						Artist = existingArtist,
 						Genre = existingGenre,
-					}
+					},
 				},
 			};
 
@@ -268,7 +268,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 						Year = 1997,
 						Artist = existingArtist,
 						Genre = existingGenre,
-					}
+					},
 				},
 			};
 
@@ -281,7 +281,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 						Track = 1,
 						Title = "She Is My Sin",
 						FullTitle = "She Is My Sin",
-					}
+					},
 				})
 				{
 					Year = 2000,
@@ -300,7 +300,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 						Track = 1,
 						Title = "Progeny",
 						FullTitle = "Progeny",
-					}
+					},
 				})
 				{
 					DiscTitle = "Gladiator (CD 1)",
@@ -325,7 +325,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 						Track = 2,
 						Title = "Spybreak! (Short One)",
 						FullTitle = "Propellerheads - Spybreak! (Short One)",
-					}
+					},
 				})
 				{
 					DiscTitle = "The Matrix (CD 1)",
@@ -342,7 +342,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.DiscPreprocessor.View
 						Track = 14,
 						Title = "Cool Song",
 						FullTitle = "Cool Song",
-					}
+					},
 				})
 				{
 					Year = 1997,

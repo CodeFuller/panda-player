@@ -28,15 +28,16 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 					{
 						Rating = Rating.R10,
 						Days = 30,
-					}
-				}
+					},
+				},
 			};
 
-			var songs = Enumerable.Repeat(new Song
-			{
-				Rating = Rating.R10,
-				LastPlaybackTime = new DateTime(2017, 09, 01),
-			}, 12).ToList();
+			var songs = Enumerable.Repeat(
+				new Song
+				{
+					Rating = Rating.R10,
+					LastPlaybackTime = new DateTime(2017, 09, 01),
+				}, 12).ToList();
 
 			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs.ToCollection() } });
 
@@ -69,15 +70,16 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 					{
 						Rating = Rating.R10,
 						Days = 30,
-					}
-				}
+					},
+				},
 			};
 
-			var songs = Enumerable.Repeat(new Song
-			{
-				Rating = Rating.R10,
-				LastPlaybackTime = null,
-			}, 12).ToList();
+			var songs = Enumerable.Repeat(
+				new Song
+				{
+					Rating = Rating.R10,
+					LastPlaybackTime = null,
+				}, 12).ToList();
 
 			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs.ToCollection() } });
 
@@ -110,8 +112,8 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 					{
 						Rating = Rating.R10,
 						Days = 30,
-					}
-				}
+					},
+				},
 			};
 
 			var song = new Song
@@ -150,15 +152,16 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 					{
 						Rating = Rating.R10,
 						Days = 30,
-					}
-				}
+					},
+				},
 			};
 
-			var songs = Enumerable.Repeat(new Song
-			{
-				Rating = Rating.R9,
-				LastPlaybackTime = null,
-			}, 12);
+			var songs = Enumerable.Repeat(
+				new Song
+				{
+					Rating = Rating.R9,
+					LastPlaybackTime = null,
+				}, 12);
 
 			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs.ToCollection() } });
 
@@ -190,21 +193,23 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 					{
 						Rating = Rating.R10,
 						Days = 30,
-					}
-				}
+					},
+				},
 			};
 
-			var songs1 = Enumerable.Repeat(new Song
-			{
-				Rating = Rating.R10,
-				LastPlaybackTime = null,
-			}, 12).ToList();
+			var songs1 = Enumerable.Repeat(
+				new Song
+				{
+					Rating = Rating.R10,
+					LastPlaybackTime = null,
+				}, 12).ToList();
 
-			var songs2 = Enumerable.Repeat(new Song
-			{
-				Rating = Rating.R10,
-				LastPlaybackTime = null,
-			}, 12).ToList();
+			var songs2 = Enumerable.Repeat(
+				new Song
+				{
+					Rating = Rating.R10,
+					LastPlaybackTime = null,
+				}, 12).ToList();
 
 			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs1.Concat(songs2).ToCollection() } });
 
@@ -238,15 +243,16 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 					{
 						Rating = Rating.R10,
 						Days = 30,
-					}
-				}
+					},
+				},
 			};
 
-			var songs = Enumerable.Repeat(new Song
-			{
-				Rating = Rating.R10,
-				LastPlaybackTime = null,
-			}, 5).ToList();
+			var songs = Enumerable.Repeat(
+				new Song
+				{
+					Rating = Rating.R10,
+					LastPlaybackTime = null,
+				}, 5).ToList();
 
 			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs.ToCollection() } });
 
@@ -278,21 +284,23 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 					{
 						Rating = Rating.R10,
 						Days = 30,
-					}
-				}
+					},
+				},
 			};
 
-			var songs1 = Enumerable.Repeat(new Song
-			{
-				Rating = Rating.R10,
-				LastPlaybackTime = null,
-			}, 12).ToList();
+			var songs1 = Enumerable.Repeat(
+				new Song
+				{
+					Rating = Rating.R10,
+					LastPlaybackTime = null,
+				}, 12).ToList();
 
-			var songs2 = Enumerable.Repeat(new Song
-			{
-				Rating = Rating.R10,
-				LastPlaybackTime = null,
-			}, 11).ToList();
+			var songs2 = Enumerable.Repeat(
+				new Song
+				{
+					Rating = Rating.R10,
+					LastPlaybackTime = null,
+				}, 11).ToList();
 
 			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs1.Concat(songs2).ToCollection() } });
 
@@ -332,20 +340,22 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 						Rating = Rating.R9,
 						Days = 60,
 					},
-				}
+				},
 			};
 
-			var songs1 = Enumerable.Repeat(new Song
-			{
-				Rating = Rating.R9,
-				LastPlaybackTime = new DateTime(2017, 01, 01),
-			}, 12).ToList();
+			var songs1 = Enumerable.Repeat(
+				new Song
+				{
+					Rating = Rating.R9,
+					LastPlaybackTime = new DateTime(2017, 01, 01),
+				}, 12).ToList();
 
-			var songs2 = Enumerable.Repeat(new Song
-			{
-				Rating = Rating.R10,
-				LastPlaybackTime = new DateTime(2017, 01, 01),
-			}, 12).ToList();
+			var songs2 = Enumerable.Repeat(
+				new Song
+				{
+					Rating = Rating.R10,
+					LastPlaybackTime = new DateTime(2017, 01, 01),
+				}, 12).ToList();
 
 			var discLibrary = new DiscLibrary(new[] { new Disc { SongsUnordered = songs1.Concat(songs2).ToCollection() } });
 
@@ -379,8 +389,8 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 					{
 						Rating = Rating.R10,
 						Days = 30,
-					}
-				}
+					},
+				},
 			};
 
 			var songs1 = Enumerable.Range(1, 12).Select(i => new Song
@@ -440,7 +450,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 						Rating = Rating.R8,
 						Days = 90,
 					},
-				}
+				},
 			};
 
 			// Rank = 2 * 0 = 0

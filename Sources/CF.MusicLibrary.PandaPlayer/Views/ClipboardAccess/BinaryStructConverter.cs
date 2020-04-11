@@ -5,7 +5,8 @@ namespace CF.MusicLibrary.PandaPlayer.Views.ClipboardAccess
 {
 	public static class BinaryStructConverter
 	{
-		public static T FromByteArray<T>(byte[] data) where T : struct
+		public static T FromByteArray<T>(byte[] data)
+			where T : struct
 		{
 			IntPtr ptr = IntPtr.Zero;
 			try
@@ -25,7 +26,8 @@ namespace CF.MusicLibrary.PandaPlayer.Views.ClipboardAccess
 			}
 		}
 
-		public static byte[] ToByteArray<T>(T data) where T : struct
+		public static byte[] ToByteArray<T>(T data)
+			where T : struct
 		{
 			IntPtr ptr = IntPtr.Zero;
 			try

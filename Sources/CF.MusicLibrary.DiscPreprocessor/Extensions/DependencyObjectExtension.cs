@@ -16,7 +16,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.Extensions
 		/// <returns>
 		/// First parent control of type T.
 		/// </returns>
-		public static T ParentOfType<T>(this DependencyObject control) where T : DependencyObject
+		public static T ParentOfType<T>(this DependencyObject control)
+			where T : DependencyObject
 		{
 			return ParentOfType<T>(control, null);
 		}
@@ -30,7 +31,8 @@ namespace CF.MusicLibrary.DiscPreprocessor.Extensions
 		/// <returns>
 		/// First parent control of type T that satisfies given filter.
 		/// </returns>
-		public static T ParentOfType<T>(this DependencyObject control, Predicate<T> filter) where T : DependencyObject
+		public static T ParentOfType<T>(this DependencyObject control, Predicate<T> filter)
+			where T : DependencyObject
 		{
 			var parent = VisualTreeHelper.GetParent(control);
 

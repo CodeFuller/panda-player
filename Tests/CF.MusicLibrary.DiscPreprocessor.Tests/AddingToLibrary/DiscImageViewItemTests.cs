@@ -37,7 +37,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.AddingToLibrary
 
 			var disc = new Disc
 			{
-				Uri = new Uri("/Some/Disc/Uri", UriKind.Relative)
+				Uri = new Uri("/Some/Disc/Uri", UriKind.Relative),
 			};
 
 			var target = new DiscImageViewItem(disc, DiscImageType.Cover, Substitute.For<IImageFile>());

@@ -132,7 +132,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 					Genre = genre,
 					Year = 2017,
 					TrackNumber = 7,
-				}
+				},
 			});
 
 			// Act & Assert
@@ -177,7 +177,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 					Genre = genre,
 					Year = 2017,
 					TrackNumber = 7,
-				}
+				},
 			});
 
 			// Act & Assert
@@ -215,7 +215,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 					Genre = new Genre { Id = 2 },
 					Year = 2018,
 					TrackNumber = 8,
-				}
+				},
 			});
 
 			// Act & Assert
@@ -249,7 +249,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 					Genre = genre,
 					Year = 2017,
 					TrackNumber = 7,
-				}
+				},
 			});
 
 			// Act
@@ -291,7 +291,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 					Genre = new Genre(),
 					Year = 2017,
 					TrackNumber = 7,
-				}
+				},
 			});
 
 			// Act
@@ -336,7 +336,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 					Genre = new Genre(),
 					Year = 2017,
 					TrackNumber = 7,
-				}
+				},
 			});
 
 			// Act
@@ -429,7 +429,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var target = new EditSongPropertiesViewModel(new DiscLibrary(), libraryStructurer, libraryContentUpdaterMock);
 			target.Load(new[]
 			{
-				new Song { Uri = new Uri("SomeFileName.mp3", UriKind.Relative) }
+				new Song { Uri = new Uri("SomeFileName.mp3", UriKind.Relative) },
 			});
 
 			// Act
@@ -449,7 +449,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var song = new Song
 			{
 				Disc = new Disc { Uri = new Uri("/SomeDiscUri", UriKind.Relative) },
-				Uri = new Uri("SomeFileName.mp3", UriKind.Relative)
+				Uri = new Uri("SomeFileName.mp3", UriKind.Relative),
 			};
 
 			ILibraryContentUpdater libraryContentUpdaterMock = Substitute.For<ILibraryContentUpdater>();
@@ -484,12 +484,12 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 				new Song
 				{
 					Disc = new Disc { Uri = new Uri("/SomeDiscUri", UriKind.Relative) },
-					Uri = new Uri("SomeFileName1.mp3", UriKind.Relative)
+					Uri = new Uri("SomeFileName1.mp3", UriKind.Relative),
 				},
 				new Song
 				{
 					Disc = new Disc { Uri = new Uri("/SomeDiscUri", UriKind.Relative) },
-					Uri = new Uri("SomeFileName2.mp3", UriKind.Relative)
+					Uri = new Uri("SomeFileName2.mp3", UriKind.Relative),
 				},
 			});
 

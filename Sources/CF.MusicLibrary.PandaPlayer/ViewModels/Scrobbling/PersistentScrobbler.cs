@@ -25,7 +25,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Scrobbling
 			{
 				await scrobbler.UpdateNowPlaying(track);
 			}
+#pragma warning disable CA1031 // Do not catch general exception types
 			catch (Exception e)
+#pragma warning restore CA1031 // Do not catch general exception types
 			{
 				logger.LogWarning($"Failed to update Now Playing Track for '{track}'. Error: {e.Message}");
 			}

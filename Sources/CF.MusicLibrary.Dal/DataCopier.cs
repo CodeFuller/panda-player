@@ -54,7 +54,9 @@ namespace CF.MusicLibrary.Dal
 			using var transaction = connection.BeginTransaction();
 
 			using var cmd = connection.CreateCommand();
+#pragma warning disable CA2100 // Review SQL queries for security vulnerabilities
 			cmd.CommandText = commandText;
+#pragma warning restore CA2100 // Review SQL queries for security vulnerabilities
 			cmd.ExecuteNonQuery();
 
 			transaction.Commit();

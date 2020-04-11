@@ -156,7 +156,10 @@ namespace CF.MusicLibrary.PandaPlayer
 		protected override void BootstrapLogging(ILoggerFactory loggerFactory, IConfiguration configuration)
 		{
 			loggerViewModelInstance = new LoggerViewModel();
+
+#pragma warning disable CA2000 // Dispose objects before losing scope
 			loggerFactory.AddProvider(new InstanceLoggerProvider(loggerViewModelInstance));
+#pragma warning restore CA2000 // Dispose objects before losing scope
 		}
 	}
 }

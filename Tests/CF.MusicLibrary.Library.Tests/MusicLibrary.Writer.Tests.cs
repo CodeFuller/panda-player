@@ -62,7 +62,7 @@ namespace CF.MusicLibrary.Library.Tests
 			var song = new Song
 			{
 				Disc = new Disc(),
-				Checksum = null
+				Checksum = null,
 			};
 
 			IChecksumCalculator checksumCalculatorStub = Substitute.For<IChecksumCalculator>();
@@ -911,7 +911,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			var disc = new Disc
 			{
-				Images = { discImage1, discImage2 }
+				Images = { discImage1, discImage2 },
 			};
 
 			IMusicLibraryStorage storageMock = Substitute.For<IMusicLibraryStorage>();
@@ -939,7 +939,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			var disc = new Disc
 			{
-				Images = { discImage1, discImage2 }
+				Images = { discImage1, discImage2 },
 			};
 
 			IMusicLibraryRepository repositoryMock = Substitute.For<IMusicLibraryRepository>();
@@ -966,7 +966,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			var disc = new Disc
 			{
-				CoverImage = prevImage
+				CoverImage = prevImage,
 			};
 
 			IMusicLibraryStorage storageMock = Substitute.For<IMusicLibraryStorage>();
@@ -992,7 +992,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			var disc = new Disc
 			{
-				CoverImage = prevImage
+				CoverImage = prevImage,
 			};
 
 			IMusicLibraryRepository repositoryMock = Substitute.For<IMusicLibraryRepository>();
@@ -1016,7 +1016,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			var disc = new Disc
 			{
-				Uri = new Uri("/SomeDisc", UriKind.Relative)
+				Uri = new Uri("/SomeDisc", UriKind.Relative),
 			};
 			var imageInfo = new ImageInfo
 			{
@@ -1057,7 +1057,7 @@ namespace CF.MusicLibrary.Library.Tests
 			var disc = new Disc();
 			var imageInfo = new ImageInfo
 			{
-				FileName = "ImageFileName.img"
+				FileName = "ImageFileName.img",
 			};
 
 			IMusicLibraryStorage storageMock = Substitute.For<IMusicLibraryStorage>();
@@ -1082,7 +1082,7 @@ namespace CF.MusicLibrary.Library.Tests
 			var disc = new Disc();
 			var imageInfo = new ImageInfo
 			{
-				FileName = "ImageFileName.img"
+				FileName = "ImageFileName.img",
 			};
 
 			IMusicLibraryRepository repositoryMock = Substitute.For<IMusicLibraryRepository>();
@@ -1151,7 +1151,7 @@ namespace CF.MusicLibrary.Library.Tests
 
 			var song = new Song
 			{
-				Checksum = 54321
+				Checksum = 54321,
 			};
 
 			IMusicLibraryStorage storageStub = Substitute.For<IMusicLibraryStorage>();

@@ -37,7 +37,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 				{
 					Id = 0,
 					Name = "Previous Name",
-				}
+				},
 			};
 			var addedSong = new AddedSong(song, "SomeSong.mp3");
 
@@ -63,7 +63,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Tests.ViewModels
 				{
 					Id = 12345,
 					Name = "Previous Name",
-				}
+				},
 			};
 			var addedSong = new AddedSong(song, "SomeSong.mp3");
 

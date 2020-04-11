@@ -190,7 +190,7 @@ namespace CF.MusicLibrary.Library.Tests
 				{
 					new Song { Uri = new Uri("/SomeSong11.mp3", UriKind.Relative) },
 					new Song { Uri = new Uri("/SomeSong12.mp3", UriKind.Relative) },
-				}
+				},
 			};
 
 			var disc2 = new Disc
@@ -198,7 +198,7 @@ namespace CF.MusicLibrary.Library.Tests
 				SongsUnordered = new[]
 				{
 					new Song { Uri = new Uri("/SomeSong21.mp3", UriKind.Relative) },
-				}
+				},
 			};
 
 			var disc3 = new Disc
@@ -206,7 +206,7 @@ namespace CF.MusicLibrary.Library.Tests
 				SongsUnordered = new[]
 				{
 					new Song { Uri = new Uri("/SomeSong31.mp3", UriKind.Relative) },
-				}
+				},
 			};
 
 			var discLibrary = new DiscLibrary(new[] { disc1, disc2, disc3 });
@@ -252,7 +252,7 @@ namespace CF.MusicLibrary.Library.Tests
 				{
 					ImageType = DiscImageType.Cover,
 					Uri = new Uri("/SomeImage1.img", UriKind.Relative),
-				}
+				},
 			};
 			var disc2 = new Disc
 			{
@@ -261,7 +261,7 @@ namespace CF.MusicLibrary.Library.Tests
 				{
 					ImageType = DiscImageType.Cover,
 					Uri = new Uri("/SomeImage2.img", UriKind.Relative),
-				}
+				},
 			};
 			var disc3 = new Disc
 			{
@@ -270,7 +270,7 @@ namespace CF.MusicLibrary.Library.Tests
 				{
 					ImageType = DiscImageType.Cover,
 					Uri = new Uri("/SomeImage3.img", UriKind.Relative),
-				}
+				},
 			};
 
 			var discLibrary = new DiscLibrary(new[] { disc1, disc2, disc3 });

@@ -4,7 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CF.MusicLibrary.DiscPreprocessor
 {
-	public class ObjectFactory<TType> : IObjectFactory<TType> where TType : class
+	public class ObjectFactory<TType> : IObjectFactory<TType>
+		where TType : class
 	{
 		private readonly IServiceProvider serviceProvider;
 

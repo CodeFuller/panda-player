@@ -22,7 +22,7 @@ namespace CF.MusicLibrary.Core.Objects
 		/// Gets or sets Disc Title.
 		/// </summary>
 		/// <example>
-		/// The Classical Conspiracy (Live) (CD 1)
+		/// The Classical Conspiracy (Live) (CD 1).
 		/// </example>
 		public string Title { get; set; }
 
@@ -30,7 +30,7 @@ namespace CF.MusicLibrary.Core.Objects
 		/// Gets or sets Album Title.
 		/// </summary>
 		/// <example>
-		/// The Classical Conspiracy
+		/// The Classical Conspiracy.
 		/// </example>>
 		public string AlbumTitle { get; set; }
 
@@ -63,11 +63,15 @@ namespace CF.MusicLibrary.Core.Objects
 			.ThenBy(s => s.Artist?.Name)
 			.ThenBy(s => s.Title);
 
+#pragma warning disable CA2227 // Collection properties should be read only - Setter is required for EF Core
 		public ICollection<Song> SongsUnordered { get; set; } = new Collection<Song>();
+#pragma warning restore CA2227 // Collection properties should be read only
 
 		public IEnumerable<Song> RepresentativeSongs => IsDeleted ? AllSongs : Songs;
 
+#pragma warning disable CA2227 // Collection properties should be read only - Setter is required for EF Core
 		public ICollection<DiscImage> Images { get; set; } = new Collection<DiscImage>();
+#pragma warning restore CA2227 // Collection properties should be read only
 
 		public DiscImage CoverImage
 		{

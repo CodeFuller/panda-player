@@ -128,6 +128,7 @@ namespace CF.MusicLibrary.LibraryChecker.Tests
 			checkScopeMock.Received(1).SetScopeUri(new Uri("/", UriKind.Relative));
 		}
 
+		[Test]
 		public void Run_IfNoCommandIsSpecified_ReturnsWithNoAction()
 		{
 			// Arrange

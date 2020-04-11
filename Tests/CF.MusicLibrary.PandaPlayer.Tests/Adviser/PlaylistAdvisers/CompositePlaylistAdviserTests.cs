@@ -29,7 +29,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var settings = new AdviserSettings
 			{
-				HighlyRatedSongsAdviser = new HighlyRatedSongsAdviserSettings { PlaybacksBetweenHighlyRatedSongs = 10 }
+				HighlyRatedSongsAdviser = new HighlyRatedSongsAdviserSettings { PlaybacksBetweenHighlyRatedSongs = 10 },
 			};
 
 			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, highlyRatedSongsAdviserStub, Substitute.For<IPlaylistAdviser>(),
@@ -63,12 +63,12 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var memoRepositoryStub = Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>();
 			memoRepositoryStub.Load().Returns(new PlaylistAdviserMemo
 			{
-				PlaybacksSinceHighlyRatedSongsPlaylist = 2
+				PlaybacksSinceHighlyRatedSongsPlaylist = 2,
 			});
 
 			var settings = new AdviserSettings
 			{
-				HighlyRatedSongsAdviser = new HighlyRatedSongsAdviserSettings { PlaybacksBetweenHighlyRatedSongs = 10 }
+				HighlyRatedSongsAdviser = new HighlyRatedSongsAdviserSettings { PlaybacksBetweenHighlyRatedSongs = 10 },
 			};
 
 			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, highlyRatedSongsAdviserStub,
@@ -101,7 +101,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var settings = new AdviserSettings
 			{
-				FavouriteArtistsAdviser = new FavouriteArtistsAdviserSettings { PlaybacksBetweenFavouriteArtistDiscs = 5 }
+				FavouriteArtistsAdviser = new FavouriteArtistsAdviserSettings { PlaybacksBetweenFavouriteArtistDiscs = 5 },
 			};
 
 			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, Substitute.For<IPlaylistAdviser>(), favouriteArtistDiscsAdviserStub,
@@ -134,13 +134,13 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var settings = new AdviserSettings
 			{
-				FavouriteArtistsAdviser = new FavouriteArtistsAdviserSettings { PlaybacksBetweenFavouriteArtistDiscs = 6 }
+				FavouriteArtistsAdviser = new FavouriteArtistsAdviserSettings { PlaybacksBetweenFavouriteArtistDiscs = 6 },
 			};
 
 			var memoRepositoryStub = Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>();
 			memoRepositoryStub.Load().Returns(new PlaylistAdviserMemo
 			{
-				PlaybacksSinceFavouriteArtistDisc = 2
+				PlaybacksSinceFavouriteArtistDisc = 2,
 			});
 
 			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, Substitute.For<IPlaylistAdviser>(),

@@ -68,7 +68,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.ViewModels
 			var songs = new List<Song>
 			{
 				new Song { Disc = disc },
-				new Song { Disc = disc }
+				new Song { Disc = disc },
 			};
 
 			var target = new SongPlaylistViewModel(Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());

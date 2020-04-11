@@ -44,7 +44,7 @@ namespace CF.MusicLibrary.LibraryChecker.Registrators
 
 		public void RegisterBadTagData(Song song, IEnumerable<SongTagType> tagTypes)
 		{
-			LogInconsistency(Current($"Bad tag types for {song.Uri + ":", -100}: [{String.Join(", ", tagTypes)}]"));
+			LogInconsistency(Current($"Bad tag types for {song.Uri + ":",-100}: [{String.Join(", ", tagTypes)}]"));
 		}
 
 		public void RegisterArtistNotFound(Artist artist)

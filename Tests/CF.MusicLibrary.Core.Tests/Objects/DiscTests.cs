@@ -22,7 +22,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { Artist = artist },
 					new Song { Artist = artist },
-				}
+				},
 			};
 
 			// Act
@@ -45,7 +45,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { Artist = new Artist() },
 					new Song { Artist = new Artist() },
-				}
+				},
 			};
 
 			// Act
@@ -68,7 +68,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { Artist = new Artist() },
 					new Song { Artist = null },
-				}
+				},
 			};
 
 			// Act
@@ -93,7 +93,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { Artist = artist, DeleteDate = new DateTime(2018, 09, 30) },
 					new Song { Artist = artist, DeleteDate = new DateTime(2018, 09, 30) },
-				}
+				},
 			};
 
 			// Act
@@ -116,7 +116,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { Artist = new Artist(), DeleteDate = new DateTime(2018, 09, 30) },
 					new Song { Artist = new Artist(), DeleteDate = new DateTime(2018, 09, 30) },
-				}
+				},
 			};
 
 			// Act
@@ -139,7 +139,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { Artist = new Artist(), DeleteDate = new DateTime(2018, 09, 30) },
 					new Song { Artist = null, DeleteDate = new DateTime(2018, 09, 30) },
-				}
+				},
 			};
 
 			// Act
@@ -164,7 +164,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { Genre = genre },
 					new Song { Genre = genre },
-				}
+				},
 			};
 
 			// Act
@@ -187,7 +187,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { Genre = new Genre() },
 					new Song { Genre = new Genre() },
-				}
+				},
 			};
 
 			// Act
@@ -210,7 +210,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { Genre = new Genre() },
 					new Song { Genre = null },
-				}
+				},
 			};
 
 			// Act
@@ -233,7 +233,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { Year = 2017 },
 					new Song { Year = 2017 },
-				}
+				},
 			};
 
 			// Act
@@ -256,7 +256,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { Year = 2016 },
 					new Song { Year = 2017 },
-				}
+				},
 			};
 
 			// Act
@@ -279,7 +279,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { Year = null },
 					new Song { Year = 2017 },
-				}
+				},
 			};
 
 			// Act
@@ -303,7 +303,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 					new Song { LastPlaybackTime = new DateTime(2017, 11, 28), },
 					new Song { LastPlaybackTime = new DateTime(2017, 04, 03), },
 					new Song { LastPlaybackTime = new DateTime(2017, 05, 09), },
-				}
+				},
 			};
 
 			// Act
@@ -326,7 +326,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { LastPlaybackTime = new DateTime(2017, 04, 03), },
 					new Song { LastPlaybackTime = null, },
-				}
+				},
 			};
 
 			// Act
@@ -350,7 +350,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 					new Song { LastPlaybackTime = new DateTime(2017, 11, 28), DeleteDate = new DateTime(2017, 12, 01) },
 					new Song { LastPlaybackTime = new DateTime(2017, 04, 03), DeleteDate = new DateTime(2017, 12, 01) },
 					new Song { LastPlaybackTime = new DateTime(2017, 05, 09), DeleteDate = new DateTime(2017, 12, 01) },
-				}
+				},
 			};
 
 			// Act
@@ -373,7 +373,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { LastPlaybackTime = new DateTime(2017, 04, 03), DeleteDate = new DateTime(2017, 12, 01) },
 					new Song { LastPlaybackTime = null, DeleteDate = new DateTime(2017, 12, 01) },
-				}
+				},
 			};
 
 			// Act
@@ -398,7 +398,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 					new Song { LastPlaybackTime = new DateTime(2017, 11, 28), },
 					new Song { LastPlaybackTime = new DateTime(2017, 04, 03), },
 					new Song { LastPlaybackTime = new DateTime(2017, 05, 09), },
-				}
+				},
 			};
 
 			// Act
@@ -422,7 +422,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 					new Song { LastPlaybackTime = new DateTime(2017, 01, 01), DeleteDate = new DateTime(2017, 12, 01) },
 					new Song { LastPlaybackTime = new DateTime(2017, 04, 03), },
 					new Song { LastPlaybackTime = null, },
-				}
+				},
 			};
 
 			// Act
@@ -676,7 +676,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				Images =
 				{
 					new DiscImage { ImageType = DiscImageType.Cover },
-					new DiscImage { ImageType = DiscImageType.None }
+					new DiscImage { ImageType = DiscImageType.None },
 				},
 			};
 
@@ -701,7 +701,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { DeleteDate = null },
 					new Song { DeleteDate = new DateTime(2017, 09, 30) },
-				}
+				},
 			};
 
 			// Act & Assert
@@ -720,7 +720,7 @@ namespace CF.MusicLibrary.Core.Tests.Objects
 				{
 					new Song { DeleteDate = new DateTime(2017, 09, 30) },
 					new Song { DeleteDate = new DateTime(2017, 09, 30) },
-				}
+				},
 			};
 
 			// Act & Assert
