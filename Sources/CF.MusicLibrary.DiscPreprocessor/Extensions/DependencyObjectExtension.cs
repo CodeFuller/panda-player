@@ -9,7 +9,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Extensions
 	public static class DependencyObjectExtension
 	{
 		/// <summary>
-		/// Find a sequence of children of type T
+		/// Find a sequence of children of type T.
 		/// </summary>
 		/// <typeparam name="T">Type of control to search.</typeparam>
 		/// <param name="control">Child control.</param>
@@ -23,7 +23,7 @@ namespace CF.MusicLibrary.DiscPreprocessor.Extensions
 		}
 
 		/// <summary>
-		/// Find a sequence of children of type T and apply filter if applicable
+		/// Find a sequence of children of type T and apply filter if applicable.
 		/// </summary>
 		/// <typeparam name="T">Type of control to search.</typeparam>
 		/// <param name="control">Child control.</param>

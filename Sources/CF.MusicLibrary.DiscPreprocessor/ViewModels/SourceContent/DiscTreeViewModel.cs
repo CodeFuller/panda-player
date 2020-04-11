@@ -7,8 +7,9 @@ using GalaSoft.MvvmLight;
 
 namespace CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Following ViewModel naming convention")]
+#pragma warning disable CA1710 // Identifiers should have correct suffix - Following ViewModel naming convention
 	public class DiscTreeViewModel : ViewModelBase, IEnumerable<DiscTreeViewItem>
+#pragma warning restore CA1710 // Identifiers should have correct suffix
 	{
 		public ObservableCollection<DiscTreeViewItem> Discs { get; } = new ObservableCollection<DiscTreeViewItem>();
 

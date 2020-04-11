@@ -52,8 +52,9 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels
 		// Should be of type IList because of SelectedItem binding in SongListView
 		private IList selectedSongItems;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Collection is used in two-way binding")]
+#pragma warning disable CA2227 // Collection properties should be read only - Collection is used in two-way binding
 		public IList SelectedSongItems
+#pragma warning restore CA2227 // Collection properties should be read only
 		{
 			get => selectedSongItems;
 			set => Set(ref selectedSongItems, value);

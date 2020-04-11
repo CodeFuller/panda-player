@@ -3,8 +3,9 @@ using Newtonsoft.Json;
 
 namespace CF.MusicLibrary.LastFM
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Class is instantiated by Json.NET")]
+#pragma warning disable CA1812 // The class is instantiated by DI container - The class is instantiated by Json.NET
 	internal class BooleanJsonConverter : JsonConverter
+#pragma warning restore CA1812 // The class is instantiated by DI container
 	{
 		public override bool CanConvert(Type objectType)
 		{

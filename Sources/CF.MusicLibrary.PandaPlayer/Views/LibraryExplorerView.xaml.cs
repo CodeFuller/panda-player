@@ -12,7 +12,7 @@ using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
 namespace CF.MusicLibrary.PandaPlayer.Views
 {
 	/// <summary>
-	/// Interaction logic for LibraryExplorerView.xaml
+	/// Interaction logic for LibraryExplorerView.xaml.
 	/// </summary>
 	public partial class LibraryExplorerView : UserControl
 	{

@@ -21,7 +21,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.Player
 
 		void Pause();
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", Justification = "'Stop' is the best name in current semantics")]
+#pragma warning disable CA1716 // Identifiers should not match keywords - 'Stop' is the best name in current semantics
 		void Stop();
+#pragma warning restore CA1716 // Identifiers should not match keywords
 	}
 }

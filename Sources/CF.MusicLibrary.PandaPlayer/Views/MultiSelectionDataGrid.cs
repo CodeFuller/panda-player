@@ -10,8 +10,9 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 		public static readonly DependencyProperty SelectedItemsListProperty =
 			DependencyProperty.Register("SelectedItemsList", typeof(IList), typeof(MultiSelectionDataGrid), new PropertyMetadata(null));
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Collection is used in two-way binding")]
+#pragma warning disable CA2227 // Collection properties should be read only - Collection is used in two-way binding
 		public IList SelectedItemsList
+#pragma warning restore CA2227 // Collection properties should be read only
 		{
 			get => (IList)GetValue(SelectedItemsListProperty);
 			set => SetValue(SelectedItemsListProperty, value);

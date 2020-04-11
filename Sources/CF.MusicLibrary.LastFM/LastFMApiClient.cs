@@ -355,17 +355,20 @@ namespace CF.MusicLibrary.LastFM
 				select new KeyValuePair<string, string>(key, value);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "Lower case is an external requirement")]
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Cryptography", "CA5351:DoNotUseBrokenCryptographicAlgorithms", Justification = "We are just clients of 3rd party API and use algorithm required by the server")]
 		private static string CalcMD5(string data)
 		{
+#pragma warning disable CA5351 // Do Not Use Broken Cryptographic Algorithms - We are just clients of 3rd party API and use algorithm required by the server
 			using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+#pragma warning restore CA5351 // Do Not Use Broken Cryptographic Algorithms
 			{
 				byte[] dataToHash = new UTF8Encoding().GetBytes(data);
 				byte[] hashBytes = md5.ComputeHash(dataToHash);
+
+#pragma warning disable CA1308 // Normalize strings to uppercase - Using of lower case is an external requirement
 				return BitConverter.ToString(hashBytes)
 					.Replace("-", string.Empty)
 					.ToLower(CultureInfo.InvariantCulture);
+#pragma warning restore CA1308 // Normalize strings to uppercase
 			}
 		}
 	}

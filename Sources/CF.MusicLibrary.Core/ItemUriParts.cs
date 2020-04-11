@@ -7,8 +7,9 @@ using CF.Library.Core.Extensions;
 
 namespace CF.MusicLibrary.Core
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Adding 'Collection' suffix makes class name too long")]
+#pragma warning disable CA1710 // Identifiers should have correct suffix
 	public class ItemUriParts : IEnumerable<string>
+#pragma warning restore CA1710 // Identifiers should have correct suffix
 	{
 		private const string UriDelimiter = "/";
 

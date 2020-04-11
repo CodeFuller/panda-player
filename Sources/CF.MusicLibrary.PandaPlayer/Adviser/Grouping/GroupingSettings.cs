@@ -2,8 +2,9 @@
 
 namespace CF.MusicLibrary.PandaPlayer.Adviser.Grouping
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "Following Settings class naming convention")]
+#pragma warning disable CA1710 // Identifiers should have correct suffix - Following Settings class naming convention
 	public class GroupingSettings : Collection<GroupPattern>
+#pragma warning restore CA1710 // Identifiers should have correct suffix
 	{
 	}
 }

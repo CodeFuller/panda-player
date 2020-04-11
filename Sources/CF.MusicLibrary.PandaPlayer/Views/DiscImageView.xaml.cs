@@ -5,7 +5,7 @@ using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 namespace CF.MusicLibrary.PandaPlayer.Views
 {
 	/// <summary>
-	/// Interaction logic for DiscImageView.xaml
+	/// Interaction logic for DiscImageView.xaml.
 	/// </summary>
 	public partial class DiscImageView : UserControl
 	{
@@ -16,8 +16,9 @@ namespace CF.MusicLibrary.PandaPlayer.Views
 			InitializeComponent();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Method name follows convention for event handlers")]
+#pragma warning disable CA1707 // Identifiers should not contain underscores - Method name follows convention for event handlers
 		public async void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+#pragma warning restore CA1707 // Identifiers should not contain underscores
 		{
 			if (e.ClickCount == 2)
 			{
