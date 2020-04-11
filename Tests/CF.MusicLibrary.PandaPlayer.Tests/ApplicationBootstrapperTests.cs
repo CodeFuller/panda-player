@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.Library;
 using CF.MusicLibrary.PandaPlayer.Adviser.Grouping;
@@ -49,31 +48,6 @@ namespace CF.MusicLibrary.PandaPlayer.Tests
 			// Act & Assert
 
 			Assert.DoesNotThrow(() => target.Bootstrap(Array.Empty<string>()));
-		}
-
-		[Test]
-		public void RegisterDependencies_BindsSqLiteConnectionSettingsCorrectly()
-		{
-			// Arrange
-
-			var settingValues = new Dictionary<string, string>
-			{
-				{ "dataStoragePath", @"c:\temp" },
-				{ "fileSystemStorage:root", @"c:\temp" },
-				{ "database:dataSource", @"Some DataSource" },
-			};
-			var target = new ApplicationBootstrapperHelper(settingValues);
-
-			// Act
-
-			target.Bootstrap(Array.Empty<string>());
-
-			// Assert
-
-			var options = target.ResolveDependency<IOptions<SqLiteConnectionSettings>>();
-			var settings = options.Value;
-
-			Assert.AreEqual(@"Some DataSource", settings.DataSource);
 		}
 
 		[Test]

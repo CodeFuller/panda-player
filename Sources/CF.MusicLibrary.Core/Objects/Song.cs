@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -12,6 +13,8 @@ namespace CF.MusicLibrary.Core.Objects
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		public int Id { get; set; }
+
+		public int DiscId { get; set; }
 
 		public Disc Disc { get; set; }
 
@@ -132,7 +135,7 @@ namespace CF.MusicLibrary.Core.Objects
 			}
 		}
 
-		public Collection<Playback> Playbacks { get; } = new Collection<Playback>();
+		public ICollection<Playback> Playbacks { get; set; } = new Collection<Playback>();
 
 		public DateTime? DeleteDate { get; set; }
 

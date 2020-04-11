@@ -25,7 +25,6 @@
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Net.Compilers" Version="2.8.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="all" />
   </ItemGroup>
 

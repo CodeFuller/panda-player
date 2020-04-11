@@ -7,7 +7,7 @@ using CF.MusicLibrary.Common.Images;
 using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
-using CF.MusicLibrary.Dal;
+using CF.MusicLibrary.Dal.Extensions;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.Library;
 using CF.MusicLibrary.LibraryChecker.Checkers;
@@ -24,14 +24,13 @@ namespace CF.MusicLibrary.LibraryChecker
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{
 			services.Configure<CheckingSettings>(options => configuration.Bind("checkingSettings", options));
-			services.Configure<SqLiteConnectionSettings>(options => configuration.Bind("database", options));
 			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("fileSystemStorage", options));
 			services.Configure<LastFmClientSettings>(options => configuration.Bind("lastFmClient", options));
 			services.Configure<DiscToAlbumMappingSettings>(options => configuration.Bind("discToAlbumMappings", options));
 
+			services.AddDal(settings => configuration.Bind("database", settings));
+
 			services.AddTransient<IApplicationLogic, ApplicationLogic>();
-			services.AddTransient<IConfiguredDbConnectionFactory, SqLiteConnectionFactory>();
-			services.AddTransient<IMusicLibraryRepository, MusicLibraryRepositoryEF>();
 			services.AddTransient<IFileStorage, FileSystemStorage>();
 			services.AddTransient<IMusicLibraryStorage, FileSystemMusicStorage>();
 			services.AddTransient<ILibraryStructurer, LibraryStructurer>();

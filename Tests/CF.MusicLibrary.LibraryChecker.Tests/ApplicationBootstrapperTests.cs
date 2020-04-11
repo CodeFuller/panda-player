@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.Library;
 using Microsoft.Extensions.Configuration;
@@ -124,31 +123,6 @@ namespace CF.MusicLibrary.LibraryChecker.Tests
 			var titleCharCorrection = filterSettings.LastFmSongTitleCharacterCorrections.Single();
 			Assert.AreEqual('A', titleCharCorrection.Original);
 			Assert.AreEqual('B', titleCharCorrection.Corrected);
-		}
-
-		[Test]
-		public void RegisterDependencies_BindsSqLiteConnectionSettingsCorrectly()
-		{
-			// Arrange
-
-			var settingValues = new Dictionary<string, string>
-			{
-				{ "dataStoragePath", @"c:\temp" },
-				{ "fileSystemStorage:root", @"c:\temp" },
-				{ "database:dataSource", @"Some DataSource" },
-			};
-			var target = new ApplicationBootstrapperHelper(settingValues);
-
-			// Act
-
-			target.Bootstrap(Array.Empty<string>());
-
-			// Assert
-
-			var options = target.ResolveDependency<IOptions<SqLiteConnectionSettings>>();
-			var settings = options.Value;
-
-			Assert.AreEqual(@"Some DataSource", settings.DataSource);
 		}
 
 		[Test]

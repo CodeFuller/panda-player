@@ -27,11 +27,8 @@
     <PackageReference Include="CF.Library.Bootstrap" Version="1.0.0" />
     <PackageReference Include="CF.Library.Logging" Version="2.2.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Net.Compilers" Version="2.8.0" />
     <PackageReference Include="NDesk.Options" Version="0.2.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="all" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.108" />
   </ItemGroup>
 
   <ItemGroup>
@@ -58,5 +55,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+  <PropertyGroup>
+    <NoWarn>NU1701</NoWarn>
+  </PropertyGroup>
 
 </Project>

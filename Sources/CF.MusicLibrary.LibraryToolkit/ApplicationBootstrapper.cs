@@ -5,7 +5,7 @@ using CF.Library.Core.Facades;
 using CF.Library.Logging;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
-using CF.MusicLibrary.Dal;
+using CF.MusicLibrary.Dal.Extensions;
 using CF.MusicLibrary.Library;
 using CF.MusicLibrary.LibraryToolkit.Interfaces;
 using CF.MusicLibrary.LibraryToolkit.Seeders;
@@ -22,7 +22,6 @@ namespace CF.MusicLibrary.LibraryToolkit
 	{
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{
-			services.Configure<SqLiteConnectionSettings>(options => configuration.Bind("musicLibrary:database", options));
 			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("musicLibrary:fileSystemStorage", options));
 			services.Configure<DiscsSeederSettings>(options => configuration.Bind("seeders:discsSeeder", options));
 			services.Configure<SongsSeederSettings>(options => configuration.Bind("seeders:songsSeeder", options));
@@ -39,8 +38,8 @@ namespace CF.MusicLibrary.LibraryToolkit
 			services.AddTransient<ISongsSeeder, SongsSeeder>();
 			services.AddTransient<IPlaybacksSeeder, PlaybacksSeeder>();
 
-			services.AddTransient<IConfiguredDbConnectionFactory, SqLiteConnectionFactory>();
-			services.AddTransient<IMusicLibraryRepository, MusicLibraryRepositoryEF>();
+			services.AddDal(settings => configuration.Bind("musicLibrary:database", settings));
+
 			services.AddTransient<IFileStorage, FileSystemStorage>();
 			services.AddTransient<IMusicLibraryStorage, FileSystemMusicStorage>();
 			services.AddTransient<ILibraryStructurer, LibraryStructurer>();

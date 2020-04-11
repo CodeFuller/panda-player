@@ -67,7 +67,7 @@ namespace CF.MusicLibrary.Core.Objects
 
 		public IEnumerable<Song> RepresentativeSongs => IsDeleted ? AllSongs : Songs;
 
-		public ICollection<DiscImage> Images { get; } = new Collection<DiscImage>();
+		public ICollection<DiscImage> Images { get; set; } = new Collection<DiscImage>();
 
 		public DiscImage CoverImage
 		{

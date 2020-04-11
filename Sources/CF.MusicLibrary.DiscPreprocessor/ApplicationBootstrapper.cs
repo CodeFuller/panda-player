@@ -7,6 +7,7 @@ using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.Dal;
+using CF.MusicLibrary.Dal.Extensions;
 using CF.MusicLibrary.DiscPreprocessor.Interfaces;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
 using CF.MusicLibrary.DiscPreprocessor.ParsingContent;
@@ -24,13 +25,12 @@ namespace CF.MusicLibrary.DiscPreprocessor
 	{
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{
-			services.Configure<SqLiteConnectionSettings>(options => configuration.Bind("database", options));
 			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("fileSystemStorage", options));
 			services.Configure<DiscPreprocessorSettings>(configuration.Bind);
 			services.Configure<DiscToAlbumMappingSettings>(options => configuration.Bind("discToAlbumMappings", options));
 
-			services.AddTransient<IConfiguredDbConnectionFactory, SqLiteConnectionFactory>();
-			services.AddTransient<IMusicLibraryRepository, MusicLibraryRepositoryEF>();
+			services.AddDal(settings => configuration.Bind("database", settings));
+
 			services.AddTransient<IFileStorage, FileSystemStorage>();
 			services.AddTransient<IMusicLibraryStorage, FileSystemMusicStorage>();
 			services.AddTransient<IChecksumCalculator, Crc32Calculator>();

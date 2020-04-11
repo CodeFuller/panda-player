@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Dal;
-using CF.MusicLibrary.Tests;
+using CF.MusicLibrary.Dal.Extensions;
+using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.Dal
@@ -17,14 +20,13 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.Dal
 		{
 			// Arrange
 
-			var binPath = AppDomain.CurrentDomain.BaseDirectory;
-			var settings = new SqLiteConnectionSettings
-			{
-				DataSource = Path.Combine(binPath, "MusicLibrary.db"),
-			};
+			var services = new ServiceCollection();
 
-			var connectionFactory = new SqLiteConnectionFactory(settings.StubOptions());
-			var target = new MusicLibraryRepositoryEF(connectionFactory);
+			var binPath = AppDomain.CurrentDomain.BaseDirectory;
+			services.AddDal(settings => settings.DataSource = Path.Combine(binPath, "MusicLibrary.db"));
+
+			var serviceProvider = services.BuildServiceProvider();
+			var target = serviceProvider.GetRequiredService<IMusicLibraryRepository>();
 
 			// Act
 
@@ -55,17 +57,12 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.Dal
 			};
 
 			var binPath = AppDomain.CurrentDomain.BaseDirectory;
-			var settings = new SqLiteConnectionSettings
-			{
-				DataSource = Path.Combine(binPath, "MusicLibrary.db"),
-			};
-
-			var connectionFactory = new SqLiteConnectionFactory(settings.StubOptions());
+			var connectionString = Path.Combine(binPath, "MusicLibrary.db").ToConnectionString();
 
 			// Act
 
 			List<string> actualTables;
-			using (var connection = connectionFactory.CreateConnection())
+			using (var connection = new SqliteConnection(connectionString))
 			{
 				connection.Open();
 				var schema = connection.GetSchema("Tables");

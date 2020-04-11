@@ -6,6 +6,8 @@ namespace CF.MusicLibrary.Core.Objects
 	{
 		public int Id { get; set; }
 
+		public int SongId { get; set; }
+
 		public Song Song { get; set; }
 
 		public DateTime PlaybackTime { get; set; }

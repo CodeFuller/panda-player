@@ -10,7 +10,7 @@ using CF.MusicLibrary.Common.Images;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
-using CF.MusicLibrary.Dal;
+using CF.MusicLibrary.Dal.Extensions;
 using CF.MusicLibrary.LastFM;
 using CF.MusicLibrary.Library;
 using CF.MusicLibrary.PandaPlayer.Adviser;
@@ -39,7 +39,6 @@ namespace CF.MusicLibrary.PandaPlayer
 
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{
-			services.Configure<SqLiteConnectionSettings>(options => configuration.Bind("database", options));
 			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("fileSystemStorage", options));
 			services.Configure<LastFmClientSettings>(options => configuration.Bind("lastFmClient", options));
 			services.Configure<AdviserSettings>(options => configuration.Bind("adviser", options));
@@ -54,8 +53,8 @@ namespace CF.MusicLibrary.PandaPlayer
 				throw new InvalidOperationException("dataStoragePath is not configured");
 			}
 
-			services.AddTransient<IConfiguredDbConnectionFactory, SqLiteConnectionFactory>();
-			services.AddTransient<IMusicLibraryRepository, MusicLibraryRepositoryEF>();
+			services.AddDal(settings => configuration.Bind("database", settings));
+
 			services.AddTransient<ISongTagger, SongTagger>();
 			services.AddTransient<IFileStorage, FileSystemStorage>();
 			services.AddTransient<IMusicLibraryStorage, FileSystemMusicStorage>();
