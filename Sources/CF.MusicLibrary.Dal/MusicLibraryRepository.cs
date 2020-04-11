@@ -11,12 +11,12 @@ using Microsoft.EntityFrameworkCore;
 namespace CF.MusicLibrary.Dal
 {
 #pragma warning disable CA1812 // The class is instantiated by DI container
-	internal class MusicLibraryRepositoryEF : IMusicLibraryRepository
+	internal class MusicLibraryRepository : IMusicLibraryRepository
 #pragma warning restore CA1812 // The class is instantiated by DI container
 	{
 		private readonly Action<DbContextOptionsBuilder> contextSetup;
 
-		public MusicLibraryRepositoryEF(Action<DbContextOptionsBuilder> contextSetup)
+		public MusicLibraryRepository(Action<DbContextOptionsBuilder> contextSetup)
 		{
 			this.contextSetup = contextSetup ?? throw new ArgumentNullException(nameof(contextSetup));
 		}

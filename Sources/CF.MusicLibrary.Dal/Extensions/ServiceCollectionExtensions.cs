@@ -13,7 +13,7 @@ namespace CF.MusicLibrary.Dal.Extensions
 			setupSettings(settings);
 			services.AddSingleton<Action<DbContextOptionsBuilder>>(settings.ToContextSetup());
 
-			services.AddTransient<IMusicLibraryRepository, MusicLibraryRepositoryEF>();
+			services.AddTransient<IMusicLibraryRepository, MusicLibraryRepository>();
 			services.AddTransient<IDataCopier, DataCopier>();
 
 			return services;

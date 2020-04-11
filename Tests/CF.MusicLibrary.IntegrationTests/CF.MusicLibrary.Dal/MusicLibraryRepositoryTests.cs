@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.Dal
 {
 	[TestFixture]
-	public class MusicLibraryRepositoryEFTests
+	public class MusicLibraryRepositoryTests
 	{
 		[Test]
 		public void GetDiscs_LoadsDiscsDataCorrectly()
@@ -72,7 +72,7 @@ namespace CF.MusicLibrary.IntegrationTests.CF.MusicLibrary.Dal
 			// Assert
 
 			var unknownTables = actualTables.Where(t => !knownTables.Contains(t)).ToList();
-			CollectionAssert.IsEmpty(unknownTables, $"Following table(s) are not covered by {nameof(MusicLibraryRepositoryEF.CopyData)} method: {String.Join(", ", unknownTables)}");
+			CollectionAssert.IsEmpty(unknownTables, $"Following table(s) are not covered by {nameof(MusicLibraryRepository.CopyData)} method: {String.Join(", ", unknownTables)}");
 		}
 	}
 }

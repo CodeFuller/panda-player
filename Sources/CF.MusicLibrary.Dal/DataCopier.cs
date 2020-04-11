@@ -26,7 +26,7 @@ namespace CF.MusicLibrary.Dal
 			CreateDatabaseSchema(targetDatabaseFileName);
 
 			logger.LogInformation("Copying the data...");
-			await MusicLibraryRepositoryEF.CopyData(GetContextSetupForDatabaseFile(sourceDatabaseFileName), GetContextSetupForDatabaseFile(targetDatabaseFileName));
+			await MusicLibraryRepository.CopyData(GetContextSetupForDatabaseFile(sourceDatabaseFileName), GetContextSetupForDatabaseFile(targetDatabaseFileName));
 
 			logger.LogInformation("Data was migrated successfully");
 		}
