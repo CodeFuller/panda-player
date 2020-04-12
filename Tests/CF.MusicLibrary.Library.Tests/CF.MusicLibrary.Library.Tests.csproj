@@ -5,7 +5,7 @@
   </ImportGroup>
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>$(TargetAppFramework)</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
