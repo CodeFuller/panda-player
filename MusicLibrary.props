@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <TargetAppFramework>net461</TargetAppFramework>
+    <TargetAppFramework>netcoreapp3.1</TargetAppFramework>
     <LangVersion>latest</LangVersion>
     <FxCopAnalyzersVersion>2.9.8</FxCopAnalyzersVersion>
     <StyleCopAnalyzersVersion>1.1.118</StyleCopAnalyzersVersion>

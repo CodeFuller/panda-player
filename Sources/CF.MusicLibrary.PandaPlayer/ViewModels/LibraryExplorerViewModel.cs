@@ -16,7 +16,7 @@ using CF.MusicLibrary.PandaPlayer.Events.SongListEvents;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using CF.MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace CF.MusicLibrary.PandaPlayer.ViewModels

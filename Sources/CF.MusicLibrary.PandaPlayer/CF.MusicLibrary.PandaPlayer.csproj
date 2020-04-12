@@ -1,22 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <ImportGroup Label="Properties">
     <Import Project="..\..\MusicLibrary.props" />
   </ImportGroup>
 
   <PropertyGroup>
-    <LanguageTargets>$(MSBuildToolsPath)\Microsoft.CSharp.targets</LanguageTargets>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>$(TargetAppFramework)</TargetFramework>
-    <OutputType>winexe</OutputType>
-    <OutputTypeEx>winexe</OutputTypeEx>
+    <UseWPF>true</UseWPF>
+    <!-- TBD: Fix app icon
     <ApplicationIcon>Views\Icons\PandaPlayer.ico</ApplicationIcon>
-    <AssemblyName>PandaPlayer</AssemblyName>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <Description>Audio Player for discs from Music Library</Description>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    -->
   </PropertyGroup>
 
   <PropertyGroup>
@@ -26,13 +20,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\GlobalAssemblyInfo.cs" Link="GlobalAssemblyInfo.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="CF.Library.Wpf" Version="4.0.0" />
+    <PackageReference Include="CF.Library.Wpf" Version="5.0.0-alpha-01" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(FxCopAnalyzersVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
     <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopAnalyzersVersion)" PrivateAssets="all" />
   </ItemGroup>
 
@@ -46,31 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-
-  <ItemGroup>
-
-    <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
-    <Compile Update="Properties\Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
-
-    <Page Include="**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" Exclude="App.xaml" />
-    <Compile Update="**\*.xaml.cs" SubType="Designer" DependentUpon="%(Filename)" />
-
-    <Resource Include="Views\Icons\*.*" />
-    <Resource Include="Views\Icons\Ratings\*.*" />
-
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MsBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="AdviserSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -81,5 +47,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <PropertyGroup>
+    <NoWarn>NU1701</NoWarn>
+  </PropertyGroup>
 
 </Project>

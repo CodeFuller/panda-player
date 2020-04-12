@@ -45,7 +45,7 @@ namespace CF.MusicLibrary.PandaPlayer.Adviser.Grouping
 			var groupId = GroupId;
 			for (var i = 1; i < match.Groups.Count; ++i)
 			{
-				groupId = groupId.Replace(Invariant($"${i}"), match.Groups[i].Value);
+				groupId = groupId.Replace(Invariant($"${i}"), match.Groups[i].Value, StringComparison.Ordinal);
 			}
 
 			return groupId;

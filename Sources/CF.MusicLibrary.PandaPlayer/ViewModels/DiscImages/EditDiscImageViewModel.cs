@@ -9,7 +9,7 @@ using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.Events.DiscEvents;
 using CF.MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Extensions.Options;
 
@@ -140,8 +140,8 @@ namespace CF.MusicLibrary.PandaPlayer.ViewModels.DiscImages
 			foreach (var discCoverSearchPageStub in settings.DiscCoverImageLookupPages)
 			{
 				string discCoverSearchPage = discCoverSearchPageStub;
-				discCoverSearchPage = discCoverSearchPage.Replace("{DiscArtist}", Uri.EscapeDataString(Disc.Artist?.Name ?? String.Empty));
-				discCoverSearchPage = discCoverSearchPage.Replace("{DiscTitle}", Uri.EscapeDataString(Disc.AlbumTitle ?? String.Empty));
+				discCoverSearchPage = discCoverSearchPage.Replace("{DiscArtist}", Uri.EscapeDataString(Disc.Artist?.Name ?? String.Empty), StringComparison.Ordinal);
+				discCoverSearchPage = discCoverSearchPage.Replace("{DiscTitle}", Uri.EscapeDataString(Disc.AlbumTitle ?? String.Empty), StringComparison.Ordinal);
 				webBrowser.OpenPage(discCoverSearchPage);
 			}
 		}

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using static System.FormattableString;
 
 namespace CF.MusicLibrary.PandaPlayer
@@ -7,7 +8,7 @@ namespace CF.MusicLibrary.PandaPlayer
 	{
 		public void OpenPage(string pageAddress)
 		{
-			pageAddress = pageAddress.Replace("\"", "\\\"");
+			pageAddress = pageAddress.Replace("\"", "\\\"", StringComparison.Ordinal);
 			Process.Start(Invariant($"\"{pageAddress}\""));
 		}
 	}
