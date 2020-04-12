@@ -6,7 +6,6 @@ using CF.MusicLibrary.Core;
 using CF.MusicLibrary.Core.Interfaces;
 using CF.MusicLibrary.Core.Media;
 using CF.MusicLibrary.Core.Objects;
-using CF.MusicLibrary.Dal;
 using CF.MusicLibrary.Dal.Extensions;
 using CF.MusicLibrary.DiscPreprocessor.Interfaces;
 using CF.MusicLibrary.DiscPreprocessor.MusicStorage;
