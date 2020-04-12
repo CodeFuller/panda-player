@@ -12,7 +12,7 @@ using CF.MusicLibrary.DiscPreprocessor.ParsingContent;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels.Interfaces;
 using CF.MusicLibrary.DiscPreprocessor.ViewModels.SourceContent;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Extensions.Options;
 using static System.FormattableString;
