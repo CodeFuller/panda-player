@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CF.MusicLibrary.Core.Objects;
 using CF.MusicLibrary.PandaPlayer.Adviser;
 using CF.MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
 using CF.MusicLibrary.Tests;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Internal;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -14,6 +14,34 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 	[TestFixture]
 	public class FavouriteArtistDiscsAdviserTests
 	{
+		// It's difficult to test logging calls with NSubstitute, because FormattedLogValues got internal.
+		// See https://github.com/nsubstitute/NSubstitute/issues/597 for more details.
+		private class LoggerMock<T> : ILogger<T>
+		{
+			private readonly Dictionary<LogLevel, int> callsCounters = new Dictionary<LogLevel, int>();
+
+			public int this[LogLevel level]
+			{
+				get => callsCounters.TryGetValue(level, out var count) ? count : 0;
+				set => callsCounters[level] = value;
+			}
+
+			public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+			{
+				callsCounters[logLevel] = this[logLevel] + 1;
+			}
+
+			public bool IsEnabled(LogLevel logLevel)
+			{
+				return true;
+			}
+
+			public IDisposable BeginScope<TState>(TState state)
+			{
+				return Substitute.For<IDisposable>();
+			}
+		}
+
 		[Test]
 		public void AdviseDiscs_IfAllDiscsAreActive_AdvisesDiscsInCorrectOrder()
 		{
@@ -229,7 +257,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var disc3 = new Disc { SongsUnordered = new[] { new Song { Artist = new Artist { Name = "Unfavourite Artist" } } } };
 			var library = new DiscLibrary(new[] { disc1, disc2, disc3 });
 
-			var loggerMock = Substitute.For<ILogger<FavouriteArtistDiscsAdviser>>();
+			var loggerMock = new LoggerMock<FavouriteArtistDiscsAdviser>();
 
 			var target = new FavouriteArtistDiscsAdviser(Substitute.For<IPlaylistAdviser>(), loggerMock, settings.StubOptions());
 
@@ -239,7 +267,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			// Assert
 
-			loggerMock.DidNotReceiveWithAnyArgs().Log(LogLevel.Warning, Arg.Any<EventId>(), Arg.Any<FormattedLogValues>(), null, Arg.Any<Func<FormattedLogValues, Exception, string>>());
+			Assert.AreEqual(0, loggerMock[LogLevel.Warning]);
 		}
 
 		[Test]
@@ -258,7 +286,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var disc = new Disc { SongsUnordered = new[] { new Song { Artist = new Artist { Name = "Favourite Artist" } } } };
 			var library = new DiscLibrary(new[] { disc });
 
-			var loggerMock = Substitute.For<ILogger<FavouriteArtistDiscsAdviser>>();
+			var loggerMock = new LoggerMock<FavouriteArtistDiscsAdviser>();
 
 			var target = new FavouriteArtistDiscsAdviser(Substitute.For<IPlaylistAdviser>(), loggerMock, settings.StubOptions());
 
@@ -268,7 +296,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			// Assert
 
-			loggerMock.Received(1).Log(LogLevel.Warning, Arg.Any<EventId>(), Arg.Any<FormattedLogValues>(), null, Arg.Any<Func<FormattedLogValues, Exception, string>>());
+			Assert.AreEqual(1, loggerMock[LogLevel.Warning]);
 		}
 
 		[Test]
@@ -287,11 +315,11 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var disc = new Disc { SongsUnordered = new[] { new Song { Artist = new Artist { Name = "Favourite Artist" } } } };
 			var library = new DiscLibrary(new[] { disc });
 
-			var loggerMock = Substitute.For<ILogger<FavouriteArtistDiscsAdviser>>();
+			var loggerMock = new LoggerMock<FavouriteArtistDiscsAdviser>();
 
 			var target = new FavouriteArtistDiscsAdviser(Substitute.For<IPlaylistAdviser>(), loggerMock, settings.StubOptions());
 			target.Advise(library);
-			loggerMock.ClearReceivedCalls();
+			loggerMock[LogLevel.Warning] = 0;
 
 			// Act
 
@@ -299,7 +327,7 @@ namespace CF.MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			// Assert
 
-			loggerMock.DidNotReceiveWithAnyArgs().Log(LogLevel.Warning, Arg.Any<EventId>(), Arg.Any<FormattedLogValues>(), null, Arg.Any<Func<FormattedLogValues, Exception, string>>());
+			Assert.AreEqual(0, loggerMock[LogLevel.Warning]);
 		}
 	}
 }
