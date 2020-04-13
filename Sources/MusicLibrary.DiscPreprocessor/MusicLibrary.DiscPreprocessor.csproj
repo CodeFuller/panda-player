@@ -8,9 +8,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>$(TargetAppFramework)</TargetFramework>
     <UseWPF>true</UseWPF>
-    <!-- TBD: Fix app icon
     <ApplicationIcon>DiscPreprocessor.ico</ApplicationIcon>
-    -->
   </PropertyGroup>
 
   <PropertyGroup>
@@ -31,6 +29,13 @@
     <ProjectReference Include="..\MusicLibrary.Dal\MusicLibrary.Dal.csproj" />
     <ProjectReference Include="..\MusicLibrary.Library\MusicLibrary.Library.csproj" />
     <ProjectReference Include="..\MusicLibrary.Tagger\MusicLibrary.Tagger.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="DiscPreprocessor.ico">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
