@@ -9,6 +9,7 @@
     <TargetFramework>$(TargetAppFramework)</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Views\Icons\PandaPlayer.ico</ApplicationIcon>
+    <AssemblyName>PandaPlayer</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup>

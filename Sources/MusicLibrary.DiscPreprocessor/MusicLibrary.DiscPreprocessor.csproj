@@ -9,6 +9,7 @@
     <TargetFramework>$(TargetAppFramework)</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>DiscPreprocessor.ico</ApplicationIcon>
+    <AssemblyName>DiscPreprocessor</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup>
