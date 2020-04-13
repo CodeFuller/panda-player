@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ImportGroup Label="Properties">
+    <Import Project="..\..\MusicLibrary.props" />
+  </ImportGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>$(TargetAppFramework)</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>Utility with different operations on Music library content</Description>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\..\MusicLibrary.Sources.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs" Link="GlobalAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CF.Library.Bootstrap" Version="1.0.0" />
+    <PackageReference Include="CF.Library.Core" Version="3.0.0" />
+    <PackageReference Include="CF.Library.Logging" Version="2.2.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(FxCopAnalyzersVersion)" PrivateAssets="all" />
+    <PackageReference Include="MusicLibraryApi.Client" Version="4.1.0" />
+    <PackageReference Include="NDesk.Options" Version="0.2.1" />
+    <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopAnalyzersVersion)" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MusicLibrary.Dal\MusicLibrary.Dal.csproj" />
+    <ProjectReference Include="..\MusicLibrary.Library\MusicLibrary.Library.csproj" />
+    <ProjectReference Include="..\MusicLibrary.Tagger\MusicLibrary.Tagger.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="AppSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\MusicLibrary.Dal\MusicLibrary.sql" Link="MusicLibrary.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <NoWarn>NU1701</NoWarn>
+  </PropertyGroup>
+
+</Project>

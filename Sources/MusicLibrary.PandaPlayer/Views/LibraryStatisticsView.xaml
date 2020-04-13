@@ -1,0 +1,67 @@
+﻿<Window x:Class="MusicLibrary.PandaPlayer.Views.LibraryStatisticsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:valueConverters="clr-namespace:MusicLibrary.PandaPlayer.Views.ValueConverters"
+        mc:Ignorable="d"
+        Title="Library Statistics" Width="250" Height="350" WindowStartupLocation="CenterOwner"
+        Style="{StaticResource DialogWindow}" ResizeMode="NoResize">
+
+    <Window.Resources>
+        <valueConverters:CommaSeparatedNumberValueConverter x:Key="CommaSeparatedNumberValueConverter" />
+        <valueConverters:SongFileSizeValueConverter x:Key="SongFileSizeValueConverter" />
+        <valueConverters:SongsTotalDurationValueConverter x:Key="SongsTotalDurationValueConverter" />
+        <valueConverters:PercentageValueConverter x:Key="PercentageValueConverter" />
+    </Window.Resources>
+
+    <StackPanel Orientation="Vertical">
+        <Grid>
+            <Label Content="Artists number:" />
+            <Label HorizontalAlignment="Right" Content="{Binding ArtistsNumber, Converter={StaticResource CommaSeparatedNumberValueConverter}}" />
+        </Grid>
+        <Grid>
+            <Label Content="Disc Artists number:" />
+            <Label HorizontalAlignment="Right" Content="{Binding DiscArtistsNumber, Converter={StaticResource CommaSeparatedNumberValueConverter}}" />
+        </Grid>
+        <Grid>
+            <Label Content="Discs number:" />
+            <Label HorizontalAlignment="Right" Content="{Binding DiscsNumber, Converter={StaticResource CommaSeparatedNumberValueConverter}}" />
+        </Grid>
+        <Grid>
+            <Label Content="Songs number:" />
+            <Label HorizontalAlignment="Right" Content="{Binding SongsNumber, Converter={StaticResource CommaSeparatedNumberValueConverter}}" />
+        </Grid>
+        <Grid>
+            <Label Content="Storage size:" />
+            <Label HorizontalAlignment="Right" Content="{Binding StorageSize, Converter={StaticResource SongFileSizeValueConverter}}" />
+        </Grid>
+        <Separator />
+        <Grid>
+            <Label Content="Total Duration:" />
+            <Label HorizontalAlignment="Right" Content="{Binding TotalDuration, Converter={StaticResource SongsTotalDurationValueConverter}}" />
+        </Grid>
+        <Grid>
+            <Label Content="Listens duration:" />
+            <Label HorizontalAlignment="Right" Content="{Binding ListensDuration, Converter={StaticResource SongsTotalDurationValueConverter}}" />
+        </Grid>
+        <Grid>
+            <Label Content="Listens number:" />
+            <Label HorizontalAlignment="Right" Content="{Binding ListensNumber, Converter={StaticResource CommaSeparatedNumberValueConverter}}" />
+        </Grid>
+        <Separator />
+        <Grid>
+            <Label Content="Unlistened songs:" />
+            <Label HorizontalAlignment="Right" Content="{Binding UnlistenedSongsPercentage, Converter={StaticResource PercentageValueConverter}}" />
+        </Grid>
+        <Grid>
+            <Label Content="Unrated songs:" />
+            <Label HorizontalAlignment="Right" Content="{Binding UnratedSongsPercentage, Converter={StaticResource PercentageValueConverter}}" />
+        </Grid>
+        <Grid>
+            <Label Content="Discs without cover:" />
+			<Label HorizontalAlignment="Right" Content="{Binding PercentageOfDiscsWithoutCoverImage, Converter={StaticResource PercentageValueConverter}}" />
+        </Grid>
+        <Button Content="OK" Width="100" Margin="10" IsDefault="True" IsCancel="True" Click="OkButton_Click" />
+    </StackPanel>
+</Window>

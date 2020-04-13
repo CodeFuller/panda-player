@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using NSubstitute;
 
-namespace CF.MusicLibrary.Tests
+namespace MusicLibrary.Tests
 {
 	public static class OptionsStubExtensions
 	{

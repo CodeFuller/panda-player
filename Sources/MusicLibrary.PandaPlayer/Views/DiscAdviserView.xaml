@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="MusicLibrary.PandaPlayer.Views.DiscAdviserView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignWidth="500" d:DesignHeight="25">
+    <Grid Background="#505050">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1"/>
+            <ColumnDefinition Width="32"/>
+            <ColumnDefinition Width="1"/>
+            <ColumnDefinition Width="32"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" Content="{Binding CurrentAdviseAnnouncement}" />
+        <Separator Grid.Column="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+        <Button Grid.Column="2" BorderThickness="0" Command="{Binding PlayCurrentAdviseCommand}">
+            <Image Source="/Views/Icons/PlayButton.png" />
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" />
+            </Button.Style>
+        </Button>
+        <Separator Grid.Column="3" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+        <Button Grid.Column="4" BorderThickness="0" Command="{Binding SwitchToNextAdviseCommand}">
+            <Image Source="/Views/Icons/NextAdviseButton.png" />
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" />
+            </Button.Style>
+        </Button>
+    </Grid>
+</UserControl>

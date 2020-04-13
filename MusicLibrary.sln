@@ -3,52 +3,52 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.Core", "Sources\CF.MusicLibrary.Core\CF.MusicLibrary.Core.csproj", "{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.DiscPreprocessor", "Sources\MusicLibrary.DiscPreprocessor\MusicLibrary.DiscPreprocessor.csproj", "{B977EA7B-85A2-429A-B98F-E76023589321}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.DiscPreprocessor", "Sources\CF.MusicLibrary.DiscPreprocessor\CF.MusicLibrary.DiscPreprocessor.csproj", "{B977EA7B-85A2-429A-B98F-E76023589321}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.PandaPlayer", "Sources\MusicLibrary.PandaPlayer\MusicLibrary.PandaPlayer.csproj", "{502D59CA-7973-46C9-A2A4-9144C48CBEE4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.PandaPlayer", "Sources\CF.MusicLibrary.PandaPlayer\CF.MusicLibrary.PandaPlayer.csproj", "{502D59CA-7973-46C9-A2A4-9144C48CBEE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Dal", "Sources\MusicLibrary.Dal\MusicLibrary.Dal.csproj", "{83AD3795-4E4A-4D32-BE5B-9D68287EF586}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.Dal", "Sources\CF.MusicLibrary.Dal\CF.MusicLibrary.Dal.csproj", "{83AD3795-4E4A-4D32-BE5B-9D68287EF586}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.LastFM", "Sources\MusicLibrary.LastFM\MusicLibrary.LastFM.csproj", "{7F368759-572F-41D4-A7FF-1B3898AE3918}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.LastFM", "Sources\CF.MusicLibrary.LastFM\CF.MusicLibrary.LastFM.csproj", "{7F368759-572F-41D4-A7FF-1B3898AE3918}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.LibraryChecker", "Sources\MusicLibrary.LibraryChecker\MusicLibrary.LibraryChecker.csproj", "{72458EFF-83E3-4907-8161-5401AA303D93}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.LibraryChecker", "Sources\CF.MusicLibrary.LibraryChecker\CF.MusicLibrary.LibraryChecker.csproj", "{72458EFF-83E3-4907-8161-5401AA303D93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Tagger", "Sources\MusicLibrary.Tagger\MusicLibrary.Tagger.csproj", "{931CDE55-D545-47AF-B525-06AB15E74C3E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.Tagger", "Sources\CF.MusicLibrary.Tagger\CF.MusicLibrary.Tagger.csproj", "{931CDE55-D545-47AF-B525-06AB15E74C3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.LibraryToolkit", "Sources\MusicLibrary.LibraryToolkit\MusicLibrary.LibraryToolkit.csproj", "{59585C20-BE78-4A26-943F-5DE4F7C9E045}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.LibraryToolkit", "Sources\CF.MusicLibrary.LibraryToolkit\CF.MusicLibrary.LibraryToolkit.csproj", "{59585C20-BE78-4A26-943F-5DE4F7C9E045}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Common", "Sources\MusicLibrary.Common\MusicLibrary.Common.csproj", "{5501311F-CBCD-40B3-95F4-F28D521E6EC5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.Common", "Sources\CF.MusicLibrary.Common\CF.MusicLibrary.Common.csproj", "{5501311F-CBCD-40B3-95F4-F28D521E6EC5}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.Library", "Sources\CF.MusicLibrary.Library\CF.MusicLibrary.Library.csproj", "{E27630AC-2F6F-4F2C-BFBF-3663F2C18F9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Library", "Sources\MusicLibrary.Library\MusicLibrary.Library.csproj", "{E27630AC-2F6F-4F2C-BFBF-3663F2C18F9C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EE527A89-5ED8-4502-9785-A7A481C4F971}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.Common.Tests", "Tests\CF.MusicLibrary.Common.Tests\CF.MusicLibrary.Common.Tests.csproj", "{0C444E59-01BE-4B09-A0C8-75186F8481CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Common.Tests", "Tests\MusicLibrary.Common.Tests\MusicLibrary.Common.Tests.csproj", "{0C444E59-01BE-4B09-A0C8-75186F8481CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.Core.Tests", "Tests\CF.MusicLibrary.Core.Tests\CF.MusicLibrary.Core.Tests.csproj", "{8AE136C6-6404-4692-AC32-6908EA4F9CF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Core.Tests", "Tests\MusicLibrary.Core.Tests\MusicLibrary.Core.Tests.csproj", "{8AE136C6-6404-4692-AC32-6908EA4F9CF2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.DiscPreprocessor.Tests", "Tests\CF.MusicLibrary.DiscPreprocessor.Tests\CF.MusicLibrary.DiscPreprocessor.Tests.csproj", "{B22B7E10-307A-4D05-B656-80457C922BEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.DiscPreprocessor.Tests", "Tests\MusicLibrary.DiscPreprocessor.Tests\MusicLibrary.DiscPreprocessor.Tests.csproj", "{B22B7E10-307A-4D05-B656-80457C922BEF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.IntegrationTests", "Tests\CF.MusicLibrary.IntegrationTests\CF.MusicLibrary.IntegrationTests.csproj", "{91576519-B828-4930-894B-17A1B8F13257}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.IntegrationTests", "Tests\MusicLibrary.IntegrationTests\MusicLibrary.IntegrationTests.csproj", "{91576519-B828-4930-894B-17A1B8F13257}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.LastFM.Tests", "Tests\CF.MusicLibrary.LastFM.Tests\CF.MusicLibrary.LastFM.Tests.csproj", "{8E9272FC-0978-42B0-A1B7-8DEC4534724C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.LastFM.Tests", "Tests\MusicLibrary.LastFM.Tests\MusicLibrary.LastFM.Tests.csproj", "{8E9272FC-0978-42B0-A1B7-8DEC4534724C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.Library.Tests", "Tests\CF.MusicLibrary.Library.Tests\CF.MusicLibrary.Library.Tests.csproj", "{A48A1FC0-CA25-4DFC-AD17-547DA9A142F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Library.Tests", "Tests\MusicLibrary.Library.Tests\MusicLibrary.Library.Tests.csproj", "{A48A1FC0-CA25-4DFC-AD17-547DA9A142F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.PandaPlayer.Tests", "Tests\CF.MusicLibrary.PandaPlayer.Tests\CF.MusicLibrary.PandaPlayer.Tests.csproj", "{35E9AAA7-C4D5-4A83-A5D8-036C9FFB58A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.PandaPlayer.Tests", "Tests\MusicLibrary.PandaPlayer.Tests\MusicLibrary.PandaPlayer.Tests.csproj", "{35E9AAA7-C4D5-4A83-A5D8-036C9FFB58A5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.LibraryChecker.Tests", "Tests\CF.MusicLibrary.LibraryChecker.Tests\CF.MusicLibrary.LibraryChecker.Tests.csproj", "{65A8921E-54D4-4E26-ADA9-42EC138B044C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.LibraryChecker.Tests", "Tests\MusicLibrary.LibraryChecker.Tests\MusicLibrary.LibraryChecker.Tests.csproj", "{65A8921E-54D4-4E26-ADA9-42EC138B044C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CF.MusicLibrary.LibraryToolkit.Tests", "Tests\CF.MusicLibrary.LibraryToolkit.Tests\CF.MusicLibrary.LibraryToolkit.Tests.csproj", "{B849DE9E-CDBA-4AF4-8614-9926FF1C4320}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.LibraryToolkit.Tests", "Tests\MusicLibrary.LibraryToolkit.Tests\MusicLibrary.LibraryToolkit.Tests.csproj", "{B849DE9E-CDBA-4AF4-8614-9926FF1C4320}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A067007-9BD3-4EF3-ADA9-68A04CEED64B}"
 	ProjectSection(SolutionItems) = preProject
 		MusicLibrary.props = MusicLibrary.props
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Core", "Sources\MusicLibrary.Core\MusicLibrary.Core.csproj", "{F16D1C24-F09A-4289-91C7-C9A3122D5225}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,10 +56,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B977EA7B-85A2-429A-B98F-E76023589321}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B977EA7B-85A2-429A-B98F-E76023589321}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B977EA7B-85A2-429A-B98F-E76023589321}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -132,12 +128,15 @@ Global
 		{B849DE9E-CDBA-4AF4-8614-9926FF1C4320}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B849DE9E-CDBA-4AF4-8614-9926FF1C4320}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B849DE9E-CDBA-4AF4-8614-9926FF1C4320}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F16D1C24-F09A-4289-91C7-C9A3122D5225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F16D1C24-F09A-4289-91C7-C9A3122D5225}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F16D1C24-F09A-4289-91C7-C9A3122D5225}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F16D1C24-F09A-4289-91C7-C9A3122D5225}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{A7C549D0-0D6C-4B3B-82F6-23894CE00CA9} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
 		{B977EA7B-85A2-429A-B98F-E76023589321} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
 		{502D59CA-7973-46C9-A2A4-9144C48CBEE4} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
 		{83AD3795-4E4A-4D32-BE5B-9D68287EF586} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
@@ -156,6 +155,7 @@ Global
 		{35E9AAA7-C4D5-4A83-A5D8-036C9FFB58A5} = {EE527A89-5ED8-4502-9785-A7A481C4F971}
 		{65A8921E-54D4-4E26-ADA9-42EC138B044C} = {EE527A89-5ED8-4502-9785-A7A481C4F971}
 		{B849DE9E-CDBA-4AF4-8614-9926FF1C4320} = {EE527A89-5ED8-4502-9785-A7A481C4F971}
+		{F16D1C24-F09A-4289-91C7-C9A3122D5225} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8FAD434A-F2AF-4138-AB70-749D7D8D4C9D}
