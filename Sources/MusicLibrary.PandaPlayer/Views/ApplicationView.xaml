@@ -24,12 +24,10 @@
 
         <Grid>
             <!-- http://www.codeproject.com/Articles/36468/WPF-NotifyIcon -->
-            <!-- TBD: Restore tray functionality
             <tb:TaskbarIcon Name="TaskbarIcon"
                 IconSource="/Views/Icons/PandaPlayer.ico"
                 ToolTipText="{Binding Title}"
                 LeftClickCommand="{Binding ReversePlayingCommand}"/>
-            -->
         </Grid>
 
         <Grid>
