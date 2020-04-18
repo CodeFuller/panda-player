@@ -16,10 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\OptionsStubExtensions.cs" Link="OptionsStubExtensions.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(FxCopAnalyzersVersion)" PrivateAssets="all" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(TestSdkVersion)" />
     <PackageReference Include="NSubstitute" Version="$(NSubstituteVersion)" />

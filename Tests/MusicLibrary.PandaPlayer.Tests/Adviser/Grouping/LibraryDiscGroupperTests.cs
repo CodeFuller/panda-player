@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.Extensions.Options;
 using MusicLibrary.Core.Objects;
 using MusicLibrary.PandaPlayer.Adviser.Grouping;
-using MusicLibrary.Tests;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -29,7 +29,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.Grouping
 
 			var settings = new GroupingSettings { nonMatchedGroupStub, matchedGroupStub, };
 
-			var target = new LibraryDiscGroupper(settings.StubOptions());
+			var target = new LibraryDiscGroupper(Options.Create(settings));
 
 			// Act
 
@@ -67,7 +67,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.Grouping
 
 			var settings = new GroupingSettings { firstMatchedGroup, secondMatchedGroup, };
 
-			var target = new LibraryDiscGroupper(settings.StubOptions());
+			var target = new LibraryDiscGroupper(Options.Create(settings));
 
 			// Act
 
@@ -95,7 +95,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.Grouping
 				return true;
 			});
 
-			var target = new LibraryDiscGroupper(new GroupingSettings { groupStub, }.StubOptions());
+			var target = new LibraryDiscGroupper(Options.Create(new GroupingSettings { groupStub, }));
 
 			// Act
 
@@ -116,7 +116,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.Grouping
 
 			var settings = new GroupingSettings { Substitute.For<GroupPattern>(), };
 
-			var target = new LibraryDiscGroupper(settings.StubOptions());
+			var target = new LibraryDiscGroupper(Options.Create(settings));
 
 			// Act & Assert
 

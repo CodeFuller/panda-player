@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MusicLibrary.Core.Objects;
 using MusicLibrary.PandaPlayer.Adviser;
 using MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
-using MusicLibrary.Tests;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -84,7 +84,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			IPlaylistAdviser discAdviserStub = Substitute.For<IPlaylistAdviser>();
 			discAdviserStub.Advise(library).Returns(discs.Select(AdvisedPlaylist.ForDisc));
 
-			var target = new FavouriteArtistDiscsAdviser(discAdviserStub, Substitute.For<ILogger<FavouriteArtistDiscsAdviser>>(), settings.StubOptions());
+			var target = new FavouriteArtistDiscsAdviser(discAdviserStub, Substitute.For<ILogger<FavouriteArtistDiscsAdviser>>(), Options.Create(settings));
 
 			// Act
 
@@ -123,7 +123,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			IPlaylistAdviser discAdviserStub = Substitute.For<IPlaylistAdviser>();
 			discAdviserStub.Advise(library).Returns(discs.Where(d => !d.IsDeleted).Select(AdvisedPlaylist.ForDisc));
 
-			var target = new FavouriteArtistDiscsAdviser(discAdviserStub, Substitute.For<ILogger<FavouriteArtistDiscsAdviser>>(), settings.StubOptions());
+			var target = new FavouriteArtistDiscsAdviser(discAdviserStub, Substitute.For<ILogger<FavouriteArtistDiscsAdviser>>(), Options.Create(settings));
 
 			// Act
 
@@ -161,7 +161,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			IPlaylistAdviser discAdviserStub = Substitute.For<IPlaylistAdviser>();
 			discAdviserStub.Advise(library).Returns(new[] { favouriteDiscAdvise, nonFavouriteDiscAdvise });
 
-			var target = new FavouriteArtistDiscsAdviser(discAdviserStub, Substitute.For<ILogger<FavouriteArtistDiscsAdviser>>(), settings.StubOptions());
+			var target = new FavouriteArtistDiscsAdviser(discAdviserStub, Substitute.For<ILogger<FavouriteArtistDiscsAdviser>>(), Options.Create(settings));
 
 			// Act
 
@@ -194,7 +194,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			IPlaylistAdviser discAdviserStub = Substitute.For<IPlaylistAdviser>();
 			discAdviserStub.Advise(library).Returns(new[] { AdvisedPlaylist.ForDisc(discWithoutArtist) });
 
-			var target = new FavouriteArtistDiscsAdviser(discAdviserStub, Substitute.For<ILogger<FavouriteArtistDiscsAdviser>>(), settings.StubOptions());
+			var target = new FavouriteArtistDiscsAdviser(discAdviserStub, Substitute.For<ILogger<FavouriteArtistDiscsAdviser>>(), Options.Create(settings));
 
 			// Act
 
@@ -225,7 +225,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			IPlaylistAdviser discAdviserStub = Substitute.For<IPlaylistAdviser>();
 			discAdviserStub.Advise(library).Returns(new[] { AdvisedPlaylist.ForDisc(disc) });
 
-			var target = new FavouriteArtistDiscsAdviser(discAdviserStub, Substitute.For<ILogger<FavouriteArtistDiscsAdviser>>(), settings.StubOptions());
+			var target = new FavouriteArtistDiscsAdviser(discAdviserStub, Substitute.For<ILogger<FavouriteArtistDiscsAdviser>>(), Options.Create(settings));
 
 			// Act
 
@@ -259,7 +259,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var loggerMock = new LoggerMock<FavouriteArtistDiscsAdviser>();
 
-			var target = new FavouriteArtistDiscsAdviser(Substitute.For<IPlaylistAdviser>(), loggerMock, settings.StubOptions());
+			var target = new FavouriteArtistDiscsAdviser(Substitute.For<IPlaylistAdviser>(), loggerMock, Options.Create(settings));
 
 			// Act
 
@@ -288,7 +288,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var loggerMock = new LoggerMock<FavouriteArtistDiscsAdviser>();
 
-			var target = new FavouriteArtistDiscsAdviser(Substitute.For<IPlaylistAdviser>(), loggerMock, settings.StubOptions());
+			var target = new FavouriteArtistDiscsAdviser(Substitute.For<IPlaylistAdviser>(), loggerMock, Options.Create(settings));
 
 			// Act
 
@@ -317,7 +317,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 
 			var loggerMock = new LoggerMock<FavouriteArtistDiscsAdviser>();
 
-			var target = new FavouriteArtistDiscsAdviser(Substitute.For<IPlaylistAdviser>(), loggerMock, settings.StubOptions());
+			var target = new FavouriteArtistDiscsAdviser(Substitute.For<IPlaylistAdviser>(), loggerMock, Options.Create(settings));
 			target.Advise(library);
 			loggerMock[LogLevel.Warning] = 0;
 

@@ -3,13 +3,13 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using CF.Library.Core.Facades;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Extensions.Options;
 using MusicLibrary.Common.Images;
 using MusicLibrary.Core.Interfaces;
 using MusicLibrary.Core.Objects;
 using MusicLibrary.Core.Objects.Images;
 using MusicLibrary.PandaPlayer.Events.DiscEvents;
 using MusicLibrary.PandaPlayer.ViewModels.DiscImages;
-using MusicLibrary.Tests;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -31,7 +31,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 
 			var disc = new Disc();
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			// Act
 
@@ -50,7 +50,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IImageFile imageFileMock = Substitute.For<IImageFile>();
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				imageFileMock, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileMock, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			// Act
 
@@ -73,7 +73,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IImageFile imageFileMock = Substitute.For<IImageFile>();
 
 			var target = new EditDiscImageViewModel(musicLibraryStub, Substitute.For<IDocumentDownloader>(),
-				imageFileMock, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileMock, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			// Act
 
@@ -96,7 +96,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IImageFile imageFileMock = Substitute.For<IImageFile>();
 
 			var target = new EditDiscImageViewModel(musicLibraryStub, Substitute.For<IDocumentDownloader>(),
-				imageFileMock, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileMock, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			// Act
 
@@ -114,7 +114,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 
 			var disc = new Disc();
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			target.Load(disc).Wait();
 			target.SetImage(Array.Empty<byte>());
@@ -157,7 +157,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IWebBrowser webBrowserMock = Substitute.For<IWebBrowser>();
 
 			var target = new EditDiscImageViewModel(musicLibraryStub, Substitute.For<IDocumentDownloader>(),
-				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), webBrowserMock, settings.StubOptions());
+				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), webBrowserMock, Options.Create(settings));
 
 			// Act
 
@@ -194,7 +194,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IWebBrowser webBrowserMock = Substitute.For<IWebBrowser>();
 
 			var target = new EditDiscImageViewModel(musicLibraryStub, Substitute.For<IDocumentDownloader>(),
-				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), webBrowserMock, settings.StubOptions());
+				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), webBrowserMock, Options.Create(settings));
 
 			// Act
 
@@ -224,7 +224,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IWebBrowser webBrowserMock = Substitute.For<IWebBrowser>();
 
 			var target = new EditDiscImageViewModel(musicLibraryStub, Substitute.For<IDocumentDownloader>(),
-				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), webBrowserMock, settings.StubOptions());
+				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), webBrowserMock, Options.Create(settings));
 
 			// Act
 
@@ -241,7 +241,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			// Arrange
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			target.Load(new Disc()).Wait();
 
@@ -265,7 +265,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IImageFile imageFileMock = Substitute.For<IImageFile>();
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				imageFileMock, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileMock, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			// Act
 
@@ -282,7 +282,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			// Arrange
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			// Act & Assert
 
@@ -298,7 +298,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			imageFileStub.ImageIsValid.Returns(false);
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			target.Load(new Disc()).Wait();
 
@@ -319,7 +319,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			imageFileStub.ImageIsValid.Returns(true);
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			target.Load(new Disc()).Wait();
 
@@ -344,7 +344,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			imageFileStub.ImageInfo.Returns(imageInfo);
 
 			var target = new EditDiscImageViewModel(musicLibraryMock, Substitute.For<IDocumentDownloader>(),
-				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			target.Load(disc).Wait();
 
@@ -374,7 +374,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => receivedEvent = e.Disc == disc);
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			target.Load(disc).Wait();
 
@@ -401,7 +401,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IImageFile imageFileMock = Substitute.For<IImageFile>();
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				imageFileMock, fileSystemStub, Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileMock, fileSystemStub, Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			// Act
 
@@ -423,7 +423,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IImageFile imageFileMock = Substitute.For<IImageFile>();
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				imageFileMock, fileSystemStub, Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileMock, fileSystemStub, Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			// Act
 
@@ -445,7 +445,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IImageFile imageFileMock = Substitute.For<IImageFile>();
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				imageFileMock, fileSystemStub, Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileMock, fileSystemStub, Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			// Act
 
@@ -469,7 +469,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			fileSystemFacadeMock.GetTempFileName().Returns("SomeTempFile.tmp");
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), documentDownloaderStub,
-				Substitute.For<IImageFile>(), fileSystemFacadeMock, Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				Substitute.For<IImageFile>(), fileSystemFacadeMock, Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			// Act
 
@@ -491,7 +491,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IImageFile imageFileMock = Substitute.For<IImageFile>();
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				imageFileMock, fileSystemFacadeStub, Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileMock, fileSystemFacadeStub, Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			// Act
 
@@ -508,7 +508,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			// Arrange
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			// Act
 
@@ -528,7 +528,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			fileSystemFacadeMock.GetTempFileName().Returns("SomeTempFile.tmp");
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				Substitute.For<IImageFile>(), fileSystemFacadeMock, Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				Substitute.For<IImageFile>(), fileSystemFacadeMock, Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			byte[] imageData = Array.Empty<byte>();
 
@@ -552,7 +552,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IImageFile imageFileMock = Substitute.For<IImageFile>();
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				imageFileMock, fileSystemFacadeStub, Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileMock, fileSystemFacadeStub, Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			byte[] imageData = Array.Empty<byte>();
 
@@ -571,7 +571,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			// Arrange
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				Substitute.For<IImageFile>(), Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			// Act
 
@@ -594,7 +594,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			imageFileStub.ImageStatus.Returns("SomeImageStatus");
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			// Act & Assert
 
@@ -612,7 +612,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			string changedPropertyName = null;
 			target.PropertyChanged += (sender, e) => changedPropertyName = e.PropertyName;
@@ -634,7 +634,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			string changedPropertyName = null;
 			target.PropertyChanged += (sender, e) => changedPropertyName = e.PropertyName;
@@ -656,7 +656,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			string changedPropertyName = null;
 			target.PropertyChanged += (sender, e) => changedPropertyName = e.PropertyName;
@@ -678,7 +678,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels.DiscImages
 			IImageFile imageFileStub = Substitute.For<IImageFile>();
 
 			var target = new EditDiscImageViewModel(Substitute.For<IMusicLibrary>(), Substitute.For<IDocumentDownloader>(),
-				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), new PandaPlayerSettings().StubOptions());
+				imageFileStub, Substitute.For<IFileSystemFacade>(), Substitute.For<IWebBrowser>(), Options.Create(new PandaPlayerSettings()));
 
 			string changedPropertyName = null;
 			target.PropertyChanged += (sender, e) => changedPropertyName = e.PropertyName;

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using CF.Library.Core.Facades;
+using Microsoft.Extensions.Options;
 using MusicLibrary.Core.Interfaces;
 using MusicLibrary.DiscPreprocessor.MusicStorage;
-using MusicLibrary.Tests;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -24,7 +24,7 @@ namespace MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			var settings = new DiscPreprocessorSettings { WorkshopStoragePath = "SomeStorage" };
-			var target = new WorkshopMusicStorage(Substitute.For<IDiscTitleToAlbumMapper>(), fileSystemMock, settings.StubOptions());
+			var target = new WorkshopMusicStorage(Substitute.For<IDiscTitleToAlbumMapper>(), fileSystemMock, Options.Create(settings));
 
 			// Act
 
@@ -53,7 +53,7 @@ namespace MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 
 			var settings = new DiscPreprocessorSettings { WorkshopStoragePath = "SomeStorage" };
 
-			var target = new WorkshopMusicStorage(Substitute.For<IDiscTitleToAlbumMapper>(), fileSystemMock, settings.StubOptions());
+			var target = new WorkshopMusicStorage(Substitute.For<IDiscTitleToAlbumMapper>(), fileSystemMock, Options.Create(settings));
 
 			// Act
 
@@ -75,7 +75,7 @@ namespace MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 
 			var settings = new DiscPreprocessorSettings { WorkshopStoragePath = "SomeStorage" };
 
-			var target = new WorkshopMusicStorage(Substitute.For<IDiscTitleToAlbumMapper>(), fileSystemMock, settings.StubOptions());
+			var target = new WorkshopMusicStorage(Substitute.For<IDiscTitleToAlbumMapper>(), fileSystemMock, Options.Create(settings));
 
 			// Act
 
@@ -99,7 +99,7 @@ namespace MusicLibrary.DiscPreprocessor.Tests.MusicStorage
 
 			var settings = new DiscPreprocessorSettings { WorkshopStoragePath = "SomeStorage" };
 
-			var target = new WorkshopMusicStorage(Substitute.For<IDiscTitleToAlbumMapper>(), fileSystemMock, settings.StubOptions());
+			var target = new WorkshopMusicStorage(Substitute.For<IDiscTitleToAlbumMapper>(), fileSystemMock, Options.Create(settings));
 
 			// Act
 

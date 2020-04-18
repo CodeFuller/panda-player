@@ -1,4 +1,4 @@
-﻿using MusicLibrary.Tests;
+﻿using Microsoft.Extensions.Options;
 using NUnit.Framework;
 
 namespace MusicLibrary.Core.Tests
@@ -19,7 +19,7 @@ namespace MusicLibrary.Core.Tests
 				},
 			};
 
-			var target = new DiscTitleToAlbumMapper(settings.StubOptions());
+			var target = new DiscTitleToAlbumMapper(Options.Create(settings));
 
 			// Act
 
@@ -44,7 +44,7 @@ namespace MusicLibrary.Core.Tests
 				},
 			};
 
-			var target = new DiscTitleToAlbumMapper(settings.StubOptions());
+			var target = new DiscTitleToAlbumMapper(Options.Create(settings));
 
 			// Act
 
@@ -70,7 +70,7 @@ namespace MusicLibrary.Core.Tests
 				},
 			};
 
-			var target = new DiscTitleToAlbumMapper(settings.StubOptions());
+			var target = new DiscTitleToAlbumMapper(Options.Create(settings));
 
 			// Act
 
@@ -94,7 +94,7 @@ namespace MusicLibrary.Core.Tests
 				},
 			};
 
-			var target = new DiscTitleToAlbumMapper(settings.StubOptions());
+			var target = new DiscTitleToAlbumMapper(Options.Create(settings));
 
 			// Act
 
@@ -123,7 +123,7 @@ namespace MusicLibrary.Core.Tests
 				},
 			};
 
-			var target = new DiscTitleToAlbumMapper(settings.StubOptions());
+			var target = new DiscTitleToAlbumMapper(Options.Create(settings));
 
 			// Act
 
@@ -139,7 +139,7 @@ namespace MusicLibrary.Core.Tests
 		{
 			// Arrange
 
-			var target = new DiscTitleToAlbumMapper(new DiscToAlbumMappingSettings().StubOptions());
+			var target = new DiscTitleToAlbumMapper(Options.Create(new DiscToAlbumMappingSettings()));
 
 			// Act
 
@@ -182,7 +182,7 @@ namespace MusicLibrary.Core.Tests
 				},
 			};
 
-			var target = new DiscTitleToAlbumMapper(settings.StubOptions());
+			var target = new DiscTitleToAlbumMapper(Options.Create(settings));
 
 			// Act
 
@@ -206,7 +206,7 @@ namespace MusicLibrary.Core.Tests
 				},
 			};
 
-			var target = new DiscTitleToAlbumMapper(settings.StubOptions());
+			var target = new DiscTitleToAlbumMapper(Options.Create(settings));
 
 			// Act
 
@@ -222,7 +222,7 @@ namespace MusicLibrary.Core.Tests
 		{
 			// Arrange
 
-			var target = new DiscTitleToAlbumMapper(new DiscToAlbumMappingSettings().StubOptions());
+			var target = new DiscTitleToAlbumMapper(Options.Create(new DiscToAlbumMappingSettings()));
 
 			// Act
 
@@ -238,7 +238,7 @@ namespace MusicLibrary.Core.Tests
 		{
 			// Arrange
 
-			var target = new DiscTitleToAlbumMapper(new DiscToAlbumMappingSettings().StubOptions());
+			var target = new DiscTitleToAlbumMapper(Options.Create(new DiscToAlbumMappingSettings()));
 
 			// Act
 

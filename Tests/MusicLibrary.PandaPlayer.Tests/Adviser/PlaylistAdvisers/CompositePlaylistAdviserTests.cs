@@ -1,8 +1,8 @@
 ﻿using System.Linq;
+using Microsoft.Extensions.Options;
 using MusicLibrary.Core.Objects;
 using MusicLibrary.PandaPlayer.Adviser;
 using MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
-using MusicLibrary.Tests;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -33,7 +33,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			};
 
 			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, highlyRatedSongsAdviserStub, Substitute.For<IPlaylistAdviser>(),
-				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>(), settings.StubOptions());
+				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>(), Options.Create(settings));
 
 			// Act
 
@@ -72,7 +72,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			};
 
 			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, highlyRatedSongsAdviserStub,
-				Substitute.For<IPlaylistAdviser>(), memoRepositoryStub, settings.StubOptions());
+				Substitute.For<IPlaylistAdviser>(), memoRepositoryStub, Options.Create(settings));
 
 			// Act
 
@@ -105,7 +105,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			};
 
 			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, Substitute.For<IPlaylistAdviser>(), favouriteArtistDiscsAdviserStub,
-				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>(), settings.StubOptions());
+				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>(), Options.Create(settings));
 
 			// Act
 
@@ -144,7 +144,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			});
 
 			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, Substitute.For<IPlaylistAdviser>(),
-				favouriteArtistDiscsAdviserStub, memoRepositoryStub, settings.StubOptions());
+				favouriteArtistDiscsAdviserStub, memoRepositoryStub, Options.Create(settings));
 
 			// Act
 
@@ -180,7 +180,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			favouriteArtistDiscsAdviserStub.Advise(library).Returns(new[] { favouriteArtistDiscAdvise1, favouriteArtistDiscAdvise2 });
 
 			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, Substitute.For<IPlaylistAdviser>(), favouriteArtistDiscsAdviserStub,
-				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>(), new AdviserSettings().StubOptions());
+				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>(), Options.Create(new AdviserSettings()));
 
 			// Act
 
@@ -224,7 +224,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			};
 
 			var target = new CompositePlaylistAdviser(usualDiscsAdviserStub, highlyRatedSongsAdviserStub, favouriteArtistDiscsAdviserStub,
-				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>(), settings.StubOptions());
+				Substitute.For<IGenericDataRepository<PlaylistAdviserMemo>>(), Options.Create(settings));
 
 			// Act
 
@@ -262,7 +262,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			});
 
 			var target = new CompositePlaylistAdviser(Substitute.For<IPlaylistAdviser>(), Substitute.For<IPlaylistAdviser>(),
-				Substitute.For<IPlaylistAdviser>(), memoRepositoryMock, new AdviserSettings().StubOptions());
+				Substitute.For<IPlaylistAdviser>(), memoRepositoryMock, Options.Create(new AdviserSettings()));
 
 			// Act
 

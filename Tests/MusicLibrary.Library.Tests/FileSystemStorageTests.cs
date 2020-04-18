@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using CF.Library.Core.Facades;
+using Microsoft.Extensions.Options;
 using MusicLibrary.Core.Interfaces;
-using MusicLibrary.Tests;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -18,7 +18,7 @@ namespace MusicLibrary.Library.Tests
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemMock, Options.Create(settings));
 
 			// Act
 
@@ -40,7 +40,7 @@ namespace MusicLibrary.Library.Tests
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemMock, Options.Create(settings));
 
 			// Act
 
@@ -58,7 +58,7 @@ namespace MusicLibrary.Library.Tests
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemMock, Options.Create(settings));
 
 			// Act
 
@@ -77,7 +77,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			// Act
 
@@ -96,7 +96,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(false);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			// Act & Assert
 
@@ -111,7 +111,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			// Act
 
@@ -130,7 +130,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemMock, Options.Create(settings));
 
 			// Act
 
@@ -149,7 +149,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(false);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			// Act & Assert
 
@@ -164,7 +164,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(false);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			// Act & Assert
 
@@ -179,7 +179,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemMock, Options.Create(settings));
 
 			// Act
 
@@ -199,7 +199,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemMock, Options.Create(settings));
 
 			// Act
 
@@ -223,7 +223,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemMock, Options.Create(settings));
 
 			// Act
 
@@ -241,7 +241,7 @@ namespace MusicLibrary.Library.Tests
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemMock, Options.Create(settings));
 
 			// Act
 
@@ -259,7 +259,7 @@ namespace MusicLibrary.Library.Tests
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemMock, Options.Create(settings));
 
 			// Act
 
@@ -277,7 +277,7 @@ namespace MusicLibrary.Library.Tests
 
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemMock, Options.Create(settings));
 			fileSystemMock.DirectoryIsEmpty(@"RootDir\SomeDir").Returns(false);
 
 			// Act
@@ -297,7 +297,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemMock = Substitute.For<IFileSystemFacade>();
 			fileSystemMock.GetFullPath(Arg.Any<string>()).Returns(x => (string)x[0]);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemMock, Options.Create(settings));
 			fileSystemMock.DirectoryIsEmpty(@"RootDir\SomeDir").Returns(true);
 			fileSystemMock.GetParentDirectory(@"RootDir\SomeDir\SomeFile").Returns(@"RootDir\SomeDir");
 
@@ -329,7 +329,7 @@ namespace MusicLibrary.Library.Tests
 
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 
-			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemMock, Options.Create(settings));
 
 			// Act
 
@@ -357,7 +357,7 @@ namespace MusicLibrary.Library.Tests
 
 			var settings = new FileSystemStorageSettings { Root = @"SomeOuterDir\RootDir" };
 
-			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemMock, Options.Create(settings));
 
 			// Act
 
@@ -377,7 +377,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(false);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			var checkScopeStub = Substitute.For<IUriCheckScope>();
 			checkScopeStub.Contains(Arg.Any<Uri>()).Returns(true);
@@ -401,7 +401,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			var checkScopeStub = Substitute.For<IUriCheckScope>();
 			checkScopeStub.Contains(Arg.Any<Uri>()).Returns(true);
@@ -428,7 +428,7 @@ namespace MusicLibrary.Library.Tests
 
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
 
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			var checkScopeStub = Substitute.For<IUriCheckScope>();
 			checkScopeStub.Contains(Arg.Any<Uri>()).Returns(true);
@@ -453,7 +453,7 @@ namespace MusicLibrary.Library.Tests
 			fileSystemStub.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			fileSystemStub.GetReadOnlyAttribute(@"RootDir\SomeDir\SomeFile").Returns(true);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			var checkScopeStub = Substitute.For<IUriCheckScope>();
 			checkScopeStub.Contains(Arg.Any<Uri>()).Returns(true);
@@ -478,7 +478,7 @@ namespace MusicLibrary.Library.Tests
 			fileSystemMock.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			fileSystemMock.GetReadOnlyAttribute(@"RootDir\SomeFile").Returns(false);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemMock, Options.Create(settings));
 
 			var checkScopeStub = Substitute.For<IUriCheckScope>();
 			checkScopeStub.Contains(Arg.Any<Uri>()).Returns(true);
@@ -502,7 +502,7 @@ namespace MusicLibrary.Library.Tests
 			fileSystemMock.FileExists(@"RootDir\SomeDir\SomeFile").Returns(true);
 			fileSystemMock.GetReadOnlyAttribute(@"RootDir\SomeDir\SomeFile").Returns(false);
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemMock, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemMock, Options.Create(settings));
 
 			var checkScopeStub = Substitute.For<IUriCheckScope>();
 			checkScopeStub.Contains(Arg.Any<Uri>()).Returns(true);
@@ -525,7 +525,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.EnumerateFiles(@"RootDir", "*.*", SearchOption.AllDirectories).Returns(new[] { @"RootDir\SomeDir\SomeFile" });
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			var checkScopeStub = Substitute.For<IUriCheckScope>();
 			checkScopeStub.Contains(Arg.Any<Uri>()).Returns(true);
@@ -549,7 +549,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.EnumerateFiles(@"RootDir", "*.*", SearchOption.AllDirectories).Returns(new[] { @"RootDir\SomeDir\SomeFile" });
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			var checkScopeStub = Substitute.For<IUriCheckScope>();
 			checkScopeStub.Contains(Arg.Any<Uri>()).Returns(true);
@@ -573,7 +573,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.EnumerateFiles(@"RootDir", "*.*", SearchOption.AllDirectories).Returns(new[] { @"RootDir\SomeDir\SomeFile" });
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			var checkScopeStub = Substitute.For<IUriCheckScope>();
 			checkScopeStub.Contains(Arg.Any<Uri>()).Returns(true);
@@ -597,7 +597,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.EnumerateFiles(@"RootDir", "*.*", SearchOption.AllDirectories).Returns(new[] { @"RootDir\SomeDir\SomeFile" });
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			var checkScopeStub = Substitute.For<IUriCheckScope>();
 			checkScopeStub.Contains(new Uri("/SomeDir/SomeFile", UriKind.Relative)).Returns(false);
@@ -621,7 +621,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.EnumerateDirectories(@"RootDir", "*.*", SearchOption.AllDirectories).Returns(new[] { @"RootDir\SomeDir" });
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			var checkScopeStub = Substitute.For<IUriCheckScope>();
 			checkScopeStub.Contains(Arg.Any<Uri>()).Returns(true);
@@ -645,7 +645,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.EnumerateDirectories(@"RootDir", "*.*", SearchOption.AllDirectories).Returns(new[] { @"RootDir\SomeDir" });
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			var checkScopeStub = Substitute.For<IUriCheckScope>();
 			checkScopeStub.Contains(Arg.Any<Uri>()).Returns(true);
@@ -669,7 +669,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.EnumerateDirectories(@"RootDir", "*.*", SearchOption.AllDirectories).Returns(new[] { @"RootDir\SomeDir\SubDir" });
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			var checkScopeStub = Substitute.For<IUriCheckScope>();
 			checkScopeStub.Contains(Arg.Any<Uri>()).Returns(true);
@@ -693,7 +693,7 @@ namespace MusicLibrary.Library.Tests
 			IFileSystemFacade fileSystemStub = Substitute.For<IFileSystemFacade>();
 			fileSystemStub.EnumerateDirectories(@"RootDir", "*.*", SearchOption.AllDirectories).Returns(new[] { @"RootDir\SomeDir" });
 			var settings = new FileSystemStorageSettings { Root = "RootDir" };
-			var target = new FileSystemStorage(fileSystemStub, settings.StubOptions());
+			var target = new FileSystemStorage(fileSystemStub, Options.Create(settings));
 
 			var checkScopeStub = Substitute.For<IUriCheckScope>();
 			checkScopeStub.Contains(new Uri("/SomeDir", UriKind.Relative)).Returns(false);

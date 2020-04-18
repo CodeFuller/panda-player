@@ -2,10 +2,10 @@
 using System.Linq;
 using CF.Library.Core.Extensions;
 using CF.Library.Core.Facades;
+using Microsoft.Extensions.Options;
 using MusicLibrary.Core.Objects;
 using MusicLibrary.PandaPlayer.Adviser;
 using MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
-using MusicLibrary.Tests;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -44,7 +44,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 07));
 
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, settings.StubOptions());
+			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, Options.Create(settings));
 
 			// Act
 
@@ -86,7 +86,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, settings.StubOptions());
+			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, Options.Create(settings));
 
 			// Act
 
@@ -127,7 +127,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, settings.StubOptions());
+			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, Options.Create(settings));
 
 			// Act
 
@@ -168,7 +168,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 06));
 
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, settings.StubOptions());
+			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, Options.Create(settings));
 
 			// Act
 
@@ -216,7 +216,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, settings.StubOptions());
+			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, Options.Create(settings));
 
 			// Act
 
@@ -259,7 +259,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, settings.StubOptions());
+			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, Options.Create(settings));
 
 			// Act
 
@@ -307,7 +307,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, settings.StubOptions());
+			var target = new HighlyRatedSongsAdviser(Substitute.For<IAdviseFactorsProvider>(), dateTimeStub, Options.Create(settings));
 
 			// Act
 
@@ -362,7 +362,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(new AdviseFactorsProvider(), dateTimeStub, settings.StubOptions());
+			var target = new HighlyRatedSongsAdviser(new AdviseFactorsProvider(), dateTimeStub, Options.Create(settings));
 
 			// Act
 
@@ -410,7 +410,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(new AdviseFactorsProvider(), dateTimeStub, settings.StubOptions());
+			var target = new HighlyRatedSongsAdviser(new AdviseFactorsProvider(), dateTimeStub, Options.Create(settings));
 
 			// Act
 
@@ -494,7 +494,7 @@ namespace MusicLibrary.PandaPlayer.Tests.Adviser.PlaylistAdvisers
 			var dateTimeStub = Substitute.For<IClock>();
 			dateTimeStub.Now.Returns(new DateTime(2017, 10, 01));
 
-			var target = new HighlyRatedSongsAdviser(new AdviseFactorsProvider(), dateTimeStub, settings.StubOptions());
+			var target = new HighlyRatedSongsAdviser(new AdviseFactorsProvider(), dateTimeStub, Options.Create(settings));
 
 			// Act
 
