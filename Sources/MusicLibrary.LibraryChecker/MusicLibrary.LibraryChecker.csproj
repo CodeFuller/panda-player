@@ -12,20 +12,14 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Description>Utility for checking consistency of Music library content</Description>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\MusicLibrary.Sources.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CF.Library.Core" Version="$(CFLibraryVersion)" />
     <PackageReference Include="CF.Library.Bootstrap" Version="$(CFLibraryVersion)" />
+    <PackageReference Include="CF.Library.Core" Version="$(CFLibraryVersion)" />
     <PackageReference Include="CF.Library.Logging" Version="$(CFLibraryVersion)" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(FxCopAnalyzersVersion)" PrivateAssets="all" />
     <PackageReference Include="NDesk.Options" Version="0.2.1" />

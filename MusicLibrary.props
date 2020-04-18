@@ -6,5 +6,9 @@
     <CFLibraryVersion>6.0.0</CFLibraryVersion>
     <FxCopAnalyzersVersion>2.9.8</FxCopAnalyzersVersion>
     <StyleCopAnalyzersVersion>1.1.118</StyleCopAnalyzersVersion>
+    <TestSdkVersion>16.5.0</TestSdkVersion>
+    <NSubstituteVersion>3.1.0</NSubstituteVersion>
+    <NUnitVersion>3.6.1</NUnitVersion>
+    <NUnit3TestAdapterVersion>3.10.0</NUnit3TestAdapterVersion>
   </PropertyGroup>
 </Project>
