@@ -9,5 +9,5 @@
 
 	"dataStoragePath": "d:\\DiscPreprocessor\\.data",
 	"workshopStoragePath": "d:\\music.workshop\\Gateway",
-	"deleteSourceContentAfterAdding": "True"
+	"deleteSourceContentAfterAdding": true
 }

@@ -144,15 +144,6 @@ namespace MusicLibrary.PandaPlayer
 					Path.Combine(dataStoragePath, "ScrobblesQueue.json")));
 		}
 
-		protected override void BootstrapConfiguration(IConfigurationBuilder configurationBuilder, string[] commandLineArgs)
-		{
-			base.BootstrapConfiguration(configurationBuilder, commandLineArgs);
-
-			configurationBuilder
-				.AddJsonFile("AdviserSettings.json", optional: false)
-				.AddJsonFile("AppSettings.Dev.json", optional: true);
-		}
-
 		protected override void BootstrapLogging(ILoggerFactory loggerFactory, IConfiguration configuration)
 		{
 			loggerViewModelInstance = new LoggerViewModel();

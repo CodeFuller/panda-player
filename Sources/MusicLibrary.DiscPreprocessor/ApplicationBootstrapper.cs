@@ -67,13 +67,5 @@ namespace MusicLibrary.DiscPreprocessor
 			services.AddTransient<IAddToLibraryViewModel, AddToLibraryViewModel>();
 			services.AddTransient<ApplicationViewModel>();
 		}
-
-		protected override void BootstrapConfiguration(IConfigurationBuilder configurationBuilder, string[] commandLineArgs)
-		{
-			base.BootstrapConfiguration(configurationBuilder, commandLineArgs);
-
-			configurationBuilder.AddJsonFile("AppSettings.Dev.json", optional: true)
-				.AddJsonFile("DiscToAlbumMappings.json", optional: false);
-		}
 	}
 }

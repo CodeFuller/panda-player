@@ -28,7 +28,7 @@
 	},
 
 	"database": {
-		"dataSource": "d:\\CodeFuller\\_days\\2020.04.11\\MusicLibrary.db"
+		"dataSource": "d:\\PandaPlayer\\MusicLibrary.db"
 	},
 
 	"fileSystemStorage": {
@@ -57,7 +57,7 @@
 					"FileNamePattern": "LibraryChecker - {YYYY}_{MM}_{DD} - {HH}_{mm}_{SS} - {PID}",
 					"FileNameExtension": "log",
 					"RollSize": 4194304,
-					"JsonOutput": "False",
+					"JsonOutput": false,
 					"MessageFormat": "{Timestamp:yyyy.MM.dd HH:mm:ss.fff} [{Level:u3}] [TID: {PrettyThreadId}] {Message}{NewLine}{Exception}"
 				}
 			}

@@ -26,9 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CF.Library.Bootstrap" Version="1.0.0" />
-    <PackageReference Include="CF.Library.Core" Version="3.0.0" />
-    <PackageReference Include="CF.Library.Logging" Version="2.2.2" />
+    <PackageReference Include="CF.Library.Bootstrap" Version="$(CFLibraryVersion)" />
+    <PackageReference Include="CF.Library.Core" Version="$(CFLibraryVersion)" />
+    <PackageReference Include="CF.Library.Logging" Version="$(CFLibraryVersion)" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(FxCopAnalyzersVersion)" PrivateAssets="all" />
     <PackageReference Include="MusicLibraryApi.Client" Version="4.1.0" />
     <PackageReference Include="NDesk.Options" Version="0.2.1" />
@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="AppSettings.json">
+    <None Update="conf/**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\MusicLibrary.Dal\MusicLibrary.sql" Link="MusicLibrary.sql">

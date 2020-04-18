@@ -1,6 +1,5 @@
 ﻿using System;
 using CF.Library.Bootstrap;
-using CF.Library.Configuration;
 using CF.Library.Core.Facades;
 using CF.Library.Logging;
 using Microsoft.Extensions.Configuration;
@@ -54,7 +53,7 @@ namespace MusicLibrary.LibraryToolkit
 		protected override void BootstrapConfiguration(IConfigurationBuilder configurationBuilder, string[] commandLineArgs)
 		{
 			// We do not load configuration from command line, so that it does not conflict with utility commands.
-			configurationBuilder.LoadSettings("AppSettings.json", Array.Empty<string>());
+			base.BootstrapConfiguration(configurationBuilder, Array.Empty<string>());
 		}
 
 		protected override void BootstrapLogging(ILoggerFactory loggerFactory, IConfiguration configuration)

@@ -2,6 +2,8 @@
   <PropertyGroup>
     <TargetAppFramework>netcoreapp3.1</TargetAppFramework>
     <LangVersion>latest</LangVersion>
+    <CrossCuttingPackagesVersion>3.1.1</CrossCuttingPackagesVersion>
+    <CFLibraryVersion>6.0.0</CFLibraryVersion>
     <FxCopAnalyzersVersion>2.9.8</FxCopAnalyzersVersion>
     <StyleCopAnalyzersVersion>1.1.118</StyleCopAnalyzersVersion>
   </PropertyGroup>

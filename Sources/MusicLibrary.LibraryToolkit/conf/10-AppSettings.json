@@ -1,7 +1,7 @@
 ﻿{
 	"musicLibrary": {
 		"database": {
-			"dataSource": "d:\\PandaPlayer\\MusicLibrarySmall.db"
+			"dataSource": "d:\\PandaPlayer\\MusicLibrary.db"
 		},
 
 		"fileSystemStorage": {

@@ -1,10 +1,10 @@
 ﻿{
 	"database": {
-		"dataSource": "d:\\PandaPlayer\\MusicLibrarySmall.db"
+		"dataSource": "d:\\PandaPlayer\\MusicLibrary.db"
 	},
 
 	"fileSystemStorage": {
-		"root": "g:\\music"
+		"root": "d:\\music"
 	},
 
 	"dataStoragePath": "d:\\PandaPlayer\\.data",
