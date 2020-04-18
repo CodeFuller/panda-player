@@ -33,10 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\GlobalAssemblyInfo.cs" Link="GlobalAssemblyInfo.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MusicLibrary.Common\MusicLibrary.Common.csproj" />
     <ProjectReference Include="..\MusicLibrary.Dal\MusicLibrary.Dal.csproj" />
     <ProjectReference Include="..\MusicLibrary.LastFM\MusicLibrary.LastFM.csproj" />
