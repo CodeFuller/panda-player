@@ -5,9 +5,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 {
 	public interface ILibraryBrowser
 	{
-		IEnumerable<FolderExplorerItem> GetChildFolderItems(FolderExplorerItem folderItem);
+		IEnumerable<LibraryExplorerItem> GetChildFolderItems(FolderExplorerItem folderItem);
 
-		FolderExplorerItem GetParentFolder(FolderExplorerItem folderItem);
+		FolderExplorerItem GetParentFolder(LibraryExplorerItem item);
 
 		DiscExplorerItem GetDiscItem(Disc disc);
 	}

@@ -33,13 +33,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		private FolderExplorerItem ParentFolder { get; set; }
 
-		public ObservableCollection<FolderExplorerItem> Items { get; } = new ObservableCollection<FolderExplorerItem>();
+		public ObservableCollection<LibraryExplorerItem> Items { get; } = new ObservableCollection<LibraryExplorerItem>();
 
 		public FolderExplorerItem CurrentFolder { get; private set; }
 
-		private FolderExplorerItem selectedItem;
+		private LibraryExplorerItem selectedItem;
 
-		public FolderExplorerItem SelectedItem
+		public LibraryExplorerItem SelectedItem
 		{
 			get => selectedItem;
 			set
@@ -121,13 +121,15 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public void ChangeFolder()
 		{
-			ChangeFolder(SelectedItem);
+			if (SelectedItem is FolderExplorerItem folderItem)
+			{
+				ChangeFolder(folderItem);
+			}
 		}
 
 		private void PlayDisc()
 		{
-			var discItem = SelectedItem as DiscExplorerItem;
-			if (discItem == null)
+			if (!(SelectedItem is DiscExplorerItem discItem))
 			{
 				return;
 			}
@@ -155,27 +157,27 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 			Items.Remove(discItem);
 
-			// If only '..' item remains
+			// If current folder does not contain discs anymore (i.e. only '..' item remains),
+			// then we want to navigate to upper non-empty folder.
 			if (Items.Count == 1)
 			{
-				FolderExplorerItem currFolder = discItem;
-				do
-				{
-					currFolder = libraryBrowser.GetParentFolder(currFolder);
-				}
-				while (currFolder != null && !libraryBrowser.GetChildFolderItems(currFolder).Any());
+				var currentFolder = libraryBrowser.GetParentFolder(discItem);
 
-				if (currFolder != null)
+				while (currentFolder != null && !libraryBrowser.GetChildFolderItems(currentFolder).Any())
 				{
-					ChangeFolder(currFolder);
+					currentFolder = libraryBrowser.GetParentFolder(currentFolder);
+				}
+
+				if (currentFolder != null)
+				{
+					ChangeFolder(currentFolder);
 				}
 			}
 		}
 
 		private void EditDiscProperties()
 		{
-			var discItem = SelectedItem as DiscExplorerItem;
-			if (discItem != null)
+			if (SelectedItem is DiscExplorerItem discItem)
 			{
 				viewNavigator.ShowDiscPropertiesView(discItem.Disc);
 			}
@@ -194,7 +196,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				return;
 			}
 
-			// Remember current directory if we're moving up
+			// Remembering current directory if we're moving up, so that we can select it in parent's list.
 			FolderExplorerItem prevFolder = null;
 			if (newFolder.IsParentItem)
 			{
@@ -221,13 +223,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			FolderExplorerItem newSelectedItem = null;
 			if (prevFolder != null)
 			{
-				newSelectedItem = Items.FirstOrDefault(f => new FolderItemComparer().Equals(f, prevFolder));
+				newSelectedItem = Items.OfType<FolderExplorerItem>().FirstOrDefault(f => new FolderItemComparer().Equals(f, prevFolder));
 			}
 
 			SelectedItem = newSelectedItem ?? Items.FirstOrDefault();
 		}
 
-		private void SetItems(IEnumerable<FolderExplorerItem> newItems)
+		private void SetItems(IEnumerable<LibraryExplorerItem> newItems)
 		{
 			Items.Clear();
 			Items.AddRange(newItems.OrderBy(it => it.Name));

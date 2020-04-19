@@ -9,9 +9,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 	{
 		FolderExplorerItem CurrentFolder { get; }
 
-		ObservableCollection<FolderExplorerItem> Items { get; }
+		ObservableCollection<LibraryExplorerItem> Items { get; }
 
-		FolderExplorerItem SelectedItem { get; set; }
+		LibraryExplorerItem SelectedItem { get; set; }
 
 		Disc SelectedDisc { get; }
 

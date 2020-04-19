@@ -15,20 +15,17 @@ namespace MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
 		}
 
-		public IEnumerable<FolderExplorerItem> GetChildFolderItems(FolderExplorerItem folderItem)
+		public IEnumerable<LibraryExplorerItem> GetChildFolderItems(FolderExplorerItem folderItem)
 		{
-			if (folderItem == null)
-			{
-				throw new ArgumentNullException(nameof(folderItem));
-			}
+			_ = folderItem ?? throw new ArgumentNullException(nameof(folderItem));
 
-			Dictionary<Uri, FolderExplorerItem> knownFolderUris = new Dictionary<Uri, FolderExplorerItem>();
+			var knownFolderUris = new Dictionary<Uri, LibraryExplorerItem>();
 			foreach (var disc in discLibrary.Discs)
 			{
 				var childUri = GetDirectChildUri(folderItem.Uri, disc.Uri);
 				if (childUri != null && !knownFolderUris.ContainsKey(childUri))
 				{
-					FolderExplorerItem item = childUri == disc.Uri ? new DiscExplorerItem(disc) : new FolderExplorerItem(childUri);
+					var item = childUri == disc.Uri ? new DiscExplorerItem(disc) as LibraryExplorerItem : new FolderExplorerItem(childUri);
 					knownFolderUris.Add(childUri, item);
 				}
 			}
@@ -38,26 +35,23 @@ namespace MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 
 		private static Uri GetDirectChildUri(Uri parentUri, Uri childUri)
 		{
-			ItemUriParts parentParts = new ItemUriParts(parentUri);
-			ItemUriParts childParts = new ItemUriParts(childUri);
+			var parentParts = new ItemUriParts(parentUri);
+			var childParts = new ItemUriParts(childUri);
 
 			return parentParts.IsBaseOf(childParts) ? ItemUriParts.Join(childParts.Take(parentParts.Count + 1)) : null;
 		}
 
-		public FolderExplorerItem GetParentFolder(FolderExplorerItem folderItem)
+		public FolderExplorerItem GetParentFolder(LibraryExplorerItem item)
 		{
-			if (folderItem == null)
-			{
-				throw new ArgumentNullException(nameof(folderItem));
-			}
+			_ = item ?? throw new ArgumentNullException(nameof(item));
 
-			ItemUriParts childParts = new ItemUriParts(folderItem.Uri);
+			var childParts = new ItemUriParts(item.Uri);
 			if (childParts.Count == 0)
 			{
 				return null;
 			}
 
-			Uri parentUri = ItemUriParts.Join(childParts.Take(childParts.Count - 1));
+			var parentUri = ItemUriParts.Join(childParts.Take(childParts.Count - 1));
 			return new FolderExplorerItem(parentUri);
 		}
 

@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 {
-	public class DiscExplorerItem : FolderExplorerItem
+	public class DiscExplorerItem : LibraryExplorerItem
 	{
 		public Disc Disc { get; }
 
