@@ -14,7 +14,7 @@ using MusicLibrary.Common.Images;
 using MusicLibrary.Core.Interfaces;
 using MusicLibrary.Core.Media;
 using MusicLibrary.Core.Objects;
-using MusicLibrary.Dal.Extensions;
+using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.LastFM;
 using MusicLibrary.Library;
 using MusicLibrary.PandaPlayer.Adviser;
@@ -25,7 +25,6 @@ using MusicLibrary.PandaPlayer.ContentUpdate;
 using MusicLibrary.PandaPlayer.ViewModels;
 using MusicLibrary.PandaPlayer.ViewModels.DiscImages;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
-using MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
 using MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist;
 using MusicLibrary.PandaPlayer.ViewModels.Player;
 using MusicLibrary.PandaPlayer.ViewModels.Scrobbling;
@@ -53,7 +52,7 @@ namespace MusicLibrary.PandaPlayer
 				throw new InvalidOperationException("dataStoragePath is not configured");
 			}
 
-			services.AddDal(settings => configuration.Bind("database", settings));
+			services.AddLocalDbDal(settings => configuration.Bind("database", settings));
 
 			services.AddTransient<ISongTagger, SongTagger>();
 			services.AddTransient<IFileStorage, FileSystemStorage>();
@@ -83,7 +82,6 @@ namespace MusicLibrary.PandaPlayer
 			services.AddSingleton<ILoggerViewModel>(loggerViewModelInstance);
 			services.AddSingleton<ApplicationViewModel>();
 
-			services.AddTransient<ILibraryBrowser, FileSystemLibraryBrowser>();
 			services.AddTransient<ITimerFacade, TimerFacade>(sp => new TimerFacade());
 			services.AddTransient<ITokenAuthorizer, DefaultBrowserTokenAuthorizer>();
 			services.AddTransient<ILastFMApiClient, LastFMApiClient>();

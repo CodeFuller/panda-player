@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CF.Library.Core.Enums;
 using CF.Library.Core.Extensions;
 using CF.Library.Core.Interfaces;
 using CF.Library.Wpf;
@@ -12,6 +11,9 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Core.Objects;
+using MusicLibrary.Dal.Abstractions.Dto;
+using MusicLibrary.Dal.Abstractions.Dto.Folders;
+using MusicLibrary.Dal.Abstractions.Interfaces;
 using MusicLibrary.PandaPlayer.ContentUpdate;
 using MusicLibrary.PandaPlayer.Events;
 using MusicLibrary.PandaPlayer.Events.DiscEvents;
@@ -23,23 +25,23 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 {
 	public class LibraryExplorerViewModel : ViewModelBase, ILibraryExplorerViewModel
 	{
-		private readonly ILibraryBrowser libraryBrowser;
-
 		private readonly ILibraryContentUpdater libraryContentUpdater;
 
 		private readonly IViewNavigator viewNavigator;
 
 		private readonly IWindowService windowService;
 
-		private FolderExplorerItem ParentFolder { get; set; }
+		private readonly IFolderReader folderReader;
 
-		public ObservableCollection<LibraryExplorerItem> Items { get; } = new ObservableCollection<LibraryExplorerItem>();
+		public ObservableCollection<BasicExplorerItem> Items { get; } = new ObservableCollection<BasicExplorerItem>();
 
-		public FolderExplorerItem CurrentFolder { get; private set; }
+		private ItemId ParentFolderId { get; set; }
 
-		private LibraryExplorerItem selectedItem;
+		private ItemId LoadedFolderId { get; set; }
 
-		public LibraryExplorerItem SelectedItem
+		private BasicExplorerItem selectedItem;
+
+		public BasicExplorerItem SelectedItem
 		{
 			get => selectedItem;
 			set
@@ -75,56 +77,110 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand EditDiscPropertiesCommand { get; }
 
-		public LibraryExplorerViewModel(ILibraryBrowser libraryBrowser, IExplorerSongListViewModel songListViewModel,
+		public LibraryExplorerViewModel(IFolderReader folderReader, IExplorerSongListViewModel songListViewModel,
 			ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
 		{
-			this.libraryBrowser = libraryBrowser ?? throw new ArgumentNullException(nameof(libraryBrowser));
+			this.folderReader = folderReader ?? throw new ArgumentNullException(nameof(folderReader));
 			SongListViewModel = songListViewModel ?? throw new ArgumentNullException(nameof(songListViewModel));
 			this.libraryContentUpdater = libraryContentUpdater ?? throw new ArgumentNullException(nameof(libraryContentUpdater));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
 
-			ChangeFolderCommand = new RelayCommand(ChangeFolder);
+			ChangeFolderCommand = new AsyncRelayCommand(() => ChangeToCurrentlySelectedFolder(CancellationToken.None));
 			PlayDiscCommand = new RelayCommand(PlayDisc);
 			DeleteDiscCommand = new AsyncRelayCommand(DeleteDisc);
 			JumpToFirstItemCommand = new RelayCommand(() => SelectedItem = Items.FirstOrDefault());
 			JumpToLastItemCommand = new RelayCommand(() => SelectedItem = Items.LastOrDefault());
 			EditDiscPropertiesCommand = new RelayCommand(EditDiscProperties);
 
-			Messenger.Default.Register<LibraryLoadedEventArgs>(this, e => Load());
+			Messenger.Default.Register<LibraryLoadedEventArgs>(this, e => LoadRootFolder());
 			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaylistChanged(e.Disc));
 			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistChanged(e.Disc));
 		}
 
-		public void Load()
+		// TBD: How to make it async?
+		private void LoadRootFolder()
 		{
-			ChangeFolder(FolderExplorerItem.Root);
+			// TBD: We should not load root folder, if some disc is active, because folder of this disc will be loaded just after that.
+			var rootFolderData = folderReader.GetRootFolder(false, CancellationToken.None).Result;
+			LoadFolder(rootFolderData);
+		}
+
+		private async Task ChangeToCurrentlySelectedFolder(CancellationToken cancellationToken)
+		{
+			switch (SelectedItem)
+			{
+				case ParentFolderExplorerItem _:
+					await LoadParentFolder(cancellationToken);
+					break;
+
+				case FolderExplorerItem folderItem:
+					await LoadFolder(folderItem.FolderId, cancellationToken);
+					break;
+			}
+		}
+
+		private async Task LoadFolder(ItemId folderId, CancellationToken cancellationToken)
+		{
+			var folder = await folderReader.GetFolder(folderId, includeDeletedDiscs: false, cancellationToken);
+
+			LoadFolder(folder);
+		}
+
+		private void LoadFolder(FolderData folderData)
+		{
+			SetFolderItems(folderData);
+
+			SelectedItem = Items.FirstOrDefault();
+
+			ParentFolderId = folderData.ParentFolderId;
+			LoadedFolderId = folderData.Id;
+		}
+
+		private async Task LoadParentFolder(CancellationToken cancellationToken)
+		{
+			// Remembering current folder before it gets updated.
+			var prevFolderId = LoadedFolderId;
+
+			await LoadFolder(ParentFolderId, cancellationToken);
+
+			// Setting previously loaded folder as currently selected item.
+			FolderExplorerItem newSelectedItem = null;
+			if (prevFolderId != null)
+			{
+				newSelectedItem = Items.OfType<FolderExplorerItem>().FirstOrDefault(f => f.FolderId == prevFolderId);
+			}
+
+			SelectedItem = newSelectedItem ?? Items.FirstOrDefault();
+		}
+
+		private void SetFolderItems(FolderData folderData)
+		{
+			Items.Clear();
+
+			if (folderData.ParentFolderId != null)
+			{
+				Items.Add(new ParentFolderExplorerItem());
+			}
+
+			Items.AddRange(folderData.Subfolders.Select(x => new FolderExplorerItem(x)).OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase));
+
+			Items.AddRange(folderData.Discs.Select(x => new DiscExplorerItem(x)).OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase));
 		}
 
 		public void SwitchToDisc(Disc disc)
 		{
-			var discItem = libraryBrowser.GetDiscItem(disc);
-			if (discItem == null)
-			{
-				return;
-			}
+			// TBD: Implement loading of disc folder
+			throw new NotImplementedException();
 
-			var discParentFolder = libraryBrowser.GetParentFolder(discItem);
-			if (discParentFolder == null)
-			{
-				return;
-			}
+			/*
+			var discId = disc.GetDiscId();
+			var discFolder = folderReader.GetDiscFolder(discId, CancellationToken.None).Result;
 
-			ChangeFolder(discParentFolder);
-			SelectedItem = Items.OfType<DiscExplorerItem>().SingleOrDefault(it => it.Disc.Id == disc.Id);
-		}
+			LoadFolder(discFolder);
 
-		public void ChangeFolder()
-		{
-			if (SelectedItem is FolderExplorerItem folderItem)
-			{
-				ChangeFolder(folderItem);
-			}
+			SelectedItem = Items.OfType<DiscExplorerItem>().FirstOrDefault(x => x.DiscId == discId);
+			*/
 		}
 
 		private void PlayDisc()
@@ -137,10 +193,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Send(new PlaySongsListEventArgs(discItem.Disc));
 		}
 
-		public async Task DeleteDisc()
+		public static async Task DeleteDisc()
 		{
-			var discItem = SelectedItem as DiscExplorerItem;
-			if (discItem == null)
+			// TBD: Implement disc deletion
+			await Task.CompletedTask;
+			throw new NotImplementedException();
+/*
+			if (!(SelectedItem is DiscExplorerItem discItem))
 			{
 				return;
 			}
@@ -157,13 +216,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 			Items.Remove(discItem);
 
-			// If current folder does not contain discs anymore (i.e. only '..' item remains),
+			// If current folder does not contain other items anymore (i.e. only '..' item remains),
 			// then we want to navigate to upper non-empty folder.
 			if (Items.Count == 1)
 			{
 				var currentFolder = libraryBrowser.GetParentFolder(discItem);
 
-				while (currentFolder != null && !libraryBrowser.GetChildFolderItems(currentFolder).Any())
+				while (currentFolder != null && !libraryBrowser.GetFolderItems(currentFolder).Any())
 				{
 					currentFolder = libraryBrowser.GetParentFolder(currentFolder);
 				}
@@ -173,6 +232,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 					ChangeFolder(currentFolder);
 				}
 			}
+*/
 		}
 
 		private void EditDiscProperties()
@@ -181,58 +241,6 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			{
 				viewNavigator.ShowDiscPropertiesView(discItem.Disc);
 			}
-		}
-
-		private void ChangeFolder(FolderExplorerItem newFolder)
-		{
-			if (newFolder == null)
-			{
-				return;
-			}
-
-			var childFolderItems = libraryBrowser.GetChildFolderItems(newFolder).ToList();
-			if (!childFolderItems.Any())
-			{
-				return;
-			}
-
-			// Remembering current directory if we're moving up, so that we can select it in parent's list.
-			FolderExplorerItem prevFolder = null;
-			if (newFolder.IsParentItem)
-			{
-				prevFolder = CurrentFolder;
-			}
-
-			CurrentFolder = newFolder;
-
-			// Getting a parent of new folder
-			ParentFolder = libraryBrowser.GetParentFolder(newFolder);
-			if (ParentFolder != null)
-			{
-				ParentFolder.IsParentItem = true;
-			}
-
-			// Building new items list
-			SetItems(childFolderItems);
-			if (ParentFolder != null)
-			{
-				Items.Insert(0, ParentFolder);
-			}
-
-			// Setting selected item
-			FolderExplorerItem newSelectedItem = null;
-			if (prevFolder != null)
-			{
-				newSelectedItem = Items.OfType<FolderExplorerItem>().FirstOrDefault(f => new FolderItemComparer().Equals(f, prevFolder));
-			}
-
-			SelectedItem = newSelectedItem ?? Items.FirstOrDefault();
-		}
-
-		private void SetItems(IEnumerable<LibraryExplorerItem> newItems)
-		{
-			Items.Clear();
-			Items.AddRange(newItems.OrderBy(it => it.Name));
 		}
 
 		private void OnPlaylistChanged(Disc disc)

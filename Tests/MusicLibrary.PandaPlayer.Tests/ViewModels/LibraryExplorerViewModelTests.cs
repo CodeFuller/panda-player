@@ -34,7 +34,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels
 			var item3 = new FolderExplorerItem(new Uri("/SomeFolder/Item 3", UriKind.Relative));
 
 			// Sanity check
-			Assert.AreEqual("Item 1", item1.Name);
+			Assert.AreEqual("Item 1", item1.Title);
 
 			var unsortedItems = new[] { item2, item1, item3 };
 			var sortedItems = new[] { item1, item2, item3 };
@@ -42,7 +42,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels
 			var parentItem = new FolderExplorerItem(new Uri("/SomeFolder", UriKind.Relative));
 
 			ILibraryBrowser libraryBrowserStub = Substitute.For<ILibraryBrowser>();
-			libraryBrowserStub.GetChildFolderItems(parentItem).Returns(unsortedItems);
+			libraryBrowserStub.GetFolderItems(parentItem).Returns(unsortedItems);
 
 			LibraryExplorerViewModel target = new LibraryExplorerViewModel(libraryBrowserStub, Substitute.For<IExplorerSongListViewModel>(),
 				Substitute.For<ILibraryContentUpdater>(), Substitute.For<IViewNavigator>(), Substitute.For<IWindowService>());
@@ -210,7 +210,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels
 			var folderItem = new FolderExplorerItem(new Uri("/SomeFolder", UriKind.Relative));
 
 			ILibraryBrowser libraryBrowserStub = Substitute.For<ILibraryBrowser>();
-			libraryBrowserStub.GetChildFolderItems(folderItem).Returns(new[] { discItem });
+			libraryBrowserStub.GetFolderItems(folderItem).Returns(new[] { discItem });
 
 			IWindowService windowServiceStub = Substitute.For<IWindowService>();
 			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);
@@ -245,7 +245,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels
 			var folderItem = new FolderExplorerItem(new Uri("/SomeFolder", UriKind.Relative));
 
 			ILibraryBrowser libraryBrowserStub = Substitute.For<ILibraryBrowser>();
-			libraryBrowserStub.GetChildFolderItems(folderItem).Returns(new[] { discItem });
+			libraryBrowserStub.GetFolderItems(folderItem).Returns(new[] { discItem });
 
 			IWindowService windowServiceStub = Substitute.For<IWindowService>();
 			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);
@@ -290,7 +290,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels
 			var folderItem = new FolderExplorerItem(new Uri("/SomeFolder", UriKind.Relative));
 
 			ILibraryBrowser libraryBrowserStub = Substitute.For<ILibraryBrowser>();
-			libraryBrowserStub.GetChildFolderItems(folderItem).Returns(new[] { discItem });
+			libraryBrowserStub.GetFolderItems(folderItem).Returns(new[] { discItem });
 
 			IWindowService windowServiceStub = Substitute.For<IWindowService>();
 			windowServiceStub.ShowMessageBox(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ShowMessageBoxButton>(), Arg.Any<ShowMessageBoxIcon>()).Returns(ShowMessageBoxResult.Yes);
@@ -326,8 +326,8 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels
 			});
 
 			ILibraryBrowser libraryBrowserStub = Substitute.For<ILibraryBrowser>();
-			libraryBrowserStub.GetChildFolderItems(folderItem1).Returns(new[] { folderItem21, folderItem22 }.AsEnumerable(), new[] { folderItem22 }.AsEnumerable());
-			libraryBrowserStub.GetChildFolderItems(folderItem21).Returns(new[] { discItem }.AsEnumerable(), Enumerable.Empty<DiscExplorerItem>());
+			libraryBrowserStub.GetFolderItems(folderItem1).Returns(new[] { folderItem21, folderItem22 }.AsEnumerable(), new[] { folderItem22 }.AsEnumerable());
+			libraryBrowserStub.GetFolderItems(folderItem21).Returns(new[] { discItem }.AsEnumerable(), Enumerable.Empty<DiscExplorerItem>());
 			libraryBrowserStub.GetParentFolder(discItem).Returns(folderItem21);
 			libraryBrowserStub.GetParentFolder(folderItem21).Returns(folderItem1);
 
@@ -370,7 +370,7 @@ namespace MusicLibrary.PandaPlayer.Tests.ViewModels
 			});
 
 			ILibraryBrowser libraryBrowserStub = Substitute.For<ILibraryBrowser>();
-			libraryBrowserStub.GetChildFolderItems(folderItem2).Returns(new[] { discItem1, discItem2 }.AsEnumerable(), new[] { discItem2 }.AsEnumerable());
+			libraryBrowserStub.GetFolderItems(folderItem2).Returns(new[] { discItem1, discItem2 }.AsEnumerable(), new[] { discItem2 }.AsEnumerable());
 			libraryBrowserStub.GetParentFolder(discItem1).Returns(folderItem2);
 			libraryBrowserStub.GetParentFolder(folderItem2).Returns(folderItem1);
 

@@ -144,8 +144,8 @@ namespace MusicLibrary.PandaPlayer.Views
 			}
 
 			DataGrid dataGrid = ContentDataGrid;
-			var selected = dataGrid.Items.Cast<LibraryExplorerItem>()
-				.FirstOrDefault(it => it.Name.StartsWith(enteredText, StringComparison.CurrentCultureIgnoreCase));
+			var selected = dataGrid.Items.Cast<BasicExplorerItem>()
+				.FirstOrDefault(it => it.Title.StartsWith(enteredText, StringComparison.CurrentCultureIgnoreCase));
 			if (selected != null)
 			{
 				dataGrid.SelectedItem = selected;

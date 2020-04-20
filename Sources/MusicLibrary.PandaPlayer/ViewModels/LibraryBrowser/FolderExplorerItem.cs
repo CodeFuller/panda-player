@@ -1,19 +1,20 @@
 ﻿using System;
-using MusicLibrary.Core;
+using MusicLibrary.Dal.Abstractions.Dto;
+using MusicLibrary.Dal.Abstractions.Dto.Folders;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 {
-	public class FolderExplorerItem : LibraryExplorerItem
+	public class FolderExplorerItem : BasicExplorerItem
 	{
-		public static FolderExplorerItem Root => new FolderExplorerItem(ItemUriParts.RootUri);
+		private readonly SubfolderData folderData;
 
-		public override string Name => IsParentItem ? ".." : base.Name;
+		public ItemId FolderId => folderData.Id;
 
-		public bool IsParentItem { get; set; }
+		public override string Title => folderData.Name;
 
-		public FolderExplorerItem(Uri uri)
-			: base(uri)
+		public FolderExplorerItem(SubfolderData folderData)
 		{
+			this.folderData = folderData ?? throw new ArgumentNullException(nameof(folderData));
 		}
 	}
 }

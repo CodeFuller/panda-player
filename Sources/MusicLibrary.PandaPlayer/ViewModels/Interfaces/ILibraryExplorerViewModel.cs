@@ -7,17 +7,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
 	public interface ILibraryExplorerViewModel : INotifyPropertyChanged
 	{
-		FolderExplorerItem CurrentFolder { get; }
+		ObservableCollection<BasicExplorerItem> Items { get; }
 
-		ObservableCollection<LibraryExplorerItem> Items { get; }
-
-		LibraryExplorerItem SelectedItem { get; set; }
+		BasicExplorerItem SelectedItem { get; set; }
 
 		Disc SelectedDisc { get; }
 
 		IExplorerSongListViewModel SongListViewModel { get; }
-
-		void Load();
 
 		void SwitchToDisc(Disc disc);
 	}

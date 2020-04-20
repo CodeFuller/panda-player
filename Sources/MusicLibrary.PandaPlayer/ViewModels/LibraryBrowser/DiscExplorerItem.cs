@@ -1,15 +1,24 @@
-﻿using MusicLibrary.Core.Objects;
+﻿using System;
+using MusicLibrary.Core.Objects;
+using MusicLibrary.Dal.Abstractions.Dto;
+using MusicLibrary.Dal.Abstractions.Dto.Folders;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 {
-	public class DiscExplorerItem : LibraryExplorerItem
+	public class DiscExplorerItem : BasicExplorerItem
 	{
-		public Disc Disc { get; }
+		private readonly FolderDiscData discData;
 
-		public DiscExplorerItem(Disc disc)
-			: base(disc.Uri)
+		public ItemId DiscId => discData.Id;
+
+		public override string Title => discData.TreeTitle;
+
+		// TBD: Remove after redesign
+		public Disc Disc => discData.Disc;
+
+		public DiscExplorerItem(FolderDiscData discData)
 		{
-			Disc = disc;
+			this.discData = discData ?? throw new ArgumentNullException(nameof(discData));
 		}
 	}
 }
