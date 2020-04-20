@@ -5,7 +5,7 @@ using MusicLibrary.Dal.Abstractions.Dto.Folders;
 
 namespace MusicLibrary.Dal.Abstractions.Interfaces
 {
-	public interface IFolderReader
+	public interface IFoldersRepository
 	{
 		Task<FolderData> GetRootFolder(bool includeDeletedDiscs, CancellationToken cancellationToken);
 

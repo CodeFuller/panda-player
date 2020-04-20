@@ -13,11 +13,11 @@ using MusicLibrary.Dal.LocalDb.Extensions;
 namespace MusicLibrary.Dal.LocalDb
 {
 	// TBD: Remove after redesign
-	internal class FolderReader : IFolderReader
+	internal class FoldersRepository : IFoldersRepository
 	{
 		private readonly DiscLibrary discLibrary;
 
-		public FolderReader(DiscLibrary discLibrary)
+		public FoldersRepository(DiscLibrary discLibrary)
 		{
 			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
 		}

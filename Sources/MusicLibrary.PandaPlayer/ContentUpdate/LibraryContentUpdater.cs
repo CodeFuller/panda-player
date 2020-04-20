@@ -49,11 +49,6 @@ namespace MusicLibrary.PandaPlayer.ContentUpdate
 			return musicLibrary.DeleteSong(song, clock.Now);
 		}
 
-		public Task DeleteDisc(Disc disc)
-		{
-			return musicLibrary.DeleteDisc(disc);
-		}
-
 		public Task ChangeDiscUri(Disc disc, Uri newDiscUri)
 		{
 			return musicLibrary.ChangeDiscUri(disc, newDiscUri);

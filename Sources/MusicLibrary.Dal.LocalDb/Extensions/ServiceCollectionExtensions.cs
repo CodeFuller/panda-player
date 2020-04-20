@@ -11,7 +11,8 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 		{
 			services.AddDal(setupSettings);
 
-			services.AddSingleton<IFolderReader, FolderReader>();
+			services.AddSingleton<IFoldersRepository, FoldersRepository>();
+			services.AddSingleton<IDiscsRepository, DiscsRepository>();
 
 			return services;
 		}
