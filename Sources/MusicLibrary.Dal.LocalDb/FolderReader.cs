@@ -45,7 +45,9 @@ namespace MusicLibrary.Dal.LocalDb
 				{
 					var discData = new FolderDiscData
 					{
+						Id = disc.Uri.ToItemId(),
 						TreeTitle = new ItemUriParts(disc.Uri).Last(),
+						Disc = disc,
 					};
 
 					discs.Add(discData);
@@ -86,8 +88,10 @@ namespace MusicLibrary.Dal.LocalDb
 
 		public Task<FolderData> GetDiscFolder(ItemId discId, CancellationToken cancellationToken)
 		{
-			// TBD: Implement getting of disc folder
-			throw new NotImplementedException();
+			var uriParts = new ItemUriParts(discId.ToUri());
+			var parentFolderId = ItemUriParts.Join(uriParts.Take(uriParts.Count - 1)).ToItemId();
+
+			return GetFolder(parentFolderId, false, CancellationToken.None);
 		}
 	}
 }

@@ -14,6 +14,7 @@ using MusicLibrary.Core.Objects;
 using MusicLibrary.Dal.Abstractions.Dto;
 using MusicLibrary.Dal.Abstractions.Dto.Folders;
 using MusicLibrary.Dal.Abstractions.Interfaces;
+using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.PandaPlayer.ContentUpdate;
 using MusicLibrary.PandaPlayer.Events;
 using MusicLibrary.PandaPlayer.Events.DiscEvents;
@@ -170,17 +171,12 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public void SwitchToDisc(Disc disc)
 		{
-			// TBD: Implement loading of disc folder
-			throw new NotImplementedException();
-
-			/*
-			var discId = disc.GetDiscId();
+			var discId = disc.Uri.ToItemId();
 			var discFolder = folderReader.GetDiscFolder(discId, CancellationToken.None).Result;
 
 			LoadFolder(discFolder);
 
 			SelectedItem = Items.OfType<DiscExplorerItem>().FirstOrDefault(x => x.DiscId == discId);
-			*/
 		}
 
 		private void PlayDisc()
