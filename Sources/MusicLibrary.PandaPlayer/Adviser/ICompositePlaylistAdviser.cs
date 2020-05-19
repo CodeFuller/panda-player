@@ -1,4 +1,4 @@
-﻿namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
+﻿namespace MusicLibrary.PandaPlayer.Adviser
 {
 	public interface ICompositePlaylistAdviser : IPlaylistAdviser
 	{

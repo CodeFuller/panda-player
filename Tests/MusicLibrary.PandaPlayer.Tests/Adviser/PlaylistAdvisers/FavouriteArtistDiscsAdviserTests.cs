@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MusicLibrary.Core.Objects;
 using MusicLibrary.PandaPlayer.Adviser;
-using MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
 using NSubstitute;
 using NUnit.Framework;
 

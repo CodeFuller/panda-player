@@ -3,7 +3,6 @@ using System.Linq;
 using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Core.Objects;
 using MusicLibrary.PandaPlayer.Adviser;
-using MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
 using MusicLibrary.PandaPlayer.Events;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
 using MusicLibrary.PandaPlayer.ViewModels;

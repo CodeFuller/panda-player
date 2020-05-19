@@ -7,7 +7,6 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Core.Objects;
 using MusicLibrary.PandaPlayer.Adviser;
-using MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
 using MusicLibrary.PandaPlayer.Events;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -18,7 +17,6 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 	{
 		private const int AdvisedPlaylistsNumber = 30;
 
-		private readonly DiscLibrary discLibrary;
 		private readonly ICompositePlaylistAdviser playlistAdviser;
 
 		private readonly List<AdvisedPlaylist> currAdvises = new List<AdvisedPlaylist>();
@@ -43,9 +41,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand SwitchToNextAdviseCommand { get; }
 
-		public DiscAdviserViewModel(DiscLibrary discLibrary, ICompositePlaylistAdviser playlistAdviser)
+		public DiscAdviserViewModel(ICompositePlaylistAdviser playlistAdviser)
 		{
-			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
 			this.playlistAdviser = playlistAdviser ?? throw new ArgumentNullException(nameof(playlistAdviser));
 
 			PlayCurrentAdviseCommand = new RelayCommand(PlayCurrentAdvise);
@@ -87,7 +84,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		private void RebuildAdvises()
 		{
 			currAdvises.Clear();
-			currAdvises.AddRange(playlistAdviser.Advise(discLibrary).Take(AdvisedPlaylistsNumber));
+			currAdvises.AddRange(playlistAdviser.Advise().Take(AdvisedPlaylistsNumber));
 			CurrAdviseIndex = 0;
 		}
 
