@@ -1,67 +1,54 @@
 ﻿using System;
-using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Interfaces.Services;
+using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {
 	public class LibraryStatisticsViewModel : ViewModelBase, ILibraryStatisticsViewModel
 	{
-		private readonly DiscLibrary discLibrary;
+		private readonly IStatisticsService statisticsService;
 
-		public int ArtistsNumber => discLibrary.Artists.Count();
+		private StatisticsModel Statistics { get; set; }
 
-		public int DiscArtistsNumber => discLibrary.Discs.Select(d => d.Artist).Where(a => a != null).Distinct().Count();
+		public int ArtistsNumber => Statistics.ArtistsNumber;
 
-		public int DiscsNumber => discLibrary.Discs.Count();
+		public int DiscArtistsNumber => Statistics.DiscArtistsNumber;
 
-		public int SongsNumber => discLibrary.Songs.Count();
+		public int DiscsNumber => Statistics.DiscsNumber;
 
-		public long StorageSize => discLibrary.Songs.Sum(s => (long)s.FileSize) + discLibrary.Discs.SelectMany(d => d.Images).Sum(im => (long)im.FileSize);
+		public int SongsNumber => Statistics.SongsNumber;
 
-		public TimeSpan TotalDuration => discLibrary.Songs.Aggregate(TimeSpan.Zero, (currSum, currSong) => currSum + currSong.Duration);
+		public long StorageSize => Statistics.StorageSize;
 
-		public TimeSpan ListensDuration => TimeSpan.FromTicks(discLibrary.AllSongs.Sum(song => song.PlaybacksCount * song.Duration.Ticks));
+		public TimeSpan SongsDuration => Statistics.SongsDuration;
 
-		public int ListensNumber => discLibrary.AllSongs.Sum(song => song.PlaybacksCount);
+		public TimeSpan PlaybacksDuration => Statistics.PlaybacksDuration;
 
-		private int UnlistenedSongsNumber => discLibrary.Songs.Count(s => s.PlaybacksCount == 0);
+		public int PlaybacksNumber => Statistics.PlaybacksNumber;
 
-		public double UnlistenedSongsPercentage
+		public double UnheardSongsPercentage => CalculatePercentage(Statistics.UnheardSongsNumber, SongsNumber);
+
+		public double UnratedSongsPercentage => CalculatePercentage(Statistics.UnratedSongsNumber, SongsNumber);
+
+		public double PercentageOfDiscsWithoutCoverImage => CalculatePercentage(Statistics.NumberOfDiscsWithoutCoverImage, DiscsNumber);
+
+		public LibraryStatisticsViewModel(IStatisticsService statisticsService)
 		{
-			get
-			{
-				var totalSongsNumber = SongsNumber;
-				return totalSongsNumber > 0 ? (double)UnlistenedSongsNumber / totalSongsNumber : 0;
-			}
+			this.statisticsService = statisticsService ?? throw new ArgumentNullException(nameof(statisticsService));
 		}
 
-		private int UnratedSongsNumber => discLibrary.Songs.Count(s => s.Rating == null);
-
-		public double UnratedSongsPercentage
+		public async Task Load(CancellationToken cancellationToken)
 		{
-			get
-			{
-				var totalSongsNumber = SongsNumber;
-				return totalSongsNumber > 0 ? (double)UnratedSongsNumber / totalSongsNumber : 0;
-			}
+			Statistics = await statisticsService.GetLibraryStatistics(cancellationToken);
 		}
 
-		private int NumberOfDiscsWithoutCoverImage => discLibrary.Discs.Count(disc => disc.CoverImage == null);
-
-		public double PercentageOfDiscsWithoutCoverImage
+		private static double CalculatePercentage(int value, int totalCount)
 		{
-			get
-			{
-				var totalDiscsNumber = DiscsNumber;
-				return totalDiscsNumber > 0 ? (double)NumberOfDiscsWithoutCoverImage / totalDiscsNumber : 0;
-			}
-		}
-
-		public LibraryStatisticsViewModel(DiscLibrary discLibrary)
-		{
-			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
+			return totalCount > 0 ? (double)value / totalCount : 0;
 		}
 	}
 }

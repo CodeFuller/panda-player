@@ -10,6 +10,7 @@ namespace MusicLibrary.Logic
 		{
 			services.AddSingleton<IGenresService, GenresService>();
 			services.AddSingleton<IArtistsService, ArtistsService>();
+			services.AddSingleton<IStatisticsService, StatisticsService>();
 
 			return services;
 		}

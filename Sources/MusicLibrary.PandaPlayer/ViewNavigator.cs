@@ -69,9 +69,11 @@ namespace MusicLibrary.PandaPlayer
 			ShowDialog<EditDiscImageView>(viewModel);
 		}
 
-		public void ShowLibraryStatisticsView()
+		public async Task ShowLibraryStatisticsView(CancellationToken cancellationToken)
 		{
-			ShowDialog<LibraryStatisticsView>(viewModelHolder.LibraryStatisticsViewModel);
+			var viewModel = viewModelHolder.LibraryStatisticsViewModel;
+			await viewModel.Load(cancellationToken);
+			ShowDialog<LibraryStatisticsView>(viewModel);
 		}
 
 		private static bool ShowDialog<TDialogView>(object dataContext)

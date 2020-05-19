@@ -38,21 +38,21 @@
         </Grid>
         <Separator />
         <Grid>
-            <Label Content="Total Duration:" />
-            <Label HorizontalAlignment="Right" Content="{Binding TotalDuration, Converter={StaticResource SongsTotalDurationValueConverter}}" />
+            <Label Content="Songs Duration:" />
+            <Label HorizontalAlignment="Right" Content="{Binding SongsDuration, Converter={StaticResource SongsTotalDurationValueConverter}}" />
         </Grid>
         <Grid>
-            <Label Content="Listens duration:" />
-            <Label HorizontalAlignment="Right" Content="{Binding ListensDuration, Converter={StaticResource SongsTotalDurationValueConverter}}" />
+            <Label Content="Playbacks duration:" />
+            <Label HorizontalAlignment="Right" Content="{Binding PlaybacksDuration, Converter={StaticResource SongsTotalDurationValueConverter}}" />
         </Grid>
         <Grid>
-            <Label Content="Listens number:" />
-            <Label HorizontalAlignment="Right" Content="{Binding ListensNumber, Converter={StaticResource CommaSeparatedNumberValueConverter}}" />
+            <Label Content="Playbacks number:" />
+            <Label HorizontalAlignment="Right" Content="{Binding PlaybacksNumber, Converter={StaticResource CommaSeparatedNumberValueConverter}}" />
         </Grid>
         <Separator />
         <Grid>
-            <Label Content="Unlistened songs:" />
-            <Label HorizontalAlignment="Right" Content="{Binding UnlistenedSongsPercentage, Converter={StaticResource PercentageValueConverter}}" />
+            <Label Content="Unheard songs:" />
+            <Label HorizontalAlignment="Right" Content="{Binding UnheardSongsPercentage, Converter={StaticResource PercentageValueConverter}}" />
         </Grid>
         <Grid>
             <Label Content="Unrated songs:" />

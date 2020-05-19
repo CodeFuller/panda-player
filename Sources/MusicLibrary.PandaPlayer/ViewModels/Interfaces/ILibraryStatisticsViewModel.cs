@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
@@ -14,16 +16,18 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		long StorageSize { get; }
 
-		TimeSpan TotalDuration { get; }
+		TimeSpan SongsDuration { get; }
 
-		TimeSpan ListensDuration { get; }
+		TimeSpan PlaybacksDuration { get; }
 
-		int ListensNumber { get; }
+		int PlaybacksNumber { get; }
 
-		double UnlistenedSongsPercentage { get; }
+		double UnheardSongsPercentage { get; }
 
 		double UnratedSongsPercentage { get; }
 
 		double PercentageOfDiscsWithoutCoverImage { get; }
+
+		Task Load(CancellationToken cancellationToken);
 	}
 }

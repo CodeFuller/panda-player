@@ -16,6 +16,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 			services.AddSingleton<IDiscsRepository, DiscsRepository>();
 			services.AddSingleton<IGenresRepository, GenresRepository>();
 			services.AddSingleton<IArtistsRepository, ArtistsRepository>();
+			services.AddSingleton<IStatisticsRepository, StatisticsRepository>();
 
 			return services;
 		}

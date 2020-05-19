@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Wpf;
@@ -86,7 +87,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 			LoadCommand = new AsyncRelayCommand(Load);
 			ReversePlayingCommand = new RelayCommand(ReversePlaying);
-			ShowLibraryStatisticsCommand = new RelayCommand(ShowLibraryStatistics);
+			ShowLibraryStatisticsCommand = new AsyncRelayCommand(ShowLibraryStatistics);
 
 			Messenger.Default.Register<PlaySongsListEventArgs>(this, OnPlaySongList);
 			Messenger.Default.Register<PlayDiscFromSongEventArgs>(this, OnPlayDiscFromSongLaunched);
@@ -110,9 +111,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		public void ShowLibraryStatistics()
+		public async Task ShowLibraryStatistics()
 		{
-			viewNavigator.ShowLibraryStatisticsView();
+			await viewNavigator.ShowLibraryStatisticsView(CancellationToken.None);
 		}
 
 		private void OnPlaySongList(PlaySongsListEventArgs e)
