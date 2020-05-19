@@ -16,6 +16,7 @@ using MusicLibrary.Core.Objects;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.LastFM;
 using MusicLibrary.Library;
+using MusicLibrary.Logic;
 using MusicLibrary.PandaPlayer.Adviser;
 using MusicLibrary.PandaPlayer.ContentUpdate;
 using MusicLibrary.PandaPlayer.ViewModels;
@@ -117,6 +118,8 @@ namespace MusicLibrary.PandaPlayer
 					sp.GetRequiredService<IFileSystemFacade>(),
 					sp.GetRequiredService<ILogger<ScrobblesQueueRepository>>(),
 					Path.Combine(dataStoragePath, "ScrobblesQueue.json")));
+
+			services.AddMusicLibraryServices();
 		}
 
 		protected override void BootstrapLogging(ILoggerFactory loggerFactory, IConfiguration configuration)

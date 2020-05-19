@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using MusicLibrary.Core;
 using MusicLibrary.Core.Interfaces;
 using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Interfaces.Services;
+using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.ContentUpdate;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
@@ -13,7 +16,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 {
 	public class EditSongPropertiesViewModel : ViewModelBase, IEditSongPropertiesViewModel
 	{
-		private readonly DiscLibrary library;
+		private readonly IGenresService genresService;
+		private readonly IArtistsService artistsService;
+
 		private readonly ILibraryStructurer libraryStructurer;
 		private readonly ILibraryContentUpdater libraryContentUpdater;
 
@@ -98,18 +103,19 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public EditedSongProperty<short?> TrackNumber { get; set; }
 
-		public IEnumerable<EditedSongProperty<Artist>> AvailableArtists { get; private set; }
+		public IReadOnlyCollection<EditedSongProperty<ArtistModel>> AvailableArtists { get; private set; }
 
-		public IEnumerable<EditedSongProperty<Genre>> AvailableGenres { get; private set; }
+		public IReadOnlyCollection<EditedSongProperty<GenreModel>> AvailableGenres { get; private set; }
 
-		public EditSongPropertiesViewModel(DiscLibrary library, ILibraryStructurer libraryStructurer, ILibraryContentUpdater libraryContentUpdater)
+		public EditSongPropertiesViewModel(IGenresService genresService, IArtistsService artistsService, ILibraryStructurer libraryStructurer, ILibraryContentUpdater libraryContentUpdater)
 		{
-			this.library = library ?? throw new ArgumentNullException(nameof(library));
+			this.genresService = genresService ?? throw new ArgumentNullException(nameof(genresService));
+			this.artistsService = artistsService ?? throw new ArgumentNullException(nameof(artistsService));
 			this.libraryStructurer = libraryStructurer ?? throw new ArgumentNullException(nameof(libraryStructurer));
 			this.libraryContentUpdater = libraryContentUpdater ?? throw new ArgumentNullException(nameof(libraryContentUpdater));
 		}
 
-		public void Load(IEnumerable<Song> songs)
+		public async Task Load(IEnumerable<Song> songs, CancellationToken cancellationToken)
 		{
 			editedSongs = songs.ToList();
 			if (editedSongs.Count == 0)
@@ -117,8 +123,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				throw new InvalidOperationException("Songs list is empty");
 			}
 
-			AvailableArtists = FillAvailableValues(library.AllArtists, a => a.Name);
-			AvailableGenres = FillAvailableValues(library.Genres, g => g.Name);
+			AvailableArtists = await FillAvailableValues(() => artistsService.GetAllArtists(cancellationToken));
+			AvailableGenres = await FillAvailableValues(() => genresService.GetAllGenres(cancellationToken));
 
 			fileName = SingleSongMode ? GetSongFileName(SingleSong) : null;
 			title = SingleSongMode ? SingleSong.Title : null;
@@ -143,13 +149,18 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			await libraryContentUpdater.UpdateSongs(GetUpdatedSongs(), UpdatedSongProperties.ForceTagUpdate);
 		}
 
-		private static IEnumerable<EditedSongProperty<T>> FillAvailableValues<T>(IEnumerable<T> values, Func<T, object> sortedProperty)
+		private static async Task<IReadOnlyCollection<EditedSongProperty<T>>> FillAvailableValues<T>(Func<Task<IReadOnlyCollection<T>>> valuesProvider)
 			where T : class
 		{
-			var availableValues = new List<EditedSongProperty<T>>();
-			availableValues.Add(new EditedSongProperty<T>());
-			availableValues.Add(new EditedSongProperty<T>(null));
-			availableValues.AddRange(values.OrderBy(sortedProperty).Select(v => new EditedSongProperty<T>(v)));
+			var availableValues = new List<EditedSongProperty<T>>
+			{
+				new EditedSongProperty<T>(),
+				new EditedSongProperty<T>(null),
+			};
+
+			var loadedValues = await valuesProvider();
+			availableValues.AddRange(loadedValues.Select(v => new EditedSongProperty<T>(v)));
+
 			return availableValues;
 		}
 

@@ -16,13 +16,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(FxCopAnalyzersVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(CrossCuttingPackagesVersion)" PrivateAssets="all" />
     <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopAnalyzersVersion)" PrivateAssets="all" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- TBD: Remove this dependency after redesign -->
-    <ProjectReference Include="..\MusicLibrary.Core\MusicLibrary.Core.csproj" />
-    <ProjectReference Include="..\MusicLibrary.Logic\MusicLibrary.Logic.csproj" />
   </ItemGroup>
 
 </Project>

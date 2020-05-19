@@ -56,6 +56,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Dal.Abstractio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Dal.LocalDb", "Sources\MusicLibrary.Dal.LocalDb\MusicLibrary.Dal.LocalDb.csproj", "{510E3C70-2733-4586-AA0F-8689C9A88313}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicLibrary.Logic", "Sources\MusicLibrary.Logic\MusicLibrary.Logic.csproj", "{0B14C9B2-DC6D-4253-8CB2-5B0958142B0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -146,6 +148,10 @@ Global
 		{510E3C70-2733-4586-AA0F-8689C9A88313}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{510E3C70-2733-4586-AA0F-8689C9A88313}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{510E3C70-2733-4586-AA0F-8689C9A88313}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B14C9B2-DC6D-4253-8CB2-5B0958142B0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B14C9B2-DC6D-4253-8CB2-5B0958142B0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B14C9B2-DC6D-4253-8CB2-5B0958142B0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B14C9B2-DC6D-4253-8CB2-5B0958142B0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -172,6 +178,7 @@ Global
 		{F16D1C24-F09A-4289-91C7-C9A3122D5225} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
 		{C486AB0A-F4C6-4F63-BE03-B3EA799BEBD6} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
 		{510E3C70-2733-4586-AA0F-8689C9A88313} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
+		{0B14C9B2-DC6D-4253-8CB2-5B0958142B0B} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8FAD434A-F2AF-4138-AB70-749D7D8D4C9D}

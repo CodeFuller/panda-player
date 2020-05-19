@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using CF.Library.Core.Enums;
@@ -54,10 +55,10 @@ namespace MusicLibrary.PandaPlayer
 			ShowDialog<EditDiscPropertiesView>(viewModel);
 		}
 
-		public void ShowSongPropertiesView(IEnumerable<Song> songs)
+		public async Task ShowSongPropertiesView(IEnumerable<Song> songs, CancellationToken cancellationToken)
 		{
 			var viewModel = viewModelHolder.EditSongPropertiesViewModel;
-			viewModel.Load(songs);
+			await viewModel.Load(songs, cancellationToken);
 			ShowDialog<EditSongPropertiesView>(viewModel);
 		}
 

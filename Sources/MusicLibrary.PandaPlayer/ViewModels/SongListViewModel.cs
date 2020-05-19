@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Core.Enums;
@@ -86,7 +87,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			PlaySongsNextCommand = new RelayCommand(PlaySongsNext);
 			PlaySongsLastCommand = new RelayCommand(PlaySongsLast);
 			DeleteSongsFromDiscCommand = new AsyncRelayCommand(DeleteSongsFromDisc);
-			EditSongsPropertiesCommand = new RelayCommand(EditSongsProperties);
+			EditSongsPropertiesCommand = new AsyncRelayCommand(EditSongsProperties);
 			SetRatingMenuItems = RatingsHelper.AllowedRatingsDesc.Select(r => new SetRatingMenuItem(this, r)).ToList();
 		}
 
@@ -131,12 +132,12 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			OnSongItemsChanged();
 		}
 
-		private void EditSongsProperties()
+		private async Task EditSongsProperties()
 		{
 			var selectedSongs = SelectedSongs.ToList();
 			if (selectedSongs.Any())
 			{
-				viewNavigator.ShowSongPropertiesView(selectedSongs);
+				await viewNavigator.ShowSongPropertiesView(selectedSongs, CancellationToken.None);
 			}
 		}
 

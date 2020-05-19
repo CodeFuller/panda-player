@@ -10,7 +10,7 @@ using MusicLibrary.Dal.LocalDb.Extensions;
 
 namespace MusicLibrary.Dal.LocalDb
 {
-	public class DiscsRepository : IDiscsRepository
+	internal class DiscsRepository : IDiscsRepository
 	{
 		private readonly IMusicLibrary musicLibrary;
 

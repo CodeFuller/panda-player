@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MusicLibrary.Core.Objects;
 
@@ -10,7 +11,7 @@ namespace MusicLibrary.PandaPlayer
 
 		void ShowDiscPropertiesView(Disc disc);
 
-		void ShowSongPropertiesView(IEnumerable<Song> songs);
+		Task ShowSongPropertiesView(IEnumerable<Song> songs, CancellationToken cancellationToken);
 
 		Task ShowEditDiscImageView(Disc disc);
 
