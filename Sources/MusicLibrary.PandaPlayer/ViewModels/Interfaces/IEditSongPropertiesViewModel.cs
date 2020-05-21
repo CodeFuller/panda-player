@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
 	public interface IEditSongPropertiesViewModel
 	{
-		Task Load(IEnumerable<Song> songs, CancellationToken cancellationToken);
+		Task Load(IEnumerable<SongModel> songs, CancellationToken cancellationToken);
 
-		Task Save();
+		Task Save(CancellationToken cancellationToken);
 	}
 }

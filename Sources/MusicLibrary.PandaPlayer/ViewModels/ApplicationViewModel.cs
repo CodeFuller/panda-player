@@ -8,6 +8,8 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Interfaces.Services;
+using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.Events;
 using MusicLibrary.PandaPlayer.Events.DiscEvents;
 using MusicLibrary.PandaPlayer.Events.SongEvents;
@@ -25,6 +27,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		private const string DefaultTitle = "Panda Player";
 
 		private readonly DiscLibrary discLibrary;
+
+		private readonly IDiscsService discsService;
 
 		private readonly IViewNavigator viewNavigator;
 
@@ -52,25 +56,25 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			set
 			{
 				Set(ref selectedSongListIndex, value);
-				ActiveDisc = (SelectedSongListIndex == ExplorerSongListIndex) ? LibraryExplorerViewModel.SelectedDisc : PlaylistActiveDisc;
+				ActiveDiscId = (SelectedSongListIndex == ExplorerSongListIndex) ? LibraryExplorerViewModel.SelectedDisc?.Id : PlaylistActiveDiscId;
 			}
 		}
 
-		private Disc activeDisc;
+		private ItemId activeDiscId;
 
-		private Disc ActiveDisc
+		private ItemId ActiveDiscId
 		{
 			set
 			{
-				if (activeDisc != value)
+				if (activeDiscId != value)
 				{
-					activeDisc = value;
-					Messenger.Default.Send(new ActiveDiscChangedEventArgs(activeDisc));
+					activeDiscId = value;
+					Messenger.Default.Send(new ActiveDiscChangedEventArgs(activeDiscId));
 				}
 			}
 		}
 
-		private Disc PlaylistActiveDisc => Playlist.CurrentSong?.Disc ?? Playlist.PlayedDisc;
+		private ItemId PlaylistActiveDiscId => Playlist.CurrentSong?.DiscId ?? Playlist.PlayingDiscId;
 
 		public ICommand LoadCommand { get; }
 
@@ -78,9 +82,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand ShowLibraryStatisticsCommand { get; }
 
-		public ApplicationViewModel(DiscLibrary discLibrary, IApplicationViewModelHolder viewModelHolder, IMusicPlayerViewModel musicPlayerViewModel, IViewNavigator viewNavigator)
+		public ApplicationViewModel(DiscLibrary discLibrary, IDiscsService discsService, IApplicationViewModelHolder viewModelHolder, IMusicPlayerViewModel musicPlayerViewModel, IViewNavigator viewNavigator)
 		{
 			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
+			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
 			ViewModelHolder = viewModelHolder ?? throw new ArgumentNullException(nameof(viewModelHolder));
 			MusicPlayerViewModel = musicPlayerViewModel ?? throw new ArgumentNullException(nameof(musicPlayerViewModel));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
@@ -96,7 +101,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => SwitchToExplorerSongList());
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => OnPlaylistSongChanged());
 			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistSongChanged());
-			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => NavigateLibraryExplorerToDisc(e.Disc));
+			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => NavigateLibraryExplorerToDisc(e.DiscId));
 		}
 
 		public async Task Load()
@@ -126,7 +131,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		private void OnPlayDiscFromSongLaunched(PlayDiscFromSongEventArgs message)
 		{
-			var disc = message.Song.Disc;
+			// TBD: Can we make it async?
+			var disc = discsService.GetDisc(message.Song.DiscId, CancellationToken.None).Result;
+
 			Playlist.SetSongs(disc.Songs);
 			Playlist.SwitchToSong(message.Song);
 			ResetPlayer();
@@ -163,11 +170,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 			if (SelectedSongListIndex == PlaylistSongListIndex)
 			{
-				ActiveDisc = PlaylistActiveDisc;
+				ActiveDiscId = PlaylistActiveDiscId;
 			}
 		}
 
-		private string BuildCurrentTitle(Song song)
+		private string BuildCurrentTitle(SongModel song)
 		{
 			var songTitle = song.Artist != null ? Current($"{song.Artist.Name} - {song.Title}") : song.Title;
 			return Current($"{Playlist.CurrentSongIndex + 1}/{Playlist.SongsNumber} - {songTitle}");
@@ -175,13 +182,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		private void OnPlaylistFinished(PlaylistFinishedEventArgs e)
 		{
-			var playedDisc = Playlist.PlayedDisc;
-			if (playedDisc == null || playedDisc.Songs.All(s => s.Rating != null))
+			var songs = e.Songs;
+			if (songs.All(s => s.Rating != null))
 			{
 				return;
 			}
 
-			viewNavigator.ShowRateDiscView(playedDisc);
+			viewNavigator.ShowRatePlaylistSongsView(songs);
 		}
 
 		private void SwitchToExplorerSongList()
@@ -194,9 +201,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			SelectedSongListIndex = PlaylistSongListIndex;
 		}
 
-		private void NavigateLibraryExplorerToDisc(Disc disc)
+		private void NavigateLibraryExplorerToDisc(ItemId discId)
 		{
-			LibraryExplorerViewModel.SwitchToDisc(disc);
+			LibraryExplorerViewModel.SwitchToDisc(discId);
 			SwitchToExplorerSongList();
 		}
 	}

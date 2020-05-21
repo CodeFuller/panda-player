@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
@@ -13,7 +14,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		ReadOnlyObservableCollection<SongListItem> SongItems { get; }
 
-		IEnumerable<Song> Songs { get; }
+		IEnumerable<SongModel> Songs { get; }
 
 		SongListItem SelectedSongItem { get; }
 
@@ -35,8 +36,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		IReadOnlyCollection<SetRatingMenuItem> SetRatingMenuItems { get; }
 
-		void SetSongs(IEnumerable<Song> newSongs);
+		void SetSongs(IEnumerable<SongModel> newSongs);
 
-		Task SetRatingForSelectedSongs(Rating rating);
+		Task SetRatingForSelectedSongs(RatingModel rating, CancellationToken cancellationToken);
 	}
 }

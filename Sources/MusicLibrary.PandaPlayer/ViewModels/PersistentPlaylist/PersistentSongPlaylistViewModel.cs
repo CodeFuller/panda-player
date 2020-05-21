@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using CF.Library.Core.Interfaces;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Extensions.Logging;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.PandaPlayer.ContentUpdate;
+using MusicLibrary.Logic.Interfaces.Services;
+using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.Events;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
@@ -14,21 +15,24 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 {
 	public class PersistentSongPlaylistViewModel : SongPlaylistViewModel
 	{
+		private readonly ISongsService songsService;
+
 		private readonly IGenericDataRepository<PlaylistData> playlistDataRepository;
 		private readonly ILogger<PersistentSongPlaylistViewModel> logger;
 
-		public PersistentSongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService,
+		public PersistentSongPlaylistViewModel(ISongsService songsService, IViewNavigator viewNavigator, IWindowService windowService,
 			IGenericDataRepository<PlaylistData> playlistDataRepository, ILogger<PersistentSongPlaylistViewModel> logger)
-			: base(libraryContentUpdater, viewNavigator, windowService)
+			: base(songsService, viewNavigator, windowService)
 		{
+			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
 			this.playlistDataRepository = playlistDataRepository ?? throw new ArgumentNullException(nameof(playlistDataRepository));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-			Messenger.Default.Register<LibraryLoadedEventArgs>(this, e => Load(e.DiscLibrary));
+			Messenger.Default.Register<LibraryLoadedEventArgs>(this, e => Load());
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => this.playlistDataRepository.Purge());
 		}
 
-		private void Load(DiscLibrary library)
+		private void Load()
 		{
 			PlaylistData playListData = playlistDataRepository.Load();
 			if (playListData == null)
@@ -37,31 +41,39 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 				return;
 			}
 
-			Load(playListData, library);
+			Load(playListData);
 		}
 
-		private void Load(PlaylistData playListData, DiscLibrary library)
+		private void Load(PlaylistData playListData)
 		{
-			var songs = new List<Song>();
+			var songIds = playListData.Songs
+				.Select(s => s.Id)
+				.Select(id => new ItemId(id))
+				.Distinct();
+
+			// TBD: Make async
+			var loadedSongs = songsService.GetSongs(songIds, CancellationToken.None).Result
+				.ToDictionary(s => s.Id, s => s);
+
+			var playListSongs = new List<SongModel>();
 			foreach (var playlistSong in playListData.Songs)
 			{
-				var song = library.Songs.SingleOrDefault(s => playlistSong.Matches(s));
-				if (song == null)
+				if (!loadedSongs.TryGetValue(new ItemId(playlistSong.Id), out var loadedSong))
 				{
-					logger.LogInformation(Current($"Song {playlistSong.Uri} from saved playlist was not found in library. Ignoring saved playlist"));
+					logger.LogInformation(Current($"Song {playlistSong.Id} from saved playlist was not found in library. Ignoring saved playlist"));
 					return;
 				}
 
-				songs.Add(song);
+				playListSongs.Add(loadedSong);
 			}
 
-			if (playListData.CurrentSongIndex != null && (playListData.CurrentSongIndex < 0 || playListData.CurrentSongIndex >= songs.Count))
+			if (playListData.CurrentSongIndex != null && (playListData.CurrentSongIndex < 0 || playListData.CurrentSongIndex >= loadedSongs.Count))
 			{
-				logger.LogInformation(Current($"Index of current song in saved playlist is invalid ({playListData.CurrentSongIndex}, [{0}, {songs.Count})). Ignoring saved playlist"));
+				logger.LogInformation(Current($"Index of current song in saved playlist is invalid ({playListData.CurrentSongIndex}, [{0}, {loadedSongs.Count})). Ignoring saved playlist"));
 				return;
 			}
 
-			SetSongsRaw(songs);
+			SetSongsRaw(playListSongs);
 			CurrentSongIndex = playListData.CurrentSongIndex;
 
 			Messenger.Default.Send(new PlaylistLoadedEventArgs(this));

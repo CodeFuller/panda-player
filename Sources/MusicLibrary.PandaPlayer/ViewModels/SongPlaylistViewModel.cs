@@ -6,8 +6,8 @@ using CF.Library.Core.Extensions;
 using CF.Library.Core.Interfaces;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.PandaPlayer.ContentUpdate;
+using MusicLibrary.Logic.Interfaces.Services;
+using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.Events.DiscEvents;
 using MusicLibrary.PandaPlayer.Events.SongEvents;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
@@ -47,16 +47,16 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public override bool DisplayTrackNumbers => false;
 
-		public Song CurrentSong => CurrentItem?.Song;
+		public SongModel CurrentSong => CurrentItem?.Song;
 
-		public Disc PlayedDisc => Songs.Select(s => s.Disc).UniqueOrDefault();
+		public ItemId PlayingDiscId => Songs.Select(s => s.DiscId).UniqueOrDefault();
 
 		public override ICommand PlayFromSongCommand { get; }
 
 		public ICommand NavigateToSongDiscCommand { get; }
 
-		public SongPlaylistViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
-			: base(libraryContentUpdater, viewNavigator, windowService)
+		public SongPlaylistViewModel(ISongsService songsService, IViewNavigator viewNavigator, IWindowService windowService)
+			: base(songsService, viewNavigator, windowService)
 		{
 			PlayFromSongCommand = new RelayCommand(PlayFromSong);
 			NavigateToSongDiscCommand = new RelayCommand(NavigateToSongDisc);
@@ -70,14 +70,14 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Send(new PlaylistChangedEventArgs(this));
 		}
 
-		public override void SetSongs(IEnumerable<Song> newSongs)
+		public override void SetSongs(IEnumerable<SongModel> newSongs)
 		{
 			CurrentSongIndex = null;
 			SetSongsRaw(newSongs);
 			OnPlaylistChanged();
 		}
 
-		protected void SetSongsRaw(IEnumerable<Song> newSongs)
+		protected void SetSongsRaw(IEnumerable<SongModel> newSongs)
 		{
 			base.SetSongs(newSongs);
 		}
@@ -88,16 +88,16 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			OnPlaylistChanged();
 		}
 
-		public void SwitchToSong(Song song)
+		public void SwitchToSong(SongModel song)
 		{
 			CurrentSongIndex = GetSongIndex(song);
 			OnPlaylistChanged();
 		}
 
-		private int GetSongIndex(Song song)
+		private int GetSongIndex(SongModel song)
 		{
 			var songIndexes = SongItems.Select((item, i) => new { item.Song, Index = i })
-				.Where(obj => obj.Song == song)
+				.Where(obj => obj.Song.Id == song.Id)
 				.Select(obj => obj.Index)
 				.ToList();
 
@@ -114,10 +114,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			return songIndexes.Single();
 		}
 
-		private void OnAddingNextSongs(IReadOnlyCollection<Song> songs)
+		private void OnAddingNextSongs(IReadOnlyCollection<SongModel> songs)
 		{
-			int insertIndex = CurrentSongIndex + 1 ?? 0;
-			int firstSongIndex = insertIndex;
+			var insertIndex = CurrentSongIndex + 1 ?? 0;
+			var firstSongIndex = insertIndex;
 			InsertSongs(insertIndex, songs);
 
 			if (CurrentItem == null && songs.Any())
@@ -128,9 +128,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			OnPlaylistChanged();
 		}
 
-		private void OnAddingLastSongs(IReadOnlyCollection<Song> songs)
+		private void OnAddingLastSongs(IReadOnlyCollection<SongModel> songs)
 		{
-			int firstSongIndex = SongItems.Count;
+			var firstSongIndex = SongItems.Count;
 			AddSongs(songs);
 
 			if (CurrentItem == null && songs.Any())
@@ -159,7 +159,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				return;
 			}
 
-			Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(song.Disc));
+			Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(song.DiscId));
 		}
 	}
 }

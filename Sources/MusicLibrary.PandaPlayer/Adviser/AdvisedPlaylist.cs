@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using CF.Library.Core.Extensions;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.Adviser
 {
@@ -12,11 +10,11 @@ namespace MusicLibrary.PandaPlayer.Adviser
 
 		public string Title { get; private set; }
 
-		public IReadOnlyCollection<Song> Songs { get; private set; }
+		public IReadOnlyCollection<SongModel> Songs { get; private set; }
 
-		private Disc disc;
+		private DiscModel disc;
 
-		public Disc Disc
+		public DiscModel Disc
 		{
 			get
 			{
@@ -35,35 +33,14 @@ namespace MusicLibrary.PandaPlayer.Adviser
 		{
 		}
 
-		public static AdvisedPlaylist ForDisc(Disc disc)
+		public static AdvisedPlaylist ForDisc(DiscModel disc)
 		{
 			return new AdvisedPlaylist
 			{
 				AdvisedPlaylistType = AdvisedPlaylistType.Disc,
-				Title = disc.Artist == null ? disc.Title : FormattableStringExtensions.Current($"{disc.Artist.Name} - {disc.Title}"),
-				Songs = new List<Song>(disc.Songs),
+				Title = "Stub Title",
+				Songs = new List<SongModel>(),
 				Disc = disc,
-			};
-		}
-
-		public static AdvisedPlaylist ForFavouriteArtistDisc(Disc disc)
-		{
-			return new AdvisedPlaylist
-			{
-				AdvisedPlaylistType = AdvisedPlaylistType.FavouriteArtistDisc,
-				Title = "*** " + (disc.Artist == null ? disc.Title : FormattableStringExtensions.Current($"{disc.Artist.Name} - {disc.Title}")),
-				Songs = new List<Song>(disc.Songs),
-				Disc = disc,
-			};
-		}
-
-		public static AdvisedPlaylist ForHighlyRatedSongs(IEnumerable<Song> songs)
-		{
-			return new AdvisedPlaylist
-			{
-				AdvisedPlaylistType = AdvisedPlaylistType.HighlyRatedSongs,
-				Title = "Highly Rated Songs",
-				Songs = songs.ToList(),
 			};
 		}
 	}

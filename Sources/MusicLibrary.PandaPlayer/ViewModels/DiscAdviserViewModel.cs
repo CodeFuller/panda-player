@@ -5,7 +5,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.Adviser;
 using MusicLibrary.PandaPlayer.Events;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
@@ -88,18 +88,18 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			CurrAdviseIndex = 0;
 		}
 
-		private void OnPlaylistFinished(IEnumerable<Song> finishedSongs)
+		private void OnPlaylistFinished(IEnumerable<SongModel> finishedSongs)
 		{
-			List<Song> finishedSongsList = finishedSongs.ToList();
+			var finishedSongsList = finishedSongs.ToList();
 
 			// Removing advises that could be covered by just finished playlist.
-			bool currAdviseChanged = false;
+			var advisesWereModified = false;
 			for (var i = currAdviseIndex; i < currAdvises.Count;)
 			{
 				if (SongListCoversAdvise(finishedSongsList, currAdvises[i]))
 				{
 					currAdvises.RemoveAt(i);
-					currAdviseChanged = currAdviseChanged || (i == currAdviseIndex);
+					advisesWereModified = advisesWereModified || (i == currAdviseIndex);
 				}
 				else
 				{
@@ -107,7 +107,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				}
 			}
 
-			if (currAdviseChanged)
+			if (advisesWereModified)
 			{
 				OnCurrentAdvisedChanged();
 			}
@@ -121,9 +121,12 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			RaisePropertyChanged(nameof(CurrentAdviseAnnouncement));
 		}
 
-		private static bool SongListCoversAdvise(List<Song> songs, AdvisedPlaylist advise)
+		private static bool SongListCoversAdvise(List<SongModel> songs, AdvisedPlaylist advise)
 		{
-			return advise.Songs.All(songs.Contains);
+			var songListIds = songs.Select(s => s.Id).Distinct();
+			var adviseIds = advise.Songs.Select(s => s.Id).Distinct();
+
+			return !adviseIds.Except(songListIds).Any();
 		}
 	}
 }

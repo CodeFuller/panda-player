@@ -1,10 +1,10 @@
-﻿using MusicLibrary.Core.Objects;
+﻿using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.Events.SongEvents
 {
 	public class PlayPlaylistStartingFromSongEventArgs : BaseSongEventArgs
 	{
-		public PlayPlaylistStartingFromSongEventArgs(Song song)
+		public PlayPlaylistStartingFromSongEventArgs(SongModel song)
 			: base(song)
 		{
 		}

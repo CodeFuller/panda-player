@@ -14,19 +14,17 @@ namespace MusicLibrary.PandaPlayer.Views.ValueConverters
 				return "N/A";
 			}
 
-			if (!(value is DateTime) || targetType != typeof(String))
+			if (!(value is DateTimeOffset dt) || targetType != typeof(String))
 			{
 				return null;
 			}
 
-			var dt = (DateTime)value;
-
 			string dayPart;
-			if (dt.Date == DateTime.Today)
+			if (dt.Date == DateTimeOffset.Now.Date)
 			{
 				dayPart = "Today";
 			}
-			else if (dt.Date == DateTime.Today.AddDays(-1))
+			else if (dt.Date == DateTimeOffset.Now.AddDays(-1).Date)
 			{
 				dayPart = "Yesterday";
 			}

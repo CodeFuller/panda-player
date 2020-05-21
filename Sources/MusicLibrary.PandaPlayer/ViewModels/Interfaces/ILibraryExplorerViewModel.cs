@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
@@ -11,10 +11,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		BasicExplorerItem SelectedItem { get; set; }
 
-		Disc SelectedDisc { get; }
+		DiscModel SelectedDisc { get; }
 
 		IExplorerSongListViewModel SongListViewModel { get; }
 
-		void SwitchToDisc(Disc disc);
+		void SwitchToDisc(ItemId discId);
 	}
 }

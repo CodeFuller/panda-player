@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
-using MusicLibrary.Core.Interfaces;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.PandaPlayer.Events.DiscEvents;
+using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 {
 	public class DiscImageViewModel : ViewModelBase, IDiscImageViewModel
 	{
-		private readonly IMusicLibrary musicLibrary;
 		private readonly IViewNavigator viewNavigator;
 
-		private Disc currentDisc;
+		private DiscModel currentDisc;
 
-		private Disc CurrentDisc
+		private DiscModel CurrentDisc
 		{
 			get => currentDisc;
 			set
@@ -43,19 +39,21 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 			}
 		}
 
-		public DiscImageViewModel(IMusicLibrary musicLibrary, IViewNavigator viewNavigator)
+		public DiscImageViewModel(IViewNavigator viewNavigator)
 		{
-			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 
-			Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => CurrentDisc = e.Disc);
-			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
+			// TODO: Restore this functionality
+			// Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => CurrentDisc = e.Disc);
+			// Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
 		}
 
-		private string GetCurrImageFileName()
+		private static string GetCurrImageFileName()
 		{
-			var activeDisc = CurrentDisc;
-			return activeDisc == null ? null : musicLibrary.GetDiscCoverImage(activeDisc).Result;
+			// TODO: Restore this functionality
+			// var activeDisc = CurrentDisc;
+			// return activeDisc == null ? null : musicLibrary.GetDiscCoverImage(activeDisc).Result;
+			return null;
 		}
 
 		public async Task EditDiscImage()
@@ -69,8 +67,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 			await viewNavigator.ShowEditDiscImageView(activeDisc);
 		}
 
-		private void OnDiscImageChanged(Disc disc)
+		private void OnDiscImageChanged(DiscModel disc)
 		{
+			// TODO: Restore this functionality
 			if (disc == CurrentDisc)
 			{
 				CurrImageFileName = GetCurrImageFileName();

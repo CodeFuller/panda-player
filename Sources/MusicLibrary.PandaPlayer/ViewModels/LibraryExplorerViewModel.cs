@@ -11,11 +11,8 @@ using CF.Library.Wpf;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.Dal.Abstractions.Dto;
-using MusicLibrary.Dal.Abstractions.Dto.Folders;
-using MusicLibrary.Dal.Abstractions.Interfaces;
-using MusicLibrary.Dal.LocalDb.Extensions;
+using MusicLibrary.Logic.Interfaces.Services;
+using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.Events;
 using MusicLibrary.PandaPlayer.Events.DiscEvents;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
@@ -26,9 +23,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 {
 	public class LibraryExplorerViewModel : ViewModelBase, ILibraryExplorerViewModel
 	{
-		private readonly IFoldersRepository foldersRepository;
+		private readonly IFoldersService foldersService;
 
-		private readonly IDiscsRepository discsRepository;
+		private readonly IDiscsService discsService;
 
 		private readonly IViewNavigator viewNavigator;
 
@@ -56,13 +53,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				}
 				else
 				{
-					SongListViewModel.SetSongs(Enumerable.Empty<Song>());
+					SongListViewModel.SetSongs(Enumerable.Empty<SongModel>());
 					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null));
 				}
 			}
 		}
 
-		public Disc SelectedDisc => (selectedItem as DiscExplorerItem)?.Disc;
+		public DiscModel SelectedDisc => (selectedItem as DiscExplorerItem)?.Disc;
 
 		public IExplorerSongListViewModel SongListViewModel { get; }
 
@@ -78,11 +75,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand EditDiscPropertiesCommand { get; }
 
-		public LibraryExplorerViewModel(IFoldersRepository foldersRepository, IDiscsRepository discsRepository,
+		public LibraryExplorerViewModel(IFoldersService foldersService, IDiscsService discsService,
 			IExplorerSongListViewModel songListViewModel, IViewNavigator viewNavigator, IWindowService windowService)
 		{
-			this.foldersRepository = foldersRepository ?? throw new ArgumentNullException(nameof(foldersRepository));
-			this.discsRepository = discsRepository ?? throw new ArgumentNullException(nameof(discsRepository));
+			this.foldersService = foldersService ?? throw new ArgumentNullException(nameof(foldersService));
+			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
 			SongListViewModel = songListViewModel ?? throw new ArgumentNullException(nameof(songListViewModel));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
@@ -95,15 +92,15 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			EditDiscPropertiesCommand = new RelayCommand(EditDiscProperties);
 
 			Messenger.Default.Register<LibraryLoadedEventArgs>(this, e => LoadRootFolder());
-			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaylistChanged(e.Disc));
-			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistChanged(e.Disc));
+			Messenger.Default.Register<PlaySongsListEventArgs>(this, OnPlaylistChanged);
+			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, OnPlaylistChanged);
 		}
 
 		// TBD: How to make it async?
 		private void LoadRootFolder()
 		{
 			// TBD: We should not load root folder, if some disc is active, because folder of this disc will be loaded just after that.
-			var rootFolderData = foldersRepository.GetRootFolder(false, CancellationToken.None).Result;
+			var rootFolderData = foldersService.GetRootFolder(false, CancellationToken.None).Result;
 			LoadFolder(rootFolderData);
 		}
 
@@ -123,19 +120,19 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		private async Task LoadFolder(ItemId folderId, CancellationToken cancellationToken)
 		{
-			var folder = await foldersRepository.GetFolder(folderId, includeDeletedDiscs: false, cancellationToken);
+			var folder = await foldersService.GetFolder(folderId, includeDeletedDiscs: false, cancellationToken);
 
 			LoadFolder(folder);
 		}
 
-		private void LoadFolder(FolderData folderData)
+		private void LoadFolder(FolderModel folder)
 		{
-			SetFolderItems(folderData);
+			SetFolderItems(folder);
 
 			SelectedItem = Items.FirstOrDefault();
 
-			ParentFolderId = folderData.ParentFolderId;
-			LoadedFolderId = folderData.Id;
+			ParentFolderId = folder.ParentFolderId;
+			LoadedFolderId = folder.Id;
 		}
 
 		private async Task LoadParentFolder(CancellationToken cancellationToken)
@@ -155,24 +152,23 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			SelectedItem = newSelectedItem ?? Items.FirstOrDefault();
 		}
 
-		private void SetFolderItems(FolderData folderData)
+		private void SetFolderItems(FolderModel folder)
 		{
 			Items.Clear();
 
-			if (folderData.ParentFolderId != null)
+			if (folder.ParentFolderId != null)
 			{
 				Items.Add(new ParentFolderExplorerItem());
 			}
 
-			Items.AddRange(folderData.Subfolders.Select(x => new FolderExplorerItem(x)).OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase));
+			Items.AddRange(folder.Subfolders.Select(x => new FolderExplorerItem(x)).OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase));
 
-			Items.AddRange(folderData.Discs.Select(x => new DiscExplorerItem(x)).OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase));
+			Items.AddRange(folder.Discs.Select(x => new DiscExplorerItem(x)).OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase));
 		}
 
-		public void SwitchToDisc(Disc disc)
+		public void SwitchToDisc(ItemId discId)
 		{
-			var discId = disc.Uri.ToItemId();
-			var discFolder = foldersRepository.GetDiscFolder(discId, CancellationToken.None).Result;
+			var discFolder = foldersService.GetDiscFolder(discId, CancellationToken.None).Result;
 
 			LoadFolder(discFolder);
 
@@ -204,7 +200,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 			// We're sending this event to release any disc images hold by DiscImageViewModel.
 			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null));
-			await discsRepository.DeleteDisc(discItem.DiscId, cancellationToken);
+			await discsService.DeleteDisc(discItem.DiscId, cancellationToken);
 
 			Items.Remove(discItem);
 		}
@@ -217,11 +213,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		private void OnPlaylistChanged(Disc disc)
+		private void OnPlaylistChanged(BaseSongListEventArgs e)
 		{
-			if (disc != null)
+			if (e.DiscId != null)
 			{
-				SwitchToDisc(disc);
+				SwitchToDisc(e.DiscId);
 			}
 		}
 	}

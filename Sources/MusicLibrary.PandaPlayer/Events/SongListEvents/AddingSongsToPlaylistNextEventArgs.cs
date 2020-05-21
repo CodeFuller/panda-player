@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.Events.SongListEvents
 {
 	public class AddingSongsToPlaylistNextEventArgs : AddingSongsToPlaylistEventArgs
 	{
-		public AddingSongsToPlaylistNextEventArgs(IEnumerable<Song> songs)
+		public AddingSongsToPlaylistNextEventArgs(IEnumerable<SongModel> songs)
 			: base(songs)
 		{
 		}

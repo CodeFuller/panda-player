@@ -2,7 +2,7 @@
 using CF.Library.Core.Interfaces;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using MusicLibrary.PandaPlayer.ContentUpdate;
+using MusicLibrary.Logic.Interfaces.Services;
 using MusicLibrary.PandaPlayer.Events.SongEvents;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
@@ -14,8 +14,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public override ICommand PlayFromSongCommand { get; }
 
-		public ExplorerSongListViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
-			: base(libraryContentUpdater, viewNavigator, windowService)
+		public ExplorerSongListViewModel(ISongsService songsService, IViewNavigator viewNavigator, IWindowService windowService)
+			: base(songsService, viewNavigator, windowService)
 		{
 			PlayFromSongCommand = new RelayCommand(PlayDiscFromSong);
 		}

@@ -1,24 +1,24 @@
 ﻿using System.Windows.Input;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
 	public interface ISongPlaylistViewModel : ISongListViewModel
 	{
-		Song CurrentSong { get; }
+		SongModel CurrentSong { get; }
 
 		int? CurrentSongIndex { get; }
 
 		/// <summary>
-		/// If all songs in playlist belong to one Disc, returns this Disc.
-		/// Returns null otherwise.
+		/// Gets id of currently playing disc, if all songs in playlist belong to one disc
+		/// Otherwise, returns null.
 		/// </summary>
-		Disc PlayedDisc { get; }
+		ItemId PlayingDiscId { get; }
 
 		ICommand NavigateToSongDiscCommand { get; }
 
 		void SwitchToNextSong();
 
-		void SwitchToSong(Song song);
+		void SwitchToSong(SongModel song);
 	}
 }

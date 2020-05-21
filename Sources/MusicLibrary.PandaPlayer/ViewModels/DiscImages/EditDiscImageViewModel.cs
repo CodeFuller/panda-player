@@ -5,26 +5,24 @@ using System.Windows.Input;
 using CF.Library.Core.Facades;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Extensions.Options;
 using MusicLibrary.Common.Images;
-using MusicLibrary.Core.Interfaces;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.PandaPlayer.Events.DiscEvents;
+using MusicLibrary.Logic.Interfaces.Services;
+using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 {
 	public class EditDiscImageViewModel : ViewModelBase, IEditDiscImageViewModel
 	{
-		private readonly IMusicLibrary musicLibrary;
+		private readonly IDiscsService discsService;
 		private readonly IDocumentDownloader documentDownloader;
 		private readonly IImageFile imageFile;
 		private readonly IFileSystemFacade fileSystemFacade;
 		private readonly IWebBrowser webBrowser;
 		private readonly PandaPlayerSettings settings;
 
-		public Disc Disc { get; private set; }
+		public DiscModel Disc { get; private set; }
 
 		public string ImageFileName => imageFile.ImageFileName;
 
@@ -44,10 +42,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 
 		public ICommand LaunchSearchForDiscImageCommand { get; }
 
-		public EditDiscImageViewModel(IMusicLibrary musicLibrary, IDocumentDownloader documentDownloader, IImageFile imageFile,
+		public EditDiscImageViewModel(IDiscsService discsService, IDocumentDownloader documentDownloader, IImageFile imageFile,
 			IFileSystemFacade fileSystemFacade, IWebBrowser webBrowser, IOptions<PandaPlayerSettings> options)
 		{
-			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
 			this.documentDownloader = documentDownloader ?? throw new ArgumentNullException(nameof(documentDownloader));
 			this.imageFile = imageFile ?? throw new ArgumentNullException(nameof(imageFile));
 			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
@@ -59,8 +57,12 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 			LaunchSearchForDiscImageCommand = new RelayCommand(LaunchSearchForDiscCoverImage);
 		}
 
-		public async Task Load(Disc disc)
+		public async Task Load(DiscModel disc)
 		{
+			// TODO: Restore this functionality
+			await Task.CompletedTask;
+
+/*
 			Disc = disc;
 			imageFile.Unload();
 
@@ -75,6 +77,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 			}
 
 			ImageWasChanged = false;
+*/
 		}
 
 		public void Unload()
@@ -100,8 +103,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 				throw new InvalidOperationException("Image was not changed");
 			}
 
-			await musicLibrary.SetDiscCoverImage(Disc, imageFile.ImageInfo);
-			Messenger.Default.Send(new DiscImageChangedEventArgs(Disc));
+			// TODO: Restore this functionality
+			await Task.CompletedTask;
+
+			// await musicLibrary.SetDiscCoverImage(Disc, imageFile.ImageInfo);
+			// Messenger.Default.Send(new DiscImageChangedEventArgs(Disc));
 		}
 
 		public async Task SetImage(Uri imageUri)
@@ -139,10 +145,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 		{
 			foreach (var discCoverSearchPageStub in settings.DiscCoverImageLookupPages)
 			{
-				string discCoverSearchPage = discCoverSearchPageStub;
-				discCoverSearchPage = discCoverSearchPage.Replace("{DiscArtist}", Uri.EscapeDataString(Disc.Artist?.Name ?? String.Empty), StringComparison.Ordinal);
-				discCoverSearchPage = discCoverSearchPage.Replace("{DiscTitle}", Uri.EscapeDataString(Disc.AlbumTitle ?? String.Empty), StringComparison.Ordinal);
-				webBrowser.OpenPage(discCoverSearchPage);
+				// TODO: Restore this functionality
+				// string discCoverSearchPage = discCoverSearchPageStub;
+				// discCoverSearchPage = discCoverSearchPage.Replace("{DiscArtist}", Uri.EscapeDataString(Disc.Artist?.Name ?? String.Empty), StringComparison.Ordinal);
+				// discCoverSearchPage = discCoverSearchPage.Replace("{DiscTitle}", Uri.EscapeDataString(Disc.AlbumTitle ?? String.Empty), StringComparison.Ordinal);
+				// webBrowser.OpenPage(discCoverSearchPage);
 			}
 		}
 	}

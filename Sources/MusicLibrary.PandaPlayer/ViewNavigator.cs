@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using CF.Library.Core.Enums;
 using CF.Library.Core.Interfaces;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.PandaPlayer.Views;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
@@ -27,42 +27,43 @@ namespace MusicLibrary.PandaPlayer
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
 		}
 
-		public void ShowRateDiscView(Disc disc)
+		public void ShowRatePlaylistSongsView(IEnumerable<SongModel> songs)
 		{
-			var unratedSongsNumber = disc.Songs.Count(s => s.Rating == null);
+			var songsList = songs.ToList();
+			var unratedSongsNumber = songsList.Count(s => s.Rating == null);
 			if (unratedSongsNumber == 0)
 			{
 				throw new InvalidOperationException("All disc songs are already rated");
 			}
 
-			if (unratedSongsNumber == disc.Songs.Count())
+			if (unratedSongsNumber == songsList.Count)
 			{
-				var rateDiscViewModel = viewModelHolder.RateDiscViewModel;
-				rateDiscViewModel.Load(disc);
-				ShowDialog<RateDiscView>(rateDiscViewModel);
+				var viewModel = viewModelHolder.RateSongsViewModel;
+				viewModel.Load(songsList);
+				ShowDialog<RateSongsView>(viewModel);
 			}
 			else
 			{
-				var message = Current($"You've just finished listening of disc '{disc.Title}' that have some songs still unrated. Please devote some time and rate them.");
-				windowService.ShowMessageBox(message, "Rate listened disc", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation);
+				var message = Current($"You've just finished listening of playlist that have some songs unrated. Please devote some time and rate them.");
+				windowService.ShowMessageBox(message, "Rate listened songs", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation);
 			}
 		}
 
-		public void ShowDiscPropertiesView(Disc disc)
+		public void ShowDiscPropertiesView(DiscModel disc)
 		{
 			var viewModel = viewModelHolder.EditDiscPropertiesViewModel;
 			viewModel.Load(disc);
 			ShowDialog<EditDiscPropertiesView>(viewModel);
 		}
 
-		public async Task ShowSongPropertiesView(IEnumerable<Song> songs, CancellationToken cancellationToken)
+		public async Task ShowSongPropertiesView(IEnumerable<SongModel> songs, CancellationToken cancellationToken)
 		{
 			var viewModel = viewModelHolder.EditSongPropertiesViewModel;
 			await viewModel.Load(songs, cancellationToken);
 			ShowDialog<EditSongPropertiesView>(viewModel);
 		}
 
-		public async Task ShowEditDiscImageView(Disc disc)
+		public async Task ShowEditDiscImageView(DiscModel disc)
 		{
 			var viewModel = viewModelHolder.EditDiscImageViewModel;
 			await viewModel.Load(disc);

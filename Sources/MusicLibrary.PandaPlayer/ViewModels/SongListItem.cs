@@ -1,12 +1,12 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {
 	public class SongListItem : ViewModelBase
 	{
-		public Song Song { get; }
+		public SongModel Song { get; }
 
 		private bool isCurrentlyPlayed;
 
@@ -16,20 +16,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			set => Set(ref isCurrentlyPlayed, value);
 		}
 
-		public DateTime? LastPlaybackTime => Song.LastPlaybackTime;
+		public DateTimeOffset? LastPlaybackTime => Song.LastPlaybackTime;
 
 		public int PlaybacksCount => Song.PlaybacksCount;
 
-		public SongListItem(Song song)
+		public SongListItem(SongModel song)
 		{
-			Song = song;
-		}
-
-		public void AddPlaybackForCurrentSong(DateTime playbackDateTime)
-		{
-			Song.AddPlayback(playbackDateTime);
-			RaisePropertyChanged(nameof(LastPlaybackTime));
-			RaisePropertyChanged(nameof(PlaybacksCount));
+			Song = song ?? throw new ArgumentNullException(nameof(song));
 		}
 	}
 }

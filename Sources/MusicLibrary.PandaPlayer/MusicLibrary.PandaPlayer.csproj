@@ -32,6 +32,7 @@
     <ProjectReference Include="..\MusicLibrary.Dal.LocalDb\MusicLibrary.Dal.LocalDb.csproj" />
     <ProjectReference Include="..\MusicLibrary.LastFM\MusicLibrary.LastFM.csproj" />
     <ProjectReference Include="..\MusicLibrary.Library\MusicLibrary.Library.csproj" />
+    <ProjectReference Include="..\MusicLibrary.Logic\MusicLibrary.Logic.csproj" />
     <ProjectReference Include="..\MusicLibrary.Tagger\MusicLibrary.Tagger.csproj" />
   </ItemGroup>
 

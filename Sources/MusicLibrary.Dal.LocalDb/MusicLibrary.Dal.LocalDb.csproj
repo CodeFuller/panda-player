@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ImportGroup Label="Properties">
     <Import Project="..\..\MusicLibrary.props" />
@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MusicLibrary.Dal.Abstractions\MusicLibrary.Dal.Abstractions.csproj" />
     <ProjectReference Include="..\MusicLibrary.Dal\MusicLibrary.Dal.csproj" />
+    <ProjectReference Include="..\MusicLibrary.Logic\MusicLibrary.Logic.csproj" />
   </ItemGroup>
 
 </Project>

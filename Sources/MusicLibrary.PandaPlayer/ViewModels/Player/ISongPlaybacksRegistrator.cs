@@ -1,12 +1,13 @@
-﻿using System.Threading.Tasks;
-using MusicLibrary.Core.Objects;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Player
 {
 	public interface ISongPlaybacksRegistrator
 	{
-		Task RegisterPlaybackStart(Song song);
+		Task RegisterPlaybackStart(SongModel song, CancellationToken cancellationToken);
 
-		Task RegisterPlaybackFinish(Song song);
+		Task RegisterPlaybackFinish(SongModel song, CancellationToken cancellationToken);
 	}
 }

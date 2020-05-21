@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Threading;
+using System.Windows;
 using System.Windows.Input;
 using CF.Library.Wpf.Extensions;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -24,7 +25,7 @@ namespace MusicLibrary.PandaPlayer.Views
 
 		private async void Save_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			await ViewModel.Save();
+			await ViewModel.Save(CancellationToken.None);
 			DialogResult = true;
 			e.Handled = true;
 		}

@@ -1,15 +1,15 @@
 ﻿using System;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.Events.SongEvents
 {
 	public abstract class BaseSongEventArgs : EventArgs
 	{
-		public Song Song { get; }
+		public SongModel Song { get; }
 
-		protected BaseSongEventArgs(Song song)
+		protected BaseSongEventArgs(SongModel song)
 		{
-			Song = song;
+			Song = song ?? throw new ArgumentNullException(nameof(song));
 		}
 	}
 }

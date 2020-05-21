@@ -1,50 +1,48 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
-using MusicLibrary.Core;
-using MusicLibrary.Core.Interfaces;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.PandaPlayer.ContentUpdate;
+using MusicLibrary.Logic.Interfaces.Services;
+using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {
 	public class EditDiscPropertiesViewModel : ViewModelBase, IEditDiscPropertiesViewModel
 	{
-		private readonly ILibraryStructurer libraryStructurer;
-		private readonly ILibraryContentUpdater libraryContentUpdater;
+		private readonly IDiscsService discsService;
 
-		private Disc Disc { get; set; }
+		private DiscModel Disc { get; set; }
 
-		private string folderName;
+		private string title;
 
-		public string FolderName
+		public string Title
 		{
-			get => folderName;
+			get => title;
 			set
 			{
 				if (String.IsNullOrWhiteSpace(value))
 				{
-					throw new InvalidOperationException("Value of Disc folder name could not be empty");
+					throw new InvalidOperationException("Value of disc title could not be empty");
 				}
 
-				Set(ref folderName, value);
+				Set(ref title, value);
 			}
 		}
 
-		private string discTitle;
+		private string treeTitle;
 
-		public string DiscTitle
+		public string TreeTitle
 		{
-			get => discTitle;
+			get => treeTitle;
 			set
 			{
 				if (String.IsNullOrWhiteSpace(value))
 				{
-					throw new InvalidOperationException("Value of Disc title could not be empty");
+					throw new InvalidOperationException("Value of disc tree title could not be empty");
 				}
 
-				Set(ref discTitle, value);
+				Set(ref treeTitle, value);
 			}
 		}
 
@@ -64,38 +62,22 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		public EditDiscPropertiesViewModel(ILibraryStructurer libraryStructurer, ILibraryContentUpdater libraryContentUpdater)
+		public EditDiscPropertiesViewModel(IDiscsService discsService)
 		{
-			this.libraryStructurer = libraryStructurer ?? throw new ArgumentNullException(nameof(libraryStructurer));
-			this.libraryContentUpdater = libraryContentUpdater ?? throw new ArgumentNullException(nameof(libraryContentUpdater));
+			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
 		}
 
-		public void Load(Disc disc)
+		public void Load(DiscModel disc)
 		{
 			Disc = disc;
-			FolderName = libraryStructurer.GetDiscFolderName(disc.Uri);
-			DiscTitle = disc.Title;
+			Title = disc.Title;
+			TreeTitle = disc.TreeTitle;
 			AlbumTitle = disc.AlbumTitle;
 		}
 
-		public async Task Save()
+		public async Task Save(CancellationToken cancellationToken)
 		{
-			var updatedProperties = UpdatedSongProperties.None;
-			if (!String.Equals(Disc.AlbumTitle, AlbumTitle, StringComparison.Ordinal))
-			{
-				updatedProperties |= UpdatedSongProperties.Album;
-			}
-
-			Disc.Title = DiscTitle;
-			Disc.AlbumTitle = AlbumTitle;
-
-			var originalDiscFolderName = libraryStructurer.GetDiscFolderName(Disc.Uri);
-			if (!String.Equals(originalDiscFolderName, FolderName, StringComparison.Ordinal))
-			{
-				await libraryContentUpdater.ChangeDiscUri(Disc, libraryStructurer.ReplaceDiscPartInUri(Disc.Uri, FolderName));
-			}
-
-			await libraryContentUpdater.UpdateDisc(Disc, updatedProperties);
+			await discsService.UpdateDisc(Disc, cancellationToken);
 		}
 	}
 }

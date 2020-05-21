@@ -1,27 +1,23 @@
-﻿using System;
-using MusicLibrary.Core.Objects;
+﻿using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 {
 	public class PlaylistSongData
 	{
-		public int Id { get; set; }
-
-		public Uri Uri { get; set; }
+		public string Id { get; set; }
 
 		public PlaylistSongData()
 		{
 		}
 
-		public PlaylistSongData(Song song)
+		public PlaylistSongData(SongModel song)
 		{
-			Id = song.Id;
-			Uri = song.Uri;
+			Id = song.Id.Value;
 		}
 
-		public bool Matches(Song song)
+		public bool Matches(SongModel song)
 		{
-			return Id == song.Id && Uri == song.Uri;
+			return Id == song.Id.Value;
 		}
 	}
 }

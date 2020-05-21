@@ -13,8 +13,8 @@ using CF.Library.Wpf;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.PandaPlayer.ContentUpdate;
+using MusicLibrary.Logic.Interfaces.Services;
+using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
@@ -22,7 +22,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 {
 	public abstract class SongListViewModel : ViewModelBase, ISongListViewModel
 	{
-		private readonly ILibraryContentUpdater libraryContentUpdater;
+		private readonly ISongsService songsService;
 		private readonly IViewNavigator viewNavigator;
 		private readonly IWindowService windowService;
 
@@ -32,7 +32,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public ReadOnlyObservableCollection<SongListItem> SongItems { get; }
 
-		public IEnumerable<Song> Songs => SongItems.Select(s => s.Song);
+		public IEnumerable<SongModel> Songs => SongItems.Select(s => s.Song);
 
 		private SongListItem selectedSongItem;
 
@@ -46,7 +46,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public int SongsNumber => Songs.Count();
 
-		public long TotalSongsFileSize => Songs.Select(s => (long)s.FileSize).Sum();
+		public long TotalSongsFileSize => Songs.Select(s => s.Size ?? 0).Sum();
 
 		public TimeSpan TotalSongsDuration => Songs.Aggregate(TimeSpan.Zero, (currSum, currSong) => currSum + currSong.Duration);
 
@@ -61,7 +61,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			set => Set(ref selectedSongItems, value);
 		}
 
-		public IEnumerable<Song> SelectedSongs => SelectedSongItems.OfType<SongListItem>().Select(it => it.Song);
+		public IEnumerable<SongModel> SelectedSongs => SelectedSongItems.OfType<SongListItem>().Select(it => it.Song);
 
 		public ICommand PlaySongsNextCommand { get; }
 
@@ -75,9 +75,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public IReadOnlyCollection<SetRatingMenuItem> SetRatingMenuItems { get; }
 
-		protected SongListViewModel(ILibraryContentUpdater libraryContentUpdater, IViewNavigator viewNavigator, IWindowService windowService)
+		protected SongListViewModel(ISongsService songsService, IViewNavigator viewNavigator, IWindowService windowService)
 		{
-			this.libraryContentUpdater = libraryContentUpdater ?? throw new ArgumentNullException(nameof(libraryContentUpdater));
+			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
 
@@ -86,9 +86,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 			PlaySongsNextCommand = new RelayCommand(PlaySongsNext);
 			PlaySongsLastCommand = new RelayCommand(PlaySongsLast);
-			DeleteSongsFromDiscCommand = new AsyncRelayCommand(DeleteSongsFromDisc);
+			DeleteSongsFromDiscCommand = new AsyncRelayCommand(() => DeleteSongsFromDisc(CancellationToken.None));
 			EditSongsPropertiesCommand = new AsyncRelayCommand(EditSongsProperties);
-			SetRatingMenuItems = RatingsHelper.AllowedRatingsDesc.Select(r => new SetRatingMenuItem(this, r)).ToList();
+			SetRatingMenuItems = RatingModel.All.Select(r => new SetRatingMenuItem(this, r)).ToList();
 		}
 
 		protected virtual void OnSongItemsChanged()
@@ -99,7 +99,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			RaisePropertyChanged(nameof(TotalSongsDuration));
 		}
 
-		internal async Task DeleteSongsFromDisc()
+		internal async Task DeleteSongsFromDisc(CancellationToken cancellationToken)
 		{
 			var selectedSongs = SelectedSongs.ToList();
 			if (!selectedSongs.Any())
@@ -115,10 +115,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 			foreach (var song in selectedSongs)
 			{
-				await libraryContentUpdater.DeleteSong(song);
+				await songsService.DeleteSong(song, cancellationToken);
 				for (var i = 0; i < songItems.Count;)
 				{
-					if (Object.ReferenceEquals(songItems[i].Song, song))
+					if (songItems[i].Song.Id == song.Id)
 					{
 						songItems.RemoveAt(i);
 					}
@@ -141,19 +141,19 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		public virtual void SetSongs(IEnumerable<Song> newSongs)
+		public virtual void SetSongs(IEnumerable<SongModel> newSongs)
 		{
 			songItems.Clear();
 			AddSongs(newSongs);
 		}
 
-		protected void AddSongs(IEnumerable<Song> addedSongs)
+		protected void AddSongs(IEnumerable<SongModel> addedSongs)
 		{
 			songItems.AddRange(addedSongs.Select(song => new SongListItem(song)));
 			OnSongItemsChanged();
 		}
 
-		protected void InsertSongs(int index, IEnumerable<Song> addedSongs)
+		protected void InsertSongs(int index, IEnumerable<SongModel> addedSongs)
 		{
 			foreach (var song in addedSongs)
 			{
@@ -163,12 +163,16 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			OnSongItemsChanged();
 		}
 
-		public async Task SetRatingForSelectedSongs(Rating rating)
+		public async Task SetRatingForSelectedSongs(RatingModel rating, CancellationToken cancellationToken)
 		{
 			var updatedSongs = SelectedSongs.ToList();
 			if (updatedSongs.Any())
 			{
-				await libraryContentUpdater.SetSongsRating(updatedSongs, rating);
+				foreach (var song in updatedSongs)
+				{
+					song.Rating = rating;
+					await songsService.UpdateSong(song, UpdatedSongPropertiesModel.Rating, cancellationToken);
+				}
 			}
 		}
 
@@ -182,7 +186,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			AddSongsToPlaylist(songs => new AddingSongsToPlaylistLastEventArgs(songs));
 		}
 
-		private void AddSongsToPlaylist<TAddingSongsToPlaylistEventArgs>(Func<IEnumerable<Song>, TAddingSongsToPlaylistEventArgs> eventFactory)
+		private void AddSongsToPlaylist<TAddingSongsToPlaylistEventArgs>(Func<IEnumerable<SongModel>, TAddingSongsToPlaylistEventArgs> eventFactory)
 			where TAddingSongsToPlaylistEventArgs : AddingSongsToPlaylistEventArgs
 		{
 			var selectedSongs = SelectedSongs.ToList();

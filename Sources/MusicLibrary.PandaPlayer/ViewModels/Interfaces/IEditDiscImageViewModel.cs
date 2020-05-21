@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
 	public interface IEditDiscImageViewModel
 	{
-		Disc Disc { get; }
+		DiscModel Disc { get; }
 
 		string ImageFileName { get; }
 
@@ -22,7 +22,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		void SetImage(byte[] imageData);
 
-		Task Load(Disc disc);
+		Task Load(DiscModel disc);
 
 		void Unload();
 

@@ -8,18 +8,18 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public IEditSongPropertiesViewModel EditSongPropertiesViewModel { get; }
 
-		public IRateDiscViewModel RateDiscViewModel { get; }
+		public IRateSongsViewModel RateSongsViewModel { get; }
 
 		public IEditDiscImageViewModel EditDiscImageViewModel { get; }
 
 		public ILibraryStatisticsViewModel LibraryStatisticsViewModel { get; }
 
 		public NavigatedViewModelHolder(IEditDiscPropertiesViewModel editDiscPropertiesViewModel, IEditSongPropertiesViewModel editSongPropertiesViewModel,
-			IRateDiscViewModel rateDiscViewModel, IEditDiscImageViewModel editDiscImageViewModel, ILibraryStatisticsViewModel libraryStatisticsViewModel)
+			IRateSongsViewModel rateSongsViewModel, IEditDiscImageViewModel editDiscImageViewModel, ILibraryStatisticsViewModel libraryStatisticsViewModel)
 		{
 			EditDiscPropertiesViewModel = editDiscPropertiesViewModel;
 			EditSongPropertiesViewModel = editSongPropertiesViewModel;
-			RateDiscViewModel = rateDiscViewModel;
+			RateSongsViewModel = rateSongsViewModel;
 			EditDiscImageViewModel = editDiscImageViewModel;
 			LibraryStatisticsViewModel = libraryStatisticsViewModel;
 		}

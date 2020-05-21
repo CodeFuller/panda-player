@@ -1,36 +1,37 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using CF.Library.Core.Facades;
-using MusicLibrary.Core.Interfaces;
-using MusicLibrary.Core.Objects;
 using MusicLibrary.LastFM;
 using MusicLibrary.LastFM.Objects;
+using MusicLibrary.Logic.Interfaces.Services;
+using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Player
 {
 	public class SongPlaybacksRegistrator : ISongPlaybacksRegistrator
 	{
-		private readonly IMusicLibrary musicLibrary;
+		private readonly ISongsService songsService;
 		private readonly IScrobbler scrobbler;
 		private readonly IClock clock;
 
-		public SongPlaybacksRegistrator(IMusicLibrary musicLibrary, IScrobbler scrobbler, IClock clock)
+		public SongPlaybacksRegistrator(ISongsService songsService, IScrobbler scrobbler, IClock clock)
 		{
-			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
 			this.scrobbler = scrobbler ?? throw new ArgumentNullException(nameof(scrobbler));
 			this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
 		}
 
-		public async Task RegisterPlaybackStart(Song song)
+		public async Task RegisterPlaybackStart(SongModel song, CancellationToken cancellationToken)
 		{
 			await scrobbler.UpdateNowPlaying(GetTrackFromSong(song));
 		}
 
-		public async Task RegisterPlaybackFinish(Song song)
+		public async Task RegisterPlaybackFinish(SongModel song, CancellationToken cancellationToken)
 		{
+			// TBD: IClock returns DateTime, not DateTimeOffset
 			var playbackDateTime = clock.Now;
-			song.AddPlayback(playbackDateTime);
-			await musicLibrary.AddSongPlayback(song, playbackDateTime);
+			await songsService.AddSongPlayback(song, playbackDateTime, cancellationToken);
 
 			var scrobble = new TrackScrobble
 			{
@@ -42,7 +43,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 			await scrobbler.Scrobble(scrobble);
 		}
 
-		private static Track GetTrackFromSong(Song song)
+		private static Track GetTrackFromSong(SongModel song)
 		{
 			return new Track
 			{

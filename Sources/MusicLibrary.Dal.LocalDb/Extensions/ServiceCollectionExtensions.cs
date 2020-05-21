@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using MusicLibrary.Dal.Abstractions.Interfaces;
 using MusicLibrary.Dal.Extensions;
 using MusicLibrary.Logic.Interfaces.Dal;
 
@@ -14,6 +13,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 
 			services.AddSingleton<IFoldersRepository, FoldersRepository>();
 			services.AddSingleton<IDiscsRepository, DiscsRepository>();
+			services.AddSingleton<ISongsRepository, SongsRepository>();
 			services.AddSingleton<IGenresRepository, GenresRepository>();
 			services.AddSingleton<IArtistsRepository, ArtistsRepository>();
 			services.AddSingleton<IStatisticsRepository, StatisticsRepository>();

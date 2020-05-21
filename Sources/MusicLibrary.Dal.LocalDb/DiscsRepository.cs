@@ -4,9 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using MusicLibrary.Core.Interfaces;
 using MusicLibrary.Core.Objects;
-using MusicLibrary.Dal.Abstractions.Dto;
-using MusicLibrary.Dal.Abstractions.Interfaces;
 using MusicLibrary.Dal.LocalDb.Extensions;
+using MusicLibrary.Logic.Interfaces.Dal;
+using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.Dal.LocalDb
 {
@@ -22,6 +22,18 @@ namespace MusicLibrary.Dal.LocalDb
 			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
 		}
 
+		public Task<DiscModel> GetDisc(ItemId discId, CancellationToken cancellationToken)
+		{
+			var disc = FindDisc(discId);
+			return Task.FromResult(disc.ToModel());
+		}
+
+		public Task UpdateDisc(DiscModel discModel, CancellationToken cancellationToken)
+		{
+			// TODO: Implement
+			throw new NotImplementedException();
+		}
+
 		public Task DeleteDisc(ItemId discId, CancellationToken cancellationToken)
 		{
 			var disc = FindDisc(discId);
@@ -30,7 +42,7 @@ namespace MusicLibrary.Dal.LocalDb
 
 		private Disc FindDisc(ItemId discId)
 		{
-			return discLibrary.Discs.Single(d => d.Uri.ToItemId() == discId);
+			return discLibrary.Discs.Single(d => d.Id.ToItemId() == discId);
 		}
 	}
 }

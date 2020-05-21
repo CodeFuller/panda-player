@@ -1,13 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Wpf;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using MusicLibrary.Core.Interfaces;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Interfaces.Services;
+using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
@@ -15,7 +16,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 {
 	public class MusicPlayerViewModel : ViewModelBase, IMusicPlayerViewModel
 	{
-		private readonly IMusicLibrary musicLibrary;
+		private readonly ISongsService songsService;
 		private readonly ISongPlaybacksRegistrator playbacksRegistrator;
 		private readonly IAudioPlayer audioPlayer;
 
@@ -68,15 +69,15 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 		/// <summary>
 		/// Gets the song, which is currently loaded into audio player.
 		/// </summary>
-		public Song CurrentSong { get; private set; }
+		public SongModel CurrentSong { get; private set; }
 
 		public ICommand PlayCommand { get; }
 
 		public ICommand PauseCommand { get; }
 
-		public MusicPlayerViewModel(IMusicLibrary musicLibrary, ISongPlaylistViewModel playlist, IAudioPlayer audioPlayer, ISongPlaybacksRegistrator playbacksRegistrator)
+		public MusicPlayerViewModel(ISongsService songsService, ISongPlaylistViewModel playlist, IAudioPlayer audioPlayer, ISongPlaybacksRegistrator playbacksRegistrator)
 		{
-			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
+			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
 			this.Playlist = playlist ?? throw new ArgumentNullException(nameof(playlist));
 			this.audioPlayer = audioPlayer ?? throw new ArgumentNullException(nameof(audioPlayer));
 			this.playbacksRegistrator = playbacksRegistrator ?? throw new ArgumentNullException(nameof(playbacksRegistrator));
@@ -92,13 +93,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 		{
 			if (CurrentSong == null)
 			{
-				Song currSong = Playlist.CurrentSong;
-				if (currSong == null)
+				var currentSong = Playlist.CurrentSong;
+				if (currentSong == null)
 				{
 					return;
 				}
 
-				await SwitchToNewSong(currSong);
+				await SwitchToNewSong(currentSong);
 			}
 
 			IsPlaying = true;
@@ -123,10 +124,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 
 		private async void AudioPlayer_SongFinished(object sender, SongMediaFinishedEventArgs eventArgs)
 		{
-			Song currSong = Playlist.CurrentSong;
+			var currSong = Playlist.CurrentSong;
 			if (currSong != null)
 			{
-				await playbacksRegistrator.RegisterPlaybackFinish(currSong);
+				await playbacksRegistrator.RegisterPlaybackFinish(currSong, CancellationToken.None);
 			}
 
 			CurrentSong = null;
@@ -144,12 +145,12 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 			await Play();
 		}
 
-		private async Task SwitchToNewSong(Song newSong)
+		private async Task SwitchToNewSong(SongModel newSong)
 		{
 			CurrentSong = newSong;
-			var songFileName = await musicLibrary.GetSongFile(newSong);
+			var songFileName = await songsService.GetSongFile(newSong, CancellationToken.None);
 			audioPlayer.SetCurrentSongFile(songFileName);
-			await playbacksRegistrator.RegisterPlaybackStart(newSong);
+			await playbacksRegistrator.RegisterPlaybackStart(newSong, CancellationToken.None);
 		}
 
 		private void AudioPlayer_PropertyChanged(object sender, PropertyChangedEventArgs e)

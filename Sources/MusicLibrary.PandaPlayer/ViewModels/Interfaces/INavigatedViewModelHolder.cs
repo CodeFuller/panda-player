@@ -6,7 +6,7 @@
 
 		IEditSongPropertiesViewModel EditSongPropertiesViewModel { get; }
 
-		IRateDiscViewModel RateDiscViewModel { get; }
+		IRateSongsViewModel RateSongsViewModel { get; }
 
 		IEditDiscImageViewModel EditDiscImageViewModel { get; }
 

@@ -18,7 +18,6 @@ using MusicLibrary.LastFM;
 using MusicLibrary.Library;
 using MusicLibrary.Logic;
 using MusicLibrary.PandaPlayer.Adviser;
-using MusicLibrary.PandaPlayer.ContentUpdate;
 using MusicLibrary.PandaPlayer.ViewModels;
 using MusicLibrary.PandaPlayer.ViewModels.DiscImages;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -68,7 +67,7 @@ namespace MusicLibrary.PandaPlayer
 			services.AddSingleton<IEditSongPropertiesViewModel, EditSongPropertiesViewModel>();
 			services.AddSingleton<IMusicPlayerViewModel, MusicPlayerViewModel>();
 			services.AddSingleton<IDiscAdviserViewModel, DiscAdviserViewModel>();
-			services.AddSingleton<IRateDiscViewModel, RateDiscViewModel>();
+			services.AddSingleton<IRateSongsViewModel, RateSongsViewModel>();
 			services.AddSingleton<IDiscImageViewModel, DiscImageViewModel>();
 			services.AddSingleton<IEditDiscImageViewModel, EditDiscImageViewModel>();
 			services.AddSingleton<ILibraryStatisticsViewModel, LibraryStatisticsViewModel>();
@@ -78,7 +77,6 @@ namespace MusicLibrary.PandaPlayer
 			services.AddTransient<ITimerFacade, TimerFacade>(sp => new TimerFacade());
 			services.AddTransient<ITokenAuthorizer, DefaultBrowserTokenAuthorizer>();
 			services.AddTransient<ILastFMApiClient, LastFMApiClient>();
-			services.AddTransient<ILibraryContentUpdater, LibraryContentUpdater>();
 			services.AddSingleton<IViewNavigator, ViewNavigator>();
 			services.AddTransient<ILibraryStructurer, LibraryStructurer>();
 			services.AddTransient<IWindowService, WpfWindowService>();

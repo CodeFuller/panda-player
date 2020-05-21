@@ -4,29 +4,23 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
-using MusicLibrary.Core;
-using MusicLibrary.Core.Interfaces;
-using MusicLibrary.Core.Objects;
 using MusicLibrary.Logic.Interfaces.Services;
 using MusicLibrary.Logic.Models;
-using MusicLibrary.PandaPlayer.ContentUpdate;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {
 	public class EditSongPropertiesViewModel : ViewModelBase, IEditSongPropertiesViewModel
 	{
+		private readonly ISongsService songsService;
 		private readonly IGenresService genresService;
 		private readonly IArtistsService artistsService;
 
-		private readonly ILibraryStructurer libraryStructurer;
-		private readonly ILibraryContentUpdater libraryContentUpdater;
-
-		private List<Song> editedSongs;
+		private List<SongModel> editedSongs;
 
 		public bool SingleSongMode => editedSongs.Count == 1;
 
-		private Song SingleSong
+		private SongModel SingleSong
 		{
 			get
 			{
@@ -39,38 +33,24 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		private string fileName;
+		private string treeTitle;
 
-		public string FileName
+		public string TreeTitle
 		{
-			get => fileName;
+			get => treeTitle;
 			set
 			{
 				if (!SingleSongMode)
 				{
-					throw new InvalidOperationException("File name could not be edited in multi-song mode");
+					throw new InvalidOperationException("Tree title could not be edited in multi-song mode");
 				}
 
 				if (String.IsNullOrWhiteSpace(value))
 				{
-					throw new InvalidOperationException("Value of song file name could not be empty");
+					throw new InvalidOperationException("Value of song tree title could not be empty");
 				}
 
-				Set(ref fileName, value);
-			}
-		}
-
-		private Uri UpdatedSongUri
-		{
-			get
-			{
-				if (!SingleSongMode)
-				{
-					throw new InvalidOperationException("Uri could not be updated in multi-song mode");
-				}
-
-				return String.Equals(FileName, GetSongFileName(SingleSong), StringComparison.Ordinal) ?
-					null : libraryStructurer.BuildSongUri(SingleSong.Disc.Uri, FileName);
+				Set(ref treeTitle, value);
 			}
 		}
 
@@ -95,11 +75,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		public EditedSongProperty<Artist> Artist { get; set; }
+		public EditedSongProperty<ArtistModel> Artist { get; set; }
 
-		public EditedSongProperty<Genre> Genre { get; set; }
-
-		public EditedSongProperty<short?> Year { get; set; }
+		public EditedSongProperty<GenreModel> Genre { get; set; }
 
 		public EditedSongProperty<short?> TrackNumber { get; set; }
 
@@ -107,15 +85,14 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public IReadOnlyCollection<EditedSongProperty<GenreModel>> AvailableGenres { get; private set; }
 
-		public EditSongPropertiesViewModel(IGenresService genresService, IArtistsService artistsService, ILibraryStructurer libraryStructurer, ILibraryContentUpdater libraryContentUpdater)
+		public EditSongPropertiesViewModel(ISongsService songsService, IGenresService genresService, IArtistsService artistsService)
 		{
+			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
 			this.genresService = genresService ?? throw new ArgumentNullException(nameof(genresService));
 			this.artistsService = artistsService ?? throw new ArgumentNullException(nameof(artistsService));
-			this.libraryStructurer = libraryStructurer ?? throw new ArgumentNullException(nameof(libraryStructurer));
-			this.libraryContentUpdater = libraryContentUpdater ?? throw new ArgumentNullException(nameof(libraryContentUpdater));
 		}
 
-		public async Task Load(IEnumerable<Song> songs, CancellationToken cancellationToken)
+		public async Task Load(IEnumerable<SongModel> songs, CancellationToken cancellationToken)
 		{
 			editedSongs = songs.ToList();
 			if (editedSongs.Count == 0)
@@ -126,27 +103,24 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			AvailableArtists = await FillAvailableValues(() => artistsService.GetAllArtists(cancellationToken));
 			AvailableGenres = await FillAvailableValues(() => genresService.GetAllGenres(cancellationToken));
 
-			fileName = SingleSongMode ? GetSongFileName(SingleSong) : null;
+			treeTitle = SingleSongMode ? SingleSong.TreeTitle : null;
 			title = SingleSongMode ? SingleSong.Title : null;
-			Artist = BuildProperty(editedSongs, s => s.Artist);
-			Genre = BuildProperty(editedSongs, s => s.Genre);
-			Year = BuildProperty(editedSongs, s => s.Year);
+
+			var distinctArtistId = GetDistinctValue(editedSongs, s => s.ArtistId);
+			Artist = distinctArtistId != null ? AvailableArtists.Single(a => a.Value.Id == distinctArtistId) : null;
+
+			var distinctGenreId = GetDistinctValue(editedSongs, s => s.GenreId);
+			Genre = distinctGenreId != null ? AvailableGenres.Single(g => g.Value.Id == distinctGenreId) : null;
+
 			TrackNumber = BuildProperty(editedSongs, s => s.TrackNumber);
 		}
 
-		public async Task Save()
+		public async Task Save(CancellationToken cancellationToken)
 		{
-			// Should we rename a song?
-			if (editedSongs.Count == 1)
+			foreach (var song in GetUpdatedSongs())
 			{
-				Uri newSongUri = UpdatedSongUri;
-				if (newSongUri != null)
-				{
-					await libraryContentUpdater.ChangeSongUri(SingleSong, newSongUri);
-				}
+				await songsService.UpdateSong(song, UpdatedSongPropertiesModel.ForceTagUpdate, cancellationToken);
 			}
-
-			await libraryContentUpdater.UpdateSongs(GetUpdatedSongs(), UpdatedSongProperties.ForceTagUpdate);
 		}
 
 		private static async Task<IReadOnlyCollection<EditedSongProperty<T>>> FillAvailableValues<T>(Func<Task<IReadOnlyCollection<T>>> valuesProvider)
@@ -164,13 +138,14 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			return availableValues;
 		}
 
-		private IEnumerable<Song> GetUpdatedSongs()
+		private IEnumerable<SongModel> GetUpdatedSongs()
 		{
 			foreach (var song in editedSongs)
 			{
 				if (SingleSongMode)
 				{
 					song.Title = Title;
+					song.TreeTitle = TreeTitle;
 				}
 
 				if (Artist.HasValue)
@@ -183,11 +158,6 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 					song.Genre = Genre.Value;
 				}
 
-				if (Year.HasValue)
-				{
-					song.Year = Year.Value;
-				}
-
 				if (TrackNumber.HasValue)
 				{
 					song.TrackNumber = TrackNumber.Value;
@@ -197,15 +167,17 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		private static EditedSongProperty<T> BuildProperty<T>(IEnumerable<Song> songs, Func<Song, T> propertyAccessor)
+		private static EditedSongProperty<T> BuildProperty<T>(IEnumerable<SongModel> songs, Func<SongModel, T> propertyAccessor)
 		{
 			var propertyValues = songs.Select(propertyAccessor).Distinct().ToList();
 			return propertyValues.Count == 1 ? new EditedSongProperty<T>(propertyValues.Single()) : new EditedSongProperty<T>();
 		}
 
-		private string GetSongFileName(Song song)
+		private static T GetDistinctValue<T>(IEnumerable<SongModel> songs, Func<SongModel, T> propertyAccessor)
+			where T : class
 		{
-			return libraryStructurer.GetFileNameFromUri(song.Uri);
+			var propertyValues = songs.Select(propertyAccessor).Distinct().ToList();
+			return propertyValues.Count == 1 ? propertyValues.Single() : null;
 		}
 	}
 }

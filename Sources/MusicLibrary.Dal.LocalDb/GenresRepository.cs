@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MusicLibrary.Core.Objects;
+using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.Logic.Interfaces.Dal;
 using MusicLibrary.Logic.Models;
 
@@ -24,7 +24,7 @@ namespace MusicLibrary.Dal.LocalDb
 			var genres = discLibrary.Genres
 				.Select(g => new GenreModel
 				{
-					Id = new ItemId(g.Id.ToString(CultureInfo.InvariantCulture)),
+					Id = g.Id.ToItemId(),
 					Name = g.Name,
 				})
 				.ToList();

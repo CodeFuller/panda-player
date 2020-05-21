@@ -1,11 +1,11 @@
-﻿using MusicLibrary.Core.Objects;
+﻿using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.Events.DiscEvents
 {
 	public class DiscImageChangedEventArgs : BaseDiscEventArgs
 	{
-		public DiscImageChangedEventArgs(Disc disc)
-			: base(disc)
+		public DiscImageChangedEventArgs(ItemId discId)
+			: base(discId)
 		{
 		}
 	}

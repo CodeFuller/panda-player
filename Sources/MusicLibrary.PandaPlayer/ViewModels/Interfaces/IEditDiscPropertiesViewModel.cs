@@ -1,18 +1,19 @@
-﻿using System.Threading.Tasks;
-using MusicLibrary.Core.Objects;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
 	public interface IEditDiscPropertiesViewModel
 	{
-		string FolderName { get; set; }
+		string Title { get; set; }
 
-		string DiscTitle { get; set; }
+		string TreeTitle { get; set; }
 
 		string AlbumTitle { get; set; }
 
-		void Load(Disc disc);
+		void Load(DiscModel disc);
 
-		Task Save();
+		Task Save(CancellationToken cancellationToken);
 	}
 }

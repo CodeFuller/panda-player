@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Wpf;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
@@ -11,20 +12,20 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 	{
 		private readonly ISongListViewModel parentViewModel;
 
-		public Rating Rating { get; }
+		public RatingModel Rating { get; }
 
 		public ICommand Command { get; }
 
-		public SetRatingMenuItem(ISongListViewModel parentViewModel, Rating rating)
+		public SetRatingMenuItem(ISongListViewModel parentViewModel, RatingModel rating)
 		{
 			this.parentViewModel = parentViewModel ?? throw new ArgumentNullException(nameof(parentViewModel));
 			this.Rating = rating;
-			Command = new AsyncRelayCommand(() => SetRating(rating));
+			Command = new AsyncRelayCommand(() => SetRating(rating, CancellationToken.None));
 		}
 
-		private async Task SetRating(Rating rating)
+		private async Task SetRating(RatingModel rating, CancellationToken cancellationToken)
 		{
-			await parentViewModel.SetRatingForSelectedSongs(rating);
+			await parentViewModel.SetRatingForSelectedSongs(rating, cancellationToken);
 		}
 	}
 }

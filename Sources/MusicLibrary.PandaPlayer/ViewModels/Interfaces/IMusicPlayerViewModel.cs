@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
@@ -16,7 +16,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		ISongPlaylistViewModel Playlist { get; }
 
-		Song CurrentSong { get; }
+		SongModel CurrentSong { get; }
 
 		double Volume { get; set; }
 

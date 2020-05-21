@@ -1,4 +1,4 @@
-﻿<Window x:Class="MusicLibrary.PandaPlayer.Views.RateDiscView"
+﻿<Window x:Class="MusicLibrary.PandaPlayer.Views.RateSongsView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -15,17 +15,13 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <Label HorizontalAlignment="Center" Content="{Binding Path=DiscTitle}" ContentStringFormat="You've just finished listening of unrated disc '{0}'" />
+            <Label HorizontalAlignment="Center" Content="Do you want to rate songs just listened?" />
         </Grid>
         <Grid Grid.Row="1">
-            <Label HorizontalAlignment="Center" Content="Do you want to rate it?" />
-        </Grid>
-        <Grid Grid.Row="2">
             <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="300"
                       ItemsSource="{Binding AvailableRatings}" SelectedItem="{Binding SelectedRating}">
                 <ComboBox.ItemTemplate>
@@ -35,7 +31,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </Grid>
-        <Grid Grid.Row="3" HorizontalAlignment="Center">
+        <Grid Grid.Row="2" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <Button Content="Rate" Width="100" Margin="10" IsDefault="True" Click="RateButton_Click" />
                 <Button Content="No, Thank you" Width="100" Margin="10" IsCancel="true" />

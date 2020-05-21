@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:valueConverters="clr-namespace:MusicLibrary.PandaPlayer.Views.ValueConverters"
+             xmlns:viewModels="clr-namespace:MusicLibrary.PandaPlayer.ViewModels.Interfaces"
              xmlns:views="clr-namespace:MusicLibrary.PandaPlayer.Views"
              mc:Ignorable="d" 
-             d:DesignWidth="800" d:DesignHeight="600">
+             d:DesignWidth="800" d:DesignHeight="600" d:DataContext="{d:DesignInstance viewModels:ISongPlaylistViewModel}">
 
     <UserControl.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="G" Command="{Binding NavigateToSongDiscCommand}" />
@@ -100,14 +101,14 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Bitrate" MinWidth="60" IsReadOnly="True" Binding="{Binding Song.Bitrate, Converter={StaticResource SongBitrateValueConverter}}">
+                <DataGridTextColumn Header="Bit Rate" MinWidth="60" IsReadOnly="True" Binding="{Binding Song.BitRate, Converter={StaticResource SongBitrateValueConverter}}">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="TextBlock.TextAlignment" Value="Right"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="File Size" MinWidth="60" IsReadOnly="True" Binding="{Binding Song.FileSize, Converter={StaticResource SongFileSizeValueConverter}}">
+                <DataGridTextColumn Header="File Size" MinWidth="60" IsReadOnly="True" Binding="{Binding Song.Size, Converter={StaticResource SongFileSizeValueConverter}}">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="TextBlock.TextAlignment" Value="Right"/>

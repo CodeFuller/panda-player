@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer
 {
 	public interface IViewNavigator
 	{
-		void ShowRateDiscView(Disc disc);
+		void ShowRatePlaylistSongsView(IEnumerable<SongModel> songs);
 
-		void ShowDiscPropertiesView(Disc disc);
+		void ShowDiscPropertiesView(DiscModel disc);
 
-		Task ShowSongPropertiesView(IEnumerable<Song> songs, CancellationToken cancellationToken);
+		Task ShowSongPropertiesView(IEnumerable<SongModel> songs, CancellationToken cancellationToken);
 
-		Task ShowEditDiscImageView(Disc disc);
+		Task ShowEditDiscImageView(DiscModel disc);
 
 		Task ShowLibraryStatisticsView(CancellationToken cancellationToken);
 	}
