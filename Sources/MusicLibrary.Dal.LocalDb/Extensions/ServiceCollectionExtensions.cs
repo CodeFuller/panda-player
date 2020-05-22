@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Dal.LocalDb.Internal;
+using MusicLibrary.Dal.LocalDb.Repositories;
 using MusicLibrary.Logic.Interfaces.Dal;
 
 namespace MusicLibrary.Dal.LocalDb.Extensions

@@ -8,7 +8,7 @@ using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.Logic.Interfaces.Dal;
 using MusicLibrary.Logic.Models;
 
-namespace MusicLibrary.Dal.LocalDb
+namespace MusicLibrary.Dal.LocalDb.Repositories
 {
 	internal class GenresRepository : IGenresRepository
 	{

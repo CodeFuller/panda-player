@@ -9,7 +9,7 @@ using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Logic.Interfaces.Dal;
 using MusicLibrary.Logic.Models;
 
-namespace MusicLibrary.Dal.LocalDb
+namespace MusicLibrary.Dal.LocalDb.Repositories
 {
 	internal class DiscsRepository : IDiscsRepository
 	{

@@ -6,7 +6,7 @@ using MusicLibrary.Core.Objects;
 using MusicLibrary.Logic.Interfaces.Dal;
 using MusicLibrary.Logic.Models;
 
-namespace MusicLibrary.Dal.LocalDb
+namespace MusicLibrary.Dal.LocalDb.Repositories
 {
 	internal class StatisticsRepository : IStatisticsRepository
 	{
