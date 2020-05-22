@@ -21,7 +21,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				CoverImageUri = disc.CoverImage != null ? dataStorage.TranslateInternalUri(disc.CoverImage.Uri) : null,
 			};
 
-			discModel.Songs = new List<SongModel>(disc.Songs.Select(s => s.ToModel(discModel)));
+			discModel.Songs = new List<SongModel>(disc.Songs.Select(s => s.ToModel(discModel, dataStorage)));
 
 			return discModel;
 		}

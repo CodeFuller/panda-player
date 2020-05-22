@@ -15,7 +15,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 
 		double Volume { get; set; }
 
-		void SetCurrentSongFile(string fileName);
+		void SetCurrentSongContentUri(Uri contentUri);
 
 		void Play();
 

@@ -34,15 +34,10 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 				// TBD: We can optimize this and re-use disc objects
 				var disc = discLibrary.Discs.Single(d => d.Id == song.DiscId).ToModel(dataStorage);
 
-				songs.Add(song.ToModel(disc));
+				songs.Add(song.ToModel(disc, dataStorage));
 			}
 
 			return Task.FromResult<IReadOnlyCollection<SongModel>>(songs);
-		}
-
-		public Task<string> GetSongFile(SongModel song, CancellationToken cancellationToken)
-		{
-			throw new NotImplementedException();
 		}
 
 		public Task UpdateSong(SongModel song, UpdatedSongPropertiesModel updatedProperties, CancellationToken cancellationToken)

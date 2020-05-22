@@ -46,9 +46,12 @@ namespace MusicLibrary.LastFM
 
 		public async Task UpdateNowPlaying(Track track)
 		{
-			ValidateScrobbledTrack(track);
+			if (!CheckSession())
+			{
+				return;
+			}
 
-			CheckSession();
+			ValidateScrobbledTrack(track);
 
 			logger.LogInformation($"Updating current track: [Title: {track.Title}][Artist: {track.Artist}][Album: {track.Album.Title}]");
 
@@ -76,9 +79,12 @@ namespace MusicLibrary.LastFM
 
 		public async Task Scrobble(TrackScrobble trackScrobble)
 		{
-			ValidateScrobbledTrack(trackScrobble.Track);
+			if (!CheckSession())
+			{
+				return;
+			}
 
-			CheckSession();
+			ValidateScrobbledTrack(trackScrobble.Track);
 
 			logger.LogInformation($"Scrobbling track: [Title: {trackScrobble.Track.Title}][Artist: {trackScrobble.Track.Artist}][Album: {trackScrobble.Track.Album.Title}]");
 
@@ -217,12 +223,15 @@ namespace MusicLibrary.LastFM
 			return response.Session.Key;
 		}
 
-		private void CheckSession()
+		private bool CheckSession()
 		{
 			if (String.IsNullOrEmpty(settings.SessionKey))
 			{
-				throw new InvalidOperationException("Last.fm API Session is not opened");
+				logger.LogWarning("Session key is not set for Last.FM client. No tracks will be scrobbled");
+				return false;
 			}
+
+			return true;
 		}
 
 		private async Task<TData> PerformGetRequest<TData>(NameValueCollection requestParams, bool requiresAuth)
@@ -308,7 +317,11 @@ namespace MusicLibrary.LastFM
 			requestParamsWithSignature.Add("api_key", settings.ApiKey);
 			if (requiresAuthentication)
 			{
-				CheckSession();
+				if (String.IsNullOrEmpty(settings.SessionKey))
+				{
+					throw new InvalidOperationException("Session key for Last.FM client is not set");
+				}
+
 				requestParamsWithSignature.Add("sk", settings.SessionKey);
 			}
 

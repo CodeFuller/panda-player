@@ -36,5 +36,7 @@ namespace MusicLibrary.Logic.Models
 		public DateTimeOffset? LastPlaybackTime { get; set; }
 
 		public int PlaybacksCount { get; set; }
+
+		public Uri ContentUri { get; set; }
 	}
 }

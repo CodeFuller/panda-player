@@ -148,25 +148,24 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 		private async Task SwitchToNewSong(SongModel newSong)
 		{
 			CurrentSong = newSong;
-			var songFileName = await songsService.GetSongFile(newSong, CancellationToken.None);
-			audioPlayer.SetCurrentSongFile(songFileName);
+
+			audioPlayer.SetCurrentSongContentUri(newSong.ContentUri);
 			await playbacksRegistrator.RegisterPlaybackStart(newSong, CancellationToken.None);
 		}
 
 		private void AudioPlayer_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName == nameof(IAudioPlayer.CurrSongLength))
+			switch (e.PropertyName)
 			{
-				RaisePropertyChanged(nameof(CurrSongLength));
-				RaisePropertyChanged(nameof(CurrSongProgress));
-				return;
-			}
+				case nameof(IAudioPlayer.CurrSongLength):
+					RaisePropertyChanged(nameof(CurrSongLength));
+					RaisePropertyChanged(nameof(CurrSongProgress));
+					return;
 
-			if (e.PropertyName == nameof(IAudioPlayer.CurrSongPosition))
-			{
-				RaisePropertyChanged(nameof(CurrSongElapsed));
-				RaisePropertyChanged(nameof(CurrSongProgress));
-				return;
+				case nameof(IAudioPlayer.CurrSongPosition):
+					RaisePropertyChanged(nameof(CurrSongElapsed));
+					RaisePropertyChanged(nameof(CurrSongProgress));
+					return;
 			}
 		}
 	}

@@ -10,8 +10,6 @@ namespace MusicLibrary.Logic.Interfaces.Services
 	{
 		Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken);
 
-		Task<string> GetSongFile(SongModel song, CancellationToken cancellationToken);
-
 		Task UpdateSong(SongModel song, UpdatedSongPropertiesModel updatedProperties, CancellationToken cancellationToken);
 
 		Task AddSongPlayback(SongModel song, DateTimeOffset playbackDateTime, CancellationToken cancellationToken);

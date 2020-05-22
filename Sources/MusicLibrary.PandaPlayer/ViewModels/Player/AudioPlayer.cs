@@ -8,13 +8,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 {
 	internal class AudioPlayer : IAudioPlayer
 	{
-		private const double SongPostionUpdateInterval = 200;
+		private const double SongPositionUpdateInterval = 200;
 
 		private readonly IMediaPlayerFacade mediaPlayer;
 
 		private readonly ITimerFacade timer;
 
-		private string currentSongFile;
+		private Uri currentSongUri;
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -61,21 +61,21 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 
 			this.timer = timer;
 			this.timer.Elapsed += Timer_Elapsed;
-			this.timer.Interval = SongPostionUpdateInterval;
+			this.timer.Interval = SongPositionUpdateInterval;
 
 			this.mediaPlayer.MediaOpened += MediaPlayerOnMediaOpened;
 			this.mediaPlayer.MediaEnded += MediaPlayerOnMediaEnded;
 		}
 
-		public void SetCurrentSongFile(string songFileName)
+		public void SetCurrentSongContentUri(Uri contentUri)
 		{
-			mediaPlayer.Open(new Uri(songFileName));
-			currentSongFile = songFileName;
+			mediaPlayer.Open(contentUri);
+			currentSongUri = contentUri;
 		}
 
 		public void Play()
 		{
-			if (currentSongFile == null)
+			if (currentSongUri == null)
 			{
 				throw new InvalidOperationException("Current song is not set");
 			}
@@ -115,7 +115,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 
 		private void MediaPlayerOnMediaEnded(object sender, EventArgs eventArgs)
 		{
-			currentSongFile = null;
+			currentSongUri = null;
 			OnPlaybackInterrupted();
 			mediaPlayer.Close();
 			CurrSongPosition = TimeSpan.Zero;

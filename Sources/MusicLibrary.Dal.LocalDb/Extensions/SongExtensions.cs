@@ -2,13 +2,14 @@
 using System.Linq;
 using MusicLibrary.Core;
 using MusicLibrary.Core.Objects;
+using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.Dal.LocalDb.Extensions
 {
 	internal static class SongExtensions
 	{
-		public static SongModel ToModel(this Song song, DiscModel disc)
+		public static SongModel ToModel(this Song song, DiscModel disc, IDataStorage dataStorage)
 		{
 			return new SongModel
 			{
@@ -26,6 +27,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				Checksum = song.Checksum.HasValue ? (uint)song.Checksum.Value : (uint?)null,
 				LastPlaybackTime = song.LastPlaybackTime,
 				PlaybacksCount = song.PlaybacksCount,
+				ContentUri = dataStorage.TranslateInternalUri(song.Uri),
 			};
 		}
 

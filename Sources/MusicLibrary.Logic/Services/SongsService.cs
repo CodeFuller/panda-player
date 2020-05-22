@@ -22,11 +22,6 @@ namespace MusicLibrary.Logic.Services
 			return songsRepository.GetSongs(songIds, cancellationToken);
 		}
 
-		public Task<string> GetSongFile(SongModel song, CancellationToken cancellationToken)
-		{
-			return songsRepository.GetSongFile(song, cancellationToken);
-		}
-
 		public Task UpdateSong(SongModel song, UpdatedSongPropertiesModel updatedProperties, CancellationToken cancellationToken)
 		{
 			return songsRepository.UpdateSong(song, updatedProperties, cancellationToken);
