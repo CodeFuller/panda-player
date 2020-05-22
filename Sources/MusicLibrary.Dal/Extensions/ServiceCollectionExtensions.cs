@@ -7,6 +7,7 @@ namespace MusicLibrary.Dal.Extensions
 {
 	public static class ServiceCollectionExtensions
 	{
+		// TBD: Rename to something more specific
 		public static IServiceCollection AddDal(this IServiceCollection services, Action<SqLiteConnectionSettings> setupSettings)
 		{
 			var settings = new SqLiteConnectionSettings();

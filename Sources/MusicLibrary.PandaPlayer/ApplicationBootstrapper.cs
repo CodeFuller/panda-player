@@ -13,6 +13,7 @@ using MusicLibrary.Common.Images;
 using MusicLibrary.Core.Interfaces;
 using MusicLibrary.Core.Media;
 using MusicLibrary.Core.Objects;
+using MusicLibrary.Dal.Extensions;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.LastFM;
 using MusicLibrary.Library;
@@ -34,7 +35,7 @@ namespace MusicLibrary.PandaPlayer
 
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{
-			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("fileSystemStorage", options));
+			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("localDb:dataStorage", options));
 			services.Configure<LastFmClientSettings>(options => configuration.Bind("lastFmClient", options));
 			services.Configure<PandaPlayerSettings>(configuration.Bind);
 
@@ -44,7 +45,8 @@ namespace MusicLibrary.PandaPlayer
 				throw new InvalidOperationException("dataStoragePath is not configured");
 			}
 
-			services.AddLocalDbDal(settings => configuration.Bind("database", settings), dataStorageSettings => configuration.Bind("fileSystemStorage", dataStorageSettings));
+			services.AddDal(settings => configuration.Bind("localDb:sqLite", settings));
+			services.AddLocalDbDal(settings => configuration.Bind("localDb:dataStorage", settings));
 
 			services.AddTransient<ISongTagger, SongTagger>();
 			services.AddTransient<IFileStorage, FileSystemStorage>();

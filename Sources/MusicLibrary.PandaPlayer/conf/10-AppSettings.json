@@ -1,10 +1,11 @@
 ﻿{
-	"database": {
-		"dataSource": "d:\\PandaPlayer\\MusicLibrary.db"
-	},
-
-	"fileSystemStorage": {
-		"root": "d:\\music"
+	"localDb": {
+		"sqLite": {
+			"dataSource": "d:\\PandaPlayer\\MusicLibrary.db"
+		},
+		"dataStorage": {
+			"root": "d:\\music"
+		} 
 	},
 
 	"dataStoragePath": "d:\\PandaPlayer\\.data",
