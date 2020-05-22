@@ -56,25 +56,26 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			set
 			{
 				Set(ref selectedSongListIndex, value);
-				ActiveDiscId = (SelectedSongListIndex == ExplorerSongListIndex) ? LibraryExplorerViewModel.SelectedDisc?.Id : PlaylistActiveDiscId;
+				ActiveDisc = (SelectedSongListIndex == ExplorerSongListIndex) ? LibraryExplorerViewModel.SelectedDisc : PlaylistActiveDisc;
 			}
 		}
 
-		private ItemId activeDiscId;
+		private DiscModel activeDisc;
 
-		private ItemId ActiveDiscId
+		private DiscModel ActiveDisc
 		{
 			set
 			{
-				if (activeDiscId != value)
+				// TBD: Revise objects comparing
+				if (activeDisc != value)
 				{
-					activeDiscId = value;
-					Messenger.Default.Send(new ActiveDiscChangedEventArgs(activeDiscId));
+					activeDisc = value;
+					Messenger.Default.Send(new ActiveDiscChangedEventArgs(activeDisc));
 				}
 			}
 		}
 
-		private ItemId PlaylistActiveDiscId => Playlist.CurrentSong?.DiscId ?? Playlist.PlayingDiscId;
+		private DiscModel PlaylistActiveDisc => Playlist.CurrentSong?.Disc ?? Playlist.PlayingDisc;
 
 		public ICommand LoadCommand { get; }
 
@@ -101,7 +102,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => SwitchToExplorerSongList());
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => OnPlaylistSongChanged());
 			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistSongChanged());
-			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => NavigateLibraryExplorerToDisc(e.DiscId));
+			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => NavigateLibraryExplorerToDisc(e.Disc));
 		}
 
 		public async Task Load()
@@ -131,8 +132,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		private void OnPlayDiscFromSongLaunched(PlayDiscFromSongEventArgs message)
 		{
-			// TBD: Can we make it async?
-			var disc = discsService.GetDisc(message.Song.DiscId, CancellationToken.None).Result;
+			var disc = message.Song.Disc;
 
 			Playlist.SetSongs(disc.Songs);
 			Playlist.SwitchToSong(message.Song);
@@ -170,7 +170,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 			if (SelectedSongListIndex == PlaylistSongListIndex)
 			{
-				ActiveDiscId = PlaylistActiveDiscId;
+				ActiveDisc = PlaylistActiveDisc;
 			}
 		}
 
@@ -201,9 +201,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			SelectedSongListIndex = PlaylistSongListIndex;
 		}
 
-		private void NavigateLibraryExplorerToDisc(ItemId discId)
+		private void NavigateLibraryExplorerToDisc(DiscModel disc)
 		{
-			LibraryExplorerViewModel.SwitchToDisc(discId);
+			LibraryExplorerViewModel.SwitchToDisc(disc);
 			SwitchToExplorerSongList();
 		}
 	}

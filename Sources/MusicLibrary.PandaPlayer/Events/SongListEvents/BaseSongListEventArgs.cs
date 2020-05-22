@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CF.Library.Core.Extensions;
 using MusicLibrary.Logic.Models;
+using MusicLibrary.PandaPlayer.Extensions;
 
 namespace MusicLibrary.PandaPlayer.Events.SongListEvents
 {
@@ -10,7 +10,7 @@ namespace MusicLibrary.PandaPlayer.Events.SongListEvents
 	{
 		public IReadOnlyCollection<SongModel> Songs { get; }
 
-		public ItemId DiscId => Songs.Select(s => s.DiscId).UniqueOrDefault();
+		public DiscModel Disc => Songs.UniqueOrDefault(s => s.Disc.Id)?.Disc;
 
 		protected BaseSongListEventArgs(IEnumerable<SongModel> songs)
 		{

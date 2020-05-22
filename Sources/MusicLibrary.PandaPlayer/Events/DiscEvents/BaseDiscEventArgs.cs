@@ -5,12 +5,12 @@ namespace MusicLibrary.PandaPlayer.Events.DiscEvents
 {
 	public abstract class BaseDiscEventArgs : EventArgs
 	{
-		public ItemId DiscId { get; }
+		public DiscModel Disc { get; }
 
-		protected BaseDiscEventArgs(ItemId discId)
+		protected BaseDiscEventArgs(DiscModel disc)
 		{
-			// discId can be null.
-			DiscId = discId;
+			// It can be null.
+			Disc = disc;
 		}
 	}
 }

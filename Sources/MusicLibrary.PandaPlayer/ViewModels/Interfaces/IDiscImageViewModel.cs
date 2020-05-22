@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
 	public interface IDiscImageViewModel
 	{
-		string CurrImageFileName { get; }
+		Uri CurrentImageUri { get; }
 
 		Task EditDiscImage();
 	}

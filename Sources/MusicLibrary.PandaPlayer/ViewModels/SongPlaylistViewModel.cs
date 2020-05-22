@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
-using CF.Library.Core.Extensions;
 using CF.Library.Core.Interfaces;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -11,6 +10,7 @@ using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.Events.DiscEvents;
 using MusicLibrary.PandaPlayer.Events.SongEvents;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
+using MusicLibrary.PandaPlayer.Extensions;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
@@ -49,7 +49,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public SongModel CurrentSong => CurrentItem?.Song;
 
-		public ItemId PlayingDiscId => Songs.Select(s => s.DiscId).UniqueOrDefault();
+		public DiscModel PlayingDisc => Songs.ToList().UniqueOrDefault(s => s.Disc.Id)?.Disc;
 
 		public override ICommand PlayFromSongCommand { get; }
 
@@ -159,7 +159,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				return;
 			}
 
-			Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(song.DiscId));
+			Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(song.Disc));
 		}
 	}
 }

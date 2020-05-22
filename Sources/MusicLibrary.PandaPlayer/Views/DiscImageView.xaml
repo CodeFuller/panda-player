@@ -12,6 +12,6 @@
     </UserControl.Resources>
     
     <Grid>
-        <Image Source="{Binding CurrImageFileName, Converter={StaticResource ImageSourceValueConverter}}" />
+        <Image Source="{Binding CurrentImageUri, Converter={StaticResource ImageSourceValueConverter}}" />
     </Grid>
 </UserControl>

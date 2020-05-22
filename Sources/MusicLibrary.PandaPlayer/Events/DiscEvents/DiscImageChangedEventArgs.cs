@@ -4,8 +4,8 @@ namespace MusicLibrary.PandaPlayer.Events.DiscEvents
 {
 	public class DiscImageChangedEventArgs : BaseDiscEventArgs
 	{
-		public DiscImageChangedEventArgs(ItemId discId)
-			: base(discId)
+		public DiscImageChangedEventArgs(DiscModel disc)
+			: base(disc)
 		{
 		}
 	}

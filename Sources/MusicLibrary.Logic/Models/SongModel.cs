@@ -15,10 +15,6 @@ namespace MusicLibrary.Logic.Models
 
 		public TimeSpan Duration { get; set; }
 
-		// TODO: Now we have Disc in the Song.
-		// Revise places which use DiscId and check whether the clients load disc again. If so, remove additional calls to server.
-		public ItemId DiscId => Disc.Id;
-
 		public DiscModel Disc { get; set; }
 
 		public ItemId ArtistId => Artist?.Id;

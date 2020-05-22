@@ -44,7 +44,7 @@ namespace MusicLibrary.PandaPlayer
 				throw new InvalidOperationException("dataStoragePath is not configured");
 			}
 
-			services.AddLocalDbDal(settings => configuration.Bind("database", settings));
+			services.AddLocalDbDal(settings => configuration.Bind("database", settings), dataStorageSettings => configuration.Bind("fileSystemStorage", dataStorageSettings));
 
 			services.AddTransient<ISongTagger, SongTagger>();
 			services.AddTransient<IFileStorage, FileSystemStorage>();

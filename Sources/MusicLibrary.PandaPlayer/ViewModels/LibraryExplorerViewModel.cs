@@ -166,13 +166,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			Items.AddRange(folder.Discs.Select(x => new DiscExplorerItem(x)).OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase));
 		}
 
-		public void SwitchToDisc(ItemId discId)
+		public void SwitchToDisc(DiscModel disc)
 		{
-			var discFolder = foldersService.GetDiscFolder(discId, CancellationToken.None).Result;
+			var discFolder = foldersService.GetDiscFolder(disc.Id, CancellationToken.None).Result;
 
 			LoadFolder(discFolder);
 
-			SelectedItem = Items.OfType<DiscExplorerItem>().FirstOrDefault(x => x.DiscId == discId);
+			SelectedItem = Items.OfType<DiscExplorerItem>().FirstOrDefault(x => x.DiscId == disc.Id);
 		}
 
 		private void PlayDisc()
@@ -215,9 +215,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		private void OnPlaylistChanged(BaseSongListEventArgs e)
 		{
-			if (e.DiscId != null)
+			if (e.Disc != null)
 			{
-				SwitchToDisc(e.DiscId);
+				SwitchToDisc(e.Disc);
 			}
 		}
 	}

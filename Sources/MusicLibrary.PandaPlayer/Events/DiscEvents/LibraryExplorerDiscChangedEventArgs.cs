@@ -1,16 +1,12 @@
-﻿using System;
-using MusicLibrary.Logic.Models;
+﻿using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.Events.DiscEvents
 {
-	public class LibraryExplorerDiscChangedEventArgs : EventArgs
+	public class LibraryExplorerDiscChangedEventArgs : BaseDiscEventArgs
 	{
-		public DiscModel Disc { get; }
-
 		public LibraryExplorerDiscChangedEventArgs(DiscModel disc)
+			: base(disc)
 		{
-			// Disc can be null.
-			this.Disc = disc;
 		}
 	}
 }

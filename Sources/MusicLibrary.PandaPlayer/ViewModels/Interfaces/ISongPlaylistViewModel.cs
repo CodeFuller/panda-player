@@ -10,10 +10,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 		int? CurrentSongIndex { get; }
 
 		/// <summary>
-		/// Gets id of currently playing disc, if all songs in playlist belong to one disc
+		/// Gets currently playing disc, if all songs in playlist belong to one disc.
 		/// Otherwise, returns null.
 		/// </summary>
-		ItemId PlayingDiscId { get; }
+		DiscModel PlayingDisc { get; }
 
 		ICommand NavigateToSongDiscCommand { get; }
 

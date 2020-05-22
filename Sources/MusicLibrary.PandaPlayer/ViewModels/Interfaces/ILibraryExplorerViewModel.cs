@@ -15,6 +15,6 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		IExplorerSongListViewModel SongListViewModel { get; }
 
-		void SwitchToDisc(ItemId discId);
+		void SwitchToDisc(DiscModel disc);
 	}
 }

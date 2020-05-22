@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Logic.Models;
+using MusicLibrary.PandaPlayer.Events.DiscEvents;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
@@ -18,23 +20,23 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 			set
 			{
 				Set(ref currentDisc, value);
-				CurrImageFileName = GetCurrImageFileName();
+				CurrentImageUri = currentDisc?.CoverImageUri;
 			}
 		}
 
-		private string currImageFileName;
+		private Uri currentImageUri;
 
-		public string CurrImageFileName
+		public Uri CurrentImageUri
 		{
-			get => currImageFileName;
+			get => currentImageUri;
 			private set
 			{
-				// Why don't we use ViewModelBase.Set(ref currImageFileName, value) ?
-				// When disc image is updated with new file, CurrImageFileName is not actually changed, however
+				// Why don't we use ViewModelBase.Set(ref currentImageUri, value)?
+				// When disc image is updated with new file, CurrentImageUri is not actually changed, however
 				// we need PropertyChanged event to be fired so that Image control updated image in the view.
 				// Seems like ViewModelBase.Set() has some internal check whether new value equals to the old one
 				// and don't fire the event in this case. That's why we should raise event manually.
-				currImageFileName = value;
+				currentImageUri = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -43,17 +45,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 		{
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 
-			// TODO: Restore this functionality
-			// Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => CurrentDisc = e.Disc);
-			// Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
-		}
-
-		private static string GetCurrImageFileName()
-		{
-			// TODO: Restore this functionality
-			// var activeDisc = CurrentDisc;
-			// return activeDisc == null ? null : musicLibrary.GetDiscCoverImage(activeDisc).Result;
-			return null;
+			Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => CurrentDisc = e.Disc);
+			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
 		}
 
 		public async Task EditDiscImage()
@@ -72,7 +65,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 			// TODO: Restore this functionality
 			if (disc == CurrentDisc)
 			{
-				CurrImageFileName = GetCurrImageFileName();
+				// CurrentImageFileName = GetCurrentImageFileName();
 			}
 		}
 	}

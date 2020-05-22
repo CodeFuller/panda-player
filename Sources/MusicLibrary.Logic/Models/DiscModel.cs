@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MusicLibrary.Logic.Models
 {
@@ -15,5 +16,7 @@ namespace MusicLibrary.Logic.Models
 		public string AlbumTitle { get; set; }
 
 		public IReadOnlyCollection<SongModel> Songs { get; set; }
+
+		public Uri CoverImageUri { get; set; }
 	}
 }
