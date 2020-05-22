@@ -27,9 +27,10 @@ namespace MusicLibrary.Logic.Services
 			return songsRepository.UpdateSong(song, updatedProperties, cancellationToken);
 		}
 
-		public Task AddSongPlayback(SongModel song, DateTimeOffset playbackDateTime, CancellationToken cancellationToken)
+		public Task AddSongPlayback(SongModel song, DateTimeOffset playbackTime, CancellationToken cancellationToken)
 		{
-			return songsRepository.AddSongPlayback(song, playbackDateTime, cancellationToken);
+			song.AddPlayback(playbackTime);
+			return songsRepository.UpdateSongPlaybacks(song, cancellationToken);
 		}
 
 		public Task DeleteSong(SongModel song, CancellationToken cancellationToken)

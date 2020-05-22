@@ -12,7 +12,7 @@ namespace MusicLibrary.Logic.Interfaces.Dal
 
 		Task UpdateSong(SongModel song, UpdatedSongPropertiesModel updatedProperties, CancellationToken cancellationToken);
 
-		Task AddSongPlayback(SongModel song, DateTimeOffset playbackDateTime, CancellationToken cancellationToken);
+		Task UpdateSongPlaybacks(SongModel song, CancellationToken cancellationToken);
 
 		Task DeleteSong(SongModel song, CancellationToken cancellationToken);
 	}

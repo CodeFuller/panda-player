@@ -45,7 +45,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			throw new NotImplementedException();
 		}
 
-		public Task AddSongPlayback(SongModel song, DateTimeOffset playbackDateTime, CancellationToken cancellationToken)
+		public Task UpdateSongPlaybacks(SongModel song, CancellationToken cancellationToken)
 		{
 			throw new NotImplementedException();
 		}

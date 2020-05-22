@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using CF.Library.Core.Extensions;
 using MusicLibrary.Core;
 using MusicLibrary.Core.Objects;
 using MusicLibrary.Dal.LocalDb.Interfaces;
@@ -11,7 +12,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 	{
 		public static SongModel ToModel(this Song song, DiscModel disc, IDataStorage dataStorage)
 		{
-			return new SongModel
+			var songModel = new SongModel
 			{
 				Id = song.Id.ToItemId(),
 				Title = song.Title,
@@ -29,6 +30,16 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				PlaybacksCount = song.PlaybacksCount,
 				ContentUri = dataStorage.TranslateInternalUri(song.Uri),
 			};
+
+			var playbacks = song.Playbacks
+				.Select(p => new PlaybackModel
+				{
+					PlaybackTime = p.PlaybackTime,
+				});
+
+			songModel.Playbacks.AddRange(playbacks);
+
+			return songModel;
 		}
 
 		private static RatingModel ConvertRating(Rating rating)
