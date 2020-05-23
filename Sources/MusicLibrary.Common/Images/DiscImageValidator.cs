@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CF.Library.Core.Extensions;
-using MusicLibrary.Core.Objects.Images;
 
 namespace MusicLibrary.Common.Images
 {
-	public class DiscImageValidator : IDiscImageValidator
+	internal class DiscImageValidator : IDiscImageValidator
 	{
 		private const int MinWidthAndHeight = 300;
 

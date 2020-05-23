@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using MusicLibrary.Core.Objects.Images;
 
 namespace MusicLibrary.Common.Images
 {
-	public interface IDiscImageValidator
+	internal interface IDiscImageValidator
 	{
 		ImageValidationResults ValidateDiscCoverImage(ImageInfo imageInfo);
 

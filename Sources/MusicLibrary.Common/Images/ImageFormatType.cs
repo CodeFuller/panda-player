@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace MusicLibrary.Core.Objects.Images
+namespace MusicLibrary.Common.Images
 {
 	public enum ImageFormatType
 	{

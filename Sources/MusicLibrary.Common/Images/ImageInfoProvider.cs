@@ -1,10 +1,9 @@
 ﻿using System;
 using CF.Library.Core.Facades;
-using MusicLibrary.Core.Objects.Images;
 
 namespace MusicLibrary.Common.Images
 {
-	public class ImageInfoProvider : IImageInfoProvider
+	internal class ImageInfoProvider : IImageInfoProvider
 	{
 		private readonly IImageFacade imageFacade;
 		private readonly IFileSystemFacade fileSystemFacade;

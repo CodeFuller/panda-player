@@ -1,8 +1,6 @@
-﻿using MusicLibrary.Core.Objects.Images;
-
-namespace MusicLibrary.Common.Images
+﻿namespace MusicLibrary.Common.Images
 {
-	public interface IImageInfoProvider
+	internal interface IImageInfoProvider
 	{
 		ImageInfo GetImageInfo(string imageFileName);
 	}

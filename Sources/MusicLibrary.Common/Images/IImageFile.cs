@@ -1,13 +1,10 @@
 ﻿using System.ComponentModel;
-using MusicLibrary.Core.Objects.Images;
 
 namespace MusicLibrary.Common.Images
 {
 	public interface IImageFile : INotifyPropertyChanged
 	{
 		string ImageFileName { get; }
-
-		bool IsTemporaryFile { get; }
 
 		ImageInfo ImageInfo { get; }
 

@@ -2,11 +2,10 @@
 using CF.Library.Core.Extensions;
 using CF.Library.Core.Facades;
 using GalaSoft.MvvmLight;
-using MusicLibrary.Core.Objects.Images;
 
 namespace MusicLibrary.Common.Images
 {
-	public class ImageFile : ViewModelBase, IImageFile
+	internal class ImageFile : ViewModelBase, IImageFile
 	{
 		private readonly IDiscImageValidator discImageValidator;
 		private readonly IImageInfoProvider imageInfoProvider;
@@ -14,7 +13,7 @@ namespace MusicLibrary.Common.Images
 
 		public string ImageFileName => ImageInfo?.FileName;
 
-		public bool IsTemporaryFile { get; private set; }
+		private bool IsTemporaryFile { get; set; }
 
 		private ImageInfo imageInfo;
 

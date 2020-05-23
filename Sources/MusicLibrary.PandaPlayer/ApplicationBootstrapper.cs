@@ -9,7 +9,7 @@ using CF.Library.Wpf;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MusicLibrary.Common.Images;
+using MusicLibrary.Common;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.LastFM;
 using MusicLibrary.Logic;
@@ -63,11 +63,8 @@ namespace MusicLibrary.PandaPlayer
 			services.AddTransient<IClock, SystemClock>();
 			services.AddTransient<IDocumentDownloader, HttpDocumentDownloader>();
 			services.AddTransient<IWebBrowser, SystemDefaultWebBrowser>();
-			services.AddTransient<IDiscImageValidator, DiscImageValidator>();
-			services.AddTransient<IImageFacade, ImageFacade>();
-			services.AddTransient<IImageFile, ImageFile>();
-			services.AddTransient<IImageInfoProvider, ImageInfoProvider>();
-			services.AddSingleton<IFileSystemFacade, FileSystemFacade>();
+
+			services.AddImages();
 
 			services.AddTransient<LastFMScrobbler>();
 			services.AddSingleton<IScrobbler, PersistentScrobbler>(sp =>

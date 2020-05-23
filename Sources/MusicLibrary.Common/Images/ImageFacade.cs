@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using MusicLibrary.Core.Objects.Images;
 
 namespace MusicLibrary.Common.Images
 {
-	public sealed class ImageFacade : IImageFacade
+	internal sealed class ImageFacade : IImageFacade
 	{
 		private readonly Image image;
 
