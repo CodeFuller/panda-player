@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using MusicLibrary.Core;
-using MusicLibrary.Core.Objects;
 using MusicLibrary.Dal.LocalDb.Extensions;
+using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Logic.Interfaces.Dal;
 using MusicLibrary.Logic.Models;
 
@@ -14,14 +15,14 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 	// TBD: Remove after redesign
 	internal class FoldersRepository : IFoldersRepository
 	{
+		private readonly IMusicLibraryDbContextFactory contextFactory;
+
 		private readonly IDiscsRepository discsRepository;
 
-		private readonly DiscLibrary discLibrary;
-
-		public FoldersRepository(IDiscsRepository discsRepository, DiscLibrary discLibrary)
+		public FoldersRepository(IMusicLibraryDbContextFactory contextFactory, IDiscsRepository discsRepository)
 		{
+			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
 			this.discsRepository = discsRepository ?? throw new ArgumentNullException(nameof(discsRepository));
-			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
 		}
 
 		public Task<FolderModel> GetRootFolder(CancellationToken cancellationToken)
@@ -33,10 +34,12 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 		// TBD: Extend database with folder entity and remove this logic.
 		public async Task<FolderModel> GetFolder(ItemId folderId, CancellationToken cancellationToken)
 		{
+			await using var context = contextFactory.Create();
+
 			var subfolders = new Dictionary<Uri, SubfolderModel>();
 			var discIds = new List<ItemId>();
 
-			foreach (var disc in discLibrary.Discs)
+			foreach (var disc in context.Discs)
 			{
 				var childUri = GetDirectChildUri(folderId, disc.Uri);
 				if (childUri == null)
@@ -80,14 +83,17 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			return parentParts.IsBaseOf(childParts) ? ItemUriParts.Join(childParts.Take(parentParts.Count + 1)) : null;
 		}
 
-		public Task<FolderModel> GetDiscFolder(ItemId discId, CancellationToken cancellationToken)
+		public async Task<FolderModel> GetDiscFolder(ItemId discId, CancellationToken cancellationToken)
 		{
-			var disc = discLibrary.Discs.Single(d => d.Id.ToItemId() == discId);
+			await using var context = contextFactory.Create();
+
+			var id = discId.ToInt32();
+			var disc = await context.Discs.SingleAsync(d => d.Id == id, cancellationToken);
 
 			var uriParts = new ItemUriParts(disc.Uri);
 			var parentFolderId = ItemUriParts.Join(uriParts.Take(uriParts.Count - 1)).ToItemId();
 
-			return GetFolder(parentFolderId, CancellationToken.None);
+			return await GetFolder(parentFolderId, cancellationToken);
 		}
 	}
 }
