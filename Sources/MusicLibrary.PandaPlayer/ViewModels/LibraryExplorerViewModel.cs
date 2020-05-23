@@ -91,7 +91,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			JumpToLastItemCommand = new RelayCommand(() => SelectedItem = Items.LastOrDefault());
 			EditDiscPropertiesCommand = new RelayCommand(EditDiscProperties);
 
-			Messenger.Default.Register<LibraryLoadedEventArgs>(this, e => LoadRootFolder());
+			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => LoadRootFolder());
 			Messenger.Default.Register<PlaySongsListEventArgs>(this, OnPlaylistChanged);
 			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, OnPlaylistChanged);
 		}

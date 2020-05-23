@@ -28,7 +28,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 			this.playlistDataRepository = playlistDataRepository ?? throw new ArgumentNullException(nameof(playlistDataRepository));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-			Messenger.Default.Register<LibraryLoadedEventArgs>(this, e => Load());
+			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => Load());
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => this.playlistDataRepository.Purge());
 		}
 

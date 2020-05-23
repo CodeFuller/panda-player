@@ -7,8 +7,6 @@ using CF.Library.Wpf;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.Logic.Interfaces.Services;
 using MusicLibrary.Logic.Models;
 using MusicLibrary.PandaPlayer.Events;
 using MusicLibrary.PandaPlayer.Events.DiscEvents;
@@ -25,10 +23,6 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		private const int PlaylistSongListIndex = 1;
 
 		private const string DefaultTitle = "Panda Player";
-
-		private readonly DiscLibrary discLibrary;
-
-		private readonly IDiscsService discsService;
 
 		private readonly IViewNavigator viewNavigator;
 
@@ -83,15 +77,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand ShowLibraryStatisticsCommand { get; }
 
-		public ApplicationViewModel(DiscLibrary discLibrary, IDiscsService discsService, IApplicationViewModelHolder viewModelHolder, IMusicPlayerViewModel musicPlayerViewModel, IViewNavigator viewNavigator)
+		public ApplicationViewModel(IApplicationViewModelHolder viewModelHolder, IMusicPlayerViewModel musicPlayerViewModel, IViewNavigator viewNavigator)
 		{
-			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
-			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
 			ViewModelHolder = viewModelHolder ?? throw new ArgumentNullException(nameof(viewModelHolder));
 			MusicPlayerViewModel = musicPlayerViewModel ?? throw new ArgumentNullException(nameof(musicPlayerViewModel));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 
-			LoadCommand = new AsyncRelayCommand(Load);
+			LoadCommand = new RelayCommand(Load);
 			ReversePlayingCommand = new RelayCommand(ReversePlaying);
 			ShowLibraryStatisticsCommand = new AsyncRelayCommand(ShowLibraryStatistics);
 
@@ -105,10 +97,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => NavigateLibraryExplorerToDisc(e.Disc));
 		}
 
-		public async Task Load()
+		public void Load()
 		{
-			await discLibrary.Load();
-			Messenger.Default.Send(new LibraryLoadedEventArgs(discLibrary));
+			Messenger.Default.Send(new ApplicationLoadedEventArgs());
 
 			// Setting playlist active if some previous playlist was loaded.
 			if (Playlist.Songs.Any())

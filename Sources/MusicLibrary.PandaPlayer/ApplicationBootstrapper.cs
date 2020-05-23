@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using MusicLibrary.Common.Images;
 using MusicLibrary.Core.Interfaces;
 using MusicLibrary.Core.Media;
-using MusicLibrary.Core.Objects;
 using MusicLibrary.Dal.Extensions;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.LastFM;
@@ -40,12 +39,6 @@ namespace MusicLibrary.PandaPlayer
 			services.Configure<LastFmClientSettings>(options => configuration.Bind("lastFmClient", options));
 			services.Configure<PandaPlayerSettings>(configuration.Bind);
 
-			var dataStoragePath = configuration["dataStoragePath"];
-			if (String.IsNullOrEmpty(dataStoragePath))
-			{
-				throw new InvalidOperationException("dataStoragePath is not configured");
-			}
-
 			services.AddDal(settings => configuration.Bind("localDb:sqLite", settings));
 			services.AddLocalDbDal(settings => configuration.Bind("localDb:dataStorage", settings));
 			services.AddMusicLibraryDbContext(configuration.GetConnectionString("musicLibraryDb"));
@@ -56,11 +49,6 @@ namespace MusicLibrary.PandaPlayer
 			services.AddTransient<IChecksumCalculator, Crc32Calculator>();
 			services.AddTransient<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
 			services.AddTransient<IFileSystemFacade, FileSystemFacade>();
-			services.AddSingleton<DiscLibrary>(sp => new DiscLibrary(async () =>
-			{
-				var library = sp.GetRequiredService<IMusicLibrary>();
-				return await library.LoadDiscs();
-			}));
 
 			services.AddTransient<IApplicationViewModelHolder, ApplicationViewModelHolder>();
 			services.AddTransient<INavigatedViewModelHolder, NavigatedViewModelHolder>();
@@ -102,6 +90,12 @@ namespace MusicLibrary.PandaPlayer
 			services.AddTransient(typeof(Queue<>));
 
 			services.AddTransient<ICompositePlaylistAdviser, StubPlaylistAdviser>();
+
+			var dataStoragePath = configuration["dataStoragePath"];
+			if (String.IsNullOrEmpty(dataStoragePath))
+			{
+				throw new InvalidOperationException("dataStoragePath is not configured");
+			}
 
 			services.AddTransient<IGenericDataRepository<PlaylistData>, JsonFileGenericRepository<PlaylistData>>(
 				sp => new JsonFileGenericRepository<PlaylistData>(

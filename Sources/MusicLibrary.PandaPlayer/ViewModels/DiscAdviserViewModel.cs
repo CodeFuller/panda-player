@@ -49,7 +49,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			SwitchToNextAdviseCommand = new RelayCommand(SwitchToNextAdvise);
 
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => OnPlaylistFinished(e.Songs));
-			Messenger.Default.Register<LibraryLoadedEventArgs>(this, e => Load());
+			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => Load());
 		}
 
 		private void Load()
