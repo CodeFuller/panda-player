@@ -10,12 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MusicLibrary.Common.Images;
-using MusicLibrary.Core.Interfaces;
-using MusicLibrary.Core.Media;
-using MusicLibrary.Dal.Extensions;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.LastFM;
-using MusicLibrary.Library;
 using MusicLibrary.Logic;
 using MusicLibrary.PandaPlayer.Adviser;
 using MusicLibrary.PandaPlayer.ViewModels;
@@ -24,7 +20,6 @@ using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist;
 using MusicLibrary.PandaPlayer.ViewModels.Player;
 using MusicLibrary.PandaPlayer.ViewModels.Scrobbling;
-using MusicLibrary.Tagger;
 
 namespace MusicLibrary.PandaPlayer
 {
@@ -35,20 +30,11 @@ namespace MusicLibrary.PandaPlayer
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{
 			// TBD: Extract registrations to extensions methods on IServiceCollection
-			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("localDb:dataStorage", options));
 			services.Configure<LastFmClientSettings>(options => configuration.Bind("lastFmClient", options));
 			services.Configure<PandaPlayerSettings>(configuration.Bind);
 
-			services.AddDal(settings => configuration.Bind("localDb:sqLite", settings));
 			services.AddLocalDbDal(settings => configuration.Bind("localDb:dataStorage", settings));
 			services.AddMusicLibraryDbContext(configuration.GetConnectionString("musicLibraryDb"));
-
-			services.AddTransient<ISongTagger, SongTagger>();
-			services.AddTransient<IFileStorage, FileSystemStorage>();
-			services.AddTransient<IMusicLibraryStorage, FileSystemMusicStorage>();
-			services.AddTransient<IChecksumCalculator, Crc32Calculator>();
-			services.AddTransient<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
-			services.AddTransient<IFileSystemFacade, FileSystemFacade>();
 
 			services.AddTransient<IApplicationViewModelHolder, ApplicationViewModelHolder>();
 			services.AddTransient<INavigatedViewModelHolder, NavigatedViewModelHolder>();
@@ -70,7 +56,6 @@ namespace MusicLibrary.PandaPlayer
 			services.AddTransient<ITokenAuthorizer, DefaultBrowserTokenAuthorizer>();
 			services.AddTransient<ILastFMApiClient, LastFMApiClient>();
 			services.AddSingleton<IViewNavigator, ViewNavigator>();
-			services.AddTransient<ILibraryStructurer, LibraryStructurer>();
 			services.AddTransient<IWindowService, WpfWindowService>();
 			services.AddTransient<IAudioPlayer, AudioPlayer>();
 			services.AddTransient<IMediaPlayerFacade, MediaPlayerFacade>();
@@ -82,6 +67,7 @@ namespace MusicLibrary.PandaPlayer
 			services.AddTransient<IImageFacade, ImageFacade>();
 			services.AddTransient<IImageFile, ImageFile>();
 			services.AddTransient<IImageInfoProvider, ImageInfoProvider>();
+			services.AddSingleton<IFileSystemFacade, FileSystemFacade>();
 
 			services.AddTransient<LastFMScrobbler>();
 			services.AddSingleton<IScrobbler, PersistentScrobbler>(sp =>

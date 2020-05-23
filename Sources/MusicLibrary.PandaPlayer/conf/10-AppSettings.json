@@ -4,10 +4,6 @@
 	},
 
 	"localDb": {
-		"sqLite": {
-			// TBD: Remove
-			"dataSource": "d:\\PandaPlayer\\MusicLibrary.db"
-		},
 		"dataStorage": {
 			"root": "d:\\music"
 		}
