@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using MusicLibrary.Core;
 using MusicLibrary.Core.Objects;
 using MusicLibrary.Dal.LocalDb.Extensions;
-using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Logic.Interfaces.Dal;
 using MusicLibrary.Logic.Models;
 
@@ -15,26 +14,27 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 	// TBD: Remove after redesign
 	internal class FoldersRepository : IFoldersRepository
 	{
-		private readonly IDataStorage dataStorage;
+		private readonly IDiscsRepository discsRepository;
 
 		private readonly DiscLibrary discLibrary;
 
-		public FoldersRepository(IDataStorage dataStorage, DiscLibrary discLibrary)
+		public FoldersRepository(IDiscsRepository discsRepository, DiscLibrary discLibrary)
 		{
-			this.dataStorage = dataStorage ?? throw new ArgumentNullException(nameof(dataStorage));
+			this.discsRepository = discsRepository ?? throw new ArgumentNullException(nameof(discsRepository));
 			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
 		}
 
-		public Task<FolderModel> GetRootFolder(bool includeDeletedDiscs, CancellationToken cancellationToken)
+		public Task<FolderModel> GetRootFolder(CancellationToken cancellationToken)
 		{
 			var rootId = new ItemId("/");
-			return GetFolder(rootId, includeDeletedDiscs, cancellationToken);
+			return GetFolder(rootId, cancellationToken);
 		}
 
-		public Task<FolderModel> GetFolder(ItemId folderId, bool includeDeletedDiscs, CancellationToken cancellationToken)
+		// TBD: Extend database with folder entity and remove this logic.
+		public async Task<FolderModel> GetFolder(ItemId folderId, CancellationToken cancellationToken)
 		{
 			var subfolders = new Dictionary<Uri, SubfolderModel>();
-			var discs = new List<FolderDiscModel>();
+			var discIds = new List<ItemId>();
 
 			foreach (var disc in discLibrary.Discs)
 			{
@@ -46,14 +46,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 				if (childUri == disc.Uri)
 				{
-					var discData = new FolderDiscModel
-					{
-						Id = disc.Id.ToItemId(),
-						TreeTitle = new ItemUriParts(disc.Uri).Last(),
-						Disc = disc.ToModel(dataStorage),
-					};
-
-					discs.Add(discData);
+					discIds.Add(disc.Id.ToItemId());
 				}
 				else if (!subfolders.ContainsKey(childUri))
 				{
@@ -70,15 +63,13 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			var uriParts = new ItemUriParts(folderId.ToUri());
 			var parentFolderId = uriParts.Any() ? ItemUriParts.Join(uriParts.Take(uriParts.Count - 1)).ToItemId() : null;
 
-			var folderData = new FolderModel
+			return new FolderModel
 			{
 				Id = folderId,
 				ParentFolderId = parentFolderId,
 				Subfolders = subfolders.Values,
-				Discs = discs.ToList(),
+				Discs = await discsRepository.GetDiscs(discIds, cancellationToken),
 			};
-
-			return Task.FromResult(folderData);
 		}
 
 		private static Uri GetDirectChildUri(ItemId folderId, Uri childUri)
@@ -96,7 +87,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			var uriParts = new ItemUriParts(disc.Uri);
 			var parentFolderId = ItemUriParts.Join(uriParts.Take(uriParts.Count - 1)).ToItemId();
 
-			return GetFolder(parentFolderId, false, CancellationToken.None);
+			return GetFolder(parentFolderId, CancellationToken.None);
 		}
 	}
 }

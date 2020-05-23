@@ -20,6 +20,7 @@ namespace MusicLibrary.Logic.Services
 
 		public Task<IReadOnlyCollection<ArtistModel>> GetAllArtists(CancellationToken cancellationToken)
 		{
+			// TODO: We should return artists only from active songs (logic in service?)
 			var artists = artistsRepository.GetAllArtists()
 				.OrderBy(a => a.Name)
 				.ToList();

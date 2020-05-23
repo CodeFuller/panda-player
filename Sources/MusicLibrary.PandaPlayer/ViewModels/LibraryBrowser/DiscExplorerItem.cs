@@ -5,18 +5,15 @@ namespace MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 {
 	public class DiscExplorerItem : BasicExplorerItem
 	{
-		private readonly FolderDiscModel disc;
+		public DiscModel Disc { get; }
 
-		public ItemId DiscId => disc.Id;
+		public ItemId DiscId => Disc.Id;
 
-		public override string Title => disc.TreeTitle;
+		public override string Title => Disc.TreeTitle;
 
-		// TBD: Remove after redesign
-		public DiscModel Disc => disc.Disc;
-
-		public DiscExplorerItem(FolderDiscModel disc)
+		public DiscExplorerItem(DiscModel disc)
 		{
-			this.disc = disc ?? throw new ArgumentNullException(nameof(disc));
+			this.Disc = disc ?? throw new ArgumentNullException(nameof(disc));
 		}
 	}
 }

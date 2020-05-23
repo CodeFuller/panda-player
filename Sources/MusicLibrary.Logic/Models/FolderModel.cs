@@ -10,6 +10,6 @@ namespace MusicLibrary.Logic.Models
 
 		public IReadOnlyCollection<SubfolderModel> Subfolders { get; set; }
 
-		public IReadOnlyCollection<FolderDiscModel> Discs { get; set; }
+		public IReadOnlyCollection<DiscModel> Discs { get; set; }
 	}
 }

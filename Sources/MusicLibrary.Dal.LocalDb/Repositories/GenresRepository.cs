@@ -21,10 +21,10 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			var context = contextFactory.Create();
 
 			return context.Genres
-				.Select(a => new GenreModel
+				.Select(g => new GenreModel
 				{
-					Id = new ItemId(a.Id.ToString(CultureInfo.InvariantCulture)),
-					Name = a.Name,
+					Id = new ItemId(g.Id.ToString(CultureInfo.InvariantCulture)),
+					Name = g.Name,
 				})
 				.AsQueryable();
 		}

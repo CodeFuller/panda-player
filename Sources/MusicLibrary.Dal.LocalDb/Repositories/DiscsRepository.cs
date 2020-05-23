@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using MusicLibrary.Core.Interfaces;
-using MusicLibrary.Core.Objects;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Logic.Interfaces.Dal;
@@ -13,23 +14,33 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 {
 	internal class DiscsRepository : IDiscsRepository
 	{
+		private readonly IMusicLibraryDbContextFactory contextFactory;
+
 		private readonly IMusicLibrary musicLibrary;
 
 		private readonly IDataStorage dataStorage;
 
-		private readonly DiscLibrary discLibrary;
-
-		public DiscsRepository(IMusicLibrary musicLibrary, IDataStorage dataStorage, DiscLibrary discLibrary)
+		public DiscsRepository(IMusicLibraryDbContextFactory contextFactory, IMusicLibrary musicLibrary, IDataStorage dataStorage)
 		{
+			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
 			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
 			this.dataStorage = dataStorage ?? throw new ArgumentNullException(nameof(dataStorage));
-			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
 		}
 
-		public Task<DiscModel> GetDisc(ItemId discId, CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<DiscModel>> GetDiscs(IEnumerable<ItemId> discIds, CancellationToken cancellationToken)
 		{
-			var disc = FindDisc(discId);
-			return Task.FromResult(disc.ToModel(dataStorage));
+			var ids = discIds.Select(id => id.ToInt32());
+
+			await using var context = contextFactory.Create();
+
+			return await context.Discs
+				.Include(disc => disc.Songs).ThenInclude(song => song.Artist)
+				.Include(disc => disc.Songs).ThenInclude(song => song.Genre)
+				.Include(disc => disc.Songs).ThenInclude(song => song.Playbacks)
+				.Include(disc => disc.Images)
+				.Where(disc => ids.Contains(disc.Id))
+				.Select(disc => disc.ToModel(dataStorage))
+				.ToListAsync(cancellationToken);
 		}
 
 		public Task UpdateDisc(DiscModel discModel, CancellationToken cancellationToken)
@@ -40,13 +51,8 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public Task DeleteDisc(ItemId discId, CancellationToken cancellationToken)
 		{
-			var disc = FindDisc(discId);
-			return musicLibrary.DeleteDisc(disc);
-		}
-
-		private Disc FindDisc(ItemId discId)
-		{
-			return discLibrary.Discs.Single(d => d.Id.ToItemId() == discId);
+			// TODO: Implement
+			throw new NotImplementedException();
 		}
 	}
 }

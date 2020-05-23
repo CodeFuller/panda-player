@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.Core.Objects.Images;
 using MusicLibrary.Dal.LocalDb.Entities;
 
 namespace MusicLibrary.Dal.LocalDb.Internal
@@ -23,25 +21,12 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 				builder.Property(a => a.Name).IsRequired();
 			});
 
-			modelBuilder.Entity<Disc>(builder =>
+			modelBuilder.Entity<DiscEntity>(builder =>
 			{
 				builder.ToTable("Discs");
 
-				builder
-					.Ignore(d => d.Artist)
-					.Ignore(d => d.Genre)
-					.Ignore(d => d.Year)
-					.Ignore(d => d.Uri)
-					.Ignore(d => d.LastPlaybackTime)
-					.Ignore(d => d.PlaybacksPassed)
-					.Ignore(d => d.Songs)
-					.Ignore(d => d.AllSongs)
-					.Ignore(d => d.RepresentativeSongs)
-					.Ignore(d => d.CoverImage)
-					.Ignore(d => d.IsDeleted);
-
 				builder.Property(d => d.Title).IsRequired();
-				builder.Property(d => d.DiscUri).IsRequired().HasColumnName("Uri");
+				builder.Property(d => d.Uri).IsRequired();
 			});
 
 			modelBuilder.Entity<GenreEntity>(builder =>
@@ -51,45 +36,40 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 				builder.Property(g => g.Name).IsRequired();
 			});
 
-			modelBuilder.Entity<Song>(builder =>
+			modelBuilder.Entity<SongEntity>(builder =>
 			{
 				builder.ToTable("Songs");
 
 				builder.Property(s => s.Title).IsRequired();
-				builder.Ignore(s => s.Duration);
-				builder.Property(s => s.DurationInMilliseconds).IsRequired().HasColumnName("Duration");
-				builder.Ignore(s => s.Uri);
-				builder.Property(s => s.SongUri).IsRequired().HasColumnName("Uri");
-				builder.Property(s => s.Checksum).IsRequired();
-				builder.Ignore(s => s.IsDeleted);
+				builder.Property(s => s.Uri).IsRequired();
+				builder.Property(s => s.DurationInMilliseconds).HasColumnName("Duration");
 
-				builder.Property(di => di.DiscId).HasColumnName("Disc_Id");
+				builder.Property(s => s.DiscId).HasColumnName("Disc_Id");
 				builder.Property(s => s.ArtistId).HasColumnName("Artist_Id");
 				builder.Property(s => s.GenreId).HasColumnName("Genre_Id");
 			});
 
-			modelBuilder.Entity<Playback>(builder =>
+			modelBuilder.Entity<PlaybackEntity>(builder =>
 			{
 				builder.ToTable("Playbacks");
 
-				builder.Property(s => s.SongId).HasColumnName("Song_Id");
+				builder.Property(p => p.SongId).HasColumnName("Song_Id");
 			});
 
-			modelBuilder.Entity<DiscImage>(builder =>
+			modelBuilder.Entity<DiscImageEntity>(builder =>
 			{
 				builder.ToTable("DiscImages");
 
-				builder.Ignore(di => di.Uri);
-				builder.Property(di => di.ImageUri).IsRequired().HasColumnName("Uri");
+				builder.Property(di => di.Uri).IsRequired();
 				builder.Property(di => di.DiscId).HasColumnName("Disc_Id");
 			});
 		}
 
 		public DbSet<ArtistEntity> Artists { get; set; }
 
-		public DbSet<Disc> Discs { get; set; }
+		public DbSet<DiscEntity> Discs { get; set; }
 
-		public DbSet<Song> Songs { get; set; }
+		public DbSet<SongEntity> Songs { get; set; }
 
 		public DbSet<GenreEntity> Genres { get; set; }
 	}

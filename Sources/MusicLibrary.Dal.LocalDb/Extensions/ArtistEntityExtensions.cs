@@ -1,11 +1,11 @@
-﻿using MusicLibrary.Core.Objects;
+﻿using MusicLibrary.Dal.LocalDb.Entities;
 using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.Dal.LocalDb.Extensions
 {
-	internal static class ArtistExtensions
+	internal static class ArtistEntityExtensions
 	{
-		public static ArtistModel ToModel(this Artist artist)
+		public static ArtistModel ToModel(this ArtistEntity artist)
 		{
 			return new ArtistModel
 			{

@@ -6,9 +6,9 @@ namespace MusicLibrary.Logic.Interfaces.Dal
 {
 	public interface IFoldersRepository
 	{
-		Task<FolderModel> GetRootFolder(bool includeDeletedDiscs, CancellationToken cancellationToken);
+		Task<FolderModel> GetRootFolder(CancellationToken cancellationToken);
 
-		Task<FolderModel> GetFolder(ItemId folderId, bool includeDeletedDiscs, CancellationToken cancellationToken);
+		Task<FolderModel> GetFolder(ItemId folderId, CancellationToken cancellationToken);
 
 		Task<FolderModel> GetDiscFolder(ItemId discId, CancellationToken cancellationToken);
 	}

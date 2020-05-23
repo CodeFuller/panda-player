@@ -16,14 +16,14 @@ namespace MusicLibrary.Logic.Services
 			this.foldersRepository = foldersRepository ?? throw new ArgumentNullException(nameof(foldersRepository));
 		}
 
-		public Task<FolderModel> GetRootFolder(bool includeDeletedDiscs, CancellationToken cancellationToken)
+		public Task<FolderModel> GetRootFolder(CancellationToken cancellationToken)
 		{
-			return foldersRepository.GetRootFolder(includeDeletedDiscs, cancellationToken);
+			return foldersRepository.GetRootFolder(cancellationToken);
 		}
 
-		public Task<FolderModel> GetFolder(ItemId folderId, bool includeDeletedDiscs, CancellationToken cancellationToken)
+		public Task<FolderModel> GetFolder(ItemId folderId, CancellationToken cancellationToken)
 		{
-			return foldersRepository.GetFolder(folderId, includeDeletedDiscs, cancellationToken);
+			return foldersRepository.GetFolder(folderId, cancellationToken);
 		}
 
 		public Task<FolderModel> GetDiscFolder(ItemId discId, CancellationToken cancellationToken)

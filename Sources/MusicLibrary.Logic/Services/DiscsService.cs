@@ -16,11 +16,6 @@ namespace MusicLibrary.Logic.Services
 			this.discsRepository = discsRepository ?? throw new ArgumentNullException(nameof(discsRepository));
 		}
 
-		public Task<DiscModel> GetDisc(ItemId discId, CancellationToken cancellationToken)
-		{
-			return discsRepository.GetDisc(discId, cancellationToken);
-		}
-
 		public Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken)
 		{
 			return discsRepository.UpdateDisc(disc, cancellationToken);

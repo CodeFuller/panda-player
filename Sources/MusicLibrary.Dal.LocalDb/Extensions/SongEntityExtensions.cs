@@ -2,15 +2,15 @@
 using System.Linq;
 using CF.Library.Core.Extensions;
 using MusicLibrary.Core;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Dal.LocalDb.Entities;
 using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.Dal.LocalDb.Extensions
 {
-	internal static class SongExtensions
+	internal static class SongEntityExtensions
 	{
-		public static SongModel ToModel(this Song song, DiscModel disc, IDataStorage dataStorage)
+		public static SongModel ToModel(this SongEntity song, DiscModel discModel, IDataStorage dataStorage)
 		{
 			var songModel = new SongModel
 			{
@@ -18,12 +18,12 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				Title = song.Title,
 				TreeTitle = new ItemUriParts(song.Uri).Last(),
 				TrackNumber = song.TrackNumber,
-				Duration = song.Duration,
-				Disc = disc,
+				Duration = TimeSpan.FromMilliseconds(song.DurationInMilliseconds),
+				Disc = discModel,
 				Artist = song.Artist?.ToModel(),
 				Genre = song.Genre?.ToModel(),
 				Rating = song.Rating != null ? ConvertRating(song.Rating.Value) : null,
-				BitRate = song.Bitrate,
+				BitRate = song.BitRate,
 				Size = song.FileSize,
 				Checksum = song.Checksum.HasValue ? (uint)song.Checksum.Value : (uint?)null,
 				LastPlaybackTime = song.LastPlaybackTime,
@@ -42,29 +42,29 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 			return songModel;
 		}
 
-		private static RatingModel ConvertRating(Rating rating)
+		private static RatingModel ConvertRating(int rating)
 		{
 			switch (rating)
 			{
-				case Rating.R1:
+				case 1:
 					return RatingModel.R1;
-				case Rating.R2:
+				case 2:
 					return RatingModel.R2;
-				case Rating.R3:
+				case 3:
 					return RatingModel.R3;
-				case Rating.R4:
+				case 4:
 					return RatingModel.R4;
-				case Rating.R5:
+				case 5:
 					return RatingModel.R5;
-				case Rating.R6:
+				case 6:
 					return RatingModel.R6;
-				case Rating.R7:
+				case 7:
 					return RatingModel.R7;
-				case Rating.R8:
+				case 8:
 					return RatingModel.R8;
-				case Rating.R9:
+				case 9:
 					return RatingModel.R9;
-				case Rating.R10:
+				case 10:
 					return RatingModel.R10;
 
 				default:

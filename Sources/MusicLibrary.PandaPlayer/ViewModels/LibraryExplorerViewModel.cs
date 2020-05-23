@@ -100,7 +100,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		private void LoadRootFolder()
 		{
 			// TBD: We should not load root folder, if some disc is active, because folder of this disc will be loaded just after that.
-			var rootFolderData = foldersService.GetRootFolder(false, CancellationToken.None).Result;
+			var rootFolderData = foldersService.GetRootFolder(CancellationToken.None).Result;
 			LoadFolder(rootFolderData);
 		}
 
@@ -120,7 +120,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		private async Task LoadFolder(ItemId folderId, CancellationToken cancellationToken)
 		{
-			var folder = await foldersService.GetFolder(folderId, includeDeletedDiscs: false, cancellationToken);
+			var folder = await foldersService.GetFolder(folderId, cancellationToken);
 
 			LoadFolder(folder);
 		}
