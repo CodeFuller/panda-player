@@ -31,7 +31,7 @@ namespace MusicLibrary.Dal.LocalDb.Entities
 
 		public Uri Uri { get; set; }
 
-		public int FileSize { get; set; }
+		public int? FileSize { get; set; }
 
 		public int? Checksum { get; set; }
 

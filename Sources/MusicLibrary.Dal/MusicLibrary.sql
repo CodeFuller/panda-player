@@ -9,7 +9,9 @@ CREATE TABLE [Songs] (
   [Duration] float NOT NULL,
   [Rating] int NULL,
   [Uri] ntext NOT NULL,
+  /* TODO: It can be NULL for deleted songs */
   [FileSize] int NOT NULL,
+  /* TODO: It can be NULL for deleted songs */
   [Checksum] int NOT NULL,
   [Bitrate] int NULL,
   [LastPlaybackTime] datetime NULL,

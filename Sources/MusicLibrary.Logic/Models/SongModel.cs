@@ -19,11 +19,7 @@ namespace MusicLibrary.Logic.Models
 
 		public DiscModel Disc { get; set; }
 
-		public ItemId ArtistId => Artist?.Id;
-
 		public ArtistModel Artist { get; set; }
-
-		public ItemId GenreId => Genre?.Id;
 
 		public GenreModel Genre { get; set; }
 
@@ -42,6 +38,10 @@ namespace MusicLibrary.Logic.Models
 		public ICollection<PlaybackModel> Playbacks { get; } = new Collection<PlaybackModel>();
 
 		public Uri ContentUri { get; set; }
+
+		public DateTimeOffset? DeleteDate { get; set; }
+
+		public bool IsDeleted => DeleteDate != null;
 
 		public void AddPlayback(DateTimeOffset playbackTime)
 		{

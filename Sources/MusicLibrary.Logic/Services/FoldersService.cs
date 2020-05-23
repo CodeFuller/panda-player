@@ -18,16 +18,19 @@ namespace MusicLibrary.Logic.Services
 
 		public Task<FolderModel> GetRootFolder(CancellationToken cancellationToken)
 		{
+			// TODO: Need to filter deleted discs
 			return foldersRepository.GetRootFolder(cancellationToken);
 		}
 
 		public Task<FolderModel> GetFolder(ItemId folderId, CancellationToken cancellationToken)
 		{
+			// TODO: Need to filter deleted discs
 			return foldersRepository.GetFolder(folderId, cancellationToken);
 		}
 
 		public Task<FolderModel> GetDiscFolder(ItemId discId, CancellationToken cancellationToken)
 		{
+			// TODO: Need to filter deleted discs
 			return foldersRepository.GetDiscFolder(discId, cancellationToken);
 		}
 	}

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using MusicLibrary.Logic.Models;
 
-namespace MusicLibrary.PandaPlayer.Internal
+namespace MusicLibrary.Logic.Comparers
 {
-	internal abstract class ItemWithIdEqualityComparer<T> : IEqualityComparer<T>
+	public abstract class ItemWithIdEqualityComparer<T> : IEqualityComparer<T>
 	{
 		protected abstract ItemId GetItemId(T item);
 

@@ -20,7 +20,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 			set
 			{
 				Set(ref currentDisc, value);
-				CurrentImageUri = currentDisc?.CoverImageUri;
+				CurrentImageUri = currentDisc?.CoverImage?.Uri;
 			}
 		}
 

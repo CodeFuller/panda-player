@@ -29,6 +29,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				LastPlaybackTime = song.LastPlaybackTime,
 				PlaybacksCount = song.PlaybacksCount,
 				ContentUri = dataStorage.TranslateInternalUri(song.Uri),
+				DeleteDate = song.DeleteDate,
 			};
 
 			var playbacks = song.Playbacks

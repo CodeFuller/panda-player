@@ -1,8 +1,8 @@
 ﻿using MusicLibrary.Logic.Models;
 
-namespace MusicLibrary.PandaPlayer.Internal
+namespace MusicLibrary.Logic.Comparers
 {
-	internal class GenreEqualityComparer : ItemWithIdEqualityComparer<GenreModel>
+	public class GenreEqualityComparer : ItemWithIdEqualityComparer<GenreModel>
 	{
 		protected override ItemId GetItemId(GenreModel item)
 		{

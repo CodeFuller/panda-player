@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using MusicLibrary.Logic.Comparers;
 using MusicLibrary.Logic.Interfaces.Services;
 using MusicLibrary.Logic.Models;
-using MusicLibrary.PandaPlayer.Internal;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using MusicLibrary.Core.Interfaces;
+using MusicLibrary.Dal.LocalDb.Entities;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.Dal.LocalDb.Interfaces;
+using MusicLibrary.Dal.LocalDb.Internal;
 using MusicLibrary.Logic.Interfaces.Dal;
 using MusicLibrary.Logic.Models;
 
@@ -16,15 +17,22 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 	{
 		private readonly IMusicLibraryDbContextFactory contextFactory;
 
-		private readonly IMusicLibrary musicLibrary;
-
 		private readonly IDataStorage dataStorage;
 
-		public DiscsRepository(IMusicLibraryDbContextFactory contextFactory, IMusicLibrary musicLibrary, IDataStorage dataStorage)
+		public DiscsRepository(IMusicLibraryDbContextFactory contextFactory, IDataStorage dataStorage)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
-			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
 			this.dataStorage = dataStorage ?? throw new ArgumentNullException(nameof(dataStorage));
+		}
+
+		public async Task<IReadOnlyCollection<DiscModel>> GetAllDiscs(CancellationToken cancellationToken)
+		{
+			await using var context = contextFactory.Create();
+
+			return (await GetDiscsQueryable(context)
+					.ToListAsync(cancellationToken))
+					.Select(disc => disc.ToModel(dataStorage))
+					.ToList();
 		}
 
 		public async Task<IReadOnlyCollection<DiscModel>> GetDiscs(IEnumerable<ItemId> discIds, CancellationToken cancellationToken)
@@ -33,14 +41,19 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 			await using var context = contextFactory.Create();
 
-			return await context.Discs
-				.Include(disc => disc.Songs).ThenInclude(song => song.Artist)
-				.Include(disc => disc.Songs).ThenInclude(song => song.Genre)
-				.Include(disc => disc.Songs).ThenInclude(song => song.Playbacks)
-				.Include(disc => disc.Images)
+			return await GetDiscsQueryable(context)
 				.Where(disc => ids.Contains(disc.Id))
 				.Select(disc => disc.ToModel(dataStorage))
 				.ToListAsync(cancellationToken);
+		}
+
+		private static IQueryable<DiscEntity> GetDiscsQueryable(MusicLibraryDbContext context)
+		{
+			return context.Discs
+				.Include(disc => disc.Songs).ThenInclude(song => song.Artist)
+				.Include(disc => disc.Songs).ThenInclude(song => song.Genre)
+				.Include(disc => disc.Songs).ThenInclude(song => song.Playbacks)
+				.Include(disc => disc.Images);
 		}
 
 		public Task UpdateDisc(DiscModel discModel, CancellationToken cancellationToken)

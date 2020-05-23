@@ -18,9 +18,6 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				.Select(s => s.Year)
 				.UniqueOrDefault();
 
-			var coverImage = disc.Images
-				.SingleOrDefault(im => im.ImageType == DiscImageType.Cover);
-
 			var discModel = new DiscModel
 			{
 				Id = disc.Id.ToItemId(),
@@ -28,7 +25,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				Title = disc.Title,
 				TreeTitle = new ItemUriParts(disc.Uri).Last(),
 				AlbumTitle = disc.AlbumTitle,
-				CoverImageUri = coverImage != null ? dataStorage.TranslateInternalUri(coverImage.Uri) : null,
+				Images = disc.Images.Select(image => image.ToModel(dataStorage)).ToList(),
 			};
 
 			discModel.Songs = new List<SongModel>(disc.Songs.Select(s => s.ToModel(discModel, dataStorage)));

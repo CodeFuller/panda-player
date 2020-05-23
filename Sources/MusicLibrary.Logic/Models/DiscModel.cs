@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace MusicLibrary.Logic.Models
 {
@@ -17,6 +17,10 @@ namespace MusicLibrary.Logic.Models
 
 		public IReadOnlyCollection<SongModel> Songs { get; set; }
 
-		public Uri CoverImageUri { get; set; }
+		public IReadOnlyCollection<DiscImageModel> Images { get; set; }
+
+		public DiscImageModel CoverImage => Images.SingleOrDefault(image => image.ImageType == DiscImageType.Cover);
+
+		public bool IsDeleted => Songs.All(song => song.IsDeleted);
 	}
 }
