@@ -5,11 +5,10 @@ using System.IO;
 using System.Linq;
 using CF.Library.Core.Extensions;
 
-namespace MusicLibrary.Core
+namespace MusicLibrary.Dal.LocalDb.Internal
 {
-#pragma warning disable CA1710 // Identifiers should have correct suffix
-	public class ItemUriParts : IEnumerable<string>
-#pragma warning restore CA1710 // Identifiers should have correct suffix
+	// TBD: Do we still need it after adding Folder entity?
+	internal class ItemUriParts : IEnumerable<string>
 	{
 		private const string UriDelimiter = "/";
 
