@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using MusicLibrary.Logic.Interfaces.Services;
 using MusicLibrary.Logic.Models;
+using MusicLibrary.PandaPlayer.Internal;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
@@ -100,19 +101,27 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				throw new InvalidOperationException("Songs list is empty");
 			}
 
-			AvailableArtists = await FillAvailableValues(() => artistsService.GetAllArtists(cancellationToken));
-			AvailableGenres = await FillAvailableValues(() => genresService.GetAllGenres(cancellationToken));
+			await LoadArtists(cancellationToken);
+			await LoadGenres(cancellationToken);
 
 			treeTitle = SingleSongMode ? SingleSong.TreeTitle : null;
 			title = SingleSongMode ? SingleSong.Title : null;
 
-			var distinctArtistId = GetDistinctValue(editedSongs, s => s.ArtistId);
-			Artist = distinctArtistId != null ? AvailableArtists.Single(a => a.Value.Id == distinctArtistId) : null;
+			TrackNumber = BuildProperty(editedSongs, s => s.TrackNumber, EqualityComparer<short?>.Default);
+		}
 
-			var distinctGenreId = GetDistinctValue(editedSongs, s => s.GenreId);
-			Genre = distinctGenreId != null ? AvailableGenres.Single(g => g.Value.Id == distinctGenreId) : null;
+		private async Task LoadArtists(CancellationToken cancellationToken)
+		{
+			var allArtists = await artistsService.GetAllArtists(cancellationToken);
+			AvailableArtists = GetAvailableListItems(allArtists);
+			Artist = SelectCurrentListItem(AvailableArtists, s => s.Artist, new ArtistEqualityComparer());
+		}
 
-			TrackNumber = BuildProperty(editedSongs, s => s.TrackNumber);
+		private async Task LoadGenres(CancellationToken cancellationToken)
+		{
+			var allGenres = await genresService.GetAllGenres(cancellationToken);
+			AvailableGenres = GetAvailableListItems(allGenres);
+			Genre = SelectCurrentListItem(AvailableGenres, s => s.Genre, new GenreEqualityComparer());
 		}
 
 		public async Task Save(CancellationToken cancellationToken)
@@ -123,7 +132,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		private static async Task<IReadOnlyCollection<EditedSongProperty<T>>> FillAvailableValues<T>(Func<Task<IReadOnlyCollection<T>>> valuesProvider)
+		private static IReadOnlyCollection<EditedSongProperty<T>> GetAvailableListItems<T>(IEnumerable<T> values)
 			where T : class
 		{
 			var availableValues = new List<EditedSongProperty<T>>
@@ -132,10 +141,25 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				new EditedSongProperty<T>(null),
 			};
 
-			var loadedValues = await valuesProvider();
-			availableValues.AddRange(loadedValues.Select(v => new EditedSongProperty<T>(v)));
+			availableValues.AddRange(values.Select(v => new EditedSongProperty<T>(v)));
 
 			return availableValues;
+		}
+
+		private EditedSongProperty<T> SelectCurrentListItem<T>(IEnumerable<EditedSongProperty<T>> listItems, Func<SongModel, T> propertySelector, IEqualityComparer<T> comparer)
+			where T : class
+		{
+			var distinctValue = GetDistinctValue(editedSongs, propertySelector, comparer);
+			foreach (var item in listItems)
+			{
+				if ((distinctValue == null && !item.HasValue) ||
+				    (distinctValue != null && item.HasValue && comparer.Equals(distinctValue, item.Value)))
+				{
+					return item;
+				}
+			}
+
+			throw new InvalidOperationException("Failed to select current item in the list");
 		}
 
 		private IEnumerable<SongModel> GetUpdatedSongs()
@@ -167,17 +191,16 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		private static EditedSongProperty<T> BuildProperty<T>(IEnumerable<SongModel> songs, Func<SongModel, T> propertyAccessor)
+		private static EditedSongProperty<T> BuildProperty<T>(IEnumerable<SongModel> songs, Func<SongModel, T> propertySelector, IEqualityComparer<T> comparer)
 		{
-			var propertyValues = songs.Select(propertyAccessor).Distinct().ToList();
-			return propertyValues.Count == 1 ? new EditedSongProperty<T>(propertyValues.Single()) : new EditedSongProperty<T>();
+			var value = GetDistinctValue(songs, propertySelector, comparer);
+			return value != null ? new EditedSongProperty<T>(value) : new EditedSongProperty<T>();
 		}
 
-		private static T GetDistinctValue<T>(IEnumerable<SongModel> songs, Func<SongModel, T> propertyAccessor)
-			where T : class
+		private static T GetDistinctValue<T>(IEnumerable<SongModel> songs, Func<SongModel, T> propertySelector, IEqualityComparer<T> comparer)
 		{
-			var propertyValues = songs.Select(propertyAccessor).Distinct().ToList();
-			return propertyValues.Count == 1 ? propertyValues.Single() : null;
+			var propertyValues = songs.Select(propertySelector).Distinct(comparer).ToList();
+			return propertyValues.Count == 1 ? propertyValues.Single() : default;
 		}
 	}
 }
