@@ -35,6 +35,7 @@ namespace MusicLibrary.PandaPlayer
 
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{
+			// TBD: Extract registrations to extensions methods on IServiceCollection
 			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("localDb:dataStorage", options));
 			services.Configure<LastFmClientSettings>(options => configuration.Bind("lastFmClient", options));
 			services.Configure<PandaPlayerSettings>(configuration.Bind);
@@ -47,6 +48,7 @@ namespace MusicLibrary.PandaPlayer
 
 			services.AddDal(settings => configuration.Bind("localDb:sqLite", settings));
 			services.AddLocalDbDal(settings => configuration.Bind("localDb:dataStorage", settings));
+			services.AddMusicLibraryDbContext(configuration.GetConnectionString("musicLibraryDb"));
 
 			services.AddTransient<ISongTagger, SongTagger>();
 			services.AddTransient<IFileStorage, FileSystemStorage>();

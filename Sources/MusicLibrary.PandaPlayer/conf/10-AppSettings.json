@@ -1,11 +1,16 @@
 ﻿{
+	"connectionStrings": {
+		"musicLibraryDb": "Data Source=d:\\PandaPlayer\\MusicLibrary.db;Foreign Keys=True;"
+	},
+
 	"localDb": {
 		"sqLite": {
+			// TBD: Remove
 			"dataSource": "d:\\PandaPlayer\\MusicLibrary.db"
 		},
 		"dataStorage": {
 			"root": "d:\\music"
-		} 
+		}
 	},
 
 	"dataStoragePath": "d:\\PandaPlayer\\.data",

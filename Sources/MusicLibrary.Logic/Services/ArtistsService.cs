@@ -18,12 +18,13 @@ namespace MusicLibrary.Logic.Services
 			this.artistsRepository = artistsRepository ?? throw new ArgumentNullException(nameof(artistsRepository));
 		}
 
-		public async Task<IReadOnlyCollection<ArtistModel>> GetAllArtists(CancellationToken cancellationToken)
+		public Task<IReadOnlyCollection<ArtistModel>> GetAllArtists(CancellationToken cancellationToken)
 		{
-			var genres = await artistsRepository.GetAllArtists(cancellationToken);
-
-			return genres.OrderBy(g => g.Name)
+			var artists = artistsRepository.GetAllArtists()
+				.OrderBy(a => a.Name)
 				.ToList();
+
+			return Task.FromResult<IReadOnlyCollection<ArtistModel>>(artists);
 		}
 	}
 }

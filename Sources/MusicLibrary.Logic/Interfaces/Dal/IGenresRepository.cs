@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.Logic.Interfaces.Dal
 {
 	public interface IGenresRepository
 	{
-		Task<IReadOnlyCollection<GenreModel>> GetAllGenres(CancellationToken cancellationToken);
+		IQueryable<GenreModel> GetAllGenres();
 	}
 }

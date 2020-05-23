@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.Dal.LocalDb.Extensions;
+using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Logic.Interfaces.Dal;
 using MusicLibrary.Logic.Models;
 
@@ -12,24 +9,24 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 {
 	internal class GenresRepository : IGenresRepository
 	{
-		private readonly DiscLibrary discLibrary;
+		private readonly IMusicLibraryDbContextFactory contextFactory;
 
-		public GenresRepository(DiscLibrary discLibrary)
+		public GenresRepository(IMusicLibraryDbContextFactory contextFactory)
 		{
-			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
+			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
 		}
 
-		public Task<IReadOnlyCollection<GenreModel>> GetAllGenres(CancellationToken cancellationToken)
+		public IQueryable<GenreModel> GetAllGenres()
 		{
-			var genres = discLibrary.Genres
-				.Select(g => new GenreModel
-				{
-					Id = g.Id.ToItemId(),
-					Name = g.Name,
-				})
-				.ToList();
+			var context = contextFactory.Create();
 
-			return Task.FromResult<IReadOnlyCollection<GenreModel>>(genres);
+			return context.Genres
+				.Select(a => new GenreModel
+				{
+					Id = new ItemId(a.Id.ToString(CultureInfo.InvariantCulture)),
+					Name = a.Name,
+				})
+				.AsQueryable();
 		}
 	}
 }
