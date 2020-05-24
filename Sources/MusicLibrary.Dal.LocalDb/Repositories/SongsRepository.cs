@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MusicLibrary.Core.Interfaces.Dal;
 using MusicLibrary.Core.Models;
+using MusicLibrary.Dal.LocalDb.Entities;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.Dal.LocalDb.Interfaces;
 
@@ -34,7 +35,6 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 				.Include(song => song.Disc).ThenInclude(disc => disc.Images)
 				.Include(song => song.Artist)
 				.Include(song => song.Genre)
-				.Include(song => song.Playbacks) // TBD: Can we avoid loading all playbacks? We actually can need this only for adding new playback (and showing playbacks history).
 				.Where(song => ids.Contains(song.Id))
 				.ToListAsync(cancellationToken);
 
@@ -55,9 +55,41 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			throw new NotImplementedException();
 		}
 
-		public Task UpdateSongPlaybacks(SongModel song, CancellationToken cancellationToken)
+		public async Task UpdateSongLastPlayback(SongModel song, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			await using var context = contextFactory.Create();
+
+			var id = song.Id.ToInt32();
+			var songEntity = await context.Songs
+				.Include(s => s.Playbacks)
+				.SingleAsync(s => s.Id == id, cancellationToken);
+
+			SyncSongPlaybacks(song, songEntity);
+
+			await context.SaveChangesAsync(cancellationToken);
+		}
+
+		public void SyncSongPlaybacks(SongModel model, SongEntity entity)
+		{
+			if (model.PlaybacksCount != entity.PlaybacksCount + 1)
+			{
+				throw new InvalidOperationException($"There is some discrepancy in song playbacks for song {entity.Id}: {model.PlaybacksCount} != {entity.PlaybacksCount + 1}");
+			}
+
+			if (model.LastPlaybackTime == null)
+			{
+				throw new InvalidOperationException("Last playback for the song is not set");
+			}
+
+			entity.PlaybacksCount = model.PlaybacksCount;
+			entity.LastPlaybackTime = model.LastPlaybackTime;
+
+			var playbackEntity = new PlaybackEntity
+			{
+				PlaybackTime = model.LastPlaybackTime.Value,
+			};
+
+			entity.Playbacks.Add(playbackEntity);
 		}
 
 		public Task DeleteSong(SongModel song, CancellationToken cancellationToken)

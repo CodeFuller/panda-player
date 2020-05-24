@@ -52,7 +52,6 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			return context.Discs
 				.Include(disc => disc.Songs).ThenInclude(song => song.Artist)
 				.Include(disc => disc.Songs).ThenInclude(song => song.Genre)
-				.Include(disc => disc.Songs).ThenInclude(song => song.Playbacks)
 				.Include(disc => disc.Images);
 		}
 

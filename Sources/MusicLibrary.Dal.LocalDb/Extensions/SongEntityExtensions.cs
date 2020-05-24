@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using CF.Library.Core.Extensions;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Entities;
 using MusicLibrary.Dal.LocalDb.Interfaces;
@@ -28,17 +27,10 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				Checksum = song.Checksum.HasValue ? (uint)song.Checksum.Value : (uint?)null,
 				LastPlaybackTime = song.LastPlaybackTime,
 				PlaybacksCount = song.PlaybacksCount,
+				Playbacks = song.Playbacks?.Select(p => p.ToModel()).ToList(),
 				ContentUri = dataStorage.TranslateInternalUri(song.Uri),
 				DeleteDate = song.DeleteDate,
 			};
-
-			var playbacks = song.Playbacks
-				.Select(p => new PlaybackModel
-				{
-					PlaybackTime = p.PlaybackTime,
-				});
-
-			songModel.Playbacks.AddRange(playbacks);
 
 			return songModel;
 		}

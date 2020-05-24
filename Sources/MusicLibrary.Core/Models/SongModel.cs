@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace MusicLibrary.Core.Models
 {
@@ -35,7 +34,7 @@ namespace MusicLibrary.Core.Models
 
 		public int PlaybacksCount { get; set; }
 
-		public ICollection<PlaybackModel> Playbacks { get; } = new Collection<PlaybackModel>();
+		public IReadOnlyCollection<PlaybackModel> Playbacks { get; set; }
 
 		public Uri ContentUri { get; set; }
 
@@ -47,13 +46,6 @@ namespace MusicLibrary.Core.Models
 		{
 			++PlaybacksCount;
 			LastPlaybackTime = playbackTime;
-
-			var playback = new PlaybackModel
-			{
-				PlaybackTime = playbackTime,
-			};
-
-			Playbacks.Add(playback);
 		}
 	}
 }

@@ -11,7 +11,7 @@ namespace MusicLibrary.Core.Interfaces.Dal
 
 		Task UpdateSong(SongModel song, UpdatedSongPropertiesModel updatedProperties, CancellationToken cancellationToken);
 
-		Task UpdateSongPlaybacks(SongModel song, CancellationToken cancellationToken);
+		Task UpdateSongLastPlayback(SongModel song, CancellationToken cancellationToken);
 
 		Task DeleteSong(SongModel song, CancellationToken cancellationToken);
 	}

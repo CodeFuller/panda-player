@@ -41,7 +41,7 @@ namespace MusicLibrary.Dal.LocalDb.Entities
 
 		public int PlaybacksCount { get; set; }
 
-		public IReadOnlyCollection<PlaybackEntity> Playbacks { get; set; }
+		public ICollection<PlaybackEntity> Playbacks { get; set; }
 
 		public DateTimeOffset? DeleteDate { get; set; }
 	}

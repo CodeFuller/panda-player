@@ -30,7 +30,7 @@ namespace MusicLibrary.Core.Services
 		public Task AddSongPlayback(SongModel song, DateTimeOffset playbackTime, CancellationToken cancellationToken)
 		{
 			song.AddPlayback(playbackTime);
-			return songsRepository.UpdateSongPlaybacks(song, cancellationToken);
+			return songsRepository.UpdateSongLastPlayback(song, cancellationToken);
 		}
 
 		public Task DeleteSong(SongModel song, CancellationToken cancellationToken)
