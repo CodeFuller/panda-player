@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using CF.Library.Core.Interfaces;
 using GalaSoft.MvvmLight.Messaging;
@@ -55,28 +56,55 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 			var loadedSongs = songsService.GetSongs(songIds, CancellationToken.None).Result
 				.ToDictionary(s => s.Id, s => s);
 
+			var newSongIndex = playListData.CurrentSongIndex;
+
 			var playListSongs = new List<SongModel>();
-			foreach (var playlistSong in playListData.Songs)
+			foreach (var (playlistSong, songIndex) in playListData.Songs.Select((song, i) => (song, i)))
 			{
 				if (!loadedSongs.TryGetValue(new ItemId(playlistSong.Id), out var loadedSong))
 				{
-					logger.LogInformation(Current($"Song {playlistSong.Id} from saved playlist was not found in library. Ignoring saved playlist"));
+					logger.LogWarning(Current($"Song {playlistSong.Id} from saved playlist was not found in library. Ignoring saved playlist."));
 					return;
+				}
+
+				if (loadedSong.IsDeleted)
+				{
+					logger.LogWarning(Current($"Song '{GetSongTitle(loadedSong)}' from saved playlist was deleted from the library. Ignoring this song."));
+
+					if (newSongIndex.HasValue && songIndex < newSongIndex)
+					{
+						--newSongIndex;
+					}
+
+					continue;
 				}
 
 				playListSongs.Add(loadedSong);
 			}
 
-			if (playListData.CurrentSongIndex != null && (playListData.CurrentSongIndex < 0 || playListData.CurrentSongIndex >= loadedSongs.Count))
+			if (newSongIndex != null && (newSongIndex < 0 || newSongIndex >= loadedSongs.Count))
 			{
-				logger.LogInformation(Current($"Index of current song in saved playlist is invalid ({playListData.CurrentSongIndex}, [{0}, {loadedSongs.Count})). Ignoring saved playlist"));
+				logger.LogWarning(Current($"Index of current song in saved playlist is invalid ({newSongIndex}, [0, {loadedSongs.Count})). Ignoring saved playlist."));
 				return;
 			}
 
 			SetSongsRaw(playListSongs);
-			CurrentSongIndex = playListData.CurrentSongIndex;
+			CurrentSongIndex = newSongIndex;
 
 			Messenger.Default.Send(new PlaylistLoadedEventArgs(this));
+		}
+
+		private static string GetSongTitle(SongModel song)
+		{
+			var sb = new StringBuilder();
+			if (song.TrackNumber.HasValue)
+			{
+				sb.Append($"{song.TrackNumber.Value:D2} - ");
+			}
+
+			sb.Append(song.Title);
+
+			return sb.ToString();
 		}
 
 		protected override void OnPlaylistChanged()

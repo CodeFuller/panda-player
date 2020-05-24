@@ -48,7 +48,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				var selectedDisc = SelectedDisc;
 				if (selectedDisc != null)
 				{
-					SongListViewModel.SetSongs(selectedDisc.Songs);
+					SongListViewModel.SetSongs(selectedDisc.Songs.Where(song => !song.IsDeleted));
 					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(selectedDisc));
 				}
 				else
@@ -161,9 +161,17 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				Items.Add(new ParentFolderExplorerItem());
 			}
 
-			Items.AddRange(folder.Subfolders.Select(x => new FolderExplorerItem(x)).OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase));
+			var subfolders = folder.Subfolders
+				.Select(x => new FolderExplorerItem(x))
+				.OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase);
 
-			Items.AddRange(folder.Discs.Select(x => new DiscExplorerItem(x)).OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase));
+			var discs = folder.Discs
+				.Where(disc => !disc.IsDeleted)
+				.Select(x => new DiscExplorerItem(x))
+				.OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase);
+
+			Items.AddRange(subfolders);
+			Items.AddRange(discs);
 		}
 
 		public void SwitchToDisc(DiscModel disc)
