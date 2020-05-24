@@ -1,6 +1,6 @@
 ﻿using CF.Library.Core.Extensions;
 
-namespace MusicLibrary.Common
+namespace MusicLibrary.Shared
 {
 	public static class FileSizeFormatter
 	{

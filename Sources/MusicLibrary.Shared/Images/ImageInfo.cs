@@ -1,7 +1,7 @@
 ﻿using CF.Library.Core.Exceptions;
 using CF.Library.Core.Extensions;
 
-namespace MusicLibrary.Common.Images
+namespace MusicLibrary.Shared.Images
 {
 	public class ImageInfo
 	{

@@ -1,8 +1,8 @@
 ﻿using CF.Library.Core.Facades;
 using Microsoft.Extensions.DependencyInjection;
-using MusicLibrary.Common.Images;
+using MusicLibrary.Shared.Images;
 
-namespace MusicLibrary.Common
+namespace MusicLibrary.Shared
 {
 	public static class ServiceCollectionExtensions
 	{

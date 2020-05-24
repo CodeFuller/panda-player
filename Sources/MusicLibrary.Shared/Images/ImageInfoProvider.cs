@@ -1,7 +1,7 @@
 ﻿using System;
 using CF.Library.Core.Facades;
 
-namespace MusicLibrary.Common.Images
+namespace MusicLibrary.Shared.Images
 {
 	internal class ImageInfoProvider : IImageInfoProvider
 	{

@@ -3,7 +3,7 @@ using CF.Library.Core.Extensions;
 using CF.Library.Core.Facades;
 using GalaSoft.MvvmLight;
 
-namespace MusicLibrary.Common.Images
+namespace MusicLibrary.Shared.Images
 {
 	internal class ImageFile : ViewModelBase, IImageFile
 	{

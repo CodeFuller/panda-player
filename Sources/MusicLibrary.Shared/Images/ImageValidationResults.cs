@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace MusicLibrary.Common.Images
+namespace MusicLibrary.Shared.Images
 {
 	[Flags]
 	internal enum ImageValidationResults

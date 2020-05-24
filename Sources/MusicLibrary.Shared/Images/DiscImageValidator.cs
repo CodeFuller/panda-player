@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using CF.Library.Core.Extensions;
 
-namespace MusicLibrary.Common.Images
+namespace MusicLibrary.Shared.Images
 {
 	internal class DiscImageValidator : IDiscImageValidator
 	{

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MusicLibrary.Common.Images
+namespace MusicLibrary.Shared.Images
 {
 	internal interface IDiscImageValidator
 	{

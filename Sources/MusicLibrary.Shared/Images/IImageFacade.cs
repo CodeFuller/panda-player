@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MusicLibrary.Common.Images
+namespace MusicLibrary.Shared.Images
 {
 	internal interface IImageFacade : IDisposable
 	{
