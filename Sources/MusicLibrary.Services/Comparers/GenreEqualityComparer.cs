@@ -1,6 +1,6 @@
 ﻿using MusicLibrary.Core.Models;
 
-namespace MusicLibrary.Core.Comparers
+namespace MusicLibrary.Services.Comparers
 {
 	public class GenreEqualityComparer : ItemWithIdEqualityComparer<GenreModel>
 	{

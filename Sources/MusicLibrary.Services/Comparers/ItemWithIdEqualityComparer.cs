@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using MusicLibrary.Core.Models;
 
-namespace MusicLibrary.Core.Comparers
+namespace MusicLibrary.Services.Comparers
 {
 	public abstract class ItemWithIdEqualityComparer<T> : IEqualityComparer<T>
 	{

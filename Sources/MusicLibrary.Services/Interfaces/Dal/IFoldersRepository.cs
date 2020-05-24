@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
 
-namespace MusicLibrary.Core.Interfaces.Services
+namespace MusicLibrary.Services.Interfaces.Dal
 {
-	public interface IFoldersService
+	public interface IFoldersRepository
 	{
 		Task<FolderModel> GetRootFolder(CancellationToken cancellationToken);
 

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MusicLibrary.Core.Interfaces.Dal;
-using MusicLibrary.Core.Interfaces.Services;
 using MusicLibrary.Core.Models;
+using MusicLibrary.Services.Interfaces;
+using MusicLibrary.Services.Interfaces.Dal;
 
-namespace MusicLibrary.Core.Services
+namespace MusicLibrary.Services
 {
 	internal class GenresService : IGenresService
 	{

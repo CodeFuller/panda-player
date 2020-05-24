@@ -5,10 +5,10 @@ using System.Threading;
 using CF.Library.Core.Interfaces;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Extensions.Logging;
-using MusicLibrary.Core.Interfaces.Services;
 using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.Events;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
+using MusicLibrary.Services.Interfaces;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist

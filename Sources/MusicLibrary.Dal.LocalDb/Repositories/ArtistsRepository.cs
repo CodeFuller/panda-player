@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using MusicLibrary.Core.Interfaces.Dal;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Interfaces;
+using MusicLibrary.Services.Interfaces.Dal;
 
 namespace MusicLibrary.Dal.LocalDb.Repositories
 {

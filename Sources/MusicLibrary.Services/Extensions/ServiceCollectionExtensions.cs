@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MusicLibrary.Core.Interfaces.Services;
-using MusicLibrary.Core.Services;
+using MusicLibrary.Services.Interfaces;
 
-namespace MusicLibrary.Core
+namespace MusicLibrary.Services.Extensions
 {
 	public static class ServiceCollectionExtensions
 	{

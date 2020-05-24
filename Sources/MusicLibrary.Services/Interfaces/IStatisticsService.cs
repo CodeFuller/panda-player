@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
 
-namespace MusicLibrary.Core.Interfaces.Services
+namespace MusicLibrary.Services.Interfaces
 {
 	public interface IStatisticsService
 	{

@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
 
-namespace MusicLibrary.Core.Interfaces.Services
+namespace MusicLibrary.Services.Interfaces.Dal
 {
-	public interface ISongsService
+	public interface ISongsRepository
 	{
 		Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken);
 
 		Task UpdateSong(SongModel song, UpdatedSongPropertiesModel updatedProperties, CancellationToken cancellationToken);
 
-		Task AddSongPlayback(SongModel song, DateTimeOffset playbackTime, CancellationToken cancellationToken);
+		Task UpdateSongLastPlayback(SongModel song, CancellationToken cancellationToken);
 
 		Task DeleteSong(SongModel song, CancellationToken cancellationToken);
 	}

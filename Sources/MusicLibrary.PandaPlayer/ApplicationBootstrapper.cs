@@ -9,7 +9,6 @@ using CF.Library.Wpf;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MusicLibrary.Core;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.LastFM;
 using MusicLibrary.PandaPlayer.Adviser;
@@ -19,6 +18,7 @@ using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist;
 using MusicLibrary.PandaPlayer.ViewModels.Player;
 using MusicLibrary.PandaPlayer.ViewModels.Scrobbling;
+using MusicLibrary.Services.Extensions;
 using MusicLibrary.Shared;
 
 namespace MusicLibrary.PandaPlayer
