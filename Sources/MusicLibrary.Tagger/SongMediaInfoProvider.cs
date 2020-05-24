@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using MusicLibrary.Core.Media;
+using MusicLibrary.Core.Obsolete.Media;
 
 namespace MusicLibrary.Tagger
 {

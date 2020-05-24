@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MusicLibrary.Core.Interfaces.Dal;
+using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Dal.LocalDb.Internal;
-using MusicLibrary.Logic.Interfaces.Dal;
-using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.Dal.LocalDb.Repositories
 {

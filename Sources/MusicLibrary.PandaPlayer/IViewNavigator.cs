@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MusicLibrary.Logic.Models;
+using MusicLibrary.Core.Models;
 
 namespace MusicLibrary.PandaPlayer
 {

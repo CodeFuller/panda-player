@@ -46,11 +46,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		MusicLibrary.Tests.ruleset = MusicLibrary.Tests.ruleset
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Core", "Sources\MusicLibrary.Core\MusicLibrary.Core.csproj", "{F16D1C24-F09A-4289-91C7-C9A3122D5225}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Dal.LocalDb", "Sources\MusicLibrary.Dal.LocalDb\MusicLibrary.Dal.LocalDb.csproj", "{510E3C70-2733-4586-AA0F-8689C9A88313}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Logic", "Sources\MusicLibrary.Logic\MusicLibrary.Logic.csproj", "{0B14C9B2-DC6D-4253-8CB2-5B0958142B0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Core", "Sources\MusicLibrary.Core\MusicLibrary.Core.csproj", "{0B14C9B2-DC6D-4253-8CB2-5B0958142B0B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Core.Obsolete", "Sources\MusicLibrary.Core.Obsolete\MusicLibrary.Core.Obsolete.csproj", "{147AE6D3-297C-45F1-99E8-CE55ECF55CFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -122,10 +122,6 @@ Global
 		{B849DE9E-CDBA-4AF4-8614-9926FF1C4320}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B849DE9E-CDBA-4AF4-8614-9926FF1C4320}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B849DE9E-CDBA-4AF4-8614-9926FF1C4320}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F16D1C24-F09A-4289-91C7-C9A3122D5225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F16D1C24-F09A-4289-91C7-C9A3122D5225}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F16D1C24-F09A-4289-91C7-C9A3122D5225}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F16D1C24-F09A-4289-91C7-C9A3122D5225}.Release|Any CPU.Build.0 = Release|Any CPU
 		{510E3C70-2733-4586-AA0F-8689C9A88313}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{510E3C70-2733-4586-AA0F-8689C9A88313}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{510E3C70-2733-4586-AA0F-8689C9A88313}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -134,6 +130,10 @@ Global
 		{0B14C9B2-DC6D-4253-8CB2-5B0958142B0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B14C9B2-DC6D-4253-8CB2-5B0958142B0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B14C9B2-DC6D-4253-8CB2-5B0958142B0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{147AE6D3-297C-45F1-99E8-CE55ECF55CFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{147AE6D3-297C-45F1-99E8-CE55ECF55CFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{147AE6D3-297C-45F1-99E8-CE55ECF55CFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{147AE6D3-297C-45F1-99E8-CE55ECF55CFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -155,9 +155,9 @@ Global
 		{35E9AAA7-C4D5-4A83-A5D8-036C9FFB58A5} = {EE527A89-5ED8-4502-9785-A7A481C4F971}
 		{65A8921E-54D4-4E26-ADA9-42EC138B044C} = {EE527A89-5ED8-4502-9785-A7A481C4F971}
 		{B849DE9E-CDBA-4AF4-8614-9926FF1C4320} = {EE527A89-5ED8-4502-9785-A7A481C4F971}
-		{F16D1C24-F09A-4289-91C7-C9A3122D5225} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
 		{510E3C70-2733-4586-AA0F-8689C9A88313} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
 		{0B14C9B2-DC6D-4253-8CB2-5B0958142B0B} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
+		{147AE6D3-297C-45F1-99E8-CE55ECF55CFC} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8FAD434A-F2AF-4138-AB70-749D7D8D4C9D}

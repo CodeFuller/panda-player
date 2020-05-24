@@ -1,5 +1,5 @@
 ﻿using System.Windows.Input;
-using MusicLibrary.Logic.Models;
+using MusicLibrary.Core.Models;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {

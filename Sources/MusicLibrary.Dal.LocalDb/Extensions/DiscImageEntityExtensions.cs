@@ -1,7 +1,8 @@
 ﻿using System;
+using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Entities;
 using MusicLibrary.Dal.LocalDb.Interfaces;
-using MusicLibrary.Logic.Models;
+using DiscImageType = MusicLibrary.Core.Models.DiscImageType;
 
 namespace MusicLibrary.Dal.LocalDb.Extensions
 {
@@ -18,12 +19,12 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 			};
 		}
 
-		private static Logic.Models.DiscImageType ConvertImageType(Entities.DiscImageType imageType)
+		private static DiscImageType ConvertImageType(Entities.DiscImageType imageType)
 		{
 			switch (imageType)
 			{
 				case Entities.DiscImageType.Cover:
-					return Logic.Models.DiscImageType.Cover;
+					return DiscImageType.Cover;
 
 				default:
 					throw new InvalidOperationException($"Unexpected disc image type: {imageType}");

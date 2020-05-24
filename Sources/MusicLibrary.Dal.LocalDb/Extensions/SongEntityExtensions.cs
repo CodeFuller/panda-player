@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using CF.Library.Core.Extensions;
+using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Entities;
 using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Dal.LocalDb.Internal;
-using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.Dal.LocalDb.Extensions
 {

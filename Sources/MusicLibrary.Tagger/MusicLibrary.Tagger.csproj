@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MusicLibrary.Core\MusicLibrary.Core.csproj" />
+    <ProjectReference Include="..\MusicLibrary.Core.Obsolete\MusicLibrary.Core.Obsolete.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

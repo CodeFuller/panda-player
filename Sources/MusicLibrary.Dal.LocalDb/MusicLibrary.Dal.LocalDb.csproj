@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MusicLibrary.Core\MusicLibrary.Core.csproj" />
-    <ProjectReference Include="..\MusicLibrary.Logic\MusicLibrary.Logic.csproj" />
   </ItemGroup>
 
 </Project>

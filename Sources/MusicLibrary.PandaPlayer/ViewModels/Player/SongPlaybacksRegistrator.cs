@@ -2,10 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CF.Library.Core.Facades;
+using MusicLibrary.Core.Interfaces.Services;
+using MusicLibrary.Core.Models;
 using MusicLibrary.LastFM;
 using MusicLibrary.LastFM.Objects;
-using MusicLibrary.Logic.Interfaces.Services;
-using MusicLibrary.Logic.Models;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Player
 {

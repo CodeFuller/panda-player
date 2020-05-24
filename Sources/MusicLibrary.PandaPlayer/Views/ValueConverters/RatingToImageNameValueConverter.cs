@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
-using MusicLibrary.Logic.Models;
+using MusicLibrary.Core.Models;
 using static System.FormattableString;
 
 namespace MusicLibrary.PandaPlayer.Views.ValueConverters

@@ -7,8 +7,8 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Extensions.Options;
 using MusicLibrary.Common.Images;
-using MusicLibrary.Logic.Interfaces.Services;
-using MusicLibrary.Logic.Models;
+using MusicLibrary.Core.Interfaces.Services;
+using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages

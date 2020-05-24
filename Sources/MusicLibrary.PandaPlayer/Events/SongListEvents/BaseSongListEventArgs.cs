@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MusicLibrary.Logic.Models;
+using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.Extensions;
 
 namespace MusicLibrary.PandaPlayer.Events.SongListEvents

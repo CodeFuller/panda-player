@@ -29,9 +29,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MusicLibrary.Common\MusicLibrary.Common.csproj" />
+    <ProjectReference Include="..\MusicLibrary.Core\MusicLibrary.Core.csproj" />
     <ProjectReference Include="..\MusicLibrary.Dal.LocalDb\MusicLibrary.Dal.LocalDb.csproj" />
     <ProjectReference Include="..\MusicLibrary.LastFM\MusicLibrary.LastFM.csproj" />
-    <ProjectReference Include="..\MusicLibrary.Logic\MusicLibrary.Logic.csproj" />
   </ItemGroup>
 
   <ItemGroup>

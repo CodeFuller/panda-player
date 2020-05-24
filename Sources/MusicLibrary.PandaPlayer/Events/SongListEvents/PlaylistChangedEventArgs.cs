@@ -1,4 +1,4 @@
-﻿using MusicLibrary.Logic.Models;
+﻿using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.Events.SongListEvents

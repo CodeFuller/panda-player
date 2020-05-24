@@ -1,6 +1,6 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
-using MusicLibrary.Logic.Models;
+using MusicLibrary.Core.Models;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {

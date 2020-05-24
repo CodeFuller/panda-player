@@ -1,5 +1,5 @@
 ﻿using System;
-using MusicLibrary.Logic.Models;
+using MusicLibrary.Core.Models;
 
 namespace MusicLibrary.Dal.LocalDb.Extensions
 {

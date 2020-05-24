@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using MusicLibrary.Logic.Models;
+using MusicLibrary.Core.Models;
 
 namespace MusicLibrary.PandaPlayer.Adviser
 {

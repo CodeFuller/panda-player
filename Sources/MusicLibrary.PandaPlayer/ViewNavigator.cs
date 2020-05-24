@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using CF.Library.Core.Enums;
 using CF.Library.Core.Interfaces;
-using MusicLibrary.Logic.Models;
+using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.PandaPlayer.Views;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using MusicLibrary.Core.Media;
+using MusicLibrary.Core.Obsolete.Media;
 using TagLib;
 
 namespace MusicLibrary.Tagger

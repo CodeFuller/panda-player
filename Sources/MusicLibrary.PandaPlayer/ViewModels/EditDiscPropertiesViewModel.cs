@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
-using MusicLibrary.Logic.Interfaces.Services;
-using MusicLibrary.Logic.Models;
+using MusicLibrary.Core.Interfaces.Services;
+using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels

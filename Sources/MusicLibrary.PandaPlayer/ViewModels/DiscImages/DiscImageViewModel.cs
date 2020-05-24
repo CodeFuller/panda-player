@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
-using MusicLibrary.Logic.Models;
+using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.Events.DiscEvents;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
