@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:valueConverters="clr-namespace:MusicLibrary.PandaPlayer.Views.ValueConverters"
         mc:Ignorable="d"
-        Title="Library Statistics" Width="250" Height="350" WindowStartupLocation="CenterOwner"
+        Title="Library Statistics" Width="250" SizeToContent="Height" WindowStartupLocation="CenterOwner"
         Style="{StaticResource DialogWindow}" ResizeMode="NoResize">
 
     <Window.Resources>
@@ -15,6 +15,7 @@
         <valueConverters:PercentageValueConverter x:Key="PercentageValueConverter" />
     </Window.Resources>
 
+    <!-- TODO: Improve layout - it should be two columns table -->
     <StackPanel Orientation="Vertical">
         <Grid>
             <Label Content="Artists number:" />

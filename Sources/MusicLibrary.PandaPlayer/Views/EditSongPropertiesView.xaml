@@ -6,7 +6,7 @@
         xmlns:valueConverters="clr-namespace:MusicLibrary.PandaPlayer.Views.ValueConverters"
         xmlns:validationRules="clr-namespace:MusicLibrary.PandaPlayer.Views.ValidationRules"
         mc:Ignorable="d"
-        Title="Edit song properties" Width="400" Height="210" WindowStartupLocation="CenterOwner"
+        Title="Edit song properties" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
         Style="{StaticResource PropertiesWindow}" ResizeMode="NoResize">
 
     <Window.Resources>
