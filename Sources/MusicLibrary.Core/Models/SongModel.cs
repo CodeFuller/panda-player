@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace MusicLibrary.Core.Models
 {
 	// TBD: Rename SongModel to Song, DiscModel to Disc, ...
-	public class SongModel
+	public class SongModel : INotifyPropertyChanged
 	{
 		public ItemId Id { get; set; }
 
@@ -30,9 +32,29 @@ namespace MusicLibrary.Core.Models
 
 		public uint? Checksum { get; set; }
 
-		public DateTimeOffset? LastPlaybackTime { get; set; }
+		private DateTimeOffset? lastPlaybackTime;
 
-		public int PlaybacksCount { get; set; }
+		public DateTimeOffset? LastPlaybackTime
+		{
+			get => lastPlaybackTime;
+			set
+			{
+				lastPlaybackTime = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private int playbacksCount;
+
+		public int PlaybacksCount
+		{
+			get => playbacksCount;
+			set
+			{
+				playbacksCount = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public IReadOnlyCollection<PlaybackModel> Playbacks { get; set; }
 
@@ -42,10 +64,17 @@ namespace MusicLibrary.Core.Models
 
 		public bool IsDeleted => DeleteDate != null;
 
+		public event PropertyChangedEventHandler PropertyChanged;
+
 		public void AddPlayback(DateTimeOffset playbackTime)
 		{
 			++PlaybacksCount;
 			LastPlaybackTime = playbackTime;
+		}
+
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }
