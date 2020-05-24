@@ -15,14 +15,17 @@ namespace MusicLibrary.Services
 
 		private readonly IStorageRepository storageRepository;
 
+		private readonly IClock clock;
+
 		private readonly IEqualityComparer<ArtistModel> artistsComparer = new ArtistEqualityComparer();
 
 		private readonly IEqualityComparer<GenreModel> genresComparer = new GenreEqualityComparer();
 
-		public SongsService(ISongsRepository songsRepository, IStorageRepository storageRepository)
+		public SongsService(ISongsRepository songsRepository, IStorageRepository storageRepository, IClock clock)
 		{
 			this.songsRepository = songsRepository ?? throw new ArgumentNullException(nameof(songsRepository));
 			this.storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
+			this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
 		}
 
 		public Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken)
@@ -60,9 +63,18 @@ namespace MusicLibrary.Services
 			return songsRepository.UpdateSongLastPlayback(song, cancellationToken);
 		}
 
-		public Task DeleteSong(SongModel song, CancellationToken cancellationToken)
+		public async Task DeleteSong(SongModel song, CancellationToken cancellationToken)
 		{
-			return songsRepository.DeleteSong(song, cancellationToken);
+			var deleteDate = clock.Now;
+
+			await storageRepository.DeleteSong(song, cancellationToken);
+
+			song.DeleteDate = deleteDate;
+
+			// TODO: Make the columns nullable and enable this logic.
+			// song.Size = null;
+			// song.Checksum = null;
+			await songsRepository.UpdateSong(song, cancellationToken);
 		}
 	}
 }

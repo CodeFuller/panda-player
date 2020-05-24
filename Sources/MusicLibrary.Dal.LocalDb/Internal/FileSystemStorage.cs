@@ -84,6 +84,12 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 			fileSystemFacade.SetReadOnlyAttribute(fileName);
 		}
 
+		public void DeleteFile(Uri fileUri)
+		{
+			var filePath = CheckoutFile(fileUri);
+			fileSystemFacade.DeleteFile(filePath);
+		}
+
 		private string GetFilePathForInternalUri(Uri internalUri)
 		{
 			var uriOriginalString = internalUri.OriginalString;

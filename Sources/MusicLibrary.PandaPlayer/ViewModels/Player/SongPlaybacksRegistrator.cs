@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using CF.Library.Core.Facades;
 using MusicLibrary.Core.Models;
 using MusicLibrary.LastFM;
 using MusicLibrary.LastFM.Objects;
@@ -29,7 +28,6 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 
 		public async Task RegisterPlaybackFinish(SongModel song, CancellationToken cancellationToken)
 		{
-			// TBD: IClock returns DateTime, not DateTimeOffset
 			var playbackDateTime = clock.Now;
 			await songsService.AddSongPlayback(song, playbackDateTime, cancellationToken);
 

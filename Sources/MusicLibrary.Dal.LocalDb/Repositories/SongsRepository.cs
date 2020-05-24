@@ -109,11 +109,6 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			entity.Playbacks.Add(playbackEntity);
 		}
 
-		public Task DeleteSong(SongModel song, CancellationToken cancellationToken)
-		{
-			throw new NotImplementedException();
-		}
-
 		private static async Task<SongEntity> FindSong(MusicLibraryDbContext context, ItemId id, CancellationToken cancellationToken, bool includePlaybacks = false)
 		{
 			IQueryable<SongEntity> queryable = context.Songs;

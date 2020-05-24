@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MusicLibrary.Services.Interfaces;
+using MusicLibrary.Services.Internal;
 using MusicLibrary.Services.Tagging;
 
 namespace MusicLibrary.Services.Extensions
@@ -14,6 +15,8 @@ namespace MusicLibrary.Services.Extensions
 			services.AddSingleton<IGenresService, GenresService>();
 			services.AddSingleton<IArtistsService, ArtistsService>();
 			services.AddSingleton<IStatisticsService, StatisticsService>();
+
+			services.AddSingleton<IClock, Clock>();
 
 			return services;
 		}

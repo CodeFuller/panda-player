@@ -10,5 +10,7 @@ namespace MusicLibrary.Services.Interfaces.Dal
 		Task UpdateSongTreeTitle(SongModel newSong, Uri currentSongContentUri, CancellationToken cancellationToken);
 
 		Task UpdateSong(SongModel song, CancellationToken cancellationToken);
+
+		Task DeleteSong(SongModel song, CancellationToken cancellationToken);
 	}
 }

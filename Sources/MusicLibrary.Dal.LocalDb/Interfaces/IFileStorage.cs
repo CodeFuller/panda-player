@@ -9,5 +9,7 @@ namespace MusicLibrary.Dal.LocalDb.Interfaces
 		string CheckoutFile(Uri fileUri);
 
 		void CommitFile(string fileName);
+
+		void DeleteFile(Uri fileUri);
 	}
 }

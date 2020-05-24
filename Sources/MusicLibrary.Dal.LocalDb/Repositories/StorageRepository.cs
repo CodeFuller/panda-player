@@ -49,5 +49,11 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 			return Task.CompletedTask;
 		}
+
+		public Task DeleteSong(SongModel song, CancellationToken cancellationToken)
+		{
+			fileStorage.DeleteFile(song.ContentUri);
+			return Task.CompletedTask;
+		}
 	}
 }

@@ -7,10 +7,7 @@ namespace MusicLibrary.LastFM.Objects
 	{
 		public Track Track { get; set; }
 
-		/// <summary>
-		/// The time the track started playing.
-		/// </summary>
-		public DateTime PlayStartTimestamp { get; set; }
+		public DateTimeOffset PlayStartTimestamp { get; set; }
 
 		public bool ChosenByUser { get; set; }
 
