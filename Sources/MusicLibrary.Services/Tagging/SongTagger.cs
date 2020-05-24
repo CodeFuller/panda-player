@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using MusicLibrary.Core.Obsolete.Media;
 using TagLib;
 
-namespace MusicLibrary.Tagger
+namespace MusicLibrary.Services.Tagging
 {
 	public class SongTagger : ISongTagger
 	{

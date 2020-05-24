@@ -1,4 +1,4 @@
-﻿namespace MusicLibrary.Core.Obsolete.Media
+﻿namespace MusicLibrary.Services.Tagging
 {
 	public class SongTagData
 	{

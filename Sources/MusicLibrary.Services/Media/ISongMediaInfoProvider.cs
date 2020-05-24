@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace MusicLibrary.Core.Obsolete.Media
+namespace MusicLibrary.Services.Media
 {
 	public interface ISongMediaInfoProvider
 	{

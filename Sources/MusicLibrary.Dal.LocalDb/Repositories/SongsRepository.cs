@@ -9,6 +9,7 @@ using MusicLibrary.Dal.LocalDb.Entities;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Services.Interfaces.Dal;
+using MusicLibrary.Services.Tagging;
 
 namespace MusicLibrary.Dal.LocalDb.Repositories
 {
@@ -50,7 +51,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 				.ToList();
 		}
 
-		public Task UpdateSong(SongModel song, UpdatedSongPropertiesModel updatedProperties, CancellationToken cancellationToken)
+		public Task UpdateSong(SongModel song, UpdatedSongProperties updatedProperties, CancellationToken cancellationToken)
 		{
 			throw new NotImplementedException();
 		}

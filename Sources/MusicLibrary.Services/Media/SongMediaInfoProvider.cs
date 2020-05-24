@@ -1,8 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using MusicLibrary.Core.Obsolete.Media;
 
-namespace MusicLibrary.Tagger
+namespace MusicLibrary.Services.Media
 {
 	public class SongMediaInfoProvider : ISongMediaInfoProvider
 	{

@@ -1,7 +1,8 @@
 ﻿using System;
 
-namespace MusicLibrary.Core.Obsolete
+namespace MusicLibrary.Services.Tagging
 {
+	// TODO: Can we remove this and detect changes automatically based on entity fetched from repository?
 	[Flags]
 	public enum UpdatedSongProperties
 	{

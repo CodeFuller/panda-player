@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Services.Interfaces;
 using MusicLibrary.Services.Interfaces.Dal;
+using MusicLibrary.Services.Tagging;
 
 namespace MusicLibrary.Services
 {
@@ -22,7 +23,7 @@ namespace MusicLibrary.Services
 			return songsRepository.GetSongs(songIds, cancellationToken);
 		}
 
-		public Task UpdateSong(SongModel song, UpdatedSongPropertiesModel updatedProperties, CancellationToken cancellationToken)
+		public Task UpdateSong(SongModel song, UpdatedSongProperties updatedProperties, CancellationToken cancellationToken)
 		{
 			return songsRepository.UpdateSong(song, updatedProperties, cancellationToken);
 		}
