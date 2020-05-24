@@ -25,6 +25,22 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			this.uriTranslator = uriTranslator ?? throw new ArgumentNullException(nameof(uriTranslator));
 		}
 
+		public async Task<SongModel> GetSong(ItemId songId, CancellationToken cancellationToken)
+		{
+			await using var context = contextFactory.Create();
+
+			var id = songId.ToInt32();
+			var song = await context.Songs
+				.Include(song => song.Disc)
+				.Include(song => song.Artist)
+				.Include(song => song.Genre)
+				.Where(song => song.Id == id)
+				.SingleAsync(cancellationToken);
+
+			var discModel = song.Disc.ToModel(uriTranslator);
+			return discModel.Songs.Single(song => song.Id == songId);
+		}
+
 		public async Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken)
 		{
 			var songIdsList = songIds.ToList();

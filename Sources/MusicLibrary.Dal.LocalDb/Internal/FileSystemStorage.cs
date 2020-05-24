@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using CF.Library.Core.Facades;
 using Microsoft.Extensions.Options;
 using MusicLibrary.Dal.LocalDb.Interfaces;
@@ -38,6 +40,26 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 			var relativePath = Path.GetRelativePath(rootDirectory, filePath);
 
 			return GetInternalUriForRelativePath(relativePath);
+		}
+
+		public Uri ReplaceSegmentInExternalUri(Uri externalUri, string newValue, int segmentIndex)
+		{
+			var internalUri = GetInternalUri(externalUri);
+			var segments = internalUri.OriginalString.Split(SegmentsSeparator).Skip(1).ToArray();
+			var index = segmentIndex > 0 ? segmentIndex : segments.Length + segmentIndex;
+
+			segments[index] = newValue;
+			var newInternalUri = BuildInternalUriFromSegments(segments);
+
+			return GetExternalUri(newInternalUri);
+		}
+
+		public void MoveFile(Uri currentFileUri, Uri newFileUri)
+		{
+			var sourceFilePath = GetFilePathForExternalUri(currentFileUri);
+			var destinationFilePath = GetFilePathForExternalUri(newFileUri);
+
+			fileSystemFacade.MoveFile(sourceFilePath, destinationFilePath);
 		}
 
 		public string CheckoutFile(Uri fileUri)
@@ -90,6 +112,11 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 		private static Uri GetInternalUriForRelativePath(string relativePath)
 		{
 			var segments = relativePath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+			return BuildInternalUriFromSegments(segments);
+		}
+
+		private static Uri BuildInternalUriFromSegments(IEnumerable<string> segments)
+		{
 			return new Uri($"{SegmentsSeparator}{String.Join(SegmentsSeparator, segments)}", UriKind.Relative);
 		}
 	}

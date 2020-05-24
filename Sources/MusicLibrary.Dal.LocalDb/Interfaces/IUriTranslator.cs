@@ -7,5 +7,7 @@ namespace MusicLibrary.Dal.LocalDb.Interfaces
 		Uri GetExternalUri(Uri internalUri);
 
 		Uri GetInternalUri(Uri externalUri);
+
+		Uri ReplaceSegmentInExternalUri(Uri externalUri, string newValue, int segmentIndex);
 	}
 }

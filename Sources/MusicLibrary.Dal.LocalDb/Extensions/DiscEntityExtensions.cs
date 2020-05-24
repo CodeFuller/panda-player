@@ -25,7 +25,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				Title = disc.Title,
 				TreeTitle = new ItemUriParts(disc.Uri).Last(),
 				AlbumTitle = disc.AlbumTitle,
-				Images = disc.Images.Select(image => image.ToModel(uriTranslator)).ToList(),
+				Images = disc.Images?.Select(image => image.ToModel(uriTranslator)).ToList(),
 			};
 
 			discModel.Songs = new List<SongModel>(disc.Songs.Select(s => s.ToModel(discModel, uriTranslator)));

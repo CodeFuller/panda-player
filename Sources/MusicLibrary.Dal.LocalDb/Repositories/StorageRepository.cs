@@ -12,15 +12,28 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 	{
 		private readonly IFileStorage fileStorage;
 
+		private readonly IUriTranslator uriTranslator;
+
 		private readonly ISongTagger songTagger;
 
 		private readonly IChecksumCalculator checksumCalculator;
 
-		public StorageRepository(IFileStorage fileStorage, ISongTagger songTagger, IChecksumCalculator checksumCalculator)
+		public StorageRepository(IFileStorage fileStorage, IUriTranslator uriTranslator, ISongTagger songTagger, IChecksumCalculator checksumCalculator)
 		{
 			this.fileStorage = fileStorage ?? throw new ArgumentNullException(nameof(fileStorage));
+			this.uriTranslator = uriTranslator ?? throw new ArgumentNullException(nameof(uriTranslator));
 			this.songTagger = songTagger ?? throw new ArgumentNullException(nameof(songTagger));
 			this.checksumCalculator = checksumCalculator ?? throw new ArgumentNullException(nameof(checksumCalculator));
+		}
+
+		public Task UpdateSongTreeTitle(SongModel newSong, Uri currentSongContentUri, CancellationToken cancellationToken)
+		{
+			var newContentUri = uriTranslator.ReplaceSegmentInExternalUri(currentSongContentUri, newSong.TreeTitle, -1);
+
+			newSong.ContentUri = newContentUri;
+			fileStorage.MoveFile(currentSongContentUri, newContentUri);
+
+			return Task.CompletedTask;
 		}
 
 		public Task UpdateSong(SongModel song, CancellationToken cancellationToken)
