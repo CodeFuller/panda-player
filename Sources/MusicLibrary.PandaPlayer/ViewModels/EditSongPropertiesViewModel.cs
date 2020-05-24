@@ -8,7 +8,6 @@ using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.Services.Comparers;
 using MusicLibrary.Services.Interfaces;
-using MusicLibrary.Services.Tagging;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {
@@ -129,7 +128,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		{
 			foreach (var song in GetUpdatedSongs())
 			{
-				await songsService.UpdateSong(song, UpdatedSongProperties.ForceTagUpdate, cancellationToken);
+				await songsService.UpdateSong(song, cancellationToken);
 			}
 		}
 

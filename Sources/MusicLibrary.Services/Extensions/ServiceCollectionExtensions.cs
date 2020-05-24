@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MusicLibrary.Services.Interfaces;
+using MusicLibrary.Services.Tagging;
 
 namespace MusicLibrary.Services.Extensions
 {
@@ -13,6 +14,13 @@ namespace MusicLibrary.Services.Extensions
 			services.AddSingleton<IGenresService, GenresService>();
 			services.AddSingleton<IArtistsService, ArtistsService>();
 			services.AddSingleton<IStatisticsService, StatisticsService>();
+
+			return services;
+		}
+
+		public static IServiceCollection AddSongTagger(this IServiceCollection services)
+		{
+			services.AddSingleton<ISongTagger, SongTagger>();
 
 			return services;
 		}

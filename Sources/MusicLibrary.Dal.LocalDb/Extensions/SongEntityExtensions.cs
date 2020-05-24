@@ -9,9 +9,9 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 {
 	internal static class SongEntityExtensions
 	{
-		public static SongModel ToModel(this SongEntity song, DiscModel discModel, IDataStorage dataStorage)
+		public static SongModel ToModel(this SongEntity song, DiscModel discModel, IUriTranslator uriTranslator)
 		{
-			var songModel = new SongModel
+			return new SongModel
 			{
 				Id = song.Id.ToItemId(),
 				Title = song.Title,
@@ -24,45 +24,109 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				Rating = song.Rating != null ? ConvertRating(song.Rating.Value) : null,
 				BitRate = song.BitRate,
 				Size = song.FileSize,
-				Checksum = song.Checksum.HasValue ? (uint)song.Checksum.Value : (uint?)null,
+				Checksum = (uint?)song.Checksum,
 				LastPlaybackTime = song.LastPlaybackTime,
 				PlaybacksCount = song.PlaybacksCount,
 				Playbacks = song.Playbacks?.Select(p => p.ToModel()).ToList(),
-				ContentUri = dataStorage.TranslateInternalUri(song.Uri),
+				ContentUri = uriTranslator.GetExternalUri(song.Uri),
 				DeleteDate = song.DeleteDate,
 			};
+		}
 
-			return songModel;
+		public static SongEntity ToEntity(this SongModel song, IUriTranslator uriTranslator)
+		{
+			return new SongEntity
+			{
+				Id = song.Id.ToInt32(),
+				DiscId = song.Disc.Id.ToInt32(),
+				ArtistId = song.Artist?.Id.ToInt32(),
+				TrackNumber = song.TrackNumber,
+				Year = (short?)song.Disc.Year,
+				Title = song.Title,
+				GenreId = song.Genre?.Id.ToInt32(),
+				DurationInMilliseconds = song.Duration.TotalMilliseconds,
+				Rating = song.Rating != null ? ConvertRating(song.Rating) : (int?)null,
+				Uri = uriTranslator.GetInternalUri(song.ContentUri),
+				FileSize = song.Size,
+				Checksum = (int?)song.Checksum,
+				BitRate = song.BitRate,
+				LastPlaybackTime = song.LastPlaybackTime,
+				PlaybacksCount = song.PlaybacksCount,
+				DeleteDate = song.DeleteDate,
+			};
 		}
 
 		private static RatingModel ConvertRating(int rating)
 		{
-			switch (rating)
+			return rating switch
 			{
-				case 1:
-					return RatingModel.R1;
-				case 2:
-					return RatingModel.R2;
-				case 3:
-					return RatingModel.R3;
-				case 4:
-					return RatingModel.R4;
-				case 5:
-					return RatingModel.R5;
-				case 6:
-					return RatingModel.R6;
-				case 7:
-					return RatingModel.R7;
-				case 8:
-					return RatingModel.R8;
-				case 9:
-					return RatingModel.R9;
-				case 10:
-					return RatingModel.R10;
+				1 => RatingModel.R1,
+				2 => RatingModel.R2,
+				3 => RatingModel.R3,
+				4 => RatingModel.R4,
+				5 => RatingModel.R5,
+				6 => RatingModel.R6,
+				7 => RatingModel.R7,
+				8 => RatingModel.R8,
+				9 => RatingModel.R9,
+				10 => RatingModel.R10,
+				_ => throw new InvalidOperationException($"Unexpected rating value: {rating}")
+			};
+		}
 
-				default:
-					throw new InvalidOperationException($"Unexpected rating value: {rating}");
+		private static int ConvertRating(RatingModel rating)
+		{
+			if (rating == RatingModel.R1)
+			{
+				return 1;
 			}
+
+			if (rating == RatingModel.R2)
+			{
+				return 2;
+			}
+
+			if (rating == RatingModel.R3)
+			{
+				return 3;
+			}
+
+			if (rating == RatingModel.R4)
+			{
+				return 4;
+			}
+
+			if (rating == RatingModel.R5)
+			{
+				return 5;
+			}
+
+			if (rating == RatingModel.R6)
+			{
+				return 6;
+			}
+
+			if (rating == RatingModel.R7)
+			{
+				return 7;
+			}
+
+			if (rating == RatingModel.R8)
+			{
+				return 8;
+			}
+
+			if (rating == RatingModel.R9)
+			{
+				return 9;
+			}
+
+			if (rating == RatingModel.R10)
+			{
+				return 10;
+			}
+
+			throw new InvalidOperationException($"Unexpected rating value");
 		}
 	}
 }

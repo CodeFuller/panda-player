@@ -1,6 +1,6 @@
 ﻿namespace MusicLibrary.Dal.LocalDb
 {
-	public class FileSystemDataStorageSettings
+	public class FileSystemStorageSettings
 	{
 		public string Root { get; set; }
 	}

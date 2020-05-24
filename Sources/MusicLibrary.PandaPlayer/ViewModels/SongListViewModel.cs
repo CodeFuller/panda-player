@@ -17,7 +17,6 @@ using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.Services.Interfaces;
-using MusicLibrary.Services.Tagging;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {
@@ -172,7 +171,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				foreach (var song in updatedSongs)
 				{
 					song.Rating = rating;
-					await songsService.UpdateSong(song, UpdatedSongProperties.Rating, cancellationToken);
+					await songsService.UpdateSong(song, cancellationToken);
 				}
 			}
 		}

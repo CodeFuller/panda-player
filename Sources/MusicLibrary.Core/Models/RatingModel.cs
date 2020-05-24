@@ -2,29 +2,31 @@
 
 namespace MusicLibrary.Core.Models
 {
+#pragma warning disable CA1052 // Static holder types should be Static or NotInheritable
 	public class RatingModel
+#pragma warning restore CA1052 // Static holder types should be Static or NotInheritable
 	{
-		private readonly int value;
+		public static RatingModel DefaultValue => R5;
 
-		public static RatingModel R1 { get; } = new RatingModel(1);
+		public static RatingModel R1 { get; } = new RatingModel();
 
-		public static RatingModel R2 { get; } = new RatingModel(2);
+		public static RatingModel R2 { get; } = new RatingModel();
 
-		public static RatingModel R3 { get; } = new RatingModel(3);
+		public static RatingModel R3 { get; } = new RatingModel();
 
-		public static RatingModel R4 { get; } = new RatingModel(4);
+		public static RatingModel R4 { get; } = new RatingModel();
 
-		public static RatingModel R5 { get; } = new RatingModel(5);
+		public static RatingModel R5 { get; } = new RatingModel();
 
-		public static RatingModel R6 { get; } = new RatingModel(6);
+		public static RatingModel R6 { get; } = new RatingModel();
 
-		public static RatingModel R7 { get; } = new RatingModel(7);
+		public static RatingModel R7 { get; } = new RatingModel();
 
-		public static RatingModel R8 { get; } = new RatingModel(8);
+		public static RatingModel R8 { get; } = new RatingModel();
 
-		public static RatingModel R9 { get; } = new RatingModel(9);
+		public static RatingModel R9 { get; } = new RatingModel();
 
-		public static RatingModel R10 { get; } = new RatingModel(10);
+		public static RatingModel R10 { get; } = new RatingModel();
 
 		public static IEnumerable<RatingModel> All
 		{
@@ -43,11 +45,8 @@ namespace MusicLibrary.Core.Models
 			}
 		}
 
-		private RatingModel(int value)
+		private RatingModel()
 		{
-			this.value = value;
 		}
-
-		public static RatingModel DefaultValue => R5;
 	}
 }

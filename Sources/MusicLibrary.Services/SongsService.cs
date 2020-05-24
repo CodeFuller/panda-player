@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Services.Interfaces;
 using MusicLibrary.Services.Interfaces.Dal;
-using MusicLibrary.Services.Tagging;
 
 namespace MusicLibrary.Services
 {
@@ -13,9 +12,12 @@ namespace MusicLibrary.Services
 	{
 		private readonly ISongsRepository songsRepository;
 
-		public SongsService(ISongsRepository songsRepository)
+		private readonly IStorageRepository storageRepository;
+
+		public SongsService(ISongsRepository songsRepository, IStorageRepository storageRepository)
 		{
 			this.songsRepository = songsRepository ?? throw new ArgumentNullException(nameof(songsRepository));
+			this.storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
 		}
 
 		public Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken)
@@ -23,9 +25,12 @@ namespace MusicLibrary.Services
 			return songsRepository.GetSongs(songIds, cancellationToken);
 		}
 
-		public Task UpdateSong(SongModel song, UpdatedSongProperties updatedProperties, CancellationToken cancellationToken)
+		public async Task UpdateSong(SongModel song, CancellationToken cancellationToken)
 		{
-			return songsRepository.UpdateSong(song, updatedProperties, cancellationToken);
+			await storageRepository.UpdateSong(song, cancellationToken);
+
+			// Update in repository should be performed after update in the storage, because later updates song checksum.
+			await songsRepository.UpdateSong(song, cancellationToken);
 		}
 
 		public Task AddSongPlayback(SongModel song, DateTimeOffset playbackTime, CancellationToken cancellationToken)

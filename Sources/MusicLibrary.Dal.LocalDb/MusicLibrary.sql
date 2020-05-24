@@ -12,6 +12,7 @@ CREATE TABLE [Songs] (
   /* TODO: It can be NULL for deleted songs */
   [FileSize] int NOT NULL,
   /* TODO: It can be NULL for deleted songs */
+  /* TODO: Make it uint */
   [Checksum] int NOT NULL,
   [Bitrate] int NULL,
   [LastPlaybackTime] datetime NULL,

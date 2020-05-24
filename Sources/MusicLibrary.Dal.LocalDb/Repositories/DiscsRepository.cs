@@ -17,12 +17,12 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 	{
 		private readonly IMusicLibraryDbContextFactory contextFactory;
 
-		private readonly IDataStorage dataStorage;
+		private readonly IUriTranslator uriTranslator;
 
-		public DiscsRepository(IMusicLibraryDbContextFactory contextFactory, IDataStorage dataStorage)
+		public DiscsRepository(IMusicLibraryDbContextFactory contextFactory, IUriTranslator uriTranslator)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
-			this.dataStorage = dataStorage ?? throw new ArgumentNullException(nameof(dataStorage));
+			this.uriTranslator = uriTranslator ?? throw new ArgumentNullException(nameof(uriTranslator));
 		}
 
 		public async Task<IReadOnlyCollection<DiscModel>> GetAllDiscs(CancellationToken cancellationToken)
@@ -31,7 +31,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 			return (await GetDiscsQueryable(context)
 					.ToListAsync(cancellationToken))
-					.Select(disc => disc.ToModel(dataStorage))
+					.Select(disc => disc.ToModel(uriTranslator))
 					.ToList();
 		}
 
@@ -43,7 +43,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 			return await GetDiscsQueryable(context)
 				.Where(disc => ids.Contains(disc.Id))
-				.Select(disc => disc.ToModel(dataStorage))
+				.Select(disc => disc.ToModel(uriTranslator))
 				.ToListAsync(cancellationToken);
 		}
 

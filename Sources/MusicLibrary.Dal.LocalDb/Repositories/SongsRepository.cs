@@ -8,8 +8,8 @@ using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Entities;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.Dal.LocalDb.Interfaces;
+using MusicLibrary.Dal.LocalDb.Internal;
 using MusicLibrary.Services.Interfaces.Dal;
-using MusicLibrary.Services.Tagging;
 
 namespace MusicLibrary.Dal.LocalDb.Repositories
 {
@@ -17,12 +17,12 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 	{
 		private readonly IMusicLibraryDbContextFactory contextFactory;
 
-		private readonly IDataStorage dataStorage;
+		private readonly IUriTranslator uriTranslator;
 
-		public SongsRepository(IMusicLibraryDbContextFactory contextFactory, IDataStorage dataStorage)
+		public SongsRepository(IMusicLibraryDbContextFactory contextFactory, IUriTranslator uriTranslator)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
-			this.dataStorage = dataStorage ?? throw new ArgumentNullException(nameof(dataStorage));
+			this.uriTranslator = uriTranslator ?? throw new ArgumentNullException(nameof(uriTranslator));
 		}
 
 		public async Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken)
@@ -42,7 +42,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			var songModels = songs
 				.Select(song => song.Disc)
 				.Distinct()
-				.Select(disc => disc.ToModel(dataStorage))
+				.Select(disc => disc.ToModel(uriTranslator))
 				.SelectMany(disc => disc.Songs)
 				.ToDictionary(song => song.Id, song => song);
 
@@ -51,22 +51,22 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 				.ToList();
 		}
 
-		public Task UpdateSong(SongModel song, UpdatedSongProperties updatedProperties, CancellationToken cancellationToken)
+		public async Task UpdateSong(SongModel song, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			await using var context = contextFactory.Create();
+			var songEntity = await FindSong(context, song.Id, cancellationToken);
+
+			var updatedEntity = song.ToEntity(uriTranslator);
+			context.Entry(songEntity).CurrentValues.SetValues(updatedEntity);
+			await context.SaveChangesAsync(cancellationToken);
 		}
 
 		public async Task UpdateSongLastPlayback(SongModel song, CancellationToken cancellationToken)
 		{
 			await using var context = contextFactory.Create();
-
-			var id = song.Id.ToInt32();
-			var songEntity = await context.Songs
-				.Include(s => s.Playbacks)
-				.SingleAsync(s => s.Id == id, cancellationToken);
+			var songEntity = await FindSong(context, song.Id, cancellationToken, includePlaybacks: true);
 
 			SyncSongPlaybacks(song, songEntity);
-
 			await context.SaveChangesAsync(cancellationToken);
 		}
 
@@ -96,6 +96,20 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 		public Task DeleteSong(SongModel song, CancellationToken cancellationToken)
 		{
 			throw new NotImplementedException();
+		}
+
+		private static async Task<SongEntity> FindSong(MusicLibraryDbContext context, ItemId id, CancellationToken cancellationToken, bool includePlaybacks = false)
+		{
+			IQueryable<SongEntity> queryable = context.Songs;
+
+			if (includePlaybacks)
+			{
+				queryable = queryable.Include(s => s.Playbacks);
+			}
+
+			var entityId = id.ToInt32();
+			return await queryable
+				.SingleAsync(s => s.Id == entityId, cancellationToken);
 		}
 	}
 }

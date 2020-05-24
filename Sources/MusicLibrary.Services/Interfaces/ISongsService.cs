@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
-using MusicLibrary.Services.Tagging;
 
 namespace MusicLibrary.Services.Interfaces
 {
@@ -11,7 +10,7 @@ namespace MusicLibrary.Services.Interfaces
 	{
 		Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken);
 
-		Task UpdateSong(SongModel song, UpdatedSongProperties updatedProperties, CancellationToken cancellationToken);
+		Task UpdateSong(SongModel song, CancellationToken cancellationToken);
 
 		Task AddSongPlayback(SongModel song, DateTimeOffset playbackTime, CancellationToken cancellationToken);
 

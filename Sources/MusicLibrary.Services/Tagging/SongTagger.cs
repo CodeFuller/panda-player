@@ -19,10 +19,8 @@ namespace MusicLibrary.Services.Tagging
 		{
 			CheckSourceFile(songFileName);
 
-			using (TagLib.File file = TagLib.File.Create(songFileName))
-			{
-				SetTagData(file, tagData);
-			}
+			using var file = TagLib.File.Create(songFileName);
+			SetTagData(file, tagData);
 		}
 
 		private static void SetTagData(TagLib.File file, SongTagData tagData)
@@ -42,16 +40,14 @@ namespace MusicLibrary.Services.Tagging
 
 		public SongTagData GetTagData(string songFileName)
 		{
-			using (TagLib.File file = TagLib.File.Create(songFileName))
-			{
-				var tag = file.GetTag(TagTypes.Id3v2);
-				return ExtractTagData(tag);
-			}
+			using var file = TagLib.File.Create(songFileName);
+			var tag = file.GetTag(TagTypes.Id3v2);
+			return ExtractTagData(tag);
 		}
 
 		public IEnumerable<SongTagType> GetTagTypes(string songFileName)
 		{
-			Dictionary<TagTypes, SongTagType> tagTypesMap = new Dictionary<TagTypes, SongTagType>
+			var tagTypesMap = new Dictionary<TagTypes, SongTagType>
 			{
 				{ TagTypes.Xiph, SongTagType.Xiph },
 				{ TagTypes.Id3v1, SongTagType.Id3V1 },
@@ -65,22 +61,20 @@ namespace MusicLibrary.Services.Tagging
 				{ TagTypes.XMP, SongTagType.Xmp },
 			};
 
-			using (TagLib.File file = TagLib.File.Create(songFileName))
+			using var file = TagLib.File.Create(songFileName);
+			var tagTypes = file.TagTypes;
+			foreach (var checkedTagType in tagTypesMap)
 			{
-				var tagTypes = file.TagTypes;
-				foreach (var checkedTagType in tagTypesMap)
+				if ((tagTypes & checkedTagType.Key) != 0)
 				{
-					if ((tagTypes & checkedTagType.Key) != 0)
-					{
-						yield return checkedTagType.Value;
-						tagTypes &= ~checkedTagType.Key;
-					}
+					yield return checkedTagType.Value;
+					tagTypes &= ~checkedTagType.Key;
 				}
+			}
 
-				if (tagTypes != 0)
-				{
-					yield return SongTagType.Unknown;
-				}
+			if (tagTypes != 0)
+			{
+				yield return SongTagType.Unknown;
 			}
 		}
 
@@ -88,16 +82,14 @@ namespace MusicLibrary.Services.Tagging
 		{
 			CheckSourceFile(songFileName);
 
-			using (TagLib.File file = TagLib.File.Create(songFileName))
-			{
-				var tagData = ExtractTagData(file.GetTag(TagTypes.Id3v2));
-				SetTagData(file, tagData);
-			}
+			using var file = TagLib.File.Create(songFileName);
+			var tagData = ExtractTagData(file.GetTag(TagTypes.Id3v2));
+			SetTagData(file, tagData);
 		}
 
 		private static void CheckSourceFile(string songFileName)
 		{
-			string extension = Path.GetExtension(songFileName);
+			var extension = Path.GetExtension(songFileName);
 			if (extension != ".mp3")
 			{
 				throw new InvalidOperationException("Only setting of mp3 tags is supported");

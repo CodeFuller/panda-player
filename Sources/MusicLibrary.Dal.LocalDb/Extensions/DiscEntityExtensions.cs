@@ -10,12 +10,12 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 {
 	internal static class DiscEntityExtensions
 	{
-		public static DiscModel ToModel(this DiscEntity disc, IDataStorage dataStorage)
+		public static DiscModel ToModel(this DiscEntity disc, IUriTranslator uriTranslator)
 		{
 			// TBD: Add year as disc column in database and remove this logic
 			var discYear = disc.Songs
-				.Where(s => s.DeleteDate != null)
-				.Select(s => s.Year)
+				.Where(song => song.DeleteDate == null)
+				.Select(song => song.Year)
 				.UniqueOrDefault();
 
 			var discModel = new DiscModel
@@ -25,10 +25,10 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				Title = disc.Title,
 				TreeTitle = new ItemUriParts(disc.Uri).Last(),
 				AlbumTitle = disc.AlbumTitle,
-				Images = disc.Images.Select(image => image.ToModel(dataStorage)).ToList(),
+				Images = disc.Images.Select(image => image.ToModel(uriTranslator)).ToList(),
 			};
 
-			discModel.Songs = new List<SongModel>(disc.Songs.Select(s => s.ToModel(discModel, dataStorage)));
+			discModel.Songs = new List<SongModel>(disc.Songs.Select(s => s.ToModel(discModel, uriTranslator)));
 
 			return discModel;
 		}

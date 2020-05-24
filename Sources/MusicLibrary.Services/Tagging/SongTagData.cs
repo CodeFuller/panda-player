@@ -1,4 +1,6 @@
-﻿namespace MusicLibrary.Services.Tagging
+﻿using MusicLibrary.Core.Models;
+
+namespace MusicLibrary.Services.Tagging
 {
 	public class SongTagData
 	{
@@ -14,7 +16,18 @@
 
 		public string Title { get; set; }
 
-		public static UpdatedSongProperties TaggedProperties => UpdatedSongProperties.Artist | UpdatedSongProperties.Album | UpdatedSongProperties.Year |
-																UpdatedSongProperties.Genre | UpdatedSongProperties.Track | UpdatedSongProperties.Title | UpdatedSongProperties.ForceTagUpdate;
+		public SongTagData()
+		{
+		}
+
+		public SongTagData(SongModel song)
+		{
+			Artist = song.Artist?.Name;
+			Album = song.Disc.AlbumTitle;
+			Year = song.Disc.Year;
+			Genre = song.Genre?.Name;
+			Track = song.TrackNumber;
+			Title = song.Title;
+		}
 	}
 }

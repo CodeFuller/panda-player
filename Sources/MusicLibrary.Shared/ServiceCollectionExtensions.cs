@@ -1,5 +1,6 @@
 ﻿using CF.Library.Core.Facades;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using MusicLibrary.Shared.Images;
 
 namespace MusicLibrary.Shared
@@ -12,7 +13,7 @@ namespace MusicLibrary.Shared
 			services.AddTransient<IImageFacade, ImageFacade>();
 			services.AddTransient<IImageFile, ImageFile>();
 			services.AddTransient<IImageInfoProvider, ImageInfoProvider>();
-			services.AddSingleton<IFileSystemFacade, FileSystemFacade>();
+			services.TryAddSingleton<IFileSystemFacade, FileSystemFacade>();
 
 			return services;
 		}
