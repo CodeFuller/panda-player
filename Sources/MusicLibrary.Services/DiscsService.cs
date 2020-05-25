@@ -31,6 +31,11 @@ namespace MusicLibrary.Services
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
+		public Task<IReadOnlyCollection<DiscModel>> GetAllDiscs(CancellationToken cancellationToken)
+		{
+			return discsRepository.GetAllDiscs(cancellationToken);
+		}
+
 		public Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken)
 		{
 			return discsRepository.UpdateDisc(disc, cancellationToken);

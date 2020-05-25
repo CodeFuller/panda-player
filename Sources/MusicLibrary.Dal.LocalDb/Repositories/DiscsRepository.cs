@@ -35,7 +35,8 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			// TODO: This code is duplicated between DiscsRepository and SongsRepository
 			var folderModels = discEntities
 				.Select(disc => disc.Folder.ToModel(uriTranslator.RemoveLastSegmentFromInternalUri(disc.Uri)))
-				.ToDictionary(folder => folder.Id, folder => folder);
+				.GroupBy(folder => folder.Id)
+				.ToDictionary(group => group.Key, group => group.First());
 
 			return discEntities
 					.Select(disc => disc.ToModel(folderModels[disc.Folder.Id], uriTranslator))
