@@ -5,13 +5,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 {
 	public class FolderExplorerItem : BasicExplorerItem
 	{
-		private readonly SubfolderModel folder;
+		private readonly ShallowFolderModel folder;
 
 		public ItemId FolderId => folder.Id;
 
 		public override string Title => folder.Name;
 
-		public FolderExplorerItem(SubfolderModel folder)
+		public FolderExplorerItem(ShallowFolderModel folder)
 		{
 			this.folder = folder ?? throw new ArgumentNullException(nameof(folder));
 		}

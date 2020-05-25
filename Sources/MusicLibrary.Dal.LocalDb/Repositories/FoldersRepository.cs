@@ -12,9 +12,12 @@ using MusicLibrary.Services.Interfaces.Dal;
 
 namespace MusicLibrary.Dal.LocalDb.Repositories
 {
-	// TBD: Remove after redesign
 	internal class FoldersRepository : IFoldersRepository
 	{
+		private static ItemId RootFolderId => new ItemId("/");
+
+		private static string RootFolderName => "<ROOT>";
+
 		private readonly IMusicLibraryDbContextFactory contextFactory;
 
 		private readonly IDiscsRepository discsRepository;
@@ -27,18 +30,17 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public Task<FolderModel> GetRootFolder(CancellationToken cancellationToken)
 		{
-			var rootId = new ItemId("/");
-			return GetFolder(rootId, cancellationToken);
+			return GetFolder(RootFolderId, cancellationToken);
 		}
 
-		// TBD: Extend database with folder entity and remove this logic.
 		public async Task<FolderModel> GetFolder(ItemId folderId, CancellationToken cancellationToken)
 		{
 			await using var context = contextFactory.Create();
 
-			var subfolders = new Dictionary<Uri, SubfolderModel>();
+			var subfolders = new Dictionary<Uri, ShallowFolderModel>();
 			var discIds = new List<ItemId>();
 
+			// TODO: Extend database with folder entity and adjust this implementation.
 			foreach (var disc in context.Discs)
 			{
 				var childUri = GetDirectChildUri(folderId, disc.Uri);
@@ -53,7 +55,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 				}
 				else if (!subfolders.ContainsKey(childUri))
 				{
-					var subfolder = new SubfolderModel
+					var subfolder = new ShallowFolderModel
 					{
 						Id = childUri.ToItemId(),
 						Name = new ItemUriParts(childUri).Last(),
@@ -66,12 +68,24 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			var uriParts = new ItemUriParts(folderId.ToUri());
 			var parentFolderId = uriParts.Any() ? ItemUriParts.Join(uriParts.Take(uriParts.Count - 1)).ToItemId() : null;
 
-			return new FolderModel
+			var folder = new FolderModel
 			{
 				Id = folderId,
-				ParentFolderId = parentFolderId,
+				Name = folderId == RootFolderId ? "<ROOT>" : uriParts.Last(),
+				ParentFolder = parentFolderId != null ? CreateShallowFolderModel(parentFolderId) : null,
 				Subfolders = subfolders.Values,
 				Discs = await discsRepository.GetDiscs(discIds, cancellationToken),
+			};
+
+			return folder;
+		}
+
+		private static ShallowFolderModel CreateShallowFolderModel(ItemId folderId)
+		{
+			return new ShallowFolderModel
+			{
+				Id = folderId,
+				Name = folderId == RootFolderId ? RootFolderName : new ItemUriParts(folderId.ToUri()).Last(),
 			};
 		}
 

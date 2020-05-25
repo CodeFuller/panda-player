@@ -45,13 +45,28 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 		public Uri ReplaceSegmentInExternalUri(Uri externalUri, string newValue, int segmentIndex)
 		{
 			var internalUri = GetInternalUri(externalUri);
-			var segments = internalUri.OriginalString.Split(SegmentsSeparator).Skip(1).ToArray();
-			var index = segmentIndex > 0 ? segmentIndex : segments.Length + segmentIndex;
+			var segments = SplitInternalUriToSegments(internalUri);
+			var index = segmentIndex > 0 ? segmentIndex : segments.Count + segmentIndex;
 
 			segments[index] = newValue;
 			var newInternalUri = BuildInternalUriFromSegments(segments);
 
 			return GetExternalUri(newInternalUri);
+		}
+
+		public Uri AppendSegmentToInternalUri(Uri internalUri, string newSegment)
+		{
+			IEnumerable<string> segments = SplitInternalUriToSegments(internalUri);
+			segments = segments.Concat(new[] { newSegment });
+
+			return BuildInternalUriFromSegments(segments);
+		}
+
+		public Uri RemoveLastSegmentFromInternalUri(Uri internalUri)
+		{
+			var segments = SplitInternalUriToSegments(internalUri);
+
+			return BuildInternalUriFromSegments(segments.Take(segments.Count - 1));
 		}
 
 		public void MoveFile(Uri currentFileUri, Uri newFileUri)
@@ -88,6 +103,16 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 		{
 			var filePath = CheckoutFile(fileUri);
 			fileSystemFacade.DeleteFile(filePath);
+
+			CheckForEmptyDirectory(Path.GetDirectoryName(filePath));
+		}
+
+		private void CheckForEmptyDirectory(string directoryPath)
+		{
+			if (fileSystemFacade.DirectoryIsEmpty(directoryPath))
+			{
+				fileSystemFacade.DeleteDirectory(directoryPath);
+			}
 		}
 
 		private string GetFilePathForInternalUri(Uri internalUri)
@@ -119,6 +144,11 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 		{
 			var segments = relativePath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 			return BuildInternalUriFromSegments(segments);
+		}
+
+		private static IList<string> SplitInternalUriToSegments(Uri internalUri)
+		{
+			return internalUri.OriginalString.Split(SegmentsSeparator).Skip(1).ToArray();
 		}
 
 		private static Uri BuildInternalUriFromSegments(IEnumerable<string> segments)

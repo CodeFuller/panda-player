@@ -131,7 +131,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 			SelectedItem = Items.FirstOrDefault();
 
-			ParentFolderId = folder.ParentFolderId;
+			ParentFolderId = folder.ParentFolder?.Id;
 			LoadedFolderId = folder.Id;
 		}
 
@@ -156,7 +156,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		{
 			Items.Clear();
 
-			if (folder.ParentFolderId != null)
+			if (folder.ParentFolder != null)
 			{
 				Items.Add(new ParentFolderExplorerItem());
 			}

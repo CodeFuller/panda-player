@@ -18,7 +18,6 @@ namespace MusicLibrary.Services
 
 		public Task<FolderModel> GetRootFolder(CancellationToken cancellationToken)
 		{
-			// TODO: Need to filter deleted discs
 			return foldersRepository.GetRootFolder(cancellationToken);
 		}
 

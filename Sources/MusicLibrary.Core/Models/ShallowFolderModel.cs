@@ -1,7 +1,6 @@
 ﻿namespace MusicLibrary.Core.Models
 {
-	// TBD: Do we need separate model for that?
-	public class SubfolderModel
+	public class ShallowFolderModel
 	{
 		public ItemId Id { get; set; }
 

@@ -29,22 +29,50 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 		{
 			await using var context = contextFactory.Create();
 
-			return (await GetDiscsQueryable(context)
-					.ToListAsync(cancellationToken))
-					.Select(disc => disc.ToModel(uriTranslator))
+			var discEntities = await GetDiscsQueryable(context)
+				.ToListAsync(cancellationToken);
+
+			// TODO: This code is duplicated between DiscsRepository and SongsRepository
+			var folderModels = discEntities
+				.Select(disc => disc.Folder.ToModel(uriTranslator.RemoveLastSegmentFromInternalUri(disc.Uri)))
+				.ToDictionary(folder => folder.Id, folder => folder);
+
+			return discEntities
+					.Select(disc => disc.ToModel(folderModels[disc.Folder.Id], uriTranslator))
 					.ToList();
 		}
 
 		public async Task<IReadOnlyCollection<DiscModel>> GetDiscs(IEnumerable<ItemId> discIds, CancellationToken cancellationToken)
 		{
-			var ids = discIds.Select(id => id.ToInt32());
-
 			await using var context = contextFactory.Create();
 
-			return await GetDiscsQueryable(context)
+			var ids = discIds.Select(id => id.ToInt32());
+
+			var discEntities = await GetDiscsQueryable(context)
 				.Where(disc => ids.Contains(disc.Id))
-				.Select(disc => disc.ToModel(uriTranslator))
 				.ToListAsync(cancellationToken);
+
+			// TODO: This code is duplicated between DiscsRepository and SongsRepository
+			var folderModels = discEntities
+				.Select(disc => disc.Folder.ToModel(uriTranslator.RemoveLastSegmentFromInternalUri(disc.Uri)))
+				.GroupBy(folder => folder.Id)
+				.ToDictionary(group => group.Key, group => group.First());
+
+			return discEntities
+				.Select(disc => disc.ToModel(folderModels[disc.Folder.Id], uriTranslator))
+				.ToList();
+		}
+
+		public async Task<DiscModel> GetDisc(ItemId discId, CancellationToken cancellationToken)
+		{
+			await using var context = contextFactory.Create();
+
+			var disc = await FindDisc(context, discId, cancellationToken);
+
+			// TODO: This code is duplicated between DiscsRepository and SongsRepository
+			var folderModel = disc.Folder.ToModel(uriTranslator.RemoveLastSegmentFromInternalUri(disc.Uri));
+
+			return disc.ToModel(folderModel, uriTranslator);
 		}
 
 		private static IQueryable<DiscEntity> GetDiscsQueryable(MusicLibraryDbContext context)
@@ -55,16 +83,21 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 				.Include(disc => disc.Images);
 		}
 
-		public Task UpdateDisc(DiscModel discModel, CancellationToken cancellationToken)
+		public async Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken)
 		{
-			// TODO: Implement
-			throw new NotImplementedException();
+			await using var context = contextFactory.Create();
+			var discEntity = await FindDisc(context, disc.Id, cancellationToken);
+
+			var updatedEntity = disc.ToEntity(uriTranslator);
+			context.Entry(discEntity).CurrentValues.SetValues(updatedEntity);
+			await context.SaveChangesAsync(cancellationToken);
 		}
 
-		public Task DeleteDisc(ItemId discId, CancellationToken cancellationToken)
+		private static async Task<DiscEntity> FindDisc(MusicLibraryDbContext context, ItemId id, CancellationToken cancellationToken)
 		{
-			// TODO: Implement
-			throw new NotImplementedException();
+			var entityId = id.ToInt32();
+			return await GetDiscsQueryable(context)
+				.SingleAsync(s => s.Id == entityId, cancellationToken);
 		}
 	}
 }

@@ -7,6 +7,8 @@ namespace MusicLibrary.Core.Models
 	{
 		public ItemId Id { get; set; }
 
+		public ShallowFolderModel Folder { get; set; }
+
 		public int? Year { get; set; }
 
 		public string Title { get; set; }

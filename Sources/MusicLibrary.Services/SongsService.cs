@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Services.Comparers;
 using MusicLibrary.Services.Interfaces;
@@ -17,15 +18,18 @@ namespace MusicLibrary.Services
 
 		private readonly IClock clock;
 
+		private readonly ILogger<SongsService> logger;
+
 		private readonly IEqualityComparer<ArtistModel> artistsComparer = new ArtistEqualityComparer();
 
 		private readonly IEqualityComparer<GenreModel> genresComparer = new GenreEqualityComparer();
 
-		public SongsService(ISongsRepository songsRepository, IStorageRepository storageRepository, IClock clock)
+		public SongsService(ISongsRepository songsRepository, IStorageRepository storageRepository, IClock clock, ILogger<SongsService> logger)
 		{
 			this.songsRepository = songsRepository ?? throw new ArgumentNullException(nameof(songsRepository));
 			this.storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
 			this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		public Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken)
@@ -63,13 +67,18 @@ namespace MusicLibrary.Services
 			return songsRepository.UpdateSongLastPlayback(song, cancellationToken);
 		}
 
-		public async Task DeleteSong(SongModel song, CancellationToken cancellationToken)
+		public Task DeleteSong(SongModel song, CancellationToken cancellationToken)
 		{
-			var deleteDate = clock.Now;
+			return ((ISongsService)this).DeleteSong(song, clock.Now, cancellationToken);
+		}
+
+		async Task ISongsService.DeleteSong(SongModel song, DateTimeOffset deleteTime, CancellationToken cancellationToken)
+		{
+			logger.LogInformation($"Deleting song '{song.TreeTitle}' ...");
 
 			await storageRepository.DeleteSong(song, cancellationToken);
 
-			song.DeleteDate = deleteDate;
+			song.DeleteDate = deleteTime;
 
 			// TODO: Make the columns nullable and enable this logic.
 			// song.Size = null;

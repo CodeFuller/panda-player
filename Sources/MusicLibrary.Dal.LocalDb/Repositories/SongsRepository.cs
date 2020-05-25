@@ -30,14 +30,16 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			await using var context = contextFactory.Create();
 
 			var id = songId.ToInt32();
-			var song = await context.Songs
+			var songEntity = await context.Songs
 				.Include(song => song.Disc)
 				.Include(song => song.Artist)
 				.Include(song => song.Genre)
 				.Where(song => song.Id == id)
 				.SingleAsync(cancellationToken);
 
-			var discModel = song.Disc.ToModel(uriTranslator);
+			var folderModel = songEntity.Disc.Folder.ToModel(uriTranslator.RemoveLastSegmentFromInternalUri(songEntity.Disc.Uri));
+			var discModel = songEntity.Disc.ToModel(folderModel, uriTranslator);
+
 			return discModel.Songs.Single(song => song.Id == songId);
 		}
 
@@ -55,10 +57,17 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 				.Where(song => ids.Contains(song.Id))
 				.ToListAsync(cancellationToken);
 
-			var songModels = songs
+			var discEntities = songs
 				.Select(song => song.Disc)
 				.Distinct()
-				.Select(disc => disc.ToModel(uriTranslator))
+				.ToList();
+
+			var folderModels = discEntities
+				.Select(disc => disc.Folder.ToModel(uriTranslator.RemoveLastSegmentFromInternalUri(disc.Uri)))
+				.ToDictionary(folder => folder.Id, folder => folder);
+
+			var songModels = discEntities
+				.Select(disc => disc.ToModel(folderModels[disc.Folder.Id], uriTranslator))
 				.SelectMany(disc => disc.Songs)
 				.ToDictionary(song => song.Id, song => song);
 

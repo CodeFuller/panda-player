@@ -15,5 +15,7 @@ namespace MusicLibrary.Services.Interfaces
 		Task AddSongPlayback(SongModel song, DateTimeOffset playbackTime, CancellationToken cancellationToken);
 
 		Task DeleteSong(SongModel song, CancellationToken cancellationToken);
+
+		internal Task DeleteSong(SongModel song, DateTimeOffset deleteTime, CancellationToken cancellationToken);
 	}
 }

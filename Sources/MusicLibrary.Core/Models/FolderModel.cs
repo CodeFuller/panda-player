@@ -2,13 +2,11 @@
 
 namespace MusicLibrary.Core.Models
 {
-	public class FolderModel
+	public class FolderModel : ShallowFolderModel
 	{
-		public ItemId Id { get; set; }
+		public ShallowFolderModel ParentFolder { get; set; }
 
-		public ItemId ParentFolderId { get; set; }
-
-		public IReadOnlyCollection<SubfolderModel> Subfolders { get; set; }
+		public IReadOnlyCollection<ShallowFolderModel> Subfolders { get; set; }
 
 		public IReadOnlyCollection<DiscModel> Discs { get; set; }
 	}

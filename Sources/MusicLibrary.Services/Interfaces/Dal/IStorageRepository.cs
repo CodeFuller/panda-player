@@ -12,5 +12,7 @@ namespace MusicLibrary.Services.Interfaces.Dal
 		Task UpdateSong(SongModel song, CancellationToken cancellationToken);
 
 		Task DeleteSong(SongModel song, CancellationToken cancellationToken);
+
+		Task DeleteDiscImage(DiscImageModel image, CancellationToken cancellationToken);
 	}
 }
