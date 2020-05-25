@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MusicLibrary.Core.Interfaces;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.LibraryToolkit.Extensions;
 using MusicLibrary.LibraryToolkit.Interfaces;
 using MusicLibrary.LibraryToolkit.Settings;
-using MusicLibraryApi.Client.Contracts.Songs;
 using MusicLibraryApi.Client.Interfaces;
 
 namespace MusicLibrary.LibraryToolkit.Seeders
@@ -20,23 +14,23 @@ namespace MusicLibrary.LibraryToolkit.Seeders
 	{
 		private readonly ISongsMutation songsMutation;
 
-		private readonly IMusicLibraryReader musicLibraryReader;
-
 		private readonly ILogger<SongsSeeder> logger;
 
 		private readonly SongsSeederSettings settings;
 
-		public SongsSeeder(ISongsMutation songsMutation, IMusicLibraryReader musicLibraryReader, ILogger<SongsSeeder> logger, IOptions<SongsSeederSettings> options)
+		public SongsSeeder(ISongsMutation songsMutation, ILogger<SongsSeeder> logger, IOptions<SongsSeederSettings> options)
 		{
 			this.songsMutation = songsMutation ?? throw new ArgumentNullException(nameof(songsMutation));
-			this.musicLibraryReader = musicLibraryReader ?? throw new ArgumentNullException(nameof(musicLibraryReader));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
 
-		public async Task<IReadOnlyDictionary<int, int>> SeedSongs(DiscLibrary discLibrary, IReadOnlyDictionary<int, int> discs,
-			IReadOnlyDictionary<int, int> artists, IReadOnlyDictionary<int, int> genres, CancellationToken cancellationToken)
+		public Task<IReadOnlyDictionary<int, int>> SeedSongs(IReadOnlyDictionary<int, int> discs, IReadOnlyDictionary<int, int> artists,
+			IReadOnlyDictionary<int, int> genres, CancellationToken cancellationToken)
 		{
+			// TODO: Restore this functionality or delete it completely.
+			throw new NotImplementedException();
+/*
 			logger.LogInformation("Seeding songs ...");
 
 			var songsExplicitInfo = LoadExplicitSongsInfo();
@@ -123,8 +117,10 @@ namespace MusicLibrary.LibraryToolkit.Seeders
 			logger.LogInformation("Seeded {SongsNumber} songs", songs.Count);
 
 			return songs;
+*/
 		}
 
+/*
 		private IDictionary<Uri, string> LoadExplicitSongsInfo()
 		{
 			var songsInfo = new Dictionary<Uri, string>();
@@ -196,5 +192,6 @@ namespace MusicLibrary.LibraryToolkit.Seeders
 					throw new InvalidOperationException($"Unknown rating value {rating}");
 			}
 		}
+*/
 	}
 }

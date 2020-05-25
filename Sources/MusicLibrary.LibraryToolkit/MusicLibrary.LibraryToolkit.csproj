@@ -27,18 +27,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MusicLibrary.Dal\MusicLibrary.Dal.csproj" />
-    <ProjectReference Include="..\MusicLibrary.Library\MusicLibrary.Library.csproj" />
-    <ProjectReference Include="..\MusicLibrary.Tagger\MusicLibrary.Tagger.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="conf/**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\MusicLibrary.Dal\MusicLibrary.sql" Link="MusicLibrary.sql">
+    <None Include="..\MusicLibrary.Dal.LocalDb\MusicLibrary.sql" Link="MusicLibrary.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MusicLibrary.Dal.LocalDb\MusicLibrary.Dal.LocalDb.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

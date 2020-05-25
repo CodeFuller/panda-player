@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using MusicLibrary.Core.Objects;
 using MusicLibrary.LibraryToolkit.Interfaces;
-using MusicLibraryApi.Client.Contracts.Artists;
 using MusicLibraryApi.Client.Interfaces;
 
 namespace MusicLibrary.LibraryToolkit.Seeders
@@ -23,8 +20,11 @@ namespace MusicLibrary.LibraryToolkit.Seeders
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task<IReadOnlyDictionary<int, int>> SeedArtists(DiscLibrary discLibrary, CancellationToken cancellationToken)
+		public Task<IReadOnlyDictionary<int, int>> SeedArtists(CancellationToken cancellationToken)
 		{
+			// TODO: Restore this functionality or delete it completely.
+			throw new NotImplementedException();
+/*
 			logger.LogInformation("Seeding artists ...");
 
 			var artists = new Dictionary<int, int>();
@@ -39,6 +39,7 @@ namespace MusicLibrary.LibraryToolkit.Seeders
 			logger.LogInformation("Seeded {ArtistsNumber} artists", artists.Count);
 
 			return artists;
+*/
 		}
 	}
 }

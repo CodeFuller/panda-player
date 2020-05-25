@@ -1,20 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MusicLibrary.Core;
-using MusicLibrary.Core.Interfaces;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.LibraryToolkit.Extensions;
 using MusicLibrary.LibraryToolkit.Interfaces;
 using MusicLibrary.LibraryToolkit.Settings;
-using MusicLibraryApi.Client.Contracts.Discs;
 using MusicLibraryApi.Client.Interfaces;
 
 namespace MusicLibrary.LibraryToolkit.Seeders
@@ -23,22 +14,23 @@ namespace MusicLibrary.LibraryToolkit.Seeders
 	{
 		private readonly IDiscsMutation discsMutation;
 
-		private readonly IMusicLibraryReader musicLibraryReader;
-
 		private readonly ILogger<DiscsSeeder> logger;
 
 		private readonly DiscsSeederSettings settings;
 
-		public DiscsSeeder(IDiscsMutation discsMutation, IMusicLibraryReader musicLibraryReader, ILogger<DiscsSeeder> logger, IOptions<DiscsSeederSettings> options)
+		public DiscsSeeder(IDiscsMutation discsMutation, ILogger<DiscsSeeder> logger, IOptions<DiscsSeederSettings> options)
 		{
 			this.discsMutation = discsMutation ?? throw new ArgumentNullException(nameof(discsMutation));
-			this.musicLibraryReader = musicLibraryReader ?? throw new ArgumentNullException(nameof(musicLibraryReader));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
 
-		public async Task<IReadOnlyDictionary<int, int>> SeedDiscs(DiscLibrary discLibrary, IReadOnlyDictionary<Uri, int> folders, CancellationToken cancellationToken)
+		public Task<IReadOnlyDictionary<int, int>> SeedDiscs(IReadOnlyDictionary<Uri, int> folders, CancellationToken cancellationToken)
 		{
+			// TODO: Restore this functionality or delete it completely.
+			throw new NotImplementedException();
+
+/*
 			logger.LogInformation("Seeding discs ...");
 
 			// Disc Uri -> (Album Id, Album Order)
@@ -89,8 +81,10 @@ namespace MusicLibrary.LibraryToolkit.Seeders
 			logger.LogInformation("Seeded {DiscsNumber} discs", discs.Count);
 
 			return discs;
+*/
 		}
 
+/*
 		private IDictionary<Uri, (string, int?)> BuildDiscsAlbumsInfo(DiscLibrary discLibrary)
 		{
 			var explicitAlbumsInfo = LoadExplicitAlbumsInfo();
@@ -217,5 +211,6 @@ namespace MusicLibrary.LibraryToolkit.Seeders
 
 			throw new InvalidOperationException($"Can not determine album order for disc title {disc.Title}");
 		}
+*/
 	}
 }

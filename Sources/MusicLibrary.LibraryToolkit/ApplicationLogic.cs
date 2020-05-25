@@ -27,7 +27,7 @@ namespace MusicLibrary.LibraryToolkit
 
 		public async Task<int> Run(string[] args, CancellationToken cancellationToken)
 		{
-			LaunchCommand command = LaunchCommand.ShowHelp;
+			var command = LaunchCommand.ShowHelp;
 
 			var optionSet = new OptionSet
 			{

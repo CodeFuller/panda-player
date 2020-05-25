@@ -1,10 +1,10 @@
 ﻿{
-	"musicLibrary": {
-		"database": {
-			"dataSource": "d:\\PandaPlayer\\MusicLibrary.db"
-		},
+	"connectionStrings": {
+		"musicLibraryDb": "Data Source=d:\\PandaPlayer\\MusicLibrary.db;Foreign Keys=True;"
+	},
 
-		"fileSystemStorage": {
+	"localDb": {
+		"dataStorage": {
 			"root": "d:\\music"
 		}
 	},
@@ -15,19 +15,19 @@
 		},
 		"songsSeeder": {
 			"explicitSongsInfoFile": "d:\\PandaPlayer\\ExplicitSongInfo.txt"
-		} 
+		}
 	},
 
 	"musicLibraryApiConnection": {
 		"baseUrl": "http://localhost:5000/"
 	},
 
-	"Logging": {
-		"DefaultLogLevel": "Debug",
-		"Targets": [
+	"logging": {
+		"defaultLogLevel": "Debug",
+		"targets": [
 			{
-				"Type": "Console",
-				"LogLevel": "Debug"
+				"type": "Console",
+				"logLevel": "Debug"
 			}
 		]
 	}

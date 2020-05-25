@@ -1,18 +1,13 @@
 ﻿using System;
 using CF.Library.Bootstrap;
-using CF.Library.Core.Facades;
 using CF.Library.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MusicLibrary.Core.Interfaces;
-using MusicLibrary.Core.Media;
-using MusicLibrary.Dal.Extensions;
-using MusicLibrary.Library;
+using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.LibraryToolkit.Interfaces;
 using MusicLibrary.LibraryToolkit.Seeders;
 using MusicLibrary.LibraryToolkit.Settings;
-using MusicLibrary.Tagger;
 using MusicLibraryApi.Client;
 
 namespace MusicLibrary.LibraryToolkit
@@ -21,11 +16,12 @@ namespace MusicLibrary.LibraryToolkit
 	{
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{
-			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("musicLibrary:fileSystemStorage", options));
+			services.AddLocalDbDal(settings => configuration.Bind("localDb:dataStorage", settings));
+			services.AddMusicLibraryDbContext(configuration.GetConnectionString("musicLibraryDb"));
+
 			services.Configure<DiscsSeederSettings>(options => configuration.Bind("seeders:discsSeeder", options));
 			services.Configure<SongsSeederSettings>(options => configuration.Bind("seeders:songsSeeder", options));
 
-			services.AddTransient<IFileSystemFacade, FileSystemFacade>();
 			services.AddTransient<IApplicationLogic, ApplicationLogic>();
 			services.AddTransient<IMigrateDatabaseCommand, MigrateDatabaseCommand>();
 			services.AddTransient<ISeedApiDatabaseCommand, SeedApiDatabaseCommand>();
@@ -36,16 +32,6 @@ namespace MusicLibrary.LibraryToolkit
 			services.AddTransient<IDiscsSeeder, DiscsSeeder>();
 			services.AddTransient<ISongsSeeder, SongsSeeder>();
 			services.AddTransient<IPlaybacksSeeder, PlaybacksSeeder>();
-
-			services.AddDal(settings => configuration.Bind("musicLibrary:database", settings));
-
-			services.AddTransient<IFileStorage, FileSystemStorage>();
-			services.AddTransient<IMusicLibraryStorage, FileSystemMusicStorage>();
-			services.AddTransient<ILibraryStructurer, LibraryStructurer>();
-			services.AddTransient<IChecksumCalculator, Crc32Calculator>();
-			services.AddTransient<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
-			services.AddTransient<IMusicLibraryReader, RepositoryAndStorageMusicLibrary>();
-			services.AddTransient<ISongTagger, SongTagger>();
 
 			services.AddMusicLibraryApiClient(settings => configuration.Bind("musicLibraryApiConnection", settings));
 		}
