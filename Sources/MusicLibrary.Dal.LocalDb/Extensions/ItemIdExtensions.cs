@@ -10,5 +10,10 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 		{
 			return Int32.Parse(id.Value, NumberStyles.None, CultureInfo.InvariantCulture);
 		}
+
+		public static ItemId ToItemId(this Int32 id)
+		{
+			return new ItemId(id.ToString(CultureInfo.InvariantCulture));
+		}
 	}
 }
