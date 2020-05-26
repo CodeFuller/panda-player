@@ -47,7 +47,7 @@ namespace MusicLibrary.Services
 
 			if (song.TreeTitle != currentSong.TreeTitle)
 			{
-				await storageRepository.UpdateSongTreeTitle(song, currentSong.ContentUri, cancellationToken);
+				await storageRepository.UpdateSongTreeTitle(currentSong, song, cancellationToken);
 			}
 
 			// Checking if storage data (tags) must be updated.

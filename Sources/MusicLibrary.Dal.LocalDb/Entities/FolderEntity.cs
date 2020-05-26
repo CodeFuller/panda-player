@@ -1,12 +1,22 @@
-﻿using MusicLibrary.Core.Models;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MusicLibrary.Dal.LocalDb.Entities
 {
 	internal class FolderEntity
 	{
-		// TODO: Change id to int. Currently folder URI is encoded in id.
-		public ItemId Id { get; set; }
+		public int Id { get; set; }
 
 		public string Name { get; set; }
+
+		public int? ParentFolderId { get; set; }
+
+		public FolderEntity ParentFolder { get; set; }
+
+		public IReadOnlyCollection<FolderEntity> Subfolders { get; set; }
+
+		public IReadOnlyCollection<DiscEntity> Discs { get; set; }
+
+		public DateTimeOffset? DeleteDate { get; set; }
 	}
 }

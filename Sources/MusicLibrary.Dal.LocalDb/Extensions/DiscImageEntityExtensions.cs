@@ -8,15 +8,19 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 {
 	internal static class DiscImageEntityExtensions
 	{
-		public static DiscImageModel ToModel(this DiscImageEntity discImage, IUriTranslator uriTranslator)
+		public static DiscImageModel ToModel(this DiscImageEntity discImage, DiscModel discModel, IContentUriProvider contentUriProvider)
 		{
-			return new DiscImageModel
+			var model = new DiscImageModel
 			{
 				Id = discImage.Id.ToItemId(),
+				Disc = discModel,
 				ImageType = ConvertImageType(discImage.ImageType),
-				Uri = uriTranslator.GetExternalUri(discImage.Uri),
 				Size = discImage.FileSize,
 			};
+
+			model.ContentUri = contentUriProvider.GetDiscImageUri(model);
+
+			return model;
 		}
 
 		private static DiscImageType ConvertImageType(Entities.DiscImageType imageType)

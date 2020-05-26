@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MusicLibrary.Core.Models;
+using MusicLibrary.Dal.LocalDb.Entities;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Dal.LocalDb.Internal;
@@ -14,87 +14,35 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 {
 	internal class FoldersRepository : IFoldersRepository
 	{
-		private static ItemId RootFolderId => new ItemId("/");
-
-		private static string RootFolderName => "<ROOT>";
-
 		private readonly IMusicLibraryDbContextFactory contextFactory;
 
-		private readonly IDiscsRepository discsRepository;
+		private readonly IContentUriProvider contentUriProvider;
 
-		public FoldersRepository(IMusicLibraryDbContextFactory contextFactory, IDiscsRepository discsRepository)
+		public FoldersRepository(IMusicLibraryDbContextFactory contextFactory, IContentUriProvider contentUriProvider)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
-			this.discsRepository = discsRepository ?? throw new ArgumentNullException(nameof(discsRepository));
+			this.contentUriProvider = contentUriProvider ?? throw new ArgumentNullException(nameof(contentUriProvider));
 		}
 
-		public Task<FolderModel> GetRootFolder(CancellationToken cancellationToken)
+		public async Task<FolderModel> GetRootFolder(CancellationToken cancellationToken)
 		{
-			return GetFolder(RootFolderId, cancellationToken);
+			await using var context = contextFactory.Create();
+
+			var folder = await GetFoldersQueryable(context)
+				.SingleAsync(f => f.ParentFolder == null, cancellationToken);
+
+			return folder.ToModel(contentUriProvider);
 		}
 
 		public async Task<FolderModel> GetFolder(ItemId folderId, CancellationToken cancellationToken)
 		{
 			await using var context = contextFactory.Create();
 
-			var subfolders = new Dictionary<Uri, ShallowFolderModel>();
-			var discIds = new List<ItemId>();
+			var id = folderId.ToInt32();
+			var folder = await GetFoldersQueryable(context)
+				.SingleAsync(f => f.Id == id, cancellationToken);
 
-			// TODO: Extend database with folder entity and adjust this implementation.
-			foreach (var disc in context.Discs)
-			{
-				var childUri = GetDirectChildUri(folderId, disc.Uri);
-				if (childUri == null)
-				{
-					continue;
-				}
-
-				if (childUri == disc.Uri)
-				{
-					discIds.Add(disc.Id.ToItemId());
-				}
-				else if (!subfolders.ContainsKey(childUri))
-				{
-					var subfolder = new ShallowFolderModel
-					{
-						Id = childUri.ToItemId(),
-						Name = new ItemUriParts(childUri).Last(),
-					};
-
-					subfolders.Add(childUri, subfolder);
-				}
-			}
-
-			var uriParts = new ItemUriParts(folderId.ToUri());
-			var parentFolderId = uriParts.Any() ? ItemUriParts.Join(uriParts.Take(uriParts.Count - 1)).ToItemId() : null;
-
-			var folder = new FolderModel
-			{
-				Id = folderId,
-				Name = folderId == RootFolderId ? "<ROOT>" : uriParts.Last(),
-				ParentFolder = parentFolderId != null ? CreateShallowFolderModel(parentFolderId) : null,
-				Subfolders = subfolders.Values,
-				Discs = await discsRepository.GetDiscs(discIds, cancellationToken),
-			};
-
-			return folder;
-		}
-
-		private static ShallowFolderModel CreateShallowFolderModel(ItemId folderId)
-		{
-			return new ShallowFolderModel
-			{
-				Id = folderId,
-				Name = folderId == RootFolderId ? RootFolderName : new ItemUriParts(folderId.ToUri()).Last(),
-			};
-		}
-
-		private static Uri GetDirectChildUri(ItemId folderId, Uri childUri)
-		{
-			var parentParts = new ItemUriParts(folderId.ToUri());
-			var childParts = new ItemUriParts(childUri);
-
-			return parentParts.IsBaseOf(childParts) ? ItemUriParts.Join(childParts.Take(parentParts.Count + 1)) : null;
+			return folder.ToModel(contentUriProvider);
 		}
 
 		public async Task<FolderModel> GetDiscFolder(ItemId discId, CancellationToken cancellationToken)
@@ -102,12 +50,20 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			await using var context = contextFactory.Create();
 
 			var id = discId.ToInt32();
-			var disc = await context.Discs.SingleAsync(d => d.Id == id, cancellationToken);
+			var folder = await GetFoldersQueryable(context)
+				.SingleAsync(f => f.Discs.Any(d => d.Id == id), cancellationToken);
 
-			var uriParts = new ItemUriParts(disc.Uri);
-			var parentFolderId = ItemUriParts.Join(uriParts.Take(uriParts.Count - 1)).ToItemId();
+			return folder.ToModel(contentUriProvider);
+		}
 
-			return await GetFolder(parentFolderId, cancellationToken);
+		private static IQueryable<FolderEntity> GetFoldersQueryable(MusicLibraryDbContext context)
+		{
+			return context.Folders
+				.Include(f => f.ParentFolder)
+				.Include(f => f.Subfolders)
+				.Include(f => f.Discs).ThenInclude(d => d.Songs).ThenInclude(s => s.Artist)
+				.Include(f => f.Discs).ThenInclude(d => d.Songs).ThenInclude(s => s.Genre)
+				.Include(f => f.Discs).ThenInclude(d => d.Images);
 		}
 	}
 }

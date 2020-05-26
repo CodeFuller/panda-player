@@ -21,6 +21,8 @@ namespace MusicLibrary.Dal.LocalDb.Entities
 
 		public string Title { get; set; }
 
+		public string TreeTitle { get; set; }
+
 		public int? GenreId { get; set; }
 
 		public GenreEntity Genre { get; set; }
@@ -28,8 +30,6 @@ namespace MusicLibrary.Dal.LocalDb.Entities
 		public double DurationInMilliseconds { get; set; }
 
 		public int? Rating { get; set; }
-
-		public Uri Uri { get; set; }
 
 		public long? FileSize { get; set; }
 

@@ -17,12 +17,12 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 	{
 		private readonly IMusicLibraryDbContextFactory contextFactory;
 
-		private readonly IUriTranslator uriTranslator;
+		private readonly IContentUriProvider contentUriProvider;
 
-		public SongsRepository(IMusicLibraryDbContextFactory contextFactory, IUriTranslator uriTranslator)
+		public SongsRepository(IMusicLibraryDbContextFactory contextFactory, IContentUriProvider contentUriProvider)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
-			this.uriTranslator = uriTranslator ?? throw new ArgumentNullException(nameof(uriTranslator));
+			this.contentUriProvider = contentUriProvider ?? throw new ArgumentNullException(nameof(contentUriProvider));
 		}
 
 		public async Task<SongModel> GetSong(ItemId songId, CancellationToken cancellationToken)
@@ -31,14 +31,15 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 			var id = songId.ToInt32();
 			var songEntity = await context.Songs
-				.Include(song => song.Disc)
+				.Include(song => song.Disc).ThenInclude(disc => disc.Images)
+				.Include(song => song.Disc).ThenInclude(disc => disc.Folder)
 				.Include(song => song.Artist)
 				.Include(song => song.Genre)
 				.Where(song => song.Id == id)
 				.SingleAsync(cancellationToken);
 
-			var folderModel = songEntity.Disc.Folder.ToModel(uriTranslator.RemoveLastSegmentFromInternalUri(songEntity.Disc.Uri));
-			var discModel = songEntity.Disc.ToModel(folderModel, uriTranslator);
+			var folderModel = songEntity.Disc.Folder.ToShallowModel();
+			var discModel = songEntity.Disc.ToModel(folderModel, contentUriProvider);
 
 			return discModel.Songs.Single(song => song.Id == songId);
 		}
@@ -52,6 +53,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 			var songs = await context.Songs
 				.Include(song => song.Disc).ThenInclude(disc => disc.Images)
+				.Include(song => song.Disc).ThenInclude(disc => disc.Folder)
 				.Include(song => song.Artist)
 				.Include(song => song.Genre)
 				.Where(song => ids.Contains(song.Id))
@@ -63,11 +65,11 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 				.ToList();
 
 			var folderModels = discEntities
-				.Select(disc => disc.Folder.ToModel(uriTranslator.RemoveLastSegmentFromInternalUri(disc.Uri)))
+				.Select(disc => disc.Folder.ToShallowModel())
 				.ToDictionary(folder => folder.Id, folder => folder);
 
 			var songModels = discEntities
-				.Select(disc => disc.ToModel(folderModels[disc.Folder.Id], uriTranslator))
+				.Select(disc => disc.ToModel(folderModels[disc.Folder.Id.ToItemId()], contentUriProvider))
 				.SelectMany(disc => disc.Songs)
 				.ToDictionary(song => song.Id, song => song);
 
@@ -81,7 +83,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			await using var context = contextFactory.Create();
 			var songEntity = await FindSong(context, song.Id, cancellationToken);
 
-			var updatedEntity = song.ToEntity(uriTranslator);
+			var updatedEntity = song.ToEntity();
 			context.Entry(songEntity).CurrentValues.SetValues(updatedEntity);
 			await context.SaveChangesAsync(cancellationToken);
 		}

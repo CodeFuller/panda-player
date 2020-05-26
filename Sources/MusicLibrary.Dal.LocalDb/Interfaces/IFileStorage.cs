@@ -1,15 +1,17 @@
-﻿using System;
+﻿using MusicLibrary.Dal.LocalDb.Internal;
 
 namespace MusicLibrary.Dal.LocalDb.Interfaces
 {
 	internal interface IFileStorage
 	{
-		void MoveFile(Uri currentFileUri, Uri newFileUri);
+		void MoveFile(FilePath source, FilePath destination);
 
-		string CheckoutFile(Uri fileUri);
+		string CheckoutFile(FilePath filePath);
 
 		void CommitFile(string fileName);
 
-		void DeleteFile(Uri fileUri);
+		void DeleteFile(FilePath filePath);
+
+		string GetFullPath(FilePath songPath);
 	}
 }

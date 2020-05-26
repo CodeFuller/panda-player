@@ -3,19 +3,18 @@ using System.Linq;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Entities;
 using MusicLibrary.Dal.LocalDb.Interfaces;
-using MusicLibrary.Dal.LocalDb.Internal;
 
 namespace MusicLibrary.Dal.LocalDb.Extensions
 {
 	internal static class SongEntityExtensions
 	{
-		public static SongModel ToModel(this SongEntity song, DiscModel discModel, IUriTranslator uriTranslator)
+		public static SongModel ToModel(this SongEntity song, DiscModel discModel, IContentUriProvider contentUriProvider)
 		{
-			return new SongModel
+			var model = new SongModel
 			{
 				Id = song.Id.ToItemId(),
 				Title = song.Title,
-				TreeTitle = new ItemUriParts(song.Uri).Last(),
+				TreeTitle = song.TreeTitle,
 				TrackNumber = song.TrackNumber,
 				Duration = TimeSpan.FromMilliseconds(song.DurationInMilliseconds),
 				Disc = discModel,
@@ -28,12 +27,15 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				LastPlaybackTime = song.LastPlaybackTime,
 				PlaybacksCount = song.PlaybacksCount,
 				Playbacks = song.Playbacks?.Select(p => p.ToModel()).ToList(),
-				ContentUri = uriTranslator.GetExternalUri(song.Uri),
 				DeleteDate = song.DeleteDate,
 			};
+
+			model.ContentUri = contentUriProvider.GetSongContentUri(model);
+
+			return model;
 		}
 
-		public static SongEntity ToEntity(this SongModel song, IUriTranslator uriTranslator)
+		public static SongEntity ToEntity(this SongModel song)
 		{
 			return new SongEntity
 			{
@@ -43,10 +45,10 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				TrackNumber = song.TrackNumber,
 				Year = (short?)song.Disc.Year,
 				Title = song.Title,
+				TreeTitle = song.TreeTitle,
 				GenreId = song.Genre?.Id.ToInt32(),
 				DurationInMilliseconds = song.Duration.TotalMilliseconds,
 				Rating = song.Rating != null ? ConvertRating(song.Rating) : (int?)null,
-				Uri = uriTranslator.GetInternalUri(song.ContentUri),
 				FileSize = song.Size,
 				Checksum = (int?)song.Checksum,
 				BitRate = song.BitRate,

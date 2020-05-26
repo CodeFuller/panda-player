@@ -14,11 +14,27 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 		{
 			base.OnModelCreating(modelBuilder);
 
-			modelBuilder.Entity<ArtistEntity>(builder =>
+			modelBuilder.Entity<FolderEntity>(builder =>
 			{
-				builder.ToTable("Artists");
+				builder.ToTable("Folders");
 
-				builder.Property(a => a.Name).IsRequired();
+				builder.Property(f => f.Name).IsRequired();
+				builder.Property(s => s.ParentFolderId).HasColumnName("ParentFolder_Id");
+
+				builder.HasOne(f => f.ParentFolder)
+					.WithMany(f => f.Subfolders)
+					.HasForeignKey(d => d.ParentFolderId)
+					.OnDelete(DeleteBehavior.Restrict);
+
+				var rootFolder = new FolderEntity
+				{
+					Id = 1,
+					Name = "<ROOT>",
+					ParentFolderId = null,
+				};
+
+				// TODO: Check whether database seeding work and whether next id is correctly assigned to 2.
+				builder.HasData(rootFolder);
 			});
 
 			modelBuilder.Entity<DiscEntity>(builder =>
@@ -26,7 +42,15 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 				builder.ToTable("Discs");
 
 				builder.Property(d => d.Title).IsRequired();
-				builder.Property(d => d.Uri).IsRequired();
+				builder.Property(d => d.TreeTitle).IsRequired();
+				builder.Property(d => d.FolderId).HasColumnName("Folder_Id");
+			});
+
+			modelBuilder.Entity<ArtistEntity>(builder =>
+			{
+				builder.ToTable("Artists");
+
+				builder.Property(a => a.Name).IsRequired();
 			});
 
 			modelBuilder.Entity<GenreEntity>(builder =>
@@ -41,7 +65,7 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 				builder.ToTable("Songs");
 
 				builder.Property(s => s.Title).IsRequired();
-				builder.Property(s => s.Uri).IsRequired();
+				builder.Property(s => s.TreeTitle).IsRequired();
 				builder.Property(s => s.DurationInMilliseconds).HasColumnName("Duration");
 
 				builder.Property(s => s.DiscId).HasColumnName("Disc_Id");
@@ -60,17 +84,18 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 			{
 				builder.ToTable("DiscImages");
 
-				builder.Property(di => di.Uri).IsRequired();
 				builder.Property(di => di.DiscId).HasColumnName("Disc_Id");
 			});
 		}
 
-		public DbSet<ArtistEntity> Artists { get; set; }
+		public DbSet<FolderEntity> Folders { get; set; }
 
 		public DbSet<DiscEntity> Discs { get; set; }
 
-		public DbSet<SongEntity> Songs { get; set; }
+		public DbSet<ArtistEntity> Artists { get; set; }
 
 		public DbSet<GenreEntity> Genres { get; set; }
+
+		public DbSet<SongEntity> Songs { get; set; }
 	}
 }

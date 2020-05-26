@@ -55,7 +55,7 @@ namespace MusicLibrary.Services
 
 			foreach (var image in disc.Images)
 			{
-				logger.LogInformation($"Deleting disc image '{image.Uri}' ...");
+				logger.LogInformation($"Deleting disc image '{image.TreeTitle}' ...");
 				await storageRepository.DeleteDiscImage(image, cancellationToken);
 			}
 

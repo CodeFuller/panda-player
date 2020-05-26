@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using CF.Library.Core.Extensions;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Entities;
 using MusicLibrary.Dal.LocalDb.Interfaces;
-using MusicLibrary.Dal.LocalDb.Internal;
 
 namespace MusicLibrary.Dal.LocalDb.Extensions
 {
 	internal static class DiscEntityExtensions
 	{
-		public static DiscModel ToModel(this DiscEntity disc, ShallowFolderModel folderModel, IUriTranslator uriTranslator)
+		public static DiscModel ToModel(this DiscEntity disc, ShallowFolderModel folderModel, IContentUriProvider contentUriProvider)
 		{
 			// TBD: Add year as disc column in database and remove this logic
 			var discYear = disc.Songs
@@ -24,27 +22,25 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				Folder = folderModel,
 				Year = discYear,
 				Title = disc.Title,
-				TreeTitle = new ItemUriParts(disc.Uri).Last(),
+				TreeTitle = disc.TreeTitle,
 				AlbumTitle = disc.AlbumTitle,
-				Images = disc.Images?.Select(image => image.ToModel(uriTranslator)).ToList(),
 			};
 
-			discModel.Songs = new List<SongModel>(disc.Songs.Select(s => s.ToModel(discModel, uriTranslator)));
+			discModel.Songs = disc.Songs.Select(s => s.ToModel(discModel, contentUriProvider)).ToList();
+			discModel.Images = disc.Images.Select(im => im.ToModel(discModel, contentUriProvider)).ToList();
 
 			return discModel;
 		}
 
-		public static DiscEntity ToEntity(this DiscModel disc, IUriTranslator uriTranslator)
+		public static DiscEntity ToEntity(this DiscModel disc)
 		{
-			var folderUri = disc.Folder.Id.ToUri();
-			var discUri = uriTranslator.AppendSegmentToInternalUri(folderUri, disc.TreeTitle);
-
 			return new DiscEntity
 			{
 				Id = disc.Id.ToInt32(),
+				FolderId = disc.Folder.Id.ToInt32(),
 				Title = disc.Title,
+				TreeTitle = disc.TreeTitle,
 				AlbumTitle = disc.AlbumTitle,
-				Uri = discUri,
 			};
 		}
 	}

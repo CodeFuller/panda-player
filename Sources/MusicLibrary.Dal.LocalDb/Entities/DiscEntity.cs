@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using MusicLibrary.Dal.LocalDb.Extensions;
-using MusicLibrary.Dal.LocalDb.Internal;
+﻿using System.Collections.Generic;
 
 namespace MusicLibrary.Dal.LocalDb.Entities
 {
@@ -10,24 +6,15 @@ namespace MusicLibrary.Dal.LocalDb.Entities
 	{
 		public int Id { get; set; }
 
-		public FolderEntity Folder
-		{
-			get
-			{
-				var uriParts = new ItemUriParts(Uri);
-				return new FolderEntity
-				{
-					Id = ItemUriParts.Join(uriParts.Take(uriParts.Count - 1)).ToItemId(),
-					Name = uriParts[^2],
-				};
-			}
-		}
+		public int FolderId { get; set; }
+
+		public FolderEntity Folder { get; set; }
 
 		public string Title { get; set; }
 
-		public string AlbumTitle { get; set; }
+		public string TreeTitle { get; set; }
 
-		public Uri Uri { get; set; }
+		public string AlbumTitle { get; set; }
 
 		public IReadOnlyCollection<SongEntity> Songs { get; set; }
 

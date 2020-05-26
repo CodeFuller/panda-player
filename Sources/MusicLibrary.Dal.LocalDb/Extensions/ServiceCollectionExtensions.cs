@@ -20,13 +20,20 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 			services.AddSingleton<ISongsRepository, SongsRepository>();
 			services.AddSingleton<IGenresRepository, GenresRepository>();
 			services.AddSingleton<IArtistsRepository, ArtistsRepository>();
-			services.AddSingleton<IStorageRepository, StorageRepository>();
+
+			services.AddSingleton<StorageRepository>();
+			services.AddSingleton<IStorageRepository>(sp => sp.GetRequiredService<StorageRepository>());
+			services.AddSingleton<IContentUriProvider>(sp => sp.GetRequiredService<StorageRepository>());
+			services.AddSingleton<IFileStorageOrganizer, FileStorageOrganizer>();
+
+			services.AddSingleton<FolderCache>();
+			services.AddSingleton<IFolderCache>(sp => sp.GetRequiredService<FolderCache>());
+			services.AddSingleton<IFolderProvider>(sp => sp.GetRequiredService<FolderCache>());
 
 			services.AddSongTagger();
 			services.AddSingleton<IChecksumCalculator, Crc32Calculator>();
 			services.TryAddSingleton<IFileSystemFacade, FileSystemFacade>();
 			services.AddSingleton<IFileStorage, FileSystemStorage>();
-			services.AddSingleton<IUriTranslator, FileSystemStorage>();
 
 			services.Configure(setupSettings);
 

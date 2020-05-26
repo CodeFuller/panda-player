@@ -1,12 +1,8 @@
-﻿using System;
-
-namespace MusicLibrary.Dal.LocalDb.Entities
+﻿namespace MusicLibrary.Dal.LocalDb.Entities
 {
 	internal class DiscImageEntity
 	{
 		public int Id { get; set; }
-
-		public Uri Uri { get; set; }
 
 		public int? DiscId { get; set; }
 
