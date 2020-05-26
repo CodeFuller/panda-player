@@ -8,8 +8,7 @@ namespace MusicLibrary.Core.Models
 
 		public DiscModel Disc { get; set; }
 
-		// TODO: Extend entity with TreeTitle property.
-		public string TreeTitle { get; set; } = "cover.jpg";
+		public string TreeTitle { get; set; }
 
 		public DiscImageType ImageType { get; set; }
 

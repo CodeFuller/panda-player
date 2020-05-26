@@ -7,16 +7,13 @@ CREATE TABLE [Folders] (
   FOREIGN KEY ([ParentFolder_Id]) REFERENCES [Folders] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
-/* TODO: Remove Uri column */
 CREATE TABLE [Discs] (
   [Id] INTEGER NOT NULL,
   [Folder_Id] INTEGER NOT NULL,
   [Title] ntext NOT NULL,
   [TreeTitle] ntext NOT NULL,
   [AlbumTitle] ntext NULL,
-  [Uri] ntext NOT NULL,
   CONSTRAINT [sqlite_master_PK_Discs] PRIMARY KEY ([Id]),
-  CONSTRAINT [sqlite_master_UC_Discs] UNIQUE (Uri),
   FOREIGN KEY ([Folder_Id]) REFERENCES [Folders] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
@@ -34,7 +31,6 @@ CREATE TABLE [Genres] (
   CONSTRAINT [sqlite_master_UC_Genres] UNIQUE (Name)
 );
 
-/* TODO: Remove Uri column */
 CREATE TABLE [Songs] (
   [Id] INTEGER NOT NULL,
   [Artist_Id] int NULL,
@@ -46,7 +42,6 @@ CREATE TABLE [Songs] (
   [TreeTitle] ntext NOT NULL,
   [Duration] float NOT NULL,
   [Rating] int NULL,
-  [Uri] ntext NOT NULL,
   /* TODO: It can be NULL for deleted songs */
   [FileSize] int NOT NULL,
   /* TODO: It can be NULL for deleted songs */
@@ -57,7 +52,6 @@ CREATE TABLE [Songs] (
   [PlaybacksCount] int NOT NULL,
   [DeleteDate] datetime NULL,
   CONSTRAINT [sqlite_master_PK_Songs] PRIMARY KEY ([Id]),
-  CONSTRAINT [sqlite_master_UC_Songs] UNIQUE (Uri),
   FOREIGN KEY ([Genre_Id]) REFERENCES [Genres] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION,
   FOREIGN KEY ([Disc_Id]) REFERENCES [Discs] ([Id]) ON DELETE CASCADE ON UPDATE NO ACTION,
   FOREIGN KEY ([Artist_Id]) REFERENCES [Artists] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -72,16 +66,14 @@ CREATE TABLE [Playbacks] (
   FOREIGN KEY ([Song_Id]) REFERENCES [Songs] ([Id]) ON DELETE CASCADE ON UPDATE NO ACTION
 );
 
-/* TODO: Remove Uri column */
 CREATE TABLE [DiscImages] (
   [Id] INTEGER NOT NULL,
   [Disc_Id] int NOT NULL,
+  [TreeTitle] ntext NOT NULL,
   [ImageType] int NOT NULL,
-  [Uri] ntext NOT NULL,
   [FileSize] int NOT NULL,
   [Checksum] int NOT NULL,
   CONSTRAINT [sqlite_master_PK_Discs] PRIMARY KEY ([Id]),
-  CONSTRAINT [sqlite_master_UC_Discs] UNIQUE (Uri),
   FOREIGN KEY ([Disc_Id]) REFERENCES [Discs] ([Id]) ON DELETE CASCADE ON UPDATE NO ACTION
 );
 

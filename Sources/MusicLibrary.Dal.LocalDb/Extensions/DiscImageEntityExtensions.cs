@@ -14,6 +14,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 			{
 				Id = discImage.Id.ToItemId(),
 				Disc = discModel,
+				TreeTitle = discImage.TreeTitle,
 				ImageType = ConvertImageType(discImage.ImageType),
 				Size = discImage.FileSize,
 			};

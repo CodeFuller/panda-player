@@ -84,6 +84,7 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 			{
 				builder.ToTable("DiscImages");
 
+				builder.Property(s => s.TreeTitle).IsRequired();
 				builder.Property(di => di.DiscId).HasColumnName("Disc_Id");
 			});
 		}
