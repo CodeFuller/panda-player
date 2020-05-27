@@ -4,10 +4,7 @@ using MusicLibrary.PandaPlayer.ViewModels;
 
 namespace MusicLibrary.PandaPlayer.Views
 {
-	/// <summary>
-	/// Interaction logic for ApplicationView.xaml
-	/// </summary>
-	public partial class ApplicationView : Window
+	internal partial class ApplicationView : Window
 	{
 		public ApplicationView(ApplicationViewModel model)
 		{

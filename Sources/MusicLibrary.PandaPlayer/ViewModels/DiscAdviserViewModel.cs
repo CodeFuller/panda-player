@@ -1,23 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using CF.Library.Wpf;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Extensions.Logging;
 using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.Adviser;
+using MusicLibrary.PandaPlayer.Adviser.Interfaces;
 using MusicLibrary.PandaPlayer.Events;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
+using MusicLibrary.Services.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {
-	public class DiscAdviserViewModel : ViewModelBase, IDiscAdviserViewModel
+	internal class DiscAdviserViewModel : ViewModelBase, IDiscAdviserViewModel
 	{
 		private const int AdvisedPlaylistsNumber = 30;
 
+		private readonly IDiscsService discsService;
+
 		private readonly ICompositePlaylistAdviser playlistAdviser;
+
+		private readonly ILogger<DiscAdviserViewModel> logger;
 
 		private readonly List<AdvisedPlaylist> currAdvises = new List<AdvisedPlaylist>();
 
@@ -41,12 +51,14 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand SwitchToNextAdviseCommand { get; }
 
-		public DiscAdviserViewModel(ICompositePlaylistAdviser playlistAdviser)
+		public DiscAdviserViewModel(IDiscsService discsService, ICompositePlaylistAdviser playlistAdviser, ILogger<DiscAdviserViewModel> logger)
 		{
 			this.playlistAdviser = playlistAdviser ?? throw new ArgumentNullException(nameof(playlistAdviser));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
 
 			PlayCurrentAdviseCommand = new RelayCommand(PlayCurrentAdvise);
-			SwitchToNextAdviseCommand = new RelayCommand(SwitchToNextAdvise);
+			SwitchToNextAdviseCommand = new AsyncRelayCommand(() => SwitchToNextAdvise(CancellationToken.None));
 
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => OnPlaylistFinished(e.Songs));
 			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => Load());
@@ -54,7 +66,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		private void Load()
 		{
-			RebuildAdvises();
+			// TODO: Make async
+			RebuildAdvises(CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
 		}
 
 		internal void PlayCurrentAdvise()
@@ -67,24 +80,28 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		internal void SwitchToNextAdvise()
+		internal async Task SwitchToNextAdvise(CancellationToken cancellationToken)
 		{
 			++CurrAdviseIndex;
-			RebuildAdvisesIfRequired();
+			await RebuildAdvisesIfRequired(cancellationToken);
 		}
 
-		private void RebuildAdvisesIfRequired()
+		private async Task RebuildAdvisesIfRequired(CancellationToken cancellationToken)
 		{
 			if (CurrAdviseIndex >= currAdvises.Count)
 			{
-				RebuildAdvises();
+				await RebuildAdvises(cancellationToken);
 			}
 		}
 
-		private void RebuildAdvises()
+		private async Task RebuildAdvises(CancellationToken cancellationToken)
 		{
+			logger.LogInformation("Calculating advised playlists ...");
+			var discs = await discsService.GetAllDiscs(cancellationToken);
+			var advisedPlaylists = playlistAdviser.Advise(discs).Take(AdvisedPlaylistsNumber);
+
 			currAdvises.Clear();
-			currAdvises.AddRange(playlistAdviser.Advise().Take(AdvisedPlaylistsNumber));
+			currAdvises.AddRange(advisedPlaylists);
 			CurrAdviseIndex = 0;
 		}
 
@@ -112,7 +129,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				OnCurrentAdvisedChanged();
 			}
 
-			RebuildAdvisesIfRequired();
+			// TODO: Make async
+			RebuildAdvisesIfRequired(CancellationToken.None).Wait();
 		}
 
 		protected void OnCurrentAdvisedChanged()

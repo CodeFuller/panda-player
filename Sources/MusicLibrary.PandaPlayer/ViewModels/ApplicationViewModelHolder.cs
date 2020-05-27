@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {
-	public class ApplicationViewModelHolder : IApplicationViewModelHolder
+	internal class ApplicationViewModelHolder : IApplicationViewModelHolder
 	{
 		public ILibraryExplorerViewModel LibraryExplorerViewModel { get; }
 

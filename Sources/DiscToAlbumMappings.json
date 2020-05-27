@@ -1,4 +1,5 @@
 {
+	// TODO: Remove
 	"discToAlbumMappings": {
 		"albumTitlePatterns": [
 			"^(.+) \\(CD ?\\d+\\)$",

@@ -3,7 +3,7 @@ using MusicLibrary.PandaPlayer.Adviser;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
-	public interface IDiscAdviserViewModel
+	internal interface IDiscAdviserViewModel
 	{
 		AdvisedPlaylist CurrentAdvise { get; }
 

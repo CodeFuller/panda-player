@@ -6,10 +6,7 @@ using MusicLibrary.PandaPlayer.ViewModels;
 
 namespace MusicLibrary.PandaPlayer
 {
-	/// <summary>
-	/// Interaction logic for App.xaml
-	/// </summary>
-	public partial class App : WpfApplication<ApplicationViewModel>
+	internal partial class App : WpfApplication<ApplicationViewModel>
 	{
 		public App()
 			: base(new ApplicationBootstrapper())

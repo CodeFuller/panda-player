@@ -1,6 +1,6 @@
 ﻿namespace MusicLibrary.PandaPlayer.Adviser
 {
-	public enum AdvisedPlaylistType
+	internal enum AdvisedPlaylistType
 	{
 		None,
 		Disc,

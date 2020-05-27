@@ -12,7 +12,7 @@ namespace MusicLibrary.Core.Models
 		private short? trackNumber;
 		private ArtistModel artist;
 		private GenreModel genre;
-		private RatingModel rating;
+		private RatingModel? rating;
 		private DateTimeOffset? lastPlaybackTime;
 		private int playbacksCount;
 
@@ -64,7 +64,7 @@ namespace MusicLibrary.Core.Models
 			}
 		}
 
-		public RatingModel Rating
+		public RatingModel? Rating
 		{
 			get => rating;
 			set

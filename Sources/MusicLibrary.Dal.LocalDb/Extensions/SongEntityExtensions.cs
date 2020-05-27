@@ -20,7 +20,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				Disc = discModel,
 				Artist = song.Artist?.ToModel(),
 				Genre = song.Genre?.ToModel(),
-				Rating = song.Rating != null ? ConvertRating(song.Rating.Value) : null,
+				Rating = song.Rating != null ? ConvertRating(song.Rating.Value) : (RatingModel?)null,
 				BitRate = song.BitRate,
 				Size = song.FileSize,
 				Checksum = (uint?)song.Checksum,
@@ -76,59 +76,9 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 			};
 		}
 
-		private static int ConvertRating(RatingModel rating)
+		private static int? ConvertRating(RatingModel? rating)
 		{
-			if (rating == RatingModel.R1)
-			{
-				return 1;
-			}
-
-			if (rating == RatingModel.R2)
-			{
-				return 2;
-			}
-
-			if (rating == RatingModel.R3)
-			{
-				return 3;
-			}
-
-			if (rating == RatingModel.R4)
-			{
-				return 4;
-			}
-
-			if (rating == RatingModel.R5)
-			{
-				return 5;
-			}
-
-			if (rating == RatingModel.R6)
-			{
-				return 6;
-			}
-
-			if (rating == RatingModel.R7)
-			{
-				return 7;
-			}
-
-			if (rating == RatingModel.R8)
-			{
-				return 8;
-			}
-
-			if (rating == RatingModel.R9)
-			{
-				return 9;
-			}
-
-			if (rating == RatingModel.R10)
-			{
-				return 10;
-			}
-
-			throw new InvalidOperationException($"Unexpected rating value");
+			return rating != null ? (int)rating : (int?)null;
 		}
 	}
 }

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.LastFM;
 using MusicLibrary.PandaPlayer.Adviser;
+using MusicLibrary.PandaPlayer.Adviser.Extensions;
 using MusicLibrary.PandaPlayer.ViewModels;
 using MusicLibrary.PandaPlayer.ViewModels.DiscImages;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -23,7 +24,7 @@ using MusicLibrary.Shared;
 
 namespace MusicLibrary.PandaPlayer
 {
-	public class ApplicationBootstrapper : DiApplicationBootstrapper<ApplicationViewModel>
+	internal class ApplicationBootstrapper : DiApplicationBootstrapper<ApplicationViewModel>
 	{
 		private LoggerViewModel loggerViewModelInstance;
 
@@ -72,7 +73,12 @@ namespace MusicLibrary.PandaPlayer
 			services.AddSingleton<IScrobblesProcessor, PersistentScrobblesProcessor>();
 			services.AddTransient(typeof(Queue<>));
 
-			services.AddTransient<ICompositePlaylistAdviser, StubPlaylistAdviser>();
+			services.AddPlaylistAdviser(settings =>
+			{
+				configuration.Bind("adviser", settings);
+				configuration.Bind("adviser:favouriteArtistsAdviser", settings.FavouriteArtistsAdviser);
+				configuration.Bind("adviser:highlyRatedSongsAdviser", settings.HighlyRatedSongsAdviser);
+			});
 
 			var dataStoragePath = configuration["dataStoragePath"];
 			if (String.IsNullOrEmpty(dataStoragePath))

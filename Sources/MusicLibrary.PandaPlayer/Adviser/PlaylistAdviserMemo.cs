@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.PandaPlayer.Adviser
 {
-	public class PlaylistAdviserMemo : ICloneable
+	internal class PlaylistAdviserMemo : ICloneable
 	{
 		public int PlaybacksSinceHighlyRatedSongsPlaylist { get; set; }
 
@@ -23,6 +23,7 @@ namespace MusicLibrary.PandaPlayer.Adviser
 			++PlaybacksSinceHighlyRatedSongsPlaylist;
 		}
 
+		// TODO: Can we get rid of it?
 		public object Clone()
 		{
 			return MemberwiseClone();

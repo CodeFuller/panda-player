@@ -17,7 +17,7 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {
-	public class ApplicationViewModel : ViewModelBase
+	internal class ApplicationViewModel : ViewModelBase
 	{
 		private const int ExplorerSongListIndex = 0;
 		private const int PlaylistSongListIndex = 1;

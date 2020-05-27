@@ -16,6 +16,7 @@ using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
+using MusicLibrary.PandaPlayer.ViewModels.Internal;
 using MusicLibrary.Services.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
@@ -88,7 +89,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			PlaySongsLastCommand = new RelayCommand(PlaySongsLast);
 			DeleteSongsFromDiscCommand = new AsyncRelayCommand(() => DeleteSongsFromDisc(CancellationToken.None));
 			EditSongsPropertiesCommand = new AsyncRelayCommand(EditSongsProperties);
-			SetRatingMenuItems = RatingModel.All.Select(r => new SetRatingMenuItem(this, r)).ToList();
+			SetRatingMenuItems = RatingHelpers.AllRatingValues
+				.OrderByDescending(r => r)
+				.Select(r => new SetRatingMenuItem(this, r))
+				.ToList();
 		}
 
 		protected virtual void OnSongItemsChanged()

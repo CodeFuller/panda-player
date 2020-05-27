@@ -9,7 +9,6 @@ using CF.Library.Core.Interfaces;
 using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.PandaPlayer.Views;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.PandaPlayer
 {
@@ -44,7 +43,7 @@ namespace MusicLibrary.PandaPlayer
 			}
 			else
 			{
-				var message = Current($"You've just finished listening of playlist that have some songs unrated. Please devote some time and rate them.");
+				var message = "You've just finished listening of playlist that have some songs unrated. Please devote some time and rate them.";
 				windowService.ShowMessageBox(message, "Rate listened songs", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation);
 			}
 		}

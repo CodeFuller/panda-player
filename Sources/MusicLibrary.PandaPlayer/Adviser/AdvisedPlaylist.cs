@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MusicLibrary.Core.Models;
+using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.PandaPlayer.Adviser
 {
-	public class AdvisedPlaylist
+	internal class AdvisedPlaylist
 	{
 		public AdvisedPlaylistType AdvisedPlaylistType { get; private set; }
 
@@ -38,10 +40,36 @@ namespace MusicLibrary.PandaPlayer.Adviser
 			return new AdvisedPlaylist
 			{
 				AdvisedPlaylistType = AdvisedPlaylistType.Disc,
-				Title = "Stub Title",
-				Songs = new List<SongModel>(),
+				Title = FormatDiscTitle(disc),
+				Songs = new List<SongModel>(disc.Songs),
 				Disc = disc,
 			};
+		}
+
+		public static AdvisedPlaylist ForFavouriteArtistDisc(DiscModel disc)
+		{
+			return new AdvisedPlaylist
+			{
+				AdvisedPlaylistType = AdvisedPlaylistType.FavouriteArtistDisc,
+				Title = "*** " + FormatDiscTitle(disc),
+				Songs = new List<SongModel>(disc.Songs),
+				Disc = disc,
+			};
+		}
+
+		public static AdvisedPlaylist ForHighlyRatedSongs(IEnumerable<SongModel> songs)
+		{
+			return new AdvisedPlaylist
+			{
+				AdvisedPlaylistType = AdvisedPlaylistType.HighlyRatedSongs,
+				Title = "Highly Rated Songs",
+				Songs = songs.ToList(),
+			};
+		}
+
+		private static string FormatDiscTitle(DiscModel disc)
+		{
+			return Current($"{disc.Folder.Name} / {disc.Title}");
 		}
 	}
 }

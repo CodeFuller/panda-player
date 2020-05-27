@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.Extensions;
+using MusicLibrary.Services.Comparers;
 
 namespace MusicLibrary.PandaPlayer.Events.SongListEvents
 {
@@ -10,7 +11,7 @@ namespace MusicLibrary.PandaPlayer.Events.SongListEvents
 	{
 		public IReadOnlyCollection<SongModel> Songs { get; }
 
-		public DiscModel Disc => Songs.UniqueOrDefault(s => s.Disc.Id)?.Disc;
+		public DiscModel Disc => Songs.UniqueOrDefault(new SongEqualityComparer())?.Disc;
 
 		protected BaseSongListEventArgs(IEnumerable<SongModel> songs)
 		{

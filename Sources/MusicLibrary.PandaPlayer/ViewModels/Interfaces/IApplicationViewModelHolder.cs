@@ -1,6 +1,6 @@
 ﻿namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
-	public interface IApplicationViewModelHolder
+	internal interface IApplicationViewModelHolder
 	{
 		ILibraryExplorerViewModel LibraryExplorerViewModel { get; }
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
+using MusicLibrary.PandaPlayer.ViewModels.Internal;
 using MusicLibrary.Services.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
@@ -16,7 +17,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		private IReadOnlyCollection<SongModel> Songs { get; set; }
 
-		public static IEnumerable<RatingModel> AvailableRatings => RatingModel.All;
+		public static IEnumerable<RatingModel> AvailableRatings => RatingHelpers.AllRatingValues
+			.OrderByDescending(r => r);
 
 		private RatingModel selectedRating;
 
@@ -34,7 +36,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		public void Load(IEnumerable<SongModel> songs)
 		{
 			Songs = songs.ToList();
-			SelectedRating = RatingModel.DefaultValue;
+			SelectedRating = RatingHelpers.DefaultValueProposedForAssignment;
 		}
 
 		public async Task Save(CancellationToken cancellationToken)

@@ -11,6 +11,7 @@ using MusicLibrary.PandaPlayer.Events.SongEvents;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
 using MusicLibrary.PandaPlayer.Extensions;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
+using MusicLibrary.Services.Comparers;
 using MusicLibrary.Services.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
@@ -49,7 +50,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public SongModel CurrentSong => CurrentItem?.Song;
 
-		public DiscModel PlayingDisc => Songs.ToList().UniqueOrDefault(s => s.Disc.Id)?.Disc;
+		public DiscModel PlayingDisc => Songs.ToList().UniqueOrDefault(new SongEqualityComparer())?.Disc;
 
 		public override ICommand PlayFromSongCommand { get; }
 
