@@ -6,7 +6,7 @@ namespace MusicLibrary.PandaPlayer.Events.SongListEvents
 	public class PlaySongsListEventArgs : BaseSongListEventArgs
 	{
 		public PlaySongsListEventArgs(DiscModel disc)
-			: this(disc.Songs)
+			: this(disc.ActiveSongs)
 		{
 		}
 

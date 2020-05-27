@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using MusicLibrary.Core.Models;
-using MusicLibrary.PandaPlayer.Extensions;
 using MusicLibrary.Services.Comparers;
+using MusicLibrary.Services.Extensions;
 
 namespace MusicLibrary.PandaPlayer.Adviser.Extensions
 {
@@ -10,7 +10,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.Extensions
 	{
 		public static IEnumerable<SongModel> GetDiscSongsForAnalysis(this DiscModel disc)
 		{
-			return disc.IsDeleted ? disc.Songs : disc.Songs.Where(song => !song.IsDeleted);
+			return disc.IsDeleted ? disc.AllSongs : disc.ActiveSongs;
 		}
 
 		public static ArtistModel GetSoloArtist(this DiscModel disc)

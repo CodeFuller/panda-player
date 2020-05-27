@@ -39,7 +39,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.Internal
 			var playbacksInfo = new Dictionary<ItemId, int>();
 
 			var currentPlaybacksPassed = 0;
-			foreach (var song in discs.SelectMany(disc => disc.Songs).OrderByDescending(song => song.LastPlaybackTime))
+			foreach (var song in discs.SelectMany(disc => disc.AllSongs).OrderByDescending(song => song.LastPlaybackTime))
 			{
 				var playbacksPassed = song.LastPlaybackTime.HasValue ? currentPlaybacksPassed++ : Int32.MaxValue;
 				playbacksInfo.Add(song.Id, playbacksPassed);

@@ -41,7 +41,7 @@ namespace MusicLibrary.PandaPlayer.Adviser
 			{
 				AdvisedPlaylistType = AdvisedPlaylistType.Disc,
 				Title = FormatDiscTitle(disc),
-				Songs = new List<SongModel>(disc.Songs),
+				Songs = disc.ActiveSongs.ToList(),
 				Disc = disc,
 			};
 		}
@@ -52,7 +52,7 @@ namespace MusicLibrary.PandaPlayer.Adviser
 			{
 				AdvisedPlaylistType = AdvisedPlaylistType.FavouriteArtistDisc,
 				Title = "*** " + FormatDiscTitle(disc),
-				Songs = new List<SongModel>(disc.Songs),
+				Songs = disc.ActiveSongs.ToList(),
 				Disc = disc,
 			};
 		}

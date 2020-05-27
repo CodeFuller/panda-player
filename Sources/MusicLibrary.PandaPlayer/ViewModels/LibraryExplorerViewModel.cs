@@ -48,7 +48,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				var selectedDisc = SelectedDisc;
 				if (selectedDisc != null)
 				{
-					SongListViewModel.SetSongs(selectedDisc.Songs.Where(song => !song.IsDeleted));
+					SongListViewModel.SetSongs(selectedDisc.ActiveSongs);
 					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(selectedDisc));
 				}
 				else

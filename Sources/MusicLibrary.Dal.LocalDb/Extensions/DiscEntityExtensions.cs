@@ -26,7 +26,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				AlbumTitle = disc.AlbumTitle,
 			};
 
-			discModel.Songs = disc.Songs.Select(s => s.ToModel(discModel, contentUriProvider)).ToList();
+			discModel.AllSongs = disc.Songs.Select(s => s.ToModel(discModel, contentUriProvider)).ToList();
 			discModel.Images = disc.Images.Select(im => im.ToModel(discModel, contentUriProvider)).ToList();
 
 			return discModel;

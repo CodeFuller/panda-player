@@ -17,12 +17,14 @@ namespace MusicLibrary.Core.Models
 
 		public string AlbumTitle { get; set; }
 
-		public IReadOnlyCollection<SongModel> Songs { get; set; }
+		public IReadOnlyCollection<SongModel> AllSongs { get; set; }
+
+		public IEnumerable<SongModel> ActiveSongs => AllSongs.Where(song => !song.IsDeleted);
 
 		public IReadOnlyCollection<DiscImageModel> Images { get; set; }
 
 		public DiscImageModel CoverImage => Images.SingleOrDefault(image => image.ImageType == DiscImageType.Cover);
 
-		public bool IsDeleted => Songs.All(song => song.IsDeleted);
+		public bool IsDeleted => AllSongs.All(song => song.IsDeleted);
 	}
 }

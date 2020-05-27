@@ -41,7 +41,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			var folderModel = songEntity.Disc.Folder.ToShallowModel();
 			var discModel = songEntity.Disc.ToModel(folderModel, contentUriProvider);
 
-			return discModel.Songs.Single(song => song.Id == songId);
+			return discModel.AllSongs.Single(song => song.Id == songId);
 		}
 
 		public async Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken)
@@ -70,7 +70,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 			var songModels = discEntities
 				.Select(disc => disc.ToModel(folderModels[disc.Folder.Id.ToItemId()], contentUriProvider))
-				.SelectMany(disc => disc.Songs)
+				.SelectMany(disc => disc.AllSongs)
 				.ToDictionary(song => song.Id, song => song);
 
 			return songIdsList

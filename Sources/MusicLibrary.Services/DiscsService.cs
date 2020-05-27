@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -48,7 +47,7 @@ namespace MusicLibrary.Services
 			var disc = await discsRepository.GetDisc(discId, cancellationToken);
 			logger.LogInformation($"Deleting disc '{disc.TreeTitle}' ...");
 
-			foreach (var song in disc.Songs.Where(s => !s.IsDeleted))
+			foreach (var song in disc.ActiveSongs)
 			{
 				await songsService.DeleteSong(song, deleteTime, cancellationToken);
 			}

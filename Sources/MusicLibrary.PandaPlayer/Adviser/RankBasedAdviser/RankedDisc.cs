@@ -11,9 +11,9 @@ namespace MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser
 
 		public int PlaybacksPassed { get; }
 
-		public double Rating => Disc.Songs
-			.Select(s => s.GetRatingOrDefault())
-			.Select(r => r.GetRatingValueForDiscAdviser())
+		public double Rating => Disc.ActiveSongs
+			.Select(song => song.GetRatingOrDefault())
+			.Select(rating => rating.GetRatingValueForDiscAdviser())
 			.Average();
 
 		public RankedDisc(DiscModel disc, int playbacksPassed)

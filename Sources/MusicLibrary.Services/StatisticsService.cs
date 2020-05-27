@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CF.Library.Core.Extensions;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Services.Comparers;
+using MusicLibrary.Services.Extensions;
 using MusicLibrary.Services.Interfaces;
 using MusicLibrary.Services.Interfaces.Dal;
 
@@ -26,11 +26,11 @@ namespace MusicLibrary.Services
 				.ToList();
 
 			var allSongs = activeDiscs
-				.SelectMany(disc => disc.Songs)
+				.SelectMany(disc => disc.AllSongs)
 				.ToList();
 
-			var activeSongs = allSongs
-				.Where(song => !song.IsDeleted)
+			var activeSongs = activeDiscs
+				.SelectMany(disc => disc.ActiveSongs)
 				.ToList();
 
 			return new StatisticsModel
@@ -61,12 +61,10 @@ namespace MusicLibrary.Services
 
 		private static ArtistModel GetDiscArtist(DiscModel disc)
 		{
-			return disc.Songs
-				.Where(song => !song.IsDeleted)
+			return disc.ActiveSongs
 				.Select(song => song.Artist)
 				.Where(artist => artist != null)
-				.Distinct(new ArtistEqualityComparer())
-				.UniqueOrDefault();
+				.UniqueOrDefault(new ArtistEqualityComparer());
 		}
 	}
 }

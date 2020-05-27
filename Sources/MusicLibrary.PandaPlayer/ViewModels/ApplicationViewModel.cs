@@ -125,7 +125,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		{
 			var disc = message.Song.Disc;
 
-			Playlist.SetSongs(disc.Songs);
+			Playlist.SetSongs(disc.ActiveSongs);
 			Playlist.SwitchToSong(message.Song);
 			ResetPlayer();
 			SwitchToSongPlaylist();

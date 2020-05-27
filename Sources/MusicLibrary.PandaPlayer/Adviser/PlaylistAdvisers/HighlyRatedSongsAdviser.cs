@@ -37,7 +37,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 		public IEnumerable<AdvisedPlaylist> Advise(IEnumerable<DiscModel> discs, PlaybacksInfo playbacksInfo)
 		{
 			var songsToAdvise = discs
-				.SelectMany(d => d.Songs.Where(song => !song.IsDeleted))
+				.SelectMany(disc => disc.ActiveSongs)
 				.Where(IsTimeToListenHighlyRatedSong)
 				.OrderByDescending(song => GetRankForSong(song, playbacksInfo))
 				.ThenByDescending(song => song.GetRatingOrDefault())

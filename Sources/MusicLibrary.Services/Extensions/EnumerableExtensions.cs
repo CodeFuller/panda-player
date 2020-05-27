@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace MusicLibrary.PandaPlayer.Extensions
+namespace MusicLibrary.Services.Extensions
 {
-	internal static class EnumerableExtensions
+	public static class EnumerableExtensions
 	{
 		public static TSource UniqueOrDefault<TSource>(this IEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
 		{
