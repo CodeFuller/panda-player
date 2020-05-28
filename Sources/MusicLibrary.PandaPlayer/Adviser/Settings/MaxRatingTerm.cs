@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.PandaPlayer.Adviser.Settings
 {
-	internal class MaxUnlistenedSongTerm
+	internal class MaxRatingTerm
 	{
 		public RatingModel Rating { get; set; }
 

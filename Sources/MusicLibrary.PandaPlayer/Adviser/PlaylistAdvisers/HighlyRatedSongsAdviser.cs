@@ -13,7 +13,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 {
 	internal class HighlyRatedSongsAdviser : IPlaylistAdviser
 	{
-		private readonly Dictionary<RatingModel, TimeSpan> highlyRatedSongsMaxUnlistenedTerms;
+		private readonly Dictionary<RatingModel, TimeSpan> maxTermsForRatings;
 
 		private readonly IAdviseFactorsProvider adviseFactorsProvider;
 		private readonly IClock dateTimeFacade;
@@ -30,7 +30,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 				throw new InvalidOperationException($"{nameof(settings.OneAdviseSongsNumber)} is not set for highly rated songs adviser");
 			}
 
-			highlyRatedSongsMaxUnlistenedTerms = settings.MaxUnlistenedTerms
+			maxTermsForRatings = settings.MaxTerms
 				.ToDictionary(t => t.Rating, t => TimeSpan.FromDays(t.Days));
 		}
 
@@ -64,7 +64,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 
 		private bool IsTimeToListenHighlyRatedSong(SongModel song)
 		{
-			if (!highlyRatedSongsMaxUnlistenedTerms.TryGetValue(song.GetRatingOrDefault(), out var maxUnlistenedTerm))
+			if (!maxTermsForRatings.TryGetValue(song.GetRatingOrDefault(), out var maxTerm))
 			{
 				return false;
 			}
@@ -74,7 +74,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 				return true;
 			}
 
-			return dateTimeFacade.Now - song.LastPlaybackTime.Value >= maxUnlistenedTerm;
+			return dateTimeFacade.Now - song.LastPlaybackTime.Value >= maxTerm;
 		}
 	}
 }

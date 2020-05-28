@@ -8,6 +8,6 @@ namespace MusicLibrary.PandaPlayer.Adviser.Settings
 
 		public int OneAdviseSongsNumber { get; set; }
 
-		public IReadOnlyCollection<MaxUnlistenedSongTerm> MaxUnlistenedTerms { get; set; }
+		public IReadOnlyCollection<MaxRatingTerm> MaxTerms { get; set; }
 	}
 }
