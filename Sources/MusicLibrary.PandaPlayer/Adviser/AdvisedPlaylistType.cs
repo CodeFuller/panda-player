@@ -4,7 +4,7 @@
 	{
 		None,
 		Disc,
-		FavouriteArtistDisc,
+		FavoriteArtistDisc,
 		HighlyRatedSongs,
 	}
 }

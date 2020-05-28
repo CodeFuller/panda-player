@@ -19,15 +19,15 @@ namespace MusicLibrary.PandaPlayer.Adviser.Extensions
 
 			services.AddSingleton<RankBasedDiscAdviser>();
 			services.AddSingleton<HighlyRatedSongsAdviser>();
-			services.AddSingleton<FavouriteArtistDiscsAdviser>(sp =>
-				ActivatorUtilities.CreateInstance<FavouriteArtistDiscsAdviser>(sp, sp.GetRequiredService<RankBasedDiscAdviser>()));
+			services.AddSingleton<FavoriteArtistDiscsAdviser>(sp =>
+				ActivatorUtilities.CreateInstance<FavoriteArtistDiscsAdviser>(sp, sp.GetRequiredService<RankBasedDiscAdviser>()));
 
 			services.AddTransient<ICompositePlaylistAdviser, CompositePlaylistAdviser>(sp =>
 				ActivatorUtilities.CreateInstance<CompositePlaylistAdviser>(sp, sp.GetRequiredService<RankBasedDiscAdviser>(),
-					sp.GetRequiredService<HighlyRatedSongsAdviser>(), sp.GetRequiredService<FavouriteArtistDiscsAdviser>()));
+					sp.GetRequiredService<HighlyRatedSongsAdviser>(), sp.GetRequiredService<FavoriteArtistDiscsAdviser>()));
 
 			services.Configure(setupSettings);
-			services.Configure<FavouriteArtistsAdviserSettings>(s => setupSettings(new AdviserSettings { FavouriteArtistsAdviser = s }));
+			services.Configure<FavoriteArtistsAdviserSettings>(s => setupSettings(new AdviserSettings { FavoriteArtistsAdviser = s }));
 			services.Configure<HighlyRatedSongsAdviserSettings>(s => setupSettings(new AdviserSettings { HighlyRatedSongsAdviser = s }));
 
 			return services;

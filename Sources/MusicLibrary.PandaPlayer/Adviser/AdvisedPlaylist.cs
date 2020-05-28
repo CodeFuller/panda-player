@@ -46,11 +46,11 @@ namespace MusicLibrary.PandaPlayer.Adviser
 			};
 		}
 
-		public static AdvisedPlaylist ForFavouriteArtistDisc(DiscModel disc)
+		public static AdvisedPlaylist ForFavoriteArtistDisc(DiscModel disc)
 		{
 			return new AdvisedPlaylist
 			{
-				AdvisedPlaylistType = AdvisedPlaylistType.FavouriteArtistDisc,
+				AdvisedPlaylistType = AdvisedPlaylistType.FavoriteArtistDisc,
 				Title = "*** " + FormatDiscTitle(disc),
 				Songs = disc.ActiveSongs.ToList(),
 				Disc = disc,

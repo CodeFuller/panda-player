@@ -6,20 +6,20 @@ namespace MusicLibrary.PandaPlayer.Adviser
 	{
 		public int PlaybacksSinceHighlyRatedSongsPlaylist { get; set; }
 
-		public int PlaybacksSinceFavouriteArtistDisc { get; set; }
+		public int PlaybacksSinceFavoriteArtistDisc { get; set; }
 
 		public void RegisterPlayback(AdvisedPlaylist advisePlayback)
 		{
-			if (advisePlayback.AdvisedPlaylistType == AdvisedPlaylistType.FavouriteArtistDisc)
+			if (advisePlayback.AdvisedPlaylistType == AdvisedPlaylistType.FavoriteArtistDisc)
 			{
-				PlaybacksSinceFavouriteArtistDisc = -1;
+				PlaybacksSinceFavoriteArtistDisc = -1;
 			}
 			else if (advisePlayback.AdvisedPlaylistType == AdvisedPlaylistType.HighlyRatedSongs)
 			{
 				PlaybacksSinceHighlyRatedSongsPlaylist = -1;
 			}
 
-			++PlaybacksSinceFavouriteArtistDisc;
+			++PlaybacksSinceFavoriteArtistDisc;
 			++PlaybacksSinceHighlyRatedSongsPlaylist;
 		}
 
