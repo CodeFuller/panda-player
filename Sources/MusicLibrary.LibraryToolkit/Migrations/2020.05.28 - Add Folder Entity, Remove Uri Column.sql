@@ -105,7 +105,7 @@ DROP TABLE OldSongs;
 DROP TABLE OldPlaybacks;
 DROP TABLE OldDiscImages;
 
-UPDATE Songs SET FileSize = NULL, Checksum = NULL WHERE DeleteDate IS NOT NULL;
+UPDATE Songs SET FileSize = NULL, Checksum = NULL, Bitrate = NULL WHERE DeleteDate IS NOT NULL;
 
 COMMIT;
 

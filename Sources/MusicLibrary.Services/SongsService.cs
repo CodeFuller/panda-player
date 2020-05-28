@@ -79,10 +79,10 @@ namespace MusicLibrary.Services
 			await storageRepository.DeleteSong(song, cancellationToken);
 
 			song.DeleteDate = deleteTime;
+			song.BitRate = null;
+			song.Size = null;
+			song.Checksum = null;
 
-			// TODO: Make the columns nullable and enable this logic.
-			// song.Size = null;
-			// song.Checksum = null;
 			await songsRepository.UpdateSong(song, cancellationToken);
 		}
 	}
