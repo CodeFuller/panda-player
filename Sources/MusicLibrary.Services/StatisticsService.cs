@@ -21,11 +21,13 @@ namespace MusicLibrary.Services
 
 		public async Task<StatisticsModel> GetLibraryStatistics(CancellationToken cancellationToken)
 		{
-			var activeDiscs = (await discsRepository.GetAllDiscs(cancellationToken))
+			var allDiscs = await discsRepository.GetAllDiscs(cancellationToken);
+
+			var activeDiscs = allDiscs
 				.Where(disc => !disc.IsDeleted)
 				.ToList();
 
-			var allSongs = activeDiscs
+			var allSongs = allDiscs
 				.SelectMany(disc => disc.AllSongs)
 				.ToList();
 
