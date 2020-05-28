@@ -49,7 +49,7 @@ namespace MusicLibrary.Services
 
 				DiscsNumber = activeDiscs.Count,
 				SongsNumber = activeSongs.Count,
-				StorageSize = activeSongs.Sum(song => song.Size ?? 0) + activeDiscs.SelectMany(disc => disc.Images).Sum(image => image.Size ?? 0),
+				StorageSize = activeSongs.Sum(song => song.Size ?? 0) + activeDiscs.SelectMany(disc => disc.Images).Sum(image => image.Size),
 				SongsDuration = activeSongs.Aggregate(TimeSpan.Zero, (sum, song) => sum + song.Duration),
 				PlaybacksDuration = TimeSpan.FromTicks(allSongs.Sum(song => song.PlaybacksCount * song.Duration.Ticks)),
 				PlaybacksNumber = allSongs.Sum(song => song.PlaybacksCount),

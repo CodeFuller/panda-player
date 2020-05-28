@@ -17,7 +17,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				TreeTitle = discImage.TreeTitle,
 				ImageType = ConvertImageType(discImage.ImageType),
 				Size = discImage.FileSize,
-				Checksum = (uint?)discImage.Checksum,
+				Checksum = (uint)discImage.Checksum,
 			};
 
 			model.ContentUri = contentUriProvider.GetDiscImageUri(model);
@@ -34,7 +34,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				TreeTitle = image.TreeTitle,
 				ImageType = ConvertImageType(image.ImageType),
 				FileSize = image.Size,
-				Checksum = (int?)image.Checksum,
+				Checksum = (int)image.Checksum,
 			};
 		}
 
