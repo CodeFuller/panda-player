@@ -1,9 +1,12 @@
-﻿using MusicLibrary.Dal.LocalDb.Internal;
+﻿using System.IO;
+using MusicLibrary.Dal.LocalDb.Internal;
 
 namespace MusicLibrary.Dal.LocalDb.Interfaces
 {
 	internal interface IFileStorage
 	{
+		void SaveFile(FilePath filePath, Stream content);
+
 		void MoveFile(FilePath source, FilePath destination);
 
 		string CheckoutFile(FilePath filePath);
@@ -12,6 +15,6 @@ namespace MusicLibrary.Dal.LocalDb.Interfaces
 
 		void DeleteFile(FilePath filePath);
 
-		string GetFullPath(FilePath songPath);
+		string GetFullPath(FilePath filePath);
 	}
 }

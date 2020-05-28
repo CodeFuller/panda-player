@@ -12,5 +12,7 @@ namespace MusicLibrary.Services.Interfaces.Dal
 		Task<DiscModel> GetDisc(ItemId discId, CancellationToken cancellationToken);
 
 		Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken);
+
+		Task AddDiscImage(DiscImageModel image, CancellationToken cancellationToken);
 	}
 }

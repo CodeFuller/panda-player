@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MusicLibrary.Core.Models;
-using MusicLibrary.PandaPlayer.Adviser.Extensions;
 using MusicLibrary.PandaPlayer.Adviser.Interfaces;
 using MusicLibrary.PandaPlayer.Adviser.Internal;
 using MusicLibrary.PandaPlayer.Adviser.Settings;
@@ -43,16 +42,16 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 			}
 
 			var favoriteArtistDiscs = discsList
-				.Where(disc => disc.GetSoloArtist() != null && favoriteArtists.Any(fa => String.Equals(fa, disc.GetSoloArtist().Name, StringComparison.Ordinal)));
+				.Where(disc => disc.SoloArtist != null && favoriteArtists.Any(fa => String.Equals(fa, disc.SoloArtist.Name, StringComparison.Ordinal)));
 
-			var artistOrders = favoriteArtistDiscs.GroupBy(d => d.GetSoloArtist().Id)
+			var artistOrders = favoriteArtistDiscs.GroupBy(d => d.SoloArtist.Id)
 				.Select(g => (artistId: g.Key, playbacksPassed: g.Min(playbacksInfo.GetPlaybacksPassed)))
 				.ToDictionary(x => x.artistId, x => x.playbacksPassed);
 
 			// Selecting first advised disc for each artist. Artists are ordered by last playback.
 			return discAdviser.Advise(discsList, playbacksInfo)
 				.Where(ap => GetDiscFavoriteSoloArtist(ap.Disc, artistOrders) != null)
-				.GroupBy(ap => ap.Disc.GetSoloArtist().Id)
+				.GroupBy(ap => ap.Disc.SoloArtist.Id)
 				.OrderByDescending(g => artistOrders[g.Key])
 				.Select(g => g.First())
 				.Select(a => AdvisedPlaylist.ForFavoriteArtistDisc(a.Disc));
@@ -60,7 +59,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 
 		private static ArtistModel GetDiscFavoriteSoloArtist(DiscModel disc, IReadOnlyDictionary<ItemId, int> favoriteArtists)
 		{
-			var soloArtist = disc.GetSoloArtist();
+			var soloArtist = disc.SoloArtist;
 			if (soloArtist == null)
 			{
 				return null;
@@ -74,7 +73,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 			// Checking that library contains all configured favorite artists.
 			var activeDiscs = discs.Where(disc => !disc.IsDeleted);
 			var soloArtists = activeDiscs
-				.Select(disc => disc.GetSoloArtist())
+				.Select(disc => disc.SoloArtist)
 				.Where(artist => artist != null)
 				.Select(artist => artist.Name)
 				.ToHashSet();

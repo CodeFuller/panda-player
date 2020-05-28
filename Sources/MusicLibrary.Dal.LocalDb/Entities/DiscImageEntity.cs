@@ -12,7 +12,7 @@
 
 		public DiscImageType ImageType { get; set; }
 
-		public int FileSize { get; set; }
+		public long? FileSize { get; set; }
 
 		public int? Checksum { get; set; }
 	}

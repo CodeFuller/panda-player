@@ -18,6 +18,6 @@ namespace MusicLibrary.Dal.LocalDb.Entities
 
 		public IReadOnlyCollection<SongEntity> Songs { get; set; }
 
-		public IReadOnlyCollection<DiscImageEntity> Images { get; set; }
+		public ICollection<DiscImageEntity> Images { get; set; }
 	}
 }

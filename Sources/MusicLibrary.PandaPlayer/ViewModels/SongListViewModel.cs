@@ -119,6 +119,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 			foreach (var song in selectedSongs)
 			{
+				// TODO: We actually leave song object in Disc songs list. Should we fix it?
 				await songsService.DeleteSong(song, cancellationToken);
 				for (var i = 0; i < songItems.Count;)
 				{

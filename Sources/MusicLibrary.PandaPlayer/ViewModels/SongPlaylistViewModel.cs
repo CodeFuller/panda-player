@@ -5,13 +5,13 @@ using System.Windows.Input;
 using CF.Library.Core.Interfaces;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using MusicLibrary.Core.Comparers;
+using MusicLibrary.Core.Extensions;
 using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.Events.DiscEvents;
 using MusicLibrary.PandaPlayer.Events.SongEvents;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
-using MusicLibrary.Services.Comparers;
-using MusicLibrary.Services.Extensions;
 using MusicLibrary.Services.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels

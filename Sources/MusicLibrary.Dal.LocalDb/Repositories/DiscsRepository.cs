@@ -74,6 +74,20 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			await context.SaveChangesAsync(cancellationToken);
 		}
 
+		public async Task AddDiscImage(DiscImageModel image, CancellationToken cancellationToken)
+		{
+			await using var context = contextFactory.Create();
+			var discEntity = await FindDisc(context, image.Disc.Id, cancellationToken);
+
+			var imageEntity = image.ToEntity();
+			discEntity.Images.Add(imageEntity);
+
+			await context.SaveChangesAsync(cancellationToken);
+
+			// TODO: Should we assign id in update methods for other entities?
+			image.Id = imageEntity.Id.ToItemId();
+		}
+
 		private static async Task<DiscEntity> FindDisc(MusicLibraryDbContext context, ItemId id, CancellationToken cancellationToken)
 		{
 			var entityId = id.ToInt32();

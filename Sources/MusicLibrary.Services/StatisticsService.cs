@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MusicLibrary.Core.Comparers;
+using MusicLibrary.Core.Extensions;
 using MusicLibrary.Core.Models;
-using MusicLibrary.Services.Comparers;
-using MusicLibrary.Services.Extensions;
 using MusicLibrary.Services.Interfaces;
 using MusicLibrary.Services.Interfaces.Dal;
 
@@ -49,7 +49,7 @@ namespace MusicLibrary.Services
 
 				DiscsNumber = activeDiscs.Count,
 				SongsNumber = activeSongs.Count,
-				StorageSize = activeSongs.Sum(song => song.Size ?? 0) + activeDiscs.SelectMany(disc => disc.Images).Sum(image => image.Size),
+				StorageSize = activeSongs.Sum(song => song.Size ?? 0) + activeDiscs.SelectMany(disc => disc.Images).Sum(image => image.Size ?? 0),
 				SongsDuration = activeSongs.Aggregate(TimeSpan.Zero, (sum, song) => sum + song.Duration),
 				PlaybacksDuration = TimeSpan.FromTicks(allSongs.Sum(song => song.PlaybacksCount * song.Duration.Ticks)),
 				PlaybacksNumber = allSongs.Sum(song => song.PlaybacksCount),

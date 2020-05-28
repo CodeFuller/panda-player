@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
@@ -7,6 +6,6 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 	{
 		Uri CurrentImageUri { get; }
 
-		Task EditDiscImage();
+		void EditDiscImage();
 	}
 }

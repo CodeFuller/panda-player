@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -38,6 +39,25 @@ namespace MusicLibrary.Services
 		public Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken)
 		{
 			return discsRepository.UpdateDisc(disc, cancellationToken);
+		}
+
+		public async Task SetDiscCoverImage(DiscImageModel coverImage, Stream imageContent, CancellationToken cancellationToken)
+		{
+			var disc = coverImage.Disc;
+			var currentDisc = await discsRepository.GetDisc(disc.Id, cancellationToken);
+
+			if (currentDisc.CoverImage == null)
+			{
+				disc.AddImage(coverImage);
+
+				await storageRepository.AddDiscImage(coverImage, imageContent, cancellationToken);
+				await discsRepository.AddDiscImage(coverImage, cancellationToken);
+			}
+			else
+			{
+				// TODO: Cover case when cover image already exists (with the same name or different)
+				throw new NotImplementedException();
+			}
 		}
 
 		public async Task DeleteDisc(ItemId discId, CancellationToken cancellationToken)

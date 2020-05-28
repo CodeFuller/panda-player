@@ -22,7 +22,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		void SetImage(byte[] imageData);
 
-		Task Load(DiscModel disc);
+		void Load(DiscModel disc);
 
 		void Unload();
 

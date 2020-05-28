@@ -14,18 +14,33 @@ namespace MusicLibrary.PandaPlayer.Views.ValueConverters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is Uri imageUri) || targetType != typeof(ImageSource))
+			if (targetType != typeof(ImageSource))
 			{
 				return DependencyProperty.UnsetValue;
 			}
 
-			if (!imageUri.IsFile)
+			string imageFileName;
+
+			if (value is Uri imageUri)
 			{
-				throw new NotSupportedException("Displaying of non-file URIs is not supported");
+				if (!imageUri.IsFile)
+				{
+					throw new NotSupportedException("Displaying of non-file URIs is not supported");
+				}
+
+				imageFileName = imageUri.OriginalString;
+			}
+			else if (value is string imagePath)
+			{
+				imageFileName = imagePath;
+			}
+			else
+			{
+				return DependencyProperty.UnsetValue;
 			}
 
 			var image = new BitmapImage();
-			using var fs = new FileStream(imageUri.OriginalString, FileMode.Open, FileAccess.Read);
+			using var fs = new FileStream(imageFileName, FileMode.Open, FileAccess.Read);
 			image.BeginInit();
 			image.CacheOption = BitmapCacheOption.OnLoad;
 			image.StreamSource = fs;

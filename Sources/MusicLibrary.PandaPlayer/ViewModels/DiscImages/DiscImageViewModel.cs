@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Core.Models;
@@ -49,7 +48,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
 		}
 
-		public async Task EditDiscImage()
+		public void EditDiscImage()
 		{
 			var activeDisc = CurrentDisc;
 			if (activeDisc == null)
@@ -57,15 +56,14 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 				return;
 			}
 
-			await viewNavigator.ShowEditDiscImageView(activeDisc);
+			viewNavigator.ShowEditDiscImageView(activeDisc);
 		}
 
 		private void OnDiscImageChanged(DiscModel disc)
 		{
-			// TODO: Restore this functionality
-			if (disc == CurrentDisc)
+			if (disc.Id == CurrentDisc?.Id)
 			{
-				// CurrentImageFileName = GetCurrentImageFileName();
+				CurrentImageUri = disc.CoverImage?.ContentUri;
 			}
 		}
 	}

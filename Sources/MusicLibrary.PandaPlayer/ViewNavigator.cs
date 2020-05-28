@@ -62,10 +62,10 @@ namespace MusicLibrary.PandaPlayer
 			ShowDialog<EditSongPropertiesView>(viewModel);
 		}
 
-		public async Task ShowEditDiscImageView(DiscModel disc)
+		public void ShowEditDiscImageView(DiscModel disc)
 		{
 			var viewModel = viewModelHolder.EditDiscImageViewModel;
-			await viewModel.Load(disc);
+			viewModel.Load(disc);
 			ShowDialog<EditDiscImageView>(viewModel);
 		}
 

@@ -17,12 +17,12 @@ namespace MusicLibrary.PandaPlayer.Views
 		}
 
 #pragma warning disable CA1707 // Identifiers should not contain underscores - Method name follows convention for event handlers
-		public async void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		public void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 #pragma warning restore CA1707 // Identifiers should not contain underscores
 		{
 			if (e.ClickCount == 2)
 			{
-				await ViewModel.EditDiscImage();
+				ViewModel.EditDiscImage();
 			}
 		}
 	}

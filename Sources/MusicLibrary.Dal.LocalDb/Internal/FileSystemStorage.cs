@@ -24,6 +24,23 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 			}
 		}
 
+		public void SaveFile(FilePath filePath, Stream content)
+		{
+			var fullPath = GetFullPath(filePath);
+			if (fileSystemFacade.FileExists(fullPath))
+			{
+				throw new InvalidOperationException($"Destination file '{fullPath}' already exists");
+			}
+
+			using (var fileStream = File.Create(fullPath))
+			{
+				content.Seek(0, SeekOrigin.Begin);
+				content.CopyTo(fileStream);
+			}
+
+			CommitFile(fullPath);
+		}
+
 		public void MoveFile(FilePath source, FilePath destination)
 		{
 			var sourceFilePath = GetFullPath(source);
@@ -60,9 +77,9 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 			fileSystemFacade.DeleteFile(fullPath);
 		}
 
-		public string GetFullPath(FilePath source)
+		public string GetFullPath(FilePath filePath)
 		{
-			return Path.Combine(new[] { rootDirectory }.Concat(source).ToArray());
+			return Path.Combine(new[] { rootDirectory }.Concat(filePath).ToArray());
 		}
 	}
 }

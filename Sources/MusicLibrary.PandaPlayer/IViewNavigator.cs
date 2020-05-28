@@ -13,7 +13,7 @@ namespace MusicLibrary.PandaPlayer
 
 		Task ShowSongPropertiesView(IEnumerable<SongModel> songs, CancellationToken cancellationToken);
 
-		Task ShowEditDiscImageView(DiscModel disc);
+		void ShowEditDiscImageView(DiscModel disc);
 
 		Task ShowLibraryStatisticsView(CancellationToken cancellationToken);
 	}

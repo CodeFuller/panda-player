@@ -12,7 +12,9 @@ namespace MusicLibrary.Core.Models
 
 		public DiscImageType ImageType { get; set; }
 
-		public long Size { get; set; }
+		public long? Size { get; set; }
+
+		public uint? Checksum { get; set; }
 
 		public Uri ContentUri { get; set; }
 	}

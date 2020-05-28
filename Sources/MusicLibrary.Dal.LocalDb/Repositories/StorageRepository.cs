@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
@@ -46,7 +47,8 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			var tagData = new SongTagData(song);
 			songTagger.SetTagData(songFileName, tagData);
 
-			song.Checksum = checksumCalculator.CalculateChecksum(songFileName);
+			song.Size = CalculateFileSize(songFileName);
+			song.Checksum = CalculateFileChecksum(songFileName);
 
 			fileStorage.CommitFile(songFileName);
 
@@ -59,6 +61,18 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			fileStorage.DeleteFile(songPath);
 
 			// TODO: Delete disc directory if it becomes empty.
+			return Task.CompletedTask;
+		}
+
+		public Task AddDiscImage(DiscImageModel image, Stream imageContent, CancellationToken cancellationToken)
+		{
+			var imagePath = storageOrganizer.GetDiscImagePath(image);
+			fileStorage.SaveFile(imagePath, imageContent);
+
+			var fullPath = fileStorage.GetFullPath(imagePath);
+			image.Size = CalculateFileSize(fullPath);
+			image.Checksum = CalculateFileChecksum(fullPath);
+
 			return Task.CompletedTask;
 		}
 
@@ -87,6 +101,16 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 		{
 			var fullPath = fileStorage.GetFullPath(songPath);
 			return new Uri(fullPath);
+		}
+
+		private static long CalculateFileSize(string filePath)
+		{
+			return new FileInfo(filePath).Length;
+		}
+
+		private uint CalculateFileChecksum(string filePath)
+		{
+			return checksumCalculator.CalculateChecksum(filePath);
 		}
 	}
 }

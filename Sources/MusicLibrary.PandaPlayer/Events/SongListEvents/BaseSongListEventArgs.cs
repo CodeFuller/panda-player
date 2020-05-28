@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MusicLibrary.Core.Comparers;
+using MusicLibrary.Core.Extensions;
 using MusicLibrary.Core.Models;
-using MusicLibrary.Services.Comparers;
-using MusicLibrary.Services.Extensions;
 
 namespace MusicLibrary.PandaPlayer.Events.SongListEvents
 {
