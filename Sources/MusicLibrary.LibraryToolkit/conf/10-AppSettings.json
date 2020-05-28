@@ -9,15 +9,6 @@
 		}
 	},
 
-	"seeders": {
-		"discsSeeder": {
-			"explicitAlbumsInfoFile": "d:\\PandaPlayer\\ExplicitAlbumInfo.txt"
-		},
-		"songsSeeder": {
-			"explicitSongsInfoFile": "d:\\PandaPlayer\\ExplicitSongInfo.txt"
-		}
-	},
-
 	"musicLibraryApiConnection": {
 		"baseUrl": "http://localhost:5000/"
 	},

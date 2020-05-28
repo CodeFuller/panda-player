@@ -5,6 +5,5 @@
 		None,
 		ShowHelp,
 		MigrateDatabase,
-		SeedApiDatabase,
 	}
 }

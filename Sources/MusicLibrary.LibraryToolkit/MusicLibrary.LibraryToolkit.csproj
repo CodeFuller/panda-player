@@ -21,7 +21,6 @@
     <PackageReference Include="CF.Library.Core" Version="$(CFLibraryVersion)" />
     <PackageReference Include="CF.Library.Logging" Version="$(CFLibraryVersion)" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(FxCopAnalyzersVersion)" PrivateAssets="all" />
-    <PackageReference Include="MusicLibraryApi.Client" Version="4.1.0" />
     <PackageReference Include="NDesk.Options" Version="0.2.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopAnalyzersVersion)" PrivateAssets="all" />
   </ItemGroup>
