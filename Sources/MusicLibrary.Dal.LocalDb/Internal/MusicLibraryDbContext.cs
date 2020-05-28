@@ -98,5 +98,7 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 		public DbSet<GenreEntity> Genres { get; set; }
 
 		public DbSet<SongEntity> Songs { get; set; }
+
+		public DbSet<DiscImageEntity> DiscImages { get; set; }
 	}
 }

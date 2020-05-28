@@ -46,18 +46,26 @@ namespace MusicLibrary.Services
 			var disc = coverImage.Disc;
 			var currentDisc = await discsRepository.GetDisc(disc.Id, cancellationToken);
 
-			if (currentDisc.CoverImage == null)
+			if (currentDisc.CoverImage != null)
 			{
-				disc.AddImage(coverImage);
+				await DeleteDiscCoverImage(currentDisc, cancellationToken);
+				disc.DeleteImage(disc.CoverImage);
+			}
 
-				await storageRepository.AddDiscImage(coverImage, imageContent, cancellationToken);
-				await discsRepository.AddDiscImage(coverImage, cancellationToken);
-			}
-			else
-			{
-				// TODO: Cover case when cover image already exists (with the same name or different)
-				throw new NotImplementedException();
-			}
+			disc.AddImage(coverImage);
+			await AddDiscCoverImage(coverImage, imageContent, cancellationToken);
+		}
+
+		private async Task DeleteDiscCoverImage(DiscModel disc, CancellationToken cancellationToken)
+		{
+			await storageRepository.DeleteDiscImage(disc.CoverImage, cancellationToken);
+			await discsRepository.DeleteDiscImage(disc.CoverImage, cancellationToken);
+		}
+
+		private async Task AddDiscCoverImage(DiscImageModel coverImage, Stream imageContent, CancellationToken cancellationToken)
+		{
+			await storageRepository.AddDiscImage(coverImage, imageContent, cancellationToken);
+			await discsRepository.AddDiscImage(coverImage, cancellationToken);
 		}
 
 		public async Task DeleteDisc(ItemId discId, CancellationToken cancellationToken)

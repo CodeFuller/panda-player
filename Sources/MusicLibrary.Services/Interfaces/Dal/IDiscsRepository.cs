@@ -14,5 +14,7 @@ namespace MusicLibrary.Services.Interfaces.Dal
 		Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken);
 
 		Task AddDiscImage(DiscImageModel image, CancellationToken cancellationToken);
+
+		Task DeleteDiscImage(DiscImageModel image, CancellationToken cancellationToken);
 	}
 }

@@ -88,6 +88,16 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			image.Id = imageEntity.Id.ToItemId();
 		}
 
+		public async Task DeleteDiscImage(DiscImageModel image, CancellationToken cancellationToken)
+		{
+			await using var context = contextFactory.Create();
+
+			var imageEntity = await context.DiscImages.FindAsync(new object[] { image.Id.ToInt32() }, cancellationToken);
+			context.DiscImages.Remove(imageEntity);
+
+			await context.SaveChangesAsync(cancellationToken);
+		}
+
 		private static async Task<DiscEntity> FindDisc(MusicLibraryDbContext context, ItemId id, CancellationToken cancellationToken)
 		{
 			var entityId = id.ToInt32();

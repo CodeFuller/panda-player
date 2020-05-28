@@ -55,5 +55,15 @@ namespace MusicLibrary.Core.Models
 
 			images.Add(image);
 		}
+
+		public void DeleteImage(DiscImageModel image)
+		{
+			var removed = images.RemoveAll(x => x.Id == image.Id);
+
+			if (removed != 1)
+			{
+				throw new InvalidOperationException($"Can not delete an image from disc (Matched: {removed})");
+			}
+		}
 	}
 }
