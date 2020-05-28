@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MusicLibrary.Core.Comparers;
 using MusicLibrary.Core.Extensions;
@@ -47,7 +48,11 @@ namespace MusicLibrary.Core.Models
 
 		public void AddImage(DiscImageModel image)
 		{
-			// TODO: Error check for conflicting cover.
+			if (image.ImageType == DiscImageType.Cover && CoverImage != null)
+			{
+				throw new InvalidOperationException("Disc can have only one cover image");
+			}
+
 			images.Add(image);
 		}
 	}
