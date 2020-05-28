@@ -38,19 +38,12 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 
 			if (!checkedArtists)
 			{
-				// Checking that library contains all configured favourite artists.
-				var discArtists = new HashSet<string>(discsList.Where(d => d.GetSoloArtist() != null).Select(d => d.GetSoloArtist().Name).Distinct());
-				var missingArtists = favouriteArtists.Where(a => !discArtists.Contains(a)).ToList();
-				if (missingArtists.Any())
-				{
-					logger.LogWarning("Following favourite artist(s) are missing in the library: {MissingFavouriteArtists}", String.Join(", ", missingArtists));
-				}
-
+				CheckConfigurationForFavouriteArtists(discsList);
 				checkedArtists = true;
 			}
 
 			var favouriteArtistDiscs = discsList
-				.Where(d => d.GetSoloArtist() != null && favouriteArtists.Any(fa => String.Equals(fa, d.GetSoloArtist().Name, StringComparison.Ordinal)));
+				.Where(disc => disc.GetSoloArtist() != null && favouriteArtists.Any(fa => String.Equals(fa, disc.GetSoloArtist().Name, StringComparison.Ordinal)));
 
 			var artistOrders = favouriteArtistDiscs.GroupBy(d => d.GetSoloArtist().Id)
 				.Select(g => (artistId: g.Key, playbacksPassed: g.Min(playbacksInfo.GetPlaybacksPassed)))
@@ -58,11 +51,39 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 
 			// Selecting first advised disc for each artist. Artists are ordered by last playback.
 			return discAdviser.Advise(discsList, playbacksInfo)
-				.Where(ap => ap.Disc.GetSoloArtist() != null && artistOrders.ContainsKey(ap.Disc.GetSoloArtist().Id))
+				.Where(ap => GetDiscFavouriteSoloArtist(ap.Disc, artistOrders) != null)
 				.GroupBy(ap => ap.Disc.GetSoloArtist().Id)
 				.OrderByDescending(g => artistOrders[g.Key])
 				.Select(g => g.First())
 				.Select(a => AdvisedPlaylist.ForFavouriteArtistDisc(a.Disc));
+		}
+
+		private static ArtistModel GetDiscFavouriteSoloArtist(DiscModel disc, IReadOnlyDictionary<ItemId, int> favouriteArtists)
+		{
+			var soloArtist = disc.GetSoloArtist();
+			if (soloArtist == null)
+			{
+				return null;
+			}
+
+			return favouriteArtists.ContainsKey(soloArtist.Id) ? soloArtist : null;
+		}
+
+		private void CheckConfigurationForFavouriteArtists(IEnumerable<DiscModel> discs)
+		{
+			// Checking that library contains all configured favourite artists.
+			var activeDiscs = discs.Where(disc => !disc.IsDeleted);
+			var soloArtists = activeDiscs
+				.Select(disc => disc.GetSoloArtist())
+				.Where(artist => artist != null)
+				.Select(artist => artist.Name)
+				.ToHashSet();
+
+			var missingArtists = favouriteArtists.Where(a => !soloArtists.Contains(a)).ToList();
+			if (missingArtists.Any())
+			{
+				logger.LogWarning("Following favourite artist(s) are missing in the library: {MissingFavouriteArtists}", String.Join(", ", missingArtists));
+			}
 		}
 	}
 }
