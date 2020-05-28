@@ -10,18 +10,18 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 {
 	internal class RankBasedDiscAdviser : IPlaylistAdviser
 	{
-		private readonly IDiscGroupper discGroupper;
+		private readonly IDiscClassifier discClassifier;
 		private readonly IDiscGroupSorter discGroupSorter;
 
-		public RankBasedDiscAdviser(IDiscGroupper discGroupper, IDiscGroupSorter discGroupSorter)
+		public RankBasedDiscAdviser(IDiscClassifier discClassifier, IDiscGroupSorter discGroupSorter)
 		{
-			this.discGroupper = discGroupper ?? throw new ArgumentNullException(nameof(discGroupper));
+			this.discClassifier = discClassifier ?? throw new ArgumentNullException(nameof(discClassifier));
 			this.discGroupSorter = discGroupSorter ?? throw new ArgumentNullException(nameof(discGroupSorter));
 		}
 
 		public IEnumerable<AdvisedPlaylist> Advise(IEnumerable<DiscModel> discs, PlaybacksInfo playbacksInfo)
 		{
-			var discGroups = discGroupper.GroupLibraryDiscs(discs)
+			var discGroups = discClassifier.GroupLibraryDiscs(discs)
 				.Where(dg => !dg.Discs.All(d => d.IsDeleted));
 
 			var advisedDiscs = new Collection<DiscModel>();

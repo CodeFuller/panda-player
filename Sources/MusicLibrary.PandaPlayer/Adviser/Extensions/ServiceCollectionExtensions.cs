@@ -13,7 +13,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.Extensions
 	{
 		public static IServiceCollection AddPlaylistAdviser(this IServiceCollection services, Action<AdviserSettings> setupSettings)
 		{
-			services.AddSingleton<IDiscGroupper, FolderDiscGrouper>();
+			services.AddSingleton<IDiscClassifier, FolderDiscClassifier>();
 			services.AddSingleton<IDiscGroupSorter, RankBasedDiscGroupSorter>();
 			services.AddSingleton<IAdviseFactorsProvider, AdviseFactorsProvider>();
 

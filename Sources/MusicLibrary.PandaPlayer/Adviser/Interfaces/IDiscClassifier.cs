@@ -4,7 +4,7 @@ using MusicLibrary.PandaPlayer.Adviser.Grouping;
 
 namespace MusicLibrary.PandaPlayer.Adviser.Interfaces
 {
-	internal interface IDiscGroupper
+	internal interface IDiscClassifier
 	{
 		IEnumerable<DiscGroup> GroupLibraryDiscs(IEnumerable<DiscModel> discs);
 	}
