@@ -73,6 +73,8 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			image.Size = CalculateFileSize(fullPath);
 			image.Checksum = CalculateFileChecksum(fullPath);
 
+			image.ContentUri = GetDiscImageUri(image);
+
 			return Task.CompletedTask;
 		}
 
