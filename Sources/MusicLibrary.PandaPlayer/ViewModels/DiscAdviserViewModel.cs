@@ -99,6 +99,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			logger.LogInformation("Calculating advised playlists ...");
 			var discs = await discsService.GetAllDiscs(cancellationToken);
 			var advisedPlaylists = playlistAdviser.Advise(discs).Take(AdvisedPlaylistsNumber);
+			logger.LogInformation("Finished advised playlists calculation");
 
 			currAdvises.Clear();
 			currAdvises.AddRange(advisedPlaylists);
