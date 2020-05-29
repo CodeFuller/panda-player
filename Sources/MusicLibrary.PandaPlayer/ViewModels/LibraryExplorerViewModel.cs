@@ -101,7 +101,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		{
 			// TBD: We should not load root folder, if some disc is active, because folder of this disc will be loaded just after that.
 			var rootFolderData = foldersService.GetRootFolder(CancellationToken.None).Result;
-			LoadFolder(rootFolderData);
+			LoadFolder(rootFolderData, null);
 		}
 
 		private async Task ChangeToCurrentlySelectedFolder(CancellationToken cancellationToken)
@@ -122,12 +122,12 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		{
 			var folder = await foldersService.GetFolder(folderId, cancellationToken);
 
-			LoadFolder(folder);
+			LoadFolder(folder, null);
 		}
 
-		private void LoadFolder(FolderModel folder)
+		private void LoadFolder(FolderModel folder, DiscModel selectedDisc)
 		{
-			SetFolderItems(folder);
+			SetFolderItems(folder, selectedDisc);
 
 			SelectedItem = Items.FirstOrDefault();
 
@@ -152,7 +152,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			SelectedItem = newSelectedItem ?? Items.FirstOrDefault();
 		}
 
-		private void SetFolderItems(FolderModel folder)
+		private void SetFolderItems(FolderModel folder, DiscModel selectedDisc)
 		{
 			Items.Clear();
 
@@ -165,9 +165,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				.Select(x => new FolderExplorerItem(x))
 				.OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase);
 
+			// TODO: Cover other cases for setting folder items (e.g. navigation via Library Explorer).
+			// We added passed disc instance (selectedDisc), not the one loaded from folder.
+			// It's important that same song instances are shared between Explorer songs and Playlist songs.
+			// If song is changed (playbacks, rating or other properties), then song is updated in both lists.
 			var discs = folder.Discs
 				.Where(disc => !disc.IsDeleted)
-				.Select(x => new DiscExplorerItem(x))
+				.Select(x => new DiscExplorerItem(x.Id == selectedDisc?.Id ? selectedDisc : x))
 				.OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase);
 
 			Items.AddRange(subfolders);
@@ -178,7 +182,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		{
 			var discFolder = foldersService.GetDiscFolder(disc.Id, CancellationToken.None).Result;
 
-			LoadFolder(discFolder);
+			LoadFolder(discFolder, disc);
 
 			SelectedItem = Items.OfType<DiscExplorerItem>().FirstOrDefault(x => x.DiscId == disc.Id);
 		}
