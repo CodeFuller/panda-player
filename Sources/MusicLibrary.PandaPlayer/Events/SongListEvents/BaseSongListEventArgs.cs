@@ -11,7 +11,9 @@ namespace MusicLibrary.PandaPlayer.Events.SongListEvents
 	{
 		public IReadOnlyCollection<SongModel> Songs { get; }
 
-		public DiscModel Disc => Songs.UniqueOrDefault(new SongEqualityComparer())?.Disc;
+		public DiscModel Disc => Songs
+			.Select(song => song.Disc)
+			.UniqueOrDefault(new DiscEqualityComparer());
 
 		protected BaseSongListEventArgs(IEnumerable<SongModel> songs)
 		{
