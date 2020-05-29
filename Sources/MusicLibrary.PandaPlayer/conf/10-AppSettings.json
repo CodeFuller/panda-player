@@ -20,5 +20,10 @@
 		"apiKey": "f2831f831bb20050711a078ea7e4f372",
 		"sharedSecret": "<Fill LastFM Shared Secret here>",
 		"sessionKey": "<Fill LastFM Session Key here>"
-	}
+	},
+
+	"logging": {
+		"logLevel": "Information",
+		"databaseOperationsLogLevel": "Warning"
+	} 
 }

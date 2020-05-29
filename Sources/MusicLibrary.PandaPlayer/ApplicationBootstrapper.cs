@@ -9,10 +9,12 @@ using CF.Library.Wpf;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.LastFM;
 using MusicLibrary.PandaPlayer.Adviser;
 using MusicLibrary.PandaPlayer.Adviser.Extensions;
+using MusicLibrary.PandaPlayer.Settings;
 using MusicLibrary.PandaPlayer.ViewModels;
 using MusicLibrary.PandaPlayer.ViewModels.DiscImages;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -31,8 +33,8 @@ namespace MusicLibrary.PandaPlayer
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{
 			// TBD: Extract registrations to extensions methods on IServiceCollection
-			services.Configure<LastFmClientSettings>(options => configuration.Bind("lastFmClient", options));
 			services.Configure<PandaPlayerSettings>(configuration.Bind);
+			services.Configure<LastFmClientSettings>(options => configuration.Bind("lastFmClient", options));
 
 			services.AddLocalDbDal(settings => configuration.Bind("localDb:dataStorage", settings));
 			services.AddMusicLibraryDbContext(configuration.GetConnectionString("musicLibraryDb"));
@@ -107,13 +109,23 @@ namespace MusicLibrary.PandaPlayer
 			services.AddMusicLibraryServices();
 		}
 
-		protected override void BootstrapLogging(ILoggerFactory loggerFactory, IConfiguration configuration)
+		protected override ILoggerFactory BootstrapLogging(IConfiguration configuration)
 		{
-			loggerViewModelInstance = new LoggerViewModel();
+			var settings = new LoggingSettings();
+			configuration.Bind("logging", settings);
+
+			var loggerFactory = LoggerFactory.Create(loggingBuilder =>
+			{
+				loggingBuilder.AddFilter("Microsoft.EntityFrameworkCore", settings.DatabaseOperationsLogLevel);
+			});
+
+			loggerViewModelInstance = new LoggerViewModel(Options.Create(settings));
 
 #pragma warning disable CA2000 // Dispose objects before losing scope
 			loggerFactory.AddProvider(new InstanceLoggerProvider(loggerViewModelInstance));
 #pragma warning restore CA2000 // Dispose objects before losing scope
+
+			return loggerFactory;
 		}
 	}
 }

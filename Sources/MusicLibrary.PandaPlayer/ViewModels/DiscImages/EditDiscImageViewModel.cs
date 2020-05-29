@@ -11,6 +11,7 @@ using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Extensions.Options;
 using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.Events.DiscEvents;
+using MusicLibrary.PandaPlayer.Settings;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.Services.Interfaces;
 using MusicLibrary.Shared.Images;

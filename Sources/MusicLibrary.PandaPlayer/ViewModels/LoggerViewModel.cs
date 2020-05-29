@@ -3,12 +3,14 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using MusicLibrary.PandaPlayer.Settings;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.PandaPlayer.ViewModels.Logging;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {
-	public class LoggerViewModel : ViewModelBase, ILoggerViewModel, ILogger
+	internal class LoggerViewModel : ViewModelBase, ILoggerViewModel, ILogger
 	{
 		private sealed class EmptyDisposable : IDisposable
 		{
@@ -17,6 +19,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			public void Dispose()
 			{
 			}
+		}
+
+		private readonly LoggingSettings settings;
+
+		public LoggerViewModel(IOptions<LoggingSettings> options)
+		{
+			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
 
 		public ObservableCollection<LogMessage> Messages { get; } = new ObservableCollection<LogMessage>();
@@ -29,7 +38,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public bool IsEnabled(LogLevel logLevel)
 		{
-			return true;
+			return logLevel >= settings.LogLevel;
 		}
 
 		public IDisposable BeginScope<TState>(TState state)
