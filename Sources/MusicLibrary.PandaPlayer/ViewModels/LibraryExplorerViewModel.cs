@@ -167,13 +167,14 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 
 			var subfolders = folder.Subfolders
-				.Select(x => new FolderExplorerItem(x))
-				.OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase);
+				.Where(sf => !sf.IsDeleted)
+				.Select(sf => new FolderExplorerItem(sf))
+				.OrderBy(sf => sf.Title, StringComparer.OrdinalIgnoreCase);
 
 			var discs = folder.Discs
 				.Where(disc => !disc.IsDeleted)
-				.Select(x => new DiscExplorerItem(x))
-				.OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase);
+				.Select(disc => new DiscExplorerItem(disc))
+				.OrderBy(disc => disc.Title, StringComparer.OrdinalIgnoreCase);
 
 			Items.AddRange(subfolders);
 			Items.AddRange(discs);

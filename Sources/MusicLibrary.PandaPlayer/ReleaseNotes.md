@@ -1,3 +1,6 @@
+**3.0.3 / 2020.05.30**
+* Hid deleted folders from library explorer.
+
 **3.0.2 / 2020.05.30**
 * Fixed synchronization of disc and song changes between views.
 
