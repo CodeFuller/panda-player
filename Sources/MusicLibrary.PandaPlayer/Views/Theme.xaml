@@ -28,6 +28,7 @@
     <Style TargetType="{x:Type MenuItem}">
         <Setter Property="Background" Value="#222222"/>
         <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="0" />
     </Style>
 
     <!-- Dialog -->

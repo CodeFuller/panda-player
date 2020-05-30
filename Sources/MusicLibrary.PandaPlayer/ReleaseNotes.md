@@ -1,3 +1,6 @@
+**3.0.4 / 2020.05.30**
+* Fixed display of context menu.
+
 **3.0.3 / 2020.05.30**
 * Hid deleted folders from library explorer.
 
