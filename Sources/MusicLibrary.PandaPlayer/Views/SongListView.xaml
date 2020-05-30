@@ -34,7 +34,6 @@
         <FrameworkElement Grid.Row="0" x:Name="DummyElement" Visibility="Collapsed" />
 
         <views:MultiSelectionDataGrid Grid.Row="1" x:Name="SongsDataGrid" AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="None"
-              ColumnHeaderHeight="20"
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
               ItemsSource="{Binding SongItems}" SelectedItem="{Binding SelectedSongItem}" SelectedItemsList="{Binding SelectedSongItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
@@ -66,7 +65,7 @@
             </DataGrid.InputBindings>
 
             <DataGrid.Resources>
-                <Style TargetType="{x:Type DataGridRow}">
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource MaterialDesignDataGridRow}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsCurrentlyPlayed}" Value="True">
                             <Setter Property="FontWeight" Value="Bold" />
@@ -74,48 +73,49 @@
                     </Style.Triggers>
                 </Style>
             </DataGrid.Resources>
+
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Artist" MinWidth="400" IsReadOnly="True" Binding="{Binding Song.Artist.Name}" />
-                <DataGridTextColumn Header="Track #" MinWidth="60" IsReadOnly="True" Binding="{Binding Song.TrackNumber}"
+                <DataGridTextColumn Header="Artist" Width="1*" IsReadOnly="True" Binding="{Binding Song.Artist.Name}" />
+                <DataGridTextColumn Header="Track #" IsReadOnly="True" Binding="{Binding Song.TrackNumber}"
                                 Visibility="{Binding DataContext.DisplayTrackNumbers, Source={x:Reference DummyElement}, Converter={StaticResource BooleanToVisibilityValueConverter}}">
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                             <Setter Property="TextBlock.TextAlignment" Value="Right"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Title" MinWidth="600" IsReadOnly="True" Binding="{Binding Song.Title}" />
-                <DataGridTextColumn Header="Length" MinWidth="60" IsReadOnly="True" Binding="{Binding Song.Duration, Converter={StaticResource SongDurationValueConverter}}">
+                <DataGridTextColumn Header="Title" Width="2*" IsReadOnly="True" Binding="{Binding Song.Title}" />
+                <DataGridTextColumn Header="Length" IsReadOnly="True" Binding="{Binding Song.Duration, Converter={StaticResource SongDurationValueConverter}}">
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                             <Setter Property="TextBlock.TextAlignment" Value="Right"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Bit Rate" MinWidth="60" IsReadOnly="True" Binding="{Binding Song.BitRate, Converter={StaticResource SongBitrateValueConverter}}">
+                <DataGridTextColumn Header="Bit Rate" IsReadOnly="True" Binding="{Binding Song.BitRate, Converter={StaticResource SongBitrateValueConverter}}">
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                             <Setter Property="TextBlock.TextAlignment" Value="Right"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="File Size" MinWidth="60" IsReadOnly="True" Binding="{Binding Song.Size, Converter={StaticResource SongFileSizeValueConverter}}">
+                <DataGridTextColumn Header="File Size" IsReadOnly="True" Binding="{Binding Song.Size, Converter={StaticResource SongFileSizeValueConverter}}">
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                             <Setter Property="TextBlock.TextAlignment" Value="Right"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Played #" MinWidth="60" IsReadOnly="True" Binding="{Binding Song.PlaybacksCount}">
+                <DataGridTextColumn Header="Played #" IsReadOnly="True" Binding="{Binding Song.PlaybacksCount}">
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                             <Setter Property="TextBlock.TextAlignment" Value="Right"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Last Played" MinWidth="120" IsReadOnly="True" Binding="{Binding Song.LastPlaybackTime, Converter={StaticResource SongLastPlaybackValueConverter}}">
+                <DataGridTextColumn Header="Last Played" IsReadOnly="True" Binding="{Binding Song.LastPlaybackTime, Converter={StaticResource SongLastPlaybackValueConverter}}">
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                             <Setter Property="TextBlock.TextAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
