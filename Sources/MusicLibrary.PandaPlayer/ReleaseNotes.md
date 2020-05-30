@@ -1,3 +1,6 @@
+**3.0.6 / 2020.05.30**
+* Fixed colors for combo boxes in song properties window.
+
 **3.0.5 / 2020.05.30**
 * Decreased bonus for rating in adviser.
 

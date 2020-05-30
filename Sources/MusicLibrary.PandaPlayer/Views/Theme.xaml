@@ -37,12 +37,13 @@
         <Setter Property="Foreground" Value ="White" />
     </Style>
 
-    <!-- ComboBox -->
+    <!-- Styles for ComboBox in expanded state -->
     <Style TargetType="{x:Type ComboBox}">
         <Setter Property="Background" Value="#222222"/>
     </Style>
     <Style TargetType="{x:Type ComboBoxItem}">
-        <Setter Property="Background" Value="#222222"/>
+        <Setter Property="Background" Value="Black"/>
+        <Setter Property="Foreground" Value ="White" />
     </Style>
 
     <!-- Label -->
@@ -65,9 +66,14 @@
                 <Setter Property="Foreground" Value ="White" />
                 <Setter Property="Margin" Value="0,0,10,0"></Setter>
             </Style>
+            <!-- Styles for ComboBox in collapsed state -->
             <Style TargetType="{x:Type ComboBox}">
-                <Setter Property="Background" Value="Black"></Setter>
-                <Setter Property="Foreground" Value ="White" />
+                <!-- 
+                    Background property does not actually work on Windows 8 / Windows 10
+                    https://blog.magnusmontin.net/2014/04/30/changing-the-background-colour-of-a-combobox-in-wpf-on-windows-8/
+                -->
+                <!--<Setter Property="Background" Value="Black"/>-->
+                <Setter Property="Foreground" Value ="Black" />
                 <Setter Property="Margin" Value="0,0,10,0"></Setter>
             </Style>
         </Style.Resources>
