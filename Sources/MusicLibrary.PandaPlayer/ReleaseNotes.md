@@ -1,3 +1,6 @@
+**3.0.5 / 2020.05.30**
+* Decreased bonus for rating in adviser.
+
 **3.0.4 / 2020.05.30**
 * Fixed display of context menu.
 

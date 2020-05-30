@@ -8,7 +8,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.Internal
 	internal class AdviseFactorsProvider : IAdviseFactorsProvider
 	{
 		// Disc with rating 3.0 is advised (x RatingFactorMultiplier) more often that disc with rating 2.5
-		private const double RatingFactorMultiplier = 2;
+		private const double RatingFactorMultiplier = 1.5;
 
 		public double GetFactorForGroupDiscsNumber(int discsNumber)
 		{
