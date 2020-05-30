@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -73,7 +74,7 @@ namespace MusicLibrary.LastFM
 				requestParams.Add("trackNumber", track.Number.Value.ToString(CultureInfo.InvariantCulture));
 			}
 
-			UpdateNowPlayingTrackResponse response = await PerformPostRequest<UpdateNowPlayingTrackResponse>(requestParams, true);
+			var response = await PerformPostRequest<UpdateNowPlayingTrackResponse>(requestParams, true);
 			LogCorrections(track, response.NowPlaying);
 		}
 
@@ -97,6 +98,7 @@ namespace MusicLibrary.LastFM
 				{ "choosenByUser", trackScrobble.ChosenByUser ? "1" : "0" },
 				{ "duration", trackScrobble.Track.Duration.TotalSeconds.ToString(CultureInfo.InvariantCulture) },
 			};
+
 			if (!String.IsNullOrEmpty(trackScrobble.Track.Album.Title))
 			{
 				requestParams.Add("album", trackScrobble.Track.Album.Title);
@@ -107,7 +109,7 @@ namespace MusicLibrary.LastFM
 				requestParams.Add("trackNumber", trackScrobble.Track.Number.Value.ToString(CultureInfo.InvariantCulture));
 			}
 
-			ScrobbleTrackResponse response = await PerformPostRequest<ScrobbleTrackResponse>(requestParams, true);
+			var response = await PerformPostRequest<ScrobbleTrackResponse>(requestParams, true);
 			if (response.Scrobbles.Statistics.Ignored > 0)
 			{
 				logger.LogWarning($"{response.Scrobbles.Statistics.Ignored} tracks ignored");
@@ -195,7 +197,7 @@ namespace MusicLibrary.LastFM
 
 		private async Task<string> ObtainRequestToken()
 		{
-			UnauthorizedToken unauthorizedToken = await GetAuthenticationToken();
+			var unauthorizedToken = await GetAuthenticationToken();
 			return await tokenAuthorizer.AuthorizeToken(unauthorizedToken);
 		}
 
@@ -206,7 +208,7 @@ namespace MusicLibrary.LastFM
 					{ "method", "auth.getToken" },
 				};
 
-			GetTokenResponse response = await PerformGetRequest<GetTokenResponse>(requestParams, false);
+			var response = await PerformGetRequest<GetTokenResponse>(requestParams, false);
 			var token = response.Token;
 			return new UnauthorizedToken(token, $@"http://www.last.fm/api/auth/?api_key={settings.ApiKey}&token={token}");
 		}
@@ -219,7 +221,7 @@ namespace MusicLibrary.LastFM
 					{ "token", token },
 				};
 
-			GetSessionResponse response = await PerformGetRequest<GetSessionResponse>(requestParams, false);
+			var response = await PerformGetRequest<GetSessionResponse>(requestParams, false);
 			return response.Session.Key;
 		}
 
@@ -237,19 +239,15 @@ namespace MusicLibrary.LastFM
 		private async Task<TData> PerformGetRequest<TData>(NameValueCollection requestParams, bool requiresAuth)
 			where TData : class
 		{
-			using (var request = CreateGetHttpRequest(new Uri("?" + BuildApiMethodQueryString(requestParams, requiresAuth), UriKind.Relative)))
-			{
-				return await PerformHttpRequest<TData>(request);
-			}
+			using var request = CreateGetHttpRequest(new Uri("?" + BuildApiMethodQueryString(requestParams, requiresAuth), UriKind.Relative));
+			return await PerformHttpRequest<TData>(request);
 		}
 
 		private async Task<TData> PerformPostRequest<TData>(NameValueCollection requestParams, bool requiresAuthentication)
 			where TData : class
 		{
-			using (var request = CreatePostHttpRequest(requestParams, requiresAuthentication))
-			{
-				return await PerformHttpRequest<TData>(request);
-			}
+			using var request = CreatePostHttpRequest(requestParams, requiresAuthentication);
+			return await PerformHttpRequest<TData>(request);
 		}
 
 		private static async Task<TData> PerformHttpRequest<TData>(HttpRequestMessage request)
@@ -371,18 +369,15 @@ namespace MusicLibrary.LastFM
 		private static string CalcMD5(string data)
 		{
 #pragma warning disable CA5351 // Do Not Use Broken Cryptographic Algorithms - We are just clients of 3rd party API and use algorithm required by the server
-			using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
-#pragma warning restore CA5351 // Do Not Use Broken Cryptographic Algorithms
-			{
-				byte[] dataToHash = new UTF8Encoding().GetBytes(data);
-				byte[] hashBytes = md5.ComputeHash(dataToHash);
+			using var md5 = MD5.Create();
+			var dataToHash = new UTF8Encoding().GetBytes(data);
+			var hashBytes = md5.ComputeHash(dataToHash);
 
 #pragma warning disable CA1308 // Normalize strings to uppercase - Using of lower case is an external requirement
-				return BitConverter.ToString(hashBytes)
-					.Replace("-", string.Empty)
-					.ToLower(CultureInfo.InvariantCulture);
+			return BitConverter.ToString(hashBytes)
+				.Replace("-", string.Empty)
+				.ToLower(CultureInfo.InvariantCulture);
 #pragma warning restore CA1308 // Normalize strings to uppercase
-			}
 		}
 	}
 }
