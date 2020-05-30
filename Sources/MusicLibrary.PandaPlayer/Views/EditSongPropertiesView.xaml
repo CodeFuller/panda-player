@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:valueConverters="clr-namespace:MusicLibrary.PandaPlayer.Views.ValueConverters"
         xmlns:validationRules="clr-namespace:MusicLibrary.PandaPlayer.Views.ValidationRules"
+        xmlns:di="clr-namespace:MusicLibrary.PandaPlayer.Views.DesignInstances"
         mc:Ignorable="d"
         Title="Edit song properties" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
-        Style="{StaticResource PropertiesWindow}" ResizeMode="NoResize">
+        Style="{StaticResource PropertiesWindow}" ResizeMode="NoResize" d:DataContext="{d:DesignInstance di:EditSongPropertiesDesignData, IsDesignTimeCreatable=True}" >
 
     <Window.Resources>
         <valueConverters:SongPropertyNullableShortValueConverter x:Key="SongPropertyNullableShortValueConverter" />
