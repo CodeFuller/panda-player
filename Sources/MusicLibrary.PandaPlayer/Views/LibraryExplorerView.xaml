@@ -9,7 +9,6 @@
     <DataGrid Name="ContentDataGrid" AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="None"
               ColumnHeaderHeight="20"
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
-              Background="#1B1B1B" RowBackground="#1B1B1B" Foreground="White"
               ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}"
               SelectionChanged="DataGrid_SelectionChanged"
               ContextMenuOpening="DataGrid_ContextMenuOpening"
@@ -26,14 +25,6 @@
             <KeyBinding Key="End" Command="{Binding JumpToLastItemCommand}" />
             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding ChangeFolderCommand}" />
         </DataGrid.InputBindings>
-        <DataGrid.ColumnHeaderStyle>
-            <Style TargetType="{x:Type DataGridColumnHeader}">
-                <Setter Property="HorizontalContentAlignment" Value="Center" />
-                <Setter Property="Background" Value="#4B4B4B" />
-                <Setter Property="BorderBrush" Value="Gray"/>
-                <Setter Property="BorderThickness" Value="0,0,1,0"/>
-            </Style>
-        </DataGrid.ColumnHeaderStyle>
         <DataGrid.Columns>
             <DataGridTextColumn Header="Library Content" Width="*" IsReadOnly="True" Binding="{Binding Title}" />
         </DataGrid.Columns>

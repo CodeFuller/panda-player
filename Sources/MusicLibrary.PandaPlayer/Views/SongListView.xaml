@@ -36,7 +36,6 @@
         <views:MultiSelectionDataGrid Grid.Row="1" x:Name="SongsDataGrid" AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="None"
               ColumnHeaderHeight="20"
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
-              Background="#1B1B1B" RowBackground="#1B1B1B" Foreground="White"
               ItemsSource="{Binding SongItems}" SelectedItem="{Binding SelectedSongItem}" SelectedItemsList="{Binding SelectedSongItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
             <DataGrid.ContextMenu>
@@ -66,14 +65,6 @@
                 <MouseBinding Gesture="LeftDoubleClick" Command="{Binding PlayFromSongCommand}" />
             </DataGrid.InputBindings>
 
-            <DataGrid.ColumnHeaderStyle>
-                <Style TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="HorizontalContentAlignment" Value="Center" />
-                    <Setter Property="Background" Value="#4B4B4B" />
-                    <Setter Property="BorderBrush" Value="Gray"/>
-                    <Setter Property="BorderThickness" Value="0,0,1,0"/>
-                </Style>
-            </DataGrid.ColumnHeaderStyle>
             <DataGrid.Resources>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
@@ -138,8 +129,8 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </views:MultiSelectionDataGrid>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Background="#505050">
-            <Label MinWidth="80" HorizontalContentAlignment="Center" Background="#505050">
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Label MinWidth="80" HorizontalContentAlignment="Center">
                 <Label.Style>
                     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                         <Style.Triggers>
@@ -156,7 +147,7 @@
                 </Label.Style>
             </Label>
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-            <Label MinWidth="60" HorizontalContentAlignment="Center" Background="#505050">
+            <Label MinWidth="60" HorizontalContentAlignment="Center">
                 <Label.Style>
                     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                         <Style.Triggers>
@@ -172,7 +163,7 @@
                 </Label.Style>
             </Label>
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-            <Label MinWidth="70" HorizontalContentAlignment="Center" Background="#505050">
+            <Label MinWidth="70" HorizontalContentAlignment="Center">
                 <Label.Style>
                     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                         <Style.Triggers>

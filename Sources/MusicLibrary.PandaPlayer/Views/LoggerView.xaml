@@ -10,8 +10,6 @@
 
     <DataGrid Name="MessagesDataGrid" AutoGenerateColumns="False" HeadersVisibility="None" GridLinesVisibility="None"
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
-              Background="#1B1B1B" RowBackground="#1B1B1B" Foreground="White"
-              FontSize="13" FontFamily="Lucida Sans Typewriter"
               ItemsSource="{Binding Messages}">
         <DataGrid.Resources>
             <Style TargetType="{x:Type DataGridRow}">

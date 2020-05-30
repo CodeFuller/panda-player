@@ -11,7 +11,7 @@
         <valueConverters:SongDurationValueConverter x:Key="SongDurationValueConverter" />
     </UserControl.Resources>
 
-    <Grid Background="#505050">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="32"/>
             <ColumnDefinition Width="1"/>
