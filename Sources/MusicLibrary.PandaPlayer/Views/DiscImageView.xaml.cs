@@ -4,9 +4,6 @@ using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.Views
 {
-	/// <summary>
-	/// Interaction logic for DiscImageView.xaml.
-	/// </summary>
 	public partial class DiscImageView : UserControl
 	{
 		private IDiscImageViewModel ViewModel => DataContext.GetViewModel<IDiscImageViewModel>();

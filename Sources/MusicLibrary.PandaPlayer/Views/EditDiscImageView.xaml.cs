@@ -8,9 +8,6 @@ using MusicLibrary.PandaPlayer.Views.ClipboardAccess;
 
 namespace MusicLibrary.PandaPlayer.Views
 {
-	/// <summary>
-	/// Interaction logic for EditDiscImageView.xaml
-	/// </summary>
 	public partial class EditDiscImageView : Window
 	{
 		private IEditDiscImageViewModel ViewModel => DataContext.GetViewModel<IEditDiscImageViewModel>();

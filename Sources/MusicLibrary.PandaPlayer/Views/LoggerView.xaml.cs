@@ -5,9 +5,6 @@ using MusicLibrary.PandaPlayer.ViewModels;
 
 namespace MusicLibrary.PandaPlayer.Views
 {
-	/// <summary>
-	/// Interaction logic for LoggerView.xaml
-	/// </summary>
 	public partial class LoggerView : UserControl
 	{
 		public LoggerView()

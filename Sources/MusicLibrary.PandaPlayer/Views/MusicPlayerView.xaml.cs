@@ -4,9 +4,6 @@ using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.Views
 {
-	/// <summary>
-	/// Interaction logic for MusicPlayerView.xaml
-	/// </summary>
 	public partial class MusicPlayerView : UserControl
 	{
 		private IMusicPlayerViewModel ViewModel => DataContext.GetViewModel<IMusicPlayerViewModel>();

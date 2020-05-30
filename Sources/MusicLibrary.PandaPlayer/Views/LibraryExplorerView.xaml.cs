@@ -11,9 +11,6 @@ using MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
 
 namespace MusicLibrary.PandaPlayer.Views
 {
-	/// <summary>
-	/// Interaction logic for LibraryExplorerView.xaml.
-	/// </summary>
 	public partial class LibraryExplorerView : UserControl
 	{
 		public LibraryExplorerView()

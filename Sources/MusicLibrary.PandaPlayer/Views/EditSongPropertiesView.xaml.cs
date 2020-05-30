@@ -6,9 +6,6 @@ using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.Views
 {
-	/// <summary>
-	/// Interaction logic for EditSongPropertiesView.xaml
-	/// </summary>
 	public partial class EditSongPropertiesView : Window
 	{
 		private IEditSongPropertiesViewModel ViewModel => DataContext.GetViewModel<IEditSongPropertiesViewModel>();
