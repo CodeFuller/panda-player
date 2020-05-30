@@ -6,7 +6,7 @@
         xmlns:valueConverters="clr-namespace:MusicLibrary.PandaPlayer.Views.ValueConverters"
         mc:Ignorable="d"
         Title="Rate listened disc" Width="400" Height="150" WindowStartupLocation="CenterOwner"
-        Style="{StaticResource DialogWindow}" ResizeMode="NoResize">
+        ResizeMode="NoResize">
 
     <Window.Resources>
         <valueConverters:RatingToImageNameValueConverter x:Key="RatingToImageValueConverter" />

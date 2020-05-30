@@ -8,7 +8,7 @@
         xmlns:di="clr-namespace:MusicLibrary.PandaPlayer.Views.DesignInstances"
         mc:Ignorable="d"
         Title="Edit song properties" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
-        Style="{StaticResource PropertiesWindow}" ResizeMode="NoResize" d:DataContext="{d:DesignInstance di:EditSongPropertiesDesignData, IsDesignTimeCreatable=True}" >
+        ResizeMode="NoResize" d:DataContext="{d:DesignInstance di:EditSongPropertiesDesignData, IsDesignTimeCreatable=True}" >
 
     <Window.Resources>
         <valueConverters:SongPropertyNullableShortValueConverter x:Key="SongPropertyNullableShortValueConverter" />

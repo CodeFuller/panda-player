@@ -6,7 +6,7 @@
         xmlns:validationRules="clr-namespace:MusicLibrary.PandaPlayer.Views.ValidationRules"
         mc:Ignorable="d"
         Title="Edit song properties" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
-        Style="{StaticResource PropertiesWindow}" ResizeMode="NoResize">
+        ResizeMode="NoResize">
 
     <StackPanel Orientation="Vertical">
         <Grid Margin="0,5,0,5">

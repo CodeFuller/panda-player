@@ -6,7 +6,7 @@
         xmlns:valueConverters="clr-namespace:MusicLibrary.PandaPlayer.Views.ValueConverters"
         mc:Ignorable="d"
         Title="Library Statistics" Width="250" SizeToContent="Height" WindowStartupLocation="CenterOwner"
-        Style="{StaticResource DialogWindow}" ResizeMode="NoResize">
+        ResizeMode="NoResize">
 
     <Window.Resources>
         <valueConverters:CommaSeparatedNumberValueConverter x:Key="CommaSeparatedNumberValueConverter" />
