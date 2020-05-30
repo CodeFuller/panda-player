@@ -14,7 +14,10 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Core.Models;
+using MusicLibrary.PandaPlayer.Events.DiscEvents;
+using MusicLibrary.PandaPlayer.Events.SongEvents;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
+using MusicLibrary.PandaPlayer.Internal;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.PandaPlayer.ViewModels.Internal;
 using MusicLibrary.Services.Interfaces;
@@ -93,6 +96,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				.OrderByDescending(r => r)
 				.Select(r => new SetRatingMenuItem(this, r))
 				.ToList();
+
+			Messenger.Default.Register<SongChangedEventArgs>(this, e => OnSongChanged(e.Song, e.PropertyName));
+			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
 		}
 
 		protected virtual void OnSongItemsChanged()
@@ -198,6 +204,33 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			if (selectedSongs.Any())
 			{
 				Messenger.Default.Send(eventFactory(selectedSongs));
+			}
+		}
+
+		private void OnSongChanged(SongModel changedSong, string propertyName)
+		{
+			foreach (var song in Songs)
+			{
+				if (song.Id != changedSong.Id || Object.ReferenceEquals(song, changedSong))
+				{
+					continue;
+				}
+
+				SongUpdater.UpdateSong(changedSong, song, propertyName);
+			}
+		}
+
+		private void OnDiscImageChanged(DiscModel changedDisc)
+		{
+			var discsForUpdate = Songs
+				.Select(s => s.Disc)
+				.Where(d => d.Id == changedDisc.Id)
+				.Where(d => !Object.ReferenceEquals(d, changedDisc))
+				.Distinct();
+
+			foreach (var disc in discsForUpdate)
+			{
+				disc.Images = changedDisc.Images;
 			}
 		}
 	}

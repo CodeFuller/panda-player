@@ -21,11 +21,7 @@ namespace MusicLibrary.Core.Models
 		public string Title
 		{
 			get => title;
-			set
-			{
-				title = value;
-				OnPropertyChanged();
-			}
+			set => SetField(ref title, value);
 		}
 
 		public string TreeTitle { get; set; }
@@ -33,11 +29,7 @@ namespace MusicLibrary.Core.Models
 		public short? TrackNumber
 		{
 			get => trackNumber;
-			set
-			{
-				trackNumber = value;
-				OnPropertyChanged();
-			}
+			set => SetField(ref trackNumber, value);
 		}
 
 		public TimeSpan Duration { get; set; }
@@ -47,31 +39,19 @@ namespace MusicLibrary.Core.Models
 		public ArtistModel Artist
 		{
 			get => artist;
-			set
-			{
-				artist = value;
-				OnPropertyChanged();
-			}
+			set => SetField(ref artist, value);
 		}
 
 		public GenreModel Genre
 		{
 			get => genre;
-			set
-			{
-				genre = value;
-				OnPropertyChanged();
-			}
+			set => SetField(ref genre, value);
 		}
 
 		public RatingModel? Rating
 		{
 			get => rating;
-			set
-			{
-				rating = value;
-				OnPropertyChanged();
-			}
+			set => SetField(ref rating, value);
 		}
 
 		public int? BitRate { get; set; }
@@ -83,21 +63,13 @@ namespace MusicLibrary.Core.Models
 		public DateTimeOffset? LastPlaybackTime
 		{
 			get => lastPlaybackTime;
-			set
-			{
-				lastPlaybackTime = value;
-				OnPropertyChanged();
-			}
+			set => SetField(ref lastPlaybackTime, value);
 		}
 
 		public int PlaybacksCount
 		{
 			get => playbacksCount;
-			set
-			{
-				playbacksCount = value;
-				OnPropertyChanged();
-			}
+			set => SetField(ref playbacksCount, value);
 		}
 
 		public IReadOnlyCollection<PlaybackModel> Playbacks { get; set; }
@@ -116,8 +88,15 @@ namespace MusicLibrary.Core.Models
 			LastPlaybackTime = playbackTime;
 		}
 
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		private void SetField<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
 		{
+			if (EqualityComparer<T>.Default.Equals(field, newValue))
+			{
+				return;
+			}
+
+			field = newValue;
+
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}

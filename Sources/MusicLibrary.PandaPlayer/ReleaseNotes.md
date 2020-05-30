@@ -1,3 +1,6 @@
+**3.0.2 / 2020.05.30**
+* Fixed synchronization of disc and song changes between views.
+
 **3.0.1 / 2020.05.30**
 * Fixed timestamp of Last.FM scrobbles.
 

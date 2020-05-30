@@ -1,6 +1,8 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Core.Models;
+using MusicLibrary.PandaPlayer.Events.SongEvents;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {
@@ -23,6 +25,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		public SongListItem(SongModel song)
 		{
 			Song = song ?? throw new ArgumentNullException(nameof(song));
+
+			Song.PropertyChanged += (sender, args) =>
+			{
+				Messenger.Default.Send(new SongChangedEventArgs(Song, args.PropertyName));
+			};
 		}
 	}
 }
