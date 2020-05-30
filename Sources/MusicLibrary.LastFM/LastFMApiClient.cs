@@ -93,7 +93,7 @@ namespace MusicLibrary.LastFM
 				{ "method", "track.scrobble" },
 				{ "artist", trackScrobble.Track.Artist },
 				{ "track", trackScrobble.Track.Title },
-				{ "timestamp", ((Int32)trackScrobble.PlayStartTimestamp.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds).ToString(CultureInfo.InvariantCulture) },
+				{ "timestamp", trackScrobble.PlayStartTimestamp.ToUnixTimeSeconds().ToString(CultureInfo.InvariantCulture) },
 				{ "choosenByUser", trackScrobble.ChosenByUser ? "1" : "0" },
 				{ "duration", trackScrobble.Track.Duration.TotalSeconds.ToString(CultureInfo.InvariantCulture) },
 			};
