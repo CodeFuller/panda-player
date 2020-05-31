@@ -40,19 +40,19 @@
         <Grid>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="400"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="300"/>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="400"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <views:LibraryExplorerView Grid.Row="0" x:Name="LibraryExplorer" DataContext="{Binding LibraryExplorerViewModel}" />
-                <views:DiscImageView x:Name="DiscImageView"  Grid.Row="1" DataContext="{Binding ViewModelHolder.DiscImageViewModel}" BorderThickness="1,0,1,1"
+                <views:DiscImageView x:Name="DiscImageView" Grid.Row="1" DataContext="{Binding ViewModelHolder.DiscImageViewModel}" BorderThickness="1,0,1,1"
                                MouseLeftButtonDown="DiscImageView_MouseLeftButtonDown"/>
                 <views:DiscAdviserView Grid.Row="2" DataContext="{Binding ViewModelHolder.DiscAdviserViewModel}" BorderThickness="1,0,1,1" />
                 <views:MusicPlayerView Grid.Row="3" DataContext="{Binding MusicPlayerViewModel}" BorderThickness="1,0,1,0" />
@@ -61,7 +61,7 @@
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="300"/>
+                    <RowDefinition Height="400"/>
                 </Grid.RowDefinitions>
                 <TabControl Grid.Row="0" TabStripPlacement="Bottom" SelectedIndex="{Binding SelectedSongListIndex}" BorderThickness="0">
                     <TabItem Header="Content">

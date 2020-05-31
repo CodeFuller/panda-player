@@ -5,23 +5,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignWidth="500" d:DesignHeight="25">
+             d:DesignWidth="400" d:DesignHeight="30">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="1"/>
-            <ColumnDefinition Width="25"/>
-            <ColumnDefinition Width="2"/>
-            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="1"/>
+            <ColumnDefinition Width="30"/>
         </Grid.ColumnDefinitions>
-        <Label Grid.Column="0" Content="{Binding CurrentAdviseAnnouncement}" ToolTip="{Binding CurrentAdviseAnnouncement}" />
+        <Label Grid.Column="0" VerticalAlignment="Center" Content="{Binding CurrentAdviseAnnouncement}" ToolTip="{Binding CurrentAdviseAnnouncement}" />
         <Separator Grid.Column="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-        <Button Grid.Column="2" Height="25" Padding="0" ToolTip="Play Advise" Command="{Binding PlayCurrentAdviseCommand}">
-            <materialDesign:PackIcon Kind="Play" />
+        <Button Grid.Column="2" Padding="0" Style="{DynamicResource MaterialDesignToolButton}" ToolTip="Play Advise" Command="{Binding PlayCurrentAdviseCommand}">
+            <materialDesign:PackIcon Width="30" Height="30" Kind="Play" />
         </Button>
         <Separator Grid.Column="3" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-        <Button Grid.Column="4" Height="25" Padding="0" ToolTip="Next Advise" Command="{Binding SwitchToNextAdviseCommand}">
-            <materialDesign:PackIcon Kind="Refresh" />
+        <Button Grid.Column="4" Padding="0" Style="{DynamicResource MaterialDesignToolButton}" ToolTip="Next Advise" Command="{Binding SwitchToNextAdviseCommand}">
+            <materialDesign:PackIcon Width="30" Height="30" Kind="Refresh" />
         </Button>
     </Grid>
 </UserControl>

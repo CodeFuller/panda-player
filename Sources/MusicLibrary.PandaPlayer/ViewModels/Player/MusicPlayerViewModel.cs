@@ -5,18 +5,15 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Wpf;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
-using MusicLibrary.Services.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Player
 {
 	public class MusicPlayerViewModel : ViewModelBase, IMusicPlayerViewModel
 	{
-		private readonly ISongsService songsService;
 		private readonly ISongPlaybacksRegistrator playbacksRegistrator;
 		private readonly IAudioPlayer audioPlayer;
 
@@ -25,31 +22,37 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 		public bool IsPlaying
 		{
 			get => isPlaying;
-			set => Set(ref isPlaying, value);
+			set
+			{
+				Set(ref isPlaying, value);
+				RaisePropertyChanged(nameof(ReversePlayingKind));
+			}
 		}
 
-		public TimeSpan CurrSongLength => audioPlayer.CurrSongLength;
+		public string ReversePlayingKind => IsPlaying ? "Pause" : "Play";
 
-		public TimeSpan CurrSongElapsed => audioPlayer.CurrSongPosition;
+		public TimeSpan CurrentSongLength => audioPlayer.CurrSongLength;
 
-		public double CurrSongProgress
+		public TimeSpan CurrentSongElapsed => audioPlayer.CurrSongPosition;
+
+		public double CurrentSongProgress
 		{
 			get
 			{
-				TimeSpan currSongElapsed = CurrSongElapsed;
-				TimeSpan currSongLength = CurrSongLength;
+				var currentSongElapsed = CurrentSongElapsed;
+				var currentSongLength = CurrentSongLength;
 
-				if (currSongLength == TimeSpan.Zero)
+				if (currentSongLength == TimeSpan.Zero)
 				{
 					return 0;
 				}
 
-				return Math.Round(100 * currSongElapsed.TotalMilliseconds / currSongLength.TotalMilliseconds);
+				return Math.Round(100 * currentSongElapsed.TotalMilliseconds / currentSongLength.TotalMilliseconds);
 			}
 
 			set
 			{
-				audioPlayer.CurrSongPosition = TimeSpan.FromMilliseconds(CurrSongLength.TotalMilliseconds * value);
+				audioPlayer.CurrSongPosition = TimeSpan.FromMilliseconds(CurrentSongLength.TotalMilliseconds * value);
 				RaisePropertyChanged();
 			}
 		}
@@ -71,13 +74,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 		/// </summary>
 		public SongModel CurrentSong { get; private set; }
 
-		public ICommand PlayCommand { get; }
+		public ICommand ReversePlayingCommand { get; }
 
-		public ICommand PauseCommand { get; }
-
-		public MusicPlayerViewModel(ISongsService songsService, ISongPlaylistViewModel playlist, IAudioPlayer audioPlayer, ISongPlaybacksRegistrator playbacksRegistrator)
+		public MusicPlayerViewModel(ISongPlaylistViewModel playlist, IAudioPlayer audioPlayer, ISongPlaybacksRegistrator playbacksRegistrator)
 		{
-			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
 			this.Playlist = playlist ?? throw new ArgumentNullException(nameof(playlist));
 			this.audioPlayer = audioPlayer ?? throw new ArgumentNullException(nameof(audioPlayer));
 			this.playbacksRegistrator = playbacksRegistrator ?? throw new ArgumentNullException(nameof(playbacksRegistrator));
@@ -85,8 +85,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 			this.audioPlayer.PropertyChanged += AudioPlayer_PropertyChanged;
 			this.audioPlayer.SongMediaFinished += AudioPlayer_SongFinished;
 
-			PlayCommand = new AsyncRelayCommand(Play);
-			PauseCommand = new RelayCommand(Pause);
+			ReversePlayingCommand = new AsyncRelayCommand(ReversePlaying);
 		}
 
 		public async Task Play()
@@ -106,10 +105,17 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 			audioPlayer.Play();
 		}
 
-		public void Pause()
+		public Task Pause()
 		{
 			IsPlaying = false;
 			audioPlayer.Pause();
+
+			return Task.CompletedTask;
+		}
+
+		public Task ReversePlaying()
+		{
+			return IsPlaying ? Pause() : Play();
 		}
 
 		public void Stop()
@@ -124,10 +130,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 
 		private async void AudioPlayer_SongFinished(object sender, SongMediaFinishedEventArgs eventArgs)
 		{
-			var currSong = Playlist.CurrentSong;
-			if (currSong != null)
+			var currentSong = Playlist.CurrentSong;
+			if (currentSong != null)
 			{
-				await playbacksRegistrator.RegisterPlaybackFinish(currSong, CancellationToken.None);
+				await playbacksRegistrator.RegisterPlaybackFinish(currentSong, CancellationToken.None);
 			}
 
 			CurrentSong = null;
@@ -158,13 +164,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 			switch (e.PropertyName)
 			{
 				case nameof(IAudioPlayer.CurrSongLength):
-					RaisePropertyChanged(nameof(CurrSongLength));
-					RaisePropertyChanged(nameof(CurrSongProgress));
+					RaisePropertyChanged(nameof(CurrentSongLength));
+					RaisePropertyChanged(nameof(CurrentSongProgress));
 					return;
 
 				case nameof(IAudioPlayer.CurrSongPosition):
-					RaisePropertyChanged(nameof(CurrSongElapsed));
-					RaisePropertyChanged(nameof(CurrSongProgress));
+					RaisePropertyChanged(nameof(CurrentSongElapsed));
+					RaisePropertyChanged(nameof(CurrentSongProgress));
 					return;
 			}
 		}

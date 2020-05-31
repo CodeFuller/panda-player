@@ -4,8 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:valueConverters="clr-namespace:MusicLibrary.PandaPlayer.Views.ValueConverters"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignWidth="500" d:DesignHeight="25">
+             d:DesignWidth="400" d:DesignHeight="30">
 
     <UserControl.Resources>
         <valueConverters:SongDurationValueConverter x:Key="SongDurationValueConverter" />
@@ -13,65 +14,39 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="32"/>
+            <ColumnDefinition Width="30"/>
             <ColumnDefinition Width="1"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="1"/>
-            <ColumnDefinition Width="84"/>
+            <ColumnDefinition Width="85"/>
             <ColumnDefinition Width="1"/>
-            <ColumnDefinition Width="24"/>
+            <ColumnDefinition Width="30"/>
             <ColumnDefinition Width="60"/>
         </Grid.ColumnDefinitions>
-        <Button Grid.Column="0" BorderThickness="0" Command="{Binding PlayCommand}">
-            <Image Source="/Views/Icons/PlayButton.png" />
-            <Button.Style>
-                <Style TargetType="Button" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsPlaying}" Value="False">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding IsPlaying}" Value="True">
-                            <Setter Property="Visibility" Value="Hidden" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
-        <Button Grid.Column="0" BorderThickness="0" Command="{Binding PauseCommand}">
-            <Image Source="/Views/Icons/PauseButton.png" />
-            <Button.Style>
-                <Style TargetType="Button" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
-                    <Setter Property="Visibility" Value="Hidden"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsPlaying}" Value="False">
-                            <Setter Property="Visibility" Value="Hidden" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding IsPlaying}" Value="True">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
+        <Button Grid.Column="0" Padding="0" Style="{DynamicResource MaterialDesignToolButton}" Command="{Binding ReversePlayingCommand}">
+            <materialDesign:PackIcon Width="30" Height="30" Kind="{Binding ReversePlayingKind}" />
         </Button>
         <Separator Grid.Column="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-        <ProgressBar Grid.Column="2" Foreground="Blue" Margin="5,9" Value="{Binding CurrSongProgress, Mode=OneWay}"
-                     MouseLeftButtonDown="CurrSongProgressBar_OnMouseLeftButtonDown" />
+        <ProgressBar Grid.Column="2" Margin="5,3,5,0" Value="{Binding CurrentSongProgress, Mode=OneWay}" MouseLeftButtonDown="CurrSongProgressBar_OnMouseLeftButtonDown" />
         <Separator Grid.Column="3" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-        <Label Grid.Column="4" Foreground="White" HorizontalAlignment="Center">
+        <Label Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Label.Content>
                 <TextBlock>
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} / {1}">
-                            <Binding Path="CurrSongElapsed" Converter="{StaticResource SongDurationValueConverter}"/>
-                            <Binding Path="CurrSongLength" Converter="{StaticResource SongDurationValueConverter}"/>
+                            <Binding Path="CurrentSongElapsed" Converter="{StaticResource SongDurationValueConverter}"/>
+                            <Binding Path="CurrentSongLength" Converter="{StaticResource SongDurationValueConverter}"/>
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
             </Label.Content>
         </Label>
         <Separator Grid.Column="5" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-        <Image Grid.Column="6" Source="/Views/Icons/VolumeIcon.png" />
-        <ProgressBar Grid.Column="7" Foreground="Blue" Margin="0,9,5,9" Value="{Binding Volume, Mode=OneWay}" Maximum="1"
+        <!-- TODO: Implement volume on/off on button click -->
+        <Button Grid.Column="6" Padding="0" Style="{DynamicResource MaterialDesignToolButton}">
+            <materialDesign:PackIcon Width="30" Height="30" Kind="VolumeHigh"/>
+        </Button>
+        <ProgressBar Grid.Column="7" VerticalAlignment="Center" Margin="0,3,5,0" Value="{Binding Volume, Mode=OneWay}" Maximum="1"
                      MouseLeftButtonDown="VolumeBar_OnMouseLeftButtonDown" />
     </Grid>
 

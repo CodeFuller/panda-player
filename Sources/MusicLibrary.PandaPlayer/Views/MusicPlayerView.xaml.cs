@@ -21,7 +21,7 @@ namespace MusicLibrary.PandaPlayer.Views
 				return;
 			}
 
-			ViewModel.CurrSongProgress = GetProgressBarClickValue(progressBar, e);
+			ViewModel.CurrentSongProgress = GetProgressBarClickValue(progressBar, e);
 		}
 
 		private void VolumeBar_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

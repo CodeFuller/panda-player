@@ -139,18 +139,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		internal void ReversePlaying()
 		{
-			if (MusicPlayerViewModel.IsPlaying)
-			{
-				MusicPlayerViewModel.Pause();
-			}
-			else
-			{
-				MusicPlayerViewModel.Play();
-			}
+			// TODO: ReversePlaying is an async method, which must be awaited.
+			MusicPlayerViewModel.ReversePlaying();
 		}
 
 		private void ResetPlayer()
 		{
+			// TODO: Play is an async method, which must be awaited.
 			MusicPlayerViewModel.Stop();
 			MusicPlayerViewModel.Play();
 		}

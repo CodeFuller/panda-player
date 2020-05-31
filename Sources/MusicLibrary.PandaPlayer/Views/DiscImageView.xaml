@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:valueConverters="clr-namespace:MusicLibrary.PandaPlayer.Views.ValueConverters"
              mc:Ignorable="d"
-             d:DesignWidth="300" d:DesignHeight="300"> <!-- Can't make double-click event happen without setting Background property explicitly -->
+             d:DesignWidth="400" d:DesignHeight="400">
 
     <UserControl.Resources>
         <valueConverters:ImageSourceValueConverter x:Key="ImageSourceValueConverter" />

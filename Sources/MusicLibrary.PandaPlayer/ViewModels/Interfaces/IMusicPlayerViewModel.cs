@@ -8,11 +8,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 	{
 		bool IsPlaying { get; }
 
-		TimeSpan CurrSongLength { get; }
+		TimeSpan CurrentSongLength { get; }
 
-		TimeSpan CurrSongElapsed { get; }
+		TimeSpan CurrentSongElapsed { get; }
 
-		double CurrSongProgress { get; set; }
+		double CurrentSongProgress { get; set; }
 
 		ISongPlaylistViewModel Playlist { get; }
 
@@ -22,7 +22,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		Task Play();
 
-		void Pause();
+		Task Pause();
+
+		Task ReversePlaying();
 
 #pragma warning disable CA1716 // Identifiers should not match keywords - 'Stop' is the best name in current semantics
 		void Stop();
