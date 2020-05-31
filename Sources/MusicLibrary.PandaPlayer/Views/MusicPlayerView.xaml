@@ -24,7 +24,7 @@
             <ColumnDefinition Width="60"/>
         </Grid.ColumnDefinitions>
         <Button Grid.Column="0" Padding="0" Style="{DynamicResource MaterialDesignToolButton}" Command="{Binding ReversePlayingCommand}">
-            <materialDesign:PackIcon Width="30" Height="30" Kind="{Binding ReversePlayingKind}" />
+            <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="{Binding ReversePlayingKind}" />
         </Button>
         <Separator Grid.Column="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
         <ProgressBar Grid.Column="2" Margin="5,3,5,0" Value="{Binding CurrentSongProgress, Mode=OneWay}" MouseLeftButtonDown="CurrSongProgressBar_OnMouseLeftButtonDown" />
@@ -44,7 +44,7 @@
         <Separator Grid.Column="5" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
         <!-- TODO: Implement volume on/off on button click -->
         <Button Grid.Column="6" Padding="0" Style="{DynamicResource MaterialDesignToolButton}">
-            <materialDesign:PackIcon Width="30" Height="30" Kind="VolumeHigh"/>
+            <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="VolumeHigh"/>
         </Button>
         <ProgressBar Grid.Column="7" VerticalAlignment="Center" Margin="0,3,5,0" Value="{Binding Volume, Mode=OneWay}" Maximum="1"
                      MouseLeftButtonDown="VolumeBar_OnMouseLeftButtonDown" />

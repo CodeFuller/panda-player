@@ -17,11 +17,11 @@
         <Label Grid.Column="0" VerticalAlignment="Center" Content="{Binding CurrentAdviseAnnouncement}" ToolTip="{Binding CurrentAdviseAnnouncement}" />
         <Separator Grid.Column="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
         <Button Grid.Column="2" Padding="0" Style="{DynamicResource MaterialDesignToolButton}" ToolTip="Play Advise" Command="{Binding PlayCurrentAdviseCommand}">
-            <materialDesign:PackIcon Width="30" Height="30" Kind="Play" />
+            <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="Play" />
         </Button>
         <Separator Grid.Column="3" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
         <Button Grid.Column="4" Padding="0" Style="{DynamicResource MaterialDesignToolButton}" ToolTip="Next Advise" Command="{Binding SwitchToNextAdviseCommand}">
-            <materialDesign:PackIcon Width="30" Height="30" Kind="Refresh" />
+            <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="Refresh" />
         </Button>
     </Grid>
 </UserControl>
