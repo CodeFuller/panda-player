@@ -9,9 +9,9 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="1"/>
+            <ColumnDefinition Width="2"/>
             <ColumnDefinition Width="30"/>
-            <ColumnDefinition Width="1"/>
+            <ColumnDefinition Width="2"/>
             <ColumnDefinition Width="30"/>
         </Grid.ColumnDefinitions>
         <Label Grid.Column="0" VerticalAlignment="Center" Content="{Binding CurrentAdviseAnnouncement}" ToolTip="{Binding CurrentAdviseAnnouncement}" />

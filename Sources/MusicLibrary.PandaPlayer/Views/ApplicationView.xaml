@@ -41,38 +41,38 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="2"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="2"/>
                     <RowDefinition Height="400"/>
+                    <RowDefinition Height="2"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="2"/>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <views:LibraryExplorerView Grid.Row="0" x:Name="LibraryExplorer" DataContext="{Binding LibraryExplorerViewModel}" />
-                <views:DiscImageView x:Name="DiscImageView" Grid.Row="1" DataContext="{Binding ViewModelHolder.DiscImageViewModel}" MouseLeftButtonDown="DiscImageView_MouseLeftButtonDown"/>
-                <views:DiscAdviserView Grid.Row="2" DataContext="{Binding ViewModelHolder.DiscAdviserViewModel}" />
+                <GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
+                <views:DiscImageView x:Name="DiscImageView" Grid.Row="2" DataContext="{Binding ViewModelHolder.DiscImageViewModel}" MouseLeftButtonDown="DiscImageView_MouseLeftButtonDown"/>
                 <GridSplitter Grid.Row="3" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
-                <views:MusicPlayerView Grid.Row="4" DataContext="{Binding MusicPlayerViewModel}" />
+                <views:DiscAdviserView Grid.Row="4" DataContext="{Binding ViewModelHolder.DiscAdviserViewModel}" />
+                <GridSplitter Grid.Row="5" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
+                <views:MusicPlayerView Grid.Row="6" DataContext="{Binding MusicPlayerViewModel}" />
             </Grid>
-
-            <Grid Grid.Column="1">
+            <GridSplitter Grid.Column="1" ResizeDirection="Columns" HorizontalAlignment="Stretch" />
+            <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="2"/>
                     <RowDefinition Height="400"/>
                 </Grid.RowDefinitions>
-                <TabControl Grid.Row="0" TabStripPlacement="Bottom" SelectedIndex="{Binding SelectedSongListIndex}" BorderThickness="0">
-                    <TabItem Header="Content">
-                        <views:SongListView DataContext="{Binding LibraryExplorerViewModel.SongListViewModel}" />
-                    </TabItem>
-                    <TabItem Header="Playlist">
-                        <views:SongListView DataContext="{Binding Playlist}" />
-                    </TabItem>
-                </TabControl>
-                <views:LoggerView Grid.Row="1" DataContext="{Binding ViewModelHolder.LoggerViewModel}" />
+                <views:SongListTabControl Grid.Row="0" />
+                <GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
+                <views:LoggerView Grid.Row="2" DataContext="{Binding ViewModelHolder.LoggerViewModel}" />
             </Grid>
         </Grid>
     </Grid>

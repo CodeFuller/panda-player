@@ -155,7 +155,7 @@
                     </Style>
                 </Label.Style>
             </Label>
-            <Separator Width="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+            <Separator Width="2" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
             <Label Margin="10,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                 <Label.Style>
                     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
@@ -171,7 +171,7 @@
                     </Style>
                 </Label.Style>
             </Label>
-            <Separator Width="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+            <Separator Width="2" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
             <Label Margin="10,0,10,0"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                 <Label.Style>
                     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
@@ -187,7 +187,7 @@
                     </Style>
                 </Label.Style>
             </Label>
-            <Separator Width="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+            <Separator Width="2" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
         </StackPanel>
     </Grid>
 
