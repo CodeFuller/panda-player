@@ -49,13 +49,15 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="400"/>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="2"/>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <views:LibraryExplorerView Grid.Row="0" x:Name="LibraryExplorer" DataContext="{Binding LibraryExplorerViewModel}" />
                 <views:DiscImageView x:Name="DiscImageView" Grid.Row="1" DataContext="{Binding ViewModelHolder.DiscImageViewModel}" BorderThickness="1,0,1,1"
                                MouseLeftButtonDown="DiscImageView_MouseLeftButtonDown"/>
                 <views:DiscAdviserView Grid.Row="2" DataContext="{Binding ViewModelHolder.DiscAdviserViewModel}" BorderThickness="1,0,1,1" />
-                <views:MusicPlayerView Grid.Row="3" DataContext="{Binding MusicPlayerViewModel}" BorderThickness="1,0,1,0" />
+                <GridSplitter Grid.Row="3" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
+                <views:MusicPlayerView Grid.Row="4" DataContext="{Binding MusicPlayerViewModel}" BorderThickness="1,0,1,0" />
             </Grid>
 
             <Grid Grid.Column="1">
