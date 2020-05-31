@@ -7,6 +7,13 @@
              xmlns:viewModels="clr-namespace:MusicLibrary.PandaPlayer.ViewModels.Interfaces"
              xmlns:views="clr-namespace:MusicLibrary.PandaPlayer.Views"
              mc:Ignorable="d" 
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal" 
+             TextOptions.TextRenderingMode="Auto"
+             Background="{DynamicResource MaterialDesignPaper}"
+             FontFamily="{DynamicResource MaterialDesignFont}"
              d:DesignWidth="800" d:DesignHeight="600" d:DataContext="{d:DesignInstance viewModels:ISongPlaylistViewModel}">
 
     <UserControl.InputBindings>
@@ -27,6 +34,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="2"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
@@ -129,8 +137,9 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </views:MultiSelectionDataGrid>
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Label MinWidth="80" HorizontalContentAlignment="Center">
+        <GridSplitter Grid.Row="2" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
+        <StackPanel Grid.Row="3" MinHeight="30" Orientation="Horizontal">
+            <Label Margin="10,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                 <Label.Style>
                     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                         <Style.Triggers>
@@ -146,8 +155,8 @@
                     </Style>
                 </Label.Style>
             </Label>
-            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-            <Label MinWidth="60" HorizontalContentAlignment="Center">
+            <Separator Width="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+            <Label Margin="10,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                 <Label.Style>
                     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                         <Style.Triggers>
@@ -162,8 +171,8 @@
                     </Style>
                 </Label.Style>
             </Label>
-            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-            <Label MinWidth="70" HorizontalContentAlignment="Center">
+            <Separator Width="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+            <Label Margin="10,0,10,0"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                 <Label.Style>
                     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                         <Style.Triggers>
@@ -178,7 +187,7 @@
                     </Style>
                 </Label.Style>
             </Label>
-            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+            <Separator Width="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
         </StackPanel>
     </Grid>
 
