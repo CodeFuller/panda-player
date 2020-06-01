@@ -4,18 +4,33 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:validationRules="clr-namespace:MusicLibrary.PandaPlayer.Views.ValidationRules"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Edit song properties" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        FontFamily="{materialDesign:MaterialDesignFont}"
+        Title="Edit Disc Properties" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize">
 
-    <StackPanel Orientation="Vertical">
-        <Grid Margin="0,5,0,5">
+    <StackPanel Margin="10" Orientation="Vertical">
+
+        <Grid>
+
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="90" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition MinWidth="100" />
+                <ColumnDefinition MinWidth="300" Width="*" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" HorizontalAlignment="Left" Content="Tree Title:" />
-            <TextBox Grid.Column="1" Width="300" HorizontalAlignment="Left">
+
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Content="Tree Title:" />
+            <TextBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch">
                 <TextBox.Text>
                     <Binding Path="TreeTitle" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
@@ -24,14 +39,9 @@
                     </Binding>
                 </TextBox.Text>
             </TextBox>
-        </Grid>
-        <Grid Margin="0,0,0,5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="90" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" HorizontalAlignment="Left" Content="Disc Title:" />
-            <TextBox Grid.Column="1" Width="300" HorizontalAlignment="Left">
+
+            <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Content="Disc Title:" />
+            <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch">
                 <TextBox.Text>
                     <Binding Path="Title" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
@@ -40,21 +50,20 @@
                     </Binding>
                 </TextBox.Text>
             </TextBox>
+
+            <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Content="Album Title:" />
+            <TextBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding AlbumTitle}" />
+
         </Grid>
-        <Grid Margin="0,0,0,5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="90" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" HorizontalAlignment="Left" Content="Album Title:" />
-            <TextBox Grid.Column="1" Width="300" HorizontalAlignment="Left" Text="{Binding AlbumTitle}" />
-        </Grid>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+        <StackPanel Margin="0,15,0,5" Orientation="Horizontal" HorizontalAlignment="Center">
             <StackPanel.CommandBindings>
                 <CommandBinding Command="Save" CanExecute="Save_CanExecute" Executed="Save_Executed" />
             </StackPanel.CommandBindings>
-            <Button Content="Save" Width="100" Margin="10" Command="Save" />
-            <Button Content="Cancel" Width="100" Margin="10" IsCancel="true" Click="CancelButton_Click" />
+            <Button Margin="0,0,10,0" Content="Save" Command="Save" />
+            <Button Margin="10,0,0,0" Content="Cancel" IsCancel="true" Click="CancelButton_Click" />
         </StackPanel>
+
     </StackPanel>
+
 </Window>
