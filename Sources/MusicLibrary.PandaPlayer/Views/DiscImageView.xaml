@@ -12,6 +12,12 @@
     </UserControl.Resources>
     
     <Grid>
-        <Image Source="{Binding CurrentImageUri, Converter={StaticResource ImageSourceValueConverter}}" />
+        <!-- Setting transparent background, because without background property double click event is not sent -->
+        <Border Background="#00FFFFFF" >
+            <Border.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding EditDiscImageCommand}"/>
+            </Border.InputBindings>
+            <Image Source="{Binding CurrentImageUri, Converter={StaticResource ImageSourceValueConverter}}" />
+        </Border>
     </Grid>
 </UserControl>

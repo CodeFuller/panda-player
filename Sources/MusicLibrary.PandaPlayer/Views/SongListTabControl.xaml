@@ -44,7 +44,7 @@
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding AreExplorerSongsSelected}" Value="True">
-                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -56,7 +56,7 @@
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ArePlaylistSongsSelected}" Value="True">
-                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

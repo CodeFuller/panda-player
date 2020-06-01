@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Input;
 using MusicLibrary.PandaPlayer.ViewModels;
 
 namespace MusicLibrary.PandaPlayer.Views
@@ -10,11 +9,6 @@ namespace MusicLibrary.PandaPlayer.Views
 		{
 			InitializeComponent();
 			DataContext = model;
-		}
-
-		private void DiscImageView_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-		{
-			DiscImageView.Image_MouseLeftButtonDown(sender, e);
 		}
 	}
 }

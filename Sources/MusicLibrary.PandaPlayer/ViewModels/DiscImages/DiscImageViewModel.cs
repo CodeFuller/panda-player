@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.Events.DiscEvents;
@@ -40,9 +42,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 			}
 		}
 
+		public ICommand EditDiscImageCommand { get; }
+
 		public DiscImageViewModel(IViewNavigator viewNavigator)
 		{
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
+
+			EditDiscImageCommand = new RelayCommand(EditDiscImage);
 
 			Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => CurrentDisc = e.Disc);
 			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
