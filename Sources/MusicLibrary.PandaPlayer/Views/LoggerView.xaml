@@ -16,13 +16,13 @@
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" FontFamily="Lucida Sans Typewriter"
               ItemsSource="{Binding Messages}">
         <DataGrid.Columns>
-            <DataGridTemplateColumn Header="Message" Width="*" IsReadOnly="True">
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Message}" Foreground="{Binding Level, Converter={StaticResource LogMessageLevelConverter}}" />
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
+            <DataGridTextColumn Binding="{Binding Message}" Width="*" IsReadOnly="True">
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Foreground" Value="{Binding Level, Converter={StaticResource LogMessageLevelConverter}}"/>
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+            </DataGridTextColumn>
         </DataGrid.Columns>
     </DataGrid>
 
