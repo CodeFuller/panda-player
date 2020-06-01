@@ -16,7 +16,7 @@
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" FontFamily="Lucida Sans Typewriter"
               ItemsSource="{Binding Messages}">
         <DataGrid.Columns>
-            <DataGridTextColumn Binding="{Binding Message}" Width="*" IsReadOnly="True">
+            <DataGridTextColumn Binding="{Binding Message}" Width="*" IsReadOnly="True" CellStyle="{StaticResource MaterialDesignDataGridCell}">
                 <DataGridTextColumn.ElementStyle>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="Foreground" Value="{Binding Level, Converter={StaticResource LogMessageLevelConverter}}"/>

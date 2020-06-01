@@ -83,7 +83,7 @@
             </DataGrid.Resources>
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Artist" Width="1*" IsReadOnly="True" Binding="{Binding Song.Artist.Name}" />
+                <DataGridTextColumn Header="Artist" Width="1*" IsReadOnly="True" Binding="{Binding Song.Artist.Name}" CellStyle="{StaticResource MaterialDesignDataGridCell}" />
                 <DataGridTextColumn Header="Track #" IsReadOnly="True" Binding="{Binding Song.TrackNumber}"
                                 Visibility="{Binding DataContext.DisplayTrackNumbers, Source={x:Reference DummyElement}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <DataGridTextColumn.CellStyle>
@@ -92,7 +92,7 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Title" Width="2*" IsReadOnly="True" Binding="{Binding Song.Title}" />
+                <DataGridTextColumn Header="Title" Width="2*" IsReadOnly="True" Binding="{Binding Song.Title}" CellStyle="{StaticResource MaterialDesignDataGridCell}" />
                 <DataGridTextColumn Header="Length" IsReadOnly="True" Binding="{Binding Song.Duration, Converter={StaticResource SongDurationValueConverter}}">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
@@ -128,7 +128,7 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn Header="Rating" MinWidth="150" IsReadOnly="True">
+                <DataGridTemplateColumn Header="Rating" MinWidth="150" IsReadOnly="True" CellStyle="{StaticResource MaterialDesignDataGridCell}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image Height="15" HorizontalAlignment="Left" Source="{Binding Song.Rating, Converter={StaticResource RatingToImageValueConverter}}" />
