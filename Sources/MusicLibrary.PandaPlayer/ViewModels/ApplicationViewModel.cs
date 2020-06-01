@@ -35,27 +35,28 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public ILibraryExplorerViewModel LibraryExplorerViewModel => ViewModelHolder.LibraryExplorerViewModel;
 
-		private ISongListViewModel ExplorerSongsViewModel => LibraryExplorerViewModel.SongListViewModel;
+		public ISongListViewModel ExplorerSongsViewModel => LibraryExplorerViewModel.SongListViewModel;
 
-		private ISongPlaylistViewModel PlaylistSongsViewModel => MusicPlayerViewModel.Playlist;
+		public ISongPlaylistViewModel PlaylistSongsViewModel => MusicPlayerViewModel.Playlist;
 
 		private ISongListViewModel currentSongListViewModel;
 
-		public ISongListViewModel CurrentSongListViewModel
+		private ISongListViewModel CurrentSongListViewModel
 		{
 			get => currentSongListViewModel;
-			private set
+			set
 			{
 				Set(ref currentSongListViewModel, value);
-				RaisePropertyChanged(nameof(ExplorerSongsSelected));
-				RaisePropertyChanged(nameof(PlaylistSongsSelected));
-				ActiveDisc = ExplorerSongsSelected ? LibraryExplorerViewModel.SelectedDisc : PlaylistActiveDisc;
+				RaisePropertyChanged(nameof(AreExplorerSongsSelected));
+				RaisePropertyChanged(nameof(ArePlaylistSongsSelected));
+
+				ActiveDisc = AreExplorerSongsSelected ? LibraryExplorerViewModel.SelectedDisc : PlaylistActiveDisc;
 			}
 		}
 
-		public bool ExplorerSongsSelected => CurrentSongListViewModel == ExplorerSongsViewModel;
+		public bool AreExplorerSongsSelected => CurrentSongListViewModel == ExplorerSongsViewModel;
 
-		public bool PlaylistSongsSelected => CurrentSongListViewModel == PlaylistSongsViewModel;
+		public bool ArePlaylistSongsSelected => CurrentSongListViewModel == PlaylistSongsViewModel;
 
 		public IMusicPlayerViewModel MusicPlayerViewModel { get; }
 
@@ -168,7 +169,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		{
 			Title = PlaylistSongsViewModel.CurrentSong != null ? BuildCurrentTitle(PlaylistSongsViewModel.CurrentSong) : DefaultTitle;
 
-			if (CurrentSongListViewModel == PlaylistSongsViewModel)
+			if (ArePlaylistSongsSelected)
 			{
 				ActiveDisc = PlaylistActiveDisc;
 			}

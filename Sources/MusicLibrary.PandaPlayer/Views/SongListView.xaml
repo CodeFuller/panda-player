@@ -26,7 +26,7 @@
         <valueConverters:SongFileSizeValueConverter x:Key="SongFileSizeValueConverter" />
         <valueConverters:SongLastPlaybackValueConverter x:Key="SongLastPlaybackValueConverter" />
         <valueConverters:RatingToImageNameValueConverter x:Key="RatingToImageValueConverter" />
-        <valueConverters:BooleanToVisibilityValueConverter x:Key="BooleanToVisibilityValueConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
     </UserControl.Resources>
 
     <Grid>
@@ -85,7 +85,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Artist" Width="1*" IsReadOnly="True" Binding="{Binding Song.Artist.Name}" />
                 <DataGridTextColumn Header="Track #" IsReadOnly="True" Binding="{Binding Song.TrackNumber}"
-                                Visibility="{Binding DataContext.DisplayTrackNumbers, Source={x:Reference DummyElement}, Converter={StaticResource BooleanToVisibilityValueConverter}}">
+                                Visibility="{Binding DataContext.DisplayTrackNumbers, Source={x:Reference DummyElement}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                             <Setter Property="TextBlock.TextAlignment" Value="Right"/>

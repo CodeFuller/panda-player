@@ -14,13 +14,23 @@
              FontFamily="{DynamicResource MaterialDesignFont}"
              d:DesignWidth="800" d:DesignHeight="450">
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="2"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <local:SongListView Grid.Row="0" DataContext="{Binding CurrentSongListViewModel}" />
+        <!-- We wrap each SongListView with Grid, because otherwise setting visibility does not work -->
+        <Grid Grid.Row="0"  Visibility="{Binding AreExplorerSongsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <local:SongListView DataContext="{Binding ExplorerSongsViewModel}" />
+        </Grid>
+        <Grid Grid.Row="0" Visibility="{Binding ArePlaylistSongsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <local:SongListView DataContext="{Binding PlaylistSongsViewModel}" />
+        </Grid>
         <GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
@@ -33,7 +43,7 @@
                 <Button.Style>
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ExplorerSongsSelected}" Value="True">
+                            <DataTrigger Binding="{Binding AreExplorerSongsSelected}" Value="True">
                                 <Setter Property="Foreground" Value="White" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -45,7 +55,7 @@
                 <Button.Style>
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding PlaylistSongsSelected}" Value="True">
+                            <DataTrigger Binding="{Binding ArePlaylistSongsSelected}" Value="True">
                                 <Setter Property="Foreground" Value="White" />
                             </DataTrigger>
                         </Style.Triggers>
