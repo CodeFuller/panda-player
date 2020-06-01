@@ -139,7 +139,8 @@
         </views:MultiSelectionDataGrid>
         <GridSplitter Grid.Row="2" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
         <StackPanel Grid.Row="3" MinHeight="30" Orientation="Horizontal">
-            <Label Margin="10,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+            <!-- Setting min widths for statistics labels to keep the same width when no songs are loaded in the list -->
+            <Label MinWidth="80" Margin="10,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                 <Label.Style>
                     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                         <Style.Triggers>
@@ -156,7 +157,7 @@
                 </Label.Style>
             </Label>
             <Separator Width="2" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-            <Label Margin="10,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+            <Label MinWidth="60" Margin="10,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                 <Label.Style>
                     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                         <Style.Triggers>
@@ -172,7 +173,7 @@
                 </Label.Style>
             </Label>
             <Separator Width="2" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-            <Label Margin="10,0,10,0"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+            <Label MinWidth="70" Margin="10,0,10,0"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                 <Label.Style>
                     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
                         <Style.Triggers>
