@@ -33,8 +33,14 @@
             <!-- http://www.codeproject.com/Articles/36468/WPF-NotifyIcon -->
             <tb:TaskbarIcon Name="TaskbarIcon"
                 IconSource="/Views/Icons/PandaPlayer.ico"
-                ToolTipText="{Binding Title}"
-                LeftClickCommand="{Binding ReversePlayingCommand}"/>
+                LeftClickCommand="{Binding ReversePlayingCommand}">
+
+                <tb:TaskbarIcon.TrayToolTip>
+                    <!-- Setting Placement to Mouse. Otherwise ToolTip is placed at the left upper corner of screen by Material Design style (logic in ToolTipAssist.CustomPopupPlacementCallback) -->
+                    <ToolTip Placement="Mouse" Content="{Binding Title}" />
+                </tb:TaskbarIcon.TrayToolTip>
+
+            </tb:TaskbarIcon>
         </Grid>
 
         <Grid>
