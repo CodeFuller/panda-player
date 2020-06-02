@@ -1,3 +1,6 @@
+**3.1.0 / 2020.06.02**
+* Improved UI layout.
+
 **3.0.6 / 2020.05.30**
 * Fixed colors for combo boxes in song properties window.
 
