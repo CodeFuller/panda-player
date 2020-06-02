@@ -8,6 +8,7 @@
 
     <DataGrid Name="ContentDataGrid" AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="None"
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
+              ColumnHeaderStyle="{StaticResource MaterialDesignDataGridColumnHeader}"
               ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}"
               SelectionChanged="DataGrid_SelectionChanged"
               ContextMenuOpening="DataGrid_ContextMenuOpening"
