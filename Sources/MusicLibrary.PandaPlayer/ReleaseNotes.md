@@ -1,3 +1,6 @@
+**3.1.1 / 2020.06.02**
+* Fixed width of statistics window.
+
 **3.1.0 / 2020.06.02**
 * Improved UI layout.
 

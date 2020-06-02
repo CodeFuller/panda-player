@@ -11,7 +11,7 @@
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         FontFamily="{materialDesign:MaterialDesignFont}"
-        Title="Library Statistics" MinWidth="300" SizeToContent="Height" WindowStartupLocation="CenterOwner"
+        Title="Library Statistics" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize">
 
     <Window.Resources>
@@ -19,6 +19,8 @@
         <valueConverters:SongFileSizeValueConverter x:Key="SongFileSizeValueConverter" />
         <valueConverters:SongsTotalDurationValueConverter x:Key="SongsTotalDurationValueConverter" />
         <valueConverters:PercentageValueConverter x:Key="PercentageValueConverter" />
+
+        <Thickness x:Key="FirstColumnMargin" Right="50" />
     </Window.Resources>
 
     <StackPanel Margin="10" Orientation="Vertical">
@@ -36,19 +38,19 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" Content="Artists number:" />
+            <Label Grid.Row="0" Grid.Column="0" Margin="{StaticResource FirstColumnMargin}" Content="Artists number:" />
             <Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding ArtistsNumber, Converter={StaticResource CommaSeparatedNumberValueConverter}}" />
 
-            <Label Grid.Row="1" Grid.Column="0" Content="Disc Artists number:" />
+            <Label Grid.Row="1" Grid.Column="0" Margin="{StaticResource FirstColumnMargin}" Content="Disc Artists number:" />
             <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding DiscArtistsNumber, Converter={StaticResource CommaSeparatedNumberValueConverter}}" />
 
-            <Label Grid.Row="2" Grid.Column="0" Content="Discs number:" />
+            <Label Grid.Row="2" Grid.Column="0" Margin="{StaticResource FirstColumnMargin}" Content="Discs number:" />
             <Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding DiscsNumber, Converter={StaticResource CommaSeparatedNumberValueConverter}}" />
 
-            <Label Grid.Row="3" Grid.Column="0" Content="Songs number:" />
+            <Label Grid.Row="3" Grid.Column="0" Margin="{StaticResource FirstColumnMargin}" Content="Songs number:" />
             <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding SongsNumber, Converter={StaticResource CommaSeparatedNumberValueConverter}}" />
 
-            <Label Grid.Row="4" Grid.Column="0" Content="Storage size:" />
+            <Label Grid.Row="4" Grid.Column="0" Margin="{StaticResource FirstColumnMargin}" Content="Storage size:" />
             <Label Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding StorageSize, Converter={StaticResource SongFileSizeValueConverter}}" />
         </Grid>
 
@@ -66,13 +68,13 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" Content="Songs Duration:" />
+            <Label Grid.Row="0" Grid.Column="0" Margin="{StaticResource FirstColumnMargin}" Content="Songs Duration:" />
             <Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding SongsDuration, Converter={StaticResource SongsTotalDurationValueConverter}}" />
 
-            <Label Grid.Row="1" Grid.Column="0" Content="Playbacks duration:" />
+            <Label Grid.Row="1" Grid.Column="0" Margin="{StaticResource FirstColumnMargin}" Content="Playbacks duration:" />
             <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding PlaybacksDuration, Converter={StaticResource SongsTotalDurationValueConverter}}" />
 
-            <Label Grid.Row="2" Grid.Column="0" Content="Playbacks number:" />
+            <Label Grid.Row="2" Grid.Column="0" Margin="{StaticResource FirstColumnMargin}" Content="Playbacks number:" />
             <Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding PlaybacksNumber, Converter={StaticResource CommaSeparatedNumberValueConverter}}" />
         </Grid>
 
@@ -90,13 +92,13 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" Content="Unheard songs:" />
+            <Label Grid.Row="0" Grid.Column="0" Margin="{StaticResource FirstColumnMargin}" Content="Unheard songs:" />
             <Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding UnheardSongsPercentage, Converter={StaticResource PercentageValueConverter}}" />
 
-            <Label Grid.Row="1" Grid.Column="0" Content="Unrated songs:" />
+            <Label Grid.Row="1" Grid.Column="0" Margin="{StaticResource FirstColumnMargin}" Content="Unrated songs:" />
             <Label Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding UnratedSongsPercentage, Converter={StaticResource PercentageValueConverter}}" />
 
-            <Label Grid.Row="2" Grid.Column="0" Content="Discs without cover:" />
+            <Label Grid.Row="2" Grid.Column="0" Margin="{StaticResource FirstColumnMargin}" Content="Discs without cover:" />
             <Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding PercentageOfDiscsWithoutCoverImage, Converter={StaticResource PercentageValueConverter}}" />
         </Grid>
 
