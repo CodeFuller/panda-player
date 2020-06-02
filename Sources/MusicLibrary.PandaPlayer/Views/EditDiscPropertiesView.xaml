@@ -18,16 +18,16 @@
 
         <Grid>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="100" />
-                <ColumnDefinition MinWidth="300" Width="*" />
-            </Grid.ColumnDefinitions>
-
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="100" />
+                <ColumnDefinition MinWidth="300" Width="*" />
+            </Grid.ColumnDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Content="Tree Title:" />
             <TextBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch">
