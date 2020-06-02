@@ -4,38 +4,44 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:valueConverters="clr-namespace:MusicLibrary.PandaPlayer.Views.ValueConverters"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Rate listened disc" Width="400" Height="150" WindowStartupLocation="CenterOwner"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        FontFamily="{materialDesign:MaterialDesignFont}"
+        Title="Rate Listened Songs" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize">
 
     <Window.Resources>
         <valueConverters:RatingToImageNameValueConverter x:Key="RatingToImageValueConverter" />
     </Window.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Label HorizontalAlignment="Center" Content="Do you want to rate songs just listened?" />
+    <StackPanel Margin="10" Orientation="Vertical">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Label HorizontalAlignment="Center" Content="Do you want to rate the songs you just listened to?" />
+            </Grid>
+            <Grid Grid.Row="1">
+                <ComboBox HorizontalAlignment="Center" VerticalAlignment="Top" ItemsSource="{Binding AvailableRatings}" SelectedItem="{Binding SelectedRating}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Image Height="15" Source="{Binding Path=., Converter={StaticResource RatingToImageValueConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
         </Grid>
-        <Grid Grid.Row="1">
-            <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="300"
-                      ItemsSource="{Binding AvailableRatings}" SelectedItem="{Binding SelectedRating}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <Image Height="15" Source="{Binding Path=., Converter={StaticResource RatingToImageValueConverter}}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </Grid>
-        <Grid Grid.Row="2" HorizontalAlignment="Center">
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Rate" Width="100" Margin="10" IsDefault="True" Click="RateButton_Click" />
-                <Button Content="No, Thank you" Width="100" Margin="10" IsCancel="true" />
-            </StackPanel>
-        </Grid>
-    </Grid>
+
+        <StackPanel Margin="0,15,0,5" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Margin="0,0,10,0" Content="Rate" IsDefault="True" Click="RateButton_Click" />
+            <Button Margin="10,0,0,0" Content="No, Thank you" IsCancel="true" />
+        </StackPanel>
+    </StackPanel>
+
 </Window>
