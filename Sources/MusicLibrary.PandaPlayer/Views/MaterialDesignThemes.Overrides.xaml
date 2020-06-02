@@ -7,6 +7,7 @@
 
     <Style x:Key="MaterialDesignDataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
         <Setter Property="materialDesign:DataGridAssist.ColumnHeaderPadding" Value="10,4,10,4" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
     </Style>
 
     <Style x:Key="MaterialDesignDataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}" TargetType="{x:Type DataGridCell}">

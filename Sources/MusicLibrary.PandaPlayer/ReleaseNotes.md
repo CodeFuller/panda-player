@@ -1,3 +1,6 @@
+**3.1.3 / 2020.06.02**
+* Centered header for library content explorer.
+
 **3.1.2 / 2020.06.02**
 * Fixed placement of tooltip for icon in system tray.
 

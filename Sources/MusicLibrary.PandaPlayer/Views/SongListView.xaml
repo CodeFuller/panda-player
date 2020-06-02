@@ -74,7 +74,6 @@
 
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                    <Setter Property="HorizontalContentAlignment" Value="Center" />
                     <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/>
                     <Setter Property="BorderThickness" Value="1,0,0,0"/>
                 </Style>
