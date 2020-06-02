@@ -42,7 +42,7 @@
         <FrameworkElement Grid.Row="0" x:Name="DummyElement" Visibility="Collapsed" />
 
         <views:MultiSelectionDataGrid Grid.Row="1" x:Name="SongsDataGrid" AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="None"
-              CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
+              CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="False"
               ItemsSource="{Binding SongItems}" SelectedItem="{Binding SelectedSongItem}" SelectedItemsList="{Binding SelectedSongItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
             <DataGrid.ContextMenu>
