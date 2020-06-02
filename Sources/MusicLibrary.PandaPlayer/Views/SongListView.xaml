@@ -121,7 +121,8 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Last Played" IsReadOnly="True" Binding="{Binding Song.LastPlaybackTime, Converter={StaticResource SongLastPlaybackValueConverter}}">
+                <!-- Setting minimal width for Last Played column so that its content is not too close to neighbors -->
+                <DataGridTextColumn MinWidth="140" Header="Last Played" IsReadOnly="True" Binding="{Binding Song.LastPlaybackTime, Converter={StaticResource SongLastPlaybackValueConverter}}">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                             <Setter Property="TextBlock.TextAlignment" Value="Center"/>
