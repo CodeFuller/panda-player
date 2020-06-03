@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:valueConverters="clr-namespace:MusicLibrary.PandaPlayer.Views.ValueConverters"
         xmlns:validationRules="clr-namespace:MusicLibrary.PandaPlayer.Views.ValidationRules"
         xmlns:di="clr-namespace:MusicLibrary.PandaPlayer.Views.DesignInstances"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -15,10 +15,6 @@
         FontFamily="{materialDesign:MaterialDesignFont}"
         Title="Edit Song Properties" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize" d:DataContext="{d:DesignInstance di:EditSongPropertiesDesignData, IsDesignTimeCreatable=True}" >
-
-    <Window.Resources>
-        <valueConverters:SongPropertyNullableShortValueConverter x:Key="SongPropertyNullableShortValueConverter" />
-    </Window.Resources>
 
     <StackPanel Margin="10" Orientation="Vertical">
         <Grid>
@@ -64,7 +60,7 @@
             <ComboBox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding AvailableGenres}" SelectedItem="{Binding Genre}" />
 
             <Label Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" Content="Track #:" />
-            <TextBox Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding TrackNumber, Converter={StaticResource SongPropertyNullableShortValueConverter}}" />
+            <TextBox Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding TrackNumber, TargetNullValue={x:Static system:String.Empty}}" IsEnabled="{Binding SingleSongMode}" />
 
         </Grid>
 

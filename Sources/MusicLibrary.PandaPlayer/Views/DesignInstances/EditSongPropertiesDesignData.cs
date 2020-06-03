@@ -21,7 +21,7 @@ namespace MusicLibrary.PandaPlayer.Views.DesignInstances
 
 		public EditedSongProperty<GenreModel> Genre { get; set; }
 
-		public EditedSongProperty<short?> TrackNumber { get; set; } = new EditedSongProperty<short?>(7);
+		public short? TrackNumber { get; set; } = 7;
 
 		public IReadOnlyCollection<EditedSongProperty<ArtistModel>> AvailableArtists { get; }
 

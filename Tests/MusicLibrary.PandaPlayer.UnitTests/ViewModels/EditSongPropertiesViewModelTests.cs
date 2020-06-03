@@ -16,7 +16,7 @@ namespace MusicLibrary.PandaPlayer.UnitTests.ViewModels
 	public class EditSongPropertiesViewModelTests
 	{
 		[TestMethod]
-		public async Task Load_ForSingleSong_LoadsTitlePropertiesCorrectly()
+		public async Task Load_ForSingleSong_LoadsScalarPropertiesCorrectly()
 		{
 			// Arrange
 
@@ -27,6 +27,7 @@ namespace MusicLibrary.PandaPlayer.UnitTests.ViewModels
 			{
 				Title = "Some Title",
 				TreeTitle = "Some Tree Title",
+				TrackNumber = 7,
 			};
 
 			// Act
@@ -37,10 +38,11 @@ namespace MusicLibrary.PandaPlayer.UnitTests.ViewModels
 
 			Assert.AreEqual("Some Title", target.Title);
 			Assert.AreEqual("Some Tree Title", target.TreeTitle);
+			Assert.AreEqual((short)7, target.TrackNumber);
 		}
 
 		[TestMethod]
-		public async Task Load_ForMultipleSongs_LoadsTitlePropertiesCorrectly()
+		public async Task Load_ForMultipleSongs_LoadsScalarPropertiesCorrectly()
 		{
 			// Arrange
 
@@ -51,12 +53,14 @@ namespace MusicLibrary.PandaPlayer.UnitTests.ViewModels
 			{
 				Title = "Some Title 1",
 				TreeTitle = "Some Tree Title 1",
+				TrackNumber = 1,
 			};
 
 			var song2 = new SongModel
 			{
 				Title = "Some Title 2",
 				TreeTitle = "Some Tree Title 2",
+				TrackNumber = 2,
 			};
 
 			// Act
@@ -67,6 +71,7 @@ namespace MusicLibrary.PandaPlayer.UnitTests.ViewModels
 
 			Assert.IsNull(target.Title);
 			Assert.IsNull(target.TreeTitle);
+			Assert.IsNull(target.TrackNumber);
 		}
 
 		[TestMethod]
@@ -452,106 +457,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public async Task Load_ForSingleSongWithSomeTrackNumber_FillsTrackNumberCorrectly()
-		{
-			// Arrange
-
-			var mocker = CreateMocker();
-			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
-
-			var song = new SongModel { TrackNumber = 7 };
-
-			// Act
-
-			await target.Load(new[] { song }, CancellationToken.None);
-
-			// Assert
-
-			Assert.IsTrue(target.TrackNumber.HasValue);
-			Assert.AreEqual((short?)7, target.TrackNumber.Value);
-		}
-
-		[TestMethod]
-		public async Task Load_ForSingleSongWithoutTrackNumber_FillsTrackNumberCorrectly()
-		{
-			// Arrange
-
-			var mocker = CreateMocker();
-			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
-
-			var song = new SongModel { TrackNumber = null };
-
-			// Act
-
-			await target.Load(new[] { song }, CancellationToken.None);
-
-			// Assert
-
-			Assert.IsTrue(target.TrackNumber.HasBlankValue);
-		}
-
-		[TestMethod]
-		public async Task Load_ForMultipleSongsWithSameTrackNumber_FillsTrackNumberCorrectly()
-		{
-			// Arrange
-
-			var mocker = CreateMocker();
-			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
-
-			var song1 = new SongModel { TrackNumber = 7 };
-			var song2 = new SongModel { TrackNumber = 7 };
-
-			// Act
-
-			await target.Load(new[] { song1, song2 }, CancellationToken.None);
-
-			// Assert
-
-			Assert.IsTrue(target.TrackNumber.HasValue);
-			Assert.AreEqual((short?)7, target.TrackNumber.Value);
-		}
-
-		[TestMethod]
-		public async Task Load_ForMultipleSongsWithoutTrackNumber_FillsTrackNumberCorrectly()
-		{
-			// Arrange
-
-			var mocker = CreateMocker();
-			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
-
-			var song1 = new SongModel { TrackNumber = null };
-			var song2 = new SongModel { TrackNumber = null };
-
-			// Act
-
-			await target.Load(new[] { song1, song2 }, CancellationToken.None);
-
-			// Assert
-
-			Assert.IsTrue(target.TrackNumber.HasBlankValue);
-		}
-
-		[TestMethod]
-		public async Task Load_ForMultipleSongsWithDifferentTrackNumbers_FillsTrackNumberCorrectly()
-		{
-			// Arrange
-
-			var mocker = CreateMocker();
-			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
-
-			var song1 = new SongModel { TrackNumber = 1 };
-			var song2 = new SongModel { TrackNumber = 2 };
-
-			// Act
-
-			await target.Load(new[] { song1, song2 }, CancellationToken.None);
-
-			// Assert
-
-			Assert.IsFalse(target.TrackNumber.HasValue);
-		}
-
-		[TestMethod]
 		public async Task Load_ForEmptySongList_ThrowsInvalidOperationException()
 		{
 			// Arrange
@@ -651,6 +556,25 @@ namespace MusicLibrary.PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
+		public async Task TrackNumberSetter_ForMultipleSongs_ThrowsInvalidOperationException()
+		{
+			// Arrange
+
+			var mocker = CreateMocker();
+			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
+
+			await target.Load(new[] { new SongModel(), new SongModel(), }, CancellationToken.None);
+
+			// Act
+
+			void Call() => target.TrackNumber = 1;
+
+			// Assert
+
+			Assert.ThrowsException<InvalidOperationException>(Call);
+		}
+
+		[TestMethod]
 		public async Task Save_ForSingleSongWhenPropertiesAreUpdated_UpdatesSongCorrectly()
 		{
 			// Arrange
@@ -681,7 +605,7 @@ namespace MusicLibrary.PandaPlayer.UnitTests.ViewModels
 			target.TreeTitle = "New Tree Title";
 			target.Artist = target.AvailableArtists.Last();
 			target.Genre = target.AvailableGenres.Last();
-			target.TrackNumber = new EditedSongProperty<short?>(2);
+			target.TrackNumber = 2;
 
 			await target.Save(CancellationToken.None);
 
@@ -723,7 +647,7 @@ namespace MusicLibrary.PandaPlayer.UnitTests.ViewModels
 
 			target.Artist = target.AvailableArtists.Single(x => x.HasBlankValue);
 			target.Genre = target.AvailableGenres.Single(x => x.HasBlankValue);
-			target.TrackNumber = new EditedSongProperty<short?>(null);
+			target.TrackNumber = null;
 
 			await target.Save(CancellationToken.None);
 

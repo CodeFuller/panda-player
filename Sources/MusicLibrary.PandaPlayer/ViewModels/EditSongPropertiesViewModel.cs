@@ -76,11 +76,25 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
+		private short? trackNumber;
+
+		public short? TrackNumber
+		{
+			get => trackNumber;
+			set
+			{
+				if (!SingleSongMode)
+				{
+					throw new InvalidOperationException("Track number could not be edited in multi-song mode");
+				}
+
+				Set(ref trackNumber, value);
+			}
+		}
+
 		public EditedSongProperty<ArtistModel> Artist { get; set; }
 
 		public EditedSongProperty<GenreModel> Genre { get; set; }
-
-		public EditedSongProperty<short?> TrackNumber { get; set; }
 
 		public IReadOnlyCollection<EditedSongProperty<ArtistModel>> AvailableArtists { get; private set; }
 
@@ -106,8 +120,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 			treeTitle = SingleSongMode ? SingleSong.TreeTitle : null;
 			title = SingleSongMode ? SingleSong.Title : null;
-
-			TrackNumber = BuildProperty(editedSongs, s => s.TrackNumber, EqualityComparer<short?>.Default);
+			trackNumber = SingleSongMode ? SingleSong.TrackNumber : null;
 		}
 
 		private async Task LoadArtists(CancellationToken cancellationToken)
@@ -164,6 +177,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				{
 					song.Title = Title;
 					song.TreeTitle = TreeTitle;
+					song.TrackNumber = TrackNumber;
 				}
 
 				if (Artist.HasValue)
@@ -174,11 +188,6 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				if (Genre.HasValue)
 				{
 					song.Genre = Genre.Value;
-				}
-
-				if (TrackNumber.HasValue)
-				{
-					song.TrackNumber = TrackNumber.Value;
 				}
 
 				yield return song;

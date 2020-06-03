@@ -1,3 +1,6 @@
+**3.1.5 / 2020.06.03**
+* Disabled changing of track number when multiple songs are edited.
+
 **3.1.4 / 2020.06.03**
 * Fixed filling of song properties lists when multiple songs are edited.
 

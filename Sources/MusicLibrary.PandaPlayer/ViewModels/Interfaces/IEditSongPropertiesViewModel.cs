@@ -15,7 +15,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		public EditedSongProperty<GenreModel> Genre { get; set; }
 
-		public EditedSongProperty<short?> TrackNumber { get; set; }
+		public short? TrackNumber { get; set; }
 
 		Task Load(IEnumerable<SongModel> songs, CancellationToken cancellationToken);
 
