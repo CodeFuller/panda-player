@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Shared", "Sour
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Services", "Sources\MusicLibrary.Services\MusicLibrary.Services.csproj", "{BD7A5163-E5AC-4BE1-B785-F40012C7BC8C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicLibrary.PandaPlayer.UnitTests", "Tests\MusicLibrary.PandaPlayer.UnitTests\MusicLibrary.PandaPlayer.UnitTests.csproj", "{D0D8A13D-0E14-40A7-AAC7-1932C580CFE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{BD7A5163-E5AC-4BE1-B785-F40012C7BC8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD7A5163-E5AC-4BE1-B785-F40012C7BC8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD7A5163-E5AC-4BE1-B785-F40012C7BC8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0D8A13D-0E14-40A7-AAC7-1932C580CFE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0D8A13D-0E14-40A7-AAC7-1932C580CFE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0D8A13D-0E14-40A7-AAC7-1932C580CFE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0D8A13D-0E14-40A7-AAC7-1932C580CFE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +80,7 @@ Global
 		{0B14C9B2-DC6D-4253-8CB2-5B0958142B0B} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
 		{D5035D5D-E0B5-4781-8847-62E722D9CAB3} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
 		{BD7A5163-E5AC-4BE1-B785-F40012C7BC8C} = {FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}
+		{D0D8A13D-0E14-40A7-AAC7-1932C580CFE7} = {EE527A89-5ED8-4502-9785-A7A481C4F971}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8FAD434A-F2AF-4138-AB70-749D7D8D4C9D}

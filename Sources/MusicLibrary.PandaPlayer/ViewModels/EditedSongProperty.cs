@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
@@ -10,8 +11,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		public bool HasValue
 		{
 			get => hasValue;
-			set => Set(ref hasValue, value);
+			private set => Set(ref hasValue, value);
 		}
+
+		public bool HasBlankValue => HasValue && Value == null;
 
 		private T propertyValue;
 
@@ -54,14 +57,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			return Value == null ? "< blank >" : Value.ToString();
 		}
 
-		public override bool Equals(Object obj)
+		public bool Equals(EditedSongProperty<T> cmp, IEqualityComparer<T> comparer)
 		{
-			EditedSongProperty<T> cmp = obj as EditedSongProperty<T>;
-			if (cmp == null)
-			{
-				return false;
-			}
-
 			if (HasValue != cmp.HasValue)
 			{
 				return false;
@@ -72,17 +69,17 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				return true;
 			}
 
-			if (Value == null && cmp.Value == null)
-			{
-				return true;
-			}
+			return comparer.Equals(Value, cmp.Value);
+		}
 
-			if ((Value != null && cmp.Value == null) || (Value == null && cmp.Value != null))
+		public override bool Equals(Object obj)
+		{
+			if (!(obj is EditedSongProperty<T> cmp))
 			{
 				return false;
 			}
 
-			return Value.Equals(cmp.Value);
+			return Equals(cmp, EqualityComparer<T>.Default);
 		}
 
 		public override int GetHashCode()
@@ -90,7 +87,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			// Overflow is fine, just wrap
 			unchecked
 			{
-				int hash = 17;
+				var hash = 17;
 				hash = (hash * 23) + HasValue.GetHashCode();
 				if (HasValue && Value != null)
 				{

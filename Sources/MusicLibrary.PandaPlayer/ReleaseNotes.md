@@ -1,3 +1,6 @@
+**3.1.4 / 2020.06.03**
+* Fixed filling of song properties lists when multiple songs are edited.
+
 **3.1.3 / 2020.06.02**
 * Centered header for library content explorer.
 
