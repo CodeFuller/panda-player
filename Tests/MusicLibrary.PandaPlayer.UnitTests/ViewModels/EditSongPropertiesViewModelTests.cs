@@ -503,7 +503,7 @@ namespace MusicLibrary.PandaPlayer.UnitTests.ViewModels
 			var mocker = CreateMocker();
 			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
 
-			await target.Load(new[] { new SongModel(), new SongModel(), }, CancellationToken.None);
+			await target.Load(new[] { new SongModel(), }, CancellationToken.None);
 
 			// Act
 
@@ -544,7 +544,7 @@ namespace MusicLibrary.PandaPlayer.UnitTests.ViewModels
 			var mocker = CreateMocker();
 			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
 
-			await target.Load(new[] { new SongModel(), new SongModel(), }, CancellationToken.None);
+			await target.Load(new[] { new SongModel(), }, CancellationToken.None);
 
 			// Act
 
