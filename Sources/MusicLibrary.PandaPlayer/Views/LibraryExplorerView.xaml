@@ -6,9 +6,10 @@
              mc:Ignorable="d" 
              d:DesignWidth="300" d:DesignHeight="600">
 
-    <DataGrid Name="ContentDataGrid" AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="None"
+    <DataGrid Name="ContentDataGrid" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" GridLinesVisibility="None"
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
               ColumnHeaderStyle="{StaticResource MaterialDesignDataGridColumnHeader}"
+              CellStyle="{StaticResource MaterialDesignDataGridCell}"
               ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}"
               SelectionChanged="DataGrid_SelectionChanged"
               ContextMenuOpening="DataGrid_ContextMenuOpening"
@@ -26,7 +27,7 @@
             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding ChangeFolderCommand}" />
         </DataGrid.InputBindings>
         <DataGrid.Columns>
-            <DataGridTextColumn Header="Library Content" Width="*" IsReadOnly="True" Binding="{Binding Title}" CellStyle="{StaticResource MaterialDesignDataGridCell}" />
+            <DataGridTextColumn Header="Library Content" Width="*" Binding="{Binding Title}" />
         </DataGrid.Columns>
     </DataGrid>
 
