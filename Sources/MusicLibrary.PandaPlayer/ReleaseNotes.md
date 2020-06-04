@@ -1,3 +1,6 @@
+**3.1.7 / 2020.06.04**
+* Unified buttons width in dialog windows.
+
 **3.1.6 / 2020.06.04**
 * Removed left border for first column in songs list.
 

@@ -36,10 +36,10 @@
             </Grid>
         </Grid>
 
-        <StackPanel Margin="0,15,0,5" Orientation="Horizontal" HorizontalAlignment="Center">
+        <UniformGrid Margin="0,15,0,5" Rows="1" Columns="2" HorizontalAlignment="Center">
             <Button Margin="0,0,10,0" Content="Rate" IsDefault="True" Click="RateButton_Click" />
-            <Button Margin="10,0,0,0" Content="No, Thank you" IsCancel="true" />
-        </StackPanel>
+            <Button Margin="10,0,0,0" Content="No, Thank You" IsCancel="true" />
+        </UniformGrid>
     </StackPanel>
 
 </Window>

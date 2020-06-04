@@ -54,14 +54,13 @@
 
         </Grid>
 
-        <StackPanel Margin="0,15,0,5" Orientation="Horizontal" HorizontalAlignment="Center">
-            <StackPanel.CommandBindings>
+        <UniformGrid Margin="0,15,0,5" Rows="1" Columns="2" HorizontalAlignment="Center">
+            <UniformGrid.CommandBindings>
                 <CommandBinding Command="Save" CanExecute="Save_CanExecute" Executed="Save_Executed" />
-            </StackPanel.CommandBindings>
+            </UniformGrid.CommandBindings>
             <Button Margin="0,0,10,0" Content="Save" Command="Save" />
             <Button Margin="10,0,0,0" Content="Cancel" IsCancel="true" Click="CancelButton_Click" />
-        </StackPanel>
-
+        </UniformGrid>
     </StackPanel>
 
 </Window>
