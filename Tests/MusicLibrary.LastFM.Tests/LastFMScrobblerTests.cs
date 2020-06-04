@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
@@ -10,7 +11,7 @@ namespace MusicLibrary.LastFM.Tests
 	public class LastFMScrobblerTests
 	{
 		[TestMethod]
-		public void UpdateNowPlaying_ForValidTrack_CallsLastFMApiCorrectly()
+		public async Task UpdateNowPlaying_ForValidTrack_CallsLastFMApiCorrectly()
 		{
 			// Arrange
 
@@ -27,7 +28,7 @@ namespace MusicLibrary.LastFM.Tests
 
 			// Act
 
-			target.UpdateNowPlaying(track).Wait();
+			await target.UpdateNowPlaying(track);
 
 			// Assert
 
@@ -38,7 +39,7 @@ namespace MusicLibrary.LastFM.Tests
 		[DataRow(null)]
 		[DataRow("")]
 		[DataTestMethod]
-		public void UpdateNowPlaying_WhenTrackDoesNotHaveTitle_DoesNotCallLastFMApi(string title)
+		public async Task UpdateNowPlaying_WhenTrackDoesNotHaveTitle_DoesNotCallLastFMApi(string title)
 		{
 			// Arrange
 
@@ -55,7 +56,7 @@ namespace MusicLibrary.LastFM.Tests
 
 			// Act
 
-			target.UpdateNowPlaying(track).Wait();
+			await target.UpdateNowPlaying(track);
 
 			// Assert
 
@@ -66,7 +67,7 @@ namespace MusicLibrary.LastFM.Tests
 		[DataRow(null)]
 		[DataRow("")]
 		[DataTestMethod]
-		public void UpdateNowPlaying_WhenTrackDoesNotHaveArtist_DoesNotCallLastFMApi(string artist)
+		public async Task UpdateNowPlaying_WhenTrackDoesNotHaveArtist_DoesNotCallLastFMApi(string artist)
 		{
 			// Arrange
 
@@ -83,7 +84,7 @@ namespace MusicLibrary.LastFM.Tests
 
 			// Act
 
-			target.UpdateNowPlaying(track).Wait();
+			await target.UpdateNowPlaying(track);
 
 			// Assert
 
@@ -92,7 +93,7 @@ namespace MusicLibrary.LastFM.Tests
 		}
 
 		[TestMethod]
-		public void UpdateNowPlaying_WhenTrackIsTooShort_DoesNotCallLastFMApi()
+		public async Task UpdateNowPlaying_WhenTrackIsTooShort_DoesNotCallLastFMApi()
 		{
 			// Arrange
 
@@ -109,7 +110,7 @@ namespace MusicLibrary.LastFM.Tests
 
 			// Act
 
-			target.UpdateNowPlaying(track).Wait();
+			await target.UpdateNowPlaying(track);
 
 			// Assert
 
@@ -118,7 +119,7 @@ namespace MusicLibrary.LastFM.Tests
 		}
 
 		[TestMethod]
-		public void Scrobble_ForValidTrack_CallsLastFMApiCorrectly()
+		public async Task Scrobble_ForValidTrack_CallsLastFMApiCorrectly()
 		{
 			// Arrange
 
@@ -140,7 +141,7 @@ namespace MusicLibrary.LastFM.Tests
 
 			// Act
 
-			target.Scrobble(trackScrobble).Wait();
+			await target.Scrobble(trackScrobble);
 
 			// Assert
 
@@ -151,7 +152,7 @@ namespace MusicLibrary.LastFM.Tests
 		[DataRow(null)]
 		[DataRow("")]
 		[DataTestMethod]
-		public void Scrobble_WhenTrackDoesNotHaveTitle_DoesNotCallLastFMApi(string title)
+		public async Task Scrobble_WhenTrackDoesNotHaveTitle_DoesNotCallLastFMApi(string title)
 		{
 			// Arrange
 
@@ -173,7 +174,7 @@ namespace MusicLibrary.LastFM.Tests
 
 			// Act
 
-			target.Scrobble(trackScrobble).Wait();
+			await target.Scrobble(trackScrobble);
 
 			// Assert
 
@@ -184,7 +185,7 @@ namespace MusicLibrary.LastFM.Tests
 		[DataRow(null)]
 		[DataRow("")]
 		[DataTestMethod]
-		public void Scrobble_WhenTrackDoesNotHaveArtist_DoesNotCallLastFMApi(string artist)
+		public async Task Scrobble_WhenTrackDoesNotHaveArtist_DoesNotCallLastFMApi(string artist)
 		{
 			// Arrange
 
@@ -206,7 +207,7 @@ namespace MusicLibrary.LastFM.Tests
 
 			// Act
 
-			target.Scrobble(trackScrobble).Wait();
+			await target.Scrobble(trackScrobble);
 
 			// Assert
 
@@ -215,7 +216,7 @@ namespace MusicLibrary.LastFM.Tests
 		}
 
 		[TestMethod]
-		public void Scrobble_WhenTrackIsTooShort_DoesNotCallLastFMApi()
+		public async Task Scrobble_WhenTrackIsTooShort_DoesNotCallLastFMApi()
 		{
 			// Arrange
 
@@ -237,7 +238,7 @@ namespace MusicLibrary.LastFM.Tests
 
 			// Act
 
-			target.Scrobble(trackScrobble).Wait();
+			await target.Scrobble(trackScrobble);
 
 			// Assert
 
