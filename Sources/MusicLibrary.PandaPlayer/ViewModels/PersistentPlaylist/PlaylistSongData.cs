@@ -14,10 +14,5 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 		{
 			Id = song.Id.Value;
 		}
-
-		public bool Matches(SongModel song)
-		{
-			return Id == song.Id.Value;
-		}
 	}
 }
