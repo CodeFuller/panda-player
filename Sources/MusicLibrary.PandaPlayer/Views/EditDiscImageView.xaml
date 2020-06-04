@@ -4,17 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:valueConverters="clr-namespace:MusicLibrary.PandaPlayer.Views.ValueConverters"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        Background="{DynamicResource MaterialDesignPaper}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        FontFamily="{materialDesign:MaterialDesignFont}"
         Title="Edit Disc Image" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         Loaded="Window_OnLoaded"
-        d:DesignWidth="425" d:DesignHeight="555"
-        >
+        d:DesignWidth="425" d:DesignHeight="555">
+
+    <Window.Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}"></Style>
+    </Window.Style>
 
     <Window.Resources>
         <valueConverters:ImageSourceValueConverter x:Key="ImageSourceValueConverter" />

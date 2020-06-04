@@ -5,16 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:validationRules="clr-namespace:MusicLibrary.PandaPlayer.Views.ValidationRules"
         xmlns:di="clr-namespace:MusicLibrary.PandaPlayer.Views.DesignInstances"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:system="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        Background="{DynamicResource MaterialDesignPaper}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        FontFamily="{materialDesign:MaterialDesignFont}"
         Title="Edit Song Properties" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize" d:DataContext="{d:DesignInstance di:EditSongPropertiesDesignData, IsDesignTimeCreatable=True}" >
+
+    <Window.Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}"></Style>
+    </Window.Style>
 
     <StackPanel Margin="10" Orientation="Vertical">
         <Grid>

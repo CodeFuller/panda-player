@@ -5,13 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MusicLibrary.PandaPlayer.Views"
              mc:Ignorable="d" 
-             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-             TextElement.FontWeight="Regular"
-             TextElement.FontSize="13"
-             TextOptions.TextFormattingMode="Ideal" 
-             TextOptions.TextRenderingMode="Auto"
-             Background="{DynamicResource MaterialDesignPaper}"
-             FontFamily="{DynamicResource MaterialDesignFont}"
              d:DesignWidth="800" d:DesignHeight="450">
 
     <UserControl.Resources>

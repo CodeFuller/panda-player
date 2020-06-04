@@ -7,15 +7,12 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:views="clr-namespace:MusicLibrary.PandaPlayer.Views"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        Background="{DynamicResource MaterialDesignPaper}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        FontFamily="{materialDesign:MaterialDesignFont}"
-        Title="{Binding Title}" Width="800" Height="600" WindowState="Maximized"
-        >
+        Title="{Binding Title}" Width="800" Height="600" WindowState="Maximized">
+
+    <Window.Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}"></Style>
+    </Window.Style>
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">

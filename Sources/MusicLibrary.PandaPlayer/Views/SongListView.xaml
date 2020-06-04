@@ -7,13 +7,6 @@
              xmlns:viewModels="clr-namespace:MusicLibrary.PandaPlayer.ViewModels.Interfaces"
              xmlns:views="clr-namespace:MusicLibrary.PandaPlayer.Views"
              mc:Ignorable="d"
-             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-             TextElement.FontWeight="Regular"
-             TextElement.FontSize="13"
-             TextOptions.TextFormattingMode="Ideal" 
-             TextOptions.TextRenderingMode="Auto"
-             Background="{DynamicResource MaterialDesignPaper}"
-             FontFamily="{DynamicResource MaterialDesignFont}"
              d:DesignWidth="800" d:DesignHeight="600" d:DataContext="{d:DesignInstance viewModels:ISongPlaylistViewModel}">
 
     <UserControl.InputBindings>
@@ -182,7 +175,7 @@
             <!-- Setting min widths for statistics labels to keep the same width when no songs are loaded in the list -->
             <Label MinWidth="80" Margin="10,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                 <Label.Style>
-                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource MaterialDesignLabel}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding HasSongs}" Value="True">
                                 <Setter Property="Content" Value="{Binding SongsNumber}" />
@@ -199,7 +192,7 @@
             <Separator Width="2" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
             <Label MinWidth="60" Margin="10,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                 <Label.Style>
-                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource MaterialDesignLabel}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding HasSongs}" Value="True">
                                 <Setter Property="Content" Value="{Binding TotalSongsDuration, Converter={StaticResource SongDurationValueConverter}}" />
@@ -215,7 +208,7 @@
             <Separator Width="2" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
             <Label MinWidth="70" Margin="10,0,10,0"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                 <Label.Style>
-                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource MaterialDesignLabel}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding HasSongs}" Value="True">
                                 <Setter Property="Content" Value="{Binding TotalSongsFileSize, Converter={StaticResource SongFileSizeValueConverter}}" />
