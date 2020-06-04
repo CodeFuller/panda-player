@@ -1,3 +1,6 @@
+**3.1.8 / 2020.06.04**
+* Removed unnecessary loading of root folder on startup.
+
 **3.1.7 / 2020.06.04**
 * Unified buttons width in dialog windows.
 

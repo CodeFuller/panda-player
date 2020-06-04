@@ -13,7 +13,6 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Core.Models;
-using MusicLibrary.PandaPlayer.Events;
 using MusicLibrary.PandaPlayer.Events.DiscEvents;
 using MusicLibrary.PandaPlayer.Events.SongEvents;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
@@ -94,18 +93,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			JumpToLastItemCommand = new RelayCommand(() => SelectedItem = Items.LastOrDefault());
 			EditDiscPropertiesCommand = new RelayCommand(EditDiscProperties);
 
-			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => LoadRootFolder(CancellationToken.None));
 			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaylistChanged(e, CancellationToken.None));
 			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistChanged(e, CancellationToken.None));
+			Messenger.Default.Register<NoPlaylistLoadedEventArgs>(this, e => OnNoPlaylistLoaded(CancellationToken.None));
 			Messenger.Default.Register<SongChangedEventArgs>(this, e => OnSongChanged(e.Song, e.PropertyName));
 			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
-		}
-
-		private async void LoadRootFolder(CancellationToken cancellationToken)
-		{
-			// TODO: We should not load root folder, if some disc is active, because folder of this disc will be loaded just after that.
-			var rootFolderData = await foldersService.GetRootFolder(cancellationToken);
-			LoadFolder(rootFolderData);
 		}
 
 		private async Task ChangeToCurrentlySelectedFolder(CancellationToken cancellationToken)
@@ -232,6 +224,12 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			{
 				await SwitchToDisc(e.Disc, cancellationToken);
 			}
+		}
+
+		private async void OnNoPlaylistLoaded(CancellationToken cancellationToken)
+		{
+			var rootFolderData = await foldersService.GetRootFolder(cancellationToken);
+			LoadFolder(rootFolderData);
 		}
 
 		private void OnSongChanged(SongModel changedSong, string propertyName)

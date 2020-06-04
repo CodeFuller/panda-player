@@ -36,17 +36,33 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 
 		private async void Load(CancellationToken cancellationToken)
 		{
+			var (songs, songIndex) = await LoadPlaylistData(cancellationToken);
+			if (songs != null)
+			{
+				SetSongsRaw(songs);
+				CurrentSongIndex = songIndex;
+
+				Messenger.Default.Send(new PlaylistLoadedEventArgs(this));
+			}
+			else
+			{
+				Messenger.Default.Send(new NoPlaylistLoadedEventArgs());
+			}
+		}
+
+		private async Task<(IReadOnlyCollection<SongModel> songs, int? currentSongIndex)> LoadPlaylistData(CancellationToken cancellationToken)
+		{
 			var playListData = playlistDataRepository.Load();
 			if (playListData == null)
 			{
 				logger.LogInformation("No previous playlist data detected");
-				return;
+				return (null, null);
 			}
 
-			await Load(playListData, cancellationToken);
+			return await LoadPlaylistSongs(playListData, cancellationToken);
 		}
 
-		private async Task Load(PlaylistData playListData, CancellationToken cancellationToken)
+		private async Task<(IReadOnlyCollection<SongModel> songs, int? currentSongIndex)> LoadPlaylistSongs(PlaylistData playListData, CancellationToken cancellationToken)
 		{
 			var songIds = playListData.Songs
 				.Select(s => s.Id)
@@ -64,7 +80,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 				if (!loadedSongs.TryGetValue(new ItemId(playlistSong.Id), out var loadedSong))
 				{
 					logger.LogWarning(Current($"Song {playlistSong.Id} from saved playlist was not found in library. Ignoring saved playlist."));
-					return;
+					return (null, null);
 				}
 
 				if (loadedSong.IsDeleted)
@@ -85,13 +101,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 			if (newSongIndex != null && (newSongIndex < 0 || newSongIndex >= loadedSongs.Count))
 			{
 				logger.LogWarning(Current($"Index of current song in saved playlist is invalid ({newSongIndex}, [0, {loadedSongs.Count})). Ignoring saved playlist."));
-				return;
+				return (null, null);
 			}
 
-			SetSongsRaw(playListSongs);
-			CurrentSongIndex = newSongIndex;
-
-			Messenger.Default.Send(new PlaylistLoadedEventArgs(this));
+			return (playListSongs, newSongIndex);
 		}
 
 		private static string GetSongTitle(SongModel song)
