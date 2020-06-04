@@ -11,7 +11,7 @@
         Title="{Binding Title}" Width="800" Height="600" WindowState="Maximized">
 
     <Window.Style>
-        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}"></Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}" />
     </Window.Style>
 
     <i:Interaction.Triggers>

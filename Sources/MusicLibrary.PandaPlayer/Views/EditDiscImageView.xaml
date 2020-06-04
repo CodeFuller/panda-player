@@ -10,7 +10,7 @@
         d:DesignWidth="425" d:DesignHeight="555">
 
     <Window.Style>
-        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}"></Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}" />
     </Window.Style>
 
     <Window.Resources>

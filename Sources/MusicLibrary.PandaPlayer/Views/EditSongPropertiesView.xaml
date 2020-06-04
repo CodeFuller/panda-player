@@ -11,7 +11,7 @@
         ResizeMode="NoResize" d:DataContext="{d:DesignInstance di:EditSongPropertiesDesignData, IsDesignTimeCreatable=True}" >
 
     <Window.Style>
-        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}"></Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}" />
     </Window.Style>
 
     <StackPanel Margin="10" Orientation="Vertical">

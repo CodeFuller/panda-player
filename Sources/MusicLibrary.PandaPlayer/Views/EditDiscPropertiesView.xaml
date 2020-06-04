@@ -9,7 +9,7 @@
         ResizeMode="NoResize">
 
     <Window.Style>
-        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}"></Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}" />
     </Window.Style>
 
     <StackPanel Margin="10" Orientation="Vertical">
