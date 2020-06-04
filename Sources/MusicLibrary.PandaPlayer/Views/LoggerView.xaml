@@ -14,9 +14,9 @@
 
     <DataGrid Name="MessagesDataGrid" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="None" GridLinesVisibility="None"
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" FontFamily="Lucida Sans Typewriter"
-              ItemsSource="{Binding Messages}">
+              CellStyle="{StaticResource MaterialDesignDataGridCell}" ItemsSource="{Binding Messages}">
         <DataGrid.Columns>
-            <DataGridTextColumn Binding="{Binding Message}" Width="*" CellStyle="{StaticResource MaterialDesignDataGridCell}">
+            <DataGridTextColumn Binding="{Binding Message}" Width="*">
                 <DataGridTextColumn.ElementStyle>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="Foreground" Value="{Binding Level, Converter={StaticResource LogMessageLevelConverter}}"/>

@@ -43,8 +43,9 @@
         <!-- https://stackoverflow.com/a/22074985/5740031 -->
         <FrameworkElement Grid.Row="0" x:Name="DummyElement" Visibility="Collapsed" />
 
-        <views:MultiSelectionDataGrid Grid.Row="1" x:Name="SongsDataGrid" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" GridLinesVisibility="None"
-              CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="False"
+        <views:MultiSelectionDataGrid Grid.Row="1" x:Name="SongsDataGrid" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
+              GridLinesVisibility="None" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="False"
+              CellStyle="{StaticResource MaterialDesignDataGridCell}"
               ItemsSource="{Binding SongItems}" SelectedItem="{Binding SelectedSongItem}" SelectedItemsList="{Binding SelectedSongItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
             <DataGrid.ContextMenu>
@@ -85,7 +86,7 @@
             </DataGrid.Resources>
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Artist" Width="1*" Binding="{Binding Song.Artist.Name}" CellStyle="{StaticResource MaterialDesignDataGridCell}">
+                <DataGridTextColumn Header="Artist" Width="1*" Binding="{Binding Song.Artist.Name}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource FirstColumnStyle}" />
                     </DataGridTextColumn.HeaderStyle>
@@ -97,12 +98,12 @@
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnStyle}" />
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                        <Style TargetType="DataGridCell">
                             <Setter Property="TextBlock.TextAlignment" Value="Right"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Title" Width="2*" Binding="{Binding Song.Title}" CellStyle="{StaticResource MaterialDesignDataGridCell}">
+                <DataGridTextColumn Header="Title" Width="2*" Binding="{Binding Song.Title}">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnStyle}" />
                     </DataGridTextColumn.HeaderStyle>
@@ -112,7 +113,7 @@
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnStyle}" />
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                        <Style TargetType="DataGridCell">
                             <Setter Property="TextBlock.TextAlignment" Value="Right"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
@@ -122,7 +123,7 @@
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnStyle}" />
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                        <Style TargetType="DataGridCell">
                             <Setter Property="TextBlock.TextAlignment" Value="Right"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
@@ -132,7 +133,7 @@
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnStyle}" />
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                        <Style TargetType="DataGridCell">
                             <Setter Property="TextBlock.TextAlignment" Value="Right"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
@@ -142,7 +143,7 @@
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnStyle}" />
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                        <Style TargetType="DataGridCell">
                             <Setter Property="TextBlock.TextAlignment" Value="Right"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
@@ -153,7 +154,7 @@
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnStyle}" />
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                        <Style TargetType="DataGridCell">
                             <Setter Property="TextBlock.TextAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
