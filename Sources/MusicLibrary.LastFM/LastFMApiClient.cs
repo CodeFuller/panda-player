@@ -34,17 +34,6 @@ namespace MusicLibrary.LastFM
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task OpenSession()
-		{
-			if (!String.IsNullOrEmpty(settings.SessionKey))
-			{
-				return;
-			}
-
-			var token = await ObtainRequestToken();
-			settings.SessionKey = await ObtainSession(token);
-		}
-
 		public async Task UpdateNowPlaying(Track track)
 		{
 			if (!CheckSession())
@@ -193,36 +182,6 @@ namespace MusicLibrary.LastFM
 			{
 				logger.LogWarning(Current($"Ignored track message: '{trackInfo.IgnoredMessage.Text}'"));
 			}
-		}
-
-		private async Task<string> ObtainRequestToken()
-		{
-			var unauthorizedToken = await GetAuthenticationToken();
-			return await tokenAuthorizer.AuthorizeToken(unauthorizedToken);
-		}
-
-		private async Task<UnauthorizedToken> GetAuthenticationToken()
-		{
-			var requestParams = new NameValueCollection
-				{
-					{ "method", "auth.getToken" },
-				};
-
-			var response = await PerformGetRequest<GetTokenResponse>(requestParams, false);
-			var token = response.Token;
-			return new UnauthorizedToken(token, $@"http://www.last.fm/api/auth/?api_key={settings.ApiKey}&token={token}");
-		}
-
-		private async Task<string> ObtainSession(string token)
-		{
-			var requestParams = new NameValueCollection
-				{
-					{ "method", "auth.getSession" },
-					{ "token", token },
-				};
-
-			var response = await PerformGetRequest<GetSessionResponse>(requestParams, false);
-			return response.Session.Key;
 		}
 
 		private bool CheckSession()

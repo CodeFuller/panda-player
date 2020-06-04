@@ -6,8 +6,6 @@ namespace MusicLibrary.LastFM
 {
 	public interface ILastFMApiClient
 	{
-		Task OpenSession();
-
 		Task UpdateNowPlaying(Track track);
 
 		Task Scrobble(TrackScrobble trackScrobble);
