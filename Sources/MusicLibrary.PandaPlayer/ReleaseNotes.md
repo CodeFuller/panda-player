@@ -1,3 +1,6 @@
+**3.1.6 / 2020.06.04**
+* Removed left border for first column in songs list.
+
 **3.1.5 / 2020.06.03**
 * Disabled changing of track number when multiple songs are edited.
 

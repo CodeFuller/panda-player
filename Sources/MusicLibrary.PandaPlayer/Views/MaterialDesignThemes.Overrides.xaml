@@ -6,7 +6,7 @@
     <Style TargetType="{x:Type views:MultiSelectionDataGrid}" BasedOn="{StaticResource MaterialDesignDataGrid}" />
 
     <Style x:Key="MaterialDesignDataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
-        <Setter Property="materialDesign:DataGridAssist.ColumnHeaderPadding" Value="10,4,10,4" />
+        <Setter Property="materialDesign:DataGridAssist.ColumnHeaderPadding" Value="10,5,10,5" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
     </Style>
 
