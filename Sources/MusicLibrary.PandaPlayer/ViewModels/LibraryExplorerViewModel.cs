@@ -94,18 +94,17 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			JumpToLastItemCommand = new RelayCommand(() => SelectedItem = Items.LastOrDefault());
 			EditDiscPropertiesCommand = new RelayCommand(EditDiscProperties);
 
-			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => LoadRootFolder());
-			Messenger.Default.Register<PlaySongsListEventArgs>(this, OnPlaylistChanged);
-			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, OnPlaylistChanged);
+			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => LoadRootFolder(CancellationToken.None));
+			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaylistChanged(e, CancellationToken.None));
+			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistChanged(e, CancellationToken.None));
 			Messenger.Default.Register<SongChangedEventArgs>(this, e => OnSongChanged(e.Song, e.PropertyName));
 			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
 		}
 
-		// TBD: How to make it async?
-		private void LoadRootFolder()
+		private async void LoadRootFolder(CancellationToken cancellationToken)
 		{
-			// TBD: We should not load root folder, if some disc is active, because folder of this disc will be loaded just after that.
-			var rootFolderData = foldersService.GetRootFolder(CancellationToken.None).Result;
+			// TODO: We should not load root folder, if some disc is active, because folder of this disc will be loaded just after that.
+			var rootFolderData = await foldersService.GetRootFolder(cancellationToken);
 			LoadFolder(rootFolderData);
 		}
 
@@ -180,9 +179,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			Items.AddRange(discs);
 		}
 
-		public void SwitchToDisc(DiscModel disc)
+		public async Task SwitchToDisc(DiscModel disc, CancellationToken cancellationToken)
 		{
-			var discFolder = foldersService.GetDiscFolder(disc.Id, CancellationToken.None).Result;
+			var discFolder = await foldersService.GetDiscFolder(disc.Id, cancellationToken);
 
 			LoadFolder(discFolder);
 
@@ -227,11 +226,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		private void OnPlaylistChanged(BaseSongListEventArgs e)
+		private async void OnPlaylistChanged(BaseSongListEventArgs e, CancellationToken cancellationToken)
 		{
 			if (e.Disc != null)
 			{
-				SwitchToDisc(e.Disc);
+				await SwitchToDisc(e.Disc, cancellationToken);
 			}
 		}
 

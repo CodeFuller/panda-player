@@ -10,7 +10,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 	{
 		public static DiscModel ToModel(this DiscEntity disc, ShallowFolderModel folderModel, IContentUriProvider contentUriProvider)
 		{
-			// TBD: Add year as disc column in database and remove this logic
+			// TODO: Add year as disc column in database and remove this logic
 			var discYear = disc.Songs
 				.Where(song => song.DeleteDate == null)
 				.Select(song => song.Year)

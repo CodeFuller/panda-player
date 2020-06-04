@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
 
@@ -20,11 +21,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		double Volume { get; set; }
 
-		Task Play();
+		Task Play(CancellationToken cancellationToken);
 
 		Task Pause();
 
-		Task ReversePlaying();
+		Task ReversePlaying(CancellationToken cancellationToken);
 
 #pragma warning disable CA1716 // Identifiers should not match keywords - 'Stop' is the best name in current semantics
 		void Stop();

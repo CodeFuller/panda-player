@@ -86,7 +86,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 			imageFile.Unload();
 		}
 
-		public async Task Save()
+		public async Task Save(CancellationToken cancellationToken)
 		{
 			if (Disc == null)
 			{
@@ -113,7 +113,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 			};
 
 			using var imageContent = File.OpenRead(imageFile.ImageFileName);
-			await discsService.SetDiscCoverImage(coverImage, imageContent, CancellationToken.None);
+			await discsService.SetDiscCoverImage(coverImage, imageContent, cancellationToken);
 
 			Messenger.Default.Send(new DiscImageChangedEventArgs(Disc));
 		}

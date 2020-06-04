@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace MusicLibrary.Core.Models
 {
-	// TBD: Rename SongModel to Song, DiscModel to Disc, ...
+	// TODO: Rename SongModel to Song, DiscModel to Disc, ...
 	public class SongModel : INotifyPropertyChanged
 	{
 		private string title;

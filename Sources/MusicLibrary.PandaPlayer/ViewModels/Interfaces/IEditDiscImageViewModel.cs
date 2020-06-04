@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
 
@@ -26,6 +27,6 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		void Unload();
 
-		Task Save();
+		Task Save(CancellationToken cancellationToken);
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using CF.Library.Core.Interfaces;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Extensions.Logging;
@@ -29,31 +30,30 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 			this.playlistDataRepository = playlistDataRepository ?? throw new ArgumentNullException(nameof(playlistDataRepository));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => Load());
+			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => Load(CancellationToken.None));
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => this.playlistDataRepository.Purge());
 		}
 
-		private void Load()
+		private async void Load(CancellationToken cancellationToken)
 		{
-			PlaylistData playListData = playlistDataRepository.Load();
+			var playListData = playlistDataRepository.Load();
 			if (playListData == null)
 			{
 				logger.LogInformation("No previous playlist data detected");
 				return;
 			}
 
-			Load(playListData);
+			await Load(playListData, cancellationToken);
 		}
 
-		private void Load(PlaylistData playListData)
+		private async Task Load(PlaylistData playListData, CancellationToken cancellationToken)
 		{
 			var songIds = playListData.Songs
 				.Select(s => s.Id)
 				.Select(id => new ItemId(id))
 				.Distinct();
 
-			// TBD: Make async
-			var loadedSongs = songsService.GetSongs(songIds, CancellationToken.None).Result
+			var loadedSongs = (await songsService.GetSongs(songIds, cancellationToken))
 				.ToDictionary(s => s.Id, s => s);
 
 			var newSongIndex = playListData.CurrentSongIndex;

@@ -32,7 +32,7 @@ namespace MusicLibrary.PandaPlayer
 
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{
-			// TBD: Extract registrations to extensions methods on IServiceCollection
+			// TODO: Extract registrations to extensions methods on IServiceCollection
 			services.Configure<PandaPlayerSettings>(configuration.Bind);
 			services.Configure<LastFmClientSettings>(options => configuration.Bind("lastFmClient", options));
 

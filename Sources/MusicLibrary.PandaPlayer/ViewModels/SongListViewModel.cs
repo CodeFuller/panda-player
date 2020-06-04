@@ -91,7 +91,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			PlaySongsNextCommand = new RelayCommand(PlaySongsNext);
 			PlaySongsLastCommand = new RelayCommand(PlaySongsLast);
 			DeleteSongsFromDiscCommand = new AsyncRelayCommand(() => DeleteSongsFromDisc(CancellationToken.None));
-			EditSongsPropertiesCommand = new AsyncRelayCommand(EditSongsProperties);
+			EditSongsPropertiesCommand = new AsyncRelayCommand(() => EditSongsProperties(CancellationToken.None));
 			SetRatingMenuItems = RatingHelpers.AllRatingValues
 				.OrderByDescending(r => r)
 				.Select(r => new SetRatingMenuItem(this, r))
@@ -143,12 +143,12 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			OnSongItemsChanged();
 		}
 
-		private async Task EditSongsProperties()
+		private async Task EditSongsProperties(CancellationToken cancellationToken)
 		{
 			var selectedSongs = SelectedSongs.ToList();
 			if (selectedSongs.Any())
 			{
-				await viewNavigator.ShowSongPropertiesView(selectedSongs, CancellationToken.None);
+				await viewNavigator.ShowSongPropertiesView(selectedSongs, cancellationToken);
 			}
 		}
 

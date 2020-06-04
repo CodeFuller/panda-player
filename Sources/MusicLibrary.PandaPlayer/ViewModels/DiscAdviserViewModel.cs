@@ -60,14 +60,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			PlayCurrentAdviseCommand = new RelayCommand(PlayCurrentAdvise);
 			SwitchToNextAdviseCommand = new AsyncRelayCommand(() => SwitchToNextAdvise(CancellationToken.None));
 
-			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => OnPlaylistFinished(e.Songs));
-			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => Load());
+			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => OnPlaylistFinished(e.Songs, CancellationToken.None));
+			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => Load(CancellationToken.None));
 		}
 
-		private void Load()
+		private async void Load(CancellationToken cancellationToken)
 		{
-			// TODO: Make async
-			RebuildAdvises(CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
+			await RebuildAdvises(cancellationToken);
 		}
 
 		internal void PlayCurrentAdvise()
@@ -106,7 +105,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			CurrAdviseIndex = 0;
 		}
 
-		private void OnPlaylistFinished(IEnumerable<SongModel> finishedSongs)
+		private async void OnPlaylistFinished(IEnumerable<SongModel> finishedSongs, CancellationToken cancellationToken)
 		{
 			var finishedSongsList = finishedSongs.ToList();
 
@@ -130,8 +129,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				OnCurrentAdvisedChanged();
 			}
 
-			// TODO: Make async
-			RebuildAdvisesIfRequired(CancellationToken.None).Wait();
+			await RebuildAdvisesIfRequired(cancellationToken);
 		}
 
 		protected void OnCurrentAdvisedChanged()

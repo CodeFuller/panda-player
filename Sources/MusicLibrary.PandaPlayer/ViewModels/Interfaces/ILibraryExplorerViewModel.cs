@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading;
+using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
 
@@ -15,6 +17,6 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		IExplorerSongListViewModel SongListViewModel { get; }
 
-		void SwitchToDisc(DiscModel disc);
+		Task SwitchToDisc(DiscModel disc, CancellationToken cancellationToken);
 	}
 }

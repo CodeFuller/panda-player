@@ -83,12 +83,12 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 			this.playbacksRegistrator = playbacksRegistrator ?? throw new ArgumentNullException(nameof(playbacksRegistrator));
 
 			this.audioPlayer.PropertyChanged += AudioPlayer_PropertyChanged;
-			this.audioPlayer.SongMediaFinished += AudioPlayer_SongFinished;
+			this.audioPlayer.SongMediaFinished += (s, e) => AudioPlayer_SongFinished(CancellationToken.None);
 
-			ReversePlayingCommand = new AsyncRelayCommand(ReversePlaying);
+			ReversePlayingCommand = new AsyncRelayCommand(() => ReversePlaying(CancellationToken.None));
 		}
 
-		public async Task Play()
+		public async Task Play(CancellationToken cancellationToken)
 		{
 			if (CurrentSong == null)
 			{
@@ -98,7 +98,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 					return;
 				}
 
-				await SwitchToNewSong(currentSong);
+				await SwitchToNewSong(currentSong, cancellationToken);
 			}
 
 			IsPlaying = true;
@@ -113,9 +113,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 			return Task.CompletedTask;
 		}
 
-		public Task ReversePlaying()
+		public Task ReversePlaying(CancellationToken cancellationToken)
 		{
-			return IsPlaying ? Pause() : Play();
+			return IsPlaying ? Pause() : Play(cancellationToken);
 		}
 
 		public void Stop()
@@ -128,12 +128,12 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 			}
 		}
 
-		private async void AudioPlayer_SongFinished(object sender, SongMediaFinishedEventArgs eventArgs)
+		private async void AudioPlayer_SongFinished(CancellationToken cancellationToken)
 		{
 			var currentSong = Playlist.CurrentSong;
 			if (currentSong != null)
 			{
-				await playbacksRegistrator.RegisterPlaybackFinish(currentSong, CancellationToken.None);
+				await playbacksRegistrator.RegisterPlaybackFinish(currentSong, cancellationToken);
 			}
 
 			CurrentSong = null;
@@ -148,15 +148,15 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 			}
 
 			// Play next song from the playlist.
-			await Play();
+			await Play(cancellationToken);
 		}
 
-		private async Task SwitchToNewSong(SongModel newSong)
+		private async Task SwitchToNewSong(SongModel newSong, CancellationToken cancellationToken)
 		{
 			CurrentSong = newSong;
 
 			audioPlayer.SetCurrentSongContentUri(newSong.ContentUri);
-			await playbacksRegistrator.RegisterPlaybackStart(newSong, CancellationToken.None);
+			await playbacksRegistrator.RegisterPlaybackStart(newSong, cancellationToken);
 		}
 
 		private void AudioPlayer_PropertyChanged(object sender, PropertyChangedEventArgs e)

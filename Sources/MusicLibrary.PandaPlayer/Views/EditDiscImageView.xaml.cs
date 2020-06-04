@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Threading;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
@@ -50,7 +51,7 @@ namespace MusicLibrary.PandaPlayer.Views
 
 		private async void SaveButton_Click(object sender, RoutedEventArgs e)
 		{
-			await ViewModel.Save();
+			await ViewModel.Save(CancellationToken.None);
 			DialogResult = true;
 		}
 

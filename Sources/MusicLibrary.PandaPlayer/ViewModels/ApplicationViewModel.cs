@@ -66,7 +66,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		{
 			set
 			{
-				// TBD: Revise objects comparing
+				// TODO: Revise objects comparing
 				if (activeDisc != value)
 				{
 					activeDisc = value;
@@ -94,22 +94,22 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 
 			LoadCommand = new RelayCommand(Load);
-			ReversePlayingCommand = new RelayCommand(ReversePlaying);
-			ShowLibraryStatisticsCommand = new AsyncRelayCommand(ShowLibraryStatistics);
+			ReversePlayingCommand = new AsyncRelayCommand(() => ReversePlaying(CancellationToken.None));
+			ShowLibraryStatisticsCommand = new AsyncRelayCommand(() => ShowLibraryStatistics(CancellationToken.None));
 
 			SwitchToExplorerSongsCommand = new RelayCommand(SwitchToExplorerSongs);
 			SwitchToPlaylistSongsCommand = new RelayCommand(SwitchToPlaylistSongs);
 
 			CurrentSongListViewModel = ExplorerSongsViewModel;
 
-			Messenger.Default.Register<PlaySongsListEventArgs>(this, OnPlaySongList);
-			Messenger.Default.Register<PlayDiscFromSongEventArgs>(this, OnPlayDiscFromSongLaunched);
-			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, OnPlayPlaylistStartingFromSong);
+			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaySongList(e, CancellationToken.None));
+			Messenger.Default.Register<PlayDiscFromSongEventArgs>(this, e => OnPlayDiscFromSongLaunched(e, CancellationToken.None));
+			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, e => OnPlayPlaylistStartingFromSong(CancellationToken.None));
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, OnPlaylistFinished);
 			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => SwitchToExplorerSongs());
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => OnPlaylistSongChanged());
 			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistSongChanged());
-			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => NavigateLibraryExplorerToDisc(e.Disc));
+			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => NavigateLibraryExplorerToDisc(e.Disc, CancellationToken.None));
 		}
 
 		public void Load()
@@ -123,46 +123,44 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		public async Task ShowLibraryStatistics()
+		public async Task ShowLibraryStatistics(CancellationToken cancellationToken)
 		{
-			await viewNavigator.ShowLibraryStatisticsView(CancellationToken.None);
+			await viewNavigator.ShowLibraryStatisticsView(cancellationToken);
 		}
 
-		private void OnPlaySongList(PlaySongsListEventArgs e)
+		private async void OnPlaySongList(PlaySongsListEventArgs e, CancellationToken cancellationToken)
 		{
 			PlaylistSongsViewModel.SetSongs(e.Songs);
 			PlaylistSongsViewModel.SwitchToNextSong();
-			ResetPlayer();
+			await ResetPlayer(cancellationToken);
 			SwitchToPlaylistSongs();
 		}
 
-		private void OnPlayDiscFromSongLaunched(PlayDiscFromSongEventArgs message)
+		private async void OnPlayDiscFromSongLaunched(PlayDiscFromSongEventArgs message, CancellationToken cancellationToken)
 		{
 			var disc = message.Song.Disc;
 
 			PlaylistSongsViewModel.SetSongs(disc.ActiveSongs);
 			PlaylistSongsViewModel.SwitchToSong(message.Song);
-			ResetPlayer();
+			await ResetPlayer(cancellationToken);
 			SwitchToPlaylistSongs();
 		}
 
-		private void OnPlayPlaylistStartingFromSong(PlayPlaylistStartingFromSongEventArgs message)
+		private async void OnPlayPlaylistStartingFromSong(CancellationToken cancellationToken)
 		{
-			ResetPlayer();
+			await ResetPlayer(cancellationToken);
 			SwitchToPlaylistSongs();
 		}
 
-		internal void ReversePlaying()
+		internal async Task ReversePlaying(CancellationToken cancellationToken)
 		{
-			// TODO: ReversePlaying is an async method, which must be awaited.
-			MusicPlayerViewModel.ReversePlaying();
+			await MusicPlayerViewModel.ReversePlaying(cancellationToken);
 		}
 
-		private void ResetPlayer()
+		private async Task ResetPlayer(CancellationToken cancellationToken)
 		{
-			// TODO: Play is an async method, which must be awaited.
 			MusicPlayerViewModel.Stop();
-			MusicPlayerViewModel.Play();
+			await MusicPlayerViewModel.Play(cancellationToken);
 		}
 
 		private void OnPlaylistSongChanged()
@@ -202,9 +200,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			CurrentSongListViewModel = PlaylistSongsViewModel;
 		}
 
-		private void NavigateLibraryExplorerToDisc(DiscModel disc)
+		private async void NavigateLibraryExplorerToDisc(DiscModel disc, CancellationToken cancellationToken)
 		{
-			LibraryExplorerViewModel.SwitchToDisc(disc);
+			await LibraryExplorerViewModel.SwitchToDisc(disc, cancellationToken);
 			SwitchToExplorerSongs();
 		}
 	}
