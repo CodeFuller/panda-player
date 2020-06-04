@@ -18,7 +18,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(FxCopAnalyzersVersion)" PrivateAssets="all" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(TestSdkVersion)" />
-    <PackageReference Include="Moq.AutoMock" Version="2.0.0" />
+    <PackageReference Include="Moq.AutoMock" Version="$(AutoMockVersion)" />
     <PackageReference Include="MSTest.TestAdapter" Version="$(TestAdapterVersion)" />
     <PackageReference Include="MSTest.TestFramework" Version="$(TestFrameworkVersion)" />
     <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopAnalyzersVersion)" PrivateAssets="all" />

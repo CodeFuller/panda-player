@@ -12,5 +12,6 @@
     <NUnit3TestAdapterVersion>3.10.0</NUnit3TestAdapterVersion>
     <TestAdapterVersion>2.1.0</TestAdapterVersion>
     <TestFrameworkVersion>2.1.0</TestFrameworkVersion>
+    <AutoMockVersion>2.0.0</AutoMockVersion>
   </PropertyGroup>
 </Project>
