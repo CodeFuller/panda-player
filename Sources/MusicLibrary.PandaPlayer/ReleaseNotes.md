@@ -1,3 +1,6 @@
+**3.1.11 / 2020.06.05**
+* Fixed ordering of disc songs.
+
 **3.1.10 / 2020.06.05**
 * Added deletion of empty disc directory when disc is deleted.
 
