@@ -8,5 +8,7 @@ namespace MusicLibrary.Dal.LocalDb.Interfaces
 		FilePath GetSongFilePath(SongModel song);
 
 		FilePath GetDiscImagePath(DiscImageModel image);
+
+		FilePath GetFolderPath(ShallowFolderModel folder);
 	}
 }

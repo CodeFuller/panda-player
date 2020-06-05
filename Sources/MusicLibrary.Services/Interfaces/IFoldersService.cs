@@ -9,5 +9,7 @@ namespace MusicLibrary.Services.Interfaces
 		Task<FolderModel> GetRootFolder(CancellationToken cancellationToken);
 
 		Task<FolderModel> GetFolder(ItemId folderId, CancellationToken cancellationToken);
+
+		Task DeleteFolder(ItemId folderId, CancellationToken cancellationToken);
 	}
 }

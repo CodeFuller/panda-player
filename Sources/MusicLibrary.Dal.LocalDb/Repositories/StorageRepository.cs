@@ -92,6 +92,14 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			return Task.CompletedTask;
 		}
 
+		public Task DeleteFolder(ShallowFolderModel folder, CancellationToken cancellationToken)
+		{
+			var folderPath = storageOrganizer.GetFolderPath(folder);
+			fileStorage.DeleteFolder(folderPath);
+
+			return Task.CompletedTask;
+		}
+
 		public Uri GetSongContentUri(SongModel song)
 		{
 			var songPath = storageOrganizer.GetSongFilePath(song);

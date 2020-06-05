@@ -73,7 +73,7 @@ namespace MusicLibrary.Services
 			var deleteTime = clock.Now;
 
 			var disc = await discsRepository.GetDisc(discId, cancellationToken);
-			logger.LogInformation($"Deleting disc '{disc.TreeTitle}' ...");
+			logger.LogInformation($"Deleting the disc '{disc.TreeTitle}' ...");
 
 			foreach (var song in disc.ActiveSongs)
 			{
@@ -82,14 +82,14 @@ namespace MusicLibrary.Services
 
 			foreach (var image in disc.Images)
 			{
-				logger.LogInformation($"Deleting disc image '{image.TreeTitle}' ...");
+				logger.LogInformation($"Deleting the disc image '{image.TreeTitle}' ...");
 				await storageRepository.DeleteDiscImage(image, cancellationToken);
 			}
 
 			disc.Images = new List<DiscImageModel>();
 			await discsRepository.UpdateDisc(disc, cancellationToken);
 
-			logger.LogInformation($"Disc '{disc.TreeTitle}' was deleted successfully");
+			logger.LogInformation($"The Disc '{disc.TreeTitle}' was deleted successfully");
 		}
 	}
 }

@@ -12,8 +12,9 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 			var folderModel = new FolderModel
 			{
 				Id = folder.Id.ToItemId(),
-				Name = folder.Name,
+				ParentFolderId = folder.ParentFolderId?.ToItemId(),
 				ParentFolder = folder.ParentFolder?.ToShallowModel(),
+				Name = folder.Name,
 				Subfolders = folder.Subfolders.Select(sf => sf.ToShallowModel()).ToList(),
 				DeleteDate = folder.DeleteDate,
 			};
@@ -29,6 +30,17 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 			{
 				Id = folder.Id.ToItemId(),
 				ParentFolderId = folder.ParentFolderId?.ToItemId(),
+				Name = folder.Name,
+				DeleteDate = folder.DeleteDate,
+			};
+		}
+
+		public static FolderEntity ToEntity(this ShallowFolderModel folder)
+		{
+			return new FolderEntity
+			{
+				Id = folder.Id.ToInt32(),
+				ParentFolderId = folder.ParentFolderId?.ToInt32(),
 				Name = folder.Name,
 				DeleteDate = folder.DeleteDate,
 			};

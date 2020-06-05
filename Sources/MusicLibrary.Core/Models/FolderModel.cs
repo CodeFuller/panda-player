@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace MusicLibrary.Core.Models
 {
@@ -9,5 +10,7 @@ namespace MusicLibrary.Core.Models
 		public IReadOnlyCollection<ShallowFolderModel> Subfolders { get; set; }
 
 		public IReadOnlyCollection<DiscModel> Discs { get; set; }
+
+		public bool HasContent => Subfolders.Any(f => !f.IsDeleted) || Discs.Any(d => !d.IsDeleted);
 	}
 }

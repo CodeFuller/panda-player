@@ -118,6 +118,18 @@ namespace MusicLibrary.PandaPlayer.Views
 
 				frameworkElement.ContextMenu = contextMenu;
 			}
+			else if (viewModel.SelectedItem is FolderExplorerItem)
+			{
+				var contextMenu = new ContextMenu();
+				contextMenu.Items.Add(
+					new MenuItem
+					{
+						Header = "Delete Folder",
+						Command = viewModel.DeleteFolderCommand,
+					});
+
+				frameworkElement.ContextMenu = contextMenu;
+			}
 			else
 			{
 				frameworkElement.ContextMenu = null;

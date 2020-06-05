@@ -77,6 +77,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand EditDiscPropertiesCommand { get; }
 
+		public ICommand DeleteFolderCommand { get; }
+
 		public LibraryExplorerViewModel(IFoldersService foldersService, IDiscsService discsService,
 			IExplorerSongListViewModel songListViewModel, IViewNavigator viewNavigator, IWindowService windowService)
 		{
@@ -92,6 +94,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			JumpToFirstItemCommand = new RelayCommand(() => SelectedItem = Items.FirstOrDefault());
 			JumpToLastItemCommand = new RelayCommand(() => SelectedItem = Items.LastOrDefault());
 			EditDiscPropertiesCommand = new RelayCommand(EditDiscProperties);
+			DeleteFolderCommand = new AsyncRelayCommand(() => DeleteFolder(CancellationToken.None));
 
 			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaylistChanged(e, CancellationToken.None));
 			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistChanged(e, CancellationToken.None));
@@ -216,6 +219,32 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			{
 				viewNavigator.ShowDiscPropertiesView(discItem.Disc);
 			}
+		}
+
+		private async Task DeleteFolder(CancellationToken cancellationToken)
+		{
+			if (!(SelectedItem is FolderExplorerItem folderItem))
+			{
+				return;
+			}
+
+			var folder = await foldersService.GetFolder(folderItem.FolderId, cancellationToken);
+
+			if (folder.HasContent)
+			{
+				windowService.ShowMessageBox("You can not delete non-empty directory", "Warning", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation);
+				return;
+			}
+
+			if (windowService.ShowMessageBox($"Do you really want to delete the folder '{folderItem.Title}'?", "Delete folder",
+				ShowMessageBoxButton.YesNo, ShowMessageBoxIcon.Question) != ShowMessageBoxResult.Yes)
+			{
+				return;
+			}
+
+			await foldersService.DeleteFolder(folderItem.FolderId, cancellationToken);
+
+			Items.Remove(folderItem);
 		}
 
 		private async void OnPlaylistChanged(BaseSongListEventArgs e, CancellationToken cancellationToken)

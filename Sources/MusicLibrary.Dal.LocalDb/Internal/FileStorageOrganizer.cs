@@ -26,13 +26,18 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 				.Add(image.TreeTitle);
 		}
 
+		public FilePath GetFolderPath(ShallowFolderModel folder)
+		{
+			return GetFolderPathInternal(folder);
+		}
+
 		private FilePath GetDiscPath(DiscModel disc)
 		{
-			return GetFolderPath(disc.Folder)
+			return GetFolderPathInternal(disc.Folder)
 				.Add(disc.TreeTitle);
 		}
 
-		private FilePath GetFolderPath(ShallowFolderModel folder)
+		private FilePath GetFolderPathInternal(ShallowFolderModel folder)
 		{
 			var path = new List<string>();
 

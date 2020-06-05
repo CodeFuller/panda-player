@@ -38,11 +38,39 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 		{
 			await using var context = contextFactory.Create();
 
-			var id = folderId.ToInt32();
-			var folder = await GetFoldersQueryable(context)
-				.SingleAsync(f => f.Id == id, cancellationToken);
+			var folder = await FindFolder(context, folderId, cancellationToken);
 
 			return folder.ToModel(contentUriProvider);
+		}
+
+		public async Task UpdateFolder(ShallowFolderModel folder, CancellationToken cancellationToken)
+		{
+			await using var context = contextFactory.Create();
+			var folderEntity = await FindShallowFolder(context, folder.Id, cancellationToken);
+
+			var updatedEntity = folder.ToEntity();
+			context.Entry(folderEntity).CurrentValues.SetValues(updatedEntity);
+			await context.SaveChangesAsync(cancellationToken);
+		}
+
+		private static async Task<FolderEntity> FindShallowFolder(MusicLibraryDbContext context, ItemId id, CancellationToken cancellationToken)
+		{
+			var entityId = id.ToInt32();
+			return await GetShallowFoldersQueryable(context)
+				.SingleAsync(f => f.Id == entityId, cancellationToken);
+		}
+
+		private static async Task<FolderEntity> FindFolder(MusicLibraryDbContext context, ItemId id, CancellationToken cancellationToken)
+		{
+			var entityId = id.ToInt32();
+			return await GetFoldersQueryable(context)
+				.SingleAsync(f => f.Id == entityId, cancellationToken);
+		}
+
+		private static IQueryable<FolderEntity> GetShallowFoldersQueryable(MusicLibraryDbContext context)
+		{
+			return context.Folders
+				.Include(f => f.ParentFolder);
 		}
 
 		private static IQueryable<FolderEntity> GetFoldersQueryable(MusicLibraryDbContext context)
