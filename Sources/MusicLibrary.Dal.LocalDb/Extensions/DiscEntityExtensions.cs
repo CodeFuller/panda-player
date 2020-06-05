@@ -32,6 +32,12 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 			return discModel;
 		}
 
+		public static DiscModel ToModel(this DiscEntity disc, IContentUriProvider contentUriProvider)
+		{
+			var folderModel = disc.Folder.ToShallowModel();
+			return disc.ToModel(folderModel, contentUriProvider);
+		}
+
 		public static DiscEntity ToEntity(this DiscModel disc)
 		{
 			return new DiscEntity

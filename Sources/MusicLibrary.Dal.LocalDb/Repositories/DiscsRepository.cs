@@ -32,11 +32,11 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			var discEntities = await GetDiscsQueryable(context)
 				.ToListAsync(cancellationToken);
 
-			// TODO: This code is duplicated between DiscsRepository and SongsRepository
 			var folderModels = discEntities
-				.Select(disc => disc.Folder.ToShallowModel())
-				.GroupBy(folder => folder.Id)
-				.ToDictionary(group => group.Key, group => group.First());
+				.Select(disc => disc.Folder)
+				.Distinct()
+				.Select(folder => folder.ToShallowModel())
+				.ToDictionary(folder => folder.Id, folder => folder);
 
 			return discEntities
 					.Select(disc => disc.ToModel(folderModels[disc.Folder.Id.ToItemId()], contentUriProvider))
@@ -48,11 +48,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			await using var context = contextFactory.Create();
 
 			var disc = await FindDisc(context, discId, cancellationToken);
-
-			// TODO: This code is duplicated between DiscsRepository and SongsRepository
-			var folderModel = disc.Folder.ToShallowModel();
-
-			return disc.ToModel(folderModel, contentUriProvider);
+			return disc.ToModel(contentUriProvider);
 		}
 
 		private static IQueryable<DiscEntity> GetDiscsQueryable(MusicLibraryDbContext context)

@@ -30,17 +30,11 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			await using var context = contextFactory.Create();
 
 			var id = songId.ToInt32();
-			var songEntity = await context.Songs
-				.Include(song => song.Disc).ThenInclude(disc => disc.Images)
-				.Include(song => song.Disc).ThenInclude(disc => disc.Folder)
-				.Include(song => song.Artist)
-				.Include(song => song.Genre)
+			var songEntity = await GetSongsQueryable(context)
 				.Where(song => song.Id == id)
 				.SingleAsync(cancellationToken);
 
-			var folderModel = songEntity.Disc.Folder.ToShallowModel();
-			var discModel = songEntity.Disc.ToModel(folderModel, contentUriProvider);
-
+			var discModel = songEntity.Disc.ToModel(contentUriProvider);
 			return discModel.AllSongs.Single(song => song.Id == songId);
 		}
 
@@ -51,11 +45,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 			await using var context = contextFactory.Create();
 
-			var songs = await context.Songs
-				.Include(song => song.Disc).ThenInclude(disc => disc.Images)
-				.Include(song => song.Disc).ThenInclude(disc => disc.Folder)
-				.Include(song => song.Artist)
-				.Include(song => song.Genre)
+			var songs = await GetSongsQueryable(context)
 				.Where(song => ids.Contains(song.Id))
 				.ToListAsync(cancellationToken);
 
@@ -132,6 +122,15 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			var entityId = id.ToInt32();
 			return await queryable
 				.SingleAsync(s => s.Id == entityId, cancellationToken);
+		}
+
+		private static IQueryable<SongEntity> GetSongsQueryable(MusicLibraryDbContext context)
+		{
+			return context.Songs
+				.Include(song => song.Disc).ThenInclude(disc => disc.Images)
+				.Include(song => song.Disc).ThenInclude(disc => disc.Folder)
+				.Include(song => song.Artist)
+				.Include(song => song.Genre);
 		}
 	}
 }
