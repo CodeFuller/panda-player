@@ -1,3 +1,6 @@
+**3.1.9 / 2020.06.04**
+* Added stub disc cover image when image file is missing.
+
 **3.1.8 / 2020.06.04**
 * Removed unnecessary loading of root folder on startup.
 

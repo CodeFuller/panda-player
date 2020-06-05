@@ -39,6 +39,16 @@ namespace MusicLibrary.PandaPlayer.Views.ValueConverters
 				return DependencyProperty.UnsetValue;
 			}
 
+			return LoadImage(imageFileName);
+		}
+
+		private static BitmapImage LoadImage(string imageFileName)
+		{
+			if (!File.Exists(imageFileName))
+			{
+				return new BitmapImage(new Uri("pack://application:,,,/PandaPlayer;component/Views/Icons/ImageNotFound.png", UriKind.Absolute));
+			}
+
 			var image = new BitmapImage();
 			using var fs = new FileStream(imageFileName, FileMode.Open, FileAccess.Read);
 			image.BeginInit();
