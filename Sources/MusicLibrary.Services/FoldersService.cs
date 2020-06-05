@@ -26,11 +26,5 @@ namespace MusicLibrary.Services
 			// TODO: Need to filter deleted discs
 			return foldersRepository.GetFolder(folderId, cancellationToken);
 		}
-
-		public Task<FolderModel> GetDiscFolder(ItemId discId, CancellationToken cancellationToken)
-		{
-			// TODO: Need to filter deleted discs
-			return foldersRepository.GetDiscFolder(discId, cancellationToken);
-		}
 	}
 }

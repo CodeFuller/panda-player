@@ -173,7 +173,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public async Task SwitchToDisc(DiscModel disc, CancellationToken cancellationToken)
 		{
-			var discFolder = await foldersService.GetDiscFolder(disc.Id, cancellationToken);
+			var discFolder = await foldersService.GetFolder(disc.Folder.Id, cancellationToken);
 
 			LoadFolder(discFolder);
 

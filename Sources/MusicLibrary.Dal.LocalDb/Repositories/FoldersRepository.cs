@@ -45,17 +45,6 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			return folder.ToModel(contentUriProvider);
 		}
 
-		public async Task<FolderModel> GetDiscFolder(ItemId discId, CancellationToken cancellationToken)
-		{
-			await using var context = contextFactory.Create();
-
-			var id = discId.ToInt32();
-			var folder = await GetFoldersQueryable(context)
-				.SingleAsync(f => f.Discs.Any(d => d.Id == id), cancellationToken);
-
-			return folder.ToModel(contentUriProvider);
-		}
-
 		private static IQueryable<FolderEntity> GetFoldersQueryable(MusicLibraryDbContext context)
 		{
 			return context.Folders
