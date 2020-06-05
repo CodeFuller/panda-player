@@ -81,5 +81,17 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 		{
 			return Path.Combine(new[] { rootDirectory }.Concat(filePath).ToArray());
 		}
+
+		public bool FolderIsEmpty(FilePath folderPath)
+		{
+			var fullPath = GetFullPath(folderPath);
+			return fileSystemFacade.DirectoryIsEmpty(fullPath);
+		}
+
+		public void DeleteFolder(FilePath folderPath)
+		{
+			var fullPath = GetFullPath(folderPath);
+			fileSystemFacade.DeleteDirectory(fullPath);
+		}
 	}
 }

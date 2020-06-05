@@ -1,3 +1,6 @@
+**3.1.10 / 2020.06.05**
+* Added deletion of empty disc directory when disc is deleted.
+
 **3.1.9 / 2020.06.04**
 * Added stub disc cover image when image file is missing.
 

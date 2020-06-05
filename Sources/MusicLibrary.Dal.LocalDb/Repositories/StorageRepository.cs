@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
@@ -60,7 +61,9 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			var songPath = storageOrganizer.GetSongFilePath(song);
 			fileStorage.DeleteFile(songPath);
 
-			// TODO: Delete disc directory if it becomes empty.
+			var folderPath = GetFolderPath(songPath);
+			DeleteFolderIfEmpty(folderPath);
+
 			return Task.CompletedTask;
 		}
 
@@ -83,7 +86,9 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			var imagePath = storageOrganizer.GetDiscImagePath(image);
 			fileStorage.DeleteFile(imagePath);
 
-			// TODO: Delete disc directory if it becomes empty.
+			var folderPath = GetFolderPath(imagePath);
+			DeleteFolderIfEmpty(folderPath);
+
 			return Task.CompletedTask;
 		}
 
@@ -113,6 +118,22 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 		private uint CalculateFileChecksum(string filePath)
 		{
 			return checksumCalculator.CalculateChecksum(filePath);
+		}
+
+		private static FilePath GetFolderPath(FilePath filePath)
+		{
+			var parts = filePath.ToList();
+			return new FilePath(parts.Take(parts.Count - 1));
+		}
+
+		private void DeleteFolderIfEmpty(FilePath folderPath)
+		{
+			if (!fileStorage.FolderIsEmpty(folderPath))
+			{
+				return;
+			}
+
+			fileStorage.DeleteFolder(folderPath);
 		}
 	}
 }

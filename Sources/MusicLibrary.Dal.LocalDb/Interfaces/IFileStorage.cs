@@ -16,5 +16,9 @@ namespace MusicLibrary.Dal.LocalDb.Interfaces
 		void DeleteFile(FilePath filePath);
 
 		string GetFullPath(FilePath filePath);
+
+		bool FolderIsEmpty(FilePath folderPath);
+
+		void DeleteFolder(FilePath folderPath);
 	}
 }
