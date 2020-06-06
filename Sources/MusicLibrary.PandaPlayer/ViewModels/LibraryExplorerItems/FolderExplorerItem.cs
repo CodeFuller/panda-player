@@ -1,7 +1,7 @@
 ﻿using System;
 using MusicLibrary.Core.Models;
 
-namespace MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
+namespace MusicLibrary.PandaPlayer.ViewModels.LibraryExplorerItems
 {
 	public class FolderExplorerItem : BasicExplorerItem
 	{

@@ -1,4 +1,4 @@
-﻿namespace MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
+﻿namespace MusicLibrary.PandaPlayer.ViewModels.LibraryExplorerItems
 {
 	public class ParentFolderExplorerItem : BasicExplorerItem
 	{

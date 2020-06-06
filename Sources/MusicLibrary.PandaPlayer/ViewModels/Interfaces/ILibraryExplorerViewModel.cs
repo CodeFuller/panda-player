@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
-using MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
+using MusicLibrary.PandaPlayer.ViewModels.LibraryExplorerItems;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {

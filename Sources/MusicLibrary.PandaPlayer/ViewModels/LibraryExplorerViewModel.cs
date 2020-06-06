@@ -18,7 +18,7 @@ using MusicLibrary.PandaPlayer.Events.SongEvents;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
 using MusicLibrary.PandaPlayer.Internal;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
-using MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
+using MusicLibrary.PandaPlayer.ViewModels.LibraryExplorerItems;
 using MusicLibrary.Services.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels

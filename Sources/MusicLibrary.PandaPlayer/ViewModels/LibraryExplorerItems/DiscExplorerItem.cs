@@ -3,7 +3,7 @@ using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.Events.DiscEvents;
 
-namespace MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
+namespace MusicLibrary.PandaPlayer.ViewModels.LibraryExplorerItems
 {
 	public class DiscExplorerItem : BasicExplorerItem
 	{

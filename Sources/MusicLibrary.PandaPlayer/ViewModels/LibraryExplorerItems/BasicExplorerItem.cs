@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 
-namespace MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
+namespace MusicLibrary.PandaPlayer.ViewModels.LibraryExplorerItems
 {
 	public abstract class BasicExplorerItem : ViewModelBase
 	{

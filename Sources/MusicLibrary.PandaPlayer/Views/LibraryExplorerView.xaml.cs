@@ -7,7 +7,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using MusicLibrary.PandaPlayer.ViewModels;
-using MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser;
+using MusicLibrary.PandaPlayer.ViewModels.LibraryExplorerItems;
 
 namespace MusicLibrary.PandaPlayer.Views
 {
