@@ -1,3 +1,6 @@
+**3.2.2 / 2020.06.06**
+* Extended context menu for disc with Play Disc command.
+
 **3.2.1 / 2020.06.06**
 * Restored editing of disc properties.
 

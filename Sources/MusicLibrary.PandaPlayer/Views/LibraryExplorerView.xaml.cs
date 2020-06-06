@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -102,38 +103,58 @@ namespace MusicLibrary.PandaPlayer.Views
 
 			if (viewModel.SelectedItem is DiscExplorerItem)
 			{
-				var contextMenu = new ContextMenu();
-				contextMenu.Items.Add(
+				var menuItems = new[]
+				{
+					new MenuItem
+					{
+						Header = "Play Disc",
+						Command = viewModel.PlayDiscCommand,
+					},
+
 					new MenuItem
 					{
 						Header = "Delete Disc",
 						Command = viewModel.DeleteDiscCommand,
-					});
-				contextMenu.Items.Add(
+					},
+
 					new MenuItem
 					{
 						Header = "Properties",
 						Command = viewModel.EditDiscPropertiesCommand,
-					});
+					},
+				};
 
-				frameworkElement.ContextMenu = contextMenu;
+				frameworkElement.ContextMenu = CreateContextMenu(menuItems);
 			}
 			else if (viewModel.SelectedItem is FolderExplorerItem)
 			{
-				var contextMenu = new ContextMenu();
-				contextMenu.Items.Add(
+				var menuItems = new[]
+				{
 					new MenuItem
 					{
 						Header = "Delete Folder",
 						Command = viewModel.DeleteFolderCommand,
-					});
+					},
+				};
 
-				frameworkElement.ContextMenu = contextMenu;
+				frameworkElement.ContextMenu = CreateContextMenu(menuItems);
 			}
 			else
 			{
 				frameworkElement.ContextMenu = null;
 			}
+		}
+
+		private static ContextMenu CreateContextMenu(IEnumerable<MenuItem> items)
+		{
+			var contextMenu = new ContextMenu();
+
+			foreach (var item in items)
+			{
+				contextMenu.Items.Add(item);
+			}
+
+			return contextMenu;
 		}
 
 		private void ContentDataGrid_OnKeyDown(object sender, KeyEventArgs e)
