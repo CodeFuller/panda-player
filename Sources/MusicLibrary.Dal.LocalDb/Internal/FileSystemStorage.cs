@@ -82,6 +82,14 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 			return Path.Combine(new[] { rootDirectory }.Concat(filePath).ToArray());
 		}
 
+		public void MoveFolder(FilePath source, FilePath destination)
+		{
+			var sourceFolderPath = GetFullPath(source);
+			var destinationFolderPath = GetFullPath(destination);
+
+			fileSystemFacade.MoveDirectory(sourceFolderPath, destinationFolderPath);
+		}
+
 		public bool FolderIsEmpty(FilePath folderPath)
 		{
 			var fullPath = GetFullPath(folderPath);

@@ -100,6 +100,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistChanged(e, CancellationToken.None));
 			Messenger.Default.Register<NoPlaylistLoadedEventArgs>(this, e => OnNoPlaylistLoaded(CancellationToken.None));
 			Messenger.Default.Register<SongChangedEventArgs>(this, e => OnSongChanged(e.Song, e.PropertyName));
+			Messenger.Default.Register<DiscChangedEventArgs>(this, e => OnDiscChanged(e.Disc, e.PropertyName));
 			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
 		}
 
@@ -269,6 +270,14 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				{
 					SongUpdater.UpdateSong(changedSong, song, propertyName);
 				}
+			}
+		}
+
+		private void OnDiscChanged(DiscModel changedDisc, string propertyName)
+		{
+			foreach (var disc in GetMatchingDiscs(changedDisc))
+			{
+				DiscUpdater.UpdateDisc(changedDisc, disc, propertyName);
 			}
 		}
 

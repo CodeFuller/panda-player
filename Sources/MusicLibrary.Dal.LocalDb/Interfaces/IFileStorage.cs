@@ -17,6 +17,8 @@ namespace MusicLibrary.Dal.LocalDb.Interfaces
 
 		string GetFullPath(FilePath filePath);
 
+		void MoveFolder(FilePath source, FilePath destination);
+
 		bool FolderIsEmpty(FilePath folderPath);
 
 		void DeleteFolder(FilePath folderPath);

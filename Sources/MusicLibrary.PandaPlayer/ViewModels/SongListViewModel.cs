@@ -99,6 +99,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 			Messenger.Default.Register<SongChangedEventArgs>(this, e => OnSongChanged(e.Song, e.PropertyName));
 			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
+			Messenger.Default.Register<DiscChangedEventArgs>(this, e => OnDiscChanged(e.Disc, e.PropertyName));
 		}
 
 		protected virtual void OnSongItemsChanged()
@@ -217,6 +218,19 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				}
 
 				SongUpdater.UpdateSong(changedSong, song, propertyName);
+			}
+		}
+
+		private void OnDiscChanged(DiscModel changedDisc, string propertyName)
+		{
+			foreach (var song in Songs)
+			{
+				if (song.Disc.Id != changedDisc.Id || Object.ReferenceEquals(song.Disc, changedDisc))
+				{
+					continue;
+				}
+
+				DiscUpdater.UpdateDisc(changedDisc, song.Disc, propertyName);
 			}
 		}
 

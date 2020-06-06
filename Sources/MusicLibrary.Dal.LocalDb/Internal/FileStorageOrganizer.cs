@@ -14,6 +14,11 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 			this.folderProvider = folderProvider ?? throw new ArgumentNullException(nameof(folderProvider));
 		}
 
+		public FilePath GetDiscFolderPath(DiscModel disc)
+		{
+			return GetDiscPath(disc);
+		}
+
 		public FilePath GetSongFilePath(SongModel song)
 		{
 			return GetDiscPath(song.Disc)

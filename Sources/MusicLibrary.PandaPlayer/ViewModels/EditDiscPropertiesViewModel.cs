@@ -77,6 +77,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public async Task Save(CancellationToken cancellationToken)
 		{
+			Disc.TreeTitle = TreeTitle;
+			Disc.Title = Title;
+			Disc.AlbumTitle = AlbumTitle;
+
 			await discsService.UpdateDisc(Disc, cancellationToken);
 		}
 	}

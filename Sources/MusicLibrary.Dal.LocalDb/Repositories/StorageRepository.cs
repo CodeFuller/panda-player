@@ -29,6 +29,25 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			this.checksumCalculator = checksumCalculator ?? throw new ArgumentNullException(nameof(checksumCalculator));
 		}
 
+		public Task UpdateDiscTreeTitle(DiscModel oldDisc, DiscModel newDisc, CancellationToken cancellationToken)
+		{
+			var oldDiscPath = storageOrganizer.GetDiscFolderPath(oldDisc);
+			var newDiscPath = storageOrganizer.GetDiscFolderPath(newDisc);
+			fileStorage.MoveFolder(oldDiscPath, newDiscPath);
+
+			foreach (var song in newDisc.ActiveSongs)
+			{
+				song.ContentUri = GetSongContentUri(song);
+			}
+
+			foreach (var image in newDisc.Images)
+			{
+				image.ContentUri = GetDiscImageUri(image);
+			}
+
+			return Task.CompletedTask;
+		}
+
 		public Task UpdateSongTreeTitle(SongModel oldSong, SongModel newSong, CancellationToken cancellationToken)
 		{
 			var oldSongPath = storageOrganizer.GetSongFilePath(oldSong);

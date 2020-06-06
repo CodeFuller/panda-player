@@ -1,24 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using MusicLibrary.Core.Comparers;
 using MusicLibrary.Core.Extensions;
 
 namespace MusicLibrary.Core.Models
 {
-	public class DiscModel
+	public class DiscModel : INotifyPropertyChanged
 	{
+		private string title;
+		private string treeTitle;
+		private string albumTitle;
+
 		public ItemId Id { get; set; }
 
 		public ShallowFolderModel Folder { get; set; }
 
 		public int? Year { get; set; }
 
-		public string Title { get; set; }
+		public string Title
+		{
+			get => title;
+			set => this.SetField(PropertyChanged, ref title, value);
+		}
 
-		public string TreeTitle { get; set; }
+		public string TreeTitle
+		{
+			get => treeTitle;
+			set => this.SetField(PropertyChanged, ref treeTitle, value);
+		}
 
-		public string AlbumTitle { get; set; }
+		public string AlbumTitle
+		{
+			get => albumTitle;
+			set => this.SetField(PropertyChanged, ref albumTitle, value);
+		}
 
 		public ArtistModel SoloArtist
 		{
@@ -52,6 +69,8 @@ namespace MusicLibrary.Core.Models
 		public DiscImageModel CoverImage => Images.SingleOrDefault(image => image.ImageType == DiscImageType.Cover);
 
 		public bool IsDeleted => AllSongs.All(song => song.IsDeleted);
+
+		public event PropertyChangedEventHandler PropertyChanged;
 
 		public void AddImage(DiscImageModel image)
 		{

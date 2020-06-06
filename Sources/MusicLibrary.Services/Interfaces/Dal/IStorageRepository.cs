@@ -7,6 +7,8 @@ namespace MusicLibrary.Services.Interfaces.Dal
 {
 	public interface IStorageRepository
 	{
+		Task UpdateDiscTreeTitle(DiscModel oldDisc, DiscModel newDisc, CancellationToken cancellationToken);
+
 		Task UpdateSongTreeTitle(SongModel oldSong, SongModel newSong, CancellationToken cancellationToken);
 
 		Task UpdateSong(SongModel song, CancellationToken cancellationToken);

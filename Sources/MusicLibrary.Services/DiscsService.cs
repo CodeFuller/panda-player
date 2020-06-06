@@ -36,9 +36,29 @@ namespace MusicLibrary.Services
 			return discsRepository.GetAllDiscs(cancellationToken);
 		}
 
-		public Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken)
+		public async Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken)
 		{
-			return discsRepository.UpdateDisc(disc, cancellationToken);
+			// Reading current disc properties for several reasons:
+			// 1. We need to understand which properties were actually changed.
+			//    It defines whether song content will be updated (for correct tag values) and whether disc folder in the storage must be renamed.
+			// 2. Avoid overwriting of changes made by another clients.
+			var currentDisc = await discsRepository.GetDisc(disc.Id, cancellationToken);
+
+			if (disc.TreeTitle != currentDisc.TreeTitle)
+			{
+				await storageRepository.UpdateDiscTreeTitle(currentDisc, disc, cancellationToken);
+			}
+
+			// Should we update storage data (tags) for disc songs?
+			if (disc.AlbumTitle != currentDisc.AlbumTitle)
+			{
+				foreach (var song in disc.ActiveSongs)
+				{
+					await songsService.UpdateSong(song, cancellationToken);
+				}
+			}
+
+			await discsRepository.UpdateDisc(disc, cancellationToken);
 		}
 
 		public async Task SetDiscCoverImage(DiscImageModel coverImage, Stream imageContent, CancellationToken cancellationToken)

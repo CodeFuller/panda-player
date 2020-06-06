@@ -1,5 +1,7 @@
 ﻿using System;
+using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Core.Models;
+using MusicLibrary.PandaPlayer.Events.DiscEvents;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 {
@@ -14,6 +16,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels.LibraryBrowser
 		public DiscExplorerItem(DiscModel disc)
 		{
 			this.Disc = disc ?? throw new ArgumentNullException(nameof(disc));
+
+			Disc.PropertyChanged += (sender, args) =>
+			{
+				Messenger.Default.Send(new DiscChangedEventArgs(Disc, args.PropertyName));
+			};
 		}
 	}
 }

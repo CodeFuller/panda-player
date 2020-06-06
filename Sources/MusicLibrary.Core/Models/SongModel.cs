@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using MusicLibrary.Core.Extensions;
 
 namespace MusicLibrary.Core.Models
 {
@@ -9,27 +9,33 @@ namespace MusicLibrary.Core.Models
 	public class SongModel : INotifyPropertyChanged
 	{
 		private string title;
+		private string treeTitle;
 		private short? trackNumber;
 		private ArtistModel artist;
 		private GenreModel genre;
 		private RatingModel? rating;
 		private DateTimeOffset? lastPlaybackTime;
 		private int playbacksCount;
+		private Uri contentUri;
 
 		public ItemId Id { get; set; }
 
 		public string Title
 		{
 			get => title;
-			set => SetField(ref title, value);
+			set => this.SetField(PropertyChanged, ref title, value);
 		}
 
-		public string TreeTitle { get; set; }
+		public string TreeTitle
+		{
+			get => treeTitle;
+			set => this.SetField(PropertyChanged, ref treeTitle, value);
+		}
 
 		public short? TrackNumber
 		{
 			get => trackNumber;
-			set => SetField(ref trackNumber, value);
+			set => this.SetField(PropertyChanged, ref trackNumber, value);
 		}
 
 		public TimeSpan Duration { get; set; }
@@ -39,19 +45,19 @@ namespace MusicLibrary.Core.Models
 		public ArtistModel Artist
 		{
 			get => artist;
-			set => SetField(ref artist, value);
+			set => this.SetField(PropertyChanged, ref artist, value);
 		}
 
 		public GenreModel Genre
 		{
 			get => genre;
-			set => SetField(ref genre, value);
+			set => this.SetField(PropertyChanged, ref genre, value);
 		}
 
 		public RatingModel? Rating
 		{
 			get => rating;
-			set => SetField(ref rating, value);
+			set => this.SetField(PropertyChanged, ref rating, value);
 		}
 
 		public int? BitRate { get; set; }
@@ -63,18 +69,22 @@ namespace MusicLibrary.Core.Models
 		public DateTimeOffset? LastPlaybackTime
 		{
 			get => lastPlaybackTime;
-			set => SetField(ref lastPlaybackTime, value);
+			set => this.SetField(PropertyChanged, ref lastPlaybackTime, value);
 		}
 
 		public int PlaybacksCount
 		{
 			get => playbacksCount;
-			set => SetField(ref playbacksCount, value);
+			set => this.SetField(PropertyChanged, ref playbacksCount, value);
 		}
 
 		public IReadOnlyCollection<PlaybackModel> Playbacks { get; set; }
 
-		public Uri ContentUri { get; set; }
+		public Uri ContentUri
+		{
+			get => contentUri;
+			set => this.SetField(PropertyChanged, ref contentUri, value);
+		}
 
 		public DateTimeOffset? DeleteDate { get; set; }
 
@@ -86,18 +96,6 @@ namespace MusicLibrary.Core.Models
 		{
 			++PlaybacksCount;
 			LastPlaybackTime = playbackTime;
-		}
-
-		private void SetField<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
-		{
-			if (EqualityComparer<T>.Default.Equals(field, newValue))
-			{
-				return;
-			}
-
-			field = newValue;
-
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }
