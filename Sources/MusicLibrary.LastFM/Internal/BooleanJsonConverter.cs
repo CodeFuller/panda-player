@@ -1,11 +1,9 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace MusicLibrary.LastFM
+namespace MusicLibrary.LastFM.Internal
 {
-#pragma warning disable CA1812 // The class is instantiated by DI container - The class is instantiated by Json.NET
 	internal class BooleanJsonConverter : JsonConverter
-#pragma warning restore CA1812 // The class is instantiated by DI container
 	{
 		public override bool CanConvert(Type objectType)
 		{

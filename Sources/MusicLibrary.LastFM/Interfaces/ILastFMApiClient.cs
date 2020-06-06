@@ -2,7 +2,7 @@
 using MusicLibrary.LastFM.DataContracts;
 using MusicLibrary.LastFM.Objects;
 
-namespace MusicLibrary.LastFM
+namespace MusicLibrary.LastFM.Interfaces
 {
 	public interface ILastFMApiClient
 	{

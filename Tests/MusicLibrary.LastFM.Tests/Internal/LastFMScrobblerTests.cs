@@ -3,9 +3,11 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
+using MusicLibrary.LastFM.Interfaces;
+using MusicLibrary.LastFM.Internal;
 using MusicLibrary.LastFM.Objects;
 
-namespace MusicLibrary.LastFM.Tests
+namespace MusicLibrary.LastFM.Tests.Internal
 {
 	[TestClass]
 	public class LastFMScrobblerTests

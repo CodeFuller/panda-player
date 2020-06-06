@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using MusicLibrary.LastFM.Interfaces;
 using MusicLibrary.LastFM.Objects;
 
-namespace MusicLibrary.LastFM
+namespace MusicLibrary.LastFM.Internal
 {
-	public class LastFMScrobbler : IScrobbler
+	internal class LastFMScrobbler : IScrobbler
 	{
 		private static TimeSpan MinScrobbledTrackDuration => TimeSpan.FromSeconds(30);
 

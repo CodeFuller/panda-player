@@ -12,24 +12,23 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MusicLibrary.LastFM.DataContracts;
+using MusicLibrary.LastFM.Interfaces;
 using MusicLibrary.LastFM.Objects;
 using Newtonsoft.Json;
 using static System.FormattableString;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.LastFM
+namespace MusicLibrary.LastFM.Internal
 {
-	public class LastFMApiClient : ILastFMApiClient
+	internal class LastFMApiClient : ILastFMApiClient
 	{
 		private static readonly Uri ApiBaseUri = new Uri(@"http://ws.audioscrobbler.com/2.0/");
 
-		private readonly ITokenAuthorizer tokenAuthorizer;
 		private readonly ILogger<LastFMApiClient> logger;
 		private readonly LastFmClientSettings settings;
 
-		public LastFMApiClient(ITokenAuthorizer tokenAuthorizer, ILogger<LastFMApiClient> logger, IOptions<LastFmClientSettings> options)
+		public LastFMApiClient(ILogger<LastFMApiClient> logger, IOptions<LastFmClientSettings> options)
 		{
-			this.tokenAuthorizer = tokenAuthorizer ?? throw new ArgumentNullException(nameof(tokenAuthorizer));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}

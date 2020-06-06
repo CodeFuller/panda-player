@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MusicLibrary.LastFM.Objects;
 
-namespace MusicLibrary.LastFM
+namespace MusicLibrary.LastFM.Interfaces
 {
 	public interface IScrobbler
 	{

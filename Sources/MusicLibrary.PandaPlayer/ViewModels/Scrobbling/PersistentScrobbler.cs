@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using MusicLibrary.LastFM;
+using MusicLibrary.LastFM.Interfaces;
 using MusicLibrary.LastFM.Objects;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Scrobbling

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using MusicLibrary.LastFM.Internal;
 using Newtonsoft.Json;
 
 namespace MusicLibrary.LastFM.DataContracts

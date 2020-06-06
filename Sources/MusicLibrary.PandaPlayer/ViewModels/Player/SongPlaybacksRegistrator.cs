@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
-using MusicLibrary.LastFM;
+using MusicLibrary.LastFM.Interfaces;
 using MusicLibrary.LastFM.Objects;
 using MusicLibrary.Services.Interfaces;
 
