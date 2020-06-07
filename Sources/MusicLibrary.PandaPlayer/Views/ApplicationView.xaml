@@ -21,6 +21,7 @@
     </i:Interaction.Triggers>
 
     <Window.InputBindings>
+        <KeyBinding Key="F11" Command="{Binding ShowLibraryCheckerCommand}" />
         <KeyBinding Key="F12" Command="{Binding ShowLibraryStatisticsCommand}" />
     </Window.InputBindings>
 

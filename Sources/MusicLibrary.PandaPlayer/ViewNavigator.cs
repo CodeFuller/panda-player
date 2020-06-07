@@ -69,6 +69,13 @@ namespace MusicLibrary.PandaPlayer
 			ShowDialog<EditDiscImageView>(viewModel);
 		}
 
+		public Task ShowLibraryCheckerView(CancellationToken cancellationToken)
+		{
+			ShowView<LibraryCheckerView>(viewModelHolder.LibraryCheckerViewModel);
+
+			return Task.CompletedTask;
+		}
+
 		public async Task ShowLibraryStatisticsView(CancellationToken cancellationToken)
 		{
 			var viewModel = viewModelHolder.LibraryStatisticsViewModel;
@@ -76,16 +83,26 @@ namespace MusicLibrary.PandaPlayer
 			ShowDialog<LibraryStatisticsView>(viewModel);
 		}
 
+		private static void ShowView<TView>(object dataContext)
+			where TView : Window, new()
+		{
+			CreateView<TView>(dataContext).Show();
+		}
+
 		private static bool ShowDialog<TDialogView>(object dataContext)
 			where TDialogView : Window, new()
 		{
-			TDialogView dialogView = new TDialogView
+			return CreateView<TDialogView>(dataContext).ShowDialog() ?? false;
+		}
+
+		private static TView CreateView<TView>(object dataContext)
+			where TView : Window, new()
+		{
+			return new TView
 			{
 				DataContext = dataContext,
 				Owner = ApplicationWindow,
 			};
-
-			return dialogView.ShowDialog() ?? false;
 		}
 	}
 }

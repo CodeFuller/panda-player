@@ -1,6 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
+using MusicLibrary.Services.Diagnostic.Checkers;
+using MusicLibrary.Services.Diagnostic.Interfaces;
 using MusicLibrary.Services.Interfaces;
 using MusicLibrary.Services.Internal;
+using MusicLibrary.Services.Settings;
 using MusicLibrary.Services.Tagging;
 
 namespace MusicLibrary.Services.Extensions
@@ -15,8 +19,20 @@ namespace MusicLibrary.Services.Extensions
 			services.AddSingleton<IGenresService, GenresService>();
 			services.AddSingleton<IArtistsService, ArtistsService>();
 			services.AddSingleton<IStatisticsService, StatisticsService>();
+			services.AddSingleton<IDiagnosticService, DiagnosticService>();
+
+			services.AddSingleton<IDiscConsistencyChecker, DiscConsistencyChecker>();
 
 			services.AddSingleton<IClock, Clock>();
+
+			return services;
+		}
+
+		public static IServiceCollection AddDiscTitleToAlbumMapper(this IServiceCollection services, Action<DiscToAlbumMappingSettings> setupSettings)
+		{
+			services.AddSingleton<IDiscTitleToAlbumMapper, DiscTitleToAlbumMapper>();
+
+			services.Configure<DiscToAlbumMappingSettings>(setupSettings);
 
 			return services;
 		}

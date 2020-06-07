@@ -17,8 +17,9 @@
   <ItemGroup>
     <PackageReference Include="CF.Library.Core" Version="$(CFLibraryVersion)" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(FxCopAnalyzersVersion)" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(CrossCuttingPackagesVersion)" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(CrossCuttingPackagesVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(CrossCuttingPackagesVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(CrossCuttingPackagesVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="$(CrossCuttingPackagesVersion)" />
     <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopAnalyzersVersion)" PrivateAssets="all" />
     <PackageReference Include="taglib" Version="2.1.0" />
   </ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +23,16 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
 			this.contentUriProvider = contentUriProvider ?? throw new ArgumentNullException(nameof(contentUriProvider));
+		}
+
+		public async Task<IReadOnlyCollection<ShallowFolderModel>> GetAllFolders(CancellationToken cancellationToken)
+		{
+			await using var context = contextFactory.Create();
+
+			var folders = await GetShallowFoldersQueryable(context)
+				.ToListAsync(cancellationToken);
+
+			return folders.Select(f => f.ToShallowModel()).ToList();
 		}
 
 		public async Task<FolderModel> GetRootFolder(CancellationToken cancellationToken)

@@ -23,12 +23,12 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		private readonly LoggingSettings settings;
 
+		public ObservableCollection<LogMessage> Messages { get; } = new ObservableCollection<LogMessage>();
+
 		public LoggerViewModel(IOptions<LoggingSettings> options)
 		{
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
-
-		public ObservableCollection<LogMessage> Messages { get; } = new ObservableCollection<LogMessage>();
 
 		public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
 		{

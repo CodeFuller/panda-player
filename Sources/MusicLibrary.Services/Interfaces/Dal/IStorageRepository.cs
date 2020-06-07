@@ -1,7 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
+using MusicLibrary.Services.Diagnostic.Inconsistencies;
 
 namespace MusicLibrary.Services.Interfaces.Dal
 {
@@ -20,5 +23,7 @@ namespace MusicLibrary.Services.Interfaces.Dal
 		Task DeleteDiscImage(DiscImageModel image, CancellationToken cancellationToken);
 
 		Task DeleteFolder(ShallowFolderModel folder, CancellationToken cancellationToken);
+
+		Task CheckStorage(IEnumerable<ShallowFolderModel> folders, IEnumerable<DiscModel> discs, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken);
 	}
 }

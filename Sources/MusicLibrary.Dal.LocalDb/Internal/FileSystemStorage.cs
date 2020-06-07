@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CF.Library.Core.Facades;
 using Microsoft.Extensions.Options;
+using MusicLibrary.Dal.LocalDb.Inconsistencies;
 using MusicLibrary.Dal.LocalDb.Interfaces;
+using MusicLibrary.Services.Diagnostic.Inconsistencies;
 
 namespace MusicLibrary.Dal.LocalDb.Internal
 {
@@ -22,6 +25,12 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 			{
 				throw new InvalidOperationException("Storage root is not configured");
 			}
+		}
+
+		public bool FileExists(FilePath filePath)
+		{
+			var fullPath = GetFullPath(filePath);
+			return fileSystemFacade.FileExists(fullPath);
 		}
 
 		public void SaveFile(FilePath filePath, Stream content)
@@ -82,12 +91,10 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 			return Path.Combine(new[] { rootDirectory }.Concat(filePath).ToArray());
 		}
 
-		public void MoveFolder(FilePath source, FilePath destination)
+		public bool FolderExists(FilePath folderPath)
 		{
-			var sourceFolderPath = GetFullPath(source);
-			var destinationFolderPath = GetFullPath(destination);
-
-			fileSystemFacade.MoveDirectory(sourceFolderPath, destinationFolderPath);
+			var fullPath = GetFullPath(folderPath);
+			return fileSystemFacade.DirectoryExists(fullPath);
 		}
 
 		public bool FolderIsEmpty(FilePath folderPath)
@@ -96,10 +103,40 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 			return fileSystemFacade.DirectoryIsEmpty(fullPath);
 		}
 
+		public void MoveFolder(FilePath source, FilePath destination)
+		{
+			var sourceFolderPath = GetFullPath(source);
+			var destinationFolderPath = GetFullPath(destination);
+
+			fileSystemFacade.MoveDirectory(sourceFolderPath, destinationFolderPath);
+		}
+
 		public void DeleteFolder(FilePath folderPath)
 		{
 			var fullPath = GetFullPath(folderPath);
 			fileSystemFacade.DeleteDirectory(fullPath);
+		}
+
+		public IEnumerable<string> EnumerateFolders()
+		{
+			return fileSystemFacade
+				.EnumerateDirectories(rootDirectory, "*.*", SearchOption.AllDirectories);
+		}
+
+		public IEnumerable<string> EnumerateFiles()
+		{
+			return fileSystemFacade
+				.EnumerateFiles(rootDirectory, "*.*", SearchOption.AllDirectories);
+		}
+
+		public void CheckFile(FilePath songPath, Action<LibraryInconsistency> inconsistenciesHandler)
+		{
+			var fullPath = GetFullPath(songPath);
+
+			if (!fileSystemFacade.GetReadOnlyAttribute(fullPath))
+			{
+				inconsistenciesHandler(new NoFileReadOnlyAttributeInconsistency(fullPath));
+			}
 		}
 	}
 }

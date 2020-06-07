@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using MusicLibrary.PandaPlayer.ViewModels;
+using MusicLibrary.PandaPlayer.Views.Extensions;
 
 namespace MusicLibrary.PandaPlayer.Views
 {
@@ -14,18 +14,10 @@ namespace MusicLibrary.PandaPlayer.Views
 
 		private void View_Loaded(object sender, RoutedEventArgs e)
 		{
-			var viewModel = DataContext as LoggerViewModel;
-			if (viewModel != null)
+			if (DataContext is LoggerViewModel viewModel)
 			{
-				viewModel.Messages.CollectionChanged += (s, ev) => ScrollToDataGridBottom(MessagesDataGrid);
+				viewModel.Messages.CollectionChanged += (s, ev) => MessagesDataGrid.ScrollToDataGridBottom();
 			}
-		}
-
-		private static void ScrollToDataGridBottom(DataGrid dataGrid)
-		{
-			var border = VisualTreeHelper.GetChild(dataGrid, 0) as Decorator;
-			var scroll = border?.Child as ScrollViewer;
-			scroll?.ScrollToEnd();
 		}
 	}
 }

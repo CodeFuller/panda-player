@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -24,6 +25,11 @@ namespace MusicLibrary.Services
 			this.storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
 			this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+		}
+
+		public Task<IReadOnlyCollection<ShallowFolderModel>> GetAllFolders(CancellationToken cancellationToken)
+		{
+			return foldersRepository.GetAllFolders(cancellationToken);
 		}
 
 		public Task<FolderModel> GetRootFolder(CancellationToken cancellationToken)

@@ -71,6 +71,7 @@ namespace MusicLibrary.PandaPlayer
 			RegisterDataRepositories(services, dataStoragePath);
 
 			services.AddMusicLibraryServices();
+			services.AddDiscTitleToAlbumMapper(settings => configuration.Bind("discToAlbumMappings", settings));
 		}
 
 		private void RegisterViewModels(IServiceCollection services)
@@ -87,6 +88,7 @@ namespace MusicLibrary.PandaPlayer
 			services.AddSingleton<IRateSongsViewModel, RateSongsViewModel>();
 			services.AddSingleton<IDiscImageViewModel, DiscImageViewModel>();
 			services.AddSingleton<IEditDiscImageViewModel, EditDiscImageViewModel>();
+			services.AddSingleton<ILibraryCheckerViewModel, LibraryCheckerViewModel>();
 			services.AddSingleton<ILibraryStatisticsViewModel, LibraryStatisticsViewModel>();
 			services.AddSingleton<ILoggerViewModel>(loggerViewModelInstance);
 			services.AddSingleton<ApplicationViewModel>();

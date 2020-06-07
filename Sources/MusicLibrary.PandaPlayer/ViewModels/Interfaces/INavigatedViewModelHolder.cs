@@ -10,6 +10,8 @@
 
 		IEditDiscImageViewModel EditDiscImageViewModel { get; }
 
+		ILibraryCheckerViewModel LibraryCheckerViewModel { get; }
+
 		ILibraryStatisticsViewModel LibraryStatisticsViewModel { get; }
 	}
 }

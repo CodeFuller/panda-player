@@ -15,6 +15,8 @@ namespace MusicLibrary.PandaPlayer
 
 		void ShowEditDiscImageView(DiscModel disc);
 
+		Task ShowLibraryCheckerView(CancellationToken cancellationToken);
+
 		Task ShowLibraryStatisticsView(CancellationToken cancellationToken);
 	}
 }

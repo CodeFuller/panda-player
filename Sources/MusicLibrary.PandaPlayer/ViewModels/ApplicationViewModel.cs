@@ -81,6 +81,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public ICommand ReversePlayingCommand { get; }
 
+		public ICommand ShowLibraryCheckerCommand { get; }
+
 		public ICommand ShowLibraryStatisticsCommand { get; }
 
 		public ICommand SwitchToExplorerSongsCommand { get; }
@@ -95,6 +97,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 			LoadCommand = new RelayCommand(Load);
 			ReversePlayingCommand = new AsyncRelayCommand(() => ReversePlaying(CancellationToken.None));
+			ShowLibraryCheckerCommand = new AsyncRelayCommand(() => ShowLibraryChecker(CancellationToken.None));
 			ShowLibraryStatisticsCommand = new AsyncRelayCommand(() => ShowLibraryStatistics(CancellationToken.None));
 
 			SwitchToExplorerSongsCommand = new RelayCommand(SwitchToExplorerSongs);
@@ -121,6 +124,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			{
 				SwitchToPlaylistSongs();
 			}
+		}
+
+		public async Task ShowLibraryChecker(CancellationToken cancellationToken)
+		{
+			await viewNavigator.ShowLibraryCheckerView(cancellationToken);
 		}
 
 		public async Task ShowLibraryStatistics(CancellationToken cancellationToken)
