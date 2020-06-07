@@ -25,6 +25,6 @@ namespace MusicLibrary.Services.Interfaces.Dal
 
 		Task DeleteFolder(ShallowFolderModel folder, CancellationToken cancellationToken);
 
-		Task CheckStorage(LibraryCheckFlags checkFlags, IEnumerable<ShallowFolderModel> folders, IEnumerable<DiscModel> discs, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken);
+		Task CheckStorage(LibraryCheckFlags checkFlags, IEnumerable<ShallowFolderModel> folders, IEnumerable<DiscModel> discs, IOperationProgress progress, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken);
 	}
 }

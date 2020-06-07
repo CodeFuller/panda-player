@@ -11,10 +11,11 @@ using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.Services.Diagnostic;
 using MusicLibrary.Services.Diagnostic.Inconsistencies;
 using MusicLibrary.Services.Interfaces;
+using static System.FormattableString;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {
-	internal class LibraryCheckerViewModel : ViewModelBase, ILibraryCheckerViewModel
+	internal class LibraryCheckerViewModel : ViewModelBase, ILibraryCheckerViewModel, IOperationProgress
 	{
 		private readonly IDiagnosticService diagnosticService;
 
@@ -92,6 +93,32 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			set => Set(ref isRunning, value);
 		}
 
+		private double checkProgressMaximum = 100;
+
+		public double CheckProgressMaximum
+		{
+			get => checkProgressMaximum;
+			set
+			{
+				Set(ref checkProgressMaximum, value);
+				RaisePropertyChanged(nameof(CheckProgressPercentage));
+			}
+		}
+
+		private double checkProgressValue;
+
+		public double CheckProgressValue
+		{
+			get => checkProgressValue;
+			set
+			{
+				Set(ref checkProgressValue, value);
+				RaisePropertyChanged(nameof(CheckProgressPercentage));
+			}
+		}
+
+		public string CheckProgressPercentage => Invariant($"{(CheckProgressMaximum > 0 ? CheckProgressValue / CheckProgressMaximum * 100 : 0):N1}%");
+
 		public ICommand RunCheckCommand { get; }
 
 		public ObservableCollection<DiagnosticInconsistencyViewModel> Inconsistencies { get; } = new ObservableCollection<DiagnosticInconsistencyViewModel>();
@@ -106,10 +133,12 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		private async Task RunCheck(CancellationToken cancellationToken)
 		{
 			IsRunning = true;
+			CheckProgressValue = 0;
 			Inconsistencies.Clear();
 
 			await Task.Run(() => CheckLibrary(cancellationToken), cancellationToken);
 
+			CheckProgressValue = CheckProgressMaximum;
 			IsRunning = false;
 		}
 
@@ -120,7 +149,17 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				Application.Current.Dispatcher.Invoke(() => Inconsistencies.Add(new DiagnosticInconsistencyViewModel(inconsistency)), DispatcherPriority.ContextIdle, cancellationToken);
 			}
 
-			await diagnosticService.CheckLibrary(CheckFlags, InconsistenciesHandler, cancellationToken);
+			await diagnosticService.CheckLibrary(CheckFlags, this, InconsistenciesHandler, cancellationToken);
+		}
+
+		public void SetOperationCost(int cost)
+		{
+			Application.Current.Dispatcher.Invoke(() => CheckProgressMaximum = cost);
+		}
+
+		public void IncrementOperationProgress()
+		{
+			Application.Current.Dispatcher.Invoke(() => CheckProgressValue++);
 		}
 	}
 }

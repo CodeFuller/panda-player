@@ -28,7 +28,7 @@ namespace MusicLibrary.Services
 			this.storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
 		}
 
-		public async Task CheckLibrary(LibraryCheckFlags checkFlags, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken)
+		public async Task CheckLibrary(LibraryCheckFlags checkFlags, IOperationProgress progress, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken)
 		{
 			var discs = await discsService.GetAllDiscs(cancellationToken);
 			var activeDiscs = discs.Where(d => !d.IsDeleted).ToList();
@@ -43,7 +43,7 @@ namespace MusicLibrary.Services
 				var folders = await foldersService.GetAllFolders(cancellationToken);
 				var activeFolders = folders.Where(f => !f.IsDeleted);
 
-				await storageRepository.CheckStorage(checkFlags, activeFolders, activeDiscs, inconsistenciesHandler, cancellationToken);
+				await storageRepository.CheckStorage(checkFlags, activeFolders, activeDiscs, progress, inconsistenciesHandler, cancellationToken);
 			}
 		}
 	}

@@ -8,6 +8,6 @@ namespace MusicLibrary.Services.Interfaces
 {
 	public interface IDiagnosticService
 	{
-		Task CheckLibrary(LibraryCheckFlags checkFlags, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken);
+		Task CheckLibrary(LibraryCheckFlags checkFlags, IOperationProgress progress, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken);
 	}
 }

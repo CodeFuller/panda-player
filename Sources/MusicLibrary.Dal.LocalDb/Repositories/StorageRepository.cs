@@ -10,6 +10,7 @@ using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Dal.LocalDb.Internal;
 using MusicLibrary.Services.Diagnostic;
 using MusicLibrary.Services.Diagnostic.Inconsistencies;
+using MusicLibrary.Services.Interfaces;
 using MusicLibrary.Services.Interfaces.Dal;
 using MusicLibrary.Services.Tagging;
 
@@ -123,14 +124,15 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			return Task.CompletedTask;
 		}
 
-		public Task CheckStorage(LibraryCheckFlags checkFlags, IEnumerable<ShallowFolderModel> folders, IEnumerable<DiscModel> discs, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken)
+		public Task CheckStorage(LibraryCheckFlags checkFlags, IEnumerable<ShallowFolderModel> folders, IEnumerable<DiscModel> discs,
+			IOperationProgress progress, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken)
 		{
 			var knownFolders = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 			CheckFolders(folders, knownFolders, inconsistenciesHandler);
 
 			var checkContent = checkFlags.HasFlag(LibraryCheckFlags.CheckContentConsistency);
 			var knownFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-			CheckDiscsData(discs, checkContent, knownFolders, knownFiles, inconsistenciesHandler);
+			CheckDiscsData(discs.ToList(), checkContent, knownFolders, knownFiles, progress, inconsistenciesHandler);
 
 			CheckForUnexpectedFolders(knownFolders, inconsistenciesHandler);
 
@@ -150,8 +152,11 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			}
 		}
 
-		private void CheckDiscsData(IEnumerable<DiscModel> discs, bool checkContent, HashSet<string> visitedFolders, HashSet<string> visitedFiles, Action<LibraryInconsistency> inconsistenciesHandler)
+		private void CheckDiscsData(IReadOnlyCollection<DiscModel> discs, bool checkContent, HashSet<string> visitedFolders,
+			HashSet<string> visitedFiles, IOperationProgress progress, Action<LibraryInconsistency> inconsistenciesHandler)
 		{
+			progress.SetOperationCost(discs.Count);
+
 			foreach (var disc in discs)
 			{
 				var discFolderPath = storageOrganizer.GetDiscFolderPath(disc);
@@ -173,6 +178,8 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 					visitedFiles.Add(fileStorage.GetFullPath(imagePath));
 				}
+
+				progress.IncrementOperationProgress();
 			}
 		}
 
