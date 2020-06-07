@@ -1,3 +1,6 @@
+**3.3.0 / 2020.06.07**
+* Added library checker.
+
 **3.2.2 / 2020.06.06**
 * Extended context menu for disc with Play Disc command.
 
