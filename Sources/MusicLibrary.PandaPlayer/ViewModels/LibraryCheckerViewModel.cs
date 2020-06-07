@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using CF.Library.Wpf;
 using GalaSoft.MvvmLight;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
+using MusicLibrary.Services.Diagnostic;
 using MusicLibrary.Services.Diagnostic.Inconsistencies;
 using MusicLibrary.Services.Interfaces;
 
@@ -16,6 +17,54 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 	internal class LibraryCheckerViewModel : ViewModelBase, ILibraryCheckerViewModel
 	{
 		private readonly IDiagnosticService diagnosticService;
+
+		private bool checkDiscsConsistency = true;
+
+		public bool CheckDiscsConsistency
+		{
+			get => checkDiscsConsistency;
+			set => Set(ref checkDiscsConsistency, value);
+		}
+
+		private bool checkStorageConsistency = true;
+
+		public bool CheckStorageConsistency
+		{
+			get => checkStorageConsistency;
+			set => Set(ref checkStorageConsistency, value);
+		}
+
+		private bool checkContentConsistency = false;
+
+		public bool CheckContentConsistency
+		{
+			get => checkContentConsistency;
+			set => Set(ref checkContentConsistency, value);
+		}
+
+		private LibraryCheckFlags LibraryCheckFlags
+		{
+			get
+			{
+				var libraryCheckFlags = LibraryCheckFlags.None;
+				if (CheckDiscsConsistency)
+				{
+					libraryCheckFlags |= LibraryCheckFlags.CheckDiscsConsistency;
+				}
+
+				if (CheckStorageConsistency)
+				{
+					libraryCheckFlags |= LibraryCheckFlags.CheckStorageConsistency;
+				}
+
+				if (CheckContentConsistency)
+				{
+					libraryCheckFlags |= LibraryCheckFlags.CheckContentConsistency;
+				}
+
+				return libraryCheckFlags;
+			}
+		}
 
 		private bool isRunning;
 
@@ -53,7 +102,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				Application.Current.Dispatcher.Invoke(() => Inconsistencies.Add(new DiagnosticInconsistencyViewModel(inconsistency)), DispatcherPriority.ContextIdle, cancellationToken);
 			}
 
-			await diagnosticService.CheckLibrary(InconsistenciesHandler, cancellationToken);
+			await diagnosticService.CheckLibrary(LibraryCheckFlags, InconsistenciesHandler, cancellationToken);
 		}
 	}
 }

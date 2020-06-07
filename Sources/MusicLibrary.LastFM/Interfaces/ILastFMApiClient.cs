@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using MusicLibrary.LastFM.DataContracts;
 using MusicLibrary.LastFM.Objects;
 
 namespace MusicLibrary.LastFM.Interfaces

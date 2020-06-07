@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MusicLibrary.PandaPlayer.Views"
         xmlns:valueConverters="clr-namespace:MusicLibrary.PandaPlayer.Views.ValueConverters"
         xmlns:libraryValueConverters="clr-namespace:CF.Library.Wpf.ValueConverters;assembly=CF.Library.Wpf"
         mc:Ignorable="d"
@@ -23,10 +22,19 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <UniformGrid Grid.Row="0" Margin="0,0,0,10" Rows="1" Columns="2" HorizontalAlignment="Left">
+        <Grid Grid.Row="0">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Content="Check Discs" IsChecked="{Binding CheckDiscsConsistency}" IsEnabled="{Binding IsRunning, Converter={StaticResource InverseBooleanConverter}}" />
+                <CheckBox Margin="20,0,0,0" Content="Check Storage" IsChecked="{Binding CheckStorageConsistency}" IsEnabled="{Binding IsRunning, Converter={StaticResource InverseBooleanConverter}}" />
+                <CheckBox Margin="20,0,0,0" Content="Check Content" IsChecked="{Binding CheckContentConsistency}" IsEnabled="{Binding IsRunning, Converter={StaticResource InverseBooleanConverter}}" />
+            </StackPanel>
+        </Grid>
+
+        <UniformGrid Grid.Row="1" Margin="0,10,0,0" Rows="1" Columns="2" HorizontalAlignment="Left">
             <UniformGrid.CommandBindings>
                 <CommandBinding Command="Close" Executed="Close_Executed" />
             </UniformGrid.CommandBindings>
@@ -34,7 +42,7 @@
             <Button Margin="10,0,0,0" Content="Close" Command="Close" IsEnabled="{Binding IsRunning, Converter={StaticResource InverseBooleanConverter}}" />
         </UniformGrid>
 
-        <DataGrid Name="MessagesDataGrid" Grid.Row="1" BorderThickness="2" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="None" GridLinesVisibility="None"
+        <DataGrid Name="MessagesDataGrid" Grid.Row="2" Margin="0,10,0,0" BorderThickness="2" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="None" GridLinesVisibility="None"
                   CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
                   CellStyle="{StaticResource MaterialDesignDataGridCell}" ItemsSource="{Binding Inconsistencies}">
             <DataGrid.Columns>

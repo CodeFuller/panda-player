@@ -8,6 +8,7 @@ using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Inconsistencies;
 using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Dal.LocalDb.Internal;
+using MusicLibrary.Services.Diagnostic;
 using MusicLibrary.Services.Diagnostic.Inconsistencies;
 using MusicLibrary.Services.Interfaces.Dal;
 using MusicLibrary.Services.Tagging;
@@ -122,13 +123,14 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			return Task.CompletedTask;
 		}
 
-		public Task CheckStorage(IEnumerable<ShallowFolderModel> folders, IEnumerable<DiscModel> discs, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken)
+		public Task CheckStorage(LibraryCheckFlags checkFlags, IEnumerable<ShallowFolderModel> folders, IEnumerable<DiscModel> discs, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken)
 		{
 			var knownFolders = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 			CheckFolders(folders, knownFolders, inconsistenciesHandler);
 
+			var checkContent = checkFlags.HasFlag(LibraryCheckFlags.CheckContentConsistency);
 			var knownFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-			CheckDiscsData(discs, knownFolders, knownFiles, inconsistenciesHandler);
+			CheckDiscsData(discs, checkContent, knownFolders, knownFiles, inconsistenciesHandler);
 
 			CheckForUnexpectedFolders(knownFolders, inconsistenciesHandler);
 
@@ -148,7 +150,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			}
 		}
 
-		private void CheckDiscsData(IEnumerable<DiscModel> discs, HashSet<string> visitedFolders, HashSet<string> visitedFiles, Action<LibraryInconsistency> inconsistenciesHandler)
+		private void CheckDiscsData(IEnumerable<DiscModel> discs, bool checkContent, HashSet<string> visitedFolders, HashSet<string> visitedFiles, Action<LibraryInconsistency> inconsistenciesHandler)
 		{
 			foreach (var disc in discs)
 			{
@@ -159,7 +161,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 				foreach (var song in disc.ActiveSongs)
 				{
 					var songPath = storageOrganizer.GetSongFilePath(song);
-					CheckStorageFile(songPath, song.Size.Value, song.Checksum.Value, inconsistenciesHandler);
+					CheckStorageFile(songPath, checkContent, song.Size.Value, song.Checksum.Value, inconsistenciesHandler);
 
 					visitedFiles.Add(fileStorage.GetFullPath(songPath));
 				}
@@ -167,7 +169,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 				foreach (var image in disc.Images)
 				{
 					var imagePath = storageOrganizer.GetDiscImagePath(image);
-					CheckStorageFile(imagePath, image.Size, image.Checksum, inconsistenciesHandler);
+					CheckStorageFile(imagePath, checkContent, image.Size, image.Checksum, inconsistenciesHandler);
 
 					visitedFiles.Add(fileStorage.GetFullPath(imagePath));
 				}
@@ -204,7 +206,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			}
 		}
 
-		private void CheckStorageFile(FilePath filePath, long size, uint checksum, Action<LibraryInconsistency> inconsistenciesHandler)
+		private void CheckStorageFile(FilePath filePath, bool checkContent, long size, uint checksum, Action<LibraryInconsistency> inconsistenciesHandler)
 		{
 			var fullPath = fileStorage.GetFullPath(filePath);
 
@@ -214,19 +216,27 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 				return;
 			}
 
-			var actualSize = CalculateFileSize(fullPath);
+			fileStorage.CheckFile(filePath, inconsistenciesHandler);
+
+			if (checkContent)
+			{
+				CheckFileContent(fullPath, size, checksum, inconsistenciesHandler);
+			}
+		}
+
+		private void CheckFileContent(string filePath, long size, uint checksum, Action<LibraryInconsistency> inconsistenciesHandler)
+		{
+			var actualSize = CalculateFileSize(filePath);
 			if (actualSize != size)
 			{
-				inconsistenciesHandler(new IncorrectFileSizeInconsistency(fullPath, size, actualSize));
+				inconsistenciesHandler(new IncorrectFileSizeInconsistency(filePath, size, actualSize));
 			}
 
-			var actualChecksum = CalculateFileChecksum(fullPath);
+			var actualChecksum = CalculateFileChecksum(filePath);
 			if (actualChecksum != checksum)
 			{
-				inconsistenciesHandler(new IncorrectFileChecksumInconsistency(fullPath, checksum, actualChecksum));
+				inconsistenciesHandler(new IncorrectFileChecksumInconsistency(filePath, checksum, actualChecksum));
 			}
-
-			fileStorage.CheckFile(filePath, inconsistenciesHandler);
 		}
 
 		public Uri GetSongContentUri(SongModel song)

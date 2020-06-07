@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MusicLibrary.Services.Diagnostic;
 using MusicLibrary.Services.Diagnostic.Inconsistencies;
 using MusicLibrary.Services.Diagnostic.Interfaces;
 using MusicLibrary.Services.Interfaces;
@@ -27,17 +28,23 @@ namespace MusicLibrary.Services
 			this.storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
 		}
 
-		public async Task CheckLibrary(Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken)
+		public async Task CheckLibrary(LibraryCheckFlags checkFlags, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken)
 		{
 			var discs = await discsService.GetAllDiscs(cancellationToken);
 			var activeDiscs = discs.Where(d => !d.IsDeleted).ToList();
 
-			await discConsistencyChecker.CheckDiscsConsistency(activeDiscs, inconsistenciesHandler, cancellationToken);
+			if (checkFlags.HasFlag(LibraryCheckFlags.CheckDiscsConsistency))
+			{
+				await discConsistencyChecker.CheckDiscsConsistency(activeDiscs, inconsistenciesHandler, cancellationToken);
+			}
 
-			var folders = await foldersService.GetAllFolders(cancellationToken);
-			var activeFolders = folders.Where(f => !f.IsDeleted);
+			if (checkFlags.HasFlag(LibraryCheckFlags.CheckStorageConsistency))
+			{
+				var folders = await foldersService.GetAllFolders(cancellationToken);
+				var activeFolders = folders.Where(f => !f.IsDeleted);
 
-			await storageRepository.CheckStorage(activeFolders, activeDiscs, inconsistenciesHandler, cancellationToken);
+				await storageRepository.CheckStorage(checkFlags, activeFolders, activeDiscs, inconsistenciesHandler, cancellationToken);
+			}
 		}
 	}
 }
