@@ -5,7 +5,9 @@
 
 	"localDb": {
 		"dataStorage": {
-			"root": "d:\\music"
+			"root": "d:\\music",
+			"excludePaths": [
+			] 
 		}
 	},
 

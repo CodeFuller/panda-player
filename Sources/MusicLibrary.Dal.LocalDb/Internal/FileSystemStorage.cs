@@ -16,15 +16,23 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 
 		private readonly string rootDirectory;
 
+		private readonly IReadOnlyCollection<string> excludePaths;
+
 		public FileSystemStorage(IFileSystemFacade fileSystemFacade, IOptions<FileSystemStorageSettings> options)
 		{
 			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
 
-			this.rootDirectory = options?.Value?.Root;
+			var settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
+
+			this.rootDirectory = settings.Root;
 			if (String.IsNullOrWhiteSpace(rootDirectory))
 			{
 				throw new InvalidOperationException("Storage root is not configured");
 			}
+
+			this.excludePaths = (settings.ExcludePaths ?? Enumerable.Empty<string>())
+				.Select(GetFullPath)
+				.ToList();
 		}
 
 		public bool FileExists(FilePath filePath)
@@ -88,7 +96,12 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 
 		public string GetFullPath(FilePath filePath)
 		{
-			return Path.Combine(new[] { rootDirectory }.Concat(filePath).ToArray());
+			return GetFullPath(Path.Combine(filePath.ToArray()));
+		}
+
+		public string GetFullPath(string relativePath)
+		{
+			return Path.Combine(rootDirectory, relativePath);
 		}
 
 		public bool FolderExists(FilePath folderPath)
@@ -120,13 +133,15 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 		public IEnumerable<string> EnumerateFolders()
 		{
 			return fileSystemFacade
-				.EnumerateDirectories(rootDirectory, "*.*", SearchOption.AllDirectories);
+				.EnumerateDirectories(rootDirectory, "*.*", SearchOption.AllDirectories)
+				.Where(path => !FullPathMustBeExcluded(path));
 		}
 
 		public IEnumerable<string> EnumerateFiles()
 		{
 			return fileSystemFacade
-				.EnumerateFiles(rootDirectory, "*.*", SearchOption.AllDirectories);
+				.EnumerateFiles(rootDirectory, "*.*", SearchOption.AllDirectories)
+				.Where(path => !FullPathMustBeExcluded(path));
 		}
 
 		public void CheckFile(FilePath songPath, Action<LibraryInconsistency> inconsistenciesHandler)
@@ -137,6 +152,11 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 			{
 				inconsistenciesHandler(new NoFileReadOnlyAttributeInconsistency(fullPath));
 			}
+		}
+
+		private bool FullPathMustBeExcluded(string fullPath)
+		{
+			return excludePaths.Any(ep => fullPath.StartsWith(ep, StringComparison.OrdinalIgnoreCase));
 		}
 	}
 }
