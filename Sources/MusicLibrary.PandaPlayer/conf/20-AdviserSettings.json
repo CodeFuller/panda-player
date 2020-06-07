@@ -1,0 +1,31 @@
+﻿{
+	"adviser": {
+		"favoriteArtistsAdviser": {
+			"playbacksBetweenFavoriteArtistDiscs": 7,
+
+			"favoriteArtists": [
+			]
+		},
+
+		"highlyRatedSongsAdviser": {
+
+			"playbacksBetweenHighlyRatedSongs": 10,
+
+			"oneAdviseSongsNumber": 12,
+			"maxTerms": [
+				{
+					"rating": "R10",
+					"days": 30
+				},
+				{
+					"rating": "R9",
+					"days": 60
+				},
+				{
+					"rating": "R8",
+					"days": 90
+				}
+			]
+		}
+	}
+}
