@@ -106,47 +106,6 @@ namespace MusicLibrary.LastFM.Internal
 			LogCorrections(trackScrobble.Track, response.Scrobbles.Scrobble);
 		}
 
-		public async Task<GetArtistInfoResponse> GetArtistInfo(string artistName, string userName)
-		{
-			var requestParams = new NameValueCollection
-			{
-				{ "method", "artist.getInfo" },
-				{ "artist", artistName },
-				{ "autocorrect", "1" },
-				{ "userName", userName },
-			};
-
-			return await PerformGetRequest<GetArtistInfoResponse>(requestParams, false);
-		}
-
-		public async Task<GetAlbumInfoResponse> GetAlbumInfo(Album album, string userName)
-		{
-			var requestParams = new NameValueCollection
-			{
-				{ "method", "album.getInfo" },
-				{ "artist", album.Artist },
-				{ "album", album.Title },
-				{ "autocorrect", "1" },
-				{ "userName", userName },
-			};
-
-			return await PerformGetRequest<GetAlbumInfoResponse>(requestParams, false);
-		}
-
-		public async Task<GetTrackInfoResponse> GetTrackInfo(Track track, string userName)
-		{
-			var requestParams = new NameValueCollection
-			{
-				{ "method", "track.getInfo" },
-				{ "track", track.Title },
-				{ "artist", track.Artist },
-				{ "autocorrect", "1" },
-				{ "userName", userName },
-			};
-
-			return await PerformGetRequest<GetTrackInfoResponse>(requestParams, false);
-		}
-
 		private static void ValidateScrobbledTrack(Track track)
 		{
 			if (String.IsNullOrEmpty(track.Artist))
@@ -192,13 +151,6 @@ namespace MusicLibrary.LastFM.Internal
 			}
 
 			return true;
-		}
-
-		private async Task<TData> PerformGetRequest<TData>(NameValueCollection requestParams, bool requiresAuth)
-			where TData : class
-		{
-			using var request = CreateGetHttpRequest(new Uri("?" + BuildApiMethodQueryString(requestParams, requiresAuth), UriKind.Relative));
-			return await PerformHttpRequest<TData>(request);
 		}
 
 		private async Task<TData> PerformPostRequest<TData>(NameValueCollection requestParams, bool requiresAuthentication)
@@ -249,15 +201,6 @@ namespace MusicLibrary.LastFM.Internal
 			throw new LastFMApiCallFailedException(response);
 		}
 
-		private static HttpRequestMessage CreateGetHttpRequest(Uri relativeUri)
-		{
-			return new HttpRequestMessage
-			{
-				RequestUri = relativeUri,
-				Method = HttpMethod.Get,
-			};
-		}
-
 		private HttpRequestMessage CreatePostHttpRequest(NameValueCollection requestParams, bool requiresAuthentication)
 		{
 			return new HttpRequestMessage
@@ -288,20 +231,6 @@ namespace MusicLibrary.LastFM.Internal
 			requestParamsWithSignature.Add("format", "json");
 
 			return requestParamsWithSignature;
-		}
-
-		private string BuildApiMethodQueryString(NameValueCollection requestParams, bool requiresAuthentication)
-		{
-			return BuildQueryString(BuildApiMethodRequestParams(requestParams, requiresAuthentication));
-		}
-
-		private static string BuildQueryString(NameValueCollection requestParams)
-		{
-			var paramsValues = from key in requestParams.AllKeys
-							   from value in requestParams.GetValues(key)
-							   select Invariant($"{Uri.EscapeDataString(key)}={Uri.EscapeDataString(value)}");
-
-			return String.Join("&", paramsValues);
 		}
 
 		private string CalcCallSign(NameValueCollection requestParams)

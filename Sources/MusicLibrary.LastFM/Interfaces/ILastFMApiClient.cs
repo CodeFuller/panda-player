@@ -9,11 +9,5 @@ namespace MusicLibrary.LastFM.Interfaces
 		Task UpdateNowPlaying(Track track);
 
 		Task Scrobble(TrackScrobble trackScrobble);
-
-		Task<GetArtistInfoResponse> GetArtistInfo(string artistName, string userName);
-
-		Task<GetAlbumInfoResponse> GetAlbumInfo(Album album, string userName);
-
-		Task<GetTrackInfoResponse> GetTrackInfo(Track track, string userName);
 	}
 }
