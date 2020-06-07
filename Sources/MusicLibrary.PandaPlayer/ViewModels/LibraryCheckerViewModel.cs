@@ -18,51 +18,69 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 	{
 		private readonly IDiagnosticService diagnosticService;
 
-		private bool checkDiscsConsistency = true;
-
 		public bool CheckDiscsConsistency
 		{
-			get => checkDiscsConsistency;
-			set => Set(ref checkDiscsConsistency, value);
+			get => CheckFlags.HasFlag(LibraryCheckFlags.CheckDiscsConsistency);
+			set
+			{
+				if (value)
+				{
+					CheckFlags |= LibraryCheckFlags.CheckDiscsConsistency;
+				}
+				else
+				{
+					CheckFlags &= ~LibraryCheckFlags.CheckDiscsConsistency;
+				}
+			}
 		}
-
-		private bool checkStorageConsistency = true;
 
 		public bool CheckStorageConsistency
 		{
-			get => checkStorageConsistency;
-			set => Set(ref checkStorageConsistency, value);
+			get => CheckFlags.HasFlag(LibraryCheckFlags.CheckStorageConsistency);
+			set
+			{
+				if (value)
+				{
+					CheckFlags |= LibraryCheckFlags.CheckStorageConsistency;
+				}
+				else
+				{
+					// If CheckStorage is off, then CheckContent is also off.
+					CheckFlags &= ~LibraryCheckFlags.CheckContentConsistency;
+				}
+			}
 		}
-
-		private bool checkContentConsistency = false;
 
 		public bool CheckContentConsistency
 		{
-			get => checkContentConsistency;
-			set => Set(ref checkContentConsistency, value);
+			get => CheckFlags.HasFlag(LibraryCheckFlags.CheckContentConsistency);
+			set
+			{
+				if (value)
+				{
+					CheckFlags |= LibraryCheckFlags.CheckContentConsistency;
+				}
+				else
+				{
+					// If CheckContent is off, CheckContent is still on.
+					CheckFlags &= ~LibraryCheckFlags.CheckContentConsistency;
+					CheckFlags |= LibraryCheckFlags.CheckStorageConsistency;
+				}
+			}
 		}
 
-		private LibraryCheckFlags LibraryCheckFlags
+		private LibraryCheckFlags checkFlags = LibraryCheckFlags.CheckDiscsConsistency | LibraryCheckFlags.CheckStorageConsistency;
+
+		private LibraryCheckFlags CheckFlags
 		{
-			get
+			get => checkFlags;
+			set
 			{
-				var libraryCheckFlags = LibraryCheckFlags.None;
-				if (CheckDiscsConsistency)
-				{
-					libraryCheckFlags |= LibraryCheckFlags.CheckDiscsConsistency;
-				}
+				checkFlags = value;
 
-				if (CheckStorageConsistency)
-				{
-					libraryCheckFlags |= LibraryCheckFlags.CheckStorageConsistency;
-				}
-
-				if (CheckContentConsistency)
-				{
-					libraryCheckFlags |= LibraryCheckFlags.CheckContentConsistency;
-				}
-
-				return libraryCheckFlags;
+				RaisePropertyChanged(nameof(CheckDiscsConsistency));
+				RaisePropertyChanged(nameof(CheckStorageConsistency));
+				RaisePropertyChanged(nameof(CheckContentConsistency));
 			}
 		}
 
@@ -102,7 +120,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				Application.Current.Dispatcher.Invoke(() => Inconsistencies.Add(new DiagnosticInconsistencyViewModel(inconsistency)), DispatcherPriority.ContextIdle, cancellationToken);
 			}
 
-			await diagnosticService.CheckLibrary(LibraryCheckFlags, InconsistenciesHandler, cancellationToken);
+			await diagnosticService.CheckLibrary(CheckFlags, InconsistenciesHandler, cancellationToken);
 		}
 	}
 }
