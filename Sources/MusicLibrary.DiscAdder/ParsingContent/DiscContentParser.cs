@@ -7,12 +7,12 @@ namespace MusicLibrary.DiscAdder.ParsingContent
 	internal class DiscContentParser : IDiscContentParser
 	{
 		private readonly IInputContentSplitter inputContentSplitter;
-		private readonly IEthalonDiscParser ethalonDiscParser;
+		private readonly IReferenceDiscParser referenceDiscParser;
 
-		public DiscContentParser(IInputContentSplitter inputContentSplitter, IEthalonDiscParser ethalonDiscParser)
+		public DiscContentParser(IInputContentSplitter inputContentSplitter, IReferenceDiscParser referenceDiscParser)
 		{
 			this.inputContentSplitter = inputContentSplitter ?? throw new ArgumentNullException(nameof(inputContentSplitter));
-			this.ethalonDiscParser = ethalonDiscParser ?? throw new ArgumentNullException(nameof(ethalonDiscParser));
+			this.referenceDiscParser = referenceDiscParser ?? throw new ArgumentNullException(nameof(referenceDiscParser));
 		}
 
 		public IEnumerable<DiscContent> Parse(string content)
@@ -28,7 +28,7 @@ namespace MusicLibrary.DiscAdder.ParsingContent
 		private IEnumerable<DiscContent> Parse(IEnumerable<string> content)
 		{
 			return inputContentSplitter.Split(content).
-				Select(c => ethalonDiscParser.Parse(c));
+				Select(c => referenceDiscParser.Parse(c));
 		}
 	}
 }

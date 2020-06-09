@@ -19,19 +19,19 @@ namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 			contentSaveFilePath = Path.Combine(appDataPath, ContentSaveFilename);
 		}
 
-		private string rawEthalonDiscsContent;
+		private string rawReferenceDiscsContent;
 
 		public string Content
 		{
-			get => rawEthalonDiscsContent;
+			get => rawReferenceDiscsContent;
 			set
 			{
-				Set(ref rawEthalonDiscsContent, value);
-				SaveRawEthalonDiscsContent();
+				Set(ref rawReferenceDiscsContent, value);
+				SaveRawReferenceDiscsContent();
 			}
 		}
 
-		public void LoadRawEthalonDiscsContent()
+		public void LoadRawReferenceDiscsContent()
 		{
 			if (fileSystemFacade.FileExists(contentSaveFilePath))
 			{
@@ -39,7 +39,7 @@ namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 			}
 		}
 
-		private void SaveRawEthalonDiscsContent()
+		private void SaveRawReferenceDiscsContent()
 		{
 			File.WriteAllText(contentSaveFilePath, Content);
 		}

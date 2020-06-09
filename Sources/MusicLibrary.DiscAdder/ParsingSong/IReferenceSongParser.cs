@@ -1,6 +1,6 @@
 ﻿namespace MusicLibrary.DiscAdder.ParsingSong
 {
-	internal interface IEthalonSongParser
+	internal interface IReferenceSongParser
 	{
 		string ParseSongTitle(string rawSongTitle);
 	}

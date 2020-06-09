@@ -36,8 +36,8 @@ namespace MusicLibrary.DiscAdder
 
 			services.AddTransient<IWorkshopMusicStorage, WorkshopMusicStorage>();
 
-			services.AddTransient<IEthalonSongParser, EthalonSongParser>();
-			services.AddTransient<IEthalonDiscParser, EthalonDiscParser>();
+			services.AddTransient<IReferenceSongParser, ReferenceSongParser>();
+			services.AddTransient<IReferenceDiscParser, ReferenceDiscParser>();
 			services.AddTransient<IDiscContentParser, DiscContentParser>();
 			services.AddTransient<IInputContentSplitter, InputContentSplitter>();
 			services.AddTransient<IDiscContentComparer, DiscContentComparer>();

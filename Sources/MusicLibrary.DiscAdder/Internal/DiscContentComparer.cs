@@ -8,11 +8,11 @@ namespace MusicLibrary.DiscAdder.Internal
 {
 	internal class DiscContentComparer : IDiscContentComparer
 	{
-		public void SetDiscsCorrectness(DiscTreeViewModel ethalonDiscs, DiscTreeViewModel currentDiscs)
+		public void SetDiscsCorrectness(DiscTreeViewModel referenceDiscs, DiscTreeViewModel currentDiscs)
 		{
-			if (ethalonDiscs == null)
+			if (referenceDiscs == null)
 			{
-				throw new ArgumentNullException(nameof(ethalonDiscs));
+				throw new ArgumentNullException(nameof(referenceDiscs));
 			}
 
 			if (currentDiscs == null)
@@ -20,72 +20,72 @@ namespace MusicLibrary.DiscAdder.Internal
 				throw new ArgumentNullException(nameof(currentDiscs));
 			}
 
-			for (var i = 0; i < Math.Max(ethalonDiscs.Discs.Count, currentDiscs.Discs.Count); ++i)
+			for (var i = 0; i < Math.Max(referenceDiscs.Discs.Count, currentDiscs.Discs.Count); ++i)
 			{
-				var ethalonDisc = i < ethalonDiscs.Discs.Count ? ethalonDiscs.Discs[i] : null;
+				var referenceDisc = i < referenceDiscs.Discs.Count ? referenceDiscs.Discs[i] : null;
 				var currentDisc = i < currentDiscs.Discs.Count ? currentDiscs.Discs[i] : null;
-				SetDiscsCorrectness(ethalonDisc, currentDisc);
+				SetDiscsCorrectness(referenceDisc, currentDisc);
 			}
 		}
 
-		private static void SetDiscsCorrectness(DiscTreeViewItem ethalonDisc, DiscTreeViewItem currentDisc)
+		private static void SetDiscsCorrectness(DiscTreeViewItem referenceDisc, DiscTreeViewItem currentDisc)
 		{
-			if (ethalonDisc == null && currentDisc == null)
+			if (referenceDisc == null && currentDisc == null)
 			{
 				throw new InvalidOperationException();
 			}
 
-			if (ethalonDisc == null)
+			if (referenceDisc == null)
 			{
 				MarkDiscSongsAsIncorrect(currentDisc);
 			}
 			else if (currentDisc == null)
 			{
-				MarkDiscSongsAsIncorrect(ethalonDisc);
+				MarkDiscSongsAsIncorrect(referenceDisc);
 			}
 			else
 			{
-				var ethalonSongs = ethalonDisc.Songs.ToList();
+				var referenceSongs = referenceDisc.Songs.ToList();
 				var currentSongs = currentDisc.Songs.ToList();
-				for (var i = 0; i < Math.Max(ethalonSongs.Count, currentSongs.Count); ++i)
+				for (var i = 0; i < Math.Max(referenceSongs.Count, currentSongs.Count); ++i)
 				{
-					var ethalonSong = i < ethalonSongs.Count ? ethalonSongs[i] : null;
+					var referenceSong = i < referenceSongs.Count ? referenceSongs[i] : null;
 					var currentSong = i < currentSongs.Count ? currentSongs[i] : null;
-					SetSongsCorrectness(i + 1, ethalonSong, currentSong);
+					SetSongsCorrectness(i + 1, referenceSong, currentSong);
 				}
 
-				if (ethalonSongs.Count != currentSongs.Count || ethalonDisc.DiscDirectory != currentDisc.DiscDirectory)
+				if (referenceSongs.Count != currentSongs.Count || referenceDisc.DiscDirectory != currentDisc.DiscDirectory)
 				{
-					ethalonDisc.ContentIsIncorrect = currentDisc.ContentIsIncorrect = true;
+					referenceDisc.ContentIsIncorrect = currentDisc.ContentIsIncorrect = true;
 				}
 				else
 				{
-					ethalonDisc.ContentIsIncorrect = ethalonSongs.Any(s => s.ContentIsIncorrect);
+					referenceDisc.ContentIsIncorrect = referenceSongs.Any(s => s.ContentIsIncorrect);
 					currentDisc.ContentIsIncorrect = currentSongs.Any(s => s.ContentIsIncorrect);
 				}
 			}
 		}
 
-		private static void SetSongsCorrectness(int songNumber, SongTreeViewItem ethalonSong, SongTreeViewItem currentSong)
+		private static void SetSongsCorrectness(int songNumber, SongTreeViewItem referenceSong, SongTreeViewItem currentSong)
 		{
-			if (ethalonSong == null && currentSong == null)
+			if (referenceSong == null && currentSong == null)
 			{
 				throw new InvalidOperationException();
 			}
 
-			if (ethalonSong == null)
+			if (referenceSong == null)
 			{
 				currentSong.ContentIsIncorrect = true;
 			}
 			else if (currentSong == null)
 			{
-				ethalonSong.ContentIsIncorrect = true;
+				referenceSong.ContentIsIncorrect = true;
 			}
 			else
 			{
-				bool matchesTitleWithTrack = currentSong.Title == Invariant($"{songNumber:D2} - {ethalonSong.Title}.mp3");
-				bool matchesTitleWithoutTrack = currentSong.Title == Invariant($"{ethalonSong.Title}.mp3");
-				currentSong.ContentIsIncorrect = ethalonSong.ContentIsIncorrect = !(matchesTitleWithTrack || matchesTitleWithoutTrack);
+				var matchesTitleWithTrack = currentSong.Title == Invariant($"{songNumber:D2} - {referenceSong.Title}.mp3");
+				var matchesTitleWithoutTrack = currentSong.Title == Invariant($"{referenceSong.Title}.mp3");
+				currentSong.ContentIsIncorrect = referenceSong.ContentIsIncorrect = !(matchesTitleWithTrack || matchesTitleWithoutTrack);
 			}
 		}
 

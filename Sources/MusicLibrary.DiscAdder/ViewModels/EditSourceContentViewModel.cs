@@ -75,7 +75,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 
 		public void LoadDefaultContent()
 		{
-			RawReferenceDiscs.LoadRawEthalonDiscsContent();
+			RawReferenceDiscs.LoadRawReferenceDiscsContent();
 
 			LoadCurrentDiscs();
 		}
