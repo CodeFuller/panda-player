@@ -5,11 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         d:DesignWidth="800" d:DesignHeight="400">
-    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Songs}">
+
+    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Songs}" CellStyle="{StaticResource MaterialDesignDataGridCell}"
+              BorderThickness="2" BorderBrush="{DynamicResource MaterialDesignDivider}" GridLinesVisibility="All"
+              VerticalGridLinesBrush="{DynamicResource MaterialDesignDivider}" HorizontalGridLinesBrush="{DynamicResource MaterialDesignDivider}">
         <DataGrid.ColumnHeaderStyle>
-            <Style TargetType="{x:Type DataGridColumnHeader}">
-                <Setter Property="FontWeight"  Value="Bold" />
-                <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/>
+                <Setter Property="BorderThickness" Value="0,0,1,0"/>
             </Style>
         </DataGrid.ColumnHeaderStyle>
         <DataGrid.Columns>

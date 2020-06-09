@@ -30,7 +30,7 @@
                                     <Setter Property="Foreground" Value="Red"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ContentIsIncorrect}" Value="False">
-                                    <Setter Property="Foreground" Value="Green"/>
+                                    <Setter Property="Foreground" Value="LimeGreen"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -74,7 +74,7 @@
                                     <Setter Property="Foreground" Value="Red"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ContentIsIncorrect}" Value="False">
-                                    <Setter Property="Foreground" Value="Green"/>
+                                    <Setter Property="Foreground" Value="LimeGreen"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>

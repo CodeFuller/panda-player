@@ -9,6 +9,10 @@
         mc:Ignorable="d"
         Title="Disc Adder" Width="1600" Height="800" WindowState="Maximized">
 
+    <Window.Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}" />
+    </Window.Style>
+
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModels:EditSourceContentViewModel}">
             <views:EditSourceContentView />
@@ -29,17 +33,14 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
-            <Button x:Name="ButtonPrev" MinWidth="200" Margin="0,0,5,0"
-                        Content="{Binding PrevPageName}" 
-                        IsEnabled="{Binding CanSwitchToPrevPage}"
-                        Command="{Binding SwitchToPrevPageCommand}" />
+            <Button x:Name="ButtonPrev" MinWidth="200" Margin="0,0,5,0" Content="{Binding PrevPageName}" 
+                        IsEnabled="{Binding CanSwitchToPrevPage}" Command="{Binding SwitchToPrevPageCommand}" />
             <Button x:Name="ButtonNext" MinWidth="200" Content="{Binding NextPageName}" 
-                        IsEnabled="{Binding CanSwitchToNextPage}"
-                        Command="{Binding SwitchToNextPageCommand}" />
+                        IsEnabled="{Binding CanSwitchToNextPage}" Command="{Binding SwitchToNextPageCommand}" />
         </StackPanel>
         <ContentControl Grid.Row="1" Content="{Binding CurrentPage}" Margin="5" />
     </Grid>

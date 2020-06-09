@@ -9,29 +9,29 @@
              d:DesignWidth="800" d:DesignHeight="400">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button Grid.Row="0" x:Name="ButtonReloadRawContent" Content="Reload" Command="{Binding ReloadRawContentCommand}" HorizontalAlignment="Left" Width="75" Margin="0,0,0,5"/>
-        <Grid Grid.Row="1" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <Button Grid.Row="0" x:Name="ButtonReloadRawContent" Content="Reload" Command="{Binding ReloadRawContentCommand}" HorizontalAlignment="Left" Margin="0,0,0,5" />
+        <Border Grid.Row="1" BorderThickness="2" BorderBrush="{DynamicResource MaterialDesignDivider}" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <TextBox Grid.Row="0" Grid.Column="0" x:Name="TextBoxRawReferenceDiscs" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="NoWrap" AcceptsReturn="True"
-                 Text="{Binding RawReferenceDiscs.Content, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.ScrollChanged="ScrollChanged" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
-            <views:DiscTreeView Grid.Row="0" Grid.Column="1" x:Name="TreeViewReferenceDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.ScrollChanged="ScrollChanged"
-                 ItemsSource="{Binding ReferenceDiscs.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="False">
-            </views:DiscTreeView>
-            <views:DiscTreeView Grid.Row="0" Grid.Column="2" x:Name="TreeViewCurrentDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.ScrollChanged="ScrollChanged"
-                 ItemsSource="{Binding CurrentDiscs.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="True">
-            </views:DiscTreeView>
-        </Grid>
+                <TextBox Grid.Column="0" Padding="1" BorderThickness="0" x:Name="TextBoxRawReferenceDiscs" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="NoWrap" AcceptsReturn="True"
+                         Text="{Binding RawReferenceDiscs.Content, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.ScrollChanged="ScrollChanged" ScrollViewer.VerticalScrollBarVisibility="Visible" />
+                <GridSplitter Grid.Column="1" ResizeDirection="Columns" HorizontalAlignment="Stretch" />
+                <views:DiscTreeView Grid.Column="2" x:Name="TreeViewReferenceDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                    ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding ReferenceDiscs.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="False" />
+                <GridSplitter Grid.Column="3" ResizeDirection="Columns" HorizontalAlignment="Stretch" />
+                <views:DiscTreeView Grid.Column="4" x:Name="TreeViewCurrentDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                    ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding CurrentDiscs.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="True" />
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

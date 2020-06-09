@@ -6,11 +6,12 @@
         mc:Ignorable="d"
         d:DesignWidth="800" d:DesignHeight="400">
 
-    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Discs}">
+    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Discs}" CellStyle="{StaticResource MaterialDesignDataGridCell}" BorderThickness="2" BorderBrush="{DynamicResource MaterialDesignDivider}"
+              GridLinesVisibility="All" VerticalGridLinesBrush="{DynamicResource MaterialDesignDivider}" HorizontalGridLinesBrush="{DynamicResource MaterialDesignDivider}">
         <DataGrid.ColumnHeaderStyle>
-            <Style TargetType="{x:Type DataGridColumnHeader}">
-                <Setter Property="FontWeight"  Value="Bold" />
-                <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/>
+                <Setter Property="BorderThickness" Value="0,0,1,0"/>
             </Style>
         </DataGrid.ColumnHeaderStyle>
         <DataGrid.Columns>
@@ -19,7 +20,8 @@
                     <Style TargetType="DataGridCell">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding FolderIsNew}" Value="True">
-                                <Setter Property="Background" Value="LightSkyBlue" />
+                                <Setter Property="Background" Value="Yellow" />
+                                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignPaper}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -32,6 +34,7 @@
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding WarnAboutDiscType}" Value="True">
                                 <Setter Property="Background" Value="Yellow" />
+                                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignPaper}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -44,9 +47,11 @@
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ArtistIsNotFilled}" Value="True">
                                 <Setter Property="Background" Value="Yellow" />
+                                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignPaper}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding ArtistIsNew}" Value="True">
-                                <Setter Property="Background" Value="LightSkyBlue" />
+                                <Setter Property="Background" Value="Yellow" />
+                                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignPaper}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -71,6 +76,7 @@
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding WarnAboutUnequalAlbumTitle}" Value="True">
                                 <Setter Property="Background" Value="Yellow" />
+                                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignPaper}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -84,6 +90,7 @@
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding WarnAboutNotFilledYear}" Value="True">
                                 <Setter Property="Background" Value="Yellow" />
+                                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignPaper}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -112,4 +119,5 @@
             </DataGridComboBoxColumn>
         </DataGrid.Columns>
     </DataGrid>
+
 </UserControl>

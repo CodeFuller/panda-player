@@ -14,6 +14,7 @@ using MusicLibrary.DiscAdder.MusicStorage;
 using MusicLibrary.DiscAdder.ViewModels.Interfaces;
 using MusicLibrary.Services.Interfaces;
 using MusicLibrary.Services.Media;
+using static System.FormattableString;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.ViewModels
@@ -50,16 +51,26 @@ namespace MusicLibrary.DiscAdder.ViewModels
 		public int CurrentProgress
 		{
 			get => currentProgress;
-			set => Set(ref currentProgress, value);
+			set
+			{
+				Set(ref currentProgress, value);
+				RaisePropertyChanged(nameof(CurrentProgressPercentage));
+			}
 		}
 
-		private int progressSize;
+		private int progressMaximum;
 
-		public int ProgressSize
+		public int ProgressMaximum
 		{
-			get => progressSize;
-			set => Set(ref progressSize, value);
+			get => progressMaximum;
+			set
+			{
+				Set(ref progressMaximum, value);
+				RaisePropertyChanged(nameof(CurrentProgressPercentage));
+			}
 		}
+
+		public string CurrentProgressPercentage => Invariant($"{(ProgressMaximum > 0 ? CurrentProgress / (double)ProgressMaximum * 100 : 0):N1}%");
 
 		private string progressMessages;
 
@@ -103,9 +114,10 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			DataIsReady = false;
 
 			CurrentProgress = 0;
-			ProgressSize = 0;
-			ProgressSize += await FillSongsMediaData(true);
-			ProgressSize += await AddSongsToLibrary(true, cancellationToken);
+			ProgressMaximum = 0;
+			ProgressMaximum += await FillSongsMediaData(true);
+			ProgressMaximum += await AddSongsToLibrary(true, cancellationToken);
+
 			await FillSongsMediaData(false);
 			await AddSongsToLibrary(false, cancellationToken);
 

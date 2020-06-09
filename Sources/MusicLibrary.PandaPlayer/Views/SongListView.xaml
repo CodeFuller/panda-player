@@ -21,11 +21,11 @@
         <valueConverters:RatingToImageNameValueConverter x:Key="RatingToImageValueConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
 
-        <Style x:Key="FirstColumnStyle" TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+        <Style x:Key="FirstColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
 
-        <Style x:Key="NextColumnStyle" TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+        <Style x:Key="NextColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
             <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/>
             <Setter Property="BorderThickness" Value="1,0,0,0"/>
         </Style>
@@ -88,14 +88,14 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Artist" Width="1*" Binding="{Binding Song.Artist.Name}">
                     <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource FirstColumnStyle}" />
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource FirstColumnHeaderStyle}" />
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
 
                 <DataGridTextColumn Header="Track #" Binding="{Binding Song.TrackNumber}"
                                 Visibility="{Binding DataContext.DisplayTrackNumbers, Source={x:Reference DummyElement}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnStyle}" />
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
@@ -105,12 +105,12 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Title" Width="2*" Binding="{Binding Song.Title}">
                     <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnStyle}" />
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
                     </DataGridTextColumn.HeaderStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Length" Binding="{Binding Song.Duration, Converter={StaticResource SongDurationValueConverter}}">
                     <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnStyle}" />
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
@@ -120,7 +120,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Bit Rate" Binding="{Binding Song.BitRate, Converter={StaticResource SongBitrateValueConverter}}">
                     <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnStyle}" />
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
@@ -130,7 +130,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="File Size" Binding="{Binding Song.Size, Converter={StaticResource SongFileSizeValueConverter}}">
                     <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnStyle}" />
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
@@ -140,7 +140,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Played #" Binding="{Binding Song.PlaybacksCount}">
                     <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnStyle}" />
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
@@ -151,7 +151,7 @@
                 <!-- Setting minimal width for Last Played column so that its content is not too close to neighbors -->
                 <DataGridTextColumn MinWidth="140" Header="Last Played" Binding="{Binding Song.LastPlaybackTime, Converter={StaticResource SongLastPlaybackValueConverter}}">
                     <DataGridTextColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnStyle}" />
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
                     </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
@@ -161,7 +161,7 @@
                 </DataGridTextColumn>
                 <DataGridTemplateColumn Header="Rating" MinWidth="150" CellStyle="{StaticResource MaterialDesignDataGridCell}">
                     <DataGridTemplateColumn.HeaderStyle>
-                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnStyle}" />
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
                     </DataGridTemplateColumn.HeaderStyle>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
