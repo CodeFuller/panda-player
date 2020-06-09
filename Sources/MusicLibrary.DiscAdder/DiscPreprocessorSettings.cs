@@ -1,6 +1,6 @@
 ﻿namespace MusicLibrary.DiscAdder
 {
-	public class DiscPreprocessorSettings
+	internal class DiscPreprocessorSettings
 	{
 		public string DataStoragePath { get; set; }
 

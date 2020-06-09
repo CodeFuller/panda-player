@@ -6,7 +6,7 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder
 {
-	public class SourceFileTypeResolver : ISourceFileTypeResolver
+	internal class SourceFileTypeResolver : ISourceFileTypeResolver
 	{
 		private readonly IDiscImageValidator discImageValidator;
 

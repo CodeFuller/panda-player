@@ -6,7 +6,7 @@ using MusicLibrary.DiscAdder.MusicStorage;
 
 namespace MusicLibrary.DiscAdder.ViewModels.Interfaces
 {
-	public interface IEditDiscsDetailsViewModel : IPageViewModel
+	internal interface IEditDiscsDetailsViewModel : IPageViewModel
 	{
 		ObservableCollection<DiscViewItem> Discs { get; }
 

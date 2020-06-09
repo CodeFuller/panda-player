@@ -1,6 +1,6 @@
 ﻿namespace MusicLibrary.DiscAdder.MusicStorage
 {
-	public class AddedSongInfo
+	internal class AddedSongInfo
 	{
 		public string SourcePath { get; }
 

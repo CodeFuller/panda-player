@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
-	public class AddedDisc
+	internal class AddedDisc
 	{
 		public DiscModel Disc { get; }
 

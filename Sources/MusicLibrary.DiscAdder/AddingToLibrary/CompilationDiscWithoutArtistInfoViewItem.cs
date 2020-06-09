@@ -4,7 +4,7 @@ using MusicLibrary.DiscAdder.MusicStorage;
 
 namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
-	public sealed class CompilationDiscWithoutArtistInfoViewItem : CompilationDiscViewItem
+	internal sealed class CompilationDiscWithoutArtistInfoViewItem : CompilationDiscViewItem
 	{
 		public override string DiscTypeTitle => "Compilation without Artists";
 

@@ -4,7 +4,7 @@ using MusicLibrary.DiscAdder.AddingToLibrary;
 
 namespace MusicLibrary.DiscAdder.ViewModels.Interfaces
 {
-	public interface IEditSongsDetailsViewModel : IPageViewModel
+	internal interface IEditSongsDetailsViewModel : IPageViewModel
 	{
 		ObservableCollection<SongViewItem> Songs { get; }
 

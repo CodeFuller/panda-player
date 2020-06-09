@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace MusicLibrary.DiscAdder.ParsingContent
 {
-	public class DiscContentParser : IDiscContentParser
+	internal class DiscContentParser : IDiscContentParser
 	{
 		private readonly IInputContentSplitter inputContentSplitter;
 		private readonly IEthalonDiscParser ethalonDiscParser;

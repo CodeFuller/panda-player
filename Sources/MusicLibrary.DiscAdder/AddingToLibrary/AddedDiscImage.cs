@@ -3,7 +3,7 @@ using MusicLibrary.Shared.Images;
 
 namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
-	public class AddedDiscImage
+	internal class AddedDiscImage
 	{
 		public DiscModel Disc { get; }
 

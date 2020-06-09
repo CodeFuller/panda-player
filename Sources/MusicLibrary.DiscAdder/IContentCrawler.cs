@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.DiscAdder
 {
-	public interface IContentCrawler
+	internal interface IContentCrawler
 	{
 		IEnumerable<DiscContent> LoadDiscs(string discsDirectory);
 

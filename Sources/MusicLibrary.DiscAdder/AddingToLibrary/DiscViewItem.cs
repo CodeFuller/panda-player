@@ -10,7 +10,7 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
-	public abstract class DiscViewItem : ViewModelBase
+	internal abstract class DiscViewItem : ViewModelBase
 	{
 		public string SourcePath { get; }
 

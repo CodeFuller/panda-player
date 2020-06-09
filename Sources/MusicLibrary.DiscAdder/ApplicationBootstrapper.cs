@@ -17,7 +17,7 @@ using MusicLibrary.Shared.Images;
 
 namespace MusicLibrary.DiscAdder
 {
-	public class ApplicationBootstrapper : DiApplicationBootstrapper<ApplicationViewModel>
+	internal class ApplicationBootstrapper : DiApplicationBootstrapper<ApplicationViewModel>
 	{
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{

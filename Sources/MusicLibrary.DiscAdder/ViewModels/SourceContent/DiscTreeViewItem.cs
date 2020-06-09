@@ -8,7 +8,7 @@ using MusicLibrary.DiscAdder.Events;
 
 namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 {
-	public class DiscTreeViewItem : EditableTreeViewItem
+	internal class DiscTreeViewItem : EditableTreeViewItem
 	{
 		public ReadOnlyCollection<SongTreeViewItem> SongItems { get; }
 
@@ -74,13 +74,13 @@ namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 		private SongTreeViewItem CreateSongItem(SongContent songContent)
 		{
 			var songItem = new SongTreeViewItem(songContent);
-			songItem.SongTitleChanging += SongTitle_Chaning;
+			songItem.SongTitleChanging += SongTitle_Changing;
 			songItem.SongTitleChanged += SongTitle_Changed;
 
 			return songItem;
 		}
 
-		private void SongTitle_Chaning(object sender, SongTitleChangingEventArgs e)
+		private void SongTitle_Changing(object sender, SongTitleChangingEventArgs e)
 		{
 			if (e.OldTitle != null)
 			{
@@ -88,7 +88,7 @@ namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 			}
 		}
 
-		private void SongTitle_Changed(object sender, SongTitleChangedEventArgs e)
+		private static void SongTitle_Changed(object sender, SongTitleChangedEventArgs e)
 		{
 			if (e.OldTitle != null)
 			{

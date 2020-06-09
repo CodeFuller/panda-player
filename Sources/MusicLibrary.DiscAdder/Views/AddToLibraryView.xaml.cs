@@ -2,9 +2,6 @@
 
 namespace MusicLibrary.DiscAdder.Views
 {
-	/// <summary>
-	/// Interaction logic for AddToLibraryView.xaml
-	/// </summary>
 	public partial class AddToLibraryView : UserControl
 	{
 		public AddToLibraryView()

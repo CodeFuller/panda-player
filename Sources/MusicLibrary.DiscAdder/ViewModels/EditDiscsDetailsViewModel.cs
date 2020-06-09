@@ -74,15 +74,15 @@ namespace MusicLibrary.DiscAdder.ViewModels
 				{
 					switch (addedDiscInfo.DiscType)
 					{
-						case DsicType.ArtistDisc:
+						case DiscType.ArtistDisc:
 							addedDisc = new ArtistDiscViewItem(addedDiscInfo, folderExists, availableArtists, availableGenres, PredictArtistGenre(allDiscs, addedDiscInfo.Artist));
 							break;
 
-						case DsicType.CompilationDiscWithArtistInfo:
+						case DiscType.CompilationDiscWithArtistInfo:
 							addedDisc = new CompilationDiscWithArtistInfoViewItem(addedDiscInfo, folderExists, availableArtists, availableGenres);
 							break;
 
-						case DsicType.CompilationDiscWithoutArtistInfo:
+						case DiscType.CompilationDiscWithoutArtistInfo:
 							addedDisc = new CompilationDiscWithoutArtistInfoViewItem(addedDiscInfo, folderExists, availableArtists, availableGenres);
 							break;
 

@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.DiscAdder.ViewModels.Interfaces
 {
-	public interface IPageViewModel : INotifyPropertyChanged
+	internal interface IPageViewModel : INotifyPropertyChanged
 	{
 		string Name { get; }
 

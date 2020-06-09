@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace MusicLibrary.DiscAdder.MusicStorage
 {
-	public class AddedDiscInfo
+	internal class AddedDiscInfo
 	{
 		public short? Year { get; set; }
 
@@ -14,13 +14,13 @@ namespace MusicLibrary.DiscAdder.MusicStorage
 
 		public string AlbumTitle { get; set; }
 
-		public DsicType DiscType { get; set; }
+		public DiscType DiscType { get; set; }
 
 		public string SourcePath { get; set; }
 
 		public IReadOnlyCollection<string> DestinationFolderPath { get; set; }
 
-		public bool HasArtist => DiscType == DsicType.ArtistDisc;
+		public bool HasArtist => DiscType == DiscType.ArtistDisc;
 
 		private string artist;
 

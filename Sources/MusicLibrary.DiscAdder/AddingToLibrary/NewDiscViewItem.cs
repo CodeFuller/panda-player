@@ -5,7 +5,7 @@ using MusicLibrary.DiscAdder.MusicStorage;
 
 namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
-	public abstract class NewDiscViewItem : DiscViewItem
+	internal abstract class NewDiscViewItem : DiscViewItem
 	{
 		public override string AlbumTitle
 		{

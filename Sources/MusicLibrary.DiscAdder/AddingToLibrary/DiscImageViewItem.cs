@@ -4,7 +4,7 @@ using MusicLibrary.Shared.Images;
 
 namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
-	public class DiscImageViewItem : ViewModelBase
+	internal class DiscImageViewItem : ViewModelBase
 	{
 		private readonly IImageFile imageFile;
 

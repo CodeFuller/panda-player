@@ -4,7 +4,7 @@ using System.Windows;
 namespace MusicLibrary.DiscAdder.Extensions
 {
 	// Copy/paste from https://treeviewinplaceedit.codeplex.com
-	public static class FrameworkElementExtension
+	internal static class FrameworkElementExtension
 	{
 		public static void UpdateBindingTarget(this FrameworkElement element, DependencyProperty property)
 		{

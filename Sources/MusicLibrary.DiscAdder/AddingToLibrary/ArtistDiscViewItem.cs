@@ -8,7 +8,7 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
-	public sealed class ArtistDiscViewItem : NewDiscViewItem
+	internal sealed class ArtistDiscViewItem : NewDiscViewItem
 	{
 		public override string DiscTypeTitle => "Artist Disc";
 

@@ -11,7 +11,7 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.ViewModels
 {
-	public class ApplicationViewModel : ViewModelBase
+	internal class ApplicationViewModel : ViewModelBase
 	{
 		public ICommand SwitchToPrevPageCommand { get; }
 

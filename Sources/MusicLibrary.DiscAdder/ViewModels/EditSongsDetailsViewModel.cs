@@ -7,7 +7,7 @@ using MusicLibrary.DiscAdder.ViewModels.Interfaces;
 
 namespace MusicLibrary.DiscAdder.ViewModels
 {
-	public class EditSongsDetailsViewModel : ViewModelBase, IEditSongsDetailsViewModel
+	internal class EditSongsDetailsViewModel : ViewModelBase, IEditSongsDetailsViewModel
 	{
 		public string Name => "Edit Songs Details";
 

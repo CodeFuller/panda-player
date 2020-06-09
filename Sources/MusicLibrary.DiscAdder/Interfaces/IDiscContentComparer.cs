@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.DiscAdder.Interfaces
 {
-	public interface IDiscContentComparer
+	internal interface IDiscContentComparer
 	{
 		void SetDiscsCorrectness(DiscTreeViewModel ethalonDiscs, DiscTreeViewModel currentDiscs);
 	}

@@ -1,6 +1,6 @@
 ﻿namespace MusicLibrary.DiscAdder.MusicStorage
 {
-	public enum DsicType
+	internal enum DiscType
 	{
 		/// <summary>
 		/// Invalid value.

@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.DiscAdder.Events
 {
-	public class DiscContentChangedEventArgs : EventArgs
+	internal class DiscContentChangedEventArgs : EventArgs
 	{
 	}
 }

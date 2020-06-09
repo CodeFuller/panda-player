@@ -3,9 +3,6 @@ using System.Windows.Controls;
 
 namespace MusicLibrary.DiscAdder.Views
 {
-	/// <summary>
-	/// Interaction logic for EditSourceContentView.xaml
-	/// </summary>
 	public partial class EditSourceContentView : UserControl
 	{
 		public EditSourceContentView()
@@ -15,7 +12,7 @@ namespace MusicLibrary.DiscAdder.Views
 
 		private void ScrollChanged(object sender, ScrollChangedEventArgs e)
 		{
-			List<IScrollable> scrolledControls = new List<IScrollable>
+			var scrolledControls = new List<IScrollable>
 			{
 				new ScrollableTextBox(TextBoxRawReferenceDiscs),
 				TreeViewReferenceDiscsContent,

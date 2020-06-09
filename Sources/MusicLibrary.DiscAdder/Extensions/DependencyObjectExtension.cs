@@ -6,7 +6,7 @@ using MusicLibrary.DiscAdder.Behaviors;
 namespace MusicLibrary.DiscAdder.Extensions
 {
 	// Copy/paste from https://treeviewinplaceedit.codeplex.com
-	public static class DependencyObjectExtension
+	internal static class DependencyObjectExtension
 	{
 		/// <summary>
 		/// Find a sequence of children of type T.

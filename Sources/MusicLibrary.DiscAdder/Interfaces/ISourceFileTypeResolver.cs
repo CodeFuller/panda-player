@@ -1,6 +1,6 @@
 ﻿namespace MusicLibrary.DiscAdder.Interfaces
 {
-	public interface ISourceFileTypeResolver
+	internal interface ISourceFileTypeResolver
 	{
 		SourceFileType GetSourceFileType(string filePath);
 	}

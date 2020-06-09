@@ -4,7 +4,7 @@ using MusicLibrary.Core.Models;
 
 namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
-	public class AddedSong
+	internal class AddedSong
 	{
 		public SongModel Song { get; }
 

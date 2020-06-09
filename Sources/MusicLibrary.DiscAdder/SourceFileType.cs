@@ -1,6 +1,6 @@
 ﻿namespace MusicLibrary.DiscAdder
 {
-	public enum SourceFileType
+	internal enum SourceFileType
 	{
 		None,
 		Song,

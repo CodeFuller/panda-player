@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.DiscAdder.ParsingContent
 {
-	public interface IDiscContentParser
+	internal interface IDiscContentParser
 	{
 		IEnumerable<DiscContent> Parse(string content);
 	}

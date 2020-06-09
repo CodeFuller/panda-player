@@ -6,7 +6,7 @@ using MusicLibrary.DiscAdder.ParsingSong;
 
 namespace MusicLibrary.DiscAdder.ParsingContent
 {
-	public class EthalonDiscParser : IEthalonDiscParser
+	internal class EthalonDiscParser : IEthalonDiscParser
 	{
 		private readonly IEthalonSongParser ethalonSongParser;
 

@@ -6,7 +6,7 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
-	public sealed class CompilationDiscWithArtistInfoViewItem : CompilationDiscViewItem
+	internal sealed class CompilationDiscWithArtistInfoViewItem : CompilationDiscViewItem
 	{
 		public override string DiscTypeTitle => "Compilation with Artists";
 

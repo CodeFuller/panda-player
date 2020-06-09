@@ -6,7 +6,7 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.ParsingSong
 {
-	public class EthalonSongParser : IEthalonSongParser
+	internal class EthalonSongParser : IEthalonSongParser
 	{
 		internal static ReadOnlyCollection<SongTitlePattern> TitlePatterns { get; } = new ReadOnlyCollection<SongTitlePattern>(
 			new SongTitlePattern[]

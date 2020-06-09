@@ -5,8 +5,9 @@ using GalaSoft.MvvmLight;
 
 namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 {
-	public class ReferenceContentViewModel : ViewModelBase
+	internal class ReferenceContentViewModel : ViewModelBase
 	{
+		// TODO: Store this info in the database
 		private const string ContentSaveFilename = "RawDiscsContent.txt";
 
 		private readonly IFileSystemFacade fileSystemFacade;

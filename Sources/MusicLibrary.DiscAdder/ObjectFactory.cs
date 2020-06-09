@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace MusicLibrary.DiscAdder
 {
-	public class ObjectFactory<TType> : IObjectFactory<TType>
+	internal class ObjectFactory<TType> : IObjectFactory<TType>
 		where TType : class
 	{
 		private readonly IServiceProvider serviceProvider;

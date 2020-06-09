@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 {
-	public class EditableTreeViewItem : ViewModelBase
+	internal class EditableTreeViewItem : ViewModelBase
 	{
 		private bool isSelected;
 

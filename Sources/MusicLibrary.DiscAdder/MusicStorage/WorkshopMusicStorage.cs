@@ -56,7 +56,7 @@ namespace MusicLibrary.DiscAdder.MusicStorage
 
 			if (IsArtistCategory(destinationFolderPath.First()) && destinationFolderPath.Count >= 2)
 			{
-				discInfo.DiscType = DsicType.ArtistDisc;
+				discInfo.DiscType = DiscType.ArtistDisc;
 				discInfo.Artist = destinationFolderPath.Last();
 			}
 			else
@@ -69,8 +69,8 @@ namespace MusicLibrary.DiscAdder.MusicStorage
 				}
 
 				discInfo.DiscType = hasSongWithArtist
-					? DsicType.CompilationDiscWithArtistInfo
-					: DsicType.CompilationDiscWithoutArtistInfo;
+					? DiscType.CompilationDiscWithArtistInfo
+					: DiscType.CompilationDiscWithoutArtistInfo;
 			}
 
 			return discInfo;

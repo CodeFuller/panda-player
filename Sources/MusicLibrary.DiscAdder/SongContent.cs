@@ -1,6 +1,6 @@
 ﻿namespace MusicLibrary.DiscAdder
 {
-	public class SongContent
+	internal class SongContent
 	{
 		public string Title { get; set; }
 

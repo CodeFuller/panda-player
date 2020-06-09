@@ -14,7 +14,7 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.ViewModels
 {
-	public class EditSourceDiscImagesViewModel : ViewModelBase, IEditSourceDiscImagesViewModel
+	internal class EditSourceDiscImagesViewModel : ViewModelBase, IEditSourceDiscImagesViewModel
 	{
 		private readonly IContentCrawler contentCrawler;
 		private readonly IObjectFactory<IImageFile> imageFileFactory;

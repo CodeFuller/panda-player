@@ -5,9 +5,6 @@ using System.Windows.Media;
 
 namespace MusicLibrary.DiscAdder.Views
 {
-	/// <summary>
-	/// Interaction logic for DiscTreeView.xaml
-	/// </summary>
 	public partial class DiscTreeView : TreeView, IScrollable
 	{
 		private readonly Lazy<ScrollViewer> scrollViewer;

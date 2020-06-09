@@ -4,7 +4,7 @@ using MusicLibrary.DiscAdder.ViewModels.SourceContent;
 
 namespace MusicLibrary.DiscAdder.ViewModels.Interfaces
 {
-	public interface IEditSourceContentViewModel : IPageViewModel
+	internal interface IEditSourceContentViewModel : IPageViewModel
 	{
 		DiscTreeViewModel CurrentDiscs { get; }
 

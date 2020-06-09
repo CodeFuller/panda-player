@@ -7,7 +7,7 @@ using MusicLibrary.DiscAdder.Extensions;
 namespace MusicLibrary.DiscAdder.Behaviors
 {
 	// Copy/paste from https://treeviewinplaceedit.codeplex.com
-	public static class TreeViewInPlaceEditBehavior
+	internal static class TreeViewInPlaceEditBehavior
 	{
 		public static readonly DependencyProperty IsEditableProperty = DependencyProperty.RegisterAttached(
 		  "IsEditable", typeof(bool), typeof(TreeViewInPlaceEditBehavior), new PropertyMetadata(OnIsEditableChanged));

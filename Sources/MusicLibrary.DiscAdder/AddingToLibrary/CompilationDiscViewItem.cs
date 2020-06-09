@@ -4,7 +4,7 @@ using MusicLibrary.DiscAdder.MusicStorage;
 
 namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
-	public abstract class CompilationDiscViewItem : NewDiscViewItem
+	internal abstract class CompilationDiscViewItem : NewDiscViewItem
 	{
 		// Seal the method for calling it in constructor.
 		public sealed override int? Year

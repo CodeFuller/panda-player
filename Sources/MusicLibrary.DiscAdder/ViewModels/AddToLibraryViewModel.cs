@@ -18,7 +18,7 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.ViewModels
 {
-	public class AddToLibraryViewModel : ViewModelBase, IAddToLibraryViewModel
+	internal class AddToLibraryViewModel : ViewModelBase, IAddToLibraryViewModel
 	{
 		private readonly ISongMediaInfoProvider songMediaInfoProvider;
 		private readonly IWorkshopMusicStorage workshopMusicStorage;

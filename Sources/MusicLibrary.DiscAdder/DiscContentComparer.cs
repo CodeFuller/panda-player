@@ -6,7 +6,7 @@ using static System.FormattableString;
 
 namespace MusicLibrary.DiscAdder
 {
-	public class DiscContentComparer : IDiscContentComparer
+	internal class DiscContentComparer : IDiscContentComparer
 	{
 		public void SetDiscsCorrectness(DiscTreeViewModel ethalonDiscs, DiscTreeViewModel currentDiscs)
 		{

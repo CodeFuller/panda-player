@@ -19,7 +19,7 @@ using static System.FormattableString;
 
 namespace MusicLibrary.DiscAdder.ViewModels
 {
-	public class EditSourceContentViewModel : ViewModelBase, IEditSourceContentViewModel
+	internal class EditSourceContentViewModel : ViewModelBase, IEditSourceContentViewModel
 	{
 		public string Name => "Edit Source Content";
 

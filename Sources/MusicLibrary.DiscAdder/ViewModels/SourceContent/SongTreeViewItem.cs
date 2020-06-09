@@ -3,7 +3,7 @@ using MusicLibrary.DiscAdder.Events;
 
 namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 {
-	public class SongTreeViewItem : EditableTreeViewItem
+	internal class SongTreeViewItem : EditableTreeViewItem
 	{
 		public event EventHandler<SongTitleChangingEventArgs> SongTitleChanging;
 

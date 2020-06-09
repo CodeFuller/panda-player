@@ -1,6 +1,6 @@
 ﻿namespace MusicLibrary.DiscAdder.MusicStorage
 {
-	public class WorkshopStorageSettings
+	internal class WorkshopStorageSettings
 	{
 		public string Root { get; set; }
 	}

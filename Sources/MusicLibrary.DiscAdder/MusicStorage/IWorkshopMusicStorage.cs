@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.DiscAdder.MusicStorage
 {
-	public interface IWorkshopMusicStorage
+	internal interface IWorkshopMusicStorage
 	{
 		AddedDiscInfo GetAddedDiscInfo(string sourceDiscPath, IEnumerable<string> songFiles);
 

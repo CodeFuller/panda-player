@@ -7,7 +7,7 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder
 {
-	public class ContentCrawler : IContentCrawler
+	internal class ContentCrawler : IContentCrawler
 	{
 		private readonly ISourceFileTypeResolver sourceFileTypeResolver;
 

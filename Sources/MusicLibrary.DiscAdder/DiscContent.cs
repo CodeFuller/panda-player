@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace MusicLibrary.DiscAdder
 {
-	public class DiscContent
+	internal class DiscContent
 	{
 		public string DiscDirectory { get; set; }
 

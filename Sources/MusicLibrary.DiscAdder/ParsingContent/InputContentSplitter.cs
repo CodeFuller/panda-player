@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace MusicLibrary.DiscAdder.ParsingContent
 {
-	public class InputContentSplitter : IInputContentSplitter
+	internal class InputContentSplitter : IInputContentSplitter
 	{
 		public IEnumerable<IEnumerable<string>> Split(IEnumerable<string> content)
 		{

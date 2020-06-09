@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.DiscAdder.Events
 {
-	public abstract class SongTitleChangeEventArgs : EventArgs
+	internal abstract class SongTitleChangeEventArgs : EventArgs
 	{
 		public string OldTitle { get; set; }
 

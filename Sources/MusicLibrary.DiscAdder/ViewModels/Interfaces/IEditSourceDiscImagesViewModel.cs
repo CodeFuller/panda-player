@@ -5,7 +5,7 @@ using MusicLibrary.DiscAdder.AddingToLibrary;
 
 namespace MusicLibrary.DiscAdder.ViewModels.Interfaces
 {
-	public interface IEditSourceDiscImagesViewModel : IPageViewModel
+	internal interface IEditSourceDiscImagesViewModel : IPageViewModel
 	{
 		ObservableCollection<DiscImageViewItem> ImageItems { get; }
 

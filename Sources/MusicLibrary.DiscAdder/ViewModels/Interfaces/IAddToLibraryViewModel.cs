@@ -4,7 +4,7 @@ using MusicLibrary.DiscAdder.AddingToLibrary;
 
 namespace MusicLibrary.DiscAdder.ViewModels.Interfaces
 {
-	public interface IAddToLibraryViewModel : IPageViewModel
+	internal interface IAddToLibraryViewModel : IPageViewModel
 	{
 		void SetSongs(IEnumerable<AddedSong> songs);
 
