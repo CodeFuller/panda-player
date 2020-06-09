@@ -9,15 +9,15 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Extensions.Options;
-using MusicLibrary.DiscPreprocessor.Events;
-using MusicLibrary.DiscPreprocessor.Interfaces;
-using MusicLibrary.DiscPreprocessor.MusicStorage;
-using MusicLibrary.DiscPreprocessor.ParsingContent;
-using MusicLibrary.DiscPreprocessor.ViewModels.Interfaces;
-using MusicLibrary.DiscPreprocessor.ViewModels.SourceContent;
+using MusicLibrary.DiscAdder.Events;
+using MusicLibrary.DiscAdder.Interfaces;
+using MusicLibrary.DiscAdder.MusicStorage;
+using MusicLibrary.DiscAdder.ParsingContent;
+using MusicLibrary.DiscAdder.ViewModels.Interfaces;
+using MusicLibrary.DiscAdder.ViewModels.SourceContent;
 using static System.FormattableString;
 
-namespace MusicLibrary.DiscPreprocessor.ViewModels
+namespace MusicLibrary.DiscAdder.ViewModels
 {
 	public class EditSourceContentViewModel : ViewModelBase, IEditSourceContentViewModel
 	{
@@ -30,9 +30,9 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 
 		private readonly DiscPreprocessorSettings settings;
 
-		public EthalonContentViewModel RawEthalonDiscs { get; }
+		public ReferenceContentViewModel RawReferenceDiscs { get; }
 
-		public DiscTreeViewModel EthalonDiscs { get; }
+		public DiscTreeViewModel ReferenceDiscs { get; }
 
 		public DiscTreeViewModel CurrentDiscs { get; }
 
@@ -62,11 +62,11 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 			this.workshopMusicStorage = workshopMusicStorage ?? throw new ArgumentNullException(nameof(workshopMusicStorage));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
-			EthalonDiscs = new DiscTreeViewModel();
+			ReferenceDiscs = new DiscTreeViewModel();
 			CurrentDiscs = new DiscTreeViewModel();
 
-			RawEthalonDiscs = new EthalonContentViewModel(fileSystemFacade, settings.DataStoragePath);
-			RawEthalonDiscs.PropertyChanged += OnRawEthalonDiscsPropertyChanged;
+			RawReferenceDiscs = new ReferenceContentViewModel(fileSystemFacade, settings.DataStoragePath);
+			RawReferenceDiscs.PropertyChanged += OnRawReferenceDiscsPropertyChanged;
 
 			ReloadRawContentCommand = new RelayCommand(ReloadRawContent);
 
@@ -75,7 +75,7 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 
 		public void LoadDefaultContent()
 		{
-			RawEthalonDiscs.LoadRawEthalonDiscsContent();
+			RawReferenceDiscs.LoadRawEthalonDiscsContent();
 
 			LoadCurrentDiscs();
 		}
@@ -93,12 +93,12 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 				contentBuilder.Append(Invariant($"# {disc.DiscDirectory}\n\n"));
 			}
 
-			RawEthalonDiscs.Content = contentBuilder.ToString();
+			RawReferenceDiscs.Content = contentBuilder.ToString();
 		}
 
-		private void OnRawEthalonDiscsPropertyChanged(object sender, PropertyChangedEventArgs e)
+		private void OnRawReferenceDiscsPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			UpdateDiscs(EthalonDiscs, discContentParser.Parse(RawEthalonDiscs.Content));
+			UpdateDiscs(ReferenceDiscs, discContentParser.Parse(RawReferenceDiscs.Content));
 		}
 
 		public void LoadCurrentDiscs()
@@ -116,13 +116,13 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 
 		private void SetContentCorrectness()
 		{
-			discContentComparer.SetDiscsCorrectness(EthalonDiscs, CurrentDiscs);
+			discContentComparer.SetDiscsCorrectness(ReferenceDiscs, CurrentDiscs);
 		}
 
 		private void UpdateContentCorrectness()
 		{
 			SetContentCorrectness();
-			DataIsReady = !EthalonDiscs.ContentIsIncorrect && !CurrentDiscs.ContentIsIncorrect;
+			DataIsReady = !ReferenceDiscs.ContentIsIncorrect && !CurrentDiscs.ContentIsIncorrect;
 		}
 	}
 }

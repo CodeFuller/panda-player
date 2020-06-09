@@ -39,7 +39,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 		{
 			return new SongEntity
 			{
-				Id = song.Id.ToInt32(),
+				Id = song.Id?.ToInt32() ?? default,
 				DiscId = song.Disc.Id.ToInt32(),
 				ArtistId = song.Artist?.Id.ToInt32(),
 				TrackNumber = song.TrackNumber,
@@ -48,7 +48,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				TreeTitle = song.TreeTitle,
 				GenreId = song.Genre?.Id.ToInt32(),
 				DurationInMilliseconds = song.Duration.TotalMilliseconds,
-				Rating = song.Rating != null ? ConvertRating(song.Rating) : (int?)null,
+				Rating = song.Rating != null ? ConvertRating(song.Rating) : null,
 				FileSize = song.Size,
 				Checksum = (int?)song.Checksum,
 				BitRate = song.BitRate,

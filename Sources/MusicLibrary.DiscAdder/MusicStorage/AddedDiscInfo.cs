@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MusicLibrary.DiscPreprocessor.MusicStorage
+namespace MusicLibrary.DiscAdder.MusicStorage
 {
 	public class AddedDiscInfo
 	{
@@ -10,13 +10,15 @@ namespace MusicLibrary.DiscPreprocessor.MusicStorage
 
 		public string DiscTitle { get; set; }
 
+		public string TreeTitle { get; set; }
+
 		public string AlbumTitle { get; set; }
 
 		public DsicType DiscType { get; set; }
 
 		public string SourcePath { get; set; }
 
-		public Uri UriWithinStorage { get; set; }
+		public IReadOnlyCollection<string> DestinationFolderPath { get; set; }
 
 		public bool HasArtist => DiscType == DsicType.ArtistDisc;
 

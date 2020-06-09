@@ -116,6 +116,12 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 			return fileSystemFacade.DirectoryIsEmpty(fullPath);
 		}
 
+		public void CreateFolder(FilePath folderPath)
+		{
+			var fullPath = GetFullPath(folderPath);
+			fileSystemFacade.CreateDirectory(fullPath);
+		}
+
 		public void MoveFolder(FilePath source, FilePath destination)
 		{
 			var sourceFolderPath = GetFullPath(source);

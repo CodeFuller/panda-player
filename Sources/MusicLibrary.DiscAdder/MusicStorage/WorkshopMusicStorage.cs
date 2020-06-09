@@ -7,11 +7,10 @@ using System.Text.RegularExpressions;
 using CF.Library.Core.Exceptions;
 using CF.Library.Core.Facades;
 using Microsoft.Extensions.Options;
-using MusicLibrary.Core;
-using MusicLibrary.Core.Interfaces;
+using MusicLibrary.Services.Interfaces;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.DiscPreprocessor.MusicStorage
+namespace MusicLibrary.DiscAdder.MusicStorage
 {
 	/// <summary>
 	/// Class for music storage that keeps discs for adding to library.
@@ -35,39 +34,38 @@ namespace MusicLibrary.DiscPreprocessor.MusicStorage
 			this.workshopRootPath = options?.Value?.WorkshopStoragePath ?? throw new ArgumentNullException(nameof(options));
 		}
 
-		public AddedDiscInfo GetAddedDiscInfo(string discPath, IEnumerable<string> songFiles)
+		public AddedDiscInfo GetAddedDiscInfo(string sourceDiscPath, IEnumerable<string> songFiles)
 		{
-			ItemUriParts uriParts = new ItemUriParts(discPath, workshopRootPath);
-			if (uriParts.Count == 0)
-			{
-				throw new InvalidInputDataException(Current($"Could not parse disc data from '{uriParts[1]}'"));
-			}
+			var discTreeTitle = Path.GetFileName(sourceDiscPath);
 
-			ParseDiscData(uriParts[uriParts.Count - 1], out var year, out var title);
+			ParseDiscData(discTreeTitle, out var year, out var title);
 
-			List<AddedSongInfo> songs = songFiles.Select(GetSongInfo).ToList();
+			var songs = songFiles.Select(GetSongInfo).ToList();
 
-			AddedDiscInfo discInfo = new AddedDiscInfo(songs)
+			var destinationFolderPath = GetDestinationFolderPathForDisc(sourceDiscPath);
+
+			var discInfo = new AddedDiscInfo(songs)
 			{
 				Year = year,
 				DiscTitle = title,
+				TreeTitle = discTreeTitle,
 				AlbumTitle = discTitleToAlbumMapper.GetAlbumTitleFromDiscTitle(title),
-				SourcePath = discPath,
-				UriWithinStorage = uriParts.Uri,
+				SourcePath = sourceDiscPath,
+				DestinationFolderPath = destinationFolderPath,
 			};
 
-			if (IsArtistCategory(uriParts[0]) && uriParts.Count > 2)
+			if (IsArtistCategory(destinationFolderPath.First()) && destinationFolderPath.Count >= 2)
 			{
 				discInfo.DiscType = DsicType.ArtistDisc;
-				discInfo.Artist = uriParts[uriParts.Count - 2];
+				discInfo.Artist = destinationFolderPath.Last();
 			}
 			else
 			{
-				bool hasSongWithoutArtist = songs.Any(s => String.IsNullOrEmpty(s.Artist));
-				bool hasSongWithArtist = songs.Any(s => !String.IsNullOrEmpty(s.Artist));
+				var hasSongWithoutArtist = songs.Any(s => String.IsNullOrEmpty(s.Artist));
+				var hasSongWithArtist = songs.Any(s => !String.IsNullOrEmpty(s.Artist));
 				if (hasSongWithoutArtist && hasSongWithArtist)
 				{
-					throw new InvalidInputDataException(Current($"Disc '{discPath}' has songs with and without artist name. This mode currently is not supported"));
+					throw new InvalidInputDataException(Current($"Disc '{sourceDiscPath}' has songs with and without artist name. This mode currently is not supported"));
 				}
 
 				discInfo.DiscType = hasSongWithArtist
@@ -78,9 +76,16 @@ namespace MusicLibrary.DiscPreprocessor.MusicStorage
 			return discInfo;
 		}
 
-		private static void ParseDiscData(string discName, out short? year, out string title)
+		private IReadOnlyCollection<string> GetDestinationFolderPathForDisc(string sourceDiscPath)
 		{
-			var match = DiscDataRegex.Match(discName);
+			var sourceFolderPath = Path.GetDirectoryName(sourceDiscPath);
+			var relativePath = Path.GetRelativePath(workshopRootPath, sourceFolderPath);
+			return relativePath.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+		}
+
+		private static void ParseDiscData(string discTreeTitle, out short? year, out string title)
+		{
+			var match = DiscDataRegex.Match(discTreeTitle);
 			if (match.Success)
 			{
 				year = Int16.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture);
@@ -89,13 +94,14 @@ namespace MusicLibrary.DiscPreprocessor.MusicStorage
 			else
 			{
 				year = null;
-				title = discName;
+				title = discTreeTitle;
 			}
 		}
 
-		private AddedSongInfo GetSongInfo(string songPath)
+		private static AddedSongInfo GetSongInfo(string songPath)
 		{
-			string name = Path.GetFileNameWithoutExtension(songPath);
+			var treeTitle = Path.GetFileName(songPath);
+			var name = Path.GetFileNameWithoutExtension(songPath);
 
 			var match = SongWithTrackAndArtistRegex.Match(name);
 			if (match.Success)
@@ -105,6 +111,7 @@ namespace MusicLibrary.DiscPreprocessor.MusicStorage
 					Track = Int16.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture),
 					Artist = match.Groups[3].Value,
 					Title = match.Groups[4].Value,
+					TreeTitle = treeTitle,
 					FullTitle = match.Groups[2].Value,
 				};
 			}
@@ -117,6 +124,7 @@ namespace MusicLibrary.DiscPreprocessor.MusicStorage
 					Track = Int16.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture),
 					Artist = null,
 					Title = match.Groups[2].Value,
+					TreeTitle = treeTitle,
 					FullTitle = match.Groups[2].Value,
 				};
 			}
@@ -129,6 +137,7 @@ namespace MusicLibrary.DiscPreprocessor.MusicStorage
 					Track = null,
 					Artist = match.Groups[2].Value,
 					Title = match.Groups[3].Value,
+					TreeTitle = treeTitle,
 					FullTitle = match.Groups[1].Value,
 				};
 			}
@@ -146,7 +155,7 @@ namespace MusicLibrary.DiscPreprocessor.MusicStorage
 
 			foreach (var subDirectory in fileSystemFacade.EnumerateDirectories(workshopRootPath))
 			{
-				List<string> files = new List<string>();
+				var files = new List<string>();
 				FindDirectoryFiles(subDirectory, files);
 
 				if (files.Any())
@@ -160,12 +169,12 @@ namespace MusicLibrary.DiscPreprocessor.MusicStorage
 
 		private void FindDirectoryFiles(string directoryPath, List<string> files)
 		{
-			foreach (string subDirectory in fileSystemFacade.EnumerateDirectories(directoryPath))
+			foreach (var subDirectory in fileSystemFacade.EnumerateDirectories(directoryPath))
 			{
 				FindDirectoryFiles(subDirectory, files);
 			}
 
-			foreach (string file in fileSystemFacade.EnumerateFiles(directoryPath))
+			foreach (var file in fileSystemFacade.EnumerateFiles(directoryPath))
 			{
 				files.Add(file);
 			}
@@ -175,6 +184,7 @@ namespace MusicLibrary.DiscPreprocessor.MusicStorage
 		{
 			var artistCategories = new[]
 			{
+				// TODO: Remove this hardcoded content details.
 				"Belarussian",
 				"Foreign",
 				"Russian",

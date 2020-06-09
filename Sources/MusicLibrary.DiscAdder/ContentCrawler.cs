@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MusicLibrary.DiscPreprocessor.Interfaces;
+using MusicLibrary.DiscAdder.Interfaces;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.DiscPreprocessor
+namespace MusicLibrary.DiscAdder
 {
 	public class ContentCrawler : IContentCrawler
 	{
@@ -23,12 +23,12 @@ namespace MusicLibrary.DiscPreprocessor
 
 		private IEnumerable<DiscContent> LoadDiscs(DirectoryInfo directoryInfo)
 		{
-			List<string> files = directoryInfo.GetFiles().
-				OrderBy(f => f.Name).
-				Select(f => f.FullName).
-				ToList();
+			var files = directoryInfo.GetFiles()
+				.OrderBy(f => f.Name)
+				.Select(f => f.FullName)
+				.ToList();
 
-			List<DiscContent> nestedDiscs = new List<DiscContent>();
+			var nestedDiscs = new List<DiscContent>();
 			foreach (var subDirectory in directoryInfo.GetDirectories().OrderBy(x => x.Name))
 			{
 				nestedDiscs.AddRange(LoadDiscs(subDirectory));
@@ -42,12 +42,10 @@ namespace MusicLibrary.DiscPreprocessor
 			if (files.Any())
 			{
 				var songFiles = files.Where(f => sourceFileTypeResolver.GetSourceFileType(f) == SourceFileType.Song).Select(Path.GetFileName);
-				return Enumerable.Repeat(new DiscContent(directoryInfo.FullName, songFiles), 1);
+				return new[] { new DiscContent(directoryInfo.FullName, songFiles) };
 			}
-			else
-			{
-				return nestedDiscs;
-			}
+
+			return nestedDiscs;
 		}
 
 		public IEnumerable<string> LoadDiscImages(string discDirectory)

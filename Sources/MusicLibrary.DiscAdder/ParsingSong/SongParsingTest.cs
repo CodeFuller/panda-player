@@ -1,4 +1,4 @@
-﻿namespace MusicLibrary.DiscPreprocessor.ParsingSong
+﻿namespace MusicLibrary.DiscAdder.ParsingSong
 {
 	internal class SongParsingTest
 	{

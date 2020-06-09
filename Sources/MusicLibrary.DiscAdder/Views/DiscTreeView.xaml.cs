@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace MusicLibrary.DiscPreprocessor.Views
+namespace MusicLibrary.DiscAdder.Views
 {
 	/// <summary>
 	/// Interaction logic for DiscTreeView.xaml

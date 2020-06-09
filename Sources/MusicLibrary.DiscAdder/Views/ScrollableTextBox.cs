@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace MusicLibrary.DiscPreprocessor.Views
+namespace MusicLibrary.DiscAdder.Views
 {
 	internal class ScrollableTextBox : IScrollable
 	{

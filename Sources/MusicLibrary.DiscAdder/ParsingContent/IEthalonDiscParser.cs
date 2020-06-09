@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MusicLibrary.DiscPreprocessor.ParsingContent
+namespace MusicLibrary.DiscAdder.ParsingContent
 {
 	public interface IEthalonDiscParser
 	{

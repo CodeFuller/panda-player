@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Interfaces;
 
@@ -44,9 +45,16 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 
 		private FilePath GetFolderPathInternal(ShallowFolderModel folder)
 		{
-			var path = new List<string>();
+			if (folder.IsRoot)
+			{
+				return new FilePath(Enumerable.Empty<string>());
+			}
 
-			for (var currentFolderId = folder.Id; ;)
+			// It is possible that requested folder does not yet exist (If we build destination path for new folder).
+			// But all parent folders till the root must exist.
+			var path = new List<string> { folder.Name };
+
+			for (var currentFolderId = folder.ParentFolderId; ;)
 			{
 				var currentFolder = folderProvider.GetFolder(currentFolderId);
 				if (currentFolder.IsRoot)

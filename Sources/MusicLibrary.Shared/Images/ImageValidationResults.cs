@@ -4,7 +4,7 @@ using System.ComponentModel;
 namespace MusicLibrary.Shared.Images
 {
 	[Flags]
-	internal enum ImageValidationResults
+	public enum ImageValidationResults
 	{
 		None,
 

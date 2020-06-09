@@ -1,16 +1,16 @@
-﻿using MusicLibrary.Core.Objects;
+﻿using MusicLibrary.Core.Models;
 
-namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
+namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
 	public class AddedDisc
 	{
-		public Disc Disc { get; }
+		public DiscModel Disc { get; }
 
 		public bool IsNewDisc { get; }
 
 		public string SourcePath { get; }
 
-		public AddedDisc(Disc disc, bool isNewDisc, string sourcePath)
+		public AddedDisc(DiscModel disc, bool isNewDisc, string sourcePath)
 		{
 			Disc = disc;
 			IsNewDisc = isNewDisc;

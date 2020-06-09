@@ -2,9 +2,9 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MusicLibrary.DiscPreprocessor.Extensions;
+using MusicLibrary.DiscAdder.Extensions;
 
-namespace MusicLibrary.DiscPreprocessor.Behaviors
+namespace MusicLibrary.DiscAdder.Behaviors
 {
 	// Copy/paste from https://treeviewinplaceedit.codeplex.com
 	public static class TreeViewInPlaceEditBehavior

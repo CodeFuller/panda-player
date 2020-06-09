@@ -18,6 +18,11 @@ namespace MusicLibrary.Services
 			this.artistsRepository = artistsRepository ?? throw new ArgumentNullException(nameof(artistsRepository));
 		}
 
+		public Task CreateArtist(ArtistModel artist, CancellationToken cancellationToken)
+		{
+			return artistsRepository.CreateArtist(artist, cancellationToken);
+		}
+
 		public Task<IReadOnlyCollection<ArtistModel>> GetAllArtists(CancellationToken cancellationToken)
 		{
 			// TODO: We should return artists only from active songs (logic in service?)

@@ -2,10 +2,10 @@
 using System.Windows;
 using System.Windows.Threading;
 using CF.Library.Wpf;
-using MusicLibrary.DiscPreprocessor.ViewModels;
-using MusicLibrary.DiscPreprocessor.Views;
+using MusicLibrary.DiscAdder.ViewModels;
+using MusicLibrary.DiscAdder.Views;
 
-namespace MusicLibrary.DiscPreprocessor
+namespace MusicLibrary.DiscAdder
 {
 	/// <summary>
 	/// Interaction logic for App.xaml

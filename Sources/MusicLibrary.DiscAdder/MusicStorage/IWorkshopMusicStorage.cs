@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace MusicLibrary.DiscPreprocessor.MusicStorage
+namespace MusicLibrary.DiscAdder.MusicStorage
 {
 	public interface IWorkshopMusicStorage
 	{
-		AddedDiscInfo GetAddedDiscInfo(string discPath, IEnumerable<string> songFiles);
+		AddedDiscInfo GetAddedDiscInfo(string sourceDiscPath, IEnumerable<string> songFiles);
 
 		void DeleteSourceContent(IEnumerable<string> contentFiles);
 	}

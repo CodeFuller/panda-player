@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using MusicLibrary.DiscPreprocessor.Interfaces;
-using MusicLibrary.DiscPreprocessor.ViewModels.SourceContent;
+using MusicLibrary.DiscAdder.Interfaces;
+using MusicLibrary.DiscAdder.ViewModels.SourceContent;
 using static System.FormattableString;
 
-namespace MusicLibrary.DiscPreprocessor
+namespace MusicLibrary.DiscAdder
 {
 	public class DiscContentComparer : IDiscContentComparer
 	{

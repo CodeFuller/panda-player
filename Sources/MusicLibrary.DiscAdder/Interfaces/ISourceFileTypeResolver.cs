@@ -1,4 +1,4 @@
-﻿namespace MusicLibrary.DiscPreprocessor.Interfaces
+﻿namespace MusicLibrary.DiscAdder.Interfaces
 {
 	public interface ISourceFileTypeResolver
 	{

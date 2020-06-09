@@ -5,7 +5,7 @@ using System.Linq;
 using CF.Library.Core.Extensions;
 using GalaSoft.MvvmLight;
 
-namespace MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
+namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 {
 #pragma warning disable CA1710 // Identifiers should have correct suffix - Following ViewModel naming convention
 	public class DiscTreeViewModel : ViewModelBase, IEnumerable<DiscTreeViewItem>

@@ -1,13 +1,19 @@
 ﻿{
-	"database": {
-		"dataSource": "d:\\PandaPlayer\\MusicLibrary.db"
+	"connectionStrings": {
+		"musicLibraryDb": "Data Source=d:\\PandaPlayer\\MusicLibrary.db;Foreign Keys=True;"
 	},
 
-	"fileSystemStorage": {
-		"root": "d:\\music"
+	"localDb": {
+		"dataStorage": {
+			"root": "d:\\music",
+			"excludePaths": [
+			]
+		}
 	},
 
 	"dataStoragePath": "d:\\DiscPreprocessor\\.data",
 	"workshopStoragePath": "d:\\music.workshop\\Gateway",
+
+	// TODO: Make this a UI setting
 	"deleteSourceContentAfterAdding": true
 }

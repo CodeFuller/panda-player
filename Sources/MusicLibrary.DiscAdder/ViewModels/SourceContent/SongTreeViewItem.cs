@@ -1,7 +1,7 @@
 ﻿using System;
-using MusicLibrary.DiscPreprocessor.Events;
+using MusicLibrary.DiscAdder.Events;
 
-namespace MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
+namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 {
 	public class SongTreeViewItem : EditableTreeViewItem
 	{

@@ -39,7 +39,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 		{
 			return new FolderEntity
 			{
-				Id = folder.Id.ToInt32(),
+				Id = folder.Id?.ToInt32() ?? default,
 				ParentFolderId = folder.ParentFolderId?.ToInt32(),
 				Name = folder.Name,
 				DeleteDate = folder.DeleteDate,

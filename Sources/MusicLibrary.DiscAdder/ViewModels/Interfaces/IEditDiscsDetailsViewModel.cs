@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using MusicLibrary.DiscPreprocessor.AddingToLibrary;
-using MusicLibrary.DiscPreprocessor.MusicStorage;
+using MusicLibrary.DiscAdder.AddingToLibrary;
+using MusicLibrary.DiscAdder.MusicStorage;
 
-namespace MusicLibrary.DiscPreprocessor.ViewModels.Interfaces
+namespace MusicLibrary.DiscAdder.ViewModels.Interfaces
 {
 	public interface IEditDiscsDetailsViewModel : IPageViewModel
 	{

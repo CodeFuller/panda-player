@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using static System.FormattableString;
 
-namespace MusicLibrary.DiscPreprocessor.ParsingSong
+namespace MusicLibrary.DiscAdder.ParsingSong
 {
 	internal class SongTitleMatch
 	{

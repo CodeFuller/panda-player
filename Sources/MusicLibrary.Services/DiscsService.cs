@@ -31,6 +31,13 @@ namespace MusicLibrary.Services
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
+		public async Task CreateDisc(DiscModel disc, CancellationToken cancellationToken)
+		{
+			await storageRepository.CreateDisc(disc, cancellationToken);
+
+			await discsRepository.CreateDisc(disc, cancellationToken);
+		}
+
 		public Task<IReadOnlyCollection<DiscModel>> GetAllDiscs(CancellationToken cancellationToken)
 		{
 			return discsRepository.GetAllDiscs(cancellationToken);

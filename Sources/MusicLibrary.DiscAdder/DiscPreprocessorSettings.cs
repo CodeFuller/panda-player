@@ -1,4 +1,4 @@
-﻿namespace MusicLibrary.DiscPreprocessor
+﻿namespace MusicLibrary.DiscAdder
 {
 	public class DiscPreprocessorSettings
 	{

@@ -1,18 +1,16 @@
-﻿using System;
-using GalaSoft.MvvmLight;
-using MusicLibrary.Common.Images;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.Core.Objects.Images;
+﻿using GalaSoft.MvvmLight;
+using MusicLibrary.Core.Models;
+using MusicLibrary.Shared.Images;
 
-namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
+namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
 	public class DiscImageViewItem : ViewModelBase
 	{
 		private readonly IImageFile imageFile;
 
-		public Disc Disc { get; }
+		public DiscModel Disc { get; }
 
-		public Uri DiscUri => Disc.Uri;
+		public string SourceImageFilePath => ImageInfo.FileName;
 
 		public DiscImageType ImageType { get; }
 
@@ -22,7 +20,7 @@ namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public ImageInfo ImageInfo => imageFile.ImageInfo;
 
-		public DiscImageViewItem(Disc disc, DiscImageType imageType, IImageFile imageFile)
+		public DiscImageViewItem(DiscModel disc, DiscImageType imageType, IImageFile imageFile)
 		{
 			Disc = disc;
 			ImageType = imageType;

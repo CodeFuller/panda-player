@@ -1,16 +1,16 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
-using MusicLibrary.Core.Objects;
+using MusicLibrary.Core.Models;
 
-namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
+namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
 	public class SongViewItem : ViewModelBase
 	{
 		public AddedSong AddedSong { get; }
 
-		private Song Song => AddedSong.Song;
+		private SongModel Song => AddedSong.Song;
 
-		public Uri StorageUri => Song.Uri;
+		public string SourceFilePath => AddedSong.SourceFileName;
 
 		public string ArtistName
 		{
@@ -19,13 +19,14 @@ namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
 			{
 				if (Song.Artist == null)
 				{
-					Song.Artist = new Artist
+					Song.Artist = new ArtistModel
 					{
 						Name = value,
 					};
+
 					RaisePropertyChanged();
 				}
-				else if (Song.Artist.Id == 0)
+				else if (Song.Artist.Id == null)
 				{
 					Song.Artist.Name = value;
 					RaisePropertyChanged();
@@ -42,17 +43,7 @@ namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public string AlbumTitle => Song.Disc.AlbumTitle;
 
-		public short? Year
-		{
-			get => Song.Year;
-			set
-			{
-				Song.Year = value;
-				RaisePropertyChanged();
-			}
-		}
-
-		public Genre Genre
+		public GenreModel Genre
 		{
 			get => Song.Genre;
 			set
@@ -78,6 +69,16 @@ namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
 			set
 			{
 				Song.Title = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public string TreeTitle
+		{
+			get => Song.TreeTitle;
+			set
+			{
+				Song.TreeTitle = value;
 				RaisePropertyChanged();
 			}
 		}

@@ -7,6 +7,8 @@ namespace MusicLibrary.Services.Interfaces
 {
 	public interface IArtistsService
 	{
+		Task CreateArtist(ArtistModel artist, CancellationToken cancellationToken);
+
 		Task<IReadOnlyCollection<ArtistModel>> GetAllArtists(CancellationToken cancellationToken);
 	}
 }

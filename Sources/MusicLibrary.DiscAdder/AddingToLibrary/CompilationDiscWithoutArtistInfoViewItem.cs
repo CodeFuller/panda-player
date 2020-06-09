@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.DiscPreprocessor.MusicStorage;
+using MusicLibrary.Core.Models;
+using MusicLibrary.DiscAdder.MusicStorage;
 
-namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
+namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
 	public sealed class CompilationDiscWithoutArtistInfoViewItem : CompilationDiscViewItem
 	{
 		public override string DiscTypeTitle => "Compilation without Artists";
 
-		private Artist artist;
+		private ArtistModel artist;
 
-		public override Artist Artist
+		public override ArtistModel Artist
 		{
 			get => artist;
 			set
@@ -25,12 +25,12 @@ namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public override bool ArtistIsNotFilled => Artist == null;
 
-		public CompilationDiscWithoutArtistInfoViewItem(AddedDiscInfo discInfo, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
-			: base(discInfo, availableArtists, availableGenres)
+		public CompilationDiscWithoutArtistInfoViewItem(AddedDiscInfo discInfo, bool folderExists, IEnumerable<ArtistModel> availableArtists, IEnumerable<GenreModel> availableGenres)
+			: base(discInfo, folderExists, availableArtists, availableGenres)
 		{
 		}
 
-		protected override Artist GetSongArtist(AddedSongInfo song)
+		protected override ArtistModel GetSongArtist(AddedSongInfo song)
 		{
 			return Artist;
 		}

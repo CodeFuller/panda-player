@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace MusicLibrary.DiscPreprocessor.ParsingContent
+namespace MusicLibrary.DiscAdder.ParsingContent
 {
 	public class InputContentSplitter : IInputContentSplitter
 	{

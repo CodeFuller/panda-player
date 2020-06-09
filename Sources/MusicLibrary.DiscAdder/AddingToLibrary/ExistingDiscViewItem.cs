@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.DiscPreprocessor.MusicStorage;
+using MusicLibrary.Core.Models;
+using MusicLibrary.DiscAdder.Extensions;
+using MusicLibrary.DiscAdder.MusicStorage;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
+namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
 	public class ExistingDiscViewItem : DiscViewItem
 	{
@@ -20,9 +21,9 @@ namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public override bool AlbumTitleIsEditable => false;
 
-		public override Artist Artist
+		public override ArtistModel Artist
 		{
-			get => Disc.Artist;
+			get => Disc.SoloArtist;
 			set => throw new InvalidOperationException(Current($"Artist could not be changed for '{DiscTitle}' disc"));
 		}
 
@@ -30,26 +31,20 @@ namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public override bool ArtistIsNotFilled => false;
 
-		public override short? Year
-		{
-			get => Disc.Year;
-			set => throw new InvalidOperationException(Current($"Year could not be changed for '{DiscTitle}' disc"));
-		}
-
 		public override bool YearIsEditable => false;
 
 		public override bool RequiredDataIsFilled => true;
 
-		public ExistingDiscViewItem(Disc existingDisc, AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
-			: base(disc, availableArtists, availableGenres)
+		public ExistingDiscViewItem(DiscModel existingDisc, AddedDiscInfo disc, IEnumerable<ArtistModel> availableArtists, IEnumerable<GenreModel> availableGenres)
+			: base(disc, folderExists: true, availableArtists, availableGenres)
 		{
 			Disc = existingDisc;
-			Genre = existingDisc.Genre;
+			Genre = existingDisc.GetGenre();
 		}
 
-		protected override Artist GetSongArtist(AddedSongInfo song)
+		protected override ArtistModel GetSongArtist(AddedSongInfo song)
 		{
-			return String.IsNullOrEmpty(song.Artist) ? Disc.Artist : LookupArtist(song.Artist);
+			return String.IsNullOrEmpty(song.Artist) ? Disc.SoloArtist : LookupArtist(song.Artist);
 		}
 	}
 }

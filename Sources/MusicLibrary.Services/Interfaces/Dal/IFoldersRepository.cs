@@ -7,6 +7,8 @@ namespace MusicLibrary.Services.Interfaces.Dal
 {
 	public interface IFoldersRepository
 	{
+		Task CreateFolder(ShallowFolderModel folder, CancellationToken cancellationToken);
+
 		Task<IReadOnlyCollection<ShallowFolderModel>> GetAllFolders(CancellationToken cancellationToken);
 
 		Task<FolderModel> GetRootFolder(CancellationToken cancellationToken);

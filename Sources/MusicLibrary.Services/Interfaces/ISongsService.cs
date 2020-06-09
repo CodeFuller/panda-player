@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
@@ -8,6 +9,8 @@ namespace MusicLibrary.Services.Interfaces
 {
 	public interface ISongsService
 	{
+		Task CreateSong(SongModel song, Stream songContent, CancellationToken cancellationToken);
+
 		Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken);
 
 		Task UpdateSong(SongModel song, CancellationToken cancellationToken);

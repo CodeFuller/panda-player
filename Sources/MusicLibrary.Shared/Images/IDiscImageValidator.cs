@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.Shared.Images
 {
-	internal interface IDiscImageValidator
+	public interface IDiscImageValidator
 	{
 		ImageValidationResults ValidateDiscCoverImage(ImageInfo imageInfo);
 

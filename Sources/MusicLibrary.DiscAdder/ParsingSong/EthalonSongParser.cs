@@ -4,7 +4,7 @@ using CF.Library.Core.Exceptions;
 using static System.FormattableString;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.DiscPreprocessor.ParsingSong
+namespace MusicLibrary.DiscAdder.ParsingSong
 {
 	public class EthalonSongParser : IEthalonSongParser
 	{

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MusicLibrary.DiscPreprocessor.Events
+namespace MusicLibrary.DiscAdder.Events
 {
 	public abstract class SongTitleChangeEventArgs : EventArgs
 	{

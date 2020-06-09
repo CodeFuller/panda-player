@@ -7,6 +7,8 @@ namespace MusicLibrary.Services.Interfaces.Dal
 {
 	public interface ISongsRepository
 	{
+		Task CreateSong(SongModel song, CancellationToken cancellationToken);
+
 		Task<SongModel> GetSong(ItemId songId, CancellationToken cancellationToken);
 
 		Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken);

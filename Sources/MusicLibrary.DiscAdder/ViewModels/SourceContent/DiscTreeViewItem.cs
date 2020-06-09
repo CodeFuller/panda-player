@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using GalaSoft.MvvmLight.Messaging;
-using MusicLibrary.DiscPreprocessor.Events;
+using MusicLibrary.DiscAdder.Events;
 
-namespace MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
+namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 {
 	public class DiscTreeViewItem : EditableTreeViewItem
 	{

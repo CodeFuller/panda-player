@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace MusicLibrary.DiscPreprocessor
+namespace MusicLibrary.DiscAdder
 {
 	public class DiscContent
 	{

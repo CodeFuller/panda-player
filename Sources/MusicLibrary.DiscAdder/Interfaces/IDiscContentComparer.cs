@@ -1,6 +1,6 @@
-﻿using MusicLibrary.DiscPreprocessor.ViewModels.SourceContent;
+﻿using MusicLibrary.DiscAdder.ViewModels.SourceContent;
 
-namespace MusicLibrary.DiscPreprocessor.Interfaces
+namespace MusicLibrary.DiscAdder.Interfaces
 {
 	public interface IDiscContentComparer
 	{

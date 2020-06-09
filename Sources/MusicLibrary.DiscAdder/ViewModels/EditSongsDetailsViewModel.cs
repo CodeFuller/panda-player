@@ -2,10 +2,10 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
-using MusicLibrary.DiscPreprocessor.AddingToLibrary;
-using MusicLibrary.DiscPreprocessor.ViewModels.Interfaces;
+using MusicLibrary.DiscAdder.AddingToLibrary;
+using MusicLibrary.DiscAdder.ViewModels.Interfaces;
 
-namespace MusicLibrary.DiscPreprocessor.ViewModels
+namespace MusicLibrary.DiscAdder.ViewModels
 {
 	public class EditSongsDetailsViewModel : ViewModelBase, IEditSongsDetailsViewModel
 	{

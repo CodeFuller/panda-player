@@ -2,24 +2,31 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CF.Library.Core.Exceptions;
 using GalaSoft.MvvmLight;
-using MusicLibrary.Core.Interfaces;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.DiscPreprocessor.AddingToLibrary;
-using MusicLibrary.DiscPreprocessor.MusicStorage;
-using MusicLibrary.DiscPreprocessor.ViewModels.Interfaces;
+using MusicLibrary.Core.Models;
+using MusicLibrary.DiscAdder.AddingToLibrary;
+using MusicLibrary.DiscAdder.Extensions;
+using MusicLibrary.DiscAdder.Interfaces;
+using MusicLibrary.DiscAdder.MusicStorage;
+using MusicLibrary.DiscAdder.ViewModels.Interfaces;
+using MusicLibrary.Services.Interfaces;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.DiscPreprocessor.ViewModels
+namespace MusicLibrary.DiscAdder.ViewModels
 {
-	public class EditDiscsDetailsViewModel : ViewModelBase, IEditDiscsDetailsViewModel
+	internal class EditDiscsDetailsViewModel : ViewModelBase, IEditDiscsDetailsViewModel
 	{
-		private readonly DiscLibrary discLibrary;
-		private readonly ILibraryStructurer libraryStructurer;
+		private readonly IFolderProvider folderProvider;
+
+		private readonly IDiscsService discService;
+
+		private readonly IArtistsService artistService;
+
+		private readonly IGenresService genreService;
 
 		public string Name => "Edit Discs Details";
 
@@ -29,61 +36,54 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 
 		public IEnumerable<AddedDisc> AddedDiscs => Discs.Select(d => new AddedDisc(d.Disc, d is NewDiscViewItem, d.SourcePath));
 
-		public IEnumerable<AddedSong> AddedSongs
-		{
-			get
-			{
-				foreach (var addedDisc in Discs)
-				{
-					foreach (var addedSong in addedDisc.Songs)
-					{
-						addedSong.Song.Uri = libraryStructurer.BuildSongUri(addedDisc.DestinationUri, Path.GetFileName(addedSong.SourceFileName));
-						yield return addedSong;
-					}
-				}
-			}
-		}
+		public IEnumerable<AddedSong> AddedSongs => Discs.SelectMany(addedDisc => addedDisc.Songs);
 
-		public EditDiscsDetailsViewModel(DiscLibrary discLibrary, ILibraryStructurer libraryStructurer)
+		public EditDiscsDetailsViewModel(IFolderProvider folderProvider, IDiscsService discService, IArtistsService artistService, IGenresService genreService)
 		{
-			this.discLibrary = discLibrary ?? throw new ArgumentNullException(nameof(discLibrary));
-			this.libraryStructurer = libraryStructurer ?? throw new ArgumentNullException(nameof(libraryStructurer));
-
+			this.folderProvider = folderProvider ?? throw new ArgumentNullException(nameof(folderProvider));
+			this.discService = discService ?? throw new ArgumentNullException(nameof(discService));
+			this.artistService = artistService ?? throw new ArgumentNullException(nameof(artistService));
+			this.genreService = genreService ?? throw new ArgumentNullException(nameof(genreService));
 			Discs = new ObservableCollection<DiscViewItem>();
 		}
 
 		public async Task SetDiscs(IEnumerable<AddedDiscInfo> discs)
 		{
-			await discLibrary.Load();
-
 			var discsList = discs.ToList();
-			var availableArtists = BuildAvailableArtistsList(discsList);
+			var availableArtists = await BuildAvailableArtistsList(discsList);
+			var availableGenres = await genreService.GetAllGenres(CancellationToken.None);
+
+			// For genre guessing we use all discs, including deleted.
+			var allDiscs = await discService.GetAllDiscs(CancellationToken.None);
 
 			Discs.Clear();
 			foreach (var addedDiscInfo in discsList)
 			{
-				Disc existingDisc = discLibrary.Discs.SingleOrDefault(d => d.Uri == addedDiscInfo.UriWithinStorage);
+				var parentFolder = await folderProvider.GetFolder(addedDiscInfo.DestinationFolderPath, CancellationToken.None);
+				var folderExists = parentFolder != null;
+
+				var existingDisc = parentFolder?.Discs.SingleOrDefault(d => d.TreeTitle == addedDiscInfo.TreeTitle);
 
 				DiscViewItem addedDisc;
 
 				if (existingDisc != null)
 				{
-					addedDisc = new ExistingDiscViewItem(existingDisc, addedDiscInfo, availableArtists, discLibrary.Genres);
+					addedDisc = new ExistingDiscViewItem(existingDisc, addedDiscInfo, availableArtists, availableGenres);
 				}
 				else
 				{
 					switch (addedDiscInfo.DiscType)
 					{
 						case DsicType.ArtistDisc:
-							addedDisc = new ArtistDiscViewItem(addedDiscInfo, availableArtists, discLibrary.Genres, PredictArtistGenre(addedDiscInfo.Artist));
+							addedDisc = new ArtistDiscViewItem(addedDiscInfo, folderExists, availableArtists, availableGenres, PredictArtistGenre(allDiscs, addedDiscInfo.Artist));
 							break;
 
 						case DsicType.CompilationDiscWithArtistInfo:
-							addedDisc = new CompilationDiscWithArtistInfoViewItem(addedDiscInfo, availableArtists, discLibrary.Genres);
+							addedDisc = new CompilationDiscWithArtistInfoViewItem(addedDiscInfo, folderExists, availableArtists, availableGenres);
 							break;
 
 						case DsicType.CompilationDiscWithoutArtistInfo:
-							addedDisc = new CompilationDiscWithoutArtistInfoViewItem(addedDiscInfo, availableArtists, discLibrary.Genres);
+							addedDisc = new CompilationDiscWithoutArtistInfoViewItem(addedDiscInfo, folderExists, availableArtists, availableGenres);
 							break;
 
 						default:
@@ -96,17 +96,20 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 			}
 		}
 
-		private List<Artist> BuildAvailableArtistsList(IEnumerable<AddedDiscInfo> discs)
+		private async Task<IReadOnlyCollection<ArtistModel>> BuildAvailableArtistsList(IEnumerable<AddedDiscInfo> discs)
 		{
-			List<Artist> artists = discLibrary.AllArtists.ToList();
+			var libraryArtists = await artistService.GetAllArtists(CancellationToken.None);
+			var artists = new List<ArtistModel>(libraryArtists);
 
 			var discsList = discs.ToList();
-			foreach (var songArtistName in discsList.Where(d => d.HasArtist).Select(d => d.Artist)
 
-				// We're adding Song artists even if disc.HasArtist is true,
-				// so that individual song artists are also get into artist list.
+			// We're adding Song artists even if disc.HasArtist is true, so that individual song artists also get into the artist list.
+			var newDiscsArtistNames = discsList.Where(d => d.HasArtist)
+				.Select(d => d.Artist)
 				.Concat(discsList.SelectMany(d => d.Songs).Select(s => s.Artist).Where(a => !String.IsNullOrEmpty(a)))
-				.Distinct())
+				.Distinct();
+
+			foreach (var songArtistName in newDiscsArtistNames)
 			{
 				var matchedArtist = artists.SingleOrDefault(a => String.Equals(a.Name, songArtistName, StringComparison.Ordinal));
 				var matchedArtistCaseInsensitive = artists.SingleOrDefault(a => String.Equals(a.Name, songArtistName, StringComparison.OrdinalIgnoreCase));
@@ -118,10 +121,12 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 
 				if (matchedArtist == null)
 				{
-					artists.Add(new Artist
+					var newArtist = new ArtistModel
 					{
 						Name = songArtistName,
-					});
+					};
+
+					artists.Add(newArtist);
 				}
 			}
 
@@ -135,8 +140,7 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 				RaisePropertyChanged(nameof(DataIsReady));
 			}
 
-			ArtistDiscViewItem changedDisc = sender as ArtistDiscViewItem;
-			if (changedDisc != null)
+			if (sender is ArtistDiscViewItem changedDisc)
 			{
 				if (e.PropertyName == nameof(DiscViewItem.Genre))
 				{
@@ -149,22 +153,21 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 		{
 			foreach (var disc in Discs.Where(a => a != changedDisc && a.Artist == changedDisc.Artist))
 			{
-				ArtistDiscViewItem artistDisc = disc as ArtistDiscViewItem;
-				if (artistDisc != null && valueIsEmpty(artistDisc))
+				if (disc is ArtistDiscViewItem artistDisc && valueIsEmpty(artistDisc))
 				{
 					setValue(artistDisc);
 				}
 			}
 		}
 
-		private Genre PredictArtistGenre(string artist)
+		private static GenreModel PredictArtistGenre(IEnumerable<DiscModel> discs, string artist)
 		{
 			// Selecting genre of the most recent disc
-			return discLibrary.AllDiscs
+			return discs
+				.Where(d => d.SoloArtist?.Name == artist)
 				.OrderByDescending(d => d.Year)
-				.Where(d => d.Artist?.Name == artist)
-				.Where(d => d.Genre != null)
-				.Select(d => d.Genre).FirstOrDefault();
+				.Select(d => d.GetGenre())
+				.FirstOrDefault(g => g != null);
 		}
 	}
 }

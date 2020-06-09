@@ -7,6 +7,8 @@ namespace MusicLibrary.Services.Interfaces.Dal
 {
 	public interface IDiscsRepository
 	{
+		Task CreateDisc(DiscModel disc, CancellationToken cancellationToken);
+
 		Task<IReadOnlyCollection<DiscModel>> GetAllDiscs(CancellationToken cancellationToken);
 
 		Task<DiscModel> GetDisc(ItemId discId, CancellationToken cancellationToken);

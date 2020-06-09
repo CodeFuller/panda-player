@@ -4,31 +4,39 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using CF.Library.Core.Extensions;
 using GalaSoft.MvvmLight;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.DiscPreprocessor.MusicStorage;
+using MusicLibrary.Core.Models;
+using MusicLibrary.DiscAdder.MusicStorage;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
+namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
 	public abstract class DiscViewItem : ViewModelBase
 	{
 		public string SourcePath { get; }
 
+		public string DestinationFolder => String.Join('/', DestinationFolderPath);
+
+		public IReadOnlyCollection<string> DestinationFolderPath { get; }
+
+		public bool FolderIsNew { get; }
+
 		public abstract string DiscTypeTitle { get; }
 
 		public virtual bool WarnAboutDiscType => false;
 
-		public abstract Artist Artist { get; set; }
+		public abstract ArtistModel Artist { get; set; }
 
 		public abstract bool ArtistIsEditable { get; }
 
 		public abstract bool ArtistIsNotFilled { get; }
 
-		public bool ArtistIsNew => Artist?.Id == 0;
+		public bool ArtistIsNew => Artist?.Id == null;
 
-		public Collection<Artist> AvailableArtists { get; }
+		public Collection<ArtistModel> AvailableArtists { get; }
 
 		public string DiscTitle => Disc.Title;
+
+		public string TreeTitle => Disc.TreeTitle;
 
 		public abstract string AlbumTitle { get; set; }
 
@@ -36,15 +44,15 @@ namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public bool WarnAboutUnequalAlbumTitle => AlbumTitleIsEditable && !String.Equals(AlbumTitle, DiscTitle, StringComparison.Ordinal);
 
-		public virtual short? Year { get; set; }
+		public virtual int? Year { get; set; }
 
 		public abstract bool YearIsEditable { get; }
 
 		public bool WarnAboutNotFilledYear => YearIsEditable && !Year.HasValue;
 
-		private Genre genre;
+		private GenreModel genre;
 
-		public Genre Genre
+		public GenreModel Genre
 		{
 			get => genre;
 			set
@@ -57,51 +65,29 @@ namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public bool GenreIsNotFilled => Genre == null;
 
-		public Collection<Genre> AvailableGenres { get; }
-
-		public Uri DestinationUri => Disc.Uri;
+		public Collection<GenreModel> AvailableGenres { get; }
 
 		public abstract bool RequiredDataIsFilled { get; }
 
 		protected IReadOnlyCollection<AddedSongInfo> SourceSongs { get; }
 
-		public Disc Disc { get; protected set; }
+		public DiscModel Disc { get; protected set; }
 
-		public IEnumerable<AddedSong> Songs
-		{
-			get
-			{
-				var songs = SourceSongs.Select(s => new AddedSong(
-					new Song
-					{
-						Disc = Disc,
-						Artist = GetSongArtist(s),
-						TrackNumber = s.Track,
-						Year = Year,
-						Title = s.Title,
-						Genre = Genre,
-						Rating = null,
-						LastPlaybackTime = null,
-						PlaybacksCount = 0,
-					}, s.SourcePath))
-					.ToCollection();
+		public IEnumerable<AddedSong> Songs => SourceSongs.Select(s => new AddedSong(CreateSong(s), s.SourcePath, DestinationFolderPath));
 
-				// We do not fill Disc.Songs collection as MusicLibraryRepository.AddSong() requries
-				return songs;
-			}
-		}
-
-		protected DiscViewItem(AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
+		protected DiscViewItem(AddedDiscInfo disc, bool folderExists, IEnumerable<ArtistModel> availableArtists, IEnumerable<GenreModel> availableGenres)
 		{
 			SourcePath = disc.SourcePath;
-			AvailableArtists = availableArtists.OrderBy(a => a.Name).ToCollection();
+			DestinationFolderPath = disc.DestinationFolderPath;
+			FolderIsNew = !folderExists;
+			AvailableArtists = availableArtists.ToCollection();
 			SourceSongs = disc.Songs.ToList();
-			AvailableGenres = availableGenres.OrderBy(a => a.Name).ToCollection();
+			AvailableGenres = availableGenres.ToCollection();
 		}
 
-		protected abstract Artist GetSongArtist(AddedSongInfo song);
+		protected abstract ArtistModel GetSongArtist(AddedSongInfo song);
 
-		protected Artist LookupArtist(string artistName)
+		protected ArtistModel LookupArtist(string artistName)
 		{
 			var artist = AvailableArtists.SingleOrDefault(a => a.Name == artistName);
 			if (artist == null)
@@ -110,6 +96,22 @@ namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
 			}
 
 			return artist;
+		}
+
+		private SongModel CreateSong(AddedSongInfo song)
+		{
+			return new SongModel
+			{
+				Title = song.Title,
+				TreeTitle = song.TreeTitle,
+				TrackNumber = song.Track,
+				Disc = Disc,
+				Artist = GetSongArtist(song),
+				Genre = Genre,
+				Rating = null,
+				LastPlaybackTime = null,
+				PlaybacksCount = 0,
+			};
 		}
 	}
 }

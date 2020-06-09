@@ -19,10 +19,26 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		private readonly IContentUriProvider contentUriProvider;
 
-		public FoldersRepository(IMusicLibraryDbContextFactory contextFactory, IContentUriProvider contentUriProvider)
+		private readonly IFolderCache folderCache;
+
+		public FoldersRepository(IMusicLibraryDbContextFactory contextFactory, IContentUriProvider contentUriProvider, IFolderCache folderCache)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
 			this.contentUriProvider = contentUriProvider ?? throw new ArgumentNullException(nameof(contentUriProvider));
+			this.folderCache = folderCache ?? throw new ArgumentNullException(nameof(folderCache));
+		}
+
+		public async Task CreateFolder(ShallowFolderModel folder, CancellationToken cancellationToken)
+		{
+			var folderEntity = folder.ToEntity();
+
+			await using var context = contextFactory.Create();
+			await context.Folders.AddAsync(folderEntity, cancellationToken);
+			await context.SaveChangesAsync(cancellationToken);
+
+			folder.Id = folderEntity.Id.ToItemId();
+
+			folderCache.StoreFolder(folder);
 		}
 
 		public async Task<IReadOnlyCollection<ShallowFolderModel>> GetAllFolders(CancellationToken cancellationToken)

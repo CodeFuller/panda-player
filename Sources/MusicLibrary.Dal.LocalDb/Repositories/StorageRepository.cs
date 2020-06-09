@@ -34,6 +34,14 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			this.checksumCalculator = checksumCalculator ?? throw new ArgumentNullException(nameof(checksumCalculator));
 		}
 
+		public Task CreateDisc(DiscModel disc, CancellationToken cancellationToken)
+		{
+			var discFolderPath = storageOrganizer.GetDiscFolderPath(disc);
+			fileStorage.CreateFolder(discFolderPath);
+
+			return Task.CompletedTask;
+		}
+
 		public Task UpdateDiscTreeTitle(DiscModel oldDisc, DiscModel newDisc, CancellationToken cancellationToken)
 		{
 			var oldDiscPath = storageOrganizer.GetDiscFolderPath(oldDisc);
@@ -53,6 +61,16 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			return Task.CompletedTask;
 		}
 
+		public Task AddSong(SongModel song, Stream songContent, CancellationToken cancellationToken)
+		{
+			var songPath = storageOrganizer.GetSongFilePath(song);
+			fileStorage.SaveFile(songPath, songContent);
+
+			UpdateSongTags(song);
+
+			return Task.CompletedTask;
+		}
+
 		public Task UpdateSongTreeTitle(SongModel oldSong, SongModel newSong, CancellationToken cancellationToken)
 		{
 			var oldSongPath = storageOrganizer.GetSongFilePath(oldSong);
@@ -66,6 +84,13 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public Task UpdateSong(SongModel song, CancellationToken cancellationToken)
 		{
+			UpdateSongTags(song);
+
+			return Task.CompletedTask;
+		}
+
+		private void UpdateSongTags(SongModel song)
+		{
 			var songPath = storageOrganizer.GetSongFilePath(song);
 			var songFileName = fileStorage.CheckoutFile(songPath);
 
@@ -76,8 +101,6 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			song.Checksum = CalculateFileChecksum(songFileName);
 
 			fileStorage.CommitFile(songFileName);
-
-			return Task.CompletedTask;
 		}
 
 		public Task DeleteSong(SongModel song, CancellationToken cancellationToken)
@@ -112,6 +135,14 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 			var folderPath = GetFolderPath(imagePath);
 			DeleteFolderIfEmpty(folderPath);
+
+			return Task.CompletedTask;
+		}
+
+		public Task CreateFolder(ShallowFolderModel folder, CancellationToken cancellationToken)
+		{
+			var folderPath = storageOrganizer.GetFolderPath(folder);
+			fileStorage.CreateFolder(folderPath);
 
 			return Task.CompletedTask;
 		}

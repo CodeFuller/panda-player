@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 
-namespace MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
+namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 {
 	public class EditableTreeViewItem : ViewModelBase
 	{

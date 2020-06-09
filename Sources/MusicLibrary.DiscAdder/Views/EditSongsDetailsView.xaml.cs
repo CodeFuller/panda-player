@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace MusicLibrary.DiscPreprocessor.Views
+namespace MusicLibrary.DiscAdder.Views
 {
 	/// <summary>
 	/// Interaction logic for EditSongsDetailsView.xaml

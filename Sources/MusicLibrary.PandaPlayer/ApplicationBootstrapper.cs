@@ -36,6 +36,8 @@ namespace MusicLibrary.PandaPlayer
 
 			services.AddLocalDbDal(settings => configuration.Bind("localDb:dataStorage", settings));
 			services.AddMusicLibraryDbContext(configuration.GetConnectionString("musicLibraryDb"));
+			services.AddMusicLibraryServices();
+			services.AddDiscTitleToAlbumMapper(settings => configuration.Bind("discToAlbumMappings", settings));
 
 			RegisterViewModels(services);
 			services.AddImages();
@@ -69,9 +71,6 @@ namespace MusicLibrary.PandaPlayer
 			}
 
 			RegisterDataRepositories(services, dataStoragePath);
-
-			services.AddMusicLibraryServices();
-			services.AddDiscTitleToAlbumMapper(settings => configuration.Bind("discToAlbumMappings", settings));
 		}
 
 		private void RegisterViewModels(IServiceCollection services)

@@ -1,4 +1,4 @@
-﻿namespace MusicLibrary.DiscPreprocessor.Views
+﻿namespace MusicLibrary.DiscAdder.Views
 {
 	internal interface IScrollable
 	{

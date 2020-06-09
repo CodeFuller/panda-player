@@ -1,65 +1,54 @@
 ﻿using CF.Library.Bootstrap;
-using CF.Library.Core.Facades;
 using CF.Library.Core.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MusicLibrary.Common.Images;
-using MusicLibrary.Core;
-using MusicLibrary.Core.Interfaces;
-using MusicLibrary.Core.Media;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.Dal.Extensions;
-using MusicLibrary.DiscPreprocessor.Interfaces;
-using MusicLibrary.DiscPreprocessor.MusicStorage;
-using MusicLibrary.DiscPreprocessor.ParsingContent;
-using MusicLibrary.DiscPreprocessor.ParsingSong;
-using MusicLibrary.DiscPreprocessor.ViewModels;
-using MusicLibrary.DiscPreprocessor.ViewModels.Interfaces;
-using MusicLibrary.Library;
-using MusicLibrary.Tagger;
+using MusicLibrary.Dal.LocalDb.Extensions;
+using MusicLibrary.DiscAdder.Interfaces;
+using MusicLibrary.DiscAdder.Internal;
+using MusicLibrary.DiscAdder.MusicStorage;
+using MusicLibrary.DiscAdder.ParsingContent;
+using MusicLibrary.DiscAdder.ParsingSong;
+using MusicLibrary.DiscAdder.ViewModels;
+using MusicLibrary.DiscAdder.ViewModels.Interfaces;
+using MusicLibrary.Services.Extensions;
+using MusicLibrary.Services.Media;
+using MusicLibrary.Shared;
+using MusicLibrary.Shared.Images;
 
-namespace MusicLibrary.DiscPreprocessor
+namespace MusicLibrary.DiscAdder
 {
 	public class ApplicationBootstrapper : DiApplicationBootstrapper<ApplicationViewModel>
 	{
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{
-			services.Configure<FileSystemStorageSettings>(options => configuration.Bind("fileSystemStorage", options));
+			services.AddDiscTitleToAlbumMapper(settings => configuration.Bind("discToAlbumMappings", settings));
+
 			services.Configure<DiscPreprocessorSettings>(configuration.Bind);
-			services.Configure<DiscToAlbumMappingSettings>(options => configuration.Bind("discToAlbumMappings", options));
 
-			services.AddDal(settings => configuration.Bind("database", settings));
+			services.AddLocalDbDal(settings => configuration.Bind("localDb:dataStorage", settings));
+			services.AddMusicLibraryDbContext(configuration.GetConnectionString("musicLibraryDb"));
+			services.AddMusicLibraryServices();
+			services.AddDiscTitleToAlbumMapper(settings => configuration.Bind("discToAlbumMappings", settings));
 
-			services.AddTransient<IFileStorage, FileSystemStorage>();
-			services.AddTransient<IMusicLibraryStorage, FileSystemMusicStorage>();
-			services.AddTransient<IChecksumCalculator, Crc32Calculator>();
-			services.AddTransient<IMusicLibrary, RepositoryAndStorageMusicLibrary>();
-			services.AddTransient<IFileSystemFacade, FileSystemFacade>();
+			RegisterViewModels(services);
+			services.AddImages();
+			services.AddSingleton<IObjectFactory<IImageFile>, ObjectFactory<IImageFile>>();
+
 			services.AddTransient<IWorkshopMusicStorage, WorkshopMusicStorage>();
-
-			services.AddSingleton<DiscLibrary>(sp => new DiscLibrary(async () =>
-			{
-				var library = sp.GetRequiredService<IMusicLibrary>();
-				return await library.LoadDiscs();
-			}));
 
 			services.AddTransient<IEthalonSongParser, EthalonSongParser>();
 			services.AddTransient<IEthalonDiscParser, EthalonDiscParser>();
 			services.AddTransient<IDiscContentParser, DiscContentParser>();
 			services.AddTransient<IInputContentSplitter, InputContentSplitter>();
 			services.AddTransient<IDiscContentComparer, DiscContentComparer>();
-			services.AddTransient<ISongTagger, SongTagger>();
 			services.AddTransient<ISongMediaInfoProvider, SongMediaInfoProvider>();
-			services.AddTransient<ILibraryStructurer, LibraryStructurer>();
-			services.AddTransient<IDiscImageValidator, DiscImageValidator>();
-			services.AddTransient<IImageFile, ImageFile>();
-			services.AddTransient<IObjectFactory<IImageFile>, ObjectFactory<IImageFile>>();
 			services.AddTransient<IContentCrawler, ContentCrawler>();
 			services.AddTransient<ISourceFileTypeResolver, SourceFileTypeResolver>();
-			services.AddTransient<IImageFacade, ImageFacade>();
-			services.AddTransient<IImageInfoProvider, ImageInfoProvider>();
-			services.AddSingleton<IDiscTitleToAlbumMapper, DiscTitleToAlbumMapper>();
+			services.AddSingleton<IFolderProvider, FolderProvider>();
+		}
 
+		private static void RegisterViewModels(IServiceCollection services)
+		{
 			services.AddTransient<IEditSourceContentViewModel, EditSourceContentViewModel>();
 			services.AddTransient<IEditDiscsDetailsViewModel, EditDiscsDetailsViewModel>();
 			services.AddTransient<IEditSourceDiscImagesViewModel, EditSourceDiscImagesViewModel>();

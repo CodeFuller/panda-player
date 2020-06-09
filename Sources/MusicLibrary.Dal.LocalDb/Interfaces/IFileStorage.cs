@@ -26,6 +26,8 @@ namespace MusicLibrary.Dal.LocalDb.Interfaces
 
 		bool FolderIsEmpty(FilePath folderPath);
 
+		void CreateFolder(FilePath folderPath);
+
 		void MoveFolder(FilePath source, FilePath destination);
 
 		void DeleteFolder(FilePath folderPath);

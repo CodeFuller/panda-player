@@ -1,4 +1,4 @@
-﻿namespace MusicLibrary.DiscPreprocessor.MusicStorage
+﻿namespace MusicLibrary.DiscAdder.MusicStorage
 {
 	public class WorkshopStorageSettings
 	{

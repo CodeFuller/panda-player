@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using MusicLibrary.DiscPreprocessor.ViewModels;
+using MusicLibrary.DiscAdder.ViewModels;
 
-namespace MusicLibrary.DiscPreprocessor.Views
+namespace MusicLibrary.DiscAdder.Views
 {
 	/// <summary>
 	/// Interaction logic for ApplicationView.xaml

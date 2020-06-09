@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using MusicLibrary.DiscPreprocessor.MusicStorage;
-using MusicLibrary.DiscPreprocessor.ViewModels.SourceContent;
+using MusicLibrary.DiscAdder.MusicStorage;
+using MusicLibrary.DiscAdder.ViewModels.SourceContent;
 
-namespace MusicLibrary.DiscPreprocessor.ViewModels.Interfaces
+namespace MusicLibrary.DiscAdder.ViewModels.Interfaces
 {
 	public interface IEditSourceContentViewModel : IPageViewModel
 	{

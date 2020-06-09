@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.DiscPreprocessor.MusicStorage;
+using MusicLibrary.Core.Models;
+using MusicLibrary.DiscAdder.MusicStorage;
 
-namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
+namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
 	public abstract class NewDiscViewItem : DiscViewItem
 	{
@@ -20,14 +20,13 @@ namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public override bool AlbumTitleIsEditable => true;
 
-		private short? year;
-
-		public override short? Year
+		public override int? Year
 		{
-			get => year;
+			get => Disc.Year;
 			set
 			{
-				Set(ref year, value);
+				Disc.Year = value;
+				RaisePropertyChanged();
 				RaisePropertyChanged(nameof(WarnAboutNotFilledYear));
 			}
 		}
@@ -36,19 +35,19 @@ namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public override bool RequiredDataIsFilled => !GenreIsNotFilled;
 
-		protected NewDiscViewItem(AddedDiscInfo disc, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
-			: base(disc, availableArtists, availableGenres)
+		protected NewDiscViewItem(AddedDiscInfo disc, bool folderExists, IEnumerable<ArtistModel> availableArtists, IEnumerable<GenreModel> availableGenres)
+			: base(disc, folderExists, availableArtists, availableGenres)
 		{
 			if (String.IsNullOrWhiteSpace(disc.DiscTitle))
 			{
 				throw new InvalidOperationException("Disc title could not be empty");
 			}
 
-			Disc = new Disc
+			Disc = new DiscModel
 			{
 				Title = disc.DiscTitle,
+				TreeTitle = disc.TreeTitle,
 				AlbumTitle = disc.AlbumTitle,
-				Uri = disc.UriWithinStorage,
 			};
 		}
 	}

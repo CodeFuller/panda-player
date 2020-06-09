@@ -27,10 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MusicLibrary.Common\MusicLibrary.Common.csproj" />
-    <ProjectReference Include="..\MusicLibrary.Dal\MusicLibrary.Dal.csproj" />
-    <ProjectReference Include="..\MusicLibrary.Library\MusicLibrary.Library.csproj" />
-    <ProjectReference Include="..\MusicLibrary.Tagger\MusicLibrary.Tagger.csproj" />
+    <ProjectReference Include="..\MusicLibrary.Dal.LocalDb\MusicLibrary.Dal.LocalDb.csproj" />
+    <ProjectReference Include="..\MusicLibrary.Shared\MusicLibrary.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,9 +42,6 @@
     <None Update="conf/**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="..\DiscToAlbumMappings.json" Link="conf/DiscToAlbumMappings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
 </Project>

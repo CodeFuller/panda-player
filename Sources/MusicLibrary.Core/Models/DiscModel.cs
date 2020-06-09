@@ -58,7 +58,7 @@ namespace MusicLibrary.Core.Models
 			.ThenBy(s => s.TreeTitle, StringComparer.OrdinalIgnoreCase)
 			.ThenBy(s => s.Id.Value);
 
-		private List<DiscImageModel> images;
+		private List<DiscImageModel> images = new List<DiscImageModel>();
 
 		public IReadOnlyCollection<DiscImageModel> Images
 		{

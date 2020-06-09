@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 
-namespace MusicLibrary.DiscPreprocessor.ParsingSong
+namespace MusicLibrary.DiscAdder.ParsingSong
 {
 	internal class SongTitlePattern
 	{

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using MusicLibrary.Core.Objects;
-using MusicLibrary.DiscPreprocessor.MusicStorage;
+using MusicLibrary.Core.Models;
+using MusicLibrary.DiscAdder.MusicStorage;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
+namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
 	public sealed class CompilationDiscWithArtistInfoViewItem : CompilationDiscViewItem
 	{
 		public override string DiscTypeTitle => "Compilation with Artists";
 
-		public override Artist Artist
+		public override ArtistModel Artist
 		{
 			get => null;
 			set => throw new InvalidOperationException(Current($"Artist could not be set for '{DiscTitle}' disc"));
@@ -20,12 +20,12 @@ namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
 
 		public override bool ArtistIsNotFilled => false;
 
-		public CompilationDiscWithArtistInfoViewItem(AddedDiscInfo discInfo, IEnumerable<Artist> availableArtists, IEnumerable<Genre> availableGenres)
-			: base(discInfo, availableArtists, availableGenres)
+		public CompilationDiscWithArtistInfoViewItem(AddedDiscInfo discInfo, bool folderExists, IEnumerable<ArtistModel> availableArtists, IEnumerable<GenreModel> availableGenres)
+			: base(discInfo, folderExists, availableArtists, availableGenres)
 		{
 		}
 
-		protected override Artist GetSongArtist(AddedSongInfo song)
+		protected override ArtistModel GetSongArtist(AddedSongInfo song)
 		{
 			return LookupArtist(song.Artist);
 		}

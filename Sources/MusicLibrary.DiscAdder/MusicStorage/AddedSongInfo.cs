@@ -1,4 +1,4 @@
-﻿namespace MusicLibrary.DiscPreprocessor.MusicStorage
+﻿namespace MusicLibrary.DiscAdder.MusicStorage
 {
 	public class AddedSongInfo
 	{
@@ -10,8 +10,10 @@
 
 		public string Title { get; set; }
 
+		public string TreeTitle { get; set; }
+
 		/// <summary>
-		/// Original song title, with preserved artist if it presents
+		/// Gets or sets original song title, with preserved artist if it presents.
 		/// </summary>
 		public string FullTitle { get; set; }
 

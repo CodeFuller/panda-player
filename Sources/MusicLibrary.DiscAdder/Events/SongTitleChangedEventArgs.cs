@@ -1,4 +1,4 @@
-﻿namespace MusicLibrary.DiscPreprocessor.Events
+﻿namespace MusicLibrary.DiscAdder.Events
 {
 	public class SongTitleChangedEventArgs : SongTitleChangeEventArgs
 	{

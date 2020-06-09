@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
-using MusicLibrary.Common.Images;
-using MusicLibrary.DiscPreprocessor.Interfaces;
+using MusicLibrary.DiscAdder.Interfaces;
+using MusicLibrary.Shared.Images;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.DiscPreprocessor
+namespace MusicLibrary.DiscAdder
 {
 	public class SourceFileTypeResolver : ISourceFileTypeResolver
 	{

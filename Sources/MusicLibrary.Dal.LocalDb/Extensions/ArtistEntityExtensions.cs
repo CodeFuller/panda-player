@@ -13,5 +13,14 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				Name = artist.Name,
 			};
 		}
+
+		public static ArtistEntity ToEntity(this ArtistModel artist)
+		{
+			return new ArtistEntity
+			{
+				Id = artist.Id?.ToInt32() ?? default,
+				Name = artist.Name,
+			};
+		}
 	}
 }

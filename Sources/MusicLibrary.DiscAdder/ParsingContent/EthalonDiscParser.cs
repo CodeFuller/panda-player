@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using CF.Library.Core.Exceptions;
-using MusicLibrary.DiscPreprocessor.ParsingSong;
+using MusicLibrary.DiscAdder.ParsingSong;
 
-namespace MusicLibrary.DiscPreprocessor.ParsingContent
+namespace MusicLibrary.DiscAdder.ParsingContent
 {
 	public class EthalonDiscParser : IEthalonDiscParser
 	{

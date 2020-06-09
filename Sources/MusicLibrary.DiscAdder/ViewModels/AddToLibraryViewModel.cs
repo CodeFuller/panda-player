@@ -1,25 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Wpf;
 using GalaSoft.MvvmLight;
 using Microsoft.Extensions.Options;
-using MusicLibrary.Core.Interfaces;
-using MusicLibrary.Core.Media;
-using MusicLibrary.DiscPreprocessor.AddingToLibrary;
-using MusicLibrary.DiscPreprocessor.MusicStorage;
-using MusicLibrary.DiscPreprocessor.ViewModels.Interfaces;
+using MusicLibrary.Core.Models;
+using MusicLibrary.DiscAdder.AddingToLibrary;
+using MusicLibrary.DiscAdder.MusicStorage;
+using MusicLibrary.DiscAdder.ViewModels.Interfaces;
+using MusicLibrary.Services.Interfaces;
+using MusicLibrary.Services.Media;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.DiscPreprocessor.ViewModels
+namespace MusicLibrary.DiscAdder.ViewModels
 {
 	public class AddToLibraryViewModel : ViewModelBase, IAddToLibraryViewModel
 	{
-		private readonly IMusicLibrary musicLibrary;
 		private readonly ISongMediaInfoProvider songMediaInfoProvider;
 		private readonly IWorkshopMusicStorage workshopMusicStorage;
+
+		private readonly IFoldersService foldersService;
+		private readonly IDiscsService discService;
+		private readonly ISongsService songService;
+		private readonly IArtistsService artistService;
 
 		private readonly bool deleteSourceContent;
 
@@ -38,12 +45,12 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 
 		public ICommand AddToLibraryCommand { get; }
 
-		private int currProgress;
+		private int currentProgress;
 
-		public int CurrProgress
+		public int CurrentProgress
 		{
-			get => currProgress;
-			set => Set(ref currProgress, value);
+			get => currentProgress;
+			set => Set(ref currentProgress, value);
 		}
 
 		private int progressSize;
@@ -62,12 +69,15 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 			set => Set(ref progressMessages, value);
 		}
 
-		public AddToLibraryViewModel(IMusicLibrary musicLibrary, ISongMediaInfoProvider songMediaInfoProvider,
-			IWorkshopMusicStorage workshopMusicStorage, IOptions<DiscPreprocessorSettings> options)
+		public AddToLibraryViewModel(ISongMediaInfoProvider songMediaInfoProvider, IWorkshopMusicStorage workshopMusicStorage,
+			IFoldersService foldersService, IDiscsService discService, ISongsService songService, IArtistsService artistService, IOptions<DiscPreprocessorSettings> options)
 		{
-			this.musicLibrary = musicLibrary ?? throw new ArgumentNullException(nameof(musicLibrary));
 			this.songMediaInfoProvider = songMediaInfoProvider ?? throw new ArgumentNullException(nameof(songMediaInfoProvider));
 			this.workshopMusicStorage = workshopMusicStorage ?? throw new ArgumentNullException(nameof(workshopMusicStorage));
+			this.foldersService = foldersService ?? throw new ArgumentNullException(nameof(foldersService));
+			this.discService = discService ?? throw new ArgumentNullException(nameof(discService));
+			this.songService = songService ?? throw new ArgumentNullException(nameof(songService));
+			this.artistService = artistService ?? throw new ArgumentNullException(nameof(artistService));
 			this.deleteSourceContent = options?.Value?.DeleteSourceContentAfterAdding ?? throw new ArgumentNullException(nameof(options));
 
 			AddToLibraryCommand = new AsyncRelayCommand(AddContentToLibrary);
@@ -92,12 +102,12 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 
 			DataIsReady = false;
 
-			CurrProgress = 0;
+			CurrentProgress = 0;
 			ProgressSize = 0;
 			ProgressSize += await FillSongsMediaData(true);
-			ProgressSize += await AddSongsToLibrary(true);
+			ProgressSize += await AddSongsToLibrary(true, CancellationToken.None);
 			await FillSongsMediaData(false);
-			await AddSongsToLibrary(false);
+			await AddSongsToLibrary(false, CancellationToken.None);
 
 			if (deleteSourceContent)
 			{
@@ -112,7 +122,7 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 		private async Task<int> FillSongsMediaData(bool onlyCountProgressSize)
 		{
 			const int progressIncrement = 1;
-			int taskProgressSize = addedSongs.Count * progressIncrement;
+			var taskProgressSize = addedSongs.Count * progressIncrement;
 
 			if (onlyCountProgressSize)
 			{
@@ -123,28 +133,45 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 			{
 				ProgressMessages += Current($"Getting media info for '{addedSong.SourceFileName}'...\n");
 				var mediaInfo = await songMediaInfoProvider.GetSongMediaInfo(addedSong.SourceFileName);
-				addedSong.Song.FileSize = mediaInfo.Size;
-				addedSong.Song.Bitrate = mediaInfo.Bitrate;
+
+				addedSong.Song.BitRate = mediaInfo.Bitrate;
 				addedSong.Song.Duration = mediaInfo.Duration;
 
-				CurrProgress += progressIncrement;
+				CurrentProgress += progressIncrement;
 			}
 
 			return taskProgressSize;
 		}
 
-		private async Task<int> AddSongsToLibrary(bool onlyCountProgressSize)
+		// TODO: Refactor to smaller methods
+		private async Task<int> AddSongsToLibrary(bool onlyCountProgressSize, CancellationToken cancellationToken)
 		{
 			const int progressIncrement = 5;
-			int taskProgressSize = 0;
+			var taskProgressSize = 0;
 
-			foreach (AddedSong addedSong in addedSongs)
+			foreach (var addedSong in addedSongs)
 			{
 				if (!onlyCountProgressSize)
 				{
-					ProgressMessages += Current($"Adding to library '{addedSong.SourceFileName}'...\n");
-					await musicLibrary.AddSong(addedSong.Song, addedSong.SourceFileName);
-					CurrProgress += progressIncrement;
+					var song = addedSong.Song;
+
+					if (song.Artist != null && song.Artist.Id == null)
+					{
+						await CreateArtist(song.Artist, cancellationToken);
+					}
+
+					var songDisc = song.Disc;
+					if (songDisc.Id == null)
+					{
+						await CreateDisc(songDisc, addedSong.DiscFolderPath, cancellationToken);
+					}
+
+					ProgressMessages += Current($"Adding song '{addedSong.SourceFileName}'...\n");
+
+					using var songContent = File.OpenRead(addedSong.SourceFileName);
+					await songService.CreateSong(song, songContent, cancellationToken);
+
+					CurrentProgress += progressIncrement;
 				}
 
 				taskProgressSize += progressIncrement;
@@ -152,13 +179,23 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 
 			if (addedDiscImages != null)
 			{
-				foreach (AddedDiscImage image in addedDiscImages)
+				foreach (var image in addedDiscImages)
 				{
 					if (!onlyCountProgressSize)
 					{
 						ProgressMessages += Current($"Adding disc image '{image.ImageInfo.FileName}'...\n");
-						await musicLibrary.SetDiscCoverImage(image.Disc, image.ImageInfo);
-						CurrProgress += progressIncrement;
+
+						var discImage = new DiscImageModel
+						{
+							Disc = image.Disc,
+							TreeTitle = Path.GetFileName(image.ImageInfo.FileName),
+							ImageType = DiscImageType.Cover,
+						};
+
+						using var imageContent = File.OpenRead(image.ImageInfo.FileName);
+						await discService.SetDiscCoverImage(discImage, imageContent, cancellationToken);
+
+						CurrentProgress += progressIncrement;
 					}
 
 					taskProgressSize += progressIncrement;
@@ -166,6 +203,57 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 			}
 
 			return taskProgressSize;
+		}
+
+		private async Task CreateArtist(ArtistModel artist, CancellationToken cancellationToken)
+		{
+			ProgressMessages += Current($"Creating artist '{artist.Name}' ...\n");
+
+			await artistService.CreateArtist(artist, cancellationToken);
+		}
+
+		private async Task<ShallowFolderModel> CreateFolder(IReadOnlyCollection<string> discFolderPath, CancellationToken cancellationToken)
+		{
+			const char pathSeparator = '/';
+
+			var currentFolder = await foldersService.GetRootFolder(cancellationToken);
+
+			var currentFolderFullPath = String.Empty;
+
+			foreach (var currentSubfolderName in discFolderPath)
+			{
+				currentFolderFullPath += $"{pathSeparator}{currentSubfolderName}";
+
+				var currentSubfolder = currentFolder.Subfolders.SingleOrDefault(sf => String.Equals(sf.Name, currentSubfolderName, StringComparison.Ordinal));
+				if (currentSubfolder == null)
+				{
+					ProgressMessages += Current($"Creating folder '{currentFolderFullPath}' ...\n");
+
+					currentSubfolder = new ShallowFolderModel
+					{
+						ParentFolderId = currentFolder.Id,
+						Name = currentSubfolderName,
+					};
+
+					await foldersService.CreateFolder(currentSubfolder, cancellationToken);
+				}
+
+				currentFolder = await foldersService.GetFolder(currentSubfolder.Id, cancellationToken);
+			}
+
+			return currentFolder;
+		}
+
+		private async Task CreateDisc(DiscModel disc, IReadOnlyCollection<string> discFolderPath, CancellationToken cancellationToken)
+		{
+			if (disc.Folder == null)
+			{
+				disc.Folder = await CreateFolder(discFolderPath, cancellationToken);
+			}
+
+			ProgressMessages += Current($"Creating disc '{disc.TreeTitle}' ...\n");
+
+			await discService.CreateDisc(disc, cancellationToken);
 		}
 	}
 }

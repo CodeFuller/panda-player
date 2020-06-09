@@ -1,9 +1,9 @@
 using System;
 using System.Windows;
 using System.Windows.Media;
-using MusicLibrary.DiscPreprocessor.Behaviors;
+using MusicLibrary.DiscAdder.Behaviors;
 
-namespace MusicLibrary.DiscPreprocessor.Extensions
+namespace MusicLibrary.DiscAdder.Extensions
 {
 	// Copy/paste from https://treeviewinplaceedit.codeplex.com
 	public static class DependencyObjectExtension

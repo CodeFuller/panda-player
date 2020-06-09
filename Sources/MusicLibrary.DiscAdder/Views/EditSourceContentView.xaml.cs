@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Controls;
 
-namespace MusicLibrary.DiscPreprocessor.Views
+namespace MusicLibrary.DiscAdder.Views
 {
 	/// <summary>
 	/// Interaction logic for EditSourceContentView.xaml
@@ -17,8 +17,8 @@ namespace MusicLibrary.DiscPreprocessor.Views
 		{
 			List<IScrollable> scrolledControls = new List<IScrollable>
 			{
-				new ScrollableTextBox(TextBoxRawEthalonDiscs),
-				TreeViewEthalonDiscsContent,
+				new ScrollableTextBox(TextBoxRawReferenceDiscs),
+				TreeViewReferenceDiscsContent,
 				TreeViewCurrentDiscsContent,
 			};
 

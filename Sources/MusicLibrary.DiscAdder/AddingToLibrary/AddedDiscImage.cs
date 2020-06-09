@@ -1,15 +1,15 @@
-﻿using MusicLibrary.Core.Objects;
-using MusicLibrary.Core.Objects.Images;
+﻿using MusicLibrary.Core.Models;
+using MusicLibrary.Shared.Images;
 
-namespace MusicLibrary.DiscPreprocessor.AddingToLibrary
+namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
 	public class AddedDiscImage
 	{
-		public Disc Disc { get; }
+		public DiscModel Disc { get; }
 
 		public ImageInfo ImageInfo { get; }
 
-		public AddedDiscImage(Disc disc, ImageInfo imageInfo)
+		public AddedDiscImage(DiscModel disc, ImageInfo imageInfo)
 		{
 			Disc = disc;
 			ImageInfo = imageInfo;

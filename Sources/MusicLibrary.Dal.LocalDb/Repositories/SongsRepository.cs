@@ -25,6 +25,17 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			this.contentUriProvider = contentUriProvider ?? throw new ArgumentNullException(nameof(contentUriProvider));
 		}
 
+		public async Task CreateSong(SongModel song, CancellationToken cancellationToken)
+		{
+			var songEntity = song.ToEntity();
+
+			await using var context = contextFactory.Create();
+			await context.Songs.AddAsync(songEntity, cancellationToken);
+			await context.SaveChangesAsync(cancellationToken);
+
+			song.Id = songEntity.Id.ToItemId();
+		}
+
 		public async Task<SongModel> GetSong(ItemId songId, CancellationToken cancellationToken)
 		{
 			await using var context = contextFactory.Create();

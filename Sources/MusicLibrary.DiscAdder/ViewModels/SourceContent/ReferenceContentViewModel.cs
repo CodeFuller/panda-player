@@ -3,16 +3,16 @@ using System.IO;
 using CF.Library.Core.Facades;
 using GalaSoft.MvvmLight;
 
-namespace MusicLibrary.DiscPreprocessor.ViewModels.SourceContent
+namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 {
-	public class EthalonContentViewModel : ViewModelBase
+	public class ReferenceContentViewModel : ViewModelBase
 	{
 		private const string ContentSaveFilename = "RawDiscsContent.txt";
 
 		private readonly IFileSystemFacade fileSystemFacade;
 		private readonly string contentSaveFilePath;
 
-		public EthalonContentViewModel(IFileSystemFacade fileSystemFacade, string appDataPath)
+		public ReferenceContentViewModel(IFileSystemFacade fileSystemFacade, string appDataPath)
 		{
 			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
 			contentSaveFilePath = Path.Combine(appDataPath, ContentSaveFilename);

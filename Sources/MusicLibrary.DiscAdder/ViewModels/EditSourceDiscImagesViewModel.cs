@@ -6,13 +6,13 @@ using System.Windows.Input;
 using CF.Library.Core.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using MusicLibrary.Common.Images;
-using MusicLibrary.Core.Objects.Images;
-using MusicLibrary.DiscPreprocessor.AddingToLibrary;
-using MusicLibrary.DiscPreprocessor.ViewModels.Interfaces;
+using MusicLibrary.Core.Models;
+using MusicLibrary.DiscAdder.AddingToLibrary;
+using MusicLibrary.DiscAdder.ViewModels.Interfaces;
+using MusicLibrary.Shared.Images;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.DiscPreprocessor.ViewModels
+namespace MusicLibrary.DiscAdder.ViewModels
 {
 	public class EditSourceDiscImagesViewModel : ViewModelBase, IEditSourceDiscImagesViewModel
 	{

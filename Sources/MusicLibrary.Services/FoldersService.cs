@@ -27,6 +27,13 @@ namespace MusicLibrary.Services
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
+		public async Task CreateFolder(ShallowFolderModel folder, CancellationToken cancellationToken)
+		{
+			await storageRepository.CreateFolder(folder, cancellationToken);
+
+			await foldersRepository.CreateFolder(folder, cancellationToken);
+		}
+
 		public Task<IReadOnlyCollection<ShallowFolderModel>> GetAllFolders(CancellationToken cancellationToken)
 		{
 			return foldersRepository.GetAllFolders(cancellationToken);

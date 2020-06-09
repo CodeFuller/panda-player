@@ -42,7 +42,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 		{
 			return new DiscEntity
 			{
-				Id = disc.Id.ToInt32(),
+				Id = disc.Id?.ToInt32() ?? default,
 				FolderId = disc.Folder.Id.ToInt32(),
 				Title = disc.Title,
 				TreeTitle = disc.TreeTitle,

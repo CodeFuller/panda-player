@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace MusicLibrary.DiscPreprocessor.ViewModels.Interfaces
+namespace MusicLibrary.DiscAdder.ViewModels.Interfaces
 {
 	public interface IPageViewModel : INotifyPropertyChanged
 	{

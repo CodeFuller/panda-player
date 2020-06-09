@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using MusicLibrary.DiscPreprocessor.AddingToLibrary;
+using MusicLibrary.DiscAdder.AddingToLibrary;
 
-namespace MusicLibrary.DiscPreprocessor.ViewModels.Interfaces
+namespace MusicLibrary.DiscAdder.ViewModels.Interfaces
 {
 	public interface IEditSourceDiscImagesViewModel : IPageViewModel
 	{

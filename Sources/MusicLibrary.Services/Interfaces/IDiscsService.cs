@@ -8,6 +8,8 @@ namespace MusicLibrary.Services.Interfaces
 {
 	public interface IDiscsService
 	{
+		Task CreateDisc(DiscModel disc, CancellationToken cancellationToken);
+
 		Task<IReadOnlyCollection<DiscModel>> GetAllDiscs(CancellationToken cancellationToken);
 
 		Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken);

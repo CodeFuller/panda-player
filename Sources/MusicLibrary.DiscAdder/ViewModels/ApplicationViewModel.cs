@@ -6,10 +6,10 @@ using System.Windows.Input;
 using CF.Library.Wpf;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using MusicLibrary.DiscPreprocessor.ViewModels.Interfaces;
+using MusicLibrary.DiscAdder.ViewModels.Interfaces;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.DiscPreprocessor.ViewModels
+namespace MusicLibrary.DiscAdder.ViewModels
 {
 	public class ApplicationViewModel : ViewModelBase
 	{
@@ -35,7 +35,7 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 			SwitchToPrevPageCommand = new RelayCommand(SwitchToPrevPage);
 			SwitchToNextPageCommand = new AsyncRelayCommand(SwitchToNextPage);
 
-			currPage = editSourceContentViewModel;
+			currentPage = editSourceContentViewModel;
 
 			foreach (var viewModel in ViewModels)
 			{
@@ -57,7 +57,7 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 
 		public bool CanSwitchToPrevPage => PrevPage != null;
 
-		public bool CanSwitchToNextPage => NextPage != null && CurrPage.DataIsReady;
+		public bool CanSwitchToNextPage => NextPage != null && CurrentPage.DataIsReady;
 
 		public string PrevPageName => PrevPage?.Name ?? "N/A";
 
@@ -74,14 +74,14 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 			}
 		}
 
-		private IPageViewModel currPage;
+		private IPageViewModel currentPage;
 
-		public IPageViewModel CurrPage
+		public IPageViewModel CurrentPage
 		{
-			get => currPage;
+			get => currentPage;
 			set
 			{
-				Set(ref currPage, value);
+				Set(ref currentPage, value);
 
 				RaisePropertyChanged(nameof(CanSwitchToPrevPage));
 				RaisePropertyChanged(nameof(CanSwitchToNextPage));
@@ -95,17 +95,17 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 		{
 			get
 			{
-				if (CurrPage == editDiscsDetailsViewModel)
+				if (CurrentPage == editDiscsDetailsViewModel)
 				{
 					return editSourceContentViewModel;
 				}
 
-				if (CurrPage == editSourceDiscImagesViewModel)
+				if (CurrentPage == editSourceDiscImagesViewModel)
 				{
 					return editDiscsDetailsViewModel;
 				}
 
-				if (CurrPage == editSongsDetailsViewModel)
+				if (CurrentPage == editSongsDetailsViewModel)
 				{
 					return editSourceDiscImagesViewModel;
 				}
@@ -118,27 +118,27 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 		{
 			get
 			{
-				if (CurrPage == editSourceContentViewModel)
+				if (CurrentPage == editSourceContentViewModel)
 				{
 					return editDiscsDetailsViewModel;
 				}
 
-				if (CurrPage == editDiscsDetailsViewModel)
+				if (CurrentPage == editDiscsDetailsViewModel)
 				{
 					return editSourceDiscImagesViewModel;
 				}
 
-				if (CurrPage == editSourceDiscImagesViewModel)
+				if (CurrentPage == editSourceDiscImagesViewModel)
 				{
 					return editSongsDetailsViewModel;
 				}
 
-				if (CurrPage == editSongsDetailsViewModel)
+				if (CurrentPage == editSongsDetailsViewModel)
 				{
 					return addToLibraryViewModel;
 				}
 
-				if (CurrPage == addToLibraryViewModel)
+				if (CurrentPage == addToLibraryViewModel)
 				{
 					return editSourceContentViewModel;
 				}
@@ -158,7 +158,7 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 
 			if (nextPage == null)
 			{
-				throw new InvalidOperationException(Current($"Could not switch forward from the page {CurrPage.Name}"));
+				throw new InvalidOperationException(Current($"Could not switch forward from the page {CurrentPage.Name}"));
 			}
 
 			if (nextPage == editDiscsDetailsViewModel)
@@ -184,12 +184,12 @@ namespace MusicLibrary.DiscPreprocessor.ViewModels
 				Load();
 			}
 
-			CurrPage = nextPage;
+			CurrentPage = nextPage;
 		}
 
 		private void SwitchToPrevPage()
 		{
-			CurrPage = PrevPage ?? throw new InvalidOperationException(Current($"Could not switch back from the page {CurrPage.Name}"));
+			CurrentPage = PrevPage ?? throw new InvalidOperationException(Current($"Could not switch back from the page {CurrentPage.Name}"));
 		}
 
 		private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
