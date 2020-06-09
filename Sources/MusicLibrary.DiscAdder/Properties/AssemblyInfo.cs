@@ -11,6 +11,5 @@ using System.Windows;
 
 [assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)]
 
-[assembly: InternalsVisibleTo("MusicLibrary.DiscPreprocessor.Tests")]
 [assembly: InternalsVisibleTo("MusicLibrary.IntegrationTests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

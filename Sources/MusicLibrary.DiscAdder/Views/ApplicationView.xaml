@@ -7,7 +7,7 @@
         xmlns:viewModels="clr-namespace:MusicLibrary.DiscAdder.ViewModels"
         xmlns:views="clr-namespace:MusicLibrary.DiscAdder.Views"
         mc:Ignorable="d"
-        Title="Disc Preprocessor" Width="1600" Height="800" WindowState="Maximized">
+        Title="Disc Adder" Width="1600" Height="800" WindowState="Maximized">
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModels:EditSourceContentViewModel}">

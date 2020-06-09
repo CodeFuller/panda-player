@@ -70,7 +70,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 		}
 
 		public AddToLibraryViewModel(ISongMediaInfoProvider songMediaInfoProvider, IWorkshopMusicStorage workshopMusicStorage,
-			IFoldersService foldersService, IDiscsService discService, ISongsService songService, IArtistsService artistService, IOptions<DiscPreprocessorSettings> options)
+			IFoldersService foldersService, IDiscsService discService, ISongsService songService, IArtistsService artistService, IOptions<DiscAdderSettings> options)
 		{
 			this.songMediaInfoProvider = songMediaInfoProvider ?? throw new ArgumentNullException(nameof(songMediaInfoProvider));
 			this.workshopMusicStorage = workshopMusicStorage ?? throw new ArgumentNullException(nameof(workshopMusicStorage));

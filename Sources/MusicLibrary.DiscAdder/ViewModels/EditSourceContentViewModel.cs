@@ -28,7 +28,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 		private readonly IDiscContentComparer discContentComparer;
 		private readonly IWorkshopMusicStorage workshopMusicStorage;
 
-		private readonly DiscPreprocessorSettings settings;
+		private readonly DiscAdderSettings settings;
 
 		public ReferenceContentViewModel RawReferenceDiscs { get; }
 
@@ -49,7 +49,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 		}
 
 		public EditSourceContentViewModel(IContentCrawler contentCrawler, IDiscContentParser discContentParser, IDiscContentComparer discContentComparer,
-			IWorkshopMusicStorage workshopMusicStorage, IFileSystemFacade fileSystemFacade, IOptions<DiscPreprocessorSettings> options)
+			IWorkshopMusicStorage workshopMusicStorage, IFileSystemFacade fileSystemFacade, IOptions<DiscAdderSettings> options)
 		{
 			if (fileSystemFacade == null)
 			{

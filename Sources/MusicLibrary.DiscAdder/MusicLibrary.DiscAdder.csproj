@@ -9,8 +9,8 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>$(TargetAppFramework)</TargetFramework>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>DiscPreprocessor.ico</ApplicationIcon>
-    <AssemblyName>DiscPreprocessor</AssemblyName>
+    <ApplicationIcon>DiscAdder.ico</ApplicationIcon>
+    <AssemblyName>DiscAdder</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -29,13 +29,6 @@
   <ItemGroup>
     <ProjectReference Include="..\MusicLibrary.Dal.LocalDb\MusicLibrary.Dal.LocalDb.csproj" />
     <ProjectReference Include="..\MusicLibrary.Shared\MusicLibrary.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="DiscPreprocessor.ico">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
   </ItemGroup>
 
   <ItemGroup>

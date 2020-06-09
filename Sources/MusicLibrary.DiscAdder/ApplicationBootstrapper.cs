@@ -23,7 +23,7 @@ namespace MusicLibrary.DiscAdder
 		{
 			services.AddDiscTitleToAlbumMapper(settings => configuration.Bind("discToAlbumMappings", settings));
 
-			services.Configure<DiscPreprocessorSettings>(configuration.Bind);
+			services.Configure<DiscAdderSettings>(configuration.Bind);
 
 			services.AddLocalDbDal(settings => configuration.Bind("localDb:dataStorage", settings));
 			services.AddMusicLibraryDbContext(configuration.GetConnectionString("musicLibraryDb"));

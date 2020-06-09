@@ -11,7 +11,7 @@
 		}
 	},
 
-	"dataStoragePath": "d:\\DiscPreprocessor\\.data",
+	"dataStoragePath": "d:\\DiscAdder\\.data",
 	"workshopStoragePath": "d:\\music.workshop\\Gateway",
 
 	// TODO: Make this a UI setting

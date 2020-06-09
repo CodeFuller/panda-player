@@ -27,7 +27,7 @@ namespace MusicLibrary.DiscAdder.MusicStorage
 
 		private readonly string workshopRootPath;
 
-		public WorkshopMusicStorage(IDiscTitleToAlbumMapper discTitleToAlbumMapper, IFileSystemFacade fileSystemFacade, IOptions<DiscPreprocessorSettings> options)
+		public WorkshopMusicStorage(IDiscTitleToAlbumMapper discTitleToAlbumMapper, IFileSystemFacade fileSystemFacade, IOptions<DiscAdderSettings> options)
 		{
 			this.discTitleToAlbumMapper = discTitleToAlbumMapper ?? throw new ArgumentNullException(nameof(discTitleToAlbumMapper));
 			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));

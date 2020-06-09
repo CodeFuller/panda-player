@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MusicLibrary.DiscPreprocessor.Properties
+namespace MusicLibrary.DiscAdder.Properties
 {
 
 
