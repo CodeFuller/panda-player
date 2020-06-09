@@ -6,15 +6,8 @@
         mc:Ignorable="d"
         d:DesignWidth="800" d:DesignHeight="400">
 
-    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Songs}" CellStyle="{StaticResource MaterialDesignDataGridCell}"
-              BorderThickness="2" BorderBrush="{DynamicResource MaterialDesignDivider}" GridLinesVisibility="All"
-              VerticalGridLinesBrush="{DynamicResource MaterialDesignDivider}" HorizontalGridLinesBrush="{DynamicResource MaterialDesignDivider}">
-        <DataGrid.ColumnHeaderStyle>
-            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/>
-                <Setter Property="BorderThickness" Value="0,0,1,0"/>
-            </Style>
-        </DataGrid.ColumnHeaderStyle>
+    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Songs}" Style="{StaticResource DiscAdderDataGridStyle}"
+              ColumnHeaderStyle="{StaticResource DiscAdderDataGridColumnHeaderStyle}" CellStyle="{StaticResource MaterialDesignDataGridCell}">
         <DataGrid.Columns>
             <DataGridTextColumn Header="Source File" Width="*" IsReadOnly="True" Binding="{Binding SourceFilePath}" />
             <DataGridTextColumn Header="Track" Binding="{Binding Track}" >

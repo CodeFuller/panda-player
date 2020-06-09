@@ -10,15 +10,8 @@
         <KeyBinding Key="F5" Command="{Binding RefreshContentCommand}" />
     </UserControl.InputBindings>
 
-    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding ImageItems}" IsReadOnly="True" CellStyle="{StaticResource MaterialDesignDataGridCell}"
-              BorderThickness="2" BorderBrush="{DynamicResource MaterialDesignDivider}" GridLinesVisibility="All"
-              VerticalGridLinesBrush="{DynamicResource MaterialDesignDivider}" HorizontalGridLinesBrush="{DynamicResource MaterialDesignDivider}">
-        <DataGrid.ColumnHeaderStyle>
-            <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/>
-                <Setter Property="BorderThickness" Value="0,0,1,0"/>
-            </Style>
-        </DataGrid.ColumnHeaderStyle>
+    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding ImageItems}" IsReadOnly="True" Style="{StaticResource DiscAdderDataGridStyle}"
+              ColumnHeaderStyle="{StaticResource DiscAdderDataGridColumnHeaderStyle}" CellStyle="{StaticResource MaterialDesignDataGridCell}">
         <DataGrid.Columns>
             <DataGridTextColumn Header="Source File" Width="3*" Binding="{Binding SourceImageFilePath}" />
             <DataGridTextColumn Header="Image Type" Width="1*" Binding="{Binding ImageType}">
