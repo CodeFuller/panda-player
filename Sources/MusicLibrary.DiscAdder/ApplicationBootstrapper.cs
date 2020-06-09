@@ -17,7 +17,7 @@ using MusicLibrary.Shared.Images;
 
 namespace MusicLibrary.DiscAdder
 {
-	internal class ApplicationBootstrapper : DiApplicationBootstrapper<ApplicationViewModel>
+	internal class ApplicationBootstrapper : DiApplicationBootstrapper<DiscAdderViewModel>
 	{
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{
@@ -54,7 +54,7 @@ namespace MusicLibrary.DiscAdder
 			services.AddTransient<IEditSourceDiscImagesViewModel, EditSourceDiscImagesViewModel>();
 			services.AddTransient<IEditSongsDetailsViewModel, EditSongsDetailsViewModel>();
 			services.AddTransient<IAddToLibraryViewModel, AddToLibraryViewModel>();
-			services.AddTransient<ApplicationViewModel>();
+			services.AddTransient<DiscAdderViewModel>();
 		}
 	}
 }

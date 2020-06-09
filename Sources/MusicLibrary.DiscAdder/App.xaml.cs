@@ -7,14 +7,14 @@ using MusicLibrary.DiscAdder.Views;
 
 namespace MusicLibrary.DiscAdder
 {
-	internal partial class App : WpfApplication<ApplicationViewModel>
+	internal partial class App : WpfApplication<DiscAdderViewModel>
 	{
 		public App()
 			: base(new ApplicationBootstrapper())
 		{
 		}
 
-		protected override void Run(ApplicationViewModel rootViewModel)
+		protected override void Run(DiscAdderViewModel rootViewModel)
 		{
 			if (rootViewModel == null)
 			{
@@ -25,7 +25,7 @@ namespace MusicLibrary.DiscAdder
 			Application.Current.DispatcherUnhandledException += App_CatchedUnhandledUIException;
 
 			rootViewModel.Load();
-			ApplicationView appView = new ApplicationView(rootViewModel);
+			DiscAdderView appView = new DiscAdderView(rootViewModel);
 			appView.Show();
 		}
 

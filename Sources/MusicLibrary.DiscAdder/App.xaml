@@ -1,4 +1,4 @@
-﻿<cfwpf:WpfApplication x:TypeArguments="vm:ApplicationViewModel"
+﻿<cfwpf:WpfApplication x:TypeArguments="vm:DiscAdderViewModel"
              x:ClassModifier="internal"
              x:Class="MusicLibrary.DiscAdder.App"
              xmlns:cfwpf="clr-namespace:CF.Library.Wpf;assembly=CF.Library.Wpf"

@@ -3,9 +3,9 @@ using MusicLibrary.DiscAdder.ViewModels;
 
 namespace MusicLibrary.DiscAdder.Views
 {
-	internal partial class ApplicationView : Window
+	internal partial class DiscAdderView : Window
 	{
-		public ApplicationView(ApplicationViewModel model)
+		public DiscAdderView(DiscAdderViewModel model)
 		{
 			InitializeComponent();
 			DataContext = model;

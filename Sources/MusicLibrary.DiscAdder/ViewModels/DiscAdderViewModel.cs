@@ -12,7 +12,7 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.ViewModels
 {
-	internal class ApplicationViewModel : ViewModelBase
+	internal class DiscAdderViewModel : ViewModelBase
 	{
 		public ICommand SwitchToPrevPageCommand { get; }
 
@@ -24,7 +24,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 		private readonly IEditSongsDetailsViewModel editSongsDetailsViewModel;
 		private readonly IAddToLibraryViewModel addToLibraryViewModel;
 
-		public ApplicationViewModel(IEditSourceContentViewModel editSourceContentViewModel, IEditDiscsDetailsViewModel editDiscsDetailsViewModel,
+		public DiscAdderViewModel(IEditSourceContentViewModel editSourceContentViewModel, IEditDiscsDetailsViewModel editDiscsDetailsViewModel,
 			IEditSourceDiscImagesViewModel editSourceDiscImagesViewModel, IEditSongsDetailsViewModel editSongsDetailsViewModel, IAddToLibraryViewModel addToLibraryViewModel)
 		{
 			this.editSourceContentViewModel = editSourceContentViewModel ?? throw new ArgumentNullException(nameof(editSourceContentViewModel));
