@@ -2,7 +2,7 @@
 using CF.Library.Core.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MusicLibrary.DiscAdder
+namespace MusicLibrary.DiscAdder.Internal
 {
 	internal class ObjectFactory<TType> : IObjectFactory<TType>
 		where TType : class

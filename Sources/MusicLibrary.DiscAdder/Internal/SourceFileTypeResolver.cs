@@ -4,7 +4,7 @@ using MusicLibrary.DiscAdder.Interfaces;
 using MusicLibrary.Shared.Images;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.DiscAdder
+namespace MusicLibrary.DiscAdder.Internal
 {
 	internal class SourceFileTypeResolver : ISourceFileTypeResolver
 	{

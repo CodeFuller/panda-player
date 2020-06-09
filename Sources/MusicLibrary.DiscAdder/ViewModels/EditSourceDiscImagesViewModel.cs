@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using MusicLibrary.Core.Models;
 using MusicLibrary.DiscAdder.AddingToLibrary;
+using MusicLibrary.DiscAdder.Interfaces;
 using MusicLibrary.DiscAdder.ViewModels.Interfaces;
 using MusicLibrary.Shared.Images;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;

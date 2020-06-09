@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MusicLibrary.DiscAdder
+namespace MusicLibrary.DiscAdder.Interfaces
 {
 	internal interface IContentCrawler
 	{

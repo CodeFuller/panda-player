@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
 
-namespace MusicLibrary.DiscAdder.Extensions
+namespace MusicLibrary.DiscAdder.Views.Extensions
 {
 	// Copy/paste from https://treeviewinplaceedit.codeplex.com
 	internal static class FrameworkElementExtension

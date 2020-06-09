@@ -4,7 +4,7 @@ using MusicLibrary.DiscAdder.Interfaces;
 using MusicLibrary.DiscAdder.ViewModels.SourceContent;
 using static System.FormattableString;
 
-namespace MusicLibrary.DiscAdder
+namespace MusicLibrary.DiscAdder.Internal
 {
 	internal class DiscContentComparer : IDiscContentComparer
 	{

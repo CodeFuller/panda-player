@@ -3,9 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using MusicLibrary.DiscAdder.Extensions;
+using MusicLibrary.DiscAdder.Views.Extensions;
 
-namespace MusicLibrary.DiscAdder.Behaviors
+namespace MusicLibrary.DiscAdder.Views.Behaviors
 {
 	// Copy/paste from https://treeviewinplaceedit.codeplex.com
 	internal static class TreeViewInPlaceEditBoxBehavior

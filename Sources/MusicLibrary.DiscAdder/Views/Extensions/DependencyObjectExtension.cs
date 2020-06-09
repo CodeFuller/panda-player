@@ -1,9 +1,9 @@
 using System;
 using System.Windows;
 using System.Windows.Media;
-using MusicLibrary.DiscAdder.Behaviors;
+using MusicLibrary.DiscAdder.Views.Behaviors;
 
-namespace MusicLibrary.DiscAdder.Extensions
+namespace MusicLibrary.DiscAdder.Views.Extensions
 {
 	// Copy/paste from https://treeviewinplaceedit.codeplex.com
 	internal static class DependencyObjectExtension
