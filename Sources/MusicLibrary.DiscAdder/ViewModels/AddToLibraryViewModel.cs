@@ -80,7 +80,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			this.artistService = artistService ?? throw new ArgumentNullException(nameof(artistService));
 			this.deleteSourceContent = options?.Value?.DeleteSourceContentAfterAdding ?? throw new ArgumentNullException(nameof(options));
 
-			AddToLibraryCommand = new AsyncRelayCommand(AddContentToLibrary);
+			AddToLibraryCommand = new AsyncRelayCommand(() => AddContentToLibrary(CancellationToken.None));
 		}
 
 		public void SetSongs(IEnumerable<AddedSong> songs)
@@ -93,7 +93,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			addedDiscImages = images.ToList();
 		}
 
-		public async Task AddContentToLibrary()
+		public async Task AddContentToLibrary(CancellationToken cancellationToken)
 		{
 			if (addedSongs == null)
 			{
@@ -105,9 +105,9 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			CurrentProgress = 0;
 			ProgressSize = 0;
 			ProgressSize += await FillSongsMediaData(true);
-			ProgressSize += await AddSongsToLibrary(true, CancellationToken.None);
+			ProgressSize += await AddSongsToLibrary(true, cancellationToken);
 			await FillSongsMediaData(false);
-			await AddSongsToLibrary(false, CancellationToken.None);
+			await AddSongsToLibrary(false, cancellationToken);
 
 			if (deleteSourceContent)
 			{

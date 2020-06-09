@@ -47,19 +47,19 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			Discs = new ObservableCollection<DiscViewItem>();
 		}
 
-		public async Task SetDiscs(IEnumerable<AddedDiscInfo> discs)
+		public async Task SetDiscs(IEnumerable<AddedDiscInfo> discs, CancellationToken cancellationToken)
 		{
 			var discsList = discs.ToList();
-			var availableArtists = await BuildAvailableArtistsList(discsList);
-			var availableGenres = await genreService.GetAllGenres(CancellationToken.None);
+			var availableArtists = await BuildAvailableArtistsList(discsList, cancellationToken);
+			var availableGenres = await genreService.GetAllGenres(cancellationToken);
 
 			// For genre guessing we use all discs, including deleted.
-			var allDiscs = await discService.GetAllDiscs(CancellationToken.None);
+			var allDiscs = await discService.GetAllDiscs(cancellationToken);
 
 			Discs.Clear();
 			foreach (var addedDiscInfo in discsList)
 			{
-				var parentFolder = await folderProvider.GetFolder(addedDiscInfo.DestinationFolderPath, CancellationToken.None);
+				var parentFolder = await folderProvider.GetFolder(addedDiscInfo.DestinationFolderPath, cancellationToken);
 				var folderExists = parentFolder != null;
 
 				var existingDisc = parentFolder?.Discs.SingleOrDefault(d => d.TreeTitle == addedDiscInfo.TreeTitle);
@@ -96,9 +96,9 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			}
 		}
 
-		private async Task<IReadOnlyCollection<ArtistModel>> BuildAvailableArtistsList(IEnumerable<AddedDiscInfo> discs)
+		private async Task<IReadOnlyCollection<ArtistModel>> BuildAvailableArtistsList(IEnumerable<AddedDiscInfo> discs, CancellationToken cancellationToken)
 		{
-			var libraryArtists = await artistService.GetAllArtists(CancellationToken.None);
+			var libraryArtists = await artistService.GetAllArtists(cancellationToken);
 			var artists = new List<ArtistModel>(libraryArtists);
 
 			var discsList = discs.ToList();

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MusicLibrary.DiscAdder.AddingToLibrary;
 
@@ -10,6 +11,6 @@ namespace MusicLibrary.DiscAdder.ViewModels.Interfaces
 
 		void SetDiscsImages(IEnumerable<AddedDiscImage> images);
 
-		Task AddContentToLibrary();
+		Task AddContentToLibrary(CancellationToken cancellationToken);
 	}
 }

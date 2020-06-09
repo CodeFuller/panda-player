@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Wpf;
@@ -33,7 +34,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			this.addToLibraryViewModel = addToLibraryViewModel ?? throw new ArgumentNullException(nameof(addToLibraryViewModel));
 
 			SwitchToPrevPageCommand = new RelayCommand(SwitchToPrevPage);
-			SwitchToNextPageCommand = new AsyncRelayCommand(SwitchToNextPage);
+			SwitchToNextPageCommand = new AsyncRelayCommand(() => SwitchToNextPage(CancellationToken.None));
 
 			currentPage = editSourceContentViewModel;
 
@@ -152,7 +153,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			editSourceContentViewModel.LoadDefaultContent();
 		}
 
-		internal async Task SwitchToNextPage()
+		private async Task SwitchToNextPage(CancellationToken cancellationToken)
 		{
 			var nextPage = NextPage;
 
@@ -163,7 +164,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 
 			if (nextPage == editDiscsDetailsViewModel)
 			{
-				await editDiscsDetailsViewModel.SetDiscs(editSourceContentViewModel.AddedDiscs);
+				await editDiscsDetailsViewModel.SetDiscs(editSourceContentViewModel.AddedDiscs, cancellationToken);
 			}
 			else if (nextPage == editSourceDiscImagesViewModel)
 			{
