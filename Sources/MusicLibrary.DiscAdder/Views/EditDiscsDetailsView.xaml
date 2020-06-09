@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         d:DesignWidth="800" d:DesignHeight="400">
 
-    <DataGrid x:Name="ContentDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding Discs}">
+    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Discs}">
         <DataGrid.ColumnHeaderStyle>
             <Style TargetType="{x:Type DataGridColumnHeader}">
                 <Setter Property="FontWeight"  Value="Bold" />

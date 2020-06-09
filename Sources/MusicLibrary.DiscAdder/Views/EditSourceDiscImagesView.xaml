@@ -10,7 +10,7 @@
         <KeyBinding Key="F5" Command="{Binding RefreshContentCommand}" />
     </UserControl.InputBindings>
 
-    <DataGrid x:Name="ContentDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding ImageItems}">
+    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding ImageItems}">
         <DataGrid.ColumnHeaderStyle>
             <Style TargetType="{x:Type DataGridColumnHeader}">
                 <Setter Property="FontWeight"  Value="Bold" />
