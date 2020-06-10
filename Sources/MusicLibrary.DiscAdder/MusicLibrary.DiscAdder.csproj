@@ -5,12 +5,8 @@
   </ImportGroup>
 
   <PropertyGroup>
-    <Version>2.0.0</Version>
-    <OutputType>WinExe</OutputType>
     <TargetFramework>$(TargetAppFramework)</TargetFramework>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>DiscAdder.ico</ApplicationIcon>
-    <AssemblyName>DiscAdder</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -30,12 +26,6 @@
   <ItemGroup>
     <ProjectReference Include="..\MusicLibrary.Dal.LocalDb\MusicLibrary.Dal.LocalDb.csproj" />
     <ProjectReference Include="..\MusicLibrary.Shared\MusicLibrary.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="conf/**">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

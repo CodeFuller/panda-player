@@ -24,6 +24,14 @@
 		"sessionKey": "<Fill LastFM Session Key here>"
 	},
 
+	"discAdder": {
+		"dataStoragePath": "d:\\DiscAdder\\.data",
+		"workshopStoragePath": "d:\\music.workshop\\Gateway",
+
+		// TODO: Make this a UI setting
+		"deleteSourceContentAfterAdding": true
+	},
+
 	"logging": {
 		"logLevel": "Information",
 		"databaseOperationsLogLevel": "Warning"

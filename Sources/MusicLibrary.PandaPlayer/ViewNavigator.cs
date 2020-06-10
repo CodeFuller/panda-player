@@ -7,6 +7,7 @@ using System.Windows;
 using CF.Library.Core.Enums;
 using CF.Library.Core.Interfaces;
 using MusicLibrary.Core.Models;
+using MusicLibrary.DiscAdder.Views;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.PandaPlayer.Views;
 
@@ -67,6 +68,16 @@ namespace MusicLibrary.PandaPlayer
 			var viewModel = viewModelHolder.EditDiscImageViewModel;
 			viewModel.Load(disc);
 			ShowDialog<EditDiscImageView>(viewModel);
+		}
+
+		public Task ShowDiscAdderView(CancellationToken cancellationToken)
+		{
+			var viewModel = viewModelHolder.DiscAdderViewModel;
+			viewModel.Load();
+
+			ShowView<DiscAdderView>(viewModel);
+
+			return Task.CompletedTask;
 		}
 
 		public Task ShowLibraryCheckerView(CancellationToken cancellationToken)

@@ -1,4 +1,6 @@
-﻿namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
+﻿using MusicLibrary.DiscAdder.ViewModels.Interfaces;
+
+namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 {
 	public interface INavigatedViewModelHolder
 	{
@@ -9,6 +11,8 @@
 		IRateSongsViewModel RateSongsViewModel { get; }
 
 		IEditDiscImageViewModel EditDiscImageViewModel { get; }
+
+		IDiscAdderViewModel DiscAdderViewModel { get; }
 
 		ILibraryCheckerViewModel LibraryCheckerViewModel { get; }
 

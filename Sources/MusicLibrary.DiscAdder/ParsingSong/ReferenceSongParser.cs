@@ -170,7 +170,7 @@ namespace MusicLibrary.DiscAdder.ParsingSong
 		{
 			foreach (var pattern in TitlePatterns)
 			{
-				SongTitleMatch match = pattern.Match(rawSongTitle, ParseSongPayload);
+				var match = pattern.Match(rawSongTitle, ParseSongPayload);
 				if (match.Success)
 				{
 					return match.SongTitle;

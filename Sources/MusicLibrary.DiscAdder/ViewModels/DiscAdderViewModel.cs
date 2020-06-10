@@ -12,8 +12,10 @@ using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.ViewModels
 {
-	internal class DiscAdderViewModel : ViewModelBase
+	internal class DiscAdderViewModel : ViewModelBase, IDiscAdderViewModel
 	{
+		private bool IsLoaded { get; set; }
+
 		public ICommand SwitchToPrevPageCommand { get; }
 
 		public ICommand SwitchToNextPageCommand { get; }
@@ -150,7 +152,13 @@ namespace MusicLibrary.DiscAdder.ViewModels
 
 		public void Load()
 		{
+			if (IsLoaded)
+			{
+				return;
+			}
+
 			editSourceContentViewModel.LoadDefaultContent();
+			IsLoaded = true;
 		}
 
 		private async Task SwitchToNextPage(CancellationToken cancellationToken)

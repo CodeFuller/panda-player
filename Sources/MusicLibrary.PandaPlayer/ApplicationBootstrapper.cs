@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MusicLibrary.Dal.LocalDb.Extensions;
+using MusicLibrary.DiscAdder.Extensions;
 using MusicLibrary.LastFM.Extensions;
 using MusicLibrary.PandaPlayer.Adviser;
 using MusicLibrary.PandaPlayer.Adviser.Extensions;
@@ -38,6 +39,8 @@ namespace MusicLibrary.PandaPlayer
 			services.AddMusicLibraryDbContext(configuration.GetConnectionString("musicLibraryDb"));
 			services.AddMusicLibraryServices();
 			services.AddDiscTitleToAlbumMapper(settings => configuration.Bind("discToAlbumMappings", settings));
+
+			services.AddDiscAdder(settings => configuration.Bind("discAdder", settings));
 
 			RegisterViewModels(services);
 			services.AddImages();

@@ -7,7 +7,7 @@ namespace MusicLibrary.DiscAdder.ParsingContent
 	{
 		public IEnumerable<IEnumerable<string>> Split(IEnumerable<string> content)
 		{
-			List<string> currentBlockContent = new List<string>();
+			var currentBlockContent = new List<string>();
 			foreach (var str in content)
 			{
 				if (str.Length == 0)

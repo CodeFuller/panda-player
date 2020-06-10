@@ -31,6 +31,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MusicLibrary.Core\MusicLibrary.Core.csproj" />
     <ProjectReference Include="..\MusicLibrary.Dal.LocalDb\MusicLibrary.Dal.LocalDb.csproj" />
+    <ProjectReference Include="..\MusicLibrary.DiscAdder\MusicLibrary.DiscAdder.csproj" />
     <ProjectReference Include="..\MusicLibrary.LastFM\MusicLibrary.LastFM.csproj" />
     <ProjectReference Include="..\MusicLibrary.Shared\MusicLibrary.Shared.csproj" />
   </ItemGroup>
