@@ -1,3 +1,6 @@
+**3.4.0 / 2020.06.10**
+* Integrated disc adder.
+
 **3.3.0 / 2020.06.07**
 * Added library checker.
 
