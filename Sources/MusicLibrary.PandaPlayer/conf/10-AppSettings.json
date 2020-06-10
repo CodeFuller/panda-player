@@ -26,10 +26,7 @@
 
 	"discAdder": {
 		"dataStoragePath": "d:\\DiscAdder\\.data",
-		"workshopStoragePath": "d:\\music.workshop\\Gateway",
-
-		// TODO: Make this a UI setting
-		"deleteSourceContentAfterAdding": true
+		"workshopStoragePath": "d:\\music.workshop\\Gateway"
 	},
 
 	"logging": {

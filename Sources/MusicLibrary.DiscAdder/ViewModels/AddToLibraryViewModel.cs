@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Wpf;
 using GalaSoft.MvvmLight;
-using Microsoft.Extensions.Options;
 using MusicLibrary.Core.Models;
 using MusicLibrary.DiscAdder.AddingToLibrary;
 using MusicLibrary.DiscAdder.MusicStorage;
@@ -29,8 +28,6 @@ namespace MusicLibrary.DiscAdder.ViewModels
 		private readonly ISongsService songService;
 		private readonly IArtistsService artistService;
 
-		private readonly bool deleteSourceContent;
-
 		private List<AddedSong> addedSongs;
 		private List<AddedDiscImage> addedDiscImages;
 
@@ -42,6 +39,14 @@ namespace MusicLibrary.DiscAdder.ViewModels
 		{
 			get => dataIsReady;
 			set => Set(ref dataIsReady, value);
+		}
+
+		private bool deleteSourceContent;
+
+		public bool DeleteSourceContent
+		{
+			get => deleteSourceContent;
+			set => Set(ref deleteSourceContent, value);
 		}
 
 		public ICommand AddToLibraryCommand { get; }
@@ -81,7 +86,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 		}
 
 		public AddToLibraryViewModel(ISongMediaInfoProvider songMediaInfoProvider, IWorkshopMusicStorage workshopMusicStorage,
-			IFoldersService foldersService, IDiscsService discService, ISongsService songService, IArtistsService artistService, IOptions<DiscAdderSettings> options)
+			IFoldersService foldersService, IDiscsService discService, ISongsService songService, IArtistsService artistService)
 		{
 			this.songMediaInfoProvider = songMediaInfoProvider ?? throw new ArgumentNullException(nameof(songMediaInfoProvider));
 			this.workshopMusicStorage = workshopMusicStorage ?? throw new ArgumentNullException(nameof(workshopMusicStorage));
@@ -89,7 +94,6 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			this.discService = discService ?? throw new ArgumentNullException(nameof(discService));
 			this.songService = songService ?? throw new ArgumentNullException(nameof(songService));
 			this.artistService = artistService ?? throw new ArgumentNullException(nameof(artistService));
-			this.deleteSourceContent = options?.Value?.DeleteSourceContentAfterAdding ?? throw new ArgumentNullException(nameof(options));
 
 			AddToLibraryCommand = new AsyncRelayCommand(() => AddContentToLibrary(CancellationToken.None));
 		}
@@ -97,6 +101,8 @@ namespace MusicLibrary.DiscAdder.ViewModels
 		public void SetSongs(IEnumerable<AddedSong> songs)
 		{
 			addedSongs = songs.ToList();
+
+			deleteSourceContent = false;
 		}
 
 		public void SetDiscsImages(IEnumerable<AddedDiscImage> images)
@@ -113,6 +119,13 @@ namespace MusicLibrary.DiscAdder.ViewModels
 
 			DataIsReady = false;
 
+			await Task.Run(() => AddContentToLibraryInternal(cancellationToken), cancellationToken);
+
+			DataIsReady = true;
+		}
+
+		private async Task AddContentToLibraryInternal(CancellationToken cancellationToken)
+		{
 			CurrentProgress = 0;
 			ProgressMaximum = 0;
 			ProgressMaximum += await FillSongsMediaData(true);
@@ -121,14 +134,12 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			await FillSongsMediaData(false);
 			await AddSongsToLibrary(false, cancellationToken);
 
-			if (deleteSourceContent)
+			if (DeleteSourceContent)
 			{
 				ProgressMessages += Current($"Deleting source content...\n");
 				workshopMusicStorage.DeleteSourceContent(addedSongs.Select(s => s.SourceFileName).Concat(addedDiscImages.Select(im => im.ImageInfo.FileName)));
 				ProgressMessages += Current($"Source content was deleted successfully\n");
 			}
-
-			DataIsReady = true;
 		}
 
 		private async Task<int> FillSongsMediaData(bool onlyCountProgressSize)
