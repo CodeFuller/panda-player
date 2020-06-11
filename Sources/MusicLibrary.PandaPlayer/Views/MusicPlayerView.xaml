@@ -42,7 +42,6 @@
             </Label.Content>
         </Label>
         <Separator Grid.Column="5" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-        <!-- TODO: Implement volume on/off on button click -->
         <Button Grid.Column="6" VerticalAlignment="Center" Padding="0" Style="{DynamicResource MaterialDesignToolButton}">
             <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="VolumeHigh"/>
         </Button>

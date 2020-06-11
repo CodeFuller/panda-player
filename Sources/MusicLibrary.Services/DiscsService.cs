@@ -56,8 +56,8 @@ namespace MusicLibrary.Services
 				await storageRepository.UpdateDiscTreeTitle(currentDisc, disc, cancellationToken);
 			}
 
-			// Should we update storage data (tags) for disc songs?
-			if (disc.AlbumTitle != currentDisc.AlbumTitle)
+			// Checking if we should update storage data (tags) for disc songs.
+			if (disc.AlbumTitle != currentDisc.AlbumTitle || disc.Year != currentDisc.Year)
 			{
 				foreach (var song in disc.ActiveSongs)
 				{

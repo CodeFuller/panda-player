@@ -62,6 +62,14 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
+		private int? year;
+
+		public int? Year
+		{
+			get => year;
+			set => Set(ref year, value);
+		}
+
 		public EditDiscPropertiesViewModel(IDiscsService discsService)
 		{
 			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
@@ -73,6 +81,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			Title = disc.Title;
 			TreeTitle = disc.TreeTitle;
 			AlbumTitle = disc.AlbumTitle;
+			Year = disc.Year;
 		}
 
 		public async Task Save(CancellationToken cancellationToken)
@@ -80,6 +89,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			Disc.TreeTitle = TreeTitle;
 			Disc.Title = Title;
 			Disc.AlbumTitle = AlbumTitle;
+			Disc.Year = Year;
 
 			await discsService.UpdateDisc(Disc, cancellationToken);
 		}

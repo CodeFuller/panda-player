@@ -5,7 +5,6 @@ using MusicLibrary.Core.Extensions;
 
 namespace MusicLibrary.Core.Models
 {
-	// TODO: Rename SongModel to Song, DiscModel to Disc, ...
 	public class SongModel : INotifyPropertyChanged
 	{
 		private string title;

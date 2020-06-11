@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:validationRules="clr-namespace:MusicLibrary.PandaPlayer.Views.ValidationRules"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
         Title="Edit Disc Properties" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize">
@@ -17,6 +18,7 @@
         <Grid>
 
             <Grid.RowDefinitions>
+                <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
@@ -51,6 +53,9 @@
 
             <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Content="Album Title:" />
             <TextBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding AlbumTitle}" />
+
+            <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" Content="Year:" />
+            <TextBox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Year, TargetNullValue={x:Static system:String.Empty}}" />
 
         </Grid>
 

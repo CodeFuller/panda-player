@@ -17,8 +17,6 @@ namespace MusicLibrary.Dal.LocalDb.Entities
 
 		public short? TrackNumber { get; set; }
 
-		public short? Year { get; set; }
-
 		public string Title { get; set; }
 
 		public string TreeTitle { get; set; }

@@ -43,7 +43,6 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				DiscId = song.Disc.Id.ToInt32(),
 				ArtistId = song.Artist?.Id.ToInt32(),
 				TrackNumber = song.TrackNumber,
-				Year = (short?)song.Disc.Year,
 				Title = song.Title,
 				TreeTitle = song.TreeTitle,
 				GenreId = song.Genre?.Id.ToInt32(),

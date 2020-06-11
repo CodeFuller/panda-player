@@ -60,7 +60,8 @@ namespace MusicLibrary.Services
 			}
 
 			// Checking if storage data (tags) must be updated.
-			if (song.TrackNumber != currentSong.TrackNumber || song.Title != currentSong.Title || song.Disc.AlbumTitle != currentSong.Disc.AlbumTitle ||
+			if (song.Disc.AlbumTitle != currentSong.Disc.AlbumTitle || song.Disc.Year != currentSong.Disc.Year ||
+				song.TrackNumber != currentSong.TrackNumber || song.Title != currentSong.Title ||
 			    !artistsComparer.Equals(song.Artist, currentSong.Artist) || !genresComparer.Equals(song.Genre, currentSong.Genre))
 			{
 				await storageRepository.UpdateSong(song, cancellationToken);

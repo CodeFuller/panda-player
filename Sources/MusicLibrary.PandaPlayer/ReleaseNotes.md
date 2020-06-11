@@ -1,3 +1,6 @@
+**3.4.1 / 2020.06.11**
+* Moved year property from song to disc.
+
 **3.4.0 / 2020.06.10**
 * Integrated disc adder.
 
