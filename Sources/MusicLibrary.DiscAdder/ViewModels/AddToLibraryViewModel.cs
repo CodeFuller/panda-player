@@ -130,9 +130,11 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			ProgressMaximum = 0;
 			ProgressMaximum += await FillSongsMediaData(true);
 			ProgressMaximum += await AddSongsToLibrary(true, cancellationToken);
+			ProgressMaximum += await AddDiscCoverImages(true, cancellationToken);
 
 			await FillSongsMediaData(false);
 			await AddSongsToLibrary(false, cancellationToken);
+			await AddDiscCoverImages(false, cancellationToken);
 
 			if (DeleteSourceContent)
 			{
@@ -166,7 +168,6 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			return taskProgressSize;
 		}
 
-		// TODO: Refactor to smaller methods
 		private async Task<int> AddSongsToLibrary(bool onlyCountProgressSize, CancellationToken cancellationToken)
 		{
 			const int progressIncrement = 5;
@@ -186,7 +187,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 					var songDisc = song.Disc;
 					if (songDisc.Id == null)
 					{
-						await CreateDisc(songDisc, addedSong.DiscFolderPath, cancellationToken);
+						await CreateDisc(songDisc, addedSong.Disc.FolderPath, cancellationToken);
 					}
 
 					ProgressMessages += Current($"Adding song '{addedSong.SourceFileName}'...\n");
@@ -200,29 +201,39 @@ namespace MusicLibrary.DiscAdder.ViewModels
 				taskProgressSize += progressIncrement;
 			}
 
-			if (addedDiscImages != null)
+			return taskProgressSize;
+		}
+
+		private async Task<int> AddDiscCoverImages(bool onlyCountProgressSize, CancellationToken cancellationToken)
+		{
+			const int progressIncrement = 1;
+			var taskProgressSize = 0;
+
+			if (addedDiscImages == null)
 			{
-				foreach (var image in addedDiscImages)
+				return taskProgressSize;
+			}
+
+			foreach (var image in addedDiscImages)
+			{
+				if (!onlyCountProgressSize)
 				{
-					if (!onlyCountProgressSize)
+					ProgressMessages += Current($"Adding disc image '{image.ImageInfo.FileName}'...\n");
+
+					var discImage = new DiscImageModel
 					{
-						ProgressMessages += Current($"Adding disc image '{image.ImageInfo.FileName}'...\n");
+						Disc = image.Disc,
+						TreeTitle = Path.GetFileName(image.ImageInfo.FileName),
+						ImageType = DiscImageType.Cover,
+					};
 
-						var discImage = new DiscImageModel
-						{
-							Disc = image.Disc,
-							TreeTitle = Path.GetFileName(image.ImageInfo.FileName),
-							ImageType = DiscImageType.Cover,
-						};
+					using var imageContent = File.OpenRead(image.ImageInfo.FileName);
+					await discService.SetDiscCoverImage(discImage, imageContent, cancellationToken);
 
-						using var imageContent = File.OpenRead(image.ImageInfo.FileName);
-						await discService.SetDiscCoverImage(discImage, imageContent, cancellationToken);
-
-						CurrentProgress += progressIncrement;
-					}
-
-					taskProgressSize += progressIncrement;
+					CurrentProgress += progressIncrement;
 				}
+
+				taskProgressSize += progressIncrement;
 			}
 
 			return taskProgressSize;

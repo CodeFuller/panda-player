@@ -34,9 +34,11 @@ namespace MusicLibrary.DiscAdder.ViewModels
 
 		public ObservableCollection<DiscViewItem> Discs { get; }
 
-		public IEnumerable<AddedDisc> AddedDiscs => Discs.Select(d => new AddedDisc(d.Disc, d is NewDiscViewItem, d.SourcePath));
+		private IEnumerable<(DiscViewItem discItem, AddedDisc addedDisc)> DiscPairs => Discs.Select(d => (d, new AddedDisc(d.Disc, d is NewDiscViewItem, d.SourcePath, d.DestinationFolderPath)));
 
-		public IEnumerable<AddedSong> AddedSongs => Discs.SelectMany(addedDisc => addedDisc.Songs);
+		public IEnumerable<AddedDisc> AddedDiscs => DiscPairs.Select(p => p.addedDisc);
+
+		public IEnumerable<AddedSong> AddedSongs => DiscPairs.SelectMany(p => p.discItem.Songs.Select(s => new AddedSong(p.addedDisc, s.song, s.sourcePath)));
 
 		public EditDiscsDetailsViewModel(IFolderProvider folderProvider, IDiscsService discService, IArtistsService artistService, IGenresService genreService)
 		{

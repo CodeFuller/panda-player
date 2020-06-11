@@ -1,4 +1,7 @@
-﻿using MusicLibrary.Core.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using MusicLibrary.Core.Models;
 
 namespace MusicLibrary.DiscAdder.AddingToLibrary
 {
@@ -10,11 +13,14 @@ namespace MusicLibrary.DiscAdder.AddingToLibrary
 
 		public string SourcePath { get; }
 
-		public AddedDisc(DiscModel disc, bool isNewDisc, string sourcePath)
+		public IReadOnlyCollection<string> FolderPath { get; }
+
+		public AddedDisc(DiscModel disc, bool isNewDisc, string sourcePath, IEnumerable<string> folderPath)
 		{
-			Disc = disc;
+			Disc = disc ?? throw new ArgumentNullException(nameof(disc));
 			IsNewDisc = isNewDisc;
-			SourcePath = sourcePath;
+			SourcePath = sourcePath ?? throw new ArgumentNullException(nameof(sourcePath));
+			FolderPath = folderPath?.ToList() ?? throw new ArgumentNullException(nameof(folderPath));
 		}
 	}
 }

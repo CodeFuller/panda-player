@@ -14,9 +14,9 @@ namespace MusicLibrary.DiscAdder.AddingToLibrary
 	{
 		public string SourcePath { get; }
 
-		public string DestinationFolder => String.Join('/', DestinationFolderPath);
-
 		public IReadOnlyCollection<string> DestinationFolderPath { get; }
+
+		public string DestinationFolder => String.Join('/', DestinationFolderPath);
 
 		public bool FolderIsNew { get; }
 
@@ -71,9 +71,9 @@ namespace MusicLibrary.DiscAdder.AddingToLibrary
 
 		protected IReadOnlyCollection<AddedSongInfo> SourceSongs { get; }
 
-		public DiscModel Disc { get; protected set; }
+		public IEnumerable<(SongModel song, string sourcePath)> Songs => SourceSongs.Select(s => (CreateSong(s), s.SourcePath));
 
-		public IEnumerable<AddedSong> Songs => SourceSongs.Select(s => new AddedSong(CreateSong(s), s.SourcePath, DestinationFolderPath));
+		public DiscModel Disc { get; protected set; }
 
 		protected DiscViewItem(AddedDiscInfo disc, bool folderExists, IEnumerable<ArtistModel> availableArtists, IEnumerable<GenreModel> availableGenres)
 		{
