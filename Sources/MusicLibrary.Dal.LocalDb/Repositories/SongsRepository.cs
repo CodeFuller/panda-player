@@ -75,7 +75,8 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 				.ToDictionary(song => song.Id, song => song);
 
 			return songIdsList
-				.Select(id => songModels[id]) // TODO: Check error handling in caller (Loading songs playlist).
+				.Where(id => songModels.ContainsKey(id))
+				.Select(id => songModels[id])
 				.ToList();
 		}
 

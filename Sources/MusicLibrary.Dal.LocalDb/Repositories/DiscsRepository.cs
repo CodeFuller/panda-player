@@ -91,7 +91,6 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 			await context.SaveChangesAsync(cancellationToken);
 
-			// TODO: Should we assign id in update methods for other entities?
 			image.Id = imageEntity.Id.ToItemId();
 		}
 

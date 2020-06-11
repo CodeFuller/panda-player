@@ -1,3 +1,6 @@
+**3.4.2 / 2020.06.11**
+* Fixed loading of last playlist if some songs are missing in the library.
+
 **3.4.1 / 2020.06.11**
 * Moved year property from song to disc.
 
