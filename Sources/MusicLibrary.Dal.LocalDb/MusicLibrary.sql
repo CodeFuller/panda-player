@@ -84,3 +84,6 @@ CREATE INDEX [IX_Artist_Id] ON [Songs] ([Artist_Id] ASC);
 CREATE INDEX [IX_Song_Id] ON [Playbacks] ([Song_Id] ASC);
 CREATE INDEX [IX_Folder_ParentFolder_Id] ON [Folders] ([ParentFolder_Id] ASC);
 CREATE INDEX [IX_Disc_Folder_Id] ON [Discs] ([Folder_Id] ASC);
+
+-- Seeding required initial data
+INSERT INTO [Folders]([Id], [Name], [ParentFolder_Id]) VALUES(1, '<ROOT>', NULL);

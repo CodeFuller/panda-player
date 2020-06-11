@@ -33,7 +33,6 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 					ParentFolderId = null,
 				};
 
-				// TODO: Check whether database seeding work and whether next id is correctly assigned to 2.
 				builder.HasData(rootFolder);
 			});
 
