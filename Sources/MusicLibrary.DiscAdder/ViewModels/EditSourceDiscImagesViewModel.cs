@@ -52,6 +52,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 		internal void RefreshContent()
 		{
 			LoadImages();
+			RaisePropertyChanged(nameof(DataIsReady));
 		}
 
 		private void LoadImages()

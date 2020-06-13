@@ -10,7 +10,7 @@ namespace MusicLibrary.DiscAdder.ViewModels.ViewModelItems
 
 		public DiscModel Disc { get; }
 
-		public string SourceImageFilePath => ImageInfo.FileName;
+		public string SourceImageFilePath => ImageInfo?.FileName;
 
 		public DiscImageType ImageType { get; }
 

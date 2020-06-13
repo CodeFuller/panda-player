@@ -1,3 +1,6 @@
+**3.5.1 / 2020.06.13**
+* Fixed disc adder for case when disc has no cover image.
+
 **3.5.0 / 2020.06.13**
 * Made filling of details for new discs more flexible.
 

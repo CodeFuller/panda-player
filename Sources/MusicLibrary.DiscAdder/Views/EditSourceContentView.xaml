@@ -13,7 +13,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Button Grid.Row="0" x:Name="ButtonReloadRawContent" Content="Reload" Command="{Binding ReloadRawContentCommand}" HorizontalAlignment="Left" />
-        <Border Grid.Row="1"  Margin="0,10,0,0" BorderThickness="2" BorderBrush="{DynamicResource MaterialDesignDivider}" >
+        <Border Grid.Row="1" Margin="0,10,0,0" BorderThickness="2" BorderBrush="{DynamicResource MaterialDesignDivider}" >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
