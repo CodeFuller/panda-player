@@ -14,7 +14,7 @@
                 <DataGridTextColumn.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding FolderIsNew}" Value="True">
+                            <DataTrigger Binding="{Binding WarnAboutFolder}" Value="True">
                                 <Setter Property="Background" Value="Yellow" />
                                 <Setter Property="Foreground" Value="{DynamicResource MaterialDesignPaper}" />
                             </DataTrigger>
@@ -39,25 +39,21 @@
                 <DataGridComboBoxColumn.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="IsEnabled" Value="{Binding ArtistIsEditable}" />
+                    </Style>
+                </DataGridComboBoxColumn.CellStyle>
+                <DataGridComboBoxColumn.ElementStyle>
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignDataGridComboBox}">
+                        <Setter Property="ItemsSource" Value="{Binding AvailableArtists}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ArtistIsNotFilled}" Value="True">
-                                <Setter Property="Background" Value="Yellow" />
-                                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignPaper}" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding ArtistIsNew}" Value="True">
+                            <DataTrigger Binding="{Binding WarnAboutArtist}" Value="True">
                                 <Setter Property="Background" Value="Yellow" />
                                 <Setter Property="Foreground" Value="{DynamicResource MaterialDesignPaper}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </DataGridComboBoxColumn.CellStyle>
-                <DataGridComboBoxColumn.ElementStyle>
-                    <Style TargetType="ComboBox">
-                        <Setter Property="ItemsSource" Value="{Binding AvailableArtists}" />
-                    </Style>
                 </DataGridComboBoxColumn.ElementStyle>
                 <DataGridComboBoxColumn.EditingElementStyle>
-                    <Style TargetType="ComboBox">
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignDataGridComboBox}">
                         <Setter Property="ItemsSource" Value="{Binding AvailableArtists}" />
                     </Style>
                 </DataGridComboBoxColumn.EditingElementStyle>
@@ -69,7 +65,7 @@
                     <Style TargetType="DataGridCell">
                         <Setter Property="IsEnabled" Value="{Binding AlbumTitleIsEditable}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding WarnAboutUnequalAlbumTitle}" Value="True">
+                            <DataTrigger Binding="{Binding WarnAboutAlbumTitle}" Value="True">
                                 <Setter Property="Background" Value="Yellow" />
                                 <Setter Property="Foreground" Value="{DynamicResource MaterialDesignPaper}" />
                             </DataTrigger>
@@ -83,7 +79,7 @@
                         <Setter Property="TextBlock.TextAlignment" Value="Center"/>
                         <Setter Property="IsEnabled" Value="{Binding YearIsEditable}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding WarnAboutNotFilledYear}" Value="True">
+                            <DataTrigger Binding="{Binding WarnAboutYear}" Value="True">
                                 <Setter Property="Background" Value="Yellow" />
                                 <Setter Property="Foreground" Value="{DynamicResource MaterialDesignPaper}" />
                             </DataTrigger>
@@ -102,12 +98,12 @@
                     </Style>
                 </DataGridComboBoxColumn.CellStyle>
                 <DataGridComboBoxColumn.ElementStyle>
-                    <Style TargetType="ComboBox">
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignDataGridComboBox}">
                         <Setter Property="ItemsSource" Value="{Binding AvailableGenres}" />
                     </Style>
                 </DataGridComboBoxColumn.ElementStyle>
                 <DataGridComboBoxColumn.EditingElementStyle>
-                    <Style TargetType="ComboBox">
+                    <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignDataGridComboBox}">
                         <Setter Property="ItemsSource" Value="{Binding AvailableGenres}" />
                     </Style>
                 </DataGridComboBoxColumn.EditingElementStyle>

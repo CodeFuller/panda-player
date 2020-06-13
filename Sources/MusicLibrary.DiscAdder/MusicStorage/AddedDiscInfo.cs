@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace MusicLibrary.DiscAdder.MusicStorage
@@ -14,46 +13,15 @@ namespace MusicLibrary.DiscAdder.MusicStorage
 
 		public string AlbumTitle { get; set; }
 
-		public DiscType DiscType { get; set; }
+		public string Artist { get; set; }
 
 		public string SourcePath { get; set; }
 
 		public IReadOnlyCollection<string> DestinationFolderPath { get; set; }
 
-		public bool HasArtist => DiscType == DiscType.ArtistDisc;
-
-		private string artist;
-
-		/// <summary>
-		/// Gets or sets the Disc Artist.
-		/// </summary>
-		/// <remarks>
-		/// This value is filled only for type of ArtistDisc.
-		/// </remarks>
-		public string Artist
-		{
-			get
-			{
-				if (!HasArtist)
-				{
-					throw new InvalidOperationException("Artist property is accessible only for artist discs");
-				}
-
-				return artist;
-			}
-
-			set
-			{
-				if (!HasArtist)
-				{
-					throw new InvalidOperationException("Artist property is accessible only for artist discs");
-				}
-
-				artist = value;
-			}
-		}
-
 		public IReadOnlyCollection<AddedSongInfo> Songs { get; }
+
+		public bool HasVariousArtists => Songs.Any(s => s.Artist != null);
 
 		public AddedDiscInfo(IEnumerable<AddedSongInfo> songs)
 		{

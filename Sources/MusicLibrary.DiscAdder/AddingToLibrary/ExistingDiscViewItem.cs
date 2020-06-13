@@ -13,6 +13,8 @@ namespace MusicLibrary.DiscAdder.AddingToLibrary
 
 		public override bool WarnAboutDiscType => true;
 
+		public override bool WarnAboutFolder => false;
+
 		public override string AlbumTitle
 		{
 			get => Disc.AlbumTitle;
@@ -21,30 +23,16 @@ namespace MusicLibrary.DiscAdder.AddingToLibrary
 
 		public override bool AlbumTitleIsEditable => false;
 
-		public override ArtistModel Artist
-		{
-			get => Disc.SoloArtist;
-			set => throw new InvalidOperationException(Current($"Artist could not be changed for '{DiscTitle}' disc"));
-		}
-
-		public override bool ArtistIsEditable => false;
-
-		public override bool ArtistIsNotFilled => false;
-
 		public override bool YearIsEditable => false;
 
 		public override bool RequiredDataIsFilled => true;
 
-		public ExistingDiscViewItem(DiscModel existingDisc, AddedDiscInfo disc, IEnumerable<ArtistModel> availableArtists, IEnumerable<GenreModel> availableGenres)
-			: base(disc, folderExists: true, availableArtists, availableGenres)
+		public ExistingDiscViewItem(DiscModel existingDisc, AddedDiscInfo disc, IEnumerable<ArtistViewItem> availableArtists, IEnumerable<GenreModel> availableGenres)
+			: base(disc, availableArtists, availableGenres)
 		{
 			Disc = existingDisc;
+			Artist = LookupArtist(existingDisc.SoloArtist?.Name);
 			Genre = existingDisc.GetGenre();
-		}
-
-		protected override ArtistModel GetSongArtist(AddedSongInfo song)
-		{
-			return String.IsNullOrEmpty(song.Artist) ? Disc.SoloArtist : LookupArtist(song.Artist);
 		}
 	}
 }

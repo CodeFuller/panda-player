@@ -173,16 +173,19 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			const int progressIncrement = 5;
 			var taskProgressSize = 0;
 
+			// If new folder or disc is added, then same instance will be shared across all songs.
+			// That is why we need no additional checks for created objects.
+			// However, for artists there could be different instances of ArtistModel for the same new artist.
+			// That is why we remember artists, which were created.
+			var createdArtists = new Dictionary<string, ItemId>();
+
 			foreach (var addedSong in addedSongs)
 			{
 				if (!onlyCountProgressSize)
 				{
 					var song = addedSong.Song;
 
-					if (song.Artist != null && song.Artist.Id == null)
-					{
-						await CreateArtist(song.Artist, cancellationToken);
-					}
+					await ProvideSongArtist(song, createdArtists, cancellationToken);
 
 					var songDisc = song.Disc;
 					if (songDisc.Id == null)
@@ -239,11 +242,25 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			return taskProgressSize;
 		}
 
-		private async Task CreateArtist(ArtistModel artist, CancellationToken cancellationToken)
+		private async Task ProvideSongArtist(SongModel song, IDictionary<string, ItemId> createdArtists, CancellationToken cancellationToken)
 		{
-			ProgressMessages += Current($"Creating artist '{artist.Name}' ...\n");
+			var artist = song.Artist;
 
+			if (artist == null || artist.Id != null)
+			{
+				return;
+			}
+
+			if (createdArtists.TryGetValue(artist.Name, out var artistId))
+			{
+				artist.Id = artistId;
+				return;
+			}
+
+			ProgressMessages += Current($"Creating artist '{artist.Name}' ...\n");
 			await artistService.CreateArtist(artist, cancellationToken);
+
+			createdArtists.Add(artist.Name, artist.Id);
 		}
 
 		private async Task<ShallowFolderModel> CreateFolder(IReadOnlyCollection<string> discFolderPath, CancellationToken cancellationToken)

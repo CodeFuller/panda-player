@@ -18,7 +18,7 @@
                 </DataGridTextColumn.CellStyle>
             </DataGridTextColumn>
             <DataGridTextColumn Header="Title" Binding="{Binding Title}" />
-            <DataGridTextColumn Header="Tree Title" Binding="{Binding TreeTitle}" />
+            <DataGridTextColumn Header="Tree Title" IsReadOnly="True" Binding="{Binding TreeTitle}" />
             <!-- Album Title column is set to read-only. If Album title should be modified, it's better to edit it on previous EditDiscsDetails page -->
             <DataGridTextColumn Header="Album Title" IsReadOnly="True" Binding="{Binding AlbumTitle}" />
             <!-- Genre column is set to read-only currently.

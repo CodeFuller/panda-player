@@ -37,43 +37,46 @@ namespace MusicLibrary.DiscAdder.MusicStorage
 		public AddedDiscInfo GetAddedDiscInfo(string sourceDiscPath, IEnumerable<string> songFiles)
 		{
 			var discTreeTitle = Path.GetFileName(sourceDiscPath);
-
 			ParseDiscData(discTreeTitle, out var year, out var title);
 
-			var songs = songFiles.Select(GetSongInfo).ToList();
+			var songs = ParseSongsData(songFiles).ToList();
 
 			var destinationFolderPath = GetDestinationFolderPathForDisc(sourceDiscPath);
 
-			var discInfo = new AddedDiscInfo(songs)
+			return new AddedDiscInfo(songs)
 			{
 				Year = year,
 				DiscTitle = title,
 				TreeTitle = discTreeTitle,
 				AlbumTitle = discTitleToAlbumMapper.GetAlbumTitleFromDiscTitle(title),
+
+				// If all songs have artist parsed from song file name, then we leave disc artist empty.
+				// If some songs have no artist parsed from song file name, then we take parent folder name as artist name.
+				Artist = songs.All(song => song.Artist != null) ? null : destinationFolderPath.Last(),
 				SourcePath = sourceDiscPath,
 				DestinationFolderPath = destinationFolderPath,
 			};
+		}
 
-			if (IsArtistCategory(destinationFolderPath.First()) && destinationFolderPath.Count >= 2)
+		private static IEnumerable<AddedSongInfo> ParseSongsData(IEnumerable<string> songFiles)
+		{
+			var songs = songFiles.Select(GetSongInfo).ToList();
+
+			// Should we keep Artist parsed from songs or should we clear it?
+			// Currently artist is parsed from the song filename by the following regex: (.+) - (.+)
+			// It works for file names like 'Aerosmith - I Don't Want To Miss A Thing.mp3',
+			// but doesn't work for files like '09 - Lappi - I. Eramaajarvi.mp3'.
+			// Here we determine whether major part of disc songs has artist in title.
+			// If not, then we clear Artist in all songs from this disc.
+			if (songs.Count(s => String.IsNullOrEmpty(s.Artist)) > songs.Count(s => !String.IsNullOrEmpty(s.Artist)))
 			{
-				discInfo.DiscType = DiscType.ArtistDisc;
-				discInfo.Artist = destinationFolderPath.Last();
-			}
-			else
-			{
-				var hasSongWithoutArtist = songs.Any(s => String.IsNullOrEmpty(s.Artist));
-				var hasSongWithArtist = songs.Any(s => !String.IsNullOrEmpty(s.Artist));
-				if (hasSongWithoutArtist && hasSongWithArtist)
+				foreach (var song in songs)
 				{
-					throw new InvalidInputDataException(Current($"Disc '{sourceDiscPath}' has songs with and without artist name. This mode currently is not supported"));
+					song.DismissArtistInfo();
 				}
-
-				discInfo.DiscType = hasSongWithArtist
-					? DiscType.CompilationDiscWithArtistInfo
-					: DiscType.CompilationDiscWithoutArtistInfo;
 			}
 
-			return discInfo;
+			return songs;
 		}
 
 		private IReadOnlyCollection<string> GetDestinationFolderPathForDisc(string sourceDiscPath)
@@ -178,19 +181,6 @@ namespace MusicLibrary.DiscAdder.MusicStorage
 			{
 				files.Add(file);
 			}
-		}
-
-		private static bool IsArtistCategory(string category)
-		{
-			var artistCategories = new[]
-			{
-				// TODO: Remove this hardcoded content details.
-				"Belarussian",
-				"Foreign",
-				"Russian",
-			};
-
-			return artistCategories.Any(d => String.Equals(d, category, StringComparison.OrdinalIgnoreCase));
 		}
 	}
 }

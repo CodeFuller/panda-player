@@ -18,21 +18,27 @@ namespace MusicLibrary.DiscAdder.AddingToLibrary
 
 		public string DestinationFolder => String.Join('/', DestinationFolderPath);
 
-		public bool FolderIsNew { get; }
-
 		public abstract string DiscTypeTitle { get; }
 
-		public virtual bool WarnAboutDiscType => false;
+		public abstract bool WarnAboutDiscType { get; }
 
-		public abstract ArtistModel Artist { get; set; }
+		public abstract bool WarnAboutFolder { get; }
 
-		public abstract bool ArtistIsEditable { get; }
+		private ArtistViewItem artist;
 
-		public abstract bool ArtistIsNotFilled { get; }
+		public ArtistViewItem Artist
+		{
+			get => artist;
+			set
+			{
+				Set(ref artist, value);
+				RaisePropertyChanged(nameof(WarnAboutArtist));
+			}
+		}
 
-		public bool ArtistIsNew => Artist?.Id == null;
+		public bool WarnAboutArtist => !(Artist is SpecificArtistViewItem specificArtist && !specificArtist.IsNew);
 
-		public Collection<ArtistModel> AvailableArtists { get; }
+		public Collection<ArtistViewItem> AvailableArtists { get; }
 
 		public string DiscTitle => Disc.Title;
 
@@ -42,13 +48,13 @@ namespace MusicLibrary.DiscAdder.AddingToLibrary
 
 		public abstract bool AlbumTitleIsEditable { get; }
 
-		public bool WarnAboutUnequalAlbumTitle => AlbumTitleIsEditable && !String.Equals(AlbumTitle, DiscTitle, StringComparison.Ordinal);
+		public bool WarnAboutAlbumTitle => AlbumTitleIsEditable && !String.Equals(AlbumTitle, DiscTitle, StringComparison.Ordinal);
 
 		public virtual int? Year { get; set; }
 
 		public abstract bool YearIsEditable { get; }
 
-		public bool WarnAboutNotFilledYear => YearIsEditable && !Year.HasValue;
+		public bool WarnAboutYear => YearIsEditable && !Year.HasValue;
 
 		private GenreModel genre;
 
@@ -69,33 +75,35 @@ namespace MusicLibrary.DiscAdder.AddingToLibrary
 
 		public abstract bool RequiredDataIsFilled { get; }
 
-		protected IReadOnlyCollection<AddedSongInfo> SourceSongs { get; }
+		private IReadOnlyCollection<AddedSongInfo> SourceSongs { get; }
 
 		public IEnumerable<(SongModel song, string sourcePath)> Songs => SourceSongs.Select(s => (CreateSong(s), s.SourcePath));
 
 		public DiscModel Disc { get; protected set; }
 
-		protected DiscViewItem(AddedDiscInfo disc, bool folderExists, IEnumerable<ArtistModel> availableArtists, IEnumerable<GenreModel> availableGenres)
+		protected DiscViewItem(AddedDiscInfo disc, IEnumerable<ArtistViewItem> availableArtists, IEnumerable<GenreModel> availableGenres)
 		{
 			SourcePath = disc.SourcePath;
 			DestinationFolderPath = disc.DestinationFolderPath;
-			FolderIsNew = !folderExists;
 			AvailableArtists = availableArtists.ToCollection();
 			SourceSongs = disc.Songs.ToList();
 			AvailableGenres = availableGenres.ToCollection();
 		}
 
-		protected abstract ArtistModel GetSongArtist(AddedSongInfo song);
-
-		protected ArtistModel LookupArtist(string artistName)
+		protected ArtistViewItem LookupArtist(string artistName)
 		{
-			var artist = AvailableArtists.SingleOrDefault(a => a.Name == artistName);
-			if (artist == null)
+			if (artistName == null)
+			{
+				return AvailableArtists.OfType<EmptyArtistViewItem>().Single();
+			}
+
+			var matchingArtist = AvailableArtists.OfType<SpecificArtistViewItem>().SingleOrDefault(a => a.Matches(artistName));
+			if (matchingArtist == null)
 			{
 				throw new InvalidOperationException(Current($"Artist {artistName} does not present in artists list"));
 			}
 
-			return artist;
+			return matchingArtist;
 		}
 
 		private SongModel CreateSong(AddedSongInfo song)
@@ -112,6 +120,26 @@ namespace MusicLibrary.DiscAdder.AddingToLibrary
 				LastPlaybackTime = null,
 				PlaybacksCount = 0,
 			};
+		}
+
+		private ArtistModel GetSongArtist(AddedSongInfo song)
+		{
+			if (Artist is EmptyArtistViewItem)
+			{
+				return null;
+			}
+
+			if (Artist is VariousArtistViewItem)
+			{
+				return LookupArtist(song.Artist)?.ArtistModel;
+			}
+
+			if (Artist is SpecificArtistViewItem specificArtist)
+			{
+				return specificArtist.ArtistModel;
+			}
+
+			throw new InvalidOperationException("The artist type is unknown");
 		}
 	}
 }

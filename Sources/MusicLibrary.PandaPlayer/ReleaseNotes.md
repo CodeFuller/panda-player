@@ -1,3 +1,6 @@
+**3.5.0 / 2020.06.13**
+* Made filling of details for new discs more flexible.
+
 **3.4.2 / 2020.06.11**
 * Fixed loading of last playlist if some songs are missing in the library.
 
