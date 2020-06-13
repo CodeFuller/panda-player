@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using MusicLibrary.DiscAdder.AddingToLibrary;
+using MusicLibrary.DiscAdder.ViewModels.ViewModelItems;
 
 namespace MusicLibrary.DiscAdder.ViewModels.Interfaces
 {

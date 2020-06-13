@@ -5,7 +5,7 @@ using MusicLibrary.Core.Comparers;
 using MusicLibrary.Core.Models;
 using MusicLibrary.DiscAdder.MusicStorage;
 
-namespace MusicLibrary.DiscAdder.AddingToLibrary
+namespace MusicLibrary.DiscAdder.ViewModels.ViewModelItems
 {
 	internal class NewDiscViewItem : DiscViewItem
 	{

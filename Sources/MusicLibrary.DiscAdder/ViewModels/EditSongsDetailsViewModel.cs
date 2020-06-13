@@ -4,6 +4,7 @@ using System.Linq;
 using GalaSoft.MvvmLight;
 using MusicLibrary.DiscAdder.AddingToLibrary;
 using MusicLibrary.DiscAdder.ViewModels.Interfaces;
+using MusicLibrary.DiscAdder.ViewModels.ViewModelItems;
 
 namespace MusicLibrary.DiscAdder.ViewModels
 {

@@ -5,7 +5,7 @@ using MusicLibrary.DiscAdder.Extensions;
 using MusicLibrary.DiscAdder.MusicStorage;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.DiscAdder.AddingToLibrary
+namespace MusicLibrary.DiscAdder.ViewModels.ViewModelItems
 {
 	internal class ExistingDiscViewItem : DiscViewItem
 	{

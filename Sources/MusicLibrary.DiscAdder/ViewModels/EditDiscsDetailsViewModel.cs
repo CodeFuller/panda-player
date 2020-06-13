@@ -12,6 +12,7 @@ using MusicLibrary.DiscAdder.Extensions;
 using MusicLibrary.DiscAdder.Interfaces;
 using MusicLibrary.DiscAdder.MusicStorage;
 using MusicLibrary.DiscAdder.ViewModels.Interfaces;
+using MusicLibrary.DiscAdder.ViewModels.ViewModelItems;
 using MusicLibrary.Services.Interfaces;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 

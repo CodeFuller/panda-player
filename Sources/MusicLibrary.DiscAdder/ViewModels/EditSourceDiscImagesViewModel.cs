@@ -10,6 +10,7 @@ using MusicLibrary.Core.Models;
 using MusicLibrary.DiscAdder.AddingToLibrary;
 using MusicLibrary.DiscAdder.Interfaces;
 using MusicLibrary.DiscAdder.ViewModels.Interfaces;
+using MusicLibrary.DiscAdder.ViewModels.ViewModelItems;
 using MusicLibrary.Shared.Images;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 

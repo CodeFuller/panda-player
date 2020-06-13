@@ -1,8 +1,9 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
 using MusicLibrary.Core.Models;
+using MusicLibrary.DiscAdder.AddingToLibrary;
 
-namespace MusicLibrary.DiscAdder.AddingToLibrary
+namespace MusicLibrary.DiscAdder.ViewModels.ViewModelItems
 {
 	internal class SongViewItem : ViewModelBase
 	{
