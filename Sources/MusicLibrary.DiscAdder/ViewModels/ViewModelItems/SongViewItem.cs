@@ -1,7 +1,7 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
 using MusicLibrary.Core.Models;
-using MusicLibrary.DiscAdder.AddingToLibrary;
+using MusicLibrary.DiscAdder.AddedContent;
 
 namespace MusicLibrary.DiscAdder.ViewModels.ViewModelItems
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MusicLibrary.Core.Models;
 
-namespace MusicLibrary.DiscAdder.AddingToLibrary
+namespace MusicLibrary.DiscAdder.AddedContent
 {
 	internal class AddedDisc
 	{

@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
-using MusicLibrary.DiscAdder.AddingToLibrary;
+using MusicLibrary.DiscAdder.AddedContent;
 using MusicLibrary.DiscAdder.MusicStorage;
 using MusicLibrary.DiscAdder.ViewModels.ViewModelItems;
 

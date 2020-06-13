@@ -1,7 +1,7 @@
 ﻿using System;
 using MusicLibrary.Core.Models;
 
-namespace MusicLibrary.DiscAdder.AddingToLibrary
+namespace MusicLibrary.DiscAdder.AddedContent
 {
 	internal class AddedSong
 	{

@@ -8,7 +8,7 @@ using System.Windows.Input;
 using CF.Library.Wpf;
 using GalaSoft.MvvmLight;
 using MusicLibrary.Core.Models;
-using MusicLibrary.DiscAdder.AddingToLibrary;
+using MusicLibrary.DiscAdder.AddedContent;
 using MusicLibrary.DiscAdder.MusicStorage;
 using MusicLibrary.DiscAdder.ViewModels.Interfaces;
 using MusicLibrary.Services.Interfaces;

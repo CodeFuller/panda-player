@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using MusicLibrary.Core.Models;
-using MusicLibrary.DiscAdder.AddingToLibrary;
+using MusicLibrary.DiscAdder.AddedContent;
 using MusicLibrary.DiscAdder.Extensions;
 using MusicLibrary.DiscAdder.Interfaces;
 using MusicLibrary.DiscAdder.MusicStorage;

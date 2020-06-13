@@ -1,7 +1,7 @@
 ﻿using MusicLibrary.Core.Models;
 using MusicLibrary.Shared.Images;
 
-namespace MusicLibrary.DiscAdder.AddingToLibrary
+namespace MusicLibrary.DiscAdder.AddedContent
 {
 	internal class AddedDiscImage
 	{

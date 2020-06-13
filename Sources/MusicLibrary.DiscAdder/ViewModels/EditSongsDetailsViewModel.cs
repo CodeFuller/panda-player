@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
-using MusicLibrary.DiscAdder.AddingToLibrary;
+using MusicLibrary.DiscAdder.AddedContent;
 using MusicLibrary.DiscAdder.ViewModels.Interfaces;
 using MusicLibrary.DiscAdder.ViewModels.ViewModelItems;
 

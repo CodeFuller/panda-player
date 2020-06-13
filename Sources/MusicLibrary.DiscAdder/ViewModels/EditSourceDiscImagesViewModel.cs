@@ -7,7 +7,7 @@ using CF.Library.Core.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using MusicLibrary.Core.Models;
-using MusicLibrary.DiscAdder.AddingToLibrary;
+using MusicLibrary.DiscAdder.AddedContent;
 using MusicLibrary.DiscAdder.Interfaces;
 using MusicLibrary.DiscAdder.ViewModels.Interfaces;
 using MusicLibrary.DiscAdder.ViewModels.ViewModelItems;
