@@ -37,13 +37,13 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 
 		public bool FileExists(FilePath filePath)
 		{
-			var fullPath = GetFullPath(filePath);
+			var fullPath = GetFullPathInternal(filePath);
 			return fileSystemFacade.FileExists(fullPath);
 		}
 
 		public void SaveFile(FilePath filePath, Stream content)
 		{
-			var fullPath = GetFullPath(filePath);
+			var fullPath = GetFullPathInternal(filePath);
 			if (fileSystemFacade.FileExists(fullPath))
 			{
 				throw new InvalidOperationException($"Destination file '{fullPath}' already exists");
@@ -60,15 +60,15 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 
 		public void MoveFile(FilePath source, FilePath destination)
 		{
-			var sourceFilePath = GetFullPath(source);
-			var destinationFilePath = GetFullPath(destination);
+			var sourceFilePath = GetFullPathInternal(source);
+			var destinationFilePath = GetFullPathInternal(destination);
 
 			fileSystemFacade.MoveFile(sourceFilePath, destinationFilePath);
 		}
 
 		public string CheckoutFile(FilePath filePath)
 		{
-			var fullPath = GetFullPath(filePath);
+			var fullPath = GetFullPathInternal(filePath);
 			if (!fileSystemFacade.FileExists(fullPath))
 			{
 				throw new InvalidOperationException($"Storage file '{fullPath}' does not exist");
@@ -96,6 +96,11 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 
 		public string GetFullPath(FilePath filePath)
 		{
+			return GetFullPathInternal(filePath);
+		}
+
+		private string GetFullPathInternal(FilePath filePath)
+		{
 			return GetFullPath(Path.Combine(filePath.ToArray()));
 		}
 
@@ -106,33 +111,33 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 
 		public bool FolderExists(FilePath folderPath)
 		{
-			var fullPath = GetFullPath(folderPath);
+			var fullPath = GetFullPathInternal(folderPath);
 			return fileSystemFacade.DirectoryExists(fullPath);
 		}
 
 		public bool FolderIsEmpty(FilePath folderPath)
 		{
-			var fullPath = GetFullPath(folderPath);
+			var fullPath = GetFullPathInternal(folderPath);
 			return fileSystemFacade.DirectoryIsEmpty(fullPath);
 		}
 
 		public void CreateFolder(FilePath folderPath)
 		{
-			var fullPath = GetFullPath(folderPath);
+			var fullPath = GetFullPathInternal(folderPath);
 			fileSystemFacade.CreateDirectory(fullPath);
 		}
 
 		public void MoveFolder(FilePath source, FilePath destination)
 		{
-			var sourceFolderPath = GetFullPath(source);
-			var destinationFolderPath = GetFullPath(destination);
+			var sourceFolderPath = GetFullPathInternal(source);
+			var destinationFolderPath = GetFullPathInternal(destination);
 
 			fileSystemFacade.MoveDirectory(sourceFolderPath, destinationFolderPath);
 		}
 
 		public void DeleteFolder(FilePath folderPath)
 		{
-			var fullPath = GetFullPath(folderPath);
+			var fullPath = GetFullPathInternal(folderPath);
 			fileSystemFacade.DeleteDirectory(fullPath);
 		}
 
@@ -152,7 +157,7 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 
 		public void CheckFile(FilePath songPath, Action<LibraryInconsistency> inconsistenciesHandler)
 		{
-			var fullPath = GetFullPath(songPath);
+			var fullPath = GetFullPathInternal(songPath);
 
 			if (!fileSystemFacade.GetReadOnlyAttribute(fullPath))
 			{

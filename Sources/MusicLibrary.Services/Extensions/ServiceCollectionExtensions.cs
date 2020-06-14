@@ -23,6 +23,7 @@ namespace MusicLibrary.Services.Extensions
 			services.AddSingleton<IDiagnosticService, DiagnosticService>();
 
 			services.AddSingleton<IDiscConsistencyChecker, DiscConsistencyChecker>();
+			services.AddSingleton<ITagsConsistencyChecker, TagsConsistencyChecker>();
 
 			services.AddSingleton<IClock, Clock>();
 

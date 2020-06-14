@@ -155,6 +155,26 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			return Task.CompletedTask;
 		}
 
+		public Task<SongTagData> GetSongTagData(SongModel song, CancellationToken cancellationToken)
+		{
+			var songFilePath = GetSongFilePath(song);
+
+			return Task.FromResult(songTagger.GetTagData(songFilePath));
+		}
+
+		public Task<IEnumerable<SongTagType>> GetSongTagTypes(SongModel song, CancellationToken cancellationToken)
+		{
+			var songFilePath = GetSongFilePath(song);
+
+			return Task.FromResult(songTagger.GetTagTypes(songFilePath));
+		}
+
+		private string GetSongFilePath(SongModel song)
+		{
+			var songPath = storageOrganizer.GetSongFilePath(song);
+			return fileStorage.GetFullPath(songPath);
+		}
+
 		public Task CheckStorage(LibraryCheckFlags checkFlags, IEnumerable<ShallowFolderModel> folders, IEnumerable<DiscModel> discs,
 			IOperationProgress progress, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken)
 		{

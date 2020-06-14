@@ -70,6 +70,22 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
+		public bool CheckTagsConsistency
+		{
+			get => CheckFlags.HasFlag(LibraryCheckFlags.CheckSongTagsConsistency);
+			set
+			{
+				if (value)
+				{
+					CheckFlags |= LibraryCheckFlags.CheckSongTagsConsistency;
+				}
+				else
+				{
+					CheckFlags &= ~LibraryCheckFlags.CheckSongTagsConsistency;
+				}
+			}
+		}
+
 		private LibraryCheckFlags checkFlags = LibraryCheckFlags.CheckDiscsConsistency | LibraryCheckFlags.CheckStorageConsistency;
 
 		private LibraryCheckFlags CheckFlags
@@ -82,6 +98,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				RaisePropertyChanged(nameof(CheckDiscsConsistency));
 				RaisePropertyChanged(nameof(CheckStorageConsistency));
 				RaisePropertyChanged(nameof(CheckContentConsistency));
+				RaisePropertyChanged(nameof(CheckTagsConsistency));
 			}
 		}
 

@@ -32,6 +32,7 @@
                 <CheckBox Content="Check Discs" IsChecked="{Binding CheckDiscsConsistency}" IsEnabled="{Binding IsRunning, Converter={StaticResource InverseBooleanConverter}}" />
                 <CheckBox Margin="20,0,0,0" Content="Check Storage" IsChecked="{Binding CheckStorageConsistency}" IsEnabled="{Binding IsRunning, Converter={StaticResource InverseBooleanConverter}}" />
                 <CheckBox Margin="20,0,0,0" Content="Check Content" IsChecked="{Binding CheckContentConsistency}" IsEnabled="{Binding IsRunning, Converter={StaticResource InverseBooleanConverter}}" />
+                <CheckBox Margin="20,0,0,0" Content="Check Tags" IsChecked="{Binding CheckTagsConsistency}" IsEnabled="{Binding IsRunning, Converter={StaticResource InverseBooleanConverter}}" />
             </StackPanel>
         </Grid>
 

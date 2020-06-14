@@ -78,15 +78,6 @@ namespace MusicLibrary.Services.Tagging
 			}
 		}
 
-		public void FixTagData(string songFileName)
-		{
-			CheckSourceFile(songFileName);
-
-			using var file = TagLib.File.Create(songFileName);
-			var tagData = ExtractTagData(file.GetTag(TagTypes.Id3v2));
-			SetTagData(file, tagData);
-		}
-
 		private static void CheckSourceFile(string songFileName)
 		{
 			var extension = Path.GetExtension(songFileName);

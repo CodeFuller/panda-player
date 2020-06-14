@@ -1,3 +1,6 @@
+**3.7.0 / 2020.06.14**
+* Extended library checker with check for tags consistency.
+
 **3.6.3 / 2020.06.14**
 * Unified tree title for disc cover images set by disc adder.
 
