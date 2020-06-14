@@ -20,7 +20,6 @@ namespace MusicLibrary.Services
 
 		public Task<IReadOnlyCollection<GenreModel>> GetAllGenres(CancellationToken cancellationToken)
 		{
-			// TODO: We should return genres only from active songs (logic in service?)
 			var artists = genresRepository.GetAllGenres()
 				.OrderBy(a => a.Name)
 				.ToList();

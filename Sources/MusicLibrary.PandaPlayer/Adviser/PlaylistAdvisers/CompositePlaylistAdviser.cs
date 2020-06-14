@@ -17,7 +17,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 		private readonly IGenericDataRepository<PlaylistAdviserMemo> memoRepository;
 		private readonly AdviserSettings settings;
 
-		private readonly Lazy<PlaylistAdviserMemo> memo;
+		private PlaylistAdviserMemo Memo { get; set; }
 
 		public CompositePlaylistAdviser(IPlaylistAdviser usualDiscsAdviser, IPlaylistAdviser highlyRatedSongsAdviser, IPlaylistAdviser favoriteArtistDiscsAdviser,
 			IGenericDataRepository<PlaylistAdviserMemo> memoRepository, IOptions<AdviserSettings> options)
@@ -27,21 +27,14 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 			this.favoriteArtistDiscsAdviser = favoriteArtistDiscsAdviser ?? throw new ArgumentNullException(nameof(favoriteArtistDiscsAdviser));
 			this.memoRepository = memoRepository ?? throw new ArgumentNullException(nameof(memoRepository));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
-
-			memo = new Lazy<PlaylistAdviserMemo>(() => memoRepository.Load() ??
-			new PlaylistAdviserMemo
-			{
-				// Initializing memo with threshold values so that promoted advises go first.
-				PlaybacksSinceHighlyRatedSongsPlaylist = settings.HighlyRatedSongsAdviser.PlaybacksBetweenHighlyRatedSongs,
-				PlaybacksSinceFavoriteArtistDisc = settings.FavoriteArtistsAdviser.PlaybacksBetweenFavoriteArtistDiscs,
-			});
 		}
 
 		public IEnumerable<AdvisedPlaylist> Advise(IEnumerable<DiscModel> discs)
 		{
-			var discsList = discs.ToList();
-			var playbacksMemo = (PlaylistAdviserMemo)memo.Value.Clone();
+			Memo ??= memoRepository.Load() ?? CreateDefaultMemo();
+			var playbacksMemo = Memo;
 
+			var discsList = discs.ToList();
 			var playbacksInfo = new PlaybacksInfo(discsList);
 
 			var highlyRatedSongsAdvises = new Queue<AdvisedPlaylist>(highlyRatedSongsAdviser.Advise(discsList, playbacksInfo));
@@ -51,11 +44,11 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 			var advisedDiscs = new HashSet<ItemId>();
 			while (rankedDiscsAdvises.Count > 0)
 			{
-				AdvisedPlaylist currAdvise;
+				AdvisedPlaylist currentAdvise;
 
 				if (highlyRatedSongsAdvises.Count > 0 && playbacksMemo.PlaybacksSinceHighlyRatedSongsPlaylist + 1 >= settings.HighlyRatedSongsAdviser.PlaybacksBetweenHighlyRatedSongs)
 				{
-					currAdvise = highlyRatedSongsAdvises.Dequeue();
+					currentAdvise = highlyRatedSongsAdvises.Dequeue();
 				}
 				else
 				{
@@ -64,25 +57,30 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 						? favoriteArtistDiscsAdvises
 						: rankedDiscsAdvises;
 
-					currAdvise = adviseQueue.Dequeue();
-					if (advisedDiscs.Contains(currAdvise.Disc.Id))
+					currentAdvise = adviseQueue.Dequeue();
+					if (advisedDiscs.Contains(currentAdvise.Disc.Id))
 					{
 						continue;
 					}
 
-					advisedDiscs.Add(currAdvise.Disc.Id);
+					advisedDiscs.Add(currentAdvise.Disc.Id);
 				}
 
-				// TODO: Move this playbacks memo logic to DiscAdviserViewModel
-				playbacksMemo.RegisterPlayback(currAdvise);
-				yield return currAdvise;
+				playbacksMemo = playbacksMemo.RegisterPlayback(currentAdvise);
+				yield return currentAdvise;
 			}
+		}
+
+		private PlaylistAdviserMemo CreateDefaultMemo()
+		{
+			// If no previous PlaylistAdviserMemo exist, we're initializing memo with threshold values so that promoted advises go first.
+			return new PlaylistAdviserMemo(settings.HighlyRatedSongsAdviser.PlaybacksBetweenHighlyRatedSongs, settings.FavoriteArtistsAdviser.PlaybacksBetweenFavoriteArtistDiscs);
 		}
 
 		public void RegisterAdvicePlayback(AdvisedPlaylist advise)
 		{
-			memo.Value.RegisterPlayback(advise);
-			memoRepository.Save(memo.Value);
+			Memo = Memo.RegisterPlayback(advise);
+			memoRepository.Save(Memo);
 		}
 	}
 }

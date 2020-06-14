@@ -66,7 +66,6 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		{
 			set
 			{
-				// TODO: Revise objects comparing
 				if (activeDisc != value)
 				{
 					activeDisc = value;
