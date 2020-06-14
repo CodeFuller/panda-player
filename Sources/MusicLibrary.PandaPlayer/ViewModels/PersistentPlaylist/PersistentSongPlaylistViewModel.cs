@@ -127,14 +127,13 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 			await sessionDataService.PurgeData(SongPlaylistDataKey, cancellationToken);
 		}
 
-		protected override void OnPlaylistChanged()
+		protected override async Task OnPlaylistChanged(CancellationToken cancellationToken)
 		{
 			var playlistData = new PlaylistData(this);
 
-			// TODO: Make method async
-			sessionDataService.SaveData(SongPlaylistDataKey, playlistData, CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
+			await sessionDataService.SaveData(SongPlaylistDataKey, playlistData, cancellationToken);
 
-			base.OnPlaylistChanged();
+			await base.OnPlaylistChanged(cancellationToken);
 		}
 	}
 }

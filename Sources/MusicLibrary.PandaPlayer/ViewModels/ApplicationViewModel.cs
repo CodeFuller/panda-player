@@ -145,8 +145,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		private async void OnPlaySongList(PlaySongsListEventArgs e, CancellationToken cancellationToken)
 		{
-			PlaylistSongsViewModel.SetSongs(e.Songs);
-			PlaylistSongsViewModel.SwitchToNextSong();
+			await PlaylistSongsViewModel.SetPlaylistSongs(e.Songs, cancellationToken);
+			await PlaylistSongsViewModel.SwitchToNextSong(cancellationToken);
 			await ResetPlayer(cancellationToken);
 			SwitchToPlaylistSongs();
 		}
@@ -155,8 +155,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		{
 			var disc = message.Song.Disc;
 
-			PlaylistSongsViewModel.SetSongs(disc.ActiveSongs);
-			PlaylistSongsViewModel.SwitchToSong(message.Song);
+			await PlaylistSongsViewModel.SetPlaylistSongs(disc.ActiveSongs, cancellationToken);
+			await PlaylistSongsViewModel.SwitchToSong(message.Song, cancellationToken);
 			await ResetPlayer(cancellationToken);
 			SwitchToPlaylistSongs();
 		}

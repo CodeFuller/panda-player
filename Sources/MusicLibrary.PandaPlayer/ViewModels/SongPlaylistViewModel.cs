@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Core.Interfaces;
 using GalaSoft.MvvmLight.Command;
@@ -62,37 +64,39 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			PlayFromSongCommand = new RelayCommand(PlayFromSong);
 			NavigateToSongDiscCommand = new RelayCommand(NavigateToSongDisc);
 
-			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => OnAddingNextSongs(e.Songs));
-			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => OnAddingLastSongs(e.Songs));
+			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => OnAddingNextSongs(e.Songs, CancellationToken.None));
+			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => OnAddingLastSongs(e.Songs, CancellationToken.None));
 		}
 
-		protected virtual void OnPlaylistChanged()
+		protected virtual Task OnPlaylistChanged(CancellationToken cancellationToken)
 		{
 			Messenger.Default.Send(new PlaylistChangedEventArgs(this));
+
+			return Task.CompletedTask;
 		}
 
-		public override void SetSongs(IEnumerable<SongModel> newSongs)
+		public async Task SetPlaylistSongs(IEnumerable<SongModel> newSongs, CancellationToken cancellationToken)
 		{
 			CurrentSongIndex = null;
 			SetSongsRaw(newSongs);
-			OnPlaylistChanged();
+			await OnPlaylistChanged(cancellationToken);
 		}
 
 		protected void SetSongsRaw(IEnumerable<SongModel> newSongs)
 		{
-			base.SetSongs(newSongs);
+			SetSongs(newSongs);
 		}
 
-		public void SwitchToNextSong()
+		public async Task SwitchToNextSong(CancellationToken cancellationToken)
 		{
 			CurrentSongIndex = CurrentSongIndex + 1 ?? 0;
-			OnPlaylistChanged();
+			await OnPlaylistChanged(cancellationToken);
 		}
 
-		public void SwitchToSong(SongModel song)
+		public async Task SwitchToSong(SongModel song, CancellationToken cancellationToken)
 		{
 			CurrentSongIndex = GetSongIndex(song);
-			OnPlaylistChanged();
+			await OnPlaylistChanged(cancellationToken);
 		}
 
 		private int GetSongIndex(SongModel song)
@@ -115,7 +119,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			return songIndexes.Single();
 		}
 
-		private void OnAddingNextSongs(IReadOnlyCollection<SongModel> songs)
+		private async void OnAddingNextSongs(IReadOnlyCollection<SongModel> songs, CancellationToken cancellationToken)
 		{
 			var insertIndex = CurrentSongIndex + 1 ?? 0;
 			var firstSongIndex = insertIndex;
@@ -126,10 +130,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				CurrentSongIndex = firstSongIndex;
 			}
 
-			OnPlaylistChanged();
+			await OnPlaylistChanged(cancellationToken);
 		}
 
-		private void OnAddingLastSongs(IReadOnlyCollection<SongModel> songs)
+		private async void OnAddingLastSongs(IReadOnlyCollection<SongModel> songs, CancellationToken cancellationToken)
 		{
 			var firstSongIndex = SongItems.Count;
 			AddSongs(songs);
@@ -139,7 +143,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				CurrentSongIndex = firstSongIndex;
 			}
 
-			OnPlaylistChanged();
+			await OnPlaylistChanged(cancellationToken);
 		}
 
 		internal void PlayFromSong()

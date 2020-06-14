@@ -138,7 +138,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 
 			CurrentSong = null;
 
-			Playlist.SwitchToNextSong();
+			await Playlist.SwitchToNextSong(cancellationToken);
 			if (Playlist.CurrentSong == null)
 			{
 				// We have reached the end of playlist.

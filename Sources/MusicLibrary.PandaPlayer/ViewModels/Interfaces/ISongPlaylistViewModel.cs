@@ -1,4 +1,7 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using MusicLibrary.Core.Models;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
@@ -17,8 +20,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		ICommand NavigateToSongDiscCommand { get; }
 
-		void SwitchToNextSong();
+		Task SetPlaylistSongs(IEnumerable<SongModel> songs, CancellationToken cancellationToken);
 
-		void SwitchToSong(SongModel song);
+		Task SwitchToNextSong(CancellationToken cancellationToken);
+
+		Task SwitchToSong(SongModel song, CancellationToken cancellationToken);
 	}
 }
