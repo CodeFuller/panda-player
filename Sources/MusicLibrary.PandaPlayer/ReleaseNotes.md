@@ -1,3 +1,6 @@
+**3.6.2 / 2020.06.14**
+* Fixed synchronization of songs deletion between lists.
+
 **3.6.1 / 2020.06.14**
 * Fixed loading of content explorer when playlist songs belong to various discs.
 

@@ -16,6 +16,7 @@ namespace MusicLibrary.Core.Models
 		private DateTimeOffset? lastPlaybackTime;
 		private int playbacksCount;
 		private Uri contentUri;
+		private DateTimeOffset? deleteDate;
 
 		public ItemId Id { get; set; }
 
@@ -85,7 +86,11 @@ namespace MusicLibrary.Core.Models
 			set => this.SetField(PropertyChanged, ref contentUri, value);
 		}
 
-		public DateTimeOffset? DeleteDate { get; set; }
+		public DateTimeOffset? DeleteDate
+		{
+			get => deleteDate;
+			set => this.SetField(PropertyChanged, ref deleteDate, value);
+		}
 
 		public bool IsDeleted => DeleteDate != null;
 

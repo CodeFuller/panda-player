@@ -17,6 +17,7 @@ namespace MusicLibrary.PandaPlayer.Internal
 			{ nameof(SongModel.LastPlaybackTime), (src, dst) => dst.LastPlaybackTime = src.LastPlaybackTime },
 			{ nameof(SongModel.PlaybacksCount), (src, dst) => dst.PlaybacksCount = src.PlaybacksCount },
 			{ nameof(SongModel.ContentUri), (src, dst) => dst.ContentUri = src.ContentUri },
+			{ nameof(SongModel.DeleteDate), (src, dst) => dst.DeleteDate = src.DeleteDate },
 		};
 
 		public static void UpdateSong(SongModel source, SongModel target, string propertyName)

@@ -126,22 +126,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 			foreach (var song in selectedSongs)
 			{
-				// TODO: We actually leave song object in Disc songs list. Should we fix it?
 				await songsService.DeleteSong(song, cancellationToken);
-				for (var i = 0; i < songItems.Count;)
-				{
-					if (songItems[i].Song.Id == song.Id)
-					{
-						songItems.RemoveAt(i);
-					}
-					else
-					{
-						++i;
-					}
-				}
 			}
 
-			OnSongItemsChanged();
+			// Above call to songsService.DeleteSong() updates song.DeleteDate.
+			// As result OnSongChanged() is called, which deletes song(s) from the list.
 		}
 
 		private async Task EditSongsProperties(CancellationToken cancellationToken)
@@ -210,7 +199,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		private void OnSongChanged(SongModel changedSong, string propertyName)
 		{
-			foreach (var song in Songs)
+			var originalSongs = Songs.ToList();
+			foreach (var song in originalSongs)
 			{
 				if (song.Id != changedSong.Id || Object.ReferenceEquals(song, changedSong))
 				{
@@ -218,6 +208,32 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				}
 
 				SongUpdater.UpdateSong(changedSong, song, propertyName);
+			}
+
+			if (!(propertyName == nameof(SongModel.DeleteDate) && changedSong.IsDeleted))
+			{
+				return;
+			}
+
+			var songItemsChanged = false;
+
+			// The same song could appear several times in the list, so we check the whole list and remove all instances.
+			for (var i = 0; i < songItems.Count;)
+			{
+				var song = songItems[i].Song;
+				if (song.Id != changedSong.Id)
+				{
+					++i;
+					continue;
+				}
+
+				songItems.RemoveAt(i);
+				songItemsChanged = true;
+			}
+
+			if (songItemsChanged)
+			{
+				OnSongItemsChanged();
 			}
 		}
 
