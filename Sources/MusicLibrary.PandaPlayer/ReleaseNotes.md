@@ -1,3 +1,6 @@
+**3.6.3 / 2020.06.14**
+* Unified tree title for disc cover images set by disc adder.
+
 **3.6.2 / 2020.06.14**
 * Fixed synchronization of songs deletion between lists.
 

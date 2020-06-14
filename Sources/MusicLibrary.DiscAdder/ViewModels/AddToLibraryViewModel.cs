@@ -13,6 +13,7 @@ using MusicLibrary.DiscAdder.MusicStorage;
 using MusicLibrary.DiscAdder.ViewModels.Interfaces;
 using MusicLibrary.Services.Interfaces;
 using MusicLibrary.Services.Media;
+using MusicLibrary.Shared.Extensions;
 using static System.FormattableString;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
@@ -226,7 +227,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 					var discImage = new DiscImageModel
 					{
 						Disc = image.Disc,
-						TreeTitle = Path.GetFileName(image.ImageInfo.FileName),
+						TreeTitle = image.ImageInfo.GetDiscCoverImageTreeTitle(),
 						ImageType = DiscImageType.Cover,
 					};
 

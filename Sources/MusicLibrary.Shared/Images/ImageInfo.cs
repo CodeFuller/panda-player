@@ -1,5 +1,4 @@
-﻿using CF.Library.Core.Exceptions;
-using CF.Library.Core.Extensions;
+﻿using CF.Library.Core.Extensions;
 
 namespace MusicLibrary.Shared.Images
 {
@@ -16,20 +15,5 @@ namespace MusicLibrary.Shared.Images
 		public ImageFormatType Format { get; set; }
 
 		public string FormatName => Format.GetDescription();
-
-		public string GetFileNameExtension()
-		{
-			switch (Format)
-			{
-				case ImageFormatType.Jpeg:
-					return "jpg";
-
-				case ImageFormatType.Png:
-					return "png";
-
-				default:
-					throw new UnexpectedEnumValueException(Format);
-			}
-		}
 	}
 }

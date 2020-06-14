@@ -14,6 +14,7 @@ using MusicLibrary.PandaPlayer.Events.DiscEvents;
 using MusicLibrary.PandaPlayer.Settings;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.Services.Interfaces;
+using MusicLibrary.Shared.Extensions;
 using MusicLibrary.Shared.Images;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
@@ -106,9 +107,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 			var coverImage = new DiscImageModel
 			{
 				Disc = Disc,
-
-				// TODO: cover file name is hardcoded
-				TreeTitle = Path.ChangeExtension("cover", imageFile.ImageInfo.GetFileNameExtension()),
+				TreeTitle = imageFile.ImageInfo.GetDiscCoverImageTreeTitle(),
 				ImageType = DiscImageType.Cover,
 			};
 
