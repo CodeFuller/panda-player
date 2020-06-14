@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -30,12 +31,12 @@ namespace MusicLibrary.LastFM.Tests.Internal
 
 			// Act
 
-			await target.UpdateNowPlaying(track);
+			await target.UpdateNowPlaying(track, CancellationToken.None);
 
 			// Assert
 
 			var apiClientMock = mocker.GetMock<ILastFMApiClient>();
-			apiClientMock.Verify(x => x.UpdateNowPlaying(track), Times.Once);
+			apiClientMock.Verify(x => x.UpdateNowPlaying(track, It.IsAny<CancellationToken>()), Times.Once);
 		}
 
 		[DataRow(null)]
@@ -58,12 +59,12 @@ namespace MusicLibrary.LastFM.Tests.Internal
 
 			// Act
 
-			await target.UpdateNowPlaying(track);
+			await target.UpdateNowPlaying(track, CancellationToken.None);
 
 			// Assert
 
 			var apiClientMock = mocker.GetMock<ILastFMApiClient>();
-			apiClientMock.Verify(x => x.UpdateNowPlaying(It.IsAny<Track>()), Times.Never);
+			apiClientMock.Verify(x => x.UpdateNowPlaying(It.IsAny<Track>(), It.IsAny<CancellationToken>()), Times.Never);
 		}
 
 		[DataRow(null)]
@@ -86,12 +87,12 @@ namespace MusicLibrary.LastFM.Tests.Internal
 
 			// Act
 
-			await target.UpdateNowPlaying(track);
+			await target.UpdateNowPlaying(track, CancellationToken.None);
 
 			// Assert
 
 			var apiClientMock = mocker.GetMock<ILastFMApiClient>();
-			apiClientMock.Verify(x => x.UpdateNowPlaying(It.IsAny<Track>()), Times.Never);
+			apiClientMock.Verify(x => x.UpdateNowPlaying(It.IsAny<Track>(), It.IsAny<CancellationToken>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -112,12 +113,12 @@ namespace MusicLibrary.LastFM.Tests.Internal
 
 			// Act
 
-			await target.UpdateNowPlaying(track);
+			await target.UpdateNowPlaying(track, CancellationToken.None);
 
 			// Assert
 
 			var apiClientMock = mocker.GetMock<ILastFMApiClient>();
-			apiClientMock.Verify(x => x.UpdateNowPlaying(It.IsAny<Track>()), Times.Never);
+			apiClientMock.Verify(x => x.UpdateNowPlaying(It.IsAny<Track>(), It.IsAny<CancellationToken>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -143,12 +144,12 @@ namespace MusicLibrary.LastFM.Tests.Internal
 
 			// Act
 
-			await target.Scrobble(trackScrobble);
+			await target.Scrobble(trackScrobble, CancellationToken.None);
 
 			// Assert
 
 			var apiClientMock = mocker.GetMock<ILastFMApiClient>();
-			apiClientMock.Verify(x => x.Scrobble(trackScrobble), Times.Once);
+			apiClientMock.Verify(x => x.Scrobble(trackScrobble, It.IsAny<CancellationToken>()), Times.Once);
 		}
 
 		[DataRow(null)]
@@ -176,12 +177,12 @@ namespace MusicLibrary.LastFM.Tests.Internal
 
 			// Act
 
-			await target.Scrobble(trackScrobble);
+			await target.Scrobble(trackScrobble, CancellationToken.None);
 
 			// Assert
 
 			var apiClientMock = mocker.GetMock<ILastFMApiClient>();
-			apiClientMock.Verify(x => x.Scrobble(It.IsAny<TrackScrobble>()), Times.Never);
+			apiClientMock.Verify(x => x.Scrobble(It.IsAny<TrackScrobble>(), It.IsAny<CancellationToken>()), Times.Never);
 		}
 
 		[DataRow(null)]
@@ -209,12 +210,12 @@ namespace MusicLibrary.LastFM.Tests.Internal
 
 			// Act
 
-			await target.Scrobble(trackScrobble);
+			await target.Scrobble(trackScrobble, CancellationToken.None);
 
 			// Assert
 
 			var apiClientMock = mocker.GetMock<ILastFMApiClient>();
-			apiClientMock.Verify(x => x.Scrobble(It.IsAny<TrackScrobble>()), Times.Never);
+			apiClientMock.Verify(x => x.Scrobble(It.IsAny<TrackScrobble>(), It.IsAny<CancellationToken>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -240,12 +241,12 @@ namespace MusicLibrary.LastFM.Tests.Internal
 
 			// Act
 
-			await target.Scrobble(trackScrobble);
+			await target.Scrobble(trackScrobble, CancellationToken.None);
 
 			// Assert
 
 			var apiClientMock = mocker.GetMock<ILastFMApiClient>();
-			apiClientMock.Verify(x => x.Scrobble(It.IsAny<TrackScrobble>()), Times.Never);
+			apiClientMock.Verify(x => x.Scrobble(It.IsAny<TrackScrobble>(), It.IsAny<CancellationToken>()), Times.Never);
 		}
 	}
 }

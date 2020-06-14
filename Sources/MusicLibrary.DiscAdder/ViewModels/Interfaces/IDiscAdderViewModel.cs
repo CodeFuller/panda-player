@@ -1,7 +1,10 @@
-﻿namespace MusicLibrary.DiscAdder.ViewModels.Interfaces
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace MusicLibrary.DiscAdder.ViewModels.Interfaces
 {
 	public interface IDiscAdderViewModel
 	{
-		void Load();
+		Task Load(CancellationToken cancellationToken);
 	}
 }

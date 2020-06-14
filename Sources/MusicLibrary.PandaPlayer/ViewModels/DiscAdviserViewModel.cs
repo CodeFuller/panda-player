@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CF.Library.Wpf;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Extensions.Logging;
 using MusicLibrary.Core.Models;
@@ -57,7 +56,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
 
-			PlayCurrentAdviseCommand = new RelayCommand(PlayCurrentAdvise);
+			PlayCurrentAdviseCommand = new AsyncRelayCommand(() => PlayCurrentAdvise(CancellationToken.None));
 			SwitchToNextAdviseCommand = new AsyncRelayCommand(() => SwitchToNextAdvise(CancellationToken.None));
 
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => OnPlaylistFinished(e.Songs, CancellationToken.None));
@@ -69,17 +68,17 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			await RebuildAdvises(cancellationToken);
 		}
 
-		internal void PlayCurrentAdvise()
+		private async Task PlayCurrentAdvise(CancellationToken cancellationToken)
 		{
 			var advise = CurrentAdvise;
 			if (advise != null)
 			{
-				playlistAdviser.RegisterAdvicePlayback(advise);
+				await playlistAdviser.RegisterAdvicePlayback(advise, cancellationToken);
 				Messenger.Default.Send(new PlaySongsListEventArgs(advise.Songs));
 			}
 		}
 
-		internal async Task SwitchToNextAdvise(CancellationToken cancellationToken)
+		private async Task SwitchToNextAdvise(CancellationToken cancellationToken)
 		{
 			++CurrAdviseIndex;
 			await RebuildAdvisesIfRequired(cancellationToken);
@@ -97,7 +96,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 		{
 			logger.LogInformation("Calculating advised playlists ...");
 			var discs = await discsService.GetAllDiscs(cancellationToken);
-			var advisedPlaylists = playlistAdviser.Advise(discs).Take(AdvisedPlaylistsNumber);
+			var advisedPlaylists = await playlistAdviser.Advise(discs, AdvisedPlaylistsNumber, cancellationToken);
 			logger.LogInformation("Finished advised playlists calculation");
 
 			currAdvises.Clear();

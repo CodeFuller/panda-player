@@ -8,6 +8,7 @@ using MusicLibrary.DiscAdder.ParsingContent;
 using MusicLibrary.DiscAdder.ParsingSong;
 using MusicLibrary.DiscAdder.ViewModels;
 using MusicLibrary.DiscAdder.ViewModels.Interfaces;
+using MusicLibrary.DiscAdder.ViewModels.SourceContent;
 using MusicLibrary.Services.Media;
 using MusicLibrary.Shared;
 using MusicLibrary.Shared.Images;
@@ -42,6 +43,7 @@ namespace MusicLibrary.DiscAdder.Extensions
 
 		private static void RegisterViewModels(IServiceCollection services)
 		{
+			services.AddSingleton<IReferenceContentViewModel, ReferenceContentViewModel>();
 			services.AddSingleton<IEditSourceContentViewModel, EditSourceContentViewModel>();
 			services.AddSingleton<IEditDiscsDetailsViewModel, EditDiscsDetailsViewModel>();
 			services.AddSingleton<IEditSourceDiscImagesViewModel, EditSourceDiscImagesViewModel>();

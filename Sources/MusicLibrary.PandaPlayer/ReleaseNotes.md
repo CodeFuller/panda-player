@@ -1,3 +1,6 @@
+**3.6.0 / 2020.06.14**
+* Moved session data to the database.
+
 **3.5.1 / 2020.06.13**
 * Fixed disc adder for case when disc has no cover image.
 

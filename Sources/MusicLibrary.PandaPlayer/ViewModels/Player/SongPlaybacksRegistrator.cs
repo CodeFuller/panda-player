@@ -21,9 +21,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 			this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
 		}
 
-		public async Task RegisterPlaybackStart(SongModel song, CancellationToken cancellationToken)
+		public Task RegisterPlaybackStart(SongModel song, CancellationToken cancellationToken)
 		{
-			await scrobbler.UpdateNowPlaying(GetTrackFromSong(song));
+			return scrobbler.UpdateNowPlaying(GetTrackFromSong(song), cancellationToken);
 		}
 
 		public async Task RegisterPlaybackFinish(SongModel song, CancellationToken cancellationToken)
@@ -38,7 +38,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 				ChosenByUser = true,
 			};
 
-			await scrobbler.Scrobble(scrobble);
+			await scrobbler.Scrobble(scrobble, cancellationToken);
 		}
 
 		private static Track GetTrackFromSong(SongModel song)

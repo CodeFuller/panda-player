@@ -20,6 +20,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 			services.AddSingleton<ISongsRepository, SongsRepository>();
 			services.AddSingleton<IGenresRepository, GenresRepository>();
 			services.AddSingleton<IArtistsRepository, ArtistsRepository>();
+			services.AddSingleton<ISessionDataRepository, SessionDataRepository>();
 
 			services.AddSingleton<StorageRepository>();
 			services.AddSingleton<IStorageRepository>(sp => sp.GetRequiredService<StorageRepository>());

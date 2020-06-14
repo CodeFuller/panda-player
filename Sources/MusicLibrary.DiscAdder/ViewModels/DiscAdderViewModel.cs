@@ -150,14 +150,15 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			}
 		}
 
-		public void Load()
+		public async Task Load(CancellationToken cancellationToken)
 		{
 			if (IsLoaded)
 			{
 				return;
 			}
 
-			editSourceContentViewModel.LoadDefaultContent();
+			await editSourceContentViewModel.LoadDefaultContent(cancellationToken);
+
 			IsLoaded = true;
 		}
 
@@ -190,7 +191,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			}
 			else if (nextPage == editSourceContentViewModel)
 			{
-				Load();
+				await Load(cancellationToken);
 			}
 
 			CurrentPage = nextPage;

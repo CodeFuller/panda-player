@@ -83,8 +83,15 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 			{
 				builder.ToTable("DiscImages");
 
-				builder.Property(s => s.TreeTitle).IsRequired();
+				builder.Property(di => di.TreeTitle).IsRequired();
 				builder.Property(di => di.DiscId).HasColumnName("Disc_Id");
+			});
+
+			modelBuilder.Entity<SessionDataEntity>(builder =>
+			{
+				builder.ToTable("SessionData");
+
+				builder.HasKey(sd => sd.Key);
 			});
 		}
 
@@ -99,5 +106,7 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 		public DbSet<SongEntity> Songs { get; set; }
 
 		public DbSet<DiscImageEntity> DiscImages { get; set; }
+
+		public DbSet<SessionDataEntity> SessionData { get; set; }
 	}
 }

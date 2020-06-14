@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using CF.Library.Core.Facades;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -30,7 +31,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 
 		private readonly DiscAdderSettings settings;
 
-		public ReferenceContentViewModel RawReferenceDiscs { get; }
+		public IReferenceContentViewModel RawReferenceDiscs { get; }
 
 		public DiscTreeViewModel ReferenceDiscs { get; }
 
@@ -49,23 +50,18 @@ namespace MusicLibrary.DiscAdder.ViewModels
 		}
 
 		public EditSourceContentViewModel(IContentCrawler contentCrawler, IDiscContentParser discContentParser, IDiscContentComparer discContentComparer,
-			IWorkshopMusicStorage workshopMusicStorage, IFileSystemFacade fileSystemFacade, IOptions<DiscAdderSettings> options)
+			IWorkshopMusicStorage workshopMusicStorage, IReferenceContentViewModel rawReferenceDiscs, IOptions<DiscAdderSettings> options)
 		{
-			if (fileSystemFacade == null)
-			{
-				throw new ArgumentNullException(nameof(fileSystemFacade));
-			}
-
 			this.contentCrawler = contentCrawler ?? throw new ArgumentNullException(nameof(contentCrawler));
 			this.discContentParser = discContentParser ?? throw new ArgumentNullException(nameof(discContentParser));
 			this.discContentComparer = discContentComparer ?? throw new ArgumentNullException(nameof(discContentComparer));
 			this.workshopMusicStorage = workshopMusicStorage ?? throw new ArgumentNullException(nameof(workshopMusicStorage));
+			RawReferenceDiscs = rawReferenceDiscs ?? throw new ArgumentNullException(nameof(rawReferenceDiscs));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
 			ReferenceDiscs = new DiscTreeViewModel();
 			CurrentDiscs = new DiscTreeViewModel();
 
-			RawReferenceDiscs = new ReferenceContentViewModel(fileSystemFacade, settings.DataStoragePath);
 			RawReferenceDiscs.PropertyChanged += OnRawReferenceDiscsPropertyChanged;
 
 			ReloadRawContentCommand = new RelayCommand(ReloadRawContent);
@@ -73,9 +69,9 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			Messenger.Default.Register<DiscContentChangedEventArgs>(this, OnDiscContentChanged);
 		}
 
-		public void LoadDefaultContent()
+		public async Task LoadDefaultContent(CancellationToken cancellationToken)
 		{
-			RawReferenceDiscs.LoadRawReferenceDiscsContent();
+			await RawReferenceDiscs.LoadRawReferenceDiscsContent(cancellationToken);
 
 			LoadCurrentDiscs();
 		}

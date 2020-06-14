@@ -1,22 +1,31 @@
 ﻿using System;
-using System.IO;
-using CF.Library.Core.Facades;
+using System.Threading;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using MusicLibrary.DiscAdder.ViewModels.Interfaces;
+using MusicLibrary.Services.Interfaces;
 
 namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 {
-	internal class ReferenceContentViewModel : ViewModelBase
+	internal sealed class ReferenceContentViewModel : ViewModelBase, IReferenceContentViewModel, IDisposable
 	{
-		// TODO: Store this info in the database
-		private const string ContentSaveFilename = "RawDiscsContent.txt";
+		private const string RawReferenceDiscsDataKey = "RawReferenceDiscsData";
 
-		private readonly IFileSystemFacade fileSystemFacade;
-		private readonly string contentSaveFilePath;
+		private readonly ISessionDataService sessionDataService;
 
-		public ReferenceContentViewModel(IFileSystemFacade fileSystemFacade, string appDataPath)
+		private readonly System.Timers.Timer saveContentTimer;
+
+		public ReferenceContentViewModel(ISessionDataService sessionDataService)
 		{
-			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
-			contentSaveFilePath = Path.Combine(appDataPath, ContentSaveFilename);
+			this.sessionDataService = sessionDataService ?? throw new ArgumentNullException(nameof(sessionDataService));
+
+			saveContentTimer = new System.Timers.Timer(TimeSpan.FromSeconds(5).TotalMilliseconds)
+			{
+				AutoReset = true,
+				Enabled = true,
+			};
+
+			saveContentTimer.Elapsed += (s, e) => OnSaveContentTimerElapsed(CancellationToken.None);
 		}
 
 		private string rawReferenceDiscsContent;
@@ -24,24 +33,30 @@ namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 		public string Content
 		{
 			get => rawReferenceDiscsContent;
-			set
-			{
-				Set(ref rawReferenceDiscsContent, value);
-				SaveRawReferenceDiscsContent();
-			}
+			set => Set(ref rawReferenceDiscsContent, value);
 		}
 
-		public void LoadRawReferenceDiscsContent()
+		private string LastSavedContent { get; set; }
+
+		public async Task LoadRawReferenceDiscsContent(CancellationToken cancellationToken)
 		{
-			if (fileSystemFacade.FileExists(contentSaveFilePath))
-			{
-				Content = File.ReadAllText(contentSaveFilePath);
-			}
+			Content = LastSavedContent = await sessionDataService.GetData<string>(RawReferenceDiscsDataKey, cancellationToken);
 		}
 
-		private void SaveRawReferenceDiscsContent()
+		private async void OnSaveContentTimerElapsed(CancellationToken cancellationToken)
 		{
-			File.WriteAllText(contentSaveFilePath, Content);
+			if (String.Equals(Content, LastSavedContent, StringComparison.Ordinal))
+			{
+				return;
+			}
+
+			LastSavedContent = Content;
+			await sessionDataService.SaveData(RawReferenceDiscsDataKey, LastSavedContent, cancellationToken);
+		}
+
+		public void Dispose()
+		{
+			saveContentTimer?.Dispose();
 		}
 	}
 }

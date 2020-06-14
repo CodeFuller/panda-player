@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MusicLibrary.LastFM.Interfaces;
@@ -19,24 +20,24 @@ namespace MusicLibrary.LastFM.Internal
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task UpdateNowPlaying(Track track)
+		public async Task UpdateNowPlaying(Track track, CancellationToken cancellationToken)
 		{
 			if (!TrackCouldBeScrobbled(track))
 			{
 				return;
 			}
 
-			await lastFMApiClient.UpdateNowPlaying(track);
+			await lastFMApiClient.UpdateNowPlaying(track, cancellationToken);
 		}
 
-		public async Task Scrobble(TrackScrobble trackScrobble)
+		public async Task Scrobble(TrackScrobble trackScrobble, CancellationToken cancellationToken)
 		{
 			if (!TrackCouldBeScrobbled(trackScrobble.Track))
 			{
 				return;
 			}
 
-			await lastFMApiClient.Scrobble(trackScrobble);
+			await lastFMApiClient.Scrobble(trackScrobble, cancellationToken);
 		}
 
 		private bool TrackCouldBeScrobbled(Track track)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MusicLibrary.LastFM.Interfaces;
@@ -19,11 +20,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Scrobbling
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task UpdateNowPlaying(Track track)
+		public async Task UpdateNowPlaying(Track track, CancellationToken cancellationToken)
 		{
 			try
 			{
-				await scrobbler.UpdateNowPlaying(track);
+				await scrobbler.UpdateNowPlaying(track, cancellationToken);
 			}
 #pragma warning disable CA1031 // Do not catch general exception types
 			catch (Exception e)
@@ -33,9 +34,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Scrobbling
 			}
 		}
 
-		public Task Scrobble(TrackScrobble trackScrobble)
+		public Task Scrobble(TrackScrobble trackScrobble, CancellationToken cancellationToken)
 		{
-			return scrobblesProcessor.ProcessScrobble(trackScrobble, scrobbler);
+			return scrobblesProcessor.ProcessScrobble(trackScrobble, scrobbler, cancellationToken);
 		}
 	}
 }

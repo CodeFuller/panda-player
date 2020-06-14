@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -33,7 +34,7 @@ namespace MusicLibrary.LastFM.Internal
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task UpdateNowPlaying(Track track)
+		public async Task UpdateNowPlaying(Track track, CancellationToken cancellationToken)
 		{
 			if (!CheckSession())
 			{
@@ -62,11 +63,11 @@ namespace MusicLibrary.LastFM.Internal
 				requestParams.Add("trackNumber", track.Number.Value.ToString(CultureInfo.InvariantCulture));
 			}
 
-			var response = await PerformPostRequest<UpdateNowPlayingTrackResponse>(requestParams, true);
+			var response = await PerformPostRequest<UpdateNowPlayingTrackResponse>(requestParams, true, cancellationToken);
 			LogCorrections(track, response.NowPlaying);
 		}
 
-		public async Task Scrobble(TrackScrobble trackScrobble)
+		public async Task Scrobble(TrackScrobble trackScrobble, CancellationToken cancellationToken)
 		{
 			if (!CheckSession())
 			{
@@ -97,7 +98,7 @@ namespace MusicLibrary.LastFM.Internal
 				requestParams.Add("trackNumber", trackScrobble.Track.Number.Value.ToString(CultureInfo.InvariantCulture));
 			}
 
-			var response = await PerformPostRequest<ScrobbleTrackResponse>(requestParams, true);
+			var response = await PerformPostRequest<ScrobbleTrackResponse>(requestParams, true, cancellationToken);
 			if (response.Scrobbles.Statistics.Ignored > 0)
 			{
 				logger.LogWarning($"{response.Scrobbles.Statistics.Ignored} tracks ignored");
@@ -153,14 +154,14 @@ namespace MusicLibrary.LastFM.Internal
 			return true;
 		}
 
-		private async Task<TData> PerformPostRequest<TData>(NameValueCollection requestParams, bool requiresAuthentication)
+		private async Task<TData> PerformPostRequest<TData>(NameValueCollection requestParams, bool requiresAuthentication, CancellationToken cancellationToken)
 			where TData : class
 		{
 			using var request = CreatePostHttpRequest(requestParams, requiresAuthentication);
-			return await PerformHttpRequest<TData>(request);
+			return await PerformHttpRequest<TData>(request, cancellationToken);
 		}
 
-		private static async Task<TData> PerformHttpRequest<TData>(HttpRequestMessage request)
+		private static async Task<TData> PerformHttpRequest<TData>(HttpRequestMessage request, CancellationToken cancellationToken)
 			where TData : class
 		{
 			using var clientHandler = new HttpClientHandler
@@ -176,7 +177,7 @@ namespace MusicLibrary.LastFM.Internal
 			client.DefaultRequestHeaders.Accept.Clear();
 			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-			var response = await client.SendAsync(request);
+			var response = await client.SendAsync(request, cancellationToken);
 			return await ParseResponseAsync<TData>(response);
 		}
 
@@ -255,12 +256,14 @@ namespace MusicLibrary.LastFM.Internal
 
 		private static string CalcMD5(string data)
 		{
-#pragma warning disable CA5351 // Do Not Use Broken Cryptographic Algorithms - We are just clients of 3rd party API and use algorithm required by the server
+#pragma warning disable CA5351 // Do Not Use Broken Cryptographic Algorithms - We are clients of 3rd party API and use algorithm required by the server.
 			using var md5 = MD5.Create();
+#pragma warning restore CA5351 // Do Not Use Broken Cryptographic Algorithms
+
 			var dataToHash = new UTF8Encoding().GetBytes(data);
 			var hashBytes = md5.ComputeHash(dataToHash);
 
-#pragma warning disable CA1308 // Normalize strings to uppercase - Using of lower case is an external requirement
+#pragma warning disable CA1308 // Normalize strings to uppercase - Using of lower case is an external requirement.
 			return BitConverter.ToString(hashBytes)
 				.Replace("-", string.Empty)
 				.ToLower(CultureInfo.InvariantCulture);

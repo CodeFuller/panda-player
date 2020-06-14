@@ -11,8 +11,6 @@
 		}
 	},
 
-	"dataStoragePath": "d:\\PandaPlayer\\.data",
-
 	"discCoverImageLookupPages": [
 		"https://www.google.com/search?q=\"{DiscArtist}\" \"{DiscTitle}\"&dcr=0&tbm=isch&source=lnt&tbs=isz:lt,islt:qsvga&sa=X&ved=0ahUKEwiW54Tn7r3WAhUkJJoKHUCwA9IQpwUIHg&biw=1920&bih=982&dpr=1",
 		"https://www.discogs.com/search/?q={DiscArtist}+{DiscTitle}&type=release"
@@ -25,7 +23,6 @@
 	},
 
 	"discAdder": {
-		"dataStoragePath": "d:\\DiscAdder\\.data",
 		"workshopStoragePath": "d:\\music.workshop\\Gateway"
 	},
 

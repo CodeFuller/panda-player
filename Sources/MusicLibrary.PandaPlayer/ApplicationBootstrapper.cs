@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using CF.Library.Bootstrap;
 using CF.Library.Core;
 using CF.Library.Core.Facades;
@@ -13,7 +11,6 @@ using Microsoft.Extensions.Options;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.DiscAdder.Extensions;
 using MusicLibrary.LastFM.Extensions;
-using MusicLibrary.PandaPlayer.Adviser;
 using MusicLibrary.PandaPlayer.Adviser.Extensions;
 using MusicLibrary.PandaPlayer.Settings;
 using MusicLibrary.PandaPlayer.ViewModels;
@@ -66,14 +63,6 @@ namespace MusicLibrary.PandaPlayer
 				configuration.Bind("adviser:favoriteArtistsAdviser", settings.FavoriteArtistsAdviser);
 				configuration.Bind("adviser:highlyRatedSongsAdviser", settings.HighlyRatedSongsAdviser);
 			});
-
-			var dataStoragePath = configuration["dataStoragePath"];
-			if (String.IsNullOrEmpty(dataStoragePath))
-			{
-				throw new InvalidOperationException("dataStoragePath is not configured");
-			}
-
-			RegisterDataRepositories(services, dataStoragePath);
 		}
 
 		private void RegisterViewModels(IServiceCollection services)
@@ -94,27 +83,6 @@ namespace MusicLibrary.PandaPlayer
 			services.AddSingleton<ILibraryStatisticsViewModel, LibraryStatisticsViewModel>();
 			services.AddSingleton<ILoggerViewModel>(loggerViewModelInstance);
 			services.AddSingleton<ApplicationViewModel>();
-		}
-
-		private static void RegisterDataRepositories(IServiceCollection services, string dataStoragePath)
-		{
-			services.AddTransient<IGenericDataRepository<PlaylistData>, JsonFileGenericRepository<PlaylistData>>(
-				sp => new JsonFileGenericRepository<PlaylistData>(
-					sp.GetRequiredService<IFileSystemFacade>(),
-					sp.GetRequiredService<ILogger<JsonFileGenericRepository<PlaylistData>>>(),
-					Path.Combine(dataStoragePath, "Playlist.json")));
-
-			services.AddTransient<IGenericDataRepository<PlaylistAdviserMemo>, JsonFileGenericRepository<PlaylistAdviserMemo>>(
-				sp => new JsonFileGenericRepository<PlaylistAdviserMemo>(
-					sp.GetRequiredService<IFileSystemFacade>(),
-					sp.GetRequiredService<ILogger<JsonFileGenericRepository<PlaylistAdviserMemo>>>(),
-					Path.Combine(dataStoragePath, "AdviserMemo.json")));
-
-			services.AddTransient<IScrobblesQueueRepository, ScrobblesQueueRepository>(
-				sp => new ScrobblesQueueRepository(
-					sp.GetRequiredService<IFileSystemFacade>(),
-					sp.GetRequiredService<ILogger<ScrobblesQueueRepository>>(),
-					Path.Combine(dataStoragePath, "ScrobblesQueue.json")));
 		}
 
 		protected override ILoggerFactory BootstrapLogging(IConfiguration configuration)

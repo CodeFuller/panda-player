@@ -17,21 +17,23 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 {
 	public class PersistentSongPlaylistViewModel : SongPlaylistViewModel
 	{
+		private const string SongPlaylistDataKey = "SongPlaylistData";
+
 		private readonly ISongsService songsService;
 
-		private readonly IGenericDataRepository<PlaylistData> playlistDataRepository;
+		private readonly ISessionDataService sessionDataService;
 		private readonly ILogger<PersistentSongPlaylistViewModel> logger;
 
 		public PersistentSongPlaylistViewModel(ISongsService songsService, IViewNavigator viewNavigator, IWindowService windowService,
-			IGenericDataRepository<PlaylistData> playlistDataRepository, ILogger<PersistentSongPlaylistViewModel> logger)
+			ISessionDataService sessionDataService, ILogger<PersistentSongPlaylistViewModel> logger)
 			: base(songsService, viewNavigator, windowService)
 		{
 			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
-			this.playlistDataRepository = playlistDataRepository ?? throw new ArgumentNullException(nameof(playlistDataRepository));
+			this.sessionDataService = sessionDataService ?? throw new ArgumentNullException(nameof(sessionDataService));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
 			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => Load(CancellationToken.None));
-			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => this.playlistDataRepository.Purge());
+			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => OnPlaylistFinished(CancellationToken.None));
 		}
 
 		private async void Load(CancellationToken cancellationToken)
@@ -52,10 +54,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 
 		private async Task<(IReadOnlyCollection<SongModel> songs, int? currentSongIndex)> LoadPlaylistData(CancellationToken cancellationToken)
 		{
-			var playListData = playlistDataRepository.Load();
+			var playListData = await sessionDataService.GetData<PlaylistData>(SongPlaylistDataKey, cancellationToken);
 			if (playListData == null)
 			{
-				logger.LogInformation("No previous playlist data detected");
+				logger.LogInformation("No previous playlist data loaded");
 				return (null, null);
 			}
 
@@ -120,9 +122,18 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 			return sb.ToString();
 		}
 
+		private async void OnPlaylistFinished(CancellationToken cancellationToken)
+		{
+			await sessionDataService.PurgeData(SongPlaylistDataKey, cancellationToken);
+		}
+
 		protected override void OnPlaylistChanged()
 		{
-			playlistDataRepository.Save(new PlaylistData(this));
+			var playlistData = new PlaylistData(this);
+
+			// TODO: Make method async
+			sessionDataService.SaveData(SongPlaylistDataKey, playlistData, CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
+
 			base.OnPlaylistChanged();
 		}
 	}

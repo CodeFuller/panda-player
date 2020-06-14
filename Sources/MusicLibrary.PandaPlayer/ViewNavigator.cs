@@ -70,14 +70,12 @@ namespace MusicLibrary.PandaPlayer
 			ShowDialog<EditDiscImageView>(viewModel);
 		}
 
-		public Task ShowDiscAdderView(CancellationToken cancellationToken)
+		public async Task ShowDiscAdderView(CancellationToken cancellationToken)
 		{
 			var viewModel = viewModelHolder.DiscAdderViewModel;
-			viewModel.Load();
+			await viewModel.Load(cancellationToken);
 
 			ShowView<DiscAdderView>(viewModel);
-
-			return Task.CompletedTask;
 		}
 
 		public Task ShowLibraryCheckerView(CancellationToken cancellationToken)

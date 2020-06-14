@@ -18,6 +18,7 @@ namespace MusicLibrary.Services.Extensions
 			services.AddSingleton<ISongsService, SongsService>();
 			services.AddSingleton<IGenresService, GenresService>();
 			services.AddSingleton<IArtistsService, ArtistsService>();
+			services.AddSingleton<ISessionDataService, SessionDataService>();
 			services.AddSingleton<IStatisticsService, StatisticsService>();
 			services.AddSingleton<IDiagnosticService, DiagnosticService>();
 

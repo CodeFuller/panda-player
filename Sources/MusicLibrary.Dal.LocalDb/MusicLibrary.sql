@@ -78,6 +78,12 @@ CREATE TABLE [DiscImages] (
   FOREIGN KEY ([Disc_Id]) REFERENCES [Discs] ([Id]) ON DELETE CASCADE ON UPDATE NO ACTION
 );
 
+CREATE TABLE [SessionData] (
+  [Key] ntext NOT NULL,
+  [Data] ntext NULL,
+  CONSTRAINT [sqlite_master_PK_SessionData] PRIMARY KEY ([Key])
+);
+
 CREATE INDEX [IX_Genre_Id] ON [Songs] ([Genre_Id] ASC);
 CREATE INDEX [IX_Disc_Id] ON [Songs] ([Disc_Id] ASC);
 CREATE INDEX [IX_Artist_Id] ON [Songs] ([Artist_Id] ASC);

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using MusicLibrary.DiscAdder.MusicStorage;
 using MusicLibrary.DiscAdder.ViewModels.SourceContent;
 
@@ -10,6 +12,6 @@ namespace MusicLibrary.DiscAdder.ViewModels.Interfaces
 
 		IEnumerable<AddedDiscInfo> AddedDiscs { get; }
 
-		void LoadDefaultContent();
+		Task LoadDefaultContent(CancellationToken cancellationToken);
 	}
 }

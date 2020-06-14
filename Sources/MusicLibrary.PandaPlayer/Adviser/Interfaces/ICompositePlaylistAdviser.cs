@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
 
 namespace MusicLibrary.PandaPlayer.Adviser.Interfaces
 {
 	internal interface ICompositePlaylistAdviser
 	{
-		IEnumerable<AdvisedPlaylist> Advise(IEnumerable<DiscModel> discs);
+		Task<IReadOnlyCollection<AdvisedPlaylist>> Advise(IEnumerable<DiscModel> discs, int requiredAdvisesCount, CancellationToken cancellationToken);
 
-		void RegisterAdvicePlayback(AdvisedPlaylist advise);
+		Task RegisterAdvicePlayback(AdvisedPlaylist advise, CancellationToken cancellationToken);
 	}
 }
