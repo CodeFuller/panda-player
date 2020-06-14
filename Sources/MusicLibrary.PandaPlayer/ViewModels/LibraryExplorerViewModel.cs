@@ -97,7 +97,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			DeleteFolderCommand = new AsyncRelayCommand(() => DeleteFolder(CancellationToken.None));
 
 			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaylistChanged(e, CancellationToken.None));
-			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistChanged(e, CancellationToken.None));
+			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistLoaded(e, CancellationToken.None));
 			Messenger.Default.Register<NoPlaylistLoadedEventArgs>(this, e => OnNoPlaylistLoaded(CancellationToken.None));
 			Messenger.Default.Register<SongChangedEventArgs>(this, e => OnSongChanged(e.Song, e.PropertyName));
 			Messenger.Default.Register<DiscChangedEventArgs>(this, e => OnDiscChanged(e.Disc, e.PropertyName));
@@ -256,7 +256,24 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
+		private async void OnPlaylistLoaded(BaseSongListEventArgs e, CancellationToken cancellationToken)
+		{
+			if (e.Disc != null)
+			{
+				await SwitchToDisc(e.Disc, cancellationToken);
+			}
+			else
+			{
+				await LoadRootFolder(cancellationToken);
+			}
+		}
+
 		private async void OnNoPlaylistLoaded(CancellationToken cancellationToken)
+		{
+			await LoadRootFolder(cancellationToken);
+		}
+
+		private async Task LoadRootFolder(CancellationToken cancellationToken)
 		{
 			var rootFolderData = await foldersService.GetRootFolder(cancellationToken);
 			LoadFolder(rootFolderData);

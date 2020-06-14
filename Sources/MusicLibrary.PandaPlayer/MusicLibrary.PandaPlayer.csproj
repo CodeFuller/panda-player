@@ -5,7 +5,7 @@
   </ImportGroup>
 
   <PropertyGroup>
-    <Version>3.6.0</Version>
+    <Version>3.6.1</Version>
     <OutputType>WinExe</OutputType>
     <TargetFramework>$(TargetAppFramework)</TargetFramework>
     <UseWPF>true</UseWPF>
