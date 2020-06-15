@@ -5,7 +5,7 @@ using MusicLibrary.Core.Models;
 using MusicLibrary.Services.Tagging;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.Services.Diagnostic.Inconsistencies.TagsInconsistencies
+namespace MusicLibrary.Dal.LocalDb.Inconsistencies.TagsInconsistencies
 {
 	internal class UnexpectedTagTypesInconsistency : BasicTagInconsistency
 	{

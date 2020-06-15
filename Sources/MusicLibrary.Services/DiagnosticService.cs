@@ -18,18 +18,14 @@ namespace MusicLibrary.Services
 
 		private readonly IDiscConsistencyChecker discConsistencyChecker;
 
-		private readonly ITagsConsistencyChecker tagsConsistencyChecker;
-
 		private readonly IStorageRepository storageRepository;
 
-		public DiagnosticService(IFoldersService foldersService, IDiscsService discsService, IDiscConsistencyChecker discConsistencyChecker,
-			IStorageRepository storageRepository, ITagsConsistencyChecker tagsConsistencyChecker)
+		public DiagnosticService(IFoldersService foldersService, IDiscsService discsService, IDiscConsistencyChecker discConsistencyChecker, IStorageRepository storageRepository)
 		{
 			this.foldersService = foldersService ?? throw new ArgumentNullException(nameof(foldersService));
 			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
 			this.discConsistencyChecker = discConsistencyChecker ?? throw new ArgumentNullException(nameof(discConsistencyChecker));
 			this.storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
-			this.tagsConsistencyChecker = tagsConsistencyChecker ?? throw new ArgumentNullException(nameof(tagsConsistencyChecker));
 		}
 
 		public async Task CheckLibrary(LibraryCheckFlags checkFlags, IOperationProgress progress, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken)
@@ -48,12 +44,6 @@ namespace MusicLibrary.Services
 				var activeFolders = folders.Where(f => !f.IsDeleted);
 
 				await storageRepository.CheckStorage(checkFlags, activeFolders, activeDiscs, progress, inconsistenciesHandler, cancellationToken);
-			}
-
-			if (checkFlags.HasFlag(LibraryCheckFlags.CheckSongTagsConsistency))
-			{
-				var activeSongs = activeDiscs.SelectMany(disc => disc.ActiveSongs);
-				await tagsConsistencyChecker.CheckTagsConsistency(activeSongs, inconsistenciesHandler, cancellationToken);
 			}
 		}
 	}

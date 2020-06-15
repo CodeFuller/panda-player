@@ -46,8 +46,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				}
 				else
 				{
-					// If CheckStorage is off, then CheckContent is also off.
+					// If CheckStorage is off, then CheckContent and CheckTags are also off.
 					CheckFlags &= ~LibraryCheckFlags.CheckContentConsistency;
+					CheckFlags &= ~LibraryCheckFlags.CheckSongTagsConsistency;
 				}
 			}
 		}
@@ -63,7 +64,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				}
 				else
 				{
-					// If CheckContent is off, CheckContent is still on.
+					// If CheckContent is off, CheckStorage is still on.
 					CheckFlags &= ~LibraryCheckFlags.CheckContentConsistency;
 					CheckFlags |= LibraryCheckFlags.CheckStorageConsistency;
 				}
@@ -81,7 +82,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 				}
 				else
 				{
+					// If CheckTags is off, CheckStorage is still on.
 					CheckFlags &= ~LibraryCheckFlags.CheckSongTagsConsistency;
+					CheckFlags |= LibraryCheckFlags.CheckStorageConsistency;
 				}
 			}
 		}

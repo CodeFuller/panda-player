@@ -1,8 +1,9 @@
 ﻿using System;
 using MusicLibrary.Core.Models;
+using MusicLibrary.Services.Diagnostic.Inconsistencies;
 using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
-namespace MusicLibrary.Services.Diagnostic.Inconsistencies.TagsInconsistencies
+namespace MusicLibrary.Dal.LocalDb.Inconsistencies.TagsInconsistencies
 {
 	internal abstract class BasicTagInconsistency : LibraryInconsistency
 	{

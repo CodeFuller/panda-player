@@ -9,6 +9,6 @@ namespace MusicLibrary.Services.Diagnostic
 		CheckDiscsConsistency = 0x01,
 		CheckStorageConsistency = 0x02,
 		CheckContentConsistency = CheckStorageConsistency | 0x04,
-		CheckSongTagsConsistency = 0x08,
+		CheckSongTagsConsistency = CheckStorageConsistency | 0x08,
 	}
 }

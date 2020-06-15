@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Services.Diagnostic;
 using MusicLibrary.Services.Diagnostic.Inconsistencies;
-using MusicLibrary.Services.Tagging;
 
 namespace MusicLibrary.Services.Interfaces.Dal
 {
@@ -31,10 +30,6 @@ namespace MusicLibrary.Services.Interfaces.Dal
 		Task CreateFolder(ShallowFolderModel folder, CancellationToken cancellationToken);
 
 		Task DeleteFolder(ShallowFolderModel folder, CancellationToken cancellationToken);
-
-		Task<SongTagData> GetSongTagData(SongModel song, CancellationToken cancellationToken);
-
-		Task<IEnumerable<SongTagType>> GetSongTagTypes(SongModel song, CancellationToken cancellationToken);
 
 		Task CheckStorage(LibraryCheckFlags checkFlags, IEnumerable<ShallowFolderModel> folders, IEnumerable<DiscModel> discs, IOperationProgress progress, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken);
 	}

@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using CF.Library.Core.Facades;
 using Microsoft.Extensions.Options;
-using MusicLibrary.Dal.LocalDb.Inconsistencies;
+using MusicLibrary.Dal.LocalDb.Inconsistencies.StorageInconsistencies;
 using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Services.Diagnostic.Inconsistencies;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using MusicLibrary.Services.Diagnostic.Inconsistencies;
 
-namespace MusicLibrary.Dal.LocalDb.Inconsistencies
+namespace MusicLibrary.Dal.LocalDb.Inconsistencies.StorageInconsistencies
 {
 	internal class NoFileReadOnlyAttributeInconsistency : LibraryInconsistency
 	{
