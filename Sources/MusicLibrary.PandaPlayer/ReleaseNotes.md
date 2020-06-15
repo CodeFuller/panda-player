@@ -1,3 +1,6 @@
+**3.7.1 / 2020.06.15**
+* Improved estimation of library check progress.
+
 **3.7.0 / 2020.06.14**
 * Extended library checker with check for tags consistency.
 

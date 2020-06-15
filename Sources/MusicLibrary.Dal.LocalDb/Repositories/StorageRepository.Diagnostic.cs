@@ -48,7 +48,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 		private void CheckDiscsData(IReadOnlyCollection<DiscModel> discs, LibraryCheckFlags checkFlags, HashSet<string> visitedFolders,
 			HashSet<string> visitedFiles, IOperationProgress progress, Action<LibraryInconsistency> inconsistenciesHandler)
 		{
-			progress.SetOperationCost(discs.Count);
+			progress.SetOperationCost(discs.SelectMany(d => d.ActiveSongs).Count());
 
 			var checkContent = checkFlags.HasFlag(LibraryCheckFlags.CheckContentConsistency);
 
@@ -69,6 +69,8 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 					{
 						CheckSongTags(song, inconsistenciesHandler);
 					}
+
+					progress.IncrementOperationProgress();
 				}
 
 				foreach (var image in disc.Images)
@@ -78,8 +80,6 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 					visitedFiles.Add(fileStorage.GetFullPath(imagePath));
 				}
-
-				progress.IncrementOperationProgress();
 			}
 		}
 
