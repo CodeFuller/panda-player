@@ -1,3 +1,6 @@
+**3.7.2 / 2020.07.23**
+* Fixed startup error of loading songs playlist.
+
 **3.7.1 / 2020.06.15**
 * Improved estimation of library check progress.
 

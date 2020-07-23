@@ -66,7 +66,9 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 				.ToList();
 
 			var folderModels = discEntities
-				.Select(disc => disc.Folder.ToShallowModel())
+				.Select(disc => disc.Folder)
+				.Distinct()
+				.Select(folder => folder.ToShallowModel())
 				.ToDictionary(folder => folder.Id, folder => folder);
 
 			var songModels = discEntities
