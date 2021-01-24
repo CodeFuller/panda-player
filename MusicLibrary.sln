@@ -3,34 +3,34 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.PandaPlayer", "Sources\MusicLibrary.PandaPlayer\MusicLibrary.PandaPlayer.csproj", "{502D59CA-7973-46C9-A2A4-9144C48CBEE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.PandaPlayer", "src\MusicLibrary.PandaPlayer\MusicLibrary.PandaPlayer.csproj", "{502D59CA-7973-46C9-A2A4-9144C48CBEE4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.LastFM", "Sources\MusicLibrary.LastFM\MusicLibrary.LastFM.csproj", "{7F368759-572F-41D4-A7FF-1B3898AE3918}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.LastFM", "src\MusicLibrary.LastFM\MusicLibrary.LastFM.csproj", "{7F368759-572F-41D4-A7FF-1B3898AE3918}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FB5F9ECA-507D-4FB6-BCD7-80B90A3DD2D6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EE527A89-5ED8-4502-9785-A7A481C4F971}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{EE527A89-5ED8-4502-9785-A7A481C4F971}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.LastFM.Tests", "Tests\MusicLibrary.LastFM.Tests\MusicLibrary.LastFM.Tests.csproj", "{8E9272FC-0978-42B0-A1B7-8DEC4534724C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.LastFM.UnitTests", "tests\MusicLibrary.LastFM.UnitTests\MusicLibrary.LastFM.UnitTests.csproj", "{8E9272FC-0978-42B0-A1B7-8DEC4534724C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A067007-9BD3-4EF3-ADA9-68A04CEED64B}"
 	ProjectSection(SolutionItems) = preProject
 		MusicLibrary.props = MusicLibrary.props
-		MusicLibrary.Sources.ruleset = MusicLibrary.Sources.ruleset
-		MusicLibrary.Tests.ruleset = MusicLibrary.Tests.ruleset
+		MusicLibrary.src.ruleset = MusicLibrary.src.ruleset
+		MusicLibrary.tests.ruleset = MusicLibrary.tests.ruleset
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Dal.LocalDb", "Sources\MusicLibrary.Dal.LocalDb\MusicLibrary.Dal.LocalDb.csproj", "{510E3C70-2733-4586-AA0F-8689C9A88313}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Dal.LocalDb", "src\MusicLibrary.Dal.LocalDb\MusicLibrary.Dal.LocalDb.csproj", "{510E3C70-2733-4586-AA0F-8689C9A88313}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Core", "Sources\MusicLibrary.Core\MusicLibrary.Core.csproj", "{0B14C9B2-DC6D-4253-8CB2-5B0958142B0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Core", "src\MusicLibrary.Core\MusicLibrary.Core.csproj", "{0B14C9B2-DC6D-4253-8CB2-5B0958142B0B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Shared", "Sources\MusicLibrary.Shared\MusicLibrary.Shared.csproj", "{D5035D5D-E0B5-4781-8847-62E722D9CAB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Shared", "src\MusicLibrary.Shared\MusicLibrary.Shared.csproj", "{D5035D5D-E0B5-4781-8847-62E722D9CAB3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Services", "Sources\MusicLibrary.Services\MusicLibrary.Services.csproj", "{BD7A5163-E5AC-4BE1-B785-F40012C7BC8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Services", "src\MusicLibrary.Services\MusicLibrary.Services.csproj", "{BD7A5163-E5AC-4BE1-B785-F40012C7BC8C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.PandaPlayer.UnitTests", "Tests\MusicLibrary.PandaPlayer.UnitTests\MusicLibrary.PandaPlayer.UnitTests.csproj", "{D0D8A13D-0E14-40A7-AAC7-1932C580CFE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.PandaPlayer.UnitTests", "tests\MusicLibrary.PandaPlayer.UnitTests\MusicLibrary.PandaPlayer.UnitTests.csproj", "{D0D8A13D-0E14-40A7-AAC7-1932C580CFE7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.DiscAdder", "Sources\MusicLibrary.DiscAdder\MusicLibrary.DiscAdder.csproj", "{0B7E7E54-B760-4C1E-90A0-3107117F0317}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.DiscAdder", "src\MusicLibrary.DiscAdder\MusicLibrary.DiscAdder.csproj", "{0B7E7E54-B760-4C1E-90A0-3107117F0317}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

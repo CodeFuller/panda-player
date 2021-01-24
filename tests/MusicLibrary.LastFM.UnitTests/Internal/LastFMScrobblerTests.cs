@@ -8,7 +8,7 @@ using MusicLibrary.LastFM.Interfaces;
 using MusicLibrary.LastFM.Internal;
 using MusicLibrary.LastFM.Objects;
 
-namespace MusicLibrary.LastFM.Tests.Internal
+namespace MusicLibrary.LastFM.UnitTests.Internal
 {
 	[TestClass]
 	public class LastFMScrobblerTests

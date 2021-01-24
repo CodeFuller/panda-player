@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <CodeAnalysisRuleSet>..\..\MusicLibrary.Sources.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\MusicLibrary.src.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>

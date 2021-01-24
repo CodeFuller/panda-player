@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <CodeAnalysisRuleSet>..\..\MusicLibrary.Tests.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\MusicLibrary.tests.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Sources\MusicLibrary.PandaPlayer\MusicLibrary.PandaPlayer.csproj" />
+    <ProjectReference Include="..\..\src\MusicLibrary.PandaPlayer\MusicLibrary.PandaPlayer.csproj" />
   </ItemGroup>
 
 </Project>
