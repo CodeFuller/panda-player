@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CF.Library.Core.Extensions;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
+using MusicLibrary.Shared.Extensions;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 {

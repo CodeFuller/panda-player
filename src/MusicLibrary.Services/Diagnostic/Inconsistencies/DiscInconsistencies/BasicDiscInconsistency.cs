@@ -1,6 +1,5 @@
 ﻿using System;
 using MusicLibrary.Core.Models;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.Services.Diagnostic.Inconsistencies.DiscInconsistencies
 {
@@ -8,7 +7,7 @@ namespace MusicLibrary.Services.Diagnostic.Inconsistencies.DiscInconsistencies
 	{
 		protected DiscModel Disc { get; }
 
-		protected string DiscDisplayTitle => Current($"{Disc.Folder.Name}/{Disc.TreeTitle}");
+		protected string DiscDisplayTitle => $"{Disc.Folder.Name}/{Disc.TreeTitle}";
 
 		protected BasicDiscInconsistency(DiscModel disc)
 		{

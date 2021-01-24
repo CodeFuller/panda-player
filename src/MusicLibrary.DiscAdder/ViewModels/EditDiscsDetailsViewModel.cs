@@ -14,7 +14,6 @@ using MusicLibrary.DiscAdder.MusicStorage;
 using MusicLibrary.DiscAdder.ViewModels.Interfaces;
 using MusicLibrary.DiscAdder.ViewModels.ViewModelItems;
 using MusicLibrary.Services.Interfaces;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.ViewModels
 {
@@ -107,7 +106,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 				var matchedArtistCaseInsensitive = specificArtists.SingleOrDefault(a => String.Equals(a.Name, songArtistName, StringComparison.OrdinalIgnoreCase));
 				if (matchedArtistCaseInsensitive != null)
 				{
-					throw new InvalidOperationException(Current($"Artist name differs only by case: '{songArtistName}'"));
+					throw new InvalidOperationException($"Artist name differs only by case: '{songArtistName}'");
 				}
 
 				var newArtist = new ArtistModel

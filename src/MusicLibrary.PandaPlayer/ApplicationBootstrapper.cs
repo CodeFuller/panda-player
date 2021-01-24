@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
-using CF.Library.Bootstrap;
-using CF.Library.Core;
-using CF.Library.Core.Facades;
-using CF.Library.Core.Interfaces;
-using CF.Library.Wpf;
+﻿using System;
+using System.Collections.Generic;
+using CodeFuller.Library.Bootstrap;
+using CodeFuller.Library.Wpf;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using MusicLibrary.Core.Facades;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.DiscAdder.Extensions;
 using MusicLibrary.LastFM.Extensions;
 using MusicLibrary.PandaPlayer.Adviser.Extensions;
+using MusicLibrary.PandaPlayer.Facades;
 using MusicLibrary.PandaPlayer.Settings;
 using MusicLibrary.PandaPlayer.ViewModels;
 using MusicLibrary.PandaPlayer.ViewModels.DiscImages;
@@ -24,10 +23,8 @@ using MusicLibrary.Shared;
 
 namespace MusicLibrary.PandaPlayer
 {
-	internal class ApplicationBootstrapper : DiApplicationBootstrapper<ApplicationViewModel>
+	internal class ApplicationBootstrapper : BasicApplicationBootstrapper<ApplicationViewModel>
 	{
-		private LoggerViewModel loggerViewModelInstance;
-
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{
 			services.Configure<PandaPlayerSettings>(configuration.Bind);
@@ -42,9 +39,9 @@ namespace MusicLibrary.PandaPlayer
 			RegisterViewModels(services);
 			services.AddImages();
 
-			services.AddTransient<ITimerFacade, TimerFacade>(sp => new TimerFacade());
+			services.AddTransient<ITimerFacade, TimerFacade>(_ => new TimerFacade());
 			services.AddSingleton<IViewNavigator, ViewNavigator>();
-			services.AddTransient<IWindowService, WpfWindowService>();
+			services.AddWpfWindowService();
 			services.AddTransient<IAudioPlayer, AudioPlayer>();
 			services.AddTransient<IMediaPlayerFacade, MediaPlayerFacade>();
 			services.AddTransient<ISongPlaybacksRegistrator, SongPlaybacksRegistrator>();
@@ -81,25 +78,27 @@ namespace MusicLibrary.PandaPlayer
 			services.AddSingleton<IEditDiscImageViewModel, EditDiscImageViewModel>();
 			services.AddSingleton<ILibraryCheckerViewModel, LibraryCheckerViewModel>();
 			services.AddSingleton<ILibraryStatisticsViewModel, LibraryStatisticsViewModel>();
-			services.AddSingleton<ILoggerViewModel>(loggerViewModelInstance);
+
 			services.AddSingleton<ApplicationViewModel>();
+
+			services.AddSingleton<LoggerViewModel>();
+			services.AddSingleton<ILoggerViewModel, LoggerViewModel>(sp => sp.GetRequiredService<LoggerViewModel>());
+			services.AddSingleton<InstanceLoggerProvider>(
+				sp => ActivatorUtilities.CreateInstance<InstanceLoggerProvider>(sp, sp.GetRequiredService<LoggerViewModel>()));
 		}
 
-		protected override ILoggerFactory BootstrapLogging(IConfiguration configuration)
+		protected override ILoggerFactory BootstrapLogging(IServiceProvider serviceProvider, IConfiguration configuration)
 		{
-			var settings = new LoggingSettings();
-			configuration.Bind("logging", settings);
+			var settings = configuration
+				.GetSection("logging")
+				.Get<LoggingSettings>();
 
 			var loggerFactory = LoggerFactory.Create(loggingBuilder =>
 			{
 				loggingBuilder.AddFilter("Microsoft.EntityFrameworkCore", settings.DatabaseOperationsLogLevel);
 			});
 
-			loggerViewModelInstance = new LoggerViewModel(Options.Create(settings));
-
-#pragma warning disable CA2000 // Dispose objects before losing scope
-			loggerFactory.AddProvider(new InstanceLoggerProvider(loggerViewModelInstance));
-#pragma warning restore CA2000 // Dispose objects before losing scope
+			loggerFactory.AddProvider(serviceProvider.GetRequiredService<InstanceLoggerProvider>());
 
 			return loggerFactory;
 		}

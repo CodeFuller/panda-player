@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using CF.Library.Core.Extensions;
 using GalaSoft.MvvmLight;
 using MusicLibrary.Core.Models;
 using MusicLibrary.DiscAdder.MusicStorage;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
+using MusicLibrary.Shared.Extensions;
 
 namespace MusicLibrary.DiscAdder.ViewModels.ViewModelItems
 {
@@ -100,7 +99,7 @@ namespace MusicLibrary.DiscAdder.ViewModels.ViewModelItems
 			var matchingArtist = AvailableArtists.OfType<SpecificArtistViewItem>().SingleOrDefault(a => a.Matches(artistName));
 			if (matchingArtist == null)
 			{
-				throw new InvalidOperationException(Current($"Artist {artistName} does not present in artists list"));
+				throw new InvalidOperationException($"Artist {artistName} does not present in artists list");
 			}
 
 			return matchingArtist;

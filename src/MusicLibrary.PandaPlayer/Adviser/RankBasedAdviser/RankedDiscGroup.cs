@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using CF.Library.Core.Extensions;
 using MusicLibrary.PandaPlayer.Adviser.Grouping;
 using MusicLibrary.PandaPlayer.Adviser.Internal;
+using MusicLibrary.Shared.Extensions;
 
 namespace MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser
 {

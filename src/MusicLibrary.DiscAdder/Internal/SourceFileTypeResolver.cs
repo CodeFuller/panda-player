@@ -2,7 +2,6 @@
 using System.IO;
 using MusicLibrary.DiscAdder.Interfaces;
 using MusicLibrary.Shared.Images;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.Internal
 {
@@ -27,7 +26,7 @@ namespace MusicLibrary.DiscAdder.Internal
 				return SourceFileType.Image;
 			}
 
-			throw new InvalidOperationException(Current($"Failed to recognize type of source file '{filePath}'"));
+			throw new InvalidOperationException($"Failed to recognize type of source file '{filePath}'");
 		}
 	}
 }

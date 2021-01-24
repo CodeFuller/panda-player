@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Net.Http;
 using System.Runtime.Serialization;
-using CF.Library.Core.Exceptions;
 
 namespace MusicLibrary.LastFM
 {
 	[Serializable]
-	public class LastFMApiCallFailedException : ApiCallFailedException
+	public class LastFMApiCallFailedException : Exception
 	{
 		public LastFMApiCallFailedException()
 		{
 		}
 
 		internal LastFMApiCallFailedException(HttpResponseMessage response)
-			: base(response.ReasonPhrase ?? String.Empty)
+			: this($"LastFM API call has failed. HTTP Code: {response.StatusCode}. ReasonPhrase: {response.ReasonPhrase}")
 		{
-			RequestUri = response.RequestMessage.RequestUri;
-			HttpStatusCode = (int)response.StatusCode;
 		}
 
 		public LastFMApiCallFailedException(string message)

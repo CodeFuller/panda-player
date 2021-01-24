@@ -2,7 +2,6 @@
 using System.Linq;
 using MusicLibrary.DiscAdder.Interfaces;
 using MusicLibrary.DiscAdder.ViewModels.SourceContent;
-using static System.FormattableString;
 
 namespace MusicLibrary.DiscAdder.Internal
 {
@@ -83,8 +82,8 @@ namespace MusicLibrary.DiscAdder.Internal
 			}
 			else
 			{
-				var matchesTitleWithTrack = currentSong.Title == Invariant($"{songNumber:D2} - {referenceSong.Title}.mp3");
-				var matchesTitleWithoutTrack = currentSong.Title == Invariant($"{referenceSong.Title}.mp3");
+				var matchesTitleWithTrack = currentSong.Title == $"{songNumber:D2} - {referenceSong.Title}.mp3";
+				var matchesTitleWithoutTrack = currentSong.Title == $"{referenceSong.Title}.mp3";
 				currentSong.ContentIsIncorrect = referenceSong.ContentIsIncorrect = !(matchesTitleWithTrack || matchesTitleWithoutTrack);
 			}
 		}

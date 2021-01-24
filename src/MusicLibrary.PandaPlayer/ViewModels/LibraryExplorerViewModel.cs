@@ -5,10 +5,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CF.Library.Core.Enums;
-using CF.Library.Core.Extensions;
-using CF.Library.Core.Interfaces;
-using CF.Library.Wpf;
+using CodeFuller.Library.Wpf;
+using CodeFuller.Library.Wpf.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -20,6 +18,7 @@ using MusicLibrary.PandaPlayer.Internal;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.PandaPlayer.ViewModels.LibraryExplorerItems;
 using MusicLibrary.Services.Interfaces;
+using MusicLibrary.Shared.Extensions;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {

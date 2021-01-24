@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CF.Library.Core.Interfaces;
+using CodeFuller.Library.Wpf.Interfaces;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Extensions.Logging;
 using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.Events;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
 using MusicLibrary.Services.Interfaces;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 {
@@ -81,15 +80,15 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 			{
 				if (!loadedSongs.TryGetValue(new ItemId(playlistSong.Id), out var loadedSong))
 				{
-					logger.LogWarning(Current($"Song {playlistSong.Id} from saved playlist was not found in library. Ignoring saved playlist."));
+					logger.LogWarning($"Song {playlistSong.Id} from saved playlist was not found in library. Ignoring saved playlist.");
 					return (null, null);
 				}
 
 				if (loadedSong.IsDeleted)
 				{
-					logger.LogWarning(Current($"Song '{GetSongTitle(loadedSong)}' from saved playlist was deleted from the library. Ignoring this song."));
+					logger.LogWarning($"Song '{GetSongTitle(loadedSong)}' from saved playlist was deleted from the library. Ignoring this song.");
 
-					if (newSongIndex.HasValue && songIndex < newSongIndex)
+					if (songIndex < newSongIndex)
 					{
 						--newSongIndex;
 					}
@@ -102,7 +101,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 
 			if (newSongIndex != null && (newSongIndex < 0 || newSongIndex >= loadedSongs.Count))
 			{
-				logger.LogWarning(Current($"Index of current song in saved playlist is invalid ({newSongIndex}, [0, {loadedSongs.Count})). Ignoring saved playlist."));
+				logger.LogWarning($"Index of current song in saved playlist is invalid ({newSongIndex}, [0, {loadedSongs.Count})). Ignoring saved playlist.");
 				return (null, null);
 			}
 

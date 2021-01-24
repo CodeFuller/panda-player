@@ -1,6 +1,6 @@
 ﻿using System;
-using CF.Library.Core.Facades;
 using Force.Crc32;
+using MusicLibrary.Core.Facades;
 using MusicLibrary.Dal.LocalDb.Interfaces;
 
 namespace MusicLibrary.Dal.LocalDb.Internal

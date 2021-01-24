@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using CF.Library.Core.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using MusicLibrary.Core.Models;
@@ -12,7 +11,6 @@ using MusicLibrary.DiscAdder.Interfaces;
 using MusicLibrary.DiscAdder.ViewModels.Interfaces;
 using MusicLibrary.DiscAdder.ViewModels.ViewModelItems;
 using MusicLibrary.Shared.Images;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.ViewModels
 {
@@ -64,7 +62,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 				var discImages = contentCrawler.LoadDiscImages(discInfo.SourcePath).ToList();
 				if (discImages.Count > 1)
 				{
-					throw new InvalidOperationException(Current($"Disc '{discInfo.SourcePath}' contains multiple images. Only one image per disc (cover image) is currently supported."));
+					throw new InvalidOperationException($"Disc '{discInfo.SourcePath}' contains multiple images. Only one image per disc (cover image) is currently supported.");
 				}
 
 				var imageFile = imageFileFactory.CreateInstance();

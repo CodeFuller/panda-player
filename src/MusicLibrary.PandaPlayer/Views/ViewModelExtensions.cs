@@ -1,5 +1,4 @@
 ﻿using System;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.PandaPlayer.Views
 {
@@ -10,13 +9,12 @@ namespace MusicLibrary.PandaPlayer.Views
 		{
 			if (dataContext == null)
 			{
-				throw new ArgumentNullException(Current($"DataContext for {typeof(TViewModel)} is null"));
+				throw new ArgumentNullException($"DataContext for {typeof(TViewModel)} is null");
 			}
 
-			var viewModel = dataContext as TViewModel;
-			if (viewModel == null)
+			if (!(dataContext is TViewModel viewModel))
 			{
-				throw new InvalidOperationException(Current($"Unexpected type of DataContext: Expected {typeof(TViewModel)}, actual is {dataContext.GetType()}"));
+				throw new InvalidOperationException($"Unexpected type of DataContext: Expected {typeof(TViewModel)}, actual is {dataContext.GetType()}");
 			}
 
 			return viewModel;

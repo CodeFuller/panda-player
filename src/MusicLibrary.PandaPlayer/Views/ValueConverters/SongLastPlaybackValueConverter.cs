@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using CF.Library.Core.Extensions;
 
 namespace MusicLibrary.PandaPlayer.Views.ValueConverters
 {
@@ -33,7 +32,7 @@ namespace MusicLibrary.PandaPlayer.Views.ValueConverters
 				dayPart = dt.ToString("yyyy.MM.dd", CultureInfo.CurrentCulture);
 			}
 
-			return FormattableStringExtensions.Current($"{dayPart} {dt:HH:mm}");
+			return $"{dayPart} {dt:HH:mm}";
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

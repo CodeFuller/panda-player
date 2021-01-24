@@ -6,7 +6,6 @@
 
   <PropertyGroup>
     <CrossCuttingPackagesVersion>3.1.1</CrossCuttingPackagesVersion>
-    <CFLibraryVersion>6.0.0</CFLibraryVersion>
   </PropertyGroup>
 
   <PropertyGroup>

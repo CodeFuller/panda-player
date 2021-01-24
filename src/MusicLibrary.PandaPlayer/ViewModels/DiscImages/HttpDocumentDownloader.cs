@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using CF.Library.Core.Extensions;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 {
@@ -19,7 +18,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 				{
 					if (!response.IsSuccessStatusCode)
 					{
-						throw new DocumentDownloadFailedException(FormattableStringExtensions.Current($"Failed to download document '{documentUri}'. Error code: {response.StatusCode}"));
+						throw new DocumentDownloadFailedException($"Failed to download document '{documentUri}'. Error code: {response.StatusCode}");
 					}
 
 					return await response.Content.ReadAsByteArrayAsync();

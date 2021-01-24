@@ -1,9 +1,9 @@
 ﻿<cfwpf:WpfApplication x:TypeArguments="vm:ApplicationViewModel"
              x:ClassModifier="internal"
              x:Class="MusicLibrary.PandaPlayer.App"
-             xmlns:cfwpf="clr-namespace:CF.Library.Wpf;assembly=CF.Library.Wpf"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:cfwpf="clr-namespace:CodeFuller.Library.Wpf;assembly=CodeFuller.Library.Wpf"
              xmlns:vm="clr-namespace:MusicLibrary.PandaPlayer.ViewModels"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Application.Resources>

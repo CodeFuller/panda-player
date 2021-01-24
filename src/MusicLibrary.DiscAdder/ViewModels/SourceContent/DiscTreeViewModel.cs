@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using CF.Library.Core.Extensions;
 using GalaSoft.MvvmLight;
+using MusicLibrary.Shared.Extensions;
 
 namespace MusicLibrary.DiscAdder.ViewModels.SourceContent
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MusicLibrary.Core.Facades;
 using MusicLibrary.Core.Models;
 using MusicLibrary.LastFM.Interfaces;
 using MusicLibrary.LastFM.Objects;

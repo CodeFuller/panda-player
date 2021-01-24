@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using CF.Library.Core.Extensions;
+using MusicLibrary.Shared.Extensions;
 
 namespace MusicLibrary.Shared.Images
 {

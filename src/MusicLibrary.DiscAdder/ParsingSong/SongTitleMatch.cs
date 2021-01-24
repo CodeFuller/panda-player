@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using static System.FormattableString;
 
 namespace MusicLibrary.DiscAdder.ParsingSong
 {
@@ -25,7 +24,7 @@ namespace MusicLibrary.DiscAdder.ParsingSong
 			var adjustedTitle = AdjustTitle(rawTitle);
 			SongTitle = String.IsNullOrEmpty(payload)
 				? CapitalizeTitle(adjustedTitle)
-				: Invariant($"{CapitalizeTitle(adjustedTitle)} {payload}");
+				: $"{CapitalizeTitle(adjustedTitle)} {payload}";
 		}
 
 		public SongTitleMatch(string rawTitle)

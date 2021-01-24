@@ -1,7 +1,6 @@
 ﻿using System;
-using CF.Library.Core.Extensions;
-using CF.Library.Core.Facades;
 using GalaSoft.MvvmLight;
+using MusicLibrary.Core.Facades;
 
 namespace MusicLibrary.Shared.Images
 {
@@ -33,7 +32,7 @@ namespace MusicLibrary.Shared.Images
 		public bool ImageIsValid => ImageInfo != null && discImageValidator.ValidateDiscCoverImage(ImageInfo) == ImageValidationResults.ImageIsOk;
 
 		public string ImageProperties => ImageInfo != null
-			? FormattableStringExtensions.Current($"{ImageInfo.Width} x {ImageInfo.Height}, {FileSizeFormatter.GetFormattedFileSize(ImageInfo.FileSize)}, {ImageInfo.FormatName}")
+			? $"{ImageInfo.Width} x {ImageInfo.Height}, {FileSizeFormatter.GetFormattedFileSize(ImageInfo.FileSize)}, {ImageInfo.FormatName}"
 			: "N/A";
 
 		public string ImageStatus

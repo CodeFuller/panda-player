@@ -1,6 +1,6 @@
 ﻿using System;
-using CF.Library.Core.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using MusicLibrary.DiscAdder.Interfaces;
 
 namespace MusicLibrary.DiscAdder.Internal
 {

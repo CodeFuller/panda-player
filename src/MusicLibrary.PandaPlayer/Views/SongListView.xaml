@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:valueConverters="clr-namespace:MusicLibrary.PandaPlayer.Views.ValueConverters"
              xmlns:viewModels="clr-namespace:MusicLibrary.PandaPlayer.ViewModels.Interfaces"
-             xmlns:views="clr-namespace:MusicLibrary.PandaPlayer.Views"
+             xmlns:controls="clr-namespace:CodeFuller.Library.Wpf.Controls;assembly=CodeFuller.Library.Wpf"
              mc:Ignorable="d"
              d:DesignWidth="800" d:DesignHeight="600" d:DataContext="{d:DesignInstance viewModels:ISongPlaylistViewModel}">
 
@@ -43,7 +43,7 @@
         <!-- https://stackoverflow.com/a/22074985/5740031 -->
         <FrameworkElement Grid.Row="0" x:Name="DummyElement" Visibility="Collapsed" />
 
-        <views:MultiSelectionDataGrid Grid.Row="1" x:Name="SongsDataGrid" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
+        <controls:MultiSelectionDataGrid Grid.Row="1" x:Name="SongsDataGrid" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
               GridLinesVisibility="None" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="False"
               CellStyle="{StaticResource MaterialDesignDataGridCell}"
               ItemsSource="{Binding SongItems}" SelectedItem="{Binding SelectedSongItem}" SelectedItemsList="{Binding SelectedSongItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -170,7 +170,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
-        </views:MultiSelectionDataGrid>
+        </controls:MultiSelectionDataGrid>
         <GridSplitter Grid.Row="2" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
         <StackPanel Grid.Row="3" MinHeight="30" Orientation="Horizontal">
             <!-- Setting min widths for statistics labels to keep the same width when no songs are loaded in the list -->

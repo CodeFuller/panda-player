@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using CF.Library.Wpf;
+using CodeFuller.Library.Wpf;
 using GalaSoft.MvvmLight;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.Services.Diagnostic;
 using MusicLibrary.Services.Diagnostic.Inconsistencies;
 using MusicLibrary.Services.Interfaces;
-using static System.FormattableString;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {
@@ -137,7 +136,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		public string CheckProgressPercentage => Invariant($"{(CheckProgressMaximum > 0 ? CheckProgressValue / CheckProgressMaximum * 100 : 0):N1}%");
+		public string CheckProgressPercentage => $"{(CheckProgressMaximum > 0 ? CheckProgressValue / CheckProgressMaximum * 100 : 0):N1}%";
 
 		public ICommand RunCheckCommand { get; }
 

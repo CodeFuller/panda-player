@@ -4,11 +4,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using CF.Library.Core.Exceptions;
-using CF.Library.Core.Facades;
 using Microsoft.Extensions.Options;
+using MusicLibrary.Core.Facades;
 using MusicLibrary.Services.Interfaces;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.MusicStorage
 {
@@ -145,7 +143,7 @@ namespace MusicLibrary.DiscAdder.MusicStorage
 				};
 			}
 
-			throw new InvalidInputDataException(Current($"Could not parse song data from '{songPath}'"));
+			throw new InvalidOperationException($"Could not parse song data from '{songPath}'");
 		}
 
 		public void DeleteSourceContent(IEnumerable<string> contentFiles)

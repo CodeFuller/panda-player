@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CF.Library.Wpf;
+using CodeFuller.Library.Wpf;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -13,7 +13,6 @@ using MusicLibrary.PandaPlayer.Events.DiscEvents;
 using MusicLibrary.PandaPlayer.Events.SongEvents;
 using MusicLibrary.PandaPlayer.Events.SongListEvents;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {
@@ -109,11 +108,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaySongList(e, CancellationToken.None));
 			Messenger.Default.Register<PlayDiscFromSongEventArgs>(this, e => OnPlayDiscFromSongLaunched(e, CancellationToken.None));
-			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, e => OnPlayPlaylistStartingFromSong(CancellationToken.None));
+			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, _ => OnPlayPlaylistStartingFromSong(CancellationToken.None));
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, OnPlaylistFinished);
-			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => SwitchToExplorerSongs());
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => OnPlaylistSongChanged());
-			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistSongChanged());
+			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, _ => SwitchToExplorerSongs());
+			Messenger.Default.Register<PlaylistChangedEventArgs>(this, _ => OnPlaylistSongChanged());
+			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, _ => OnPlaylistSongChanged());
 			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => NavigateLibraryExplorerToDisc(e.Disc, CancellationToken.None));
 		}
 
@@ -190,8 +189,8 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		private string BuildCurrentTitle(SongModel song)
 		{
-			var songTitle = song.Artist != null ? Current($"{song.Artist.Name} - {song.Title}") : song.Title;
-			return Current($"{PlaylistSongsViewModel.CurrentSongIndex + 1}/{PlaylistSongsViewModel.SongsNumber} - {songTitle}");
+			var songTitle = song.Artist != null ? $"{song.Artist.Name} - {song.Title}" : song.Title;
+			return $"{PlaylistSongsViewModel.CurrentSongIndex + 1}/{PlaylistSongsViewModel.SongsNumber} - {songTitle}";
 		}
 
 		private void OnPlaylistFinished(PlaylistFinishedEventArgs e)

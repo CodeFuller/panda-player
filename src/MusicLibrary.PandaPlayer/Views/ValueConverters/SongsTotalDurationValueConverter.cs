@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.PandaPlayer.Views.ValueConverters
 {
@@ -22,20 +21,20 @@ namespace MusicLibrary.PandaPlayer.Views.ValueConverters
 
 			if (seconds < SecondsInOneMinute)
 			{
-				return Current($"{seconds:F0} seconds");
+				return $"{seconds:F0} seconds";
 			}
 
 			if (seconds < SecondsInOneHour)
 			{
-				return Current($"{seconds / SecondsInOneMinute:F1} minutes");
+				return $"{seconds / SecondsInOneMinute:F1} minutes";
 			}
 
 			if (seconds < SecondsInOneDay)
 			{
-				return Current($"{seconds / SecondsInOneHour:F1} hours");
+				return $"{seconds / SecondsInOneHour:F1} hours";
 			}
 
-			return Current($"{seconds / SecondsInOneDay:F1} days");
+			return $"{seconds / SecondsInOneDay:F1} days";
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

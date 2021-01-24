@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Timers;
-using CF.Library.Core.Facades;
+using MusicLibrary.PandaPlayer.Facades;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Player
 {

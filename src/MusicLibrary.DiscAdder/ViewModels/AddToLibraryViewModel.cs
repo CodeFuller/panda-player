@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CF.Library.Wpf;
+using CodeFuller.Library.Wpf;
 using GalaSoft.MvvmLight;
 using MusicLibrary.Core.Models;
 using MusicLibrary.DiscAdder.AddedContent;
@@ -14,8 +14,6 @@ using MusicLibrary.DiscAdder.ViewModels.Interfaces;
 using MusicLibrary.Services.Interfaces;
 using MusicLibrary.Services.Media;
 using MusicLibrary.Shared.Extensions;
-using static System.FormattableString;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.ViewModels
 {
@@ -76,7 +74,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			}
 		}
 
-		public string CurrentProgressPercentage => Invariant($"{(ProgressMaximum > 0 ? CurrentProgress / (double)ProgressMaximum * 100 : 0):N1}%");
+		public string CurrentProgressPercentage => $"{(ProgressMaximum > 0 ? CurrentProgress / (double)ProgressMaximum * 100 : 0):N1}%";
 
 		private string progressMessages;
 
@@ -139,9 +137,9 @@ namespace MusicLibrary.DiscAdder.ViewModels
 
 			if (DeleteSourceContent)
 			{
-				ProgressMessages += Current($"Deleting source content...\n");
+				ProgressMessages += "Deleting source content...\n";
 				workshopMusicStorage.DeleteSourceContent(addedSongs.Select(s => s.SourceFileName).Concat(addedDiscImages.Select(im => im.ImageInfo.FileName)));
-				ProgressMessages += Current($"Source content was deleted successfully\n");
+				ProgressMessages += "Source content was deleted successfully\n";
 			}
 		}
 
@@ -157,7 +155,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 
 			foreach (var addedSong in addedSongs)
 			{
-				ProgressMessages += Current($"Getting media info for '{addedSong.SourceFileName}'...\n");
+				ProgressMessages += $"Getting media info for '{addedSong.SourceFileName}'...\n";
 				var mediaInfo = await songMediaInfoProvider.GetSongMediaInfo(addedSong.SourceFileName);
 
 				addedSong.Song.BitRate = mediaInfo.Bitrate;
@@ -194,7 +192,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 						await CreateDisc(songDisc, addedSong.Disc.FolderPath, cancellationToken);
 					}
 
-					ProgressMessages += Current($"Adding song '{addedSong.SourceFileName}'...\n");
+					ProgressMessages += $"Adding song '{addedSong.SourceFileName}'...\n";
 
 					using var songContent = File.OpenRead(addedSong.SourceFileName);
 					await songService.CreateSong(song, songContent, cancellationToken);
@@ -222,7 +220,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			{
 				if (!onlyCountProgressSize)
 				{
-					ProgressMessages += Current($"Adding disc image '{image.ImageInfo.FileName}'...\n");
+					ProgressMessages += $"Adding disc image '{image.ImageInfo.FileName}'...\n";
 
 					var discImage = new DiscImageModel
 					{
@@ -258,7 +256,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 				return;
 			}
 
-			ProgressMessages += Current($"Creating artist '{artist.Name}' ...\n");
+			ProgressMessages += $"Creating artist '{artist.Name}' ...\n";
 			await artistService.CreateArtist(artist, cancellationToken);
 
 			createdArtists.Add(artist.Name, artist.Id);
@@ -279,7 +277,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 				var currentSubfolder = currentFolder.Subfolders.SingleOrDefault(sf => String.Equals(sf.Name, currentSubfolderName, StringComparison.Ordinal));
 				if (currentSubfolder == null)
 				{
-					ProgressMessages += Current($"Creating folder '{currentFolderFullPath}' ...\n");
+					ProgressMessages += $"Creating folder '{currentFolderFullPath}' ...\n";
 
 					currentSubfolder = new ShallowFolderModel
 					{
@@ -303,7 +301,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 				disc.Folder = await CreateFolder(discFolderPath, cancellationToken);
 			}
 
-			ProgressMessages += Current($"Creating disc '{disc.TreeTitle}' ...\n");
+			ProgressMessages += $"Creating disc '{disc.TreeTitle}' ...\n";
 
 			await discService.CreateDisc(disc, cancellationToken);
 		}

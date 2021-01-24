@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using MusicLibrary.Core.Models;
 using MusicLibrary.DiscAdder.Extensions;
 using MusicLibrary.DiscAdder.MusicStorage;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.ViewModels.ViewModelItems
 {
@@ -18,7 +17,7 @@ namespace MusicLibrary.DiscAdder.ViewModels.ViewModelItems
 		public override string AlbumTitle
 		{
 			get => Disc.AlbumTitle;
-			set => throw new InvalidOperationException(Current($"Album title could not be changed for '{DiscTitle}' disc"));
+			set => throw new InvalidOperationException($"Album title could not be changed for '{DiscTitle}' disc");
 		}
 
 		public override bool AlbumTitleIsEditable => false;

@@ -1,4 +1,4 @@
-﻿using CF.Library.Core.Extensions;
+﻿using MusicLibrary.Shared.Extensions;
 
 namespace MusicLibrary.Shared.Images
 {

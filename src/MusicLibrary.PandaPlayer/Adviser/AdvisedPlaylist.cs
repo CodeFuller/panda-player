@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using MusicLibrary.Core.Models;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.PandaPlayer.Adviser
 {
 	internal class AdvisedPlaylist
 	{
-		public AdvisedPlaylistType AdvisedPlaylistType { get; private set; }
+		public AdvisedPlaylistType AdvisedPlaylistType { get; private init; }
 
-		public string Title { get; private set; }
+		public string Title { get; private init; }
 
-		public IReadOnlyCollection<SongModel> Songs { get; private set; }
+		public IReadOnlyCollection<SongModel> Songs { get; private init; }
 
-		private DiscModel disc;
+		private readonly DiscModel disc;
 
 		public DiscModel Disc
 		{
@@ -28,7 +27,7 @@ namespace MusicLibrary.PandaPlayer.Adviser
 				return disc;
 			}
 
-			private set => disc = value;
+			private init => disc = value;
 		}
 
 		private AdvisedPlaylist()
@@ -69,7 +68,7 @@ namespace MusicLibrary.PandaPlayer.Adviser
 
 		private static string FormatDiscTitle(DiscModel disc)
 		{
-			return Current($"{disc.Folder.Name} / {disc.Title}");
+			return $"{disc.Folder.Name} / {disc.Title}";
 		}
 	}
 }

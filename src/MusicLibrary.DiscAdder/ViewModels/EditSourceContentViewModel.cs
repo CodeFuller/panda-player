@@ -16,7 +16,6 @@ using MusicLibrary.DiscAdder.MusicStorage;
 using MusicLibrary.DiscAdder.ParsingContent;
 using MusicLibrary.DiscAdder.ViewModels.Interfaces;
 using MusicLibrary.DiscAdder.ViewModels.SourceContent;
-using static System.FormattableString;
 
 namespace MusicLibrary.DiscAdder.ViewModels
 {
@@ -86,7 +85,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 			var contentBuilder = new StringBuilder();
 			foreach (var disc in CurrentDiscs.Discs)
 			{
-				contentBuilder.Append(Invariant($"# {disc.DiscDirectory}\n\n"));
+				contentBuilder.Append($"# {disc.DiscDirectory}\n\n");
 			}
 
 			RawReferenceDiscs.Content = contentBuilder.ToString();

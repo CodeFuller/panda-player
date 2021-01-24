@@ -1,5 +1,5 @@
-﻿using System.IO;
-using CF.Library.Core.Exceptions;
+﻿using System;
+using System.IO;
 using MusicLibrary.Shared.Images;
 
 namespace MusicLibrary.Shared.Extensions
@@ -22,7 +22,7 @@ namespace MusicLibrary.Shared.Extensions
 					return "png";
 
 				default:
-					throw new UnexpectedEnumValueException(imageInfo.Format);
+					throw new NotSupportedException($"Image format {imageInfo.Format} is not supported");
 			}
 		}
 	}

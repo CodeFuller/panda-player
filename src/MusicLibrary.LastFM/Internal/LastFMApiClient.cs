@@ -16,8 +16,6 @@ using MusicLibrary.LastFM.DataContracts;
 using MusicLibrary.LastFM.Interfaces;
 using MusicLibrary.LastFM.Objects;
 using Newtonsoft.Json;
-using static System.FormattableString;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.LastFM.Internal
 {
@@ -124,22 +122,22 @@ namespace MusicLibrary.LastFM.Internal
 		{
 			if (trackInfo.Artist.Corrected)
 			{
-				logger.LogWarning(Current($"Corrected artist: '{track.Artist}' -> '{trackInfo.Artist.Text}'"));
+				logger.LogWarning($"Corrected artist: '{track.Artist}' -> '{trackInfo.Artist.Text}'");
 			}
 
 			if (trackInfo.Album.Corrected)
 			{
-				logger.LogWarning(Current($"Corrected album: '{track.Album}' -> '{trackInfo.Album.Text}'"));
+				logger.LogWarning($"Corrected album: '{track.Album}' -> '{trackInfo.Album.Text}'");
 			}
 
 			if (trackInfo.Track.Corrected)
 			{
-				logger.LogWarning(Current($"Corrected track: '{track.Title}' -> '{trackInfo.Track.Text}'"));
+				logger.LogWarning($"Corrected track: '{track.Title}' -> '{trackInfo.Track.Text}'");
 			}
 
 			if (!String.IsNullOrEmpty(trackInfo.IgnoredMessage.Text))
 			{
-				logger.LogWarning(Current($"Ignored track message: '{trackInfo.IgnoredMessage.Text}'"));
+				logger.LogWarning($"Ignored track message: '{trackInfo.IgnoredMessage.Text}'");
 			}
 		}
 
@@ -239,7 +237,7 @@ namespace MusicLibrary.LastFM.Internal
 			var paramsValues = from key in requestParams.AllKeys
 							   orderby key
 							   from value in requestParams.GetValues(key)
-							   select Invariant($"{key}{value}");
+							   select $"{key}{value}";
 
 			var signedData = String.Join(String.Empty, paramsValues);
 			signedData += settings.SharedSecret;

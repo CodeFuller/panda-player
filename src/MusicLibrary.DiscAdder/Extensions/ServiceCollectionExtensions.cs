@@ -1,5 +1,4 @@
 ﻿using System;
-using CF.Library.Core.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using MusicLibrary.DiscAdder.Interfaces;
 using MusicLibrary.DiscAdder.Internal;

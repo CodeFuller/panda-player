@@ -1,6 +1,4 @@
-﻿using CF.Library.Core.Extensions;
-
-namespace MusicLibrary.Shared
+﻿namespace MusicLibrary.Shared
 {
 	public static class FileSizeFormatter
 	{
@@ -13,22 +11,13 @@ namespace MusicLibrary.Shared
 		{
 			float size = fileSize;
 
-			if (fileSize < KbValue)
+			return fileSize switch
 			{
-				return FormattableStringExtensions.Current($"{fileSize} B");
-			}
-
-			if (fileSize < MbValue)
-			{
-				return FormattableStringExtensions.Current($"{size / KbValue:F1} KB");
-			}
-
-			if (size < GbValue)
-			{
-				return FormattableStringExtensions.Current($"{size / MbValue:F1} MB");
-			}
-
-			return FormattableStringExtensions.Current($"{size / GbValue:F1} GB");
+				< KbValue => $"{fileSize} B",
+				< MbValue => $"{size / KbValue:F1} KB",
+				< GbValue => $"{size / MbValue:F1} MB",
+				_ => $"{size / GbValue:F1} GB"
+			};
 		}
 	}
 }

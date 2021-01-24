@@ -4,11 +4,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CF.Library.Wpf;
+using CodeFuller.Library.Wpf;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using MusicLibrary.DiscAdder.ViewModels.Interfaces;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.ViewModels
 {
@@ -168,7 +167,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 
 			if (nextPage == null)
 			{
-				throw new InvalidOperationException(Current($"Could not switch forward from the page {CurrentPage.Name}"));
+				throw new InvalidOperationException($"Could not switch forward from the page {CurrentPage.Name}");
 			}
 
 			if (nextPage == editDiscsDetailsViewModel)
@@ -199,7 +198,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 
 		private void SwitchToPrevPage()
 		{
-			CurrentPage = PrevPage ?? throw new InvalidOperationException(Current($"Could not switch back from the page {CurrentPage.Name}"));
+			CurrentPage = PrevPage ?? throw new InvalidOperationException($"Could not switch back from the page {CurrentPage.Name}");
 		}
 
 		private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

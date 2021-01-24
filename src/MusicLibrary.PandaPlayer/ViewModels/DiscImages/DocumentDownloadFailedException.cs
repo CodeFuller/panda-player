@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using CF.Library.Core.Exceptions;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 {
 	[Serializable]
-	public class DocumentDownloadFailedException : BasicException
+	public class DocumentDownloadFailedException : Exception
 	{
 		public DocumentDownloadFailedException()
 		{

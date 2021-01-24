@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 using MusicLibrary.Core.Models;
-using static System.FormattableString;
 
 namespace MusicLibrary.PandaPlayer.Views.ValueConverters
 {
@@ -16,62 +15,25 @@ namespace MusicLibrary.PandaPlayer.Views.ValueConverters
 				return null;
 			}
 
-			return Invariant($"/Views/Icons/Ratings/{GetRatingImageFileName(rating)}");
+			return $"/Views/Icons/Ratings/{GetRatingImageFileName(rating)}";
 		}
 
 		private static string GetRatingImageFileName(RatingModel rating)
 		{
-			if (rating == RatingModel.R1)
+			return rating switch
 			{
-				return "Rating01.png";
-			}
-
-			if (rating == RatingModel.R2)
-			{
-				return "Rating02.png";
-			}
-
-			if (rating == RatingModel.R3)
-			{
-				return "Rating03.png";
-			}
-
-			if (rating == RatingModel.R4)
-			{
-				return "Rating04.png";
-			}
-
-			if (rating == RatingModel.R5)
-			{
-				return "Rating05.png";
-			}
-
-			if (rating == RatingModel.R6)
-			{
-				return "Rating06.png";
-			}
-
-			if (rating == RatingModel.R7)
-			{
-				return "Rating07.png";
-			}
-
-			if (rating == RatingModel.R8)
-			{
-				return "Rating08.png";
-			}
-
-			if (rating == RatingModel.R9)
-			{
-				return "Rating09.png";
-			}
-
-			if (rating == RatingModel.R10)
-			{
-				return "Rating10.png";
-			}
-
-			throw new InvalidOperationException($"Unexpected value for the rating: {rating}");
+				RatingModel.R1 => "Rating01.png",
+				RatingModel.R2 => "Rating02.png",
+				RatingModel.R3 => "Rating03.png",
+				RatingModel.R4 => "Rating04.png",
+				RatingModel.R5 => "Rating05.png",
+				RatingModel.R6 => "Rating06.png",
+				RatingModel.R7 => "Rating07.png",
+				RatingModel.R8 => "Rating08.png",
+				RatingModel.R9 => "Rating09.png",
+				RatingModel.R10 => "Rating10.png",
+				_ => throw new InvalidOperationException($"Unexpected value for the rating: {rating}")
+			};
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

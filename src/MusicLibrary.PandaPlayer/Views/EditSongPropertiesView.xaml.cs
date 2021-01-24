@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using System.Windows;
 using System.Windows.Input;
-using CF.Library.Wpf.Extensions;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
+using MusicLibrary.PandaPlayer.Views.Extensions;
 
 namespace MusicLibrary.PandaPlayer.Views
 {

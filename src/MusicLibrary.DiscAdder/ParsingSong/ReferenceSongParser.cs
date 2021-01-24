@@ -1,8 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
-using CF.Library.Core.Exceptions;
-using static System.FormattableString;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.ParsingSong
 {
@@ -178,7 +176,7 @@ namespace MusicLibrary.DiscAdder.ParsingSong
 			}
 
 			// We shouldn't get here, any possible title should be covered by TitlePatterns
-			throw new InternalErrorException(Current($"Title {rawSongTitle} is not covered by any pattern"));
+			throw new InvalidOperationException($"Title {rawSongTitle} is not covered by any pattern");
 		}
 
 		private static string ParseSongPayload(string rawSongPayload)
@@ -191,16 +189,16 @@ namespace MusicLibrary.DiscAdder.ParsingSong
 			var match = new Regex("^live, featuring (.+?)$").Match(rawSongPayload);
 			if (match.Success)
 			{
-				return Invariant($"(feat. {match.Groups[1].Value}) (Live)");
+				return $"(feat. {match.Groups[1].Value}) (Live)";
 			}
 
 			match = new Regex("^featuring (.+?)$").Match(rawSongPayload);
 			if (match.Success)
 			{
-				return Invariant($"(feat. {match.Groups[1].Value})");
+				return $"(feat. {match.Groups[1].Value})";
 			}
 
-			return Invariant($"({rawSongPayload})");
+			return $"({rawSongPayload})";
 		}
 	}
 }

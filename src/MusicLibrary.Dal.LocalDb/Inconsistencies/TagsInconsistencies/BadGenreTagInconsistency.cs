@@ -1,5 +1,4 @@
 ﻿using MusicLibrary.Core.Models;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.Dal.LocalDb.Inconsistencies.TagsInconsistencies
 {
@@ -7,7 +6,7 @@ namespace MusicLibrary.Dal.LocalDb.Inconsistencies.TagsInconsistencies
 	{
 		private readonly string tagGenre;
 
-		public override string Description => Current($"Genre tag is inconsistent for song '{SongDisplayTitle}': '{tagGenre}' != '{Song.Genre?.Name}'");
+		public override string Description => $"Genre tag is inconsistent for song '{SongDisplayTitle}': '{tagGenre}' != '{Song.Genre?.Name}'";
 
 		public BadGenreTagInconsistency(SongModel song, string tagGenre)
 			: base(song)

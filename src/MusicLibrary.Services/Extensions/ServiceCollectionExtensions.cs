@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using MusicLibrary.Core.Facades;
 using MusicLibrary.Services.Diagnostic.Checkers;
 using MusicLibrary.Services.Diagnostic.Interfaces;
 using MusicLibrary.Services.Interfaces;
@@ -24,7 +25,7 @@ namespace MusicLibrary.Services.Extensions
 
 			services.AddSingleton<IDiscConsistencyChecker, DiscConsistencyChecker>();
 
-			services.AddSingleton<IClock, Clock>();
+			services.AddSingleton<IClock, SystemClock>();
 
 			return services;
 		}

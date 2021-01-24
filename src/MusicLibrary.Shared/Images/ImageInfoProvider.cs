@@ -1,5 +1,5 @@
 ﻿using System;
-using CF.Library.Core.Facades;
+using MusicLibrary.Core.Facades;
 
 namespace MusicLibrary.Shared.Images
 {

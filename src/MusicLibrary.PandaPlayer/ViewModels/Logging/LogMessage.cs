@@ -1,7 +1,5 @@
 ﻿using System;
-using CF.Library.Core.Exceptions;
 using Microsoft.Extensions.Logging;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.Logging
 {
@@ -14,34 +12,21 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Logging
 		public LogMessage(LogLevel level, string message)
 		{
 			Level = level;
-			Message = Current($"{DateTime.Now:yyyy-MM-dd  HH:mm:ss}  {GetLevelString(level)}  {message}");
+			Message = $"{DateTime.Now:yyyy-MM-dd  HH:mm:ss}  {GetLevelString(level)}  {message}";
 		}
 
 		private static string GetLevelString(LogLevel level)
 		{
-			switch (level)
+			return level switch
 			{
-				case LogLevel.Critical:
-					return "CRITICAL:";
-
-				case LogLevel.Error:
-					return "ERROR:  ";
-
-				case LogLevel.Warning:
-					return "WARNING:";
-
-				case LogLevel.Information:
-					return "INFO:   ";
-
-				case LogLevel.Debug:
-					return "DEBUG:  ";
-
-				case LogLevel.Trace:
-					return "TRACE:  ";
-
-				default:
-					throw new UnexpectedEnumValueException(level);
-			}
+				LogLevel.Critical => "CRITICAL:",
+				LogLevel.Error => "ERROR:  ",
+				LogLevel.Warning => "WARNING:",
+				LogLevel.Information => "INFO:   ",
+				LogLevel.Debug => "DEBUG:  ",
+				LogLevel.Trace => "TRACE:  ",
+				_ => throw new NotSupportedException($"Log level {level} is not supported"),
+			};
 		}
 	}
 }

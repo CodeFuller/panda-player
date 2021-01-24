@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MusicLibrary.Services.Interfaces
+namespace MusicLibrary.Core.Facades
 {
 	public interface IClock
 	{

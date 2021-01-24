@@ -1,7 +1,6 @@
 ﻿using System;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Services.Diagnostic.Inconsistencies;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.Dal.LocalDb.Inconsistencies.TagsInconsistencies
 {
@@ -9,7 +8,7 @@ namespace MusicLibrary.Dal.LocalDb.Inconsistencies.TagsInconsistencies
 	{
 		protected SongModel Song { get; }
 
-		protected string SongDisplayTitle => Current($"{Song.Disc.Folder.Name}/{Song.Disc.TreeTitle}/{Song.TreeTitle}");
+		protected string SongDisplayTitle => $"{Song.Disc.Folder.Name}/{Song.Disc.TreeTitle}/{Song.TreeTitle}";
 
 		public override InconsistencySeverity Severity => InconsistencySeverity.Medium;
 

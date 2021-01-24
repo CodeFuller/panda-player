@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MusicLibrary.DiscAdder.Interfaces;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.DiscAdder.Internal
 {
@@ -35,7 +34,7 @@ namespace MusicLibrary.DiscAdder.Internal
 
 				if (files.Any() && nestedDiscs.Any())
 				{
-					throw new InvalidOperationException(Current($"Directory '{directoryInfo.FullName}' contains both directories and files. It is an invalid disc structure."));
+					throw new InvalidOperationException($"Directory '{directoryInfo.FullName}' contains both directories and files. It is an invalid disc structure.");
 				}
 			}
 

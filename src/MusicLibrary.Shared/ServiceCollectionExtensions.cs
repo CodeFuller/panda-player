@@ -1,6 +1,6 @@
-﻿using CF.Library.Core.Facades;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using MusicLibrary.Core.Facades;
 using MusicLibrary.Shared.Images;
 
 namespace MusicLibrary.Shared

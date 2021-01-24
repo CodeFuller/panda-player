@@ -1,5 +1,4 @@
 ﻿using System;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.LastFM.Objects
 {
@@ -19,7 +18,7 @@ namespace MusicLibrary.LastFM.Objects
 		{
 			var artist = String.IsNullOrEmpty(Artist) ? "N/A" : Artist;
 			var title = String.IsNullOrEmpty(Title) ? "N/A" : Title;
-			return Current($"{artist} - {title}");
+			return $"{artist} - {title}";
 		}
 	}
 }

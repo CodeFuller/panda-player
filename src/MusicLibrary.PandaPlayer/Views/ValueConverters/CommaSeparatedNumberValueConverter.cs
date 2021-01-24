@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using static CF.Library.Core.Extensions.FormattableStringExtensions;
 
 namespace MusicLibrary.PandaPlayer.Views.ValueConverters
 {
@@ -14,7 +13,7 @@ namespace MusicLibrary.PandaPlayer.Views.ValueConverters
 				return null;
 			}
 
-			return Current($"{(int)value:n0}");
+			return $"{(int)value:n0}";
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
