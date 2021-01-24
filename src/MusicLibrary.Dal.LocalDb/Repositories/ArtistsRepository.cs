@@ -3,18 +3,19 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Extensions;
-using MusicLibrary.Dal.LocalDb.Interfaces;
+using MusicLibrary.Dal.LocalDb.Internal;
 using MusicLibrary.Services.Interfaces.Dal;
 
 namespace MusicLibrary.Dal.LocalDb.Repositories
 {
 	internal class ArtistsRepository : IArtistsRepository
 	{
-		private readonly IMusicLibraryDbContextFactory contextFactory;
+		private readonly IDbContextFactory<MusicLibraryDbContext> contextFactory;
 
-		public ArtistsRepository(IMusicLibraryDbContextFactory contextFactory)
+		public ArtistsRepository(IDbContextFactory<MusicLibraryDbContext> contextFactory)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
 		}
@@ -23,7 +24,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 		{
 			var artistEntity = artist.ToEntity();
 
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 			await context.Artists.AddAsync(artistEntity, cancellationToken);
 			await context.SaveChangesAsync(cancellationToken);
 
@@ -32,7 +33,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public IQueryable<ArtistModel> GetAllArtists()
 		{
-			var context = contextFactory.Create();
+			var context = contextFactory.CreateDbContext();
 
 			return context.Artists
 				.Select(a => new ArtistModel

@@ -15,13 +15,13 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 {
 	internal class FoldersRepository : IFoldersRepository
 	{
-		private readonly IMusicLibraryDbContextFactory contextFactory;
+		private readonly IDbContextFactory<MusicLibraryDbContext> contextFactory;
 
 		private readonly IContentUriProvider contentUriProvider;
 
 		private readonly IFolderCache folderCache;
 
-		public FoldersRepository(IMusicLibraryDbContextFactory contextFactory, IContentUriProvider contentUriProvider, IFolderCache folderCache)
+		public FoldersRepository(IDbContextFactory<MusicLibraryDbContext> contextFactory, IContentUriProvider contentUriProvider, IFolderCache folderCache)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
 			this.contentUriProvider = contentUriProvider ?? throw new ArgumentNullException(nameof(contentUriProvider));
@@ -32,7 +32,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 		{
 			var folderEntity = folder.ToEntity();
 
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 			await context.Folders.AddAsync(folderEntity, cancellationToken);
 			await context.SaveChangesAsync(cancellationToken);
 
@@ -43,7 +43,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public async Task<IReadOnlyCollection<ShallowFolderModel>> GetAllFolders(CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 
 			var folders = await GetShallowFoldersQueryable(context)
 				.ToListAsync(cancellationToken);
@@ -53,7 +53,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public async Task<FolderModel> GetRootFolder(CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 
 			var folder = await GetFoldersQueryable(context)
 				.SingleAsync(f => f.ParentFolder == null, cancellationToken);
@@ -63,7 +63,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public async Task<FolderModel> GetFolder(ItemId folderId, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 
 			var folder = await FindFolder(context, folderId, cancellationToken);
 
@@ -72,7 +72,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public async Task UpdateFolder(ShallowFolderModel folder, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 			var folderEntity = await FindShallowFolder(context, folder.Id, cancellationToken);
 
 			var updatedEntity = folder.ToEntity();

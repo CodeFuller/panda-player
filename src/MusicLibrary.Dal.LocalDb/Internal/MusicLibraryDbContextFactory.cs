@@ -1,10 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using MusicLibrary.Dal.LocalDb.Interfaces;
 
 namespace MusicLibrary.Dal.LocalDb.Internal
 {
-	internal class MusicLibraryDbContextFactory : IMusicLibraryDbContextFactory
+	internal class MusicLibraryDbContextFactory : IDbContextFactory<MusicLibraryDbContext>
 	{
 		private readonly DbContextOptions<MusicLibraryDbContext> options;
 
@@ -13,7 +12,7 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 			this.options = options ?? throw new ArgumentNullException(nameof(options));
 		}
 
-		public MusicLibraryDbContext Create()
+		public MusicLibraryDbContext CreateDbContext()
 		{
 			return new MusicLibraryDbContext(options);
 		}

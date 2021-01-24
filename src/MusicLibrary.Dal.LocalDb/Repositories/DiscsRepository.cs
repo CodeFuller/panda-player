@@ -15,11 +15,11 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 {
 	internal class DiscsRepository : IDiscsRepository
 	{
-		private readonly IMusicLibraryDbContextFactory contextFactory;
+		private readonly IDbContextFactory<MusicLibraryDbContext> contextFactory;
 
 		private readonly IContentUriProvider contentUriProvider;
 
-		public DiscsRepository(IMusicLibraryDbContextFactory contextFactory, IContentUriProvider contentUriProvider)
+		public DiscsRepository(IDbContextFactory<MusicLibraryDbContext> contextFactory, IContentUriProvider contentUriProvider)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
 			this.contentUriProvider = contentUriProvider ?? throw new ArgumentNullException(nameof(contentUriProvider));
@@ -29,7 +29,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 		{
 			var discEntity = disc.ToEntity();
 
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 			await context.Discs.AddAsync(discEntity, cancellationToken);
 			await context.SaveChangesAsync(cancellationToken);
 
@@ -38,7 +38,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public async Task<IReadOnlyCollection<DiscModel>> GetAllDiscs(CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 
 			var discEntities = await GetDiscsQueryable(context)
 				.ToListAsync(cancellationToken);
@@ -56,7 +56,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public async Task<DiscModel> GetDisc(ItemId discId, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 
 			var disc = await FindDisc(context, discId, cancellationToken);
 			return disc.ToModel(contentUriProvider);
@@ -73,7 +73,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public async Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 			var discEntity = await FindDisc(context, disc.Id, cancellationToken);
 
 			var updatedEntity = disc.ToEntity();
@@ -83,7 +83,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public async Task AddDiscImage(DiscImageModel image, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 			var discEntity = await FindDisc(context, image.Disc.Id, cancellationToken);
 
 			var imageEntity = image.ToEntity();
@@ -96,7 +96,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public async Task DeleteDiscImage(DiscImageModel image, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 
 			var imageEntity = await context.DiscImages.FindAsync(new object[] { image.Id.ToInt32() }, cancellationToken);
 			context.DiscImages.Remove(imageEntity);

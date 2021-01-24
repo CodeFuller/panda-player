@@ -79,12 +79,12 @@ namespace MusicLibrary.PandaPlayer
 			services.AddSingleton<ILibraryCheckerViewModel, LibraryCheckerViewModel>();
 			services.AddSingleton<ILibraryStatisticsViewModel, LibraryStatisticsViewModel>();
 
-			services.AddSingleton<ApplicationViewModel>();
-
 			services.AddSingleton<LoggerViewModel>();
 			services.AddSingleton<ILoggerViewModel, LoggerViewModel>(sp => sp.GetRequiredService<LoggerViewModel>());
 			services.AddSingleton<InstanceLoggerProvider>(
 				sp => ActivatorUtilities.CreateInstance<InstanceLoggerProvider>(sp, sp.GetRequiredService<LoggerViewModel>()));
+
+			services.AddSingleton<ApplicationViewModel>();
 		}
 
 		protected override ILoggerFactory BootstrapLogging(IServiceProvider serviceProvider, IConfiguration configuration)

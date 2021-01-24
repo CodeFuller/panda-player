@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.Dal.LocalDb.Interfaces;
@@ -11,9 +12,9 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 	{
 		private readonly ConcurrentDictionary<ItemId, ShallowFolderModel> folders = new ConcurrentDictionary<ItemId, ShallowFolderModel>();
 
-		private readonly IMusicLibraryDbContextFactory contextFactory;
+		private readonly IDbContextFactory<MusicLibraryDbContext> contextFactory;
 
-		public FolderCache(IMusicLibraryDbContextFactory contextFactory)
+		public FolderCache(IDbContextFactory<MusicLibraryDbContext> contextFactory)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
 		}
@@ -40,7 +41,7 @@ namespace MusicLibrary.Dal.LocalDb.Internal
 
 		private void InitializeCache()
 		{
-			var context = contextFactory.Create();
+			var context = contextFactory.CreateDbContext();
 
 			var allFolders = context.Folders
 				.Select(f => f.ToShallowModel());

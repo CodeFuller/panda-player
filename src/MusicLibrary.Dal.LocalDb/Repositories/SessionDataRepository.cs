@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MusicLibrary.Dal.LocalDb.Entities;
-using MusicLibrary.Dal.LocalDb.Interfaces;
 using MusicLibrary.Dal.LocalDb.Internal;
 using MusicLibrary.Services.Interfaces.Dal;
 using Newtonsoft.Json;
@@ -12,16 +11,16 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 {
 	internal class SessionDataRepository : ISessionDataRepository
 	{
-		private readonly IMusicLibraryDbContextFactory contextFactory;
+		private readonly IDbContextFactory<MusicLibraryDbContext> contextFactory;
 
-		public SessionDataRepository(IMusicLibraryDbContextFactory contextFactory)
+		public SessionDataRepository(IDbContextFactory<MusicLibraryDbContext> contextFactory)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
 		}
 
 		public async Task SaveData<TData>(string key, TData data, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 			var dataEntity = await FindSessionData(context, key, cancellationToken);
 
 			var serializedData = SerializeData(data);
@@ -48,7 +47,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 		public async Task<TData> GetData<TData>(string key, CancellationToken cancellationToken)
 			where TData : class
 		{
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 			var dataEntity = await FindSessionData(context, key, cancellationToken);
 
 			return DeserializeData<TData>(dataEntity?.Data);
@@ -56,7 +55,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public async Task DeleteData(string key, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 			var dataEntity = await context.SessionData.SingleOrDefaultAsync(sd => sd.Key == key, cancellationToken);
 
 			if (dataEntity == null)

@@ -15,11 +15,11 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 {
 	internal class SongsRepository : ISongsRepository
 	{
-		private readonly IMusicLibraryDbContextFactory contextFactory;
+		private readonly IDbContextFactory<MusicLibraryDbContext> contextFactory;
 
 		private readonly IContentUriProvider contentUriProvider;
 
-		public SongsRepository(IMusicLibraryDbContextFactory contextFactory, IContentUriProvider contentUriProvider)
+		public SongsRepository(IDbContextFactory<MusicLibraryDbContext> contextFactory, IContentUriProvider contentUriProvider)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
 			this.contentUriProvider = contentUriProvider ?? throw new ArgumentNullException(nameof(contentUriProvider));
@@ -29,7 +29,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 		{
 			var songEntity = song.ToEntity();
 
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 			await context.Songs.AddAsync(songEntity, cancellationToken);
 			await context.SaveChangesAsync(cancellationToken);
 
@@ -38,7 +38,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public async Task<SongModel> GetSong(ItemId songId, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 
 			var id = songId.ToInt32();
 			var songEntity = await GetSongsQueryable(context)
@@ -54,7 +54,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			var songIdsList = songIds.ToList();
 			var ids = songIdsList.Select(id => id.ToInt32()).ToList();
 
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 
 			var songs = await GetSongsQueryable(context)
 				.Where(song => ids.Contains(song.Id))
@@ -84,7 +84,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public async Task UpdateSong(SongModel song, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 			var songEntity = await FindSong(context, song.Id, cancellationToken);
 
 			var updatedEntity = song.ToEntity();
@@ -94,7 +94,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public async Task UpdateSongLastPlayback(SongModel song, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.Create();
+			await using var context = contextFactory.CreateDbContext();
 			var songEntity = await FindSong(context, song.Id, cancellationToken, includePlaybacks: true);
 
 			SyncSongPlaybacks(song, songEntity);

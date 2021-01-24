@@ -38,7 +38,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 
 			services.Configure(setupSettings);
 
-			services.AddSingleton<IMusicLibraryDbContextFactory, MusicLibraryDbContextFactory>();
+			services.AddSingleton<IDbContextFactory<MusicLibraryDbContext>, MusicLibraryDbContextFactory>();
 
 			return services;
 		}
@@ -50,7 +50,10 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				throw new InvalidOperationException("The connection string for Music Library DB is not set");
 			}
 
-			services.AddDbContext<MusicLibraryDbContext>(options => options.UseSqlite(connectionString));
+			// QuerySplittingBehavior: https://docs.microsoft.com/en-us/ef/core/querying/single-split-queries
+			services.AddDbContext<MusicLibraryDbContext>(
+				options => options
+					.UseSqlite(connectionString, sqLiteOptions => sqLiteOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery)));
 
 			return services;
 		}
