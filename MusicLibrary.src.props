@@ -5,7 +5,7 @@
   </ImportGroup>
 
   <PropertyGroup>
-    <CrossCuttingPackagesVersion>3.1.1</CrossCuttingPackagesVersion>
+    <CrossCuttingPackagesVersion>5.0.0</CrossCuttingPackagesVersion>
   </PropertyGroup>
 
   <PropertyGroup>
