@@ -2,8 +2,12 @@
 
 namespace MusicLibrary.Services.Diagnostic
 {
+#pragma warning disable CA1711 // Identifiers should not have incorrect suffix
+#pragma warning disable CA2217 // Do not mark enums with FlagsAttribute
 	[Flags]
 	public enum LibraryCheckFlags
+#pragma warning restore CA2217 // Do not mark enums with FlagsAttribute
+#pragma warning restore CA1711 // Identifiers should not have incorrect suffix
 	{
 		None = 0,
 		CheckDiscsConsistency = 0x01,

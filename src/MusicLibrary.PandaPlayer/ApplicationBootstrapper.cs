@@ -62,7 +62,7 @@ namespace MusicLibrary.PandaPlayer
 			});
 		}
 
-		private void RegisterViewModels(IServiceCollection services)
+		private static void RegisterViewModels(IServiceCollection services)
 		{
 			services.AddTransient<IApplicationViewModelHolder, ApplicationViewModelHolder>();
 			services.AddTransient<INavigatedViewModelHolder, NavigatedViewModelHolder>();

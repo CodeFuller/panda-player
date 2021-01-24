@@ -12,7 +12,7 @@ namespace MusicLibrary.PandaPlayer.Views
 				throw new ArgumentNullException($"DataContext for {typeof(TViewModel)} is null");
 			}
 
-			if (!(dataContext is TViewModel viewModel))
+			if (dataContext is not TViewModel viewModel)
 			{
 				throw new InvalidOperationException($"Unexpected type of DataContext: Expected {typeof(TViewModel)}, actual is {dataContext.GetType()}");
 			}

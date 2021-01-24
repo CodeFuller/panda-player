@@ -17,6 +17,7 @@
     <Rule Id="SA1652" Action="None" Description="All diagnostics of XML documentation comments has been disabled due to the current project configuration."/>
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeAnalysis.FxCopAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.FxCopAnalyzers">
+    <Rule Id="CA1014" Action="None" Description="Mark assemblies with CLSCompliantAttribute."/>
     <Rule Id="CA1062" Action="None" Description="Validate arguments of public methods."/>
     <Rule Id="CA1812" Action="None" Description="Avoid uninstantiated internal classes."/>
     <Rule Id="CA1303" Action="None" Description="Do not pass literals as localized parameters."/>

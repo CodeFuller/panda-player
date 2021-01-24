@@ -27,33 +27,37 @@ namespace MusicLibrary.PandaPlayer.Views
 		}
 
 		[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		[DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
 		internal static extern IntPtr SetClipboardViewer(IntPtr hWndNewViewer);
 
 		[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		[DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
 		[return: MarshalAs(UnmanagedType.Bool)]
 		internal static extern bool ChangeClipboardChain(IntPtr hWndRemove, IntPtr hWndNewNext);
 
 		[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		[DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
 		internal static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
 
-		[DllImport("gdi32.dll")]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		public static extern bool DeleteObject(IntPtr hObject);
-
 		[DllImport("user32.dll")]
+		[DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
 		public static extern int ToUnicode(
 			uint wVirtKey,
 			uint wScanCode,
 			byte[] lpKeyState,
+#pragma warning disable CA1838 // Avoid StringBuilder parameters for P/Invokes
 			[Out, MarshalAs(UnmanagedType.LPWStr, SizeParamIndex = 4)] StringBuilder pwszBuff,
+#pragma warning restore CA1838 // Avoid StringBuilder parameters for P/Invokes
 			int cchBuff,
 			uint wFlags);
 
 		[DllImport("user32.dll")]
+		[DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
 		[return: MarshalAs(UnmanagedType.Bool)]
 		public static extern bool GetKeyboardState(byte[] lpKeyState);
 
 		[DllImport("user32.dll")]
+		[DefaultDllImportSearchPaths(DllImportSearchPath.UserDirectories)]
 		public static extern uint MapVirtualKey(uint uCode, MapType uMapType);
 	}
 }

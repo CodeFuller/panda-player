@@ -71,7 +71,7 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				8 => RatingModel.R8,
 				9 => RatingModel.R9,
 				10 => RatingModel.R10,
-				_ => throw new InvalidOperationException($"Unexpected rating value: {rating}")
+				_ => throw new InvalidOperationException($"Unexpected rating value: {rating}"),
 			};
 		}
 

@@ -76,7 +76,7 @@ namespace MusicLibrary.DiscAdder.ViewModels.ViewModelItems
 
 		private IReadOnlyCollection<AddedSongInfo> SourceSongs { get; }
 
-		public IEnumerable<(SongModel song, string sourcePath)> Songs => SourceSongs.Select(s => (CreateSong(s), s.SourcePath));
+		public IEnumerable<(SongModel Song, string SourcePath)> Songs => SourceSongs.Select(s => (CreateSong(s), s.SourcePath));
 
 		public DiscModel Disc { get; protected set; }
 

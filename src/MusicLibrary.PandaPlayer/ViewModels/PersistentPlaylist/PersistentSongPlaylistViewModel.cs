@@ -51,7 +51,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 			}
 		}
 
-		private async Task<(IReadOnlyCollection<SongModel> songs, int? currentSongIndex)> LoadPlaylistData(CancellationToken cancellationToken)
+		private async Task<(IReadOnlyCollection<SongModel> Songs, int? CurrentSongIndex)> LoadPlaylistData(CancellationToken cancellationToken)
 		{
 			var playListData = await sessionDataService.GetData<PlaylistData>(SongPlaylistDataKey, cancellationToken);
 			if (playListData == null)
@@ -63,7 +63,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 			return await LoadPlaylistSongs(playListData, cancellationToken);
 		}
 
-		private async Task<(IReadOnlyCollection<SongModel> songs, int? currentSongIndex)> LoadPlaylistSongs(PlaylistData playListData, CancellationToken cancellationToken)
+		private async Task<(IReadOnlyCollection<SongModel> Songs, int? CurrentSongIndex)> LoadPlaylistSongs(PlaylistData playListData, CancellationToken cancellationToken)
 		{
 			var songIds = playListData.Songs
 				.Select(s => s.Id)

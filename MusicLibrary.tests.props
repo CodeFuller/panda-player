@@ -10,8 +10,6 @@
 
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\MusicLibrary.tests.ruleset</CodeAnalysisRuleSet>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
   </PropertyGroup>
 
   <ItemGroup>

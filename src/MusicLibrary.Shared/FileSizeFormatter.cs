@@ -16,7 +16,7 @@
 				< KbValue => $"{fileSize} B",
 				< MbValue => $"{size / KbValue:F1} KB",
 				< GbValue => $"{size / MbValue:F1} MB",
-				_ => $"{size / GbValue:F1} GB"
+				_ => $"{size / GbValue:F1} GB",
 			};
 		}
 	}

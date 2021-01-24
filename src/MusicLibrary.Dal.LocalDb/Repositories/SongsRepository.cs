@@ -101,7 +101,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			await context.SaveChangesAsync(cancellationToken);
 		}
 
-		public void SyncSongPlaybacks(SongModel model, SongEntity entity)
+		private static void SyncSongPlaybacks(SongModel model, SongEntity entity)
 		{
 			if (model.PlaybacksCount != entity.PlaybacksCount + 1)
 			{

@@ -32,7 +32,7 @@ namespace MusicLibrary.PandaPlayer.Views.ValueConverters
 				RatingModel.R8 => "Rating08.png",
 				RatingModel.R9 => "Rating09.png",
 				RatingModel.R10 => "Rating10.png",
-				_ => throw new InvalidOperationException($"Unexpected value for the rating: {rating}")
+				_ => throw new InvalidOperationException($"Unexpected value for the rating: {rating}"),
 			};
 		}
 

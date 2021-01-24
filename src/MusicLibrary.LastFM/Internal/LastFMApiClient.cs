@@ -165,6 +165,7 @@ namespace MusicLibrary.LastFM.Internal
 			using var clientHandler = new HttpClientHandler
 			{
 				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+				CheckCertificateRevocationList = true,
 			};
 
 			using var client = new HttpClient(clientHandler, true)

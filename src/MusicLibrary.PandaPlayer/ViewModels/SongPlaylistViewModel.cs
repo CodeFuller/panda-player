@@ -75,10 +75,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			return Task.CompletedTask;
 		}
 
-		public async Task SetPlaylistSongs(IEnumerable<SongModel> newSongs, CancellationToken cancellationToken)
+		public async Task SetPlaylistSongs(IEnumerable<SongModel> songs, CancellationToken cancellationToken)
 		{
 			CurrentSongIndex = null;
-			SetSongsRaw(newSongs);
+			SetSongsRaw(songs);
 			await OnPlaylistChanged(cancellationToken);
 		}
 
