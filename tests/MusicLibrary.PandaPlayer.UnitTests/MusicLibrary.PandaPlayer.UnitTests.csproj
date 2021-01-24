@@ -5,7 +5,7 @@
   </ImportGroup>
 
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>$(WpfTargetFramework)</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

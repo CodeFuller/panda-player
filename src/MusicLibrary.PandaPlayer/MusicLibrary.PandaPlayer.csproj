@@ -7,7 +7,7 @@
   <PropertyGroup>
     <Version>3.7.2</Version>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>$(WpfTargetFramework)</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Views\Icons\PandaPlayer.ico</ApplicationIcon>
     <AssemblyName>PandaPlayer</AssemblyName>

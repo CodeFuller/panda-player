@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <WpfTargetFramework>net5.0-windows</WpfTargetFramework>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
