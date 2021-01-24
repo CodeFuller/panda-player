@@ -15,6 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.LastFM.UnitTes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A067007-9BD3-4EF3-ADA9-68A04CEED64B}"
 	ProjectSection(SolutionItems) = preProject
+		CHANGELOG.md = CHANGELOG.md
 		MusicLibrary.props = MusicLibrary.props
 		MusicLibrary.src.props = MusicLibrary.src.props
 		MusicLibrary.tests.props = MusicLibrary.tests.props
