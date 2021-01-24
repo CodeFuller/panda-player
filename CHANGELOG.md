@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.8.0 - 2021-01-24
+- Re-targeted to .NET 5.0.
+- Updated CodeFuller.Library to version 7.2.0.
+- Added MIT license.
+
 ## 3.7.2 - 2020-07-23
 - Fixed startup error of loading songs playlist.
 
