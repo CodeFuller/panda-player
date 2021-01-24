@@ -4,6 +4,10 @@
     <Import Project="..\..\MusicLibrary.tests.props" />
   </ImportGroup>
 
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\MusicLibrary.PandaPlayer\MusicLibrary.PandaPlayer.csproj" />
   </ItemGroup>

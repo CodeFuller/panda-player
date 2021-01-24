@@ -265,7 +265,7 @@ namespace MusicLibrary.LastFM.Internal
 
 #pragma warning disable CA1308 // Normalize strings to uppercase - Using of lower case is an external requirement.
 			return BitConverter.ToString(hashBytes)
-				.Replace("-", string.Empty)
+				.Replace("-", string.Empty, StringComparison.Ordinal)
 				.ToLower(CultureInfo.InvariantCulture);
 #pragma warning restore CA1308 // Normalize strings to uppercase
 		}

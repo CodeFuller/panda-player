@@ -4,10 +4,6 @@
     <Import Project="..\..\MusicLibrary.src.props" />
   </ImportGroup>
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="CF.Library.Core" Version="$(CFLibraryVersion)" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(CrossCuttingPackagesVersion)" />

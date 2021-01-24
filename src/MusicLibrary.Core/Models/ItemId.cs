@@ -38,7 +38,7 @@ namespace MusicLibrary.Core.Models
 
 		public override int GetHashCode()
 		{
-			return Value?.GetHashCode() ?? 0;
+			return Value?.GetHashCode(StringComparison.Ordinal) ?? 0;
 		}
 
 		public override string ToString()

@@ -31,8 +31,8 @@ namespace MusicLibrary.LastFM.Objects
 			unchecked
 			{
 				int hash = 17;
-				hash = (hash * 23) + Artist.GetHashCode();
-				hash = (hash * 23) + Title.GetHashCode();
+				hash = (hash * 23) + Artist.GetHashCode(StringComparison.Ordinal);
+				hash = (hash * 23) + Title.GetHashCode(StringComparison.Ordinal);
 				return hash;
 			}
 		}
