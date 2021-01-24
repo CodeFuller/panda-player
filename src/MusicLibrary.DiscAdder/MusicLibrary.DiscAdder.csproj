@@ -1,26 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <ImportGroup Label="Properties">
-    <Import Project="..\..\MusicLibrary.props" />
+    <Import Project="..\..\MusicLibrary.src.props" />
   </ImportGroup>
 
   <PropertyGroup>
-    <TargetFramework>$(TargetAppFramework)</TargetFramework>
+    <TargetFramework>$(WpfProjectTargetFramework)</TargetFramework>
     <UseWPF>true</UseWPF>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <CodeAnalysisRuleSet>..\..\MusicLibrary.src.ruleset</CodeAnalysisRuleSet>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CF.Library.Wpf" Version="$(CFLibraryVersion)" />
     <PackageReference Include="MaterialDesignThemes" Version="3.1.3" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(FxCopAnalyzersVersion)" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
-    <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopAnalyzersVersion)" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

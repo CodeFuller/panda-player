@@ -16,8 +16,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A067007-9BD3-4EF3-ADA9-68A04CEED64B}"
 	ProjectSection(SolutionItems) = preProject
 		MusicLibrary.props = MusicLibrary.props
-		MusicLibrary.src.ruleset = MusicLibrary.src.ruleset
-		MusicLibrary.tests.ruleset = MusicLibrary.tests.ruleset
+		MusicLibrary.src.props = MusicLibrary.src.props
+		MusicLibrary.tests.props = MusicLibrary.tests.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicLibrary.Dal.LocalDb", "src\MusicLibrary.Dal.LocalDb\MusicLibrary.Dal.LocalDb.csproj", "{510E3C70-2733-4586-AA0F-8689C9A88313}"

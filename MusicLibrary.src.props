@@ -1,0 +1,19 @@
+<Project>
+
+  <ImportGroup Label="Properties">
+    <Import Project="MusicLibrary.props" />
+  </ImportGroup>
+
+  <PropertyGroup>
+    <WpfProjectTargetFramework>netcoreapp3.1</WpfProjectTargetFramework>
+    <CrossCuttingPackagesVersion>3.1.1</CrossCuttingPackagesVersion>
+    <CFLibraryVersion>6.0.0</CFLibraryVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\..\MusicLibrary.src.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+</Project>

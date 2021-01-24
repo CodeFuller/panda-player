@@ -1,17 +1,11 @@
 <Project>
   <PropertyGroup>
-    <TargetAppFramework>netcoreapp3.1</TargetAppFramework>
     <LangVersion>latest</LangVersion>
-    <CrossCuttingPackagesVersion>3.1.1</CrossCuttingPackagesVersion>
-    <CFLibraryVersion>6.0.0</CFLibraryVersion>
-    <FxCopAnalyzersVersion>2.9.8</FxCopAnalyzersVersion>
-    <StyleCopAnalyzersVersion>1.1.118</StyleCopAnalyzersVersion>
-    <TestSdkVersion>16.5.0</TestSdkVersion>
-    <NSubstituteVersion>3.1.0</NSubstituteVersion>
-    <NUnitVersion>3.6.1</NUnitVersion>
-    <NUnit3TestAdapterVersion>3.10.0</NUnit3TestAdapterVersion>
-    <TestAdapterVersion>2.1.0</TestAdapterVersion>
-    <TestFrameworkVersion>2.1.0</TestFrameworkVersion>
-    <AutoMockVersion>2.0.0</AutoMockVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8" PrivateAssets="all" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="all" />
+  </ItemGroup>
+
 </Project>
