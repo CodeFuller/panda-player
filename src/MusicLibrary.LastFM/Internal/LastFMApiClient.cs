@@ -21,8 +21,6 @@ namespace MusicLibrary.LastFM.Internal
 {
 	internal class LastFMApiClient : ILastFMApiClient
 	{
-		private static readonly Uri ApiBaseUri = new Uri(@"http://ws.audioscrobbler.com/2.0/");
-
 		private readonly ILogger<LastFMApiClient> logger;
 		private readonly LastFmClientSettings settings;
 
@@ -159,7 +157,7 @@ namespace MusicLibrary.LastFM.Internal
 			return await PerformHttpRequest<TData>(request, cancellationToken);
 		}
 
-		private static async Task<TData> PerformHttpRequest<TData>(HttpRequestMessage request, CancellationToken cancellationToken)
+		private async Task<TData> PerformHttpRequest<TData>(HttpRequestMessage request, CancellationToken cancellationToken)
 			where TData : class
 		{
 			using var clientHandler = new HttpClientHandler
@@ -170,7 +168,7 @@ namespace MusicLibrary.LastFM.Internal
 
 			using var client = new HttpClient(clientHandler, true)
 			{
-				BaseAddress = ApiBaseUri,
+				BaseAddress = settings.ApiBaseUri,
 			};
 
 			client.DefaultRequestHeaders.Accept.Clear();
