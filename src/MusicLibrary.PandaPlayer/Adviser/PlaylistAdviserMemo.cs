@@ -8,6 +8,7 @@ namespace MusicLibrary.PandaPlayer.Adviser
 
 		public int PlaybacksSinceFavoriteArtistDisc { get; }
 
+		// TODO: Change properties to init only and avoid constructor parameters. Will deserialization work correctly?
 		public PlaylistAdviserMemo(int playbacksSinceHighlyRatedSongsPlaylist, int playbacksSinceFavoriteArtistDisc)
 		{
 			PlaybacksSinceHighlyRatedSongsPlaylist = playbacksSinceHighlyRatedSongsPlaylist;
