@@ -15,7 +15,7 @@ using MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
 using MusicLibrary.PandaPlayer.Adviser.Settings;
 using MusicLibrary.Services.Interfaces;
 
-namespace MusicLibrary.PandaPlayer.UnitTests.PlaylistAdvisers
+namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 {
 	[TestClass]
 	public class CompositePlaylistAdviserTests
