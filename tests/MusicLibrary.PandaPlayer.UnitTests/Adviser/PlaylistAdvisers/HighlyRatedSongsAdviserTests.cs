@@ -8,6 +8,7 @@ using Moq;
 using Moq.AutoMock;
 using MusicLibrary.Core.Facades;
 using MusicLibrary.Core.Models;
+using MusicLibrary.PandaPlayer.Adviser;
 using MusicLibrary.PandaPlayer.Adviser.Interfaces;
 using MusicLibrary.PandaPlayer.Adviser.Internal;
 using MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers;
@@ -507,6 +508,47 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			Assert.AreEqual(1, advises.Count);
 			CollectionAssert.AreEqual(new[] { song12, song06, song11, song10, song05, song09, song08, song04, song07, song03, song02, song01 }, advises.Single().Songs.ToList());
+		}
+
+		[TestMethod]
+		public void Advise_CreatesAdvisedPlaylistOfCorrectType()
+		{
+			// Arrange
+
+			var settings = new HighlyRatedSongsAdviserSettings
+			{
+				OneAdviseSongsNumber = 12,
+				MaxTerms = new[]
+				{
+					new MaxRatingTerm
+					{
+						Rating = RatingModel.R10,
+						Days = 30,
+					},
+				},
+			};
+
+			var songs = Enumerable.Range(1, 12).Select(n => CreateTestSong(n, RatingModel.R10, new DateTime(2017, 09, 01, 15, 48, n))).ToList();
+			var discs = new[] { CreateTestDisc(1, songs) };
+			var playbacksInfo = new PlaybacksInfo(discs);
+
+			var clockStub = new Mock<IClock>();
+			clockStub.Setup(x => x.Now).Returns(new DateTime(2017, 10, 07));
+
+			var mocker = new AutoMocker();
+			mocker.Use(clockStub);
+			mocker.Use(Options.Create(settings));
+
+			var target = mocker.CreateInstance<HighlyRatedSongsAdviser>();
+
+			// Act
+
+			var advises = target.Advise(discs, playbacksInfo).ToList();
+
+			// Assert
+
+			Assert.AreEqual(1, advises.Count);
+			Assert.AreEqual(AdvisedPlaylistType.HighlyRatedSongs, advises[0].AdvisedPlaylistType);
 		}
 
 		private static DiscModel CreateTestDisc(int id, IEnumerable<SongModel> songs)
