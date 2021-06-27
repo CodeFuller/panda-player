@@ -11,18 +11,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser
 	public class AdvisedPlaylistTests
 	{
 		[TestMethod]
-		public void DiscGetter_ForForHighlyRatedSongsPlaylist_ThrowsInvalidOperationException()
-		{
-			// Arrange
-
-			var target = AdvisedPlaylist.ForHighlyRatedSongs(Enumerable.Empty<SongModel>());
-
-			// Act & Assert
-
-			Assert.ThrowsException<InvalidOperationException>(() => target.Disc);
-		}
-
-		[TestMethod]
 		public void ForDisc_FillsPlaylistTypeCorrectly()
 		{
 			// Arrange
@@ -249,6 +237,20 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser
 			// Assert
 
 			CollectionAssert.AreEqual(new[] { song1, song2 }, target.Songs.ToList());
+		}
+
+		[TestMethod]
+		public void ForHighlyRatedSongs_DoesNotFillDisc()
+		{
+			// Arrange
+
+			// Act
+
+			var target = AdvisedPlaylist.ForHighlyRatedSongs(Enumerable.Empty<SongModel>());
+
+			// Assert
+
+			Assert.IsNull(target.Disc);
 		}
 	}
 }

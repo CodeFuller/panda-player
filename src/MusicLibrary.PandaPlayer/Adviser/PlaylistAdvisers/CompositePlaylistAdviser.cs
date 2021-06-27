@@ -16,7 +16,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 	{
 		private const string PlaylistAdviserDataKey = "PlaylistAdviserData";
 
-		private readonly IPlaylistAdviser usualDiscsAdviser;
+		private readonly IPlaylistAdviser rankedDiscsAdviser;
 		private readonly IPlaylistAdviser highlyRatedSongsAdviser;
 		private readonly IPlaylistAdviser favoriteArtistDiscsAdviser;
 		private readonly ISessionDataService sessionDataService;
@@ -24,10 +24,10 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 
 		private PlaylistAdviserMemo Memo { get; set; }
 
-		public CompositePlaylistAdviser(IPlaylistAdviser usualDiscsAdviser, IPlaylistAdviser highlyRatedSongsAdviser,
+		public CompositePlaylistAdviser(IPlaylistAdviser rankedDiscsAdviser, IPlaylistAdviser highlyRatedSongsAdviser,
 			IPlaylistAdviser favoriteArtistDiscsAdviser, ISessionDataService sessionDataService, IOptions<AdviserSettings> options)
 		{
-			this.usualDiscsAdviser = usualDiscsAdviser ?? throw new ArgumentNullException(nameof(usualDiscsAdviser));
+			this.rankedDiscsAdviser = rankedDiscsAdviser ?? throw new ArgumentNullException(nameof(rankedDiscsAdviser));
 			this.highlyRatedSongsAdviser = highlyRatedSongsAdviser ?? throw new ArgumentNullException(nameof(highlyRatedSongsAdviser));
 			this.favoriteArtistDiscsAdviser = favoriteArtistDiscsAdviser ?? throw new ArgumentNullException(nameof(favoriteArtistDiscsAdviser));
 			this.sessionDataService = sessionDataService ?? throw new ArgumentNullException(nameof(sessionDataService));
@@ -42,35 +42,32 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 			var discsList = discs.ToList();
 			var playbacksInfo = new PlaybacksInfo(discsList);
 
-			var highlyRatedSongsAdvises = new Queue<AdvisedPlaylist>(highlyRatedSongsAdviser.Advise(discsList, playbacksInfo));
-			var favoriteArtistDiscsAdvises = new Queue<AdvisedPlaylist>(favoriteArtistDiscsAdviser.Advise(discsList, playbacksInfo));
-			var rankedDiscsAdvises = new Queue<AdvisedPlaylist>(usualDiscsAdviser.Advise(discsList, playbacksInfo));
+			var highlyRatedSongsAdvises = highlyRatedSongsAdviser.Advise(discsList, playbacksInfo);
+			var favoriteArtistDiscsAdvises = favoriteArtistDiscsAdviser.Advise(discsList, playbacksInfo);
+			var rankedDiscsAdvises = rankedDiscsAdviser.Advise(discsList, playbacksInfo);
+
+			var playlistQueue = new CompositeAdvisedPlaylistQueue(highlyRatedSongsAdvises, favoriteArtistDiscsAdvises, rankedDiscsAdvises);
 
 			var advisedPlaylists = new List<AdvisedPlaylist>(requiredAdvisesCount);
 
 			var advisedDiscs = new HashSet<ItemId>();
-			while (rankedDiscsAdvises.Count > 0 && advisedPlaylists.Count < requiredAdvisesCount)
+			while (advisedPlaylists.Count < requiredAdvisesCount)
 			{
-				AdvisedPlaylist currentAdvise;
-
-				if (highlyRatedSongsAdvises.Count > 0 && playbacksMemo.PlaybacksSinceHighlyRatedSongsPlaylist + 1 >= settings.HighlyRatedSongsAdviser.PlaybacksBetweenHighlyRatedSongs)
+				var currentAdvise = GetNextAdvisedPlaylist(playbacksMemo, playlistQueue);
+				if (currentAdvise == null)
 				{
-					currentAdvise = highlyRatedSongsAdvises.Dequeue();
+					break;
 				}
-				else
-				{
-					var adviseQueue = favoriteArtistDiscsAdvises.Count > 0 &&
-					                        playbacksMemo.PlaybacksSinceFavoriteArtistDisc + 1 >= settings.FavoriteArtistsAdviser.PlaybacksBetweenFavoriteArtistDiscs
-						? favoriteArtistDiscsAdvises
-						: rankedDiscsAdvises;
 
-					currentAdvise = adviseQueue.Dequeue();
-					if (advisedDiscs.Contains(currentAdvise.Disc.Id))
+				var advisedDisc = currentAdvise.Disc;
+				if (advisedDisc != null)
+				{
+					if (advisedDiscs.Contains(advisedDisc.Id))
 					{
 						continue;
 					}
 
-					advisedDiscs.Add(currentAdvise.Disc.Id);
+					advisedDiscs.Add(advisedDisc.Id);
 				}
 
 				advisedPlaylists.Add(currentAdvise);
@@ -80,10 +77,27 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 			return advisedPlaylists;
 		}
 
+		private AdvisedPlaylist GetNextAdvisedPlaylist(PlaylistAdviserMemo playbacksMemo, CompositeAdvisedPlaylistQueue playlistQueue)
+		{
+			if (playbacksMemo.PlaybacksSinceHighlyRatedSongsPlaylist + 1 >= settings.HighlyRatedSongsAdviser.PlaybacksBetweenHighlyRatedSongs &&
+			    playlistQueue.TryDequeueHighlyRatedSongsAdvise(out var currentAdvise))
+			{
+				return currentAdvise;
+			}
+
+			if (playbacksMemo.PlaybacksSinceFavoriteArtistDisc + 1 >= settings.FavoriteArtistsAdviser.PlaybacksBetweenFavoriteArtistDiscs &&
+			    playlistQueue.TryDequeueFavoriteArtistDiscsAdvise(out currentAdvise))
+			{
+				return currentAdvise;
+			}
+
+			return playlistQueue.TryDequeueRankedDiscsAdvise(out currentAdvise) ? currentAdvise : null;
+		}
+
 		private PlaylistAdviserMemo CreateDefaultMemo()
 		{
 			// If no previous PlaylistAdviserMemo exist, we're initializing memo with threshold values so that promoted advises go first.
-			return new PlaylistAdviserMemo(settings.HighlyRatedSongsAdviser.PlaybacksBetweenHighlyRatedSongs, settings.FavoriteArtistsAdviser.PlaybacksBetweenFavoriteArtistDiscs);
+			return new(settings.HighlyRatedSongsAdviser.PlaybacksBetweenHighlyRatedSongs, settings.FavoriteArtistsAdviser.PlaybacksBetweenFavoriteArtistDiscs);
 		}
 
 		public async Task RegisterAdvicePlayback(AdvisedPlaylist advise, CancellationToken cancellationToken)
