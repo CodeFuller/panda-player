@@ -5,7 +5,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.Grouping
 {
 	internal class DiscGroup
 	{
-		private readonly List<DiscModel> discs = new List<DiscModel>();
+		private readonly List<DiscModel> discs = new();
 
 		public string Id { get; }
 
