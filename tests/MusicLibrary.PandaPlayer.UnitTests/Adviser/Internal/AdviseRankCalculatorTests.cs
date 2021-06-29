@@ -377,7 +377,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.Internal
 			return new()
 			{
 				Id = new ItemId(id.ToString(CultureInfo.InvariantCulture)),
-				TreeTitle = $"Song {id:D3}",
 				Rating = rating,
 				LastPlaybackTime = lastPlaybackTime,
 				DeleteDate = isDeleted ? new DateTime(2021, 06, 29) : null,
