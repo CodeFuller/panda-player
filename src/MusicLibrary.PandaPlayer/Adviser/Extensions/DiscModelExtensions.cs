@@ -1,13 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 using MusicLibrary.Core.Models;
 
 namespace MusicLibrary.PandaPlayer.Adviser.Extensions
 {
 	internal static class DiscModelExtensions
 	{
-		public static IEnumerable<SongModel> GetDiscSongsForAnalysis(this DiscModel disc)
+		public static DateTimeOffset? GetLastPlaybackTime(this DiscModel disc)
 		{
-			return disc.IsDeleted ? disc.AllSongs : disc.ActiveSongs;
+			var analyzedSongs = (disc.IsDeleted ? disc.AllSongs : disc.ActiveSongs).ToList();
+			return analyzedSongs.Any(s => s.LastPlaybackTime == null) ? null : analyzedSongs.Select(s => s.LastPlaybackTime).Min();
+		}
+
+		public static double GetRating(this DiscModel disc)
+		{
+			return disc.ActiveSongs
+				.Select(song => song.GetRatingOrDefault())
+				.Select(rating => rating.GetRatingValueForDiscAdviser())
+				.Average();
 		}
 	}
 }

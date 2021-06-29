@@ -1,37 +1,33 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using MusicLibrary.Core.Models;
+using MusicLibrary.PandaPlayer.Adviser.Extensions;
 using MusicLibrary.PandaPlayer.Adviser.Grouping;
 using MusicLibrary.PandaPlayer.Adviser.Internal;
-using MusicLibrary.Shared.Extensions;
 
 namespace MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser
 {
 	internal class RankedDiscGroup
 	{
-		private readonly string discGroupId;
+		private readonly Lazy<int> playbacksPassedLazy;
 
-		public Collection<RankedDisc> RankedDiscs { get; }
+		public DiscGroup DiscGroup { get; }
+
+		public IReadOnlyCollection<DiscModel> Discs => DiscGroup.Discs;
 
 		// Deleted discs are also included
-		public int PlaybacksPassed => RankedDiscs.Select(d => d.PlaybacksPassed).Min();
+		public int PlaybacksPassed => playbacksPassedLazy.Value;
 
-		public double Rating => RankedDiscs.Where(rd => !rd.Disc.IsDeleted).Select(rd => rd.Rating).Average();
+		public double Rating => Discs.Where(d => !d.IsDeleted).Select(d => d.GetRating()).Average();
 
 		public RankedDiscGroup(DiscGroup discGroup, PlaybacksInfo playbacksInfo)
 		{
-			discGroupId = discGroup.Id;
-			RankedDiscs = discGroup.Discs.Select(d => new RankedDisc(d, playbacksInfo.GetPlaybacksPassed(d))).ToCollection();
-		}
+			DiscGroup = discGroup ?? throw new ArgumentNullException(nameof(discGroup));
 
-		public DiscGroup BuildDiscGroup()
-		{
-			var discGroup = new DiscGroup(discGroupId);
-			foreach (var rd in RankedDiscs.Select(rd => rd.Disc))
-			{
-				discGroup.AddDisc(rd);
-			}
-
-			return discGroup;
+			// We use Lazy because Discs could be empty. In this case Lazy value will not be requested.
+			// Otherwise, Min() will throw on empty sequence.
+			playbacksPassedLazy = new Lazy<int>(() => Discs.Select(playbacksInfo.GetPlaybacksPassed).Min());
 		}
 	}
 }

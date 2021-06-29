@@ -28,7 +28,7 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			HighlyRatedSongsAdviser Call() => new(Mock.Of<IAdviseFactorsProvider>(), Mock.Of<IClock>(), Options.Create(settings));
+			HighlyRatedSongsAdviser Call() => new(Mock.Of<IAdviseRankCalculator>(), Mock.Of<IClock>(), Options.Create(settings));
 
 			// Assert
 
@@ -53,7 +53,7 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 				},
 			};
 
-			var songs = Enumerable.Range(1, 12).Select(n => CreateTestSong(n, RatingModel.R10, new DateTime(2017, 09, 01, 15, 48, n))).ToList();
+			var songs = Enumerable.Range(1, 12).Select(id => CreateTestSong(id, RatingModel.R10, new DateTime(2017, 09, 01))).ToList();
 			var discs = new[] { CreateTestDisc(1, songs) };
 			var playbacksInfo = new PlaybacksInfo(discs);
 
@@ -61,7 +61,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			clockStub.Setup(x => x.Now).Returns(new DateTime(2017, 10, 07));
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
 			mocker.Use(clockStub);
 			mocker.Use(Options.Create(settings));
 
@@ -95,7 +94,7 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 				},
 			};
 
-			var songs = Enumerable.Range(1, 12).Select(n => CreateTestSong(n, RatingModel.R10, lastPlaybackTime: null)).ToList();
+			var songs = Enumerable.Range(1, 12).Select(id => CreateTestSong(id, RatingModel.R10, lastPlaybackTime: null)).ToList();
 			var discs = new[] { CreateTestDisc(1, songs) };
 			var playbacksInfo = new PlaybacksInfo(discs);
 
@@ -103,7 +102,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			clockStub.Setup(x => x.Now).Returns(new DateTime(2017, 10, 01));
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
 			mocker.Use(clockStub);
 			mocker.Use(Options.Create(settings));
 
@@ -137,7 +135,7 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 				},
 			};
 
-			var songs = Enumerable.Range(1, 12).Select(n => CreateTestSong(n, RatingModel.R10, new DateTime(2017, 09, 05))).ToList();
+			var songs = Enumerable.Range(1, 12).Select(id => CreateTestSong(id, RatingModel.R10, new DateTime(2017, 09, 05))).ToList();
 			var discs = new[] { CreateTestDisc(1, songs) };
 			var playbacksInfo = new PlaybacksInfo(discs);
 
@@ -145,7 +143,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			clockStub.Setup(x => x.Now).Returns(new DateTime(2017, 10, 01));
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
 			mocker.Use(clockStub);
 			mocker.Use(Options.Create(settings));
 
@@ -161,7 +158,7 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void Advise_DoesNotReturnNotHighlyRatedSongs()
+		public void Advise_DoesNotReturnNonHighlyRatedSongs()
 		{
 			// Arrange
 
@@ -178,7 +175,7 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 				},
 			};
 
-			var songs = Enumerable.Range(1, 12).Select(n => CreateTestSong(n, RatingModel.R9, lastPlaybackTime: null)).ToList();
+			var songs = Enumerable.Range(1, 12).Select(id => CreateTestSong(id, RatingModel.R9, lastPlaybackTime: null)).ToList();
 			var discs = new[] { CreateTestDisc(1, songs) };
 			var playbacksInfo = new PlaybacksInfo(discs);
 
@@ -186,7 +183,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			clockStub.Setup(x => x.Now).Returns(new DateTime(2017, 10, 01));
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
 			mocker.Use(clockStub);
 			mocker.Use(Options.Create(settings));
 
@@ -219,8 +215,8 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 				},
 			};
 
-			var songs1 = Enumerable.Range(1, 12).Select(n => CreateTestSong(n, RatingModel.R10, lastPlaybackTime: null)).ToList();
-			var songs2 = Enumerable.Range(13, 12).Select(n => CreateTestSong(n, RatingModel.R10, lastPlaybackTime: null)).ToList();
+			var songs1 = Enumerable.Range(1, 12).Select(id => CreateTestSong(id, RatingModel.R10, lastPlaybackTime: null)).ToList();
+			var songs2 = Enumerable.Range(13, 12).Select(id => CreateTestSong(id, RatingModel.R10, lastPlaybackTime: null)).ToList();
 			var discs = new[] { CreateTestDisc(1, songs1), CreateTestDisc(2, songs2) };
 			var playbacksInfo = new PlaybacksInfo(discs);
 
@@ -228,7 +224,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			clockStub.Setup(x => x.Now).Returns(new DateTime(2017, 10, 01));
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
 			mocker.Use(clockStub);
 			mocker.Use(Options.Create(settings));
 
@@ -263,7 +258,7 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 				},
 			};
 
-			var songs = Enumerable.Range(1, 11).Select(n => CreateTestSong(n, RatingModel.R10, lastPlaybackTime: null)).ToList();
+			var songs = Enumerable.Range(1, 11).Select(id => CreateTestSong(id, RatingModel.R10, lastPlaybackTime: null)).ToList();
 			var discs = new[] { CreateTestDisc(1, songs) };
 			var playbacksInfo = new PlaybacksInfo(discs);
 
@@ -271,7 +266,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			clockStub.Setup(x => x.Now).Returns(new DateTime(2017, 10, 01));
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
 			mocker.Use(clockStub);
 			mocker.Use(Options.Create(settings));
 
@@ -304,8 +298,8 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 				},
 			};
 
-			var songs1 = Enumerable.Range(1, 12).Select(n => CreateTestSong(n, RatingModel.R10, lastPlaybackTime: null)).ToList();
-			var songs2 = Enumerable.Range(13, 11).Select(n => CreateTestSong(n, RatingModel.R10, lastPlaybackTime: null)).ToList();
+			var songs1 = Enumerable.Range(1, 12).Select(id => CreateTestSong(id, RatingModel.R10, lastPlaybackTime: null)).ToList();
+			var songs2 = Enumerable.Range(13, 11).Select(id => CreateTestSong(id, RatingModel.R10, lastPlaybackTime: null)).ToList();
 			var discs = new[] { CreateTestDisc(1, songs1), CreateTestDisc(2, songs2) };
 			var playbacksInfo = new PlaybacksInfo(discs);
 
@@ -313,7 +307,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			clockStub.Setup(x => x.Now).Returns(new DateTime(2017, 10, 01));
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
 			mocker.Use(clockStub);
 			mocker.Use(Options.Create(settings));
 
@@ -330,62 +323,13 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void Advise_SongsWithDifferentRatingAreAdvised_ReturnsSongsWithHigherRatingFirst()
+		public void Advise_IfSongsAreAdvised_ReturnsSongsWithHigherRankFirst()
 		{
 			// Arrange
 
 			var settings = new HighlyRatedSongsAdviserSettings
 			{
-				OneAdviseSongsNumber = 12,
-				MaxTerms = new[]
-				{
-					new MaxRatingTerm
-					{
-						Rating = RatingModel.R10,
-						Days = 30,
-					},
-					new MaxRatingTerm
-					{
-						Rating = RatingModel.R9,
-						Days = 60,
-					},
-				},
-			};
-
-			var songs1 = Enumerable.Range(1, 12).Select(n => CreateTestSong(n, RatingModel.R9, lastPlaybackTime: null)).ToList();
-			var songs2 = Enumerable.Range(1, 12).Select(n => CreateTestSong(12 + n, RatingModel.R10, lastPlaybackTime: null)).ToList();
-			var discs = new[] { CreateTestDisc(1, songs1), CreateTestDisc(2, songs2) };
-			var playbacksInfo = new PlaybacksInfo(discs);
-
-			var clockStub = new Mock<IClock>();
-			clockStub.Setup(x => x.Now).Returns(new DateTime(2017, 10, 01));
-
-			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
-			mocker.Use(clockStub);
-			mocker.Use(Options.Create(settings));
-
-			var target = mocker.CreateInstance<HighlyRatedSongsAdviser>();
-
-			// Act
-
-			var advises = target.Advise(discs, playbacksInfo).ToList();
-
-			// Assert
-
-			Assert.AreEqual(2, advises.Count);
-			CollectionAssert.AreEqual(songs2, advises[0].Songs.ToList());
-			CollectionAssert.AreEqual(songs1, advises[1].Songs.ToList());
-		}
-
-		[TestMethod]
-		public void Advise_IfSongsAreAdvised_ReturnsSongsWithGreaterPlaybackAgeFirst()
-		{
-			// Arrange
-
-			var settings = new HighlyRatedSongsAdviserSettings
-			{
-				OneAdviseSongsNumber = 12,
+				OneAdviseSongsNumber = 3,
 				MaxTerms = new[]
 				{
 					new MaxRatingTerm
@@ -396,105 +340,22 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 				},
 			};
 
-			var songs1 = Enumerable.Range(1, 12).Select(n => CreateTestSong(n, RatingModel.R10, new DateTime(2017, 02, 01 + n))).ToList();
-			var songs2 = Enumerable.Range(13, 12).Select(n => CreateTestSong(n, RatingModel.R10, new DateTime(2017, 01, 01 + n))).ToList();
-			var discs = new[] { CreateTestDisc(1, songs1), CreateTestDisc(2, songs2) };
+			var song1 = CreateTestSong(1, RatingModel.R10, new DateTime(2017, 02, 01));
+			var song2 = CreateTestSong(2, RatingModel.R10, new DateTime(2017, 02, 01));
+			var song3 = CreateTestSong(3, RatingModel.R10, new DateTime(2017, 02, 01));
+			var discs = new[] { CreateTestDisc(1, new[] { song1, song2, song3 }) };
 			var playbacksInfo = new PlaybacksInfo(discs);
+
+			var adviseRankCalculatorStub = new Mock<IAdviseRankCalculator>();
+			adviseRankCalculatorStub.Setup(x => x.CalculateSongRank(song1, playbacksInfo)).Returns(0.25);
+			adviseRankCalculatorStub.Setup(x => x.CalculateSongRank(song2, playbacksInfo)).Returns(0.75);
+			adviseRankCalculatorStub.Setup(x => x.CalculateSongRank(song3, playbacksInfo)).Returns(0.50);
 
 			var clockStub = new Mock<IClock>();
 			clockStub.Setup(x => x.Now).Returns(new DateTime(2017, 10, 01));
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
-			mocker.Use(clockStub);
-			mocker.Use(Options.Create(settings));
-
-			var target = mocker.CreateInstance<HighlyRatedSongsAdviser>();
-
-			// Act
-
-			var advises = target.Advise(discs, playbacksInfo).ToList();
-
-			// Assert
-
-			Assert.AreEqual(2, advises.Count);
-			CollectionAssert.AreEqual(songs2, advises[0].Songs.ToList());
-			CollectionAssert.AreEqual(songs1, advises[1].Songs.ToList());
-		}
-
-		[TestMethod]
-		public void Advise_WhenSongsAreAdvised_OrdersThemByProductOfRatingAndPlaybackAgeFactors()
-		{
-			// Arrange
-
-			var settings = new HighlyRatedSongsAdviserSettings
-			{
-				OneAdviseSongsNumber = 12,
-				MaxTerms = new[]
-				{
-					new MaxRatingTerm
-					{
-						Rating = RatingModel.R10,
-						Days = 30,
-					},
-					new MaxRatingTerm
-					{
-						Rating = RatingModel.R9,
-						Days = 60,
-					},
-				},
-			};
-
-			// Rank = 2 * 0 = 0
-			var song01 = CreateTestSong(1, RatingModel.R10, new DateTime(2017, 01, 12));
-
-			// Rank = 2 * 1 = 2
-			var song02 = CreateTestSong(2, RatingModel.R10, new DateTime(2017, 01, 11));
-
-			// Rank = 2 * 2 = 4
-			var song03 = CreateTestSong(3, RatingModel.R10, new DateTime(2017, 01, 10));
-
-			// Rank = 2 * 3 = 6
-			var song04 = CreateTestSong(4, RatingModel.R10, new DateTime(2017, 01, 09));
-
-			// Rank = 2 * 4 = 8
-			var song05 = CreateTestSong(5, RatingModel.R10, new DateTime(2017, 01, 08));
-
-			// Rank = 2 * 5 = 10
-			var song06 = CreateTestSong(6, RatingModel.R10, new DateTime(2017, 01, 07));
-
-			// Rank = 1 * 6 = 6
-			var song07 = CreateTestSong(7, RatingModel.R9, new DateTime(2017, 01, 06));
-
-			// Rank = 1 * 7 = 7
-			var song08 = CreateTestSong(8, RatingModel.R9, new DateTime(2017, 01, 05));
-
-			// Rank = 1 * 8 = 8
-			var song09 = CreateTestSong(9, RatingModel.R9, new DateTime(2017, 01, 04));
-
-			// Rank = 1 * 9 = 9
-			var song10 = CreateTestSong(10, RatingModel.R9, new DateTime(2017, 01, 03));
-
-			// Rank = 1 * 10 = 10
-			var song11 = CreateTestSong(11, RatingModel.R9, new DateTime(2017, 01, 02));
-
-			// Rank = 1 * 11 = 11
-			var song12 = CreateTestSong(12, RatingModel.R9, new DateTime(2017, 01, 01));
-
-			var songs = new[] { song01, song02, song03, song04, song05, song06, song07, song08, song09, song10, song11, song12 };
-			var discs = new[] { CreateTestDisc(1, songs) };
-			var playbacksInfo = new PlaybacksInfo(discs);
-
-			var clockStub = new Mock<IClock>();
-			clockStub.Setup(x => x.Now).Returns(new DateTime(2017, 10, 01));
-
-			var adviseFactorsProvider = new Mock<IAdviseFactorsProvider>();
-			adviseFactorsProvider.Setup(x => x.GetFactorForRating(RatingModel.R10)).Returns(2);
-			adviseFactorsProvider.Setup(x => x.GetFactorForRating(RatingModel.R9)).Returns(1);
-			adviseFactorsProvider.Setup(x => x.GetFactorForPlaybackAge(It.IsAny<int>())).Returns<int>(age => age);
-
-			var mocker = new AutoMocker();
-			mocker.Use(adviseFactorsProvider);
+			mocker.Use(adviseRankCalculatorStub);
 			mocker.Use(clockStub);
 			mocker.Use(Options.Create(settings));
 
@@ -507,7 +368,64 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			// Assert
 
 			Assert.AreEqual(1, advises.Count);
-			CollectionAssert.AreEqual(new[] { song12, song06, song11, song10, song05, song09, song08, song04, song07, song03, song02, song01 }, advises.Single().Songs.ToList());
+			CollectionAssert.AreEqual(new[] { song2, song3, song1 }, advises[0].Songs.ToList());
+		}
+
+		[TestMethod]
+		public void Advise_SongsHaveEqualRank_ReturnsSongsWithHigherRatingFirst()
+		{
+			// Arrange
+
+			var settings = new HighlyRatedSongsAdviserSettings
+			{
+				OneAdviseSongsNumber = 3,
+				MaxTerms = new[]
+				{
+					new MaxRatingTerm
+					{
+						Rating = RatingModel.R10,
+						Days = 30,
+					},
+					new MaxRatingTerm
+					{
+						Rating = RatingModel.R9,
+						Days = 60,
+					},
+					new MaxRatingTerm
+					{
+						Rating = RatingModel.R8,
+						Days = 90,
+					},
+				},
+			};
+
+			var song1 = CreateTestSong(1, RatingModel.R8, new DateTime(2017, 02, 01));
+			var song2 = CreateTestSong(2, RatingModel.R10, new DateTime(2017, 02, 01));
+			var song3 = CreateTestSong(3, RatingModel.R9, new DateTime(2017, 02, 01));
+			var discs = new[] { CreateTestDisc(1, new[] { song1, song2, song3 }) };
+			var playbacksInfo = new PlaybacksInfo(discs);
+
+			var adviseRankCalculatorStub = new Mock<IAdviseRankCalculator>();
+			adviseRankCalculatorStub.Setup(x => x.CalculateSongRank(It.IsAny<SongModel>(), playbacksInfo)).Returns(0.50);
+
+			var clockStub = new Mock<IClock>();
+			clockStub.Setup(x => x.Now).Returns(new DateTime(2017, 10, 01));
+
+			var mocker = new AutoMocker();
+			mocker.Use(adviseRankCalculatorStub);
+			mocker.Use(clockStub);
+			mocker.Use(Options.Create(settings));
+
+			var target = mocker.CreateInstance<HighlyRatedSongsAdviser>();
+
+			// Act
+
+			var advises = target.Advise(discs, playbacksInfo).ToList();
+
+			// Assert
+
+			Assert.AreEqual(1, advises.Count);
+			CollectionAssert.AreEqual(new[] { song2, song3, song1 }, advises[0].Songs.ToList());
 		}
 
 		[TestMethod]
@@ -528,7 +446,7 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 				},
 			};
 
-			var songs = Enumerable.Range(1, 12).Select(n => CreateTestSong(n, RatingModel.R10, new DateTime(2017, 09, 01, 15, 48, n))).ToList();
+			var songs = Enumerable.Range(1, 12).Select(id => CreateTestSong(id, RatingModel.R10, new DateTime(2017, 09, 01))).ToList();
 			var discs = new[] { CreateTestDisc(1, songs) };
 			var playbacksInfo = new PlaybacksInfo(discs);
 

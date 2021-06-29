@@ -23,12 +23,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.Internal
 
 		public double GetFactorForAverageRating(double rating)
 		{
-			return GetFactorForRatingValue(rating);
-		}
-
-		private static double GetFactorForRatingValue(double ratingValue)
-		{
-			return Math.Pow(RatingFactorMultiplier, ratingValue);
+			return Math.Pow(RatingFactorMultiplier, rating);
 		}
 
 		public double GetFactorForPlaybackAge(int playbackAge)

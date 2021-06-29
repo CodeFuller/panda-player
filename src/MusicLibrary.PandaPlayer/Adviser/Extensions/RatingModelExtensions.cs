@@ -6,7 +6,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.Extensions
 {
 	internal static class RatingModelExtensions
 	{
-		private static readonly Dictionary<RatingModel, double> RatingValues = new Dictionary<RatingModel, double>
+		private static readonly Dictionary<RatingModel, double> RatingValues = new()
 		{
 			{ RatingModel.R1, 1 },
 			{ RatingModel.R2, 2 },

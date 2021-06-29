@@ -10,40 +10,26 @@ namespace MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser
 {
 	internal class RankBasedDiscGroupSorter : IDiscGroupSorter
 	{
-		private readonly IAdviseFactorsProvider adviseFactorsProvider;
+		private readonly IAdviseRankCalculator adviseRankCalculator;
 
-		public RankBasedDiscGroupSorter(IAdviseFactorsProvider adviseFactorsProvider)
+		public RankBasedDiscGroupSorter(IAdviseRankCalculator adviseRankCalculator)
 		{
-			this.adviseFactorsProvider = adviseFactorsProvider ?? throw new ArgumentNullException(nameof(adviseFactorsProvider));
+			this.adviseRankCalculator = adviseRankCalculator ?? throw new ArgumentNullException(nameof(adviseRankCalculator));
 		}
 
 		public IEnumerable<DiscGroup> SortDiscGroups(IEnumerable<DiscGroup> discGroups, PlaybacksInfo playbacksInfo)
 		{
-			var rankedGroups = discGroups.Select(dg => new RankedDiscGroup(dg, playbacksInfo)).ToList();
-			return rankedGroups
-				.OrderByDescending(CalculateDiscGroupRank)
-				.Select(rdg => rdg.BuildDiscGroup());
+			return discGroups
+				.Select(dg => new RankedDiscGroup(dg, playbacksInfo))
+				.OrderByDescending(rdg => adviseRankCalculator.CalculateDiscGroupRank(rdg))
+				.Select(rdg => rdg.DiscGroup);
 		}
 
 		public IEnumerable<DiscModel> SortDiscsWithinGroup(DiscGroup discGroup, PlaybacksInfo playbacksInfo)
 		{
 			return discGroup.Discs
 				.Where(d => !d.IsDeleted)
-				.Select(d => new RankedDisc(d, playbacksInfo.GetPlaybacksPassed(d)))
-				.OrderByDescending(CalculateDiscRankWithinGroup).Select(d => d.Disc);
-		}
-
-		private double CalculateDiscGroupRank(RankedDiscGroup discGroup)
-		{
-			return discGroup.PlaybacksPassed == Int32.MaxValue ? Double.MaxValue :
-					adviseFactorsProvider.GetFactorForGroupDiscsNumber(discGroup.RankedDiscs.Count(d => !d.Disc.IsDeleted)) *
-					adviseFactorsProvider.GetFactorForAverageRating(discGroup.Rating) *
-					adviseFactorsProvider.GetFactorForPlaybackAge(discGroup.PlaybacksPassed);
-		}
-
-		private double CalculateDiscRankWithinGroup(RankedDisc disc)
-		{
-			return adviseFactorsProvider.GetFactorForAverageRating(disc.Rating) * adviseFactorsProvider.GetFactorForPlaybackAge(disc.PlaybacksPassed);
+				.OrderByDescending(d => adviseRankCalculator.CalculateDiscRank(d, playbacksInfo));
 		}
 	}
 }

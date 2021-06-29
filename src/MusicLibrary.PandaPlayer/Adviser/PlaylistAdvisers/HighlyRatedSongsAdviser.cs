@@ -15,13 +15,13 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 	{
 		private readonly Dictionary<RatingModel, TimeSpan> maxTermsForRatings;
 
-		private readonly IAdviseFactorsProvider adviseFactorsProvider;
+		private readonly IAdviseRankCalculator adviseRankCalculator;
 		private readonly IClock dateTimeFacade;
 		private readonly HighlyRatedSongsAdviserSettings settings;
 
-		public HighlyRatedSongsAdviser(IAdviseFactorsProvider adviseFactorsProvider, IClock dateTimeFacade, IOptions<HighlyRatedSongsAdviserSettings> options)
+		public HighlyRatedSongsAdviser(IAdviseRankCalculator adviseRankCalculator, IClock dateTimeFacade, IOptions<HighlyRatedSongsAdviserSettings> options)
 		{
-			this.adviseFactorsProvider = adviseFactorsProvider ?? throw new ArgumentNullException(nameof(adviseFactorsProvider));
+			this.adviseRankCalculator = adviseRankCalculator ?? throw new ArgumentNullException(nameof(adviseRankCalculator));
 			this.dateTimeFacade = dateTimeFacade ?? throw new ArgumentNullException(nameof(dateTimeFacade));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
@@ -39,7 +39,7 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 			var songsToAdvise = discs
 				.SelectMany(disc => disc.ActiveSongs)
 				.Where(IsTimeToListenHighlyRatedSong)
-				.OrderByDescending(song => GetRankForSong(song, playbacksInfo))
+				.OrderByDescending(song => adviseRankCalculator.CalculateSongRank(song, playbacksInfo))
 				.ThenByDescending(song => song.GetRatingOrDefault())
 				.ToList();
 
@@ -47,19 +47,6 @@ namespace MusicLibrary.PandaPlayer.Adviser.PlaylistAdvisers
 			{
 				yield return AdvisedPlaylist.ForHighlyRatedSongs(songsToAdvise.Skip(i).Take(settings.OneAdviseSongsNumber));
 			}
-		}
-
-		private double GetRankForSong(SongModel song, PlaybacksInfo playbacksInfo)
-		{
-			return song.LastPlaybackTime.HasValue ? GetRankForListenedSong(song, playbacksInfo) : Double.MaxValue;
-		}
-
-		private double GetRankForListenedSong(SongModel song, PlaybacksInfo playbacksInfo)
-		{
-			var factorForRating = adviseFactorsProvider.GetFactorForRating(song.GetRatingOrDefault());
-			var factorForPlaybacksAge = adviseFactorsProvider.GetFactorForPlaybackAge(playbacksInfo.GetPlaybacksPassed(song));
-
-			return factorForRating * factorForPlaybacksAge;
 		}
 
 		private bool IsTimeToListenHighlyRatedSong(SongModel song)

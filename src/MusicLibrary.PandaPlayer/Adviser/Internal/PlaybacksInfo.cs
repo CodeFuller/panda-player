@@ -25,9 +25,9 @@ namespace MusicLibrary.PandaPlayer.Adviser.Internal
 			var playbacksInfo = new Dictionary<ItemId, int>();
 
 			var currentPlaybacksPassed = 0;
-			foreach (var disc in discs.OrderByDescending(GetDiscLastPlaybackTime))
+			foreach (var disc in discs.OrderByDescending(d => d.GetLastPlaybackTime()))
 			{
-				var playbacksPassed = GetDiscLastPlaybackTime(disc).HasValue ? currentPlaybacksPassed++ : Int32.MaxValue;
+				var playbacksPassed = disc.GetLastPlaybackTime().HasValue ? currentPlaybacksPassed++ : Int32.MaxValue;
 				playbacksInfo.Add(disc.Id, playbacksPassed);
 			}
 
@@ -66,12 +66,6 @@ namespace MusicLibrary.PandaPlayer.Adviser.Internal
 			}
 
 			throw new InvalidOperationException($"The number of passed playbacks for song {song.Id} is unknown");
-		}
-
-		private static DateTimeOffset? GetDiscLastPlaybackTime(DiscModel disc)
-		{
-			var analyzedSongs = disc.GetDiscSongsForAnalysis().ToList();
-			return analyzedSongs.Any(s => s.LastPlaybackTime == null) ? null : analyzedSongs.Select(s => s.LastPlaybackTime).Min();
 		}
 	}
 }
