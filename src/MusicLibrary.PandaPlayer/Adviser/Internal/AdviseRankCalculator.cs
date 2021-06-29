@@ -11,12 +11,8 @@ namespace MusicLibrary.PandaPlayer.Adviser.Internal
 	{
 		private const double MaxRank = Double.MaxValue;
 
-		private readonly IAdviseFactorsProvider adviseFactorsProvider;
-
-		public AdviseRankCalculator(IAdviseFactorsProvider adviseFactorsProvider)
-		{
-			this.adviseFactorsProvider = adviseFactorsProvider ?? throw new ArgumentNullException(nameof(adviseFactorsProvider));
-		}
+		// Disc with rating 3.0 is advised (x RatingFactorMultiplier) more often that disc with rating 2.5
+		private const double RatingFactorMultiplier = 1.5;
 
 		public double CalculateSongRank(SongModel song, PlaybacksInfo playbacksInfo)
 		{
@@ -25,8 +21,8 @@ namespace MusicLibrary.PandaPlayer.Adviser.Internal
 				return MaxRank;
 			}
 
-			var factorForRating = adviseFactorsProvider.GetFactorForRating(song.GetRatingOrDefault());
-			var factorForPlaybacksAge = adviseFactorsProvider.GetFactorForPlaybackAge(playbacksInfo.GetPlaybacksPassed(song));
+			var factorForRating = GetFactorForRating(song.GetRatingOrDefault());
+			var factorForPlaybacksAge = GetFactorForPlaybackAge(playbacksInfo.GetPlaybacksPassed(song));
 
 			return factorForRating * factorForPlaybacksAge;
 		}
@@ -39,15 +35,36 @@ namespace MusicLibrary.PandaPlayer.Adviser.Internal
 			}
 
 			var playbacksPassed = playbacksInfo.GetPlaybacksPassed(disc);
-			return adviseFactorsProvider.GetFactorForAverageRating(disc.GetRating()) * adviseFactorsProvider.GetFactorForPlaybackAge(playbacksPassed);
+			return GetFactorForAverageRating(disc.GetRating()) * GetFactorForPlaybackAge(playbacksPassed);
 		}
 
 		public double CalculateDiscGroupRank(RankedDiscGroup discGroup)
 		{
 			return discGroup.PlaybacksPassed == Int32.MaxValue ? MaxRank :
-				adviseFactorsProvider.GetFactorForGroupDiscsNumber(discGroup.Discs.Count(d => !d.IsDeleted)) *
-				adviseFactorsProvider.GetFactorForAverageRating(discGroup.Rating) *
-				adviseFactorsProvider.GetFactorForPlaybackAge(discGroup.PlaybacksPassed);
+				GetFactorForGroupDiscsNumber(discGroup.Discs.Count(d => !d.IsDeleted)) *
+				GetFactorForAverageRating(discGroup.Rating) *
+				GetFactorForPlaybackAge(discGroup.PlaybacksPassed);
+		}
+
+		private static double GetFactorForGroupDiscsNumber(int discsNumber)
+		{
+			return Math.Sqrt(discsNumber);
+		}
+
+		private static double GetFactorForRating(RatingModel rating)
+		{
+			var ratingValue = rating.GetRatingValueForDiscAdviser();
+			return GetFactorForAverageRating(ratingValue);
+		}
+
+		private static double GetFactorForAverageRating(double rating)
+		{
+			return Math.Pow(RatingFactorMultiplier, rating);
+		}
+
+		private static double GetFactorForPlaybackAge(int playbackAge)
+		{
+			return playbackAge;
 		}
 	}
 }

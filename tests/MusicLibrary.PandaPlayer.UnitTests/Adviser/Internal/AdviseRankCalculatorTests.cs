@@ -6,7 +6,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq.AutoMock;
 using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.Adviser.Grouping;
-using MusicLibrary.PandaPlayer.Adviser.Interfaces;
 using MusicLibrary.PandaPlayer.Adviser.Internal;
 using MusicLibrary.PandaPlayer.Adviser.RankBasedAdviser;
 
@@ -28,8 +27,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.Internal
 			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2 });
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
-
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
@@ -56,8 +53,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.Internal
 			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2 });
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
-
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
@@ -91,8 +86,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.Internal
 			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2 });
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
-
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
@@ -116,8 +109,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.Internal
 			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2 });
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
-
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
@@ -142,8 +133,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.Internal
 			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2, disc3, disc4 });
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
-
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
@@ -183,8 +172,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.Internal
 			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2 });
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
-
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
@@ -208,8 +195,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.Internal
 			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2 });
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
-
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
@@ -237,8 +222,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.Internal
 			var rankedDiscGroup = new RankedDiscGroup(discGroup, playbacksInfo);
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
-
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
@@ -267,8 +250,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.Internal
 			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2, disc3, disc4 });
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
-
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
@@ -304,8 +285,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.Internal
 			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2, disc3, disc4 });
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
-
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
@@ -333,8 +312,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.Internal
 			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2, disc3, disc4 });
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
-
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
@@ -362,8 +339,6 @@ namespace MusicLibrary.PandaPlayer.UnitTests.Adviser.Internal
 			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2, disc3, disc4 });
 
 			var mocker = new AutoMocker();
-			mocker.Use<IAdviseFactorsProvider>(new AdviseFactorsProvider());
-
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act

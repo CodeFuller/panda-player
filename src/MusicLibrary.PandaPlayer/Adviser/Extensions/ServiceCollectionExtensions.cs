@@ -15,7 +15,6 @@ namespace MusicLibrary.PandaPlayer.Adviser.Extensions
 		{
 			services.AddSingleton<IDiscClassifier, FolderDiscClassifier>();
 			services.AddSingleton<IDiscGroupSorter, RankBasedDiscGroupSorter>();
-			services.AddSingleton<IAdviseFactorsProvider, AdviseFactorsProvider>();
 			services.AddSingleton<IAdviseRankCalculator, AdviseRankCalculator>();
 
 			services.AddSingleton<RankBasedDiscAdviser>();
