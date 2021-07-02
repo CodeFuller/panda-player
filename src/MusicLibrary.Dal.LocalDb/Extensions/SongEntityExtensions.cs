@@ -30,7 +30,10 @@ namespace MusicLibrary.Dal.LocalDb.Extensions
 				DeleteDate = song.DeleteDate,
 			};
 
-			model.ContentUri = contentUriProvider.GetSongContentUri(model);
+			if (!model.IsDeleted)
+			{
+				model.ContentUri = contentUriProvider.GetSongContentUri(model);
+			}
 
 			return model;
 		}

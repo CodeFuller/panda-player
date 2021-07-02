@@ -152,6 +152,11 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		public Uri GetSongContentUri(SongModel song)
 		{
+			if (song.IsDeleted)
+			{
+				throw new InvalidOperationException("Can not build content URL for deleted song");
+			}
+
 			var songPath = storageOrganizer.GetSongFilePath(song);
 			return GetUriForPath(songPath);
 		}
