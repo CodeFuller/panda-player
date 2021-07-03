@@ -6,6 +6,7 @@ using Moq;
 using MusicLibrary.Core.Facades;
 using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.Services.Extensions;
+using MusicLibrary.Services.IntegrationTests.Data;
 
 namespace MusicLibrary.Services.IntegrationTests
 {
@@ -41,6 +42,11 @@ namespace MusicLibrary.Services.IntegrationTests
 			return ServiceProvider.GetRequiredService<TService>();
 		}
 
+		protected T GetService<T>()
+		{
+			return ServiceProvider.GetRequiredService<T>();
+		}
+
 		protected Action<IServiceCollection> StubClock(DateTimeOffset now)
 		{
 			var clock = new Mock<IClock>();
@@ -67,6 +73,13 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			DeleteStorageData();
 			File.Delete(TestDatabaseFileName);
+		}
+
+#pragma warning disable CA1024 // Use properties where appropriate
+		protected TestData GetTestData()
+#pragma warning restore CA1024 // Use properties where appropriate
+		{
+			return new(LibraryStorageRoot);
 		}
 
 		private void CopyStorageData()

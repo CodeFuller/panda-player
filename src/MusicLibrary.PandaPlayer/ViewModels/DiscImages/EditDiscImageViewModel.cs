@@ -111,7 +111,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.DiscImages
 				ImageType = DiscImageType.Cover,
 			};
 
-			using var imageContent = File.OpenRead(imageFile.ImageFileName);
+			await using var imageContent = File.OpenRead(imageFile.ImageFileName);
 			await discsService.SetDiscCoverImage(coverImage, imageContent, cancellationToken);
 
 			Messenger.Default.Send(new DiscImageChangedEventArgs(Disc));

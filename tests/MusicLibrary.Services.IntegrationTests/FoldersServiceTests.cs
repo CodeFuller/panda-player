@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Extensions;
-using MusicLibrary.Services.IntegrationTests.Data;
 using MusicLibrary.Services.Interfaces;
 
 namespace MusicLibrary.Services.IntegrationTests
@@ -36,13 +35,15 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
+			newFolder.Id.Should().Be(new ItemId("6"));
+
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Test Folder");
-			Assert.IsTrue(Directory.Exists(expectedFolderPath));
+			Directory.Exists(expectedFolderPath).Should().BeTrue();
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			Assert.AreEqual(6, allFolders.Count);
+			allFolders.Count.Should().Be(6);
 
-			var testData = new TestData(LibraryStorageRoot);
+			var testData = GetTestData();
 			var expectedFolder = new FolderModel
 			{
 				Id = new ItemId("6"),
@@ -76,13 +77,15 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
+			newFolder.Id.Should().Be(new ItemId("6"));
+
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Test Folder");
-			Assert.IsTrue(Directory.Exists(expectedFolderPath));
+			Directory.Exists(expectedFolderPath).Should().BeTrue();
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			Assert.AreEqual(6, allFolders.Count);
+			allFolders.Count.Should().Be(6);
 
-			var testData = new TestData(LibraryStorageRoot);
+			var testData = GetTestData();
 			var expectedFolder = new FolderModel
 			{
 				Id = new ItemId("6"),
@@ -116,11 +119,13 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
+			newFolder.Id.Should().Be(new ItemId("6"));
+
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Foreign");
-			Assert.IsTrue(Directory.Exists(expectedFolderPath));
+			Directory.Exists(expectedFolderPath).Should().BeTrue();
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			Assert.AreEqual(6, allFolders.Count);
+			allFolders.Count.Should().Be(6);
 		}
 
 		[TestMethod]
@@ -138,11 +143,11 @@ namespace MusicLibrary.Services.IntegrationTests
 				Name = "Guano Apes",
 			};
 
-			Task Call() => target.CreateFolder(newFolder, CancellationToken.None);
+			Func<Task> call = () => target.CreateFolder(newFolder, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<DbUpdateException>(Call);
+			await call.Should().ThrowAsync<DbUpdateException>();
 		}
 
 		[TestMethod]
@@ -158,7 +163,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			var testData = new TestData(LibraryStorageRoot);
+			var testData = GetTestData();
 			var expectedFolders = new[]
 			{
 				testData.RootFolder,
@@ -184,7 +189,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			var testData = new TestData(LibraryStorageRoot);
+			var testData = GetTestData();
 			var expectedFolder = new FolderModel
 			{
 				Id = new ItemId("1"),
@@ -212,7 +217,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			var testData = new TestData(LibraryStorageRoot);
+			var testData = GetTestData();
 			var expectedFolder = new FolderModel
 			{
 				Id = new ItemId("1"),
@@ -240,7 +245,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			var testData = new TestData(LibraryStorageRoot);
+			var testData = GetTestData();
 			var expectedFolder = new FolderModel
 			{
 				Id = new ItemId("3"),
@@ -254,9 +259,9 @@ namespace MusicLibrary.Services.IntegrationTests
 				},
 				Discs = new List<DiscModel>
 				{
-					testData.Disc1,
-					testData.Disc2,
-					testData.Disc3,
+					testData.NormalDisc,
+					testData.DiscWithNullValues,
+					testData.DeletedDisc,
 				},
 			};
 
@@ -269,7 +274,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			// Arrange
 
 			var folderPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Empty Folder");
-			Assert.IsTrue(Directory.Exists(folderPath));
+			Directory.Exists(folderPath).Should().BeTrue();
 
 			var target = CreateTestTarget(StubClock(new DateTimeOffset(2021, 07, 02, 18, 49, 51, TimeSpan.FromHours(3))));
 
@@ -281,7 +286,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var foldersAfterDeletion = await target.GetAllFolders(CancellationToken.None);
 
-			var testData = new TestData(LibraryStorageRoot);
+			var testData = GetTestData();
 			var expectedFolders = new[]
 			{
 				testData.RootFolder,
@@ -299,7 +304,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			foldersAfterDeletion.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders);
 
-			Assert.IsFalse(Directory.Exists(folderPath));
+			Directory.Exists(folderPath).Should().BeFalse();
 		}
 
 		[TestMethod]
@@ -311,11 +316,11 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Act
 
-			Task Call() => target.DeleteFolder(new ItemId("3"), CancellationToken.None);
+			Func<Task> call = () => target.DeleteFolder(new ItemId("3"), CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<InvalidOperationException>(Call);
+			await call.Should().ThrowAsync<InvalidOperationException>();
 		}
 	}
 }

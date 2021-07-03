@@ -194,7 +194,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 
 					ProgressMessages += $"Adding song '{addedSong.SourceFileName}'...\n";
 
-					using var songContent = File.OpenRead(addedSong.SourceFileName);
+					await using var songContent = File.OpenRead(addedSong.SourceFileName);
 					await songService.CreateSong(song, songContent, cancellationToken);
 
 					CurrentProgress += progressIncrement;
@@ -296,10 +296,7 @@ namespace MusicLibrary.DiscAdder.ViewModels
 
 		private async Task CreateDisc(DiscModel disc, IReadOnlyCollection<string> discFolderPath, CancellationToken cancellationToken)
 		{
-			if (disc.Folder == null)
-			{
-				disc.Folder = await CreateFolder(discFolderPath, cancellationToken);
-			}
+			disc.Folder ??= await CreateFolder(discFolderPath, cancellationToken);
 
 			ProgressMessages += $"Creating disc '{disc.TreeTitle}' ...\n";
 

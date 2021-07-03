@@ -1,10 +1,10 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MusicLibrary.Core.Models;
-using MusicLibrary.Services.IntegrationTests.Data;
 using MusicLibrary.Services.Interfaces;
 
 namespace MusicLibrary.Services.IntegrationTests
@@ -30,7 +30,9 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			var testData = new TestData(LibraryStorageRoot);
+			newArtist.Id.Should().Be(new ItemId("3"));
+
+			var testData = GetTestData();
 			var expectedArtists = new[]
 			{
 				testData.Artist1,
@@ -60,11 +62,11 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Act
 
-			Task Call() => target.CreateArtist(newArtist, CancellationToken.None);
+			Func<Task> call = () => target.CreateArtist(newArtist, CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<DbUpdateException>(Call);
+			await call.Should().ThrowAsync<DbUpdateException>();
 		}
 
 		[TestMethod]
@@ -80,7 +82,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			var testData = new TestData(LibraryStorageRoot);
+			var testData = GetTestData();
 			var expectedArtists = new[]
 			{
 				testData.Artist1,

@@ -1,28 +1,45 @@
-﻿using MusicLibrary.Core.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using MusicLibrary.Core.Models;
+using MusicLibrary.Services.IntegrationTests.Extensions;
 
 namespace MusicLibrary.Services.IntegrationTests.Data
 {
 	public partial class TestData
 	{
-		public DiscModel Disc1 { get; private set; }
+		public DiscModel NormalDisc { get; private set; }
 
-		public DiscModel Disc2 { get; private set; }
+		public DiscModel DiscWithNullValues { get; private set; }
 
-		public DiscModel Disc3 { get; private set; }
+		public DiscModel DeletedDisc { get; private set; }
 
-		private void FillDiscs()
+		private void FillDiscs(string libraryStorageRoot)
 		{
-			Disc1 = new()
+			NormalDisc = new()
 			{
 				Id = new ItemId("1"),
 				Folder = ArtistFolder,
-				Year = 1997,
+				Year = 2004,
 				Title = "Planet Of The Apes - Best Of Guano Apes (CD 1)",
 				TreeTitle = "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)",
 				AlbumTitle = "Planet Of The Apes - Best Of Guano Apes",
+				Images = new List<DiscImageModel>
+				{
+					new()
+					{
+						Id = new ItemId("1"),
+						TreeTitle = "cover.jpg",
+						ImageType = DiscImageType.Cover,
+						Size = 15843,
+						Checksum = 0x852610AB,
+						ContentUri = "Foreign/Guano Apes/2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)/cover.jpg".ToContentUri(libraryStorageRoot),
+					},
+				},
 			};
 
-			Disc2 = new()
+			NormalDisc.Images.Single().Disc = NormalDisc;
+
+			DiscWithNullValues = new()
 			{
 				Id = new ItemId("2"),
 				Folder = ArtistFolder,
@@ -30,7 +47,7 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 				TreeTitle = "Disc With Null Values (CD 1)",
 			};
 
-			Disc3 = new()
+			DeletedDisc = new()
 			{
 				Id = new ItemId("3"),
 				Folder = ArtistFolder,

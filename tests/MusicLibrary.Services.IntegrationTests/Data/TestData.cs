@@ -4,7 +4,7 @@
 	{
 		public TestData(string libraryStorageRoot)
 		{
-			FillDiscs();
+			FillDiscs(libraryStorageRoot);
 			FillSongs(libraryStorageRoot);
 		}
 	}
