@@ -84,7 +84,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 		private void CopyStorageData()
 		{
-			CopyDirectory("content", LibraryStorageRoot);
+			CopyDirectory("Content", LibraryStorageRoot);
 
 			SetFilesAttributes(LibraryStorageRoot, FileAttributes.ReadOnly);
 		}
