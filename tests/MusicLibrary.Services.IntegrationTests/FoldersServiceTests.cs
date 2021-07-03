@@ -273,10 +273,11 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
-			var folderPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Empty Folder");
-			Directory.Exists(folderPath).Should().BeTrue();
-
 			var target = CreateTestTarget(StubClock(new DateTimeOffset(2021, 07, 02, 18, 49, 51, TimeSpan.FromHours(3))));
+
+			// There is no trivial way to provide empty directory with Git.
+			var directoryPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Empty Folder");
+			Directory.CreateDirectory(directoryPath);
 
 			// Act
 
@@ -304,7 +305,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			foldersAfterDeletion.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders);
 
-			Directory.Exists(folderPath).Should().BeFalse();
+			Directory.Exists(directoryPath).Should().BeFalse();
 		}
 
 		[TestMethod]
