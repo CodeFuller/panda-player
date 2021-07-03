@@ -6,8 +6,10 @@ using MusicLibrary.Services.IntegrationTests.Extensions;
 
 namespace MusicLibrary.Services.IntegrationTests.Data
 {
-	public partial class TestData
+	public partial class ReferenceData
 	{
+		public static ItemId NextSongId => new("5");
+
 		public SongModel Song1 { get; private set; }
 
 		public SongModel Song2 { get; private set; }

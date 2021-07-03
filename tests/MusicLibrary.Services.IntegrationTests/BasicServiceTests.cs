@@ -20,11 +20,25 @@ namespace MusicLibrary.Services.IntegrationTests
 
 		protected TService CreateTestTarget(Action<IServiceCollection> setupServices = null)
 		{
-			if (ServiceProvider != null)
+			if (setupServices != null && ServiceProvider != null)
 			{
-				throw new InvalidOperationException("Previous services were not disposed");
+				throw new InvalidOperationException("Cannot apply custom services configuration for existing ServiceProvider");
 			}
 
+			ServiceProvider ??= InitializeServiceProvider(setupServices);
+
+			return ServiceProvider.GetRequiredService<TService>();
+		}
+
+		protected T GetService<T>()
+		{
+			ServiceProvider ??= InitializeServiceProvider();
+
+			return ServiceProvider.GetRequiredService<T>();
+		}
+
+		private ServiceProvider InitializeServiceProvider(Action<IServiceCollection> setupServices = null)
+		{
 			var services = new ServiceCollection()
 				.AddMusicLibraryDbContext(@$"Data Source={TestDatabaseFileName};Foreign Keys=True;")
 				.AddLocalDbDal(settings =>
@@ -37,14 +51,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			setupServices?.Invoke(services);
 
-			ServiceProvider = services.BuildServiceProvider();
-
-			return ServiceProvider.GetRequiredService<TService>();
-		}
-
-		protected T GetService<T>()
-		{
-			return ServiceProvider.GetRequiredService<T>();
+			return services.BuildServiceProvider();
 		}
 
 		protected Action<IServiceCollection> StubClock(DateTimeOffset now)
@@ -76,7 +83,7 @@ namespace MusicLibrary.Services.IntegrationTests
 		}
 
 #pragma warning disable CA1024 // Use properties where appropriate
-		protected TestData GetTestData()
+		protected ReferenceData GetReferenceData()
 #pragma warning restore CA1024 // Use properties where appropriate
 		{
 			return new(LibraryStorageRoot);

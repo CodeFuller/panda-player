@@ -1,8 +1,8 @@
 ﻿namespace MusicLibrary.Services.IntegrationTests.Data
 {
-	public partial class TestData
+	public partial class ReferenceData
 	{
-		public TestData(string libraryStorageRoot)
+		public ReferenceData(string libraryStorageRoot)
 		{
 			FillDiscs(libraryStorageRoot);
 			FillSongs(libraryStorageRoot);

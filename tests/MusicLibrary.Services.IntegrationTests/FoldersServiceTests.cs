@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Extensions;
+using MusicLibrary.Services.IntegrationTests.Data;
 using MusicLibrary.Services.Interfaces;
 
 namespace MusicLibrary.Services.IntegrationTests
@@ -27,7 +28,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var newFolder = new ShallowFolderModel
 			{
-				ParentFolderId = new ItemId("1"),
+				ParentFolderId = ReferenceData.RootFolderId,
 				Name = "Test Folder",
 			};
 
@@ -35,7 +36,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			newFolder.Id.Should().Be(new ItemId("6"));
+			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
 
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Test Folder");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
@@ -43,18 +44,18 @@ namespace MusicLibrary.Services.IntegrationTests
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
 			allFolders.Count.Should().Be(6);
 
-			var testData = GetTestData();
+			var referenceData = GetReferenceData();
 			var expectedFolder = new FolderModel
 			{
-				Id = new ItemId("6"),
-				ParentFolderId = new ItemId("1"),
-				ParentFolder = testData.RootFolder,
+				Id = ReferenceData.NextFolderId,
+				ParentFolderId = ReferenceData.RootFolderId,
+				ParentFolder = referenceData.RootFolder,
 				Name = "Test Folder",
 				Subfolders = new List<ShallowFolderModel>(),
 				Discs = new List<DiscModel>(),
 			};
 
-			var createdFolder = await target.GetFolder(new ItemId("6"), CancellationToken.None);
+			var createdFolder = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
 			createdFolder.Should().BeEquivalentTo(expectedFolder);
 		}
 
@@ -69,7 +70,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var newFolder = new ShallowFolderModel
 			{
-				ParentFolderId = new ItemId("3"),
+				ParentFolderId = ReferenceData.ArtistFolderId,
 				Name = "Test Folder",
 			};
 
@@ -77,7 +78,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			newFolder.Id.Should().Be(new ItemId("6"));
+			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
 
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Test Folder");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
@@ -85,18 +86,18 @@ namespace MusicLibrary.Services.IntegrationTests
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
 			allFolders.Count.Should().Be(6);
 
-			var testData = GetTestData();
+			var referenceData = GetReferenceData();
 			var expectedFolder = new FolderModel
 			{
-				Id = new ItemId("6"),
-				ParentFolderId = new ItemId("3"),
-				ParentFolder = testData.ArtistFolder,
+				Id = ReferenceData.NextFolderId,
+				ParentFolderId = ReferenceData.ArtistFolderId,
+				ParentFolder = referenceData.ArtistFolder,
 				Name = "Test Folder",
 				Subfolders = new List<ShallowFolderModel>(),
 				Discs = new List<DiscModel>(),
 			};
 
-			var createdFolder = await target.GetFolder(new ItemId("6"), CancellationToken.None);
+			var createdFolder = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
 			createdFolder.Should().BeEquivalentTo(expectedFolder);
 		}
 
@@ -111,7 +112,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var newFolder = new ShallowFolderModel
 			{
-				ParentFolderId = new ItemId("3"),
+				ParentFolderId = ReferenceData.ArtistFolderId,
 				Name = "Foreign",
 			};
 
@@ -119,7 +120,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			newFolder.Id.Should().Be(new ItemId("6"));
+			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
 
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Foreign");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
@@ -139,7 +140,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var newFolder = new ShallowFolderModel
 			{
-				ParentFolderId = new ItemId("2"),
+				ParentFolderId = ReferenceData.SubFolderId,
 				Name = "Guano Apes",
 			};
 
@@ -163,14 +164,14 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			var testData = GetTestData();
+			var referenceData = GetReferenceData();
 			var expectedFolders = new[]
 			{
-				testData.RootFolder,
-				testData.SubFolder,
-				testData.ArtistFolder,
-				testData.EmptyFolder,
-				testData.DeletedFolder,
+				referenceData.RootFolder,
+				referenceData.SubFolder,
+				referenceData.ArtistFolder,
+				referenceData.EmptyFolder,
+				referenceData.DeletedFolder,
 			};
 
 			folders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders);
@@ -189,14 +190,14 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			var testData = GetTestData();
+			var referenceData = GetReferenceData();
 			var expectedFolder = new FolderModel
 			{
-				Id = new ItemId("1"),
+				Id = ReferenceData.RootFolderId,
 				Name = "<ROOT>",
 				Subfolders = new List<ShallowFolderModel>
 				{
-					testData.SubFolder,
+					referenceData.SubFolder,
 				},
 				Discs = new List<DiscModel>(),
 			};
@@ -213,18 +214,18 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Act
 
-			var folder = await target.GetFolder(new ItemId("1"), CancellationToken.None);
+			var folder = await target.GetFolder(ReferenceData.RootFolderId, CancellationToken.None);
 
 			// Assert
 
-			var testData = GetTestData();
+			var referenceData = GetReferenceData();
 			var expectedFolder = new FolderModel
 			{
-				Id = new ItemId("1"),
+				Id = ReferenceData.RootFolderId,
 				Name = "<ROOT>",
 				Subfolders = new List<ShallowFolderModel>
 				{
-					testData.SubFolder,
+					referenceData.SubFolder,
 				},
 				Discs = new List<DiscModel>(),
 			};
@@ -241,27 +242,27 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Act
 
-			var folder = await target.GetFolder(new ItemId("3"), CancellationToken.None);
+			var folder = await target.GetFolder(ReferenceData.ArtistFolderId, CancellationToken.None);
 
 			// Assert
 
-			var testData = GetTestData();
+			var referenceData = GetReferenceData();
 			var expectedFolder = new FolderModel
 			{
-				Id = new ItemId("3"),
-				ParentFolderId = new ItemId("2"),
-				ParentFolder = testData.SubFolder,
+				Id = ReferenceData.ArtistFolderId,
+				ParentFolderId = ReferenceData.SubFolderId,
+				ParentFolder = referenceData.SubFolder,
 				Name = "Guano Apes",
 				Subfolders = new List<ShallowFolderModel>
 				{
-					testData.EmptyFolder,
-					testData.DeletedFolder,
+					referenceData.EmptyFolder,
+					referenceData.DeletedFolder,
 				},
 				Discs = new List<DiscModel>
 				{
-					testData.NormalDisc,
-					testData.DiscWithNullValues,
-					testData.DeletedDisc,
+					referenceData.NormalDisc,
+					referenceData.DiscWithNullValues,
+					referenceData.DeletedDisc,
 				},
 			};
 
@@ -281,26 +282,26 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Act
 
-			await target.DeleteFolder(new ItemId("4"), CancellationToken.None);
+			await target.DeleteFolder(ReferenceData.EmptyFolderId, CancellationToken.None);
 
 			// Assert
 
 			var foldersAfterDeletion = await target.GetAllFolders(CancellationToken.None);
 
-			var testData = GetTestData();
+			var referenceData = GetReferenceData();
 			var expectedFolders = new[]
 			{
-				testData.RootFolder,
-				testData.SubFolder,
-				testData.ArtistFolder,
+				referenceData.RootFolder,
+				referenceData.SubFolder,
+				referenceData.ArtistFolder,
 				new ShallowFolderModel
 				{
-					Id = new ItemId("4"),
-					ParentFolderId = new ItemId("3"),
+					Id = ReferenceData.EmptyFolderId,
+					ParentFolderId = ReferenceData.ArtistFolderId,
 					Name = "Empty Folder",
 					DeleteDate = new DateTimeOffset(2021, 07, 02, 18, 49, 51, TimeSpan.FromHours(3)),
 				},
-				testData.DeletedFolder,
+				referenceData.DeletedFolder,
 			};
 
 			foldersAfterDeletion.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders);
@@ -317,7 +318,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Act
 
-			Func<Task> call = () => target.DeleteFolder(new ItemId("3"), CancellationToken.None);
+			Func<Task> call = () => target.DeleteFolder(ReferenceData.ArtistFolderId, CancellationToken.None);
 
 			// Assert
 

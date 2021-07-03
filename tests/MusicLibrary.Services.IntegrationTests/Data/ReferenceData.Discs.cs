@@ -5,8 +5,18 @@ using MusicLibrary.Services.IntegrationTests.Extensions;
 
 namespace MusicLibrary.Services.IntegrationTests.Data
 {
-	public partial class TestData
+	public partial class ReferenceData
 	{
+		public static ItemId NormalDiscId => new("1");
+
+		public static ItemId DiscWithNullValuesId => new("2");
+
+		public static ItemId NextDiscId => new("4");
+
+		public static ItemId DiscCoverImageId => new("1");
+
+		public static ItemId NextDiscCoverImageId => new("2");
+
 		public DiscModel NormalDisc { get; private set; }
 
 		public DiscModel DiscWithNullValues { get; private set; }
@@ -17,7 +27,7 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 		{
 			NormalDisc = new()
 			{
-				Id = new ItemId("1"),
+				Id = NormalDiscId,
 				Folder = ArtistFolder,
 				Year = 2004,
 				Title = "Planet Of The Apes - Best Of Guano Apes (CD 1)",
@@ -41,7 +51,7 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 
 			DiscWithNullValues = new()
 			{
-				Id = new ItemId("2"),
+				Id = DiscWithNullValuesId,
 				Folder = ArtistFolder,
 				Title = "Disc With Null Values",
 				TreeTitle = "Disc With Null Values (CD 1)",

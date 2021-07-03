@@ -5,6 +5,7 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MusicLibrary.Core.Models;
+using MusicLibrary.Services.IntegrationTests.Data;
 using MusicLibrary.Services.Interfaces;
 
 namespace MusicLibrary.Services.IntegrationTests
@@ -30,16 +31,16 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			newArtist.Id.Should().Be(new ItemId("3"));
+			newArtist.Id.Should().Be(ReferenceData.NextArtistId);
 
-			var testData = GetTestData();
+			var referenceData = GetReferenceData();
 			var expectedArtists = new[]
 			{
-				testData.Artist1,
-				testData.Artist2,
+				referenceData.Artist1,
+				referenceData.Artist2,
 				new ArtistModel
 				{
-					Id = new ItemId("3"),
+					Id = ReferenceData.NextArtistId,
 					Name = "Nautilus Pompilius",
 				},
 			};
@@ -82,11 +83,11 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			var testData = GetTestData();
+			var referenceData = GetReferenceData();
 			var expectedArtists = new[]
 			{
-				testData.Artist1,
-				testData.Artist2,
+				referenceData.Artist1,
+				referenceData.Artist2,
 			};
 
 			artists.Should().BeEquivalentTo(expectedArtists);

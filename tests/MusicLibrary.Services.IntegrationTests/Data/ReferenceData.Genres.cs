@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.Services.IntegrationTests.Data
 {
-	public partial class TestData
+	public partial class ReferenceData
 	{
 		public GenreModel Genre1 { get; } = new()
 		{

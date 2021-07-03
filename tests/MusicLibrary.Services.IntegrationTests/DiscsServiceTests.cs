@@ -8,6 +8,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Extensions;
+using MusicLibrary.Services.IntegrationTests.Data;
 using MusicLibrary.Services.IntegrationTests.Extensions;
 using MusicLibrary.Services.Interfaces;
 using MusicLibrary.Services.Tagging;
@@ -22,11 +23,9 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
-			var testData = GetTestData();
-
 			var newDisc = new DiscModel
 			{
-				Folder = testData.ArtistFolder,
+				Folder = await GetFolder(ReferenceData.ArtistFolderId),
 				Year = 2021,
 				Title = "Some New Disc (CD 1)",
 				TreeTitle = "2021 - Some New Disc (CD 1)",
@@ -38,7 +37,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				{
 					new SongModel
 					{
-						Id = new ItemId("4"),
+						Id = ReferenceData.NextSongId,
 						Title = "Some New Song",
 						TreeTitle = "01 - Some New Song.mp3",
 						Duration = new TimeSpan(0, 3, 12),
@@ -59,27 +58,31 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			newDisc.Id.Should().Be(new ItemId("4"));
+			newDisc.Id.Should().Be(ReferenceData.NextDiscId);
+
+			var referenceData = GetReferenceData();
+			var expectedDiscs = new[]
+			{
+				referenceData.NormalDisc,
+				referenceData.DiscWithNullValues,
+				referenceData.DeletedDisc,
+				new DiscModel
+				{
+					Id = ReferenceData.NextDiscId,
+					Folder = referenceData.ArtistFolder,
+					Year = 2021,
+					Title = "Some New Disc (CD 1)",
+					TreeTitle = "2021 - Some New Disc (CD 1)",
+					AlbumTitle = "Some New Disc",
+					AllSongs = new List<SongModel>(),
+				},
+			};
+
+			var allDiscs = await target.GetAllDiscs(CancellationToken.None);
+			allDiscs.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedDiscs, x => x.IgnoringCyclicReferences());
 
 			var discDirectoryPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2021 - Some New Disc (CD 1)");
 			Directory.Exists(discDirectoryPath).Should().BeTrue();
-
-			var allDiscs = await target.GetAllDiscs(CancellationToken.None);
-			allDiscs.Count.Should().Be(4);
-
-			var expectedDisc = new DiscModel
-			{
-				Id = new ItemId("4"),
-				Folder = testData.ArtistFolder,
-				Year = 2021,
-				Title = "Some New Disc (CD 1)",
-				TreeTitle = "2021 - Some New Disc (CD 1)",
-				AlbumTitle = "Some New Disc",
-				AllSongs = new List<SongModel>(),
-			};
-
-			var createdDisc = allDiscs.Single(x => x.Id == new ItemId("4"));
-			createdDisc.Should().BeEquivalentTo(expectedDisc);
 		}
 
 		[TestMethod]
@@ -87,11 +90,9 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
-			var testData = GetTestData();
-
 			var newDisc = new DiscModel
 			{
-				Folder = testData.ArtistFolder,
+				Folder = await GetFolder(ReferenceData.ArtistFolderId),
 				Title = "Some New Disc (CD 1)",
 				TreeTitle = "2021 - Some New Disc (CD 1)",
 
@@ -101,7 +102,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				{
 					new SongModel
 					{
-						Id = new ItemId("4"),
+						Id = ReferenceData.NextSongId,
 						Title = "Some New Song",
 						TreeTitle = "01 - Some New Song.mp3",
 						Duration = new TimeSpan(0, 3, 12),
@@ -122,25 +123,29 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			newDisc.Id.Should().Be(new ItemId("4"));
+			newDisc.Id.Should().Be(ReferenceData.NextDiscId);
+
+			var referenceData = GetReferenceData();
+			var expectedDiscs = new[]
+			{
+				referenceData.NormalDisc,
+				referenceData.DiscWithNullValues,
+				referenceData.DeletedDisc,
+				new DiscModel
+				{
+					Id = ReferenceData.NextDiscId,
+					Folder = referenceData.ArtistFolder,
+					Title = "Some New Disc (CD 1)",
+					TreeTitle = "2021 - Some New Disc (CD 1)",
+					AllSongs = new List<SongModel>(),
+				},
+			};
+
+			var allDiscs = await target.GetAllDiscs(CancellationToken.None);
+			allDiscs.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedDiscs, x => x.IgnoringCyclicReferences());
 
 			var discDirectoryPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2021 - Some New Disc (CD 1)");
 			Directory.Exists(discDirectoryPath).Should().BeTrue();
-
-			var allDiscs = await target.GetAllDiscs(CancellationToken.None);
-			allDiscs.Count.Should().Be(4);
-
-			var expectedDisc = new DiscModel
-			{
-				Id = new ItemId("4"),
-				Folder = testData.ArtistFolder,
-				Title = "Some New Disc (CD 1)",
-				TreeTitle = "2021 - Some New Disc (CD 1)",
-				AllSongs = new List<SongModel>(),
-			};
-
-			var createdDisc = allDiscs.Single(x => x.Id == new ItemId("4"));
-			createdDisc.Should().BeEquivalentTo(expectedDisc);
 		}
 
 		[TestMethod]
@@ -148,11 +153,9 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
-			var testData = GetTestData();
-
 			var newDisc = new DiscModel
 			{
-				Folder = testData.EmptyFolder,
+				Folder = await GetFolder(ReferenceData.EmptyFolderId),
 				Title = "Some New Disc (CD 1)",
 				TreeTitle = "2021 - Some New Disc (CD 1)",
 			};
@@ -165,7 +168,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			newDisc.Id.Should().Be(new ItemId("4"));
+			newDisc.Id.Should().Be(ReferenceData.NextDiscId);
 
 			var discDirectoryPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Empty Folder", "2021 - Some New Disc (CD 1)");
 			Directory.Exists(discDirectoryPath).Should().BeTrue();
@@ -184,12 +187,12 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			var testData = GetTestData();
+			var referenceData = GetReferenceData();
 			var expectedDiscs = new[]
 			{
-				testData.NormalDisc,
-				testData.DiscWithNullValues,
-				testData.DeletedDisc,
+				referenceData.NormalDisc,
+				referenceData.DiscWithNullValues,
+				referenceData.DeletedDisc,
 			};
 
 			discs.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedDiscs, x => x.IgnoringCyclicReferences());
@@ -200,17 +203,16 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
-			var testData = GetTestData();
-
 			var oldDiscDirectoryPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)");
 			Directory.Exists(oldDiscDirectoryPath).Should().BeTrue();
 
-			var disc = testData.NormalDisc;
-			disc.TreeTitle = "New Tree Title";
-
 			var target = CreateTestTarget();
 
+			var disc = await GetDisc(ReferenceData.NormalDiscId, target);
+
 			// Act
+
+			disc.TreeTitle = "New Tree Title";
 
 			await target.UpdateDisc(disc, CancellationToken.None);
 
@@ -236,7 +238,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			disc.Images.Select(x => x.ContentUri).Should().BeEquivalentTo(expectedImageContentUris);
 
-			var updatedDisc = await GetDisc(new ItemId("1"), target);
+			var updatedDisc = await GetDisc(ReferenceData.NormalDiscId, target);
 			updatedDisc.Should().BeEquivalentTo(disc, x => x.IgnoringCyclicReferences());
 		}
 
@@ -245,15 +247,14 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
-			var testData = GetTestData();
-
-			var disc = testData.NormalDisc;
-			disc.Year = 2021;
-			disc.AlbumTitle = "New Album Title";
-
 			var target = CreateTestTarget();
 
+			var disc = await GetDisc(ReferenceData.NormalDiscId, target);
+
 			// Act
+
+			disc.Year = 2021;
+			disc.AlbumTitle = "New Album Title";
 
 			await target.UpdateDisc(disc, CancellationToken.None);
 
@@ -269,7 +270,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			tagData2.Year.Should().Be(2021);
 			tagData2.Album.Should().Be("New Album Title");
 
-			var updatedDisc = await GetDisc(new ItemId("1"), target);
+			var updatedDisc = await GetDisc(ReferenceData.NormalDiscId, target);
 			updatedDisc.Should().BeEquivalentTo(disc, x => x.IgnoringCyclicReferences());
 		}
 
@@ -278,16 +279,14 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
-			var testData = GetTestData();
+			var target = CreateTestTarget();
 
 			var discCoverImage = new DiscImageModel
 			{
-				Disc = testData.DiscWithNullValues,
+				Disc = await GetDisc(ReferenceData.DiscWithNullValuesId, target),
 				TreeTitle = "cover.jpg",
 				ImageType = DiscImageType.Cover,
 			};
-
-			var target = CreateTestTarget();
 
 			// Act
 
@@ -296,10 +295,11 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
+			var referenceData = GetReferenceData();
 			var expectedDiscCoverImage = new DiscImageModel
 			{
-				Id = new ItemId("2"),
-				Disc = testData.DiscWithNullValues,
+				Id = ReferenceData.NextDiscCoverImageId,
+				Disc = referenceData.DiscWithNullValues,
 				TreeTitle = "cover.jpg",
 				ImageType = DiscImageType.Cover,
 				Size = 119957,
@@ -307,9 +307,11 @@ namespace MusicLibrary.Services.IntegrationTests
 				ContentUri = "Foreign/Guano Apes/Disc With Null Values (CD 1)/cover.jpg".ToContentUri(LibraryStorageRoot),
 			};
 
-			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage);
+			referenceData.DiscWithNullValues.Images = new[] { expectedDiscCoverImage };
 
-			var updatedDisc = await GetDisc(new ItemId("2"), target);
+			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
+
+			var updatedDisc = await GetDisc(ReferenceData.DiscWithNullValuesId, target);
 			updatedDisc.CoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
 
 			var imagePath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Disc With Null Values (CD 1)", "cover.jpg");
@@ -323,16 +325,14 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
-			var testData = GetTestData();
+			var target = CreateTestTarget();
 
 			var discCoverImage = new DiscImageModel
 			{
-				Disc = testData.NormalDisc,
+				Disc = await GetDisc(ReferenceData.NormalDiscId, target),
 				TreeTitle = "cover.jpg",
 				ImageType = DiscImageType.Cover,
 			};
-
-			var target = CreateTestTarget();
 
 			// Act
 
@@ -341,10 +341,11 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
+			var referenceData = GetReferenceData();
 			var expectedDiscCoverImage = new DiscImageModel
 			{
-				Id = new ItemId("1"),
-				Disc = testData.NormalDisc,
+				Id = ReferenceData.DiscCoverImageId,
+				Disc = referenceData.NormalDisc,
 				TreeTitle = "cover.jpg",
 				ImageType = DiscImageType.Cover,
 				Size = 119957,
@@ -352,9 +353,11 @@ namespace MusicLibrary.Services.IntegrationTests
 				ContentUri = "Foreign/Guano Apes/2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)/cover.jpg".ToContentUri(LibraryStorageRoot),
 			};
 
-			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage);
+			referenceData.NormalDisc.Images = new[] { expectedDiscCoverImage };
 
-			var updatedDisc = await GetDisc(new ItemId("1"), target);
+			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
+
+			var updatedDisc = await GetDisc(ReferenceData.NormalDiscId, target);
 			updatedDisc.CoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
 
 			var imagePath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)", "cover.jpg");
@@ -368,16 +371,14 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
-			var testData = GetTestData();
+			var target = CreateTestTarget();
 
 			var discCoverImage = new DiscImageModel
 			{
-				Disc = testData.NormalDisc,
+				Disc = await GetDisc(ReferenceData.NormalDiscId, target),
 				TreeTitle = "cover.png",
 				ImageType = DiscImageType.Cover,
 			};
-
-			var target = CreateTestTarget();
 
 			// Act
 
@@ -386,10 +387,11 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
+			var referenceData = GetReferenceData();
 			var expectedDiscCoverImage = new DiscImageModel
 			{
-				Id = new ItemId("1"),
-				Disc = testData.NormalDisc,
+				Id = ReferenceData.DiscCoverImageId,
+				Disc = referenceData.NormalDisc,
 				TreeTitle = "cover.png",
 				ImageType = DiscImageType.Cover,
 				Size = 184257,
@@ -397,9 +399,11 @@ namespace MusicLibrary.Services.IntegrationTests
 				ContentUri = "Foreign/Guano Apes/2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)/cover.png".ToContentUri(LibraryStorageRoot),
 			};
 
-			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage);
+			referenceData.NormalDisc.Images = new[] { expectedDiscCoverImage };
 
-			var updatedDisc = await GetDisc(new ItemId("1"), target);
+			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
+
+			var updatedDisc = await GetDisc(ReferenceData.NormalDiscId, target);
 			updatedDisc.CoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
 
 			var imagePath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)", "cover.png");
@@ -424,12 +428,12 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Act
 
-			await target.DeleteDisc(new ItemId("1"), CancellationToken.None);
+			await target.DeleteDisc(ReferenceData.NormalDiscId, CancellationToken.None);
 
 			// Assert
 
-			var testData = GetTestData();
-			var expectedDisc = testData.NormalDisc;
+			var referenceData = GetReferenceData();
+			var expectedDisc = referenceData.NormalDisc;
 			foreach (var song in expectedDisc.ActiveSongs)
 			{
 				song.DeleteDate = deleteDate;
@@ -439,10 +443,16 @@ namespace MusicLibrary.Services.IntegrationTests
 				song.ContentUri = null;
 			}
 
-			var deletedDisc = await GetDisc(new ItemId("1"), target);
+			var deletedDisc = await GetDisc(ReferenceData.NormalDiscId, target);
 			deletedDisc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
 
 			Directory.Exists(discDirectoryPath).Should().BeFalse();
+		}
+
+		private async Task<ShallowFolderModel> GetFolder(ItemId folderId)
+		{
+			var folderService = GetService<IFoldersService>();
+			return await folderService.GetFolder(folderId, CancellationToken.None);
 		}
 
 		private static async Task<DiscModel> GetDisc(ItemId discId, IDiscsService discService)

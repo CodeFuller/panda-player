@@ -2,8 +2,10 @@
 
 namespace MusicLibrary.Services.IntegrationTests.Data
 {
-	public partial class TestData
+	public partial class ReferenceData
 	{
+		public static ItemId NextArtistId => new("3");
+
 		public ArtistModel Artist1 { get; } = new()
 		{
 			Id = new ItemId("1"),
