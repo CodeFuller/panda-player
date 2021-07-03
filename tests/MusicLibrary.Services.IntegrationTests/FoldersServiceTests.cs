@@ -38,13 +38,25 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
 
-			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Test Folder");
-			Directory.Exists(expectedFolderPath).Should().BeTrue();
+			var referenceData = GetReferenceData();
+			var expectedFolders = new[]
+			{
+				referenceData.RootFolder,
+				referenceData.SubFolder,
+				referenceData.ArtistFolder,
+				referenceData.EmptyFolder,
+				referenceData.DeletedFolder,
+				new ShallowFolderModel
+				{
+					Id = ReferenceData.NextFolderId,
+					ParentFolderId = ReferenceData.RootFolderId,
+					Name = "Test Folder",
+				},
+			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.Count.Should().Be(6);
+			allFolders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
 
-			var referenceData = GetReferenceData();
 			var expectedFolder = new FolderModel
 			{
 				Id = ReferenceData.NextFolderId,
@@ -57,6 +69,9 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var createdFolder = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
 			createdFolder.Should().BeEquivalentTo(expectedFolder);
+
+			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Test Folder");
+			Directory.Exists(expectedFolderPath).Should().BeTrue();
 		}
 
 		[TestMethod]
@@ -80,13 +95,25 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
 
-			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Test Folder");
-			Directory.Exists(expectedFolderPath).Should().BeTrue();
+			var referenceData = GetReferenceData();
+			var expectedFolders = new[]
+			{
+				referenceData.RootFolder,
+				referenceData.SubFolder,
+				referenceData.ArtistFolder,
+				referenceData.EmptyFolder,
+				referenceData.DeletedFolder,
+				new ShallowFolderModel
+				{
+					Id = ReferenceData.NextFolderId,
+					ParentFolderId = ReferenceData.ArtistFolderId,
+					Name = "Test Folder",
+				},
+			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.Count.Should().Be(6);
+			allFolders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
 
-			var referenceData = GetReferenceData();
 			var expectedFolder = new FolderModel
 			{
 				Id = ReferenceData.NextFolderId,
@@ -99,6 +126,9 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var createdFolder = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
 			createdFolder.Should().BeEquivalentTo(expectedFolder);
+
+			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Test Folder");
+			Directory.Exists(expectedFolderPath).Should().BeTrue();
 		}
 
 		[TestMethod]
@@ -122,11 +152,40 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
 
-			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Foreign");
-			Directory.Exists(expectedFolderPath).Should().BeTrue();
+			var referenceData = GetReferenceData();
+			var expectedFolders = new[]
+			{
+				referenceData.RootFolder,
+				referenceData.SubFolder,
+				referenceData.ArtistFolder,
+				referenceData.EmptyFolder,
+				referenceData.DeletedFolder,
+				new ShallowFolderModel
+				{
+					Id = ReferenceData.NextFolderId,
+					ParentFolderId = ReferenceData.ArtistFolderId,
+					Name = "Foreign",
+				},
+			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.Count.Should().Be(6);
+			allFolders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
+
+			var expectedFolder = new FolderModel
+			{
+				Id = ReferenceData.NextFolderId,
+				ParentFolderId = ReferenceData.ArtistFolderId,
+				ParentFolder = referenceData.ArtistFolder,
+				Name = "Foreign",
+				Subfolders = new List<ShallowFolderModel>(),
+				Discs = new List<DiscModel>(),
+			};
+
+			var createdFolder = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
+			createdFolder.Should().BeEquivalentTo(expectedFolder);
+
+			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Foreign");
+			Directory.Exists(expectedFolderPath).Should().BeTrue();
 		}
 
 		[TestMethod]

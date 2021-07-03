@@ -170,6 +170,26 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			newDisc.Id.Should().Be(ReferenceData.NextDiscId);
 
+			var referenceData = GetReferenceData();
+			var expectedDiscs = new[]
+			{
+				referenceData.NormalDisc,
+				referenceData.DiscWithNullValues,
+				referenceData.DeletedDisc,
+				new DiscModel
+				{
+					Id = ReferenceData.NextDiscId,
+					Folder = await GetFolder(ReferenceData.EmptyFolderId),
+					Title = "Some New Disc (CD 1)",
+					TreeTitle = "2021 - Some New Disc (CD 1)",
+					AllSongs = new List<SongModel>(),
+					Images = new List<DiscImageModel>(),
+				},
+			};
+
+			var allDiscs = await target.GetAllDiscs(CancellationToken.None);
+			allDiscs.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedDiscs, x => x.IgnoringCyclicReferences());
+
 			var discDirectoryPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Empty Folder", "2021 - Some New Disc (CD 1)");
 			Directory.Exists(discDirectoryPath).Should().BeTrue();
 		}
