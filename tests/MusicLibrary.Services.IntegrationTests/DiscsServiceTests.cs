@@ -437,6 +437,8 @@ namespace MusicLibrary.Services.IntegrationTests
 				song.ContentUri = null;
 			}
 
+			expectedDisc.Images = new List<DiscImageModel>();
+
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId, target);
 			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
 

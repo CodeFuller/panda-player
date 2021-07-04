@@ -108,14 +108,11 @@ namespace MusicLibrary.Services
 				await songsService.DeleteSong(song, deleteTime, cancellationToken);
 			}
 
-			foreach (var image in disc.Images)
+			if (disc.CoverImage != null)
 			{
-				logger.LogInformation($"Deleting the disc image '{image.TreeTitle}' ...");
-				await storageRepository.DeleteDiscImage(image, cancellationToken);
+				logger.LogInformation($"Deleting disc cover image '{disc.CoverImage.TreeTitle}' ...");
+				await DeleteDiscCoverImage(disc, cancellationToken);
 			}
-
-			disc.Images = new List<DiscImageModel>();
-			await discsRepository.UpdateDisc(disc, cancellationToken);
 
 			logger.LogInformation($"The Disc '{disc.TreeTitle}' was deleted successfully");
 		}
