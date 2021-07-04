@@ -10,8 +10,8 @@ namespace MusicLibrary.Services.Internal
 {
 	internal class DiscTitleToAlbumMapper : IDiscTitleToAlbumMapper
 	{
-		private readonly List<Regex> discToAlbumPatterns = new List<Regex>();
-		private readonly List<Regex> emptyAlbumTitlePatterns = new List<Regex>();
+		private readonly List<Regex> discToAlbumPatterns = new();
+		private readonly List<Regex> emptyAlbumTitlePatterns = new();
 
 		public DiscTitleToAlbumMapper(IOptions<DiscToAlbumMappingSettings> options)
 		{
