@@ -29,7 +29,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			var newFolder = new ShallowFolderModel
 			{
 				ParentFolderId = ReferenceData.RootFolderId,
-				Name = "Test Folder",
+				Name = "Ляпис Трубецкой",
 			};
 
 			await target.CreateFolder(newFolder, CancellationToken.None);
@@ -40,7 +40,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			{
 				Id = ReferenceData.NextFolderId,
 				ParentFolderId = ReferenceData.RootFolderId,
-				Name = "Test Folder",
+				Name = "Ляпис Трубецкой",
 			};
 
 			newFolder.Should().BeEquivalentTo(expectedShallowFolder);
@@ -64,7 +64,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				Id = ReferenceData.NextFolderId,
 				ParentFolderId = ReferenceData.RootFolderId,
 				ParentFolder = referenceData.RootFolder,
-				Name = "Test Folder",
+				Name = "Ляпис Трубецкой",
 				Subfolders = new List<ShallowFolderModel>(),
 				Discs = new List<DiscModel>(),
 			};
@@ -72,7 +72,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
 			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
 
-			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Test Folder");
+			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Ляпис Трубецкой");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
 		}
 
@@ -88,7 +88,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			var newFolder = new ShallowFolderModel
 			{
 				ParentFolderId = ReferenceData.ArtistFolderId,
-				Name = "Test Folder",
+				Name = "Ляпис Трубецкой",
 			};
 
 			await target.CreateFolder(newFolder, CancellationToken.None);
@@ -99,7 +99,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			{
 				Id = ReferenceData.NextFolderId,
 				ParentFolderId = ReferenceData.ArtistFolderId,
-				Name = "Test Folder",
+				Name = "Ляпис Трубецкой",
 			};
 
 			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
@@ -123,7 +123,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				Id = ReferenceData.NextFolderId,
 				ParentFolderId = ReferenceData.ArtistFolderId,
 				ParentFolder = referenceData.ArtistFolder,
-				Name = "Test Folder",
+				Name = "Ляпис Трубецкой",
 				Subfolders = new List<ShallowFolderModel>(),
 				Discs = new List<DiscModel>(),
 			};
@@ -131,7 +131,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
 			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
 
-			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Test Folder");
+			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "Ляпис Трубецкой");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
 		}
 
@@ -147,7 +147,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			var newFolder = new ShallowFolderModel
 			{
 				ParentFolderId = ReferenceData.ArtistFolderId,
-				Name = "Foreign",
+				Name = "Belarusian",
 			};
 
 			await target.CreateFolder(newFolder, CancellationToken.None);
@@ -158,7 +158,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			{
 				Id = ReferenceData.NextFolderId,
 				ParentFolderId = ReferenceData.ArtistFolderId,
-				Name = "Foreign",
+				Name = "Belarusian",
 			};
 
 			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
@@ -182,7 +182,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				Id = ReferenceData.NextFolderId,
 				ParentFolderId = ReferenceData.ArtistFolderId,
 				ParentFolder = referenceData.ArtistFolder,
-				Name = "Foreign",
+				Name = "Belarusian",
 				Subfolders = new List<ShallowFolderModel>(),
 				Discs = new List<DiscModel>(),
 			};
@@ -190,7 +190,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
 			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
 
-			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Foreign");
+			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "Belarusian");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
 		}
 
@@ -206,7 +206,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			var newFolder = new ShallowFolderModel
 			{
 				ParentFolderId = ReferenceData.SubFolderId,
-				Name = "Guano Apes",
+				Name = "Neuro Dubel",
 			};
 
 			Func<Task> call = () => target.CreateFolder(newFolder, CancellationToken.None);
@@ -330,7 +330,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				Id = ReferenceData.ArtistFolderId,
 				ParentFolderId = ReferenceData.SubFolderId,
 				ParentFolder = referenceData.SubFolder,
-				Name = "Guano Apes",
+				Name = "Neuro Dubel",
 				Subfolders = new List<ShallowFolderModel>
 				{
 					referenceData.EmptyFolder,
@@ -339,7 +339,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				Discs = new List<DiscModel>
 				{
 					referenceData.NormalDisc,
-					referenceData.DiscWithNullValues,
+					referenceData.DiscWithMissingFields,
 					referenceData.DeletedDisc,
 				},
 			};
@@ -354,9 +354,8 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var target = CreateTestTarget(StubClock(new DateTimeOffset(2021, 07, 02, 18, 49, 51, TimeSpan.FromHours(3))));
 
-			// There is no trivial way to provide empty directory with Git.
-			var directoryPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Empty Folder");
-			Directory.CreateDirectory(directoryPath);
+			var directoryPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "Empty Folder");
+			Directory.Exists(directoryPath).Should().BeTrue();
 
 			// Act
 

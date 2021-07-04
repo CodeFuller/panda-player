@@ -93,6 +93,10 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			CopyDirectory("Content", LibraryStorageRoot);
 
+			// There is no trivial way to provide empty directory with Git.
+			var directoryPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "Empty Folder");
+			Directory.CreateDirectory(directoryPath);
+
 			SetFilesAttributes(LibraryStorageRoot, FileAttributes.ReadOnly);
 		}
 

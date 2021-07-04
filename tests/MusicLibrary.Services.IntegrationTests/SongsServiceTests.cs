@@ -26,10 +26,10 @@ namespace MusicLibrary.Services.IntegrationTests
 			var newSong = new SongModel
 			{
 				Disc = await GetDisc(ReferenceData.NormalDiscId),
-				Title = "Some New Song",
-				TreeTitle = "02 - Some New Song.mp3",
-				TrackNumber = 2,
-				Artist = await GetArtist(ReferenceData.Artist1Id),
+				Title = "Дети Галактики",
+				TreeTitle = "03 - Дети Галактики.mp3",
+				TrackNumber = 3,
+				Artist = await GetArtist(ReferenceData.Artist2Id),
 				Genre = await GetGenre(ReferenceData.Genre1Id),
 				Duration = TimeSpan.FromMilliseconds(12345),
 				Rating = RatingModel.R7,
@@ -53,37 +53,37 @@ namespace MusicLibrary.Services.IntegrationTests
 			{
 				Id = ReferenceData.NextSongId,
 				Disc = expectedDisc,
-				Title = "Some New Song",
-				TreeTitle = "02 - Some New Song.mp3",
-				TrackNumber = 2,
-				Artist = referenceData.Artist1,
+				Title = "Дети Галактики",
+				TreeTitle = "03 - Дети Галактики.mp3",
+				TrackNumber = 3,
+				Artist = referenceData.Artist2,
 				Genre = referenceData.Genre1,
 				Duration = TimeSpan.FromMilliseconds(12345),
 				Rating = RatingModel.R7,
 				BitRate = 54321,
-				Size = 416101,
-				Checksum = 1450589396,
-				ContentUri = "Foreign/Guano Apes/2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)/02 - Some New Song.mp3".ToContentUri(LibraryStorageRoot),
+				Size = 416039,
+				Checksum = 2259945390,
+				ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/03 - Дети Галактики.mp3".ToContentUri(LibraryStorageRoot),
 			};
 
 			expectedDisc.AllSongs = expectedDisc.AllSongs.Concat(new[] { expectedSong }).ToList();
 
-			var updatedDisc = await GetDisc(ReferenceData.NormalDiscId);
-			updatedDisc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
+			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
 
-			var songFilePath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)", "02 - Some New Song.mp3");
+			var songFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "03 - Дети Галактики.mp3");
 			var fileInfo = new FileInfo(songFilePath);
 			fileInfo.Exists.Should().BeTrue();
-			fileInfo.Length.Should().Be(416101);
+			fileInfo.Length.Should().Be(416039);
 
 			var expectedTagData = new SongTagData
 			{
-				Artist = "Guano Apes",
-				Album = "Planet Of The Apes - Best Of Guano Apes",
-				Year = 2004,
-				Genre = "Alternative Rock",
-				Track = 2,
-				Title = "Some New Song",
+				Artist = "Neuro Dubel",
+				Album = "Афтары правды",
+				Year = 2010,
+				Genre = "Punk Rock",
+				Track = 3,
+				Title = "Дети Галактики",
 			};
 
 			var songTagger = GetService<ISongTagger>();
@@ -99,8 +99,8 @@ namespace MusicLibrary.Services.IntegrationTests
 			var newSong = new SongModel
 			{
 				Disc = await GetDisc(ReferenceData.NormalDiscId),
-				Title = "Some New Song",
-				TreeTitle = "02 - Some New Song.mp3",
+				Title = "Дети Галактики",
+				TreeTitle = "03 - Дети Галактики.mp3",
 				Duration = TimeSpan.FromMilliseconds(12345),
 				BitRate = 54321,
 			};
@@ -122,30 +122,30 @@ namespace MusicLibrary.Services.IntegrationTests
 			{
 				Id = ReferenceData.NextSongId,
 				Disc = expectedDisc,
-				Title = "Some New Song",
-				TreeTitle = "02 - Some New Song.mp3",
+				Title = "Дети Галактики",
+				TreeTitle = "03 - Дети Галактики.mp3",
 				Duration = TimeSpan.FromMilliseconds(12345),
 				BitRate = 54321,
-				Size = 416008,
-				Checksum = 3126574971,
-				ContentUri = "Foreign/Guano Apes/2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)/02 - Some New Song.mp3".ToContentUri(LibraryStorageRoot),
+				Size = 415958,
+				Checksum = 4034664371,
+				ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/03 - Дети Галактики.mp3".ToContentUri(LibraryStorageRoot),
 			};
 
 			expectedDisc.AllSongs = expectedDisc.AllSongs.Concat(new[] { expectedSong }).ToList();
 
-			var updatedDisc = await GetDisc(ReferenceData.NormalDiscId);
-			updatedDisc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
+			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
 
-			var songFilePath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)", "02 - Some New Song.mp3");
+			var songFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "03 - Дети Галактики.mp3");
 			var fileInfo = new FileInfo(songFilePath);
 			fileInfo.Exists.Should().BeTrue();
-			fileInfo.Length.Should().Be(416008);
+			fileInfo.Length.Should().Be(415958);
 
 			var expectedTagData = new SongTagData
 			{
-				Album = "Planet Of The Apes - Best Of Guano Apes",
-				Year = 2004,
-				Title = "Some New Song",
+				Album = "Афтары правды",
+				Year = 2010,
+				Title = "Дети Галактики",
 			};
 
 			var songTagger = GetService<ISongTagger>();
@@ -161,8 +161,8 @@ namespace MusicLibrary.Services.IntegrationTests
 			var newSong = new SongModel
 			{
 				Disc = await GetDisc(ReferenceData.NormalDiscId),
-				Title = "Some New Song",
-				TreeTitle = "02 - Some New Song.mp3",
+				Title = "Дети Галактики",
+				TreeTitle = "03 - Дети Галактики.mp3",
 				Duration = TimeSpan.FromMilliseconds(12345),
 				BitRate = 54321,
 			};
@@ -176,13 +176,13 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			var songFilePath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)", "02 - Some New Song.mp3");
+			var songFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "03 - Дети Галактики.mp3");
 
 			var expectedTagData = new SongTagData
 			{
-				Album = "Planet Of The Apes - Best Of Guano Apes",
-				Year = 2004,
-				Title = "Some New Song",
+				Album = "Афтары правды",
+				Year = 2010,
+				Title = "Дети Галактики",
 			};
 
 			var songTagger = GetService<ISongTagger>();
@@ -201,8 +201,8 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var songIds = new[]
 			{
-				ReferenceData.SongWithOptionalPropertiesFilledId,
-				ReferenceData.SongFromNullDiscId,
+				ReferenceData.SongWithOptionalPropertiesFilledId1,
+				ReferenceData.SongWithOptionalPropertiesMissingId,
 			};
 
 			var songs = await target.GetSongs(songIds, CancellationToken.None);
@@ -212,8 +212,8 @@ namespace MusicLibrary.Services.IntegrationTests
 			var referenceData = GetReferenceData();
 			var expectedSongs = new[]
 			{
-				referenceData.SongWithOptionalPropertiesFilled,
-				referenceData.SongFromNullDisc,
+				referenceData.SongWithOptionalPropertiesFilled1,
+				referenceData.SongWithOptionalPropertiesMissing,
 			};
 
 			songs.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedSongs, x => x.IgnoringCyclicReferences());
@@ -230,7 +230,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var songIds = new[]
 			{
-				ReferenceData.SongWithOptionalPropertiesFilledId,
+				ReferenceData.SongWithOptionalPropertiesFilledId1,
 				ReferenceData.DeletedSongId,
 			};
 
@@ -241,7 +241,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			var referenceData = GetReferenceData();
 			var expectedSongs = new[]
 			{
-				referenceData.SongWithOptionalPropertiesFilled,
+				referenceData.SongWithOptionalPropertiesFilled1,
 				referenceData.DeletedSong,
 			};
 
@@ -259,7 +259,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var songIds = new[]
 			{
-				ReferenceData.SongWithOptionalPropertiesFilledId,
+				ReferenceData.SongWithOptionalPropertiesFilledId1,
 				ReferenceData.SongWithOptionalPropertiesMissingId,
 				ReferenceData.NextSongId,
 			};
@@ -271,7 +271,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			var referenceData = GetReferenceData();
 			var expectedSongs = new[]
 			{
-				referenceData.SongWithOptionalPropertiesFilled,
+				referenceData.SongWithOptionalPropertiesFilled1,
 				referenceData.SongWithOptionalPropertiesMissing,
 			};
 
@@ -283,34 +283,34 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
-			var oldSongFilePath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)", "01 - Break The Line.mp3");
+			var oldSongFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "01 - Про женщин.mp3");
 			File.Exists(oldSongFilePath).Should().BeTrue();
 
-			var updatedSong = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId);
+			var updatedSong = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId1);
 
 			var target = CreateTestTarget();
 
 			// Act
 
-			updatedSong.TreeTitle = "New Tree Title.mp3";
+			updatedSong.TreeTitle = "11 - Дети Галактики.mp3";
 
 			await target.UpdateSong(updatedSong, CancellationToken.None);
 
 			// Assert
 
 			var referenceData = GetReferenceData();
-			var expectedSong = referenceData.SongWithOptionalPropertiesFilled;
-			expectedSong.TreeTitle = "New Tree Title.mp3";
-			expectedSong.ContentUri = "Foreign/Guano Apes/2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)/New Tree Title.mp3".ToContentUri(LibraryStorageRoot);
+			var expectedSong = referenceData.SongWithOptionalPropertiesFilled1;
+			expectedSong.TreeTitle = "11 - Дети Галактики.mp3";
+			expectedSong.ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/11 - Дети Галактики.mp3".ToContentUri(LibraryStorageRoot);
 
 			updatedSong.Should().BeEquivalentTo(expectedSong, x => x.IgnoringCyclicReferences());
 
-			var songFromRepository = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId);
+			var songFromRepository = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId1);
 			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.IgnoringCyclicReferences());
 
 			File.Exists(oldSongFilePath).Should().BeFalse();
 
-			var newSongFilePath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)", "New Tree Title.mp3");
+			var newSongFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "11 - Дети Галактики.mp3");
 			File.Exists(newSongFilePath).Should().BeTrue();
 		}
 
@@ -319,15 +319,15 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
-			var updatedSong = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId);
+			var updatedSong = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId1);
 
 			var target = CreateTestTarget();
 
 			// Act
 
 			updatedSong.TrackNumber = 17;
-			updatedSong.Title = "New Song Title";
-			updatedSong.Artist = await GetArtist(ReferenceData.Artist2Id);
+			updatedSong.Title = "Дети Галактики";
+			updatedSong.Artist = await GetArtist(ReferenceData.Artist1Id);
 			updatedSong.Genre = await GetGenre(ReferenceData.Genre2Id);
 
 			await target.UpdateSong(updatedSong, CancellationToken.None);
@@ -335,31 +335,31 @@ namespace MusicLibrary.Services.IntegrationTests
 			// Assert
 
 			var referenceData = GetReferenceData();
-			var expectedSong = referenceData.SongWithOptionalPropertiesFilled;
+			var expectedSong = referenceData.SongWithOptionalPropertiesFilled1;
 			expectedSong.TrackNumber = 17;
-			expectedSong.Title = "New Song Title";
-			expectedSong.Artist = referenceData.Artist2;
+			expectedSong.Title = "Дети Галактики";
+			expectedSong.Artist = referenceData.Artist1;
 			expectedSong.Genre = referenceData.Genre2;
-			expectedSong.Size = 405634;
-			expectedSong.Checksum = 2283678480;
+			expectedSong.Size = 405604;
+			expectedSong.Checksum = 3102138277;
 
 			updatedSong.Should().BeEquivalentTo(expectedSong, x => x.IgnoringCyclicReferences());
 
-			var songFromRepository = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId);
+			var songFromRepository = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId1);
 			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.IgnoringCyclicReferences());
 
-			var songFilePath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)", "01 - Break The Line.mp3");
+			var songFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "01 - Про женщин.mp3");
 			var fileInfo = new FileInfo(songFilePath);
-			fileInfo.Length.Should().Be(405634);
+			fileInfo.Length.Should().Be(405604);
 
 			var expectedTagData = new SongTagData
 			{
-				Artist = "Neuro Dubel",
-				Album = "Planet Of The Apes - Best Of Guano Apes",
-				Year = 2004,
-				Genre = "Rock",
+				Artist = "Guano Apes",
+				Album = "Афтары правды",
+				Year = 2010,
+				Genre = "Alternative Rock",
 				Track = 17,
-				Title = "New Song Title",
+				Title = "Дети Галактики",
 			};
 
 			var songTagger = GetService<ISongTagger>();
@@ -408,7 +408,7 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
-			var song = await GetSongWithPlaybacks(ReferenceData.SongWithOptionalPropertiesFilledId);
+			var song = await GetSongWithPlaybacks(ReferenceData.SongWithOptionalPropertiesFilledId1);
 			song.PlaybacksCount.Should().Be(2);
 
 			var target = CreateTestTarget();
@@ -420,7 +420,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			// Assert
 
 			var referenceData = GetReferenceData(fillSongPlaybacks: true);
-			var expectedSong = referenceData.SongWithOptionalPropertiesFilled;
+			var expectedSong = referenceData.SongWithOptionalPropertiesFilled1;
 			expectedSong.PlaybacksCount = 3;
 			expectedSong.LastPlaybackTime = new DateTimeOffset(2021, 07, 04, 09, 27, 12, TimeSpan.FromHours(3));
 			expectedSong.Playbacks = expectedSong.Playbacks.Concat(new PlaybackModel[]
@@ -435,7 +435,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			// SongModel.AddPlayback() does not update Playbacks collection, that is why we exclude it for this check.
 			song.Should().BeEquivalentTo(expectedSong, x => x.Excluding(y => y.Playbacks).IgnoringCyclicReferences());
 
-			var songFromRepository = await GetSongWithPlaybacks(ReferenceData.SongWithOptionalPropertiesFilledId);
+			var songFromRepository = await GetSongWithPlaybacks(ReferenceData.SongWithOptionalPropertiesFilledId1);
 			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.IgnoringCyclicReferences());
 		}
 
@@ -444,10 +444,10 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
-			var songFilePath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)", "01 - Break The Line.mp3");
+			var songFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "01 - Про женщин.mp3");
 			File.Exists(songFilePath).Should().BeTrue();
 
-			var song = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId);
+			var song = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId1);
 
 			var target = CreateTestTarget();
 
@@ -457,7 +457,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			var expectedSongWithoutPlaybacks = GetReferenceData(fillSongPlaybacks: false).SongWithOptionalPropertiesFilled;
+			var expectedSongWithoutPlaybacks = GetReferenceData(fillSongPlaybacks: false).SongWithOptionalPropertiesFilled1;
 			expectedSongWithoutPlaybacks.DeleteDate = new DateTimeOffset(2021, 07, 04, 11, 22, 15, TimeSpan.FromHours(3));
 			expectedSongWithoutPlaybacks.BitRate = null;
 			expectedSongWithoutPlaybacks.Size = null;
@@ -466,14 +466,14 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			song.Should().BeEquivalentTo(expectedSongWithoutPlaybacks, x => x.IgnoringCyclicReferences());
 
-			var expectedSongWithPlaybacks = GetReferenceData(fillSongPlaybacks: true).SongWithOptionalPropertiesFilled;
+			var expectedSongWithPlaybacks = GetReferenceData(fillSongPlaybacks: true).SongWithOptionalPropertiesFilled1;
 			expectedSongWithPlaybacks.DeleteDate = new DateTimeOffset(2021, 07, 04, 11, 22, 15, TimeSpan.FromHours(3));
 			expectedSongWithPlaybacks.BitRate = null;
 			expectedSongWithPlaybacks.Size = null;
 			expectedSongWithPlaybacks.Checksum = null;
 			expectedSongWithPlaybacks.ContentUri = null;
 
-			var songFromRepository = await GetSongWithPlaybacks(ReferenceData.SongWithOptionalPropertiesFilledId);
+			var songFromRepository = await GetSongWithPlaybacks(ReferenceData.SongWithOptionalPropertiesFilledId1);
 			songFromRepository.Should().BeEquivalentTo(expectedSongWithPlaybacks, x => x.IgnoringCyclicReferences());
 
 			File.Exists(songFilePath).Should().BeFalse();

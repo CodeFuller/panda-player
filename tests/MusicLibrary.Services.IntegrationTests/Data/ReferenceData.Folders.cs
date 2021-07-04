@@ -28,14 +28,14 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 		{
 			Id = SubFolderId,
 			ParentFolderId = RootFolderId,
-			Name = "Foreign",
+			Name = "Belarusian",
 		};
 
 		public ShallowFolderModel ArtistFolder { get; } = new()
 		{
 			Id = ArtistFolderId,
 			ParentFolderId = SubFolderId,
-			Name = "Guano Apes",
+			Name = "Neuro Dubel",
 		};
 
 		public ShallowFolderModel EmptyFolder { get; } = new()

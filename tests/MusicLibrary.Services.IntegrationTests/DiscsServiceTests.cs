@@ -27,10 +27,10 @@ namespace MusicLibrary.Services.IntegrationTests
 				{
 					Id = fillId ? ReferenceData.NextDiscId : null,
 					Folder = await GetFolder(ReferenceData.ArtistFolderId),
-					Year = 2021,
-					Title = "Some New Disc (CD 1)",
-					TreeTitle = "2021 - Some New Disc (CD 1)",
-					AlbumTitle = "Some New Disc",
+					Year = 1994,
+					Title = "Титаник Live (CD 1)",
+					TreeTitle = "1994 - Титаник Live (CD 1)",
+					AlbumTitle = "Титаник",
 				};
 
 				if (addSong)
@@ -43,8 +43,8 @@ namespace MusicLibrary.Services.IntegrationTests
 						{
 							Id = ReferenceData.NextSongId,
 							Disc = disc,
-							Title = "Some New Song",
-							TreeTitle = "01 - Some New Song.mp3",
+							Title = "Интродукция",
+							TreeTitle = "01 - Интродукция.mp3",
 							Duration = new TimeSpan(0, 3, 12),
 							BitRate = 12345,
 							Size = 67890,
@@ -60,7 +60,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				return disc;
 			}
 
-			await TestCaseForCreateDisc(CreateDiscData, Path.Combine("Foreign", "Guano Apes", "2021 - Some New Disc (CD 1)"));
+			await TestCaseForCreateDisc(CreateDiscData, Path.Combine("Belarusian", "Neuro Dubel", "1994 - Титаник Live (CD 1)"));
 		}
 
 		[TestMethod]
@@ -72,8 +72,8 @@ namespace MusicLibrary.Services.IntegrationTests
 				{
 					Id = fillId ? ReferenceData.NextDiscId : null,
 					Folder = await GetFolder(ReferenceData.ArtistFolderId),
-					Title = "Some New Disc (CD 1)",
-					TreeTitle = "2021 - Some New Disc (CD 1)",
+					Title = "Титаник Live (CD 1)",
+					TreeTitle = "1994 - Титаник Live (CD 1)",
 				};
 
 				if (addSong)
@@ -85,8 +85,8 @@ namespace MusicLibrary.Services.IntegrationTests
 						new SongModel
 						{
 							Id = ReferenceData.NextSongId,
-							Title = "Some New Song",
-							TreeTitle = "01 - Some New Song.mp3",
+							Title = "Интродукция",
+							TreeTitle = "01 - Интродукция.mp3",
 							Duration = new TimeSpan(0, 3, 12),
 							BitRate = 12345,
 							Size = 67890,
@@ -102,7 +102,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				return disc;
 			}
 
-			await TestCaseForCreateDisc(CreateDiscData, Path.Combine("Foreign", "Guano Apes", "2021 - Some New Disc (CD 1)"));
+			await TestCaseForCreateDisc(CreateDiscData, Path.Combine("Belarusian", "Neuro Dubel", "1994 - Титаник Live (CD 1)"));
 		}
 
 		[TestMethod]
@@ -114,13 +114,13 @@ namespace MusicLibrary.Services.IntegrationTests
 				{
 					Id = fillId ? ReferenceData.NextDiscId : null,
 					Folder = await GetFolder(ReferenceData.EmptyFolderId),
-					Title = "Some New Disc (CD 1)",
-					TreeTitle = "2021 - Some New Disc (CD 1)",
+					Title = "Титаник Live (CD 1)",
+					TreeTitle = "1994 - Титаник Live (CD 1)",
 					AllSongs = new List<SongModel>(),
 				};
 			}
 
-			await TestCaseForCreateDisc(CreateDiscData, Path.Combine("Foreign", "Guano Apes", "Empty Folder", "2021 - Some New Disc (CD 1)"));
+			await TestCaseForCreateDisc(CreateDiscData, Path.Combine("Belarusian", "Neuro Dubel", "Empty Folder", "1994 - Титаник Live (CD 1)"));
 		}
 
 		// discDataFactory(bool fillId, bool addSong)
@@ -146,7 +146,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			var expectedDiscs = new[]
 			{
 				referenceData.NormalDisc,
-				referenceData.DiscWithNullValues,
+				referenceData.DiscWithMissingFields,
 				referenceData.DeletedDisc,
 				await discDataFactory(true, false),
 			};
@@ -175,7 +175,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			var expectedDiscs = new[]
 			{
 				referenceData.NormalDisc,
-				referenceData.DiscWithNullValues,
+				referenceData.DiscWithMissingFields,
 				referenceData.DeletedDisc,
 			};
 
@@ -187,7 +187,7 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
-			var oldDiscDirectoryPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)");
+			var oldDiscDirectoryPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)");
 			Directory.Exists(oldDiscDirectoryPath).Should().BeTrue();
 
 			var target = CreateTestTarget();
@@ -196,7 +196,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Act
 
-			disc.TreeTitle = "New Tree Title";
+			disc.TreeTitle = "1998 - Охотник и сайгак";
 
 			await target.UpdateDisc(disc, CancellationToken.None);
 
@@ -204,11 +204,11 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var referenceData = GetReferenceData();
 			var expectedDisc = referenceData.NormalDisc;
-			expectedDisc.TreeTitle = "New Tree Title";
+			expectedDisc.TreeTitle = "1998 - Охотник и сайгак";
 			var activeSongs = expectedDisc.ActiveSongs.ToList();
-			activeSongs[0].ContentUri = "Foreign/Guano Apes/New Tree Title/01 - Break The Line.mp3".ToContentUri(LibraryStorageRoot);
-			activeSongs[1].ContentUri = "Foreign/Guano Apes/New Tree Title/Song With Null Values.mp3".ToContentUri(LibraryStorageRoot);
-			expectedDisc.Images.Single().ContentUri = "Foreign/Guano Apes/New Tree Title/cover.jpg".ToContentUri(LibraryStorageRoot);
+			activeSongs[0].ContentUri = "Belarusian/Neuro Dubel/1998 - Охотник и сайгак/01 - Про женщин.mp3".ToContentUri(LibraryStorageRoot);
+			activeSongs[1].ContentUri = "Belarusian/Neuro Dubel/1998 - Охотник и сайгак/02 - Про жизнь дяди Саши.mp3".ToContentUri(LibraryStorageRoot);
+			expectedDisc.Images.Single().ContentUri = "Belarusian/Neuro Dubel/1998 - Охотник и сайгак/cover.jpg".ToContentUri(LibraryStorageRoot);
 
 			disc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
 
@@ -217,7 +217,7 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			Directory.Exists(oldDiscDirectoryPath).Should().BeFalse();
 
-			var newDiscDirectoryPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "New Tree Title");
+			var newDiscDirectoryPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "1998 - Охотник и сайгак");
 			Directory.Exists(newDiscDirectoryPath).Should().BeTrue();
 		}
 
@@ -232,8 +232,8 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Act
 
-			disc.Year = 2021;
-			disc.AlbumTitle = "New Album Title";
+			disc.Year = 1998;
+			disc.AlbumTitle = "Охотник и сайгак";
 
 			await target.UpdateDisc(disc, CancellationToken.None);
 
@@ -241,13 +241,13 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var referenceData = GetReferenceData();
 			var expectedDisc = referenceData.NormalDisc;
-			expectedDisc.Year = 2021;
-			expectedDisc.AlbumTitle = "New Album Title";
+			expectedDisc.Year = 1998;
+			expectedDisc.AlbumTitle = "Охотник и сайгак";
 			var activeSongs = expectedDisc.ActiveSongs.ToList();
-			activeSongs[0].Size = 405606;
-			activeSongs[0].Checksum = 3485646791;
-			activeSongs[1].Size = 404482;
-			activeSongs[1].Checksum = 1340481200;
+			activeSongs[0].Size = 405588;
+			activeSongs[0].Checksum = 1321629719;
+			activeSongs[1].Size = 404561;
+			activeSongs[1].Checksum = 3202969334;
 
 			disc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
 
@@ -256,13 +256,13 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var songTagger = GetService<ISongTagger>();
 
-			var tagData1 = songTagger.GetTagData(Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)", "01 - Break The Line.mp3"));
-			tagData1.Year.Should().Be(2021);
-			tagData1.Album.Should().Be("New Album Title");
+			var tagData1 = songTagger.GetTagData(Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "01 - Про женщин.mp3"));
+			tagData1.Year.Should().Be(1998);
+			tagData1.Album.Should().Be("Охотник и сайгак");
 
-			var tagData2 = songTagger.GetTagData(Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)", "Song With Null Values.mp3"));
-			tagData2.Year.Should().Be(2021);
-			tagData2.Album.Should().Be("New Album Title");
+			var tagData2 = songTagger.GetTagData(Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "02 - Про жизнь дяди Саши.mp3"));
+			tagData2.Year.Should().Be(1998);
+			tagData2.Album.Should().Be("Охотник и сайгак");
 
 			var updatedDisc = await GetDisc(ReferenceData.NormalDiscId, target);
 			updatedDisc.Should().BeEquivalentTo(disc, x => x.IgnoringCyclicReferences());
@@ -275,9 +275,12 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var target = CreateTestTarget();
 
+			var imageFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "Disc With Missing Fields (CD 1)", "cover.jpg");
+			File.Exists(imageFilePath).Should().BeFalse();
+
 			var discCoverImage = new DiscImageModel
 			{
-				Disc = await GetDisc(ReferenceData.DiscWithNullValuesId, target),
+				Disc = await GetDisc(ReferenceData.DiscWithMissingFieldsId, target),
 				TreeTitle = "cover.jpg",
 				ImageType = DiscImageType.Cover,
 			};
@@ -293,22 +296,21 @@ namespace MusicLibrary.Services.IntegrationTests
 			var expectedDiscCoverImage = new DiscImageModel
 			{
 				Id = ReferenceData.NextDiscCoverImageId,
-				Disc = referenceData.DiscWithNullValues,
+				Disc = referenceData.DiscWithMissingFields,
 				TreeTitle = "cover.jpg",
 				ImageType = DiscImageType.Cover,
 				Size = 119957,
 				Checksum = 1208131419,
-				ContentUri = "Foreign/Guano Apes/Disc With Null Values (CD 1)/cover.jpg".ToContentUri(LibraryStorageRoot),
+				ContentUri = "Belarusian/Neuro Dubel/Disc With Missing Fields (CD 1)/cover.jpg".ToContentUri(LibraryStorageRoot),
 			};
 
-			referenceData.DiscWithNullValues.Images = new[] { expectedDiscCoverImage };
+			referenceData.DiscWithMissingFields.Images = new[] { expectedDiscCoverImage };
 
 			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
 
-			var discFromRepository = await GetDisc(ReferenceData.DiscWithNullValuesId, target);
+			var discFromRepository = await GetDisc(ReferenceData.DiscWithMissingFieldsId, target);
 			discFromRepository.CoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
 
-			var imageFilePath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Disc With Null Values (CD 1)", "cover.jpg");
 			var fileInfo = new FileInfo(imageFilePath);
 			fileInfo.Exists.Should().BeTrue();
 			fileInfo.Length.Should().Be(119957);
@@ -320,6 +322,9 @@ namespace MusicLibrary.Services.IntegrationTests
 			// Arrange
 
 			var target = CreateTestTarget();
+
+			var imageFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "cover.jpg");
+			File.Exists(imageFilePath).Should().BeTrue();
 
 			var discCoverImage = new DiscImageModel
 			{
@@ -344,7 +349,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				ImageType = DiscImageType.Cover,
 				Size = 119957,
 				Checksum = 1208131419,
-				ContentUri = "Foreign/Guano Apes/2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)/cover.jpg".ToContentUri(LibraryStorageRoot),
+				ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/cover.jpg".ToContentUri(LibraryStorageRoot),
 			};
 
 			referenceData.NormalDisc.Images = new[] { expectedDiscCoverImage };
@@ -354,7 +359,6 @@ namespace MusicLibrary.Services.IntegrationTests
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId, target);
 			discFromRepository.CoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
 
-			var imageFilePath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)", "cover.jpg");
 			var fileInfo = new FileInfo(imageFilePath);
 			fileInfo.Exists.Should().BeTrue();
 			fileInfo.Length.Should().Be(119957);
@@ -366,6 +370,9 @@ namespace MusicLibrary.Services.IntegrationTests
 			// Arrange
 
 			var target = CreateTestTarget();
+
+			var oldImageFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "cover.jpg");
+			File.Exists(oldImageFilePath).Should().BeTrue();
 
 			var discCoverImage = new DiscImageModel
 			{
@@ -390,7 +397,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				ImageType = DiscImageType.Cover,
 				Size = 184257,
 				Checksum = 1738836760,
-				ContentUri = "Foreign/Guano Apes/2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)/cover.png".ToContentUri(LibraryStorageRoot),
+				ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/cover.png".ToContentUri(LibraryStorageRoot),
 			};
 
 			referenceData.NormalDisc.Images = new[] { expectedDiscCoverImage };
@@ -400,12 +407,11 @@ namespace MusicLibrary.Services.IntegrationTests
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId, target);
 			discFromRepository.CoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
 
-			var imageFilePath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)", "cover.png");
+			var imageFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "cover.png");
 			var fileInfo = new FileInfo(imageFilePath);
 			fileInfo.Exists.Should().BeTrue();
 			fileInfo.Length.Should().Be(184257);
 
-			var oldImageFilePath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)", "cover.jpg");
 			File.Exists(oldImageFilePath).Should().BeFalse();
 		}
 
@@ -414,7 +420,7 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
-			var discDirectoryPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)");
+			var discDirectoryPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)");
 			Directory.Exists(discDirectoryPath).Should().BeTrue();
 
 			var deleteDate = new DateTimeOffset(2021, 07, 03, 13, 25, 33, TimeSpan.FromHours(3));

@@ -9,7 +9,7 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 	{
 		public static ItemId NormalDiscId => new("1");
 
-		public static ItemId DiscWithNullValuesId => new("2");
+		public static ItemId DiscWithMissingFieldsId => new("2");
 
 		public static ItemId DeletedDiscId => new("3");
 
@@ -21,7 +21,7 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 
 		public DiscModel NormalDisc { get; private set; }
 
-		public DiscModel DiscWithNullValues { get; private set; }
+		public DiscModel DiscWithMissingFields { get; private set; }
 
 		public DiscModel DeletedDisc { get; private set; }
 
@@ -31,10 +31,10 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 			{
 				Id = NormalDiscId,
 				Folder = ArtistFolder,
-				Year = 2004,
-				Title = "Planet Of The Apes - Best Of Guano Apes (CD 1)",
-				TreeTitle = "2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)",
-				AlbumTitle = "Planet Of The Apes - Best Of Guano Apes",
+				Year = 2010,
+				Title = "Афтары правды (CD 1)",
+				TreeTitle = "2010 - Афтары правды (CD 1)",
+				AlbumTitle = "Афтары правды",
 				Images = new List<DiscImageModel>
 				{
 					new()
@@ -42,21 +42,21 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 						Id = new ItemId("1"),
 						TreeTitle = "cover.jpg",
 						ImageType = DiscImageType.Cover,
-						Size = 15843,
-						Checksum = 2233864363,
-						ContentUri = "Foreign/Guano Apes/2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)/cover.jpg".ToContentUri(libraryStorageRoot),
+						Size = 359119,
+						Checksum = 2792704281,
+						ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/cover.jpg".ToContentUri(libraryStorageRoot),
 					},
 				},
 			};
 
 			NormalDisc.Images.Single().Disc = NormalDisc;
 
-			DiscWithNullValues = new()
+			DiscWithMissingFields = new()
 			{
-				Id = DiscWithNullValuesId,
+				Id = DiscWithMissingFieldsId,
 				Folder = ArtistFolder,
-				Title = "Disc With Null Values",
-				TreeTitle = "Disc With Null Values (CD 1)",
+				Title = "Disc With Missing Fields",
+				TreeTitle = "Disc With Missing Fields (CD 1)",
 			};
 
 			DeletedDisc = new()

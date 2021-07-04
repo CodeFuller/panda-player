@@ -8,69 +8,75 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 {
 	public partial class ReferenceData
 	{
-		public static ItemId SongWithOptionalPropertiesFilledId => new("1");
+		public static ItemId SongWithOptionalPropertiesFilledId1 => new("1");
 
-		public static ItemId SongWithOptionalPropertiesMissingId => new("2");
+		public static ItemId SongWithOptionalPropertiesFilledId2 => new("2");
 
-		public static ItemId SongFromNullDiscId => new("3");
+		public static ItemId SongWithOptionalPropertiesMissingId => new("3");
 
 		public static ItemId DeletedSongId => new("4");
 
 		public static ItemId NextSongId => new("5");
 
-		public SongModel SongWithOptionalPropertiesFilled { get; private set; }
+		public SongModel SongWithOptionalPropertiesFilled1 { get; private set; }
+
+		public SongModel SongWithOptionalPropertiesFilled2 { get; private set; }
 
 		public SongModel SongWithOptionalPropertiesMissing { get; private set; }
-
-		public SongModel SongFromNullDisc { get; private set; }
 
 		public SongModel DeletedSong { get; private set; }
 
 		private void FillSongs(string libraryStorageRoot)
 		{
-			SongWithOptionalPropertiesFilled = new()
+			SongWithOptionalPropertiesFilled1 = new()
 			{
-				Id = SongWithOptionalPropertiesFilledId,
+				Id = SongWithOptionalPropertiesFilledId1,
 				Disc = NormalDisc,
-				Title = "Break The Line",
-				TreeTitle = "01 - Break The Line.mp3",
+				Title = "Про женщин",
+				TreeTitle = "01 - Про женщин.mp3",
 				TrackNumber = 1,
-				Artist = Artist1,
+				Artist = Artist2,
 				Genre = Genre1,
-				Duration = TimeSpan.FromMilliseconds(211957),
+				Duration = TimeSpan.FromMilliseconds(10626),
 				Rating = RatingModel.R6,
 				BitRate = 320000,
-				Size = 8479581,
-				Checksum = 292181681,
+				Size = 405582,
+				Checksum = 721007018,
 				LastPlaybackTime = DateTimeOffset.Parse("2021-04-03 10:33:53.3517221+03:00", CultureInfo.InvariantCulture),
 				PlaybacksCount = 2,
-				ContentUri = "Foreign/Guano Apes/2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)/01 - Break The Line.mp3".ToContentUri(libraryStorageRoot),
+				ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/01 - Про женщин.mp3".ToContentUri(libraryStorageRoot),
+			};
+
+			SongWithOptionalPropertiesFilled2 = new()
+			{
+				Id = SongWithOptionalPropertiesFilledId2,
+				Disc = NormalDisc,
+				Title = "Про жизнь дяди Саши",
+				TreeTitle = "02 - Про жизнь дяди Саши.mp3",
+				TrackNumber = 2,
+				Artist = Artist2,
+				Genre = Genre1,
+				Duration = TimeSpan.FromMilliseconds(10600),
+				Rating = RatingModel.R6,
+				BitRate = 320000,
+				Size = 404555,
+				Checksum = 3829155604,
+				LastPlaybackTime = DateTimeOffset.Parse("2021-04-03 10:37:42.1257252+03:00", CultureInfo.InvariantCulture),
+				PlaybacksCount = 2,
+				ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/02 - Про жизнь дяди Саши.mp3".ToContentUri(libraryStorageRoot),
 			};
 
 			SongWithOptionalPropertiesMissing = new()
 			{
 				Id = SongWithOptionalPropertiesMissingId,
-				Disc = NormalDisc,
-				Title = "Song With Null Values",
-				TreeTitle = "Song With Null Values.mp3",
-				Duration = TimeSpan.FromMilliseconds(186697),
+				Disc = DiscWithMissingFields,
+				Title = "Song With Missing Fields",
+				TreeTitle = "Song With Missing Fields.mp3",
+				Duration = TimeSpan.FromMilliseconds(11618),
 				BitRate = 320000,
-				Size = 7469164,
-				Checksum = 2894035568,
-				ContentUri = "Foreign/Guano Apes/2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)/Song With Null Values.mp3".ToContentUri(libraryStorageRoot),
-			};
-
-			SongFromNullDisc = new()
-			{
-				Id = SongFromNullDiscId,
-				Disc = DiscWithNullValues,
-				Title = "Song From Null Disc",
-				TreeTitle = "Song From Null Disc.mp3",
-				Duration = TimeSpan.FromMilliseconds(186697),
-				BitRate = 320000,
-				Size = 7469164,
-				Checksum = 2894035568,
-				ContentUri = "Foreign/Guano Apes/Disc With Null Values (CD 1)/Song From Null Disc.mp3".ToContentUri(libraryStorageRoot),
+				Size = 445175,
+				Checksum = 751499818,
+				ContentUri = "Belarusian/Neuro Dubel/Disc With Missing Fields (CD 1)/Song With Missing Fields.mp3".ToContentUri(libraryStorageRoot),
 			};
 
 			DeletedSong = new()
@@ -89,8 +95,8 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 				DeleteDate = DateTimeOffset.Parse("2021-03-28 14:10:59.3191807+03:00", CultureInfo.InvariantCulture),
 			};
 
-			NormalDisc.AllSongs = new List<SongModel> { SongWithOptionalPropertiesFilled, SongWithOptionalPropertiesMissing, };
-			DiscWithNullValues.AllSongs = new List<SongModel> { SongFromNullDisc, };
+			NormalDisc.AllSongs = new List<SongModel> { SongWithOptionalPropertiesFilled1, SongWithOptionalPropertiesFilled2, };
+			DiscWithMissingFields.AllSongs = new List<SongModel> { SongWithOptionalPropertiesMissing, };
 			DeletedDisc.AllSongs = new List<SongModel> { DeletedSong, };
 		}
 	}

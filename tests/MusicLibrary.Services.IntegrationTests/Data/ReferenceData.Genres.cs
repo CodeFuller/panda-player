@@ -11,13 +11,13 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 		public GenreModel Genre1 { get; } = new()
 		{
 			Id = Genre1Id,
-			Name = "Alternative Rock",
+			Name = "Punk Rock",
 		};
 
 		public GenreModel Genre2 { get; } = new()
 		{
 			Id = Genre2Id,
-			Name = "Rock",
+			Name = "Alternative Rock",
 		};
 	}
 }
