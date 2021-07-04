@@ -444,16 +444,17 @@ namespace MusicLibrary.Services.IntegrationTests
 		{
 			// Arrange
 
+			var deleteDate = new DateTimeOffset(2021, 07, 04, 11, 22, 15, TimeSpan.FromHours(3));
+			var target = CreateTestTarget(StubClock(deleteDate));
+
 			var songFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "01 - Про женщин.mp3");
 			File.Exists(songFilePath).Should().BeTrue();
 
 			var song = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId1);
 
-			var target = CreateTestTarget();
-
 			// Act
 
-			await target.DeleteSong(song, new DateTimeOffset(2021, 07, 04, 11, 22, 15, TimeSpan.FromHours(3)), CancellationToken.None);
+			await target.DeleteSong(song, CancellationToken.None);
 
 			// Assert
 
