@@ -49,6 +49,28 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 			return discModel.AllSongs.Single(song => song.Id == songId);
 		}
 
+		public async Task<SongModel> GetSongWithPlaybacks(ItemId songId, CancellationToken cancellationToken)
+		{
+			// Currently this method is used only for IT purposes.
+			// We load song indirectly via loading disc data,
+			// because we need full graph of objects for comparison.
+			await using var context = contextFactory.CreateDbContext();
+
+			var id = songId.ToInt32();
+
+			var songDisc = await context.Discs
+				.Include(disc => disc.Folder)
+				.Include(disc => disc.Songs).ThenInclude(song => song.Artist)
+				.Include(disc => disc.Songs).ThenInclude(song => song.Genre)
+				.Include(disc => disc.Songs).ThenInclude(song => song.Playbacks)
+				.Include(disc => disc.Images)
+				.Where(disc => disc.Songs.Any(song => song.Id == id))
+				.SingleAsync(cancellationToken);
+
+			var discModel = songDisc.ToModel(contentUriProvider);
+			return discModel.AllSongs.Single(song => song.Id == songId);
+		}
+
 		public async Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken)
 		{
 			var songIdsList = songIds.ToList();
@@ -141,6 +163,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 		private static IQueryable<SongEntity> GetSongsQueryable(MusicLibraryDbContext context)
 		{
 			return context.Songs
+				.Include(song => song.Disc).ThenInclude(disc => disc.Songs)
 				.Include(song => song.Disc).ThenInclude(disc => disc.Images)
 				.Include(song => song.Disc).ThenInclude(disc => disc.Folder)
 				.Include(song => song.Artist)

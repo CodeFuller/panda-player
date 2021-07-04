@@ -11,6 +11,8 @@ namespace MusicLibrary.Services.Interfaces.Dal
 
 		Task<SongModel> GetSong(ItemId songId, CancellationToken cancellationToken);
 
+		Task<SongModel> GetSongWithPlaybacks(ItemId songId, CancellationToken cancellationToken);
+
 		Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken);
 
 		Task UpdateSong(SongModel song, CancellationToken cancellationToken);

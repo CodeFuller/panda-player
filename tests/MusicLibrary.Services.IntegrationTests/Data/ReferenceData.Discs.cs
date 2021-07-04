@@ -11,6 +11,8 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 
 		public static ItemId DiscWithNullValuesId => new("2");
 
+		public static ItemId DeletedDiscId => new("3");
+
 		public static ItemId NextDiscId => new("4");
 
 		public static ItemId DiscCoverImageId => new("1");
@@ -41,7 +43,7 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 						TreeTitle = "cover.jpg",
 						ImageType = DiscImageType.Cover,
 						Size = 15843,
-						Checksum = 0x852610AB,
+						Checksum = 2233864363,
 						ContentUri = "Foreign/Guano Apes/2004 - Planet Of The Apes - Best Of Guano Apes (CD 1)/cover.jpg".ToContentUri(libraryStorageRoot),
 					},
 				},
@@ -59,7 +61,7 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 
 			DeletedDisc = new()
 			{
-				Id = new ItemId("3"),
+				Id = DeletedDiscId,
 				Folder = ArtistFolder,
 				Year = 2021,
 				Title = "Deleted Disc",

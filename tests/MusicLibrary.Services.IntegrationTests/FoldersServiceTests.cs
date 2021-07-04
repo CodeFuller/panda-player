@@ -36,7 +36,14 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
+			var expectedShallowFolder = new ShallowFolderModel
+			{
+				Id = ReferenceData.NextFolderId,
+				ParentFolderId = ReferenceData.RootFolderId,
+				Name = "Test Folder",
+			};
+
+			newFolder.Should().BeEquivalentTo(expectedShallowFolder);
 
 			var referenceData = GetReferenceData();
 			var expectedFolders = new[]
@@ -46,12 +53,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				referenceData.ArtistFolder,
 				referenceData.EmptyFolder,
 				referenceData.DeletedFolder,
-				new ShallowFolderModel
-				{
-					Id = ReferenceData.NextFolderId,
-					ParentFolderId = ReferenceData.RootFolderId,
-					Name = "Test Folder",
-				},
+				expectedShallowFolder,
 			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
@@ -67,8 +69,8 @@ namespace MusicLibrary.Services.IntegrationTests
 				Discs = new List<DiscModel>(),
 			};
 
-			var createdFolder = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
-			createdFolder.Should().BeEquivalentTo(expectedFolder);
+			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
 
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Test Folder");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
@@ -93,6 +95,13 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
+			var expectedShallowFolder = new ShallowFolderModel
+			{
+				Id = ReferenceData.NextFolderId,
+				ParentFolderId = ReferenceData.ArtistFolderId,
+				Name = "Test Folder",
+			};
+
 			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
 
 			var referenceData = GetReferenceData();
@@ -103,12 +112,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				referenceData.ArtistFolder,
 				referenceData.EmptyFolder,
 				referenceData.DeletedFolder,
-				new ShallowFolderModel
-				{
-					Id = ReferenceData.NextFolderId,
-					ParentFolderId = ReferenceData.ArtistFolderId,
-					Name = "Test Folder",
-				},
+				expectedShallowFolder,
 			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
@@ -124,8 +128,8 @@ namespace MusicLibrary.Services.IntegrationTests
 				Discs = new List<DiscModel>(),
 			};
 
-			var createdFolder = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
-			createdFolder.Should().BeEquivalentTo(expectedFolder);
+			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
 
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Test Folder");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
@@ -150,6 +154,13 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
+			var expectedShallowFolder = new ShallowFolderModel
+			{
+				Id = ReferenceData.NextFolderId,
+				ParentFolderId = ReferenceData.ArtistFolderId,
+				Name = "Foreign",
+			};
+
 			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
 
 			var referenceData = GetReferenceData();
@@ -160,12 +171,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				referenceData.ArtistFolder,
 				referenceData.EmptyFolder,
 				referenceData.DeletedFolder,
-				new ShallowFolderModel
-				{
-					Id = ReferenceData.NextFolderId,
-					ParentFolderId = ReferenceData.ArtistFolderId,
-					Name = "Foreign",
-				},
+				expectedShallowFolder,
 			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
@@ -181,8 +187,8 @@ namespace MusicLibrary.Services.IntegrationTests
 				Discs = new List<DiscModel>(),
 			};
 
-			var createdFolder = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
-			createdFolder.Should().BeEquivalentTo(expectedFolder);
+			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
 
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Foreign", "Guano Apes", "Foreign");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
@@ -208,6 +214,19 @@ namespace MusicLibrary.Services.IntegrationTests
 			// Assert
 
 			await call.Should().ThrowAsync<DbUpdateException>();
+
+			var referenceData = GetReferenceData();
+			var expectedFolders = new[]
+			{
+				referenceData.RootFolder,
+				referenceData.SubFolder,
+				referenceData.ArtistFolder,
+				referenceData.EmptyFolder,
+				referenceData.DeletedFolder,
+			};
+
+			var allFolders = await target.GetAllFolders(CancellationToken.None);
+			allFolders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
 		}
 
 		[TestMethod]
@@ -345,8 +364,6 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			var foldersAfterDeletion = await target.GetAllFolders(CancellationToken.None);
-
 			var referenceData = GetReferenceData();
 			var expectedFolders = new[]
 			{
@@ -363,7 +380,8 @@ namespace MusicLibrary.Services.IntegrationTests
 				referenceData.DeletedFolder,
 			};
 
-			foldersAfterDeletion.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders);
+			var allFolders = await target.GetAllFolders(CancellationToken.None);
+			allFolders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders);
 
 			Directory.Exists(directoryPath).Should().BeFalse();
 		}
@@ -382,6 +400,19 @@ namespace MusicLibrary.Services.IntegrationTests
 			// Assert
 
 			await call.Should().ThrowAsync<InvalidOperationException>();
+
+			var referenceData = GetReferenceData();
+			var expectedFolders = new[]
+			{
+				referenceData.RootFolder,
+				referenceData.SubFolder,
+				referenceData.ArtistFolder,
+				referenceData.EmptyFolder,
+				referenceData.DeletedFolder,
+			};
+
+			var allFolders = await target.GetAllFolders(CancellationToken.None);
+			allFolders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
 		}
 	}
 }

@@ -13,6 +13,8 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 
 		public static ItemId EmptyFolderId => new("4");
 
+		public static ItemId DeletedFolderId => new("5");
+
 		public static ItemId NextFolderId => new("6");
 
 		public ShallowFolderModel RootFolder { get; } = new()
@@ -25,14 +27,14 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 		public ShallowFolderModel SubFolder { get; } = new()
 		{
 			Id = SubFolderId,
-			ParentFolderId = new ItemId("1"),
+			ParentFolderId = RootFolderId,
 			Name = "Foreign",
 		};
 
 		public ShallowFolderModel ArtistFolder { get; } = new()
 		{
 			Id = ArtistFolderId,
-			ParentFolderId = new ItemId("2"),
+			ParentFolderId = SubFolderId,
 			Name = "Guano Apes",
 		};
 
@@ -45,7 +47,7 @@ namespace MusicLibrary.Services.IntegrationTests.Data
 
 		public ShallowFolderModel DeletedFolder { get; } = new()
 		{
-			Id = new ItemId("5"),
+			Id = DeletedFolderId,
 			ParentFolderId = ArtistFolderId,
 			Name = "Deleted Folder",
 			DeleteDate = new DateTimeOffset(2021, 06, 30, 18, 08, 10, TimeSpan.FromHours(3)),

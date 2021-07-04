@@ -21,16 +21,21 @@ INSERT INTO [Genres] ([Id], [Name]) VALUES
 
 INSERT INTO [Songs] ([Id], [Artist_Id], [Disc_Id], [Genre_Id], [TrackNumber], [Title], [TreeTitle], [Duration],
 			[Rating], [FileSize], [Checksum], [Bitrate], [LastPlaybackTime], [PlaybacksCount], [DeleteDate]) VALUES
-(1, 1, 1, 1, 1, 'Break The Line', '01 - Break The Line.mp3', 211957, 6, 8479581, 292181681, 320000, '2021-03-19 13:35:02.2626013+03:00', 9, NULL),
-(2, NULL, 1, NULL, NULL, 'Song With Null Values', 'Song With Null Values.mp3', 186697, NULL, 7469164, -1400931728, 320000, '2021-03-19 13:38:11.0351513+03:00', 8, NULL);
+(1, 1, 1, 1, 1, 'Break The Line', '01 - Break The Line.mp3', 211957, 6, 8479581, 292181681, 320000, '2021-04-03 10:33:53.3517221+03:00', 2, NULL),
+(2, NULL, 1, NULL, NULL, 'Song With Null Values', 'Song With Null Values.mp3', 186697, NULL, 7469164, -1400931728, 320000, NULL, 0, NULL);
 
 INSERT INTO [Songs] ([Id], [Artist_Id], [Disc_Id], [Genre_Id], [TrackNumber], [Title], [TreeTitle], [Duration],
 			[Rating], [FileSize], [Checksum], [Bitrate], [LastPlaybackTime], [PlaybacksCount], [DeleteDate]) VALUES
-(3, NULL, 2, NULL, NULL, 'Song From Null Disc', 'Song From Null Disc.mp3', 186697, NULL, 7469164, -1400931728, 320000, '2021-03-19 13:38:11.0351513+03:00', 8, NULL);
+(3, NULL, 2, NULL, NULL, 'Song From Null Disc', 'Song From Null Disc.mp3', 186697, NULL, 7469164, -1400931728, 320000, NULL, 0, NULL);
 
 INSERT INTO [Songs] ([Id], [Artist_Id], [Disc_Id], [Genre_Id], [TrackNumber], [Title], [TreeTitle], [Duration],
 			[Rating], [FileSize], [Checksum], [Bitrate], [LastPlaybackTime], [PlaybacksCount], [DeleteDate]) VALUES
-(4, 2, 3, 2, 1, 'Deleted Song', '01 - Deleted Song.mp3', 486739, 4, NULL, NULL, NULL, '2021-03-28 09:33:39.2582742+03:00', 2, '2021-03-28 14:10:59.3191807+03:00');
+(4, 2, 3, 2, 1, 'Deleted Song', '01 - Deleted Song.mp3', 486739, 4, NULL, NULL, NULL, '2021-03-28 09:33:39.2582742+03:00', 1, '2021-03-28 14:10:59.3191807+03:00');
 
 INSERT INTO [DiscImages] ([Id], [Disc_Id], [TreeTitle], [ImageType], [FileSize], [Checksum]) VALUES
 (1, 1, 'cover.jpg', 1, 15843, -2061102933);
+
+INSERT INTO [Playbacks] ([Id], [Song_Id], [PlaybackTime]) VALUES
+(1, 1, '2021-03-19 13:35:02.2626013+03:00'),
+(2, 1, '2021-04-03 10:33:53.3517221+03:00'),
+(3, 3, '2021-03-28 09:33:39.2582742+03:00');

@@ -31,18 +31,20 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			// Assert
 
-			newArtist.Id.Should().Be(ReferenceData.NextArtistId);
+			var expectedArtist = new ArtistModel
+			{
+				Id = ReferenceData.NextArtistId,
+				Name = "Nautilus Pompilius",
+			};
+
+			newArtist.Should().BeEquivalentTo(expectedArtist);
 
 			var referenceData = GetReferenceData();
 			var expectedArtists = new[]
 			{
 				referenceData.Artist1,
 				referenceData.Artist2,
-				new ArtistModel
-				{
-					Id = ReferenceData.NextArtistId,
-					Name = "Nautilus Pompilius",
-				},
+				expectedArtist,
 			};
 
 			var allArtists = await target.GetAllArtists(CancellationToken.None);
@@ -68,6 +70,16 @@ namespace MusicLibrary.Services.IntegrationTests
 			// Assert
 
 			await call.Should().ThrowAsync<DbUpdateException>();
+
+			var referenceData = GetReferenceData();
+			var expectedArtists = new[]
+			{
+				referenceData.Artist1,
+				referenceData.Artist2,
+			};
+
+			var allArtists = await target.GetAllArtists(CancellationToken.None);
+			allArtists.Should().BeEquivalentTo(expectedArtists);
 		}
 
 		[TestMethod]

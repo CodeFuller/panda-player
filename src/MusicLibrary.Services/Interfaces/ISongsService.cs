@@ -13,6 +13,8 @@ namespace MusicLibrary.Services.Interfaces
 
 		Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken);
 
+		internal Task<SongModel> GetSongWithPlaybacks(ItemId songId, CancellationToken cancellationToken);
+
 		Task UpdateSong(SongModel song, CancellationToken cancellationToken);
 
 		Task AddSongPlayback(SongModel song, DateTimeOffset playbackTime, CancellationToken cancellationToken);

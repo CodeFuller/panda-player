@@ -38,13 +38,18 @@ namespace MusicLibrary.Services
 		{
 			await storageRepository.AddSong(song, songContent, cancellationToken);
 
-			// Adding to repository should be performed after adding to the storage, because later updates song checksum.
+			// Adding to repository should be performed after adding to the storage, because later updates song checksum and size.
 			await songsRepository.CreateSong(song, cancellationToken);
 		}
 
 		public Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken)
 		{
 			return songsRepository.GetSongs(songIds, cancellationToken);
+		}
+
+		Task<SongModel> ISongsService.GetSongWithPlaybacks(ItemId songId, CancellationToken cancellationToken)
+		{
+			return songsRepository.GetSongWithPlaybacks(songId, cancellationToken);
 		}
 
 		public async Task UpdateSong(SongModel song, CancellationToken cancellationToken)
@@ -93,6 +98,7 @@ namespace MusicLibrary.Services
 			song.BitRate = null;
 			song.Size = null;
 			song.Checksum = null;
+			song.ContentUri = null;
 
 			await songsRepository.UpdateSong(song, cancellationToken);
 		}

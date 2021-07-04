@@ -83,10 +83,10 @@ namespace MusicLibrary.Services.IntegrationTests
 		}
 
 #pragma warning disable CA1024 // Use properties where appropriate
-		protected ReferenceData GetReferenceData()
+		protected ReferenceData GetReferenceData(bool fillSongPlaybacks = false)
 #pragma warning restore CA1024 // Use properties where appropriate
 		{
-			return new(LibraryStorageRoot);
+			return new(LibraryStorageRoot, fillSongPlaybacks);
 		}
 
 		private void CopyStorageData()
