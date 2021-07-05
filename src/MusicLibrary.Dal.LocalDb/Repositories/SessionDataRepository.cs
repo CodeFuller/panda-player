@@ -76,7 +76,7 @@ namespace MusicLibrary.Dal.LocalDb.Repositories
 
 		private static string SerializeData<TData>(TData data)
 		{
-			return data == null ? null : JsonConvert.SerializeObject(data, Formatting.Indented);
+			return data == null ? null : JsonConvert.SerializeObject(data);
 		}
 
 		private static TData DeserializeData<TData>(string data)

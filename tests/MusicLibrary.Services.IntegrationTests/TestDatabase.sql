@@ -41,3 +41,6 @@ INSERT INTO [Playbacks] ([Id], [Song_Id], [PlaybackTime]) VALUES
 (3, 4, '2021-03-28 09:33:39.2582742+03:00'),
 (4, 1, '2021-04-03 10:33:53.3517221+03:00'),
 (5, 2, '2021-04-03 10:37:42.1257252+03:00');
+
+INSERT INTO [SessionData] ([Key], [Data]) VALUES
+('Existing Data Key', '{"NumericProperty":12345,"StringProperty":"StringProperty From Database","CollectionProperty":["CollectionValue1 From Database","CollectionValue2 From Database"]}');
