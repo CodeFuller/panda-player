@@ -49,6 +49,8 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var allArtists = await target.GetAllArtists(CancellationToken.None);
 			allArtists.Should().BeEquivalentTo(expectedArtists);
+
+			await CheckLibraryConsistency();
 		}
 
 		[TestMethod]
@@ -80,6 +82,8 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var allArtists = await target.GetAllArtists(CancellationToken.None);
 			allArtists.Should().BeEquivalentTo(expectedArtists);
+
+			await CheckLibraryConsistency();
 		}
 
 		[TestMethod]

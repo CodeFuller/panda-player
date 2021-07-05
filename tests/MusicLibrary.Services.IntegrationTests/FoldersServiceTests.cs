@@ -74,6 +74,8 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Ляпис Трубецкой");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
+
+			await CheckLibraryConsistency();
 		}
 
 		[TestMethod]
@@ -133,6 +135,8 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "Ляпис Трубецкой");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
+
+			await CheckLibraryConsistency();
 		}
 
 		[TestMethod]
@@ -192,6 +196,8 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "Belarusian");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
+
+			await CheckLibraryConsistency();
 		}
 
 		[TestMethod]
@@ -227,6 +233,8 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
 			allFolders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
+
+			await CheckLibraryConsistency();
 		}
 
 		[TestMethod]
@@ -383,6 +391,8 @@ namespace MusicLibrary.Services.IntegrationTests
 			allFolders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders);
 
 			Directory.Exists(directoryPath).Should().BeFalse();
+
+			await CheckLibraryConsistency();
 		}
 
 		[TestMethod]
@@ -412,6 +422,8 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
 			allFolders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
+
+			await CheckLibraryConsistency();
 		}
 	}
 }

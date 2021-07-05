@@ -1,12 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using MusicLibrary.Core.Facades;
 using MusicLibrary.Dal.LocalDb.Extensions;
+using MusicLibrary.Services.Diagnostic;
+using MusicLibrary.Services.Diagnostic.Inconsistencies;
 using MusicLibrary.Services.Extensions;
 using MusicLibrary.Services.IntegrationTests.Data;
+using MusicLibrary.Services.Interfaces;
 
 namespace MusicLibrary.Services.IntegrationTests
 {
@@ -45,9 +53,13 @@ namespace MusicLibrary.Services.IntegrationTests
 				{
 					settings.Root = LibraryStorageRoot;
 				})
-				.AddMusicLibraryServices();
-
-			services.AddLogging();
+				.AddMusicLibraryServices()
+				.AddDiscTitleToAlbumMapper(settings =>
+				{
+					settings.AlbumTitlePatterns = new[] { @"^(.+) \(CD ?\d+\)$" };
+					settings.EmptyAlbumTitlePatterns = new[] { "Disc With Missing Fields" };
+				})
+				.AddLogging();
 
 			setupServices?.Invoke(services);
 
@@ -135,6 +147,19 @@ namespace MusicLibrary.Services.IntegrationTests
 			{
 				File.SetAttributes(filePath, attributes);
 			}
+		}
+
+		protected async Task CheckLibraryConsistency(params Type[] allowedInconsistencies)
+		{
+			var inconsistencies = new List<LibraryInconsistency>();
+			void InconsistenciesHandler(LibraryInconsistency inconsistency) => inconsistencies.Add(inconsistency);
+
+			var diagnosticService = GetService<IDiagnosticService>();
+
+			await diagnosticService.CheckLibrary(LibraryCheckFlags.All, Mock.Of<IOperationProgress>(), InconsistenciesHandler, CancellationToken.None);
+
+			var unexpectedInconsistencies = inconsistencies.Where(x => !allowedInconsistencies.Contains(x.GetType()));
+			unexpectedInconsistencies.Should().BeEmpty();
 		}
 
 		private void DisposeServices()

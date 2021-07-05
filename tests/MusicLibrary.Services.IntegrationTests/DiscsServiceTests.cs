@@ -8,6 +8,8 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MusicLibrary.Core.Models;
 using MusicLibrary.Dal.LocalDb.Extensions;
+using MusicLibrary.Dal.LocalDb.Inconsistencies.StorageInconsistencies;
+using MusicLibrary.Services.Diagnostic.Inconsistencies.DiscInconsistencies;
 using MusicLibrary.Services.IntegrationTests.Data;
 using MusicLibrary.Services.IntegrationTests.Extensions;
 using MusicLibrary.Services.Interfaces;
@@ -156,6 +158,10 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var discDirectoryPath = Path.Combine(LibraryStorageRoot, relativeDiscDirectoryPath);
 			Directory.Exists(discDirectoryPath).Should().BeTrue();
+
+			// This test creates empty disc which is considered as deleted (no active songs).
+			// Thus, disc directory is not expected in library storage.
+			await CheckLibraryConsistency(typeof(UnexpectedFolderInconsistency));
 		}
 
 		[TestMethod]
@@ -219,6 +225,8 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var newDiscDirectoryPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "1998 - Охотник и сайгак");
 			Directory.Exists(newDiscDirectoryPath).Should().BeTrue();
+
+			await CheckLibraryConsistency();
 		}
 
 		[TestMethod]
@@ -266,6 +274,8 @@ namespace MusicLibrary.Services.IntegrationTests
 
 			var updatedDisc = await GetDisc(ReferenceData.NormalDiscId, target);
 			updatedDisc.Should().BeEquivalentTo(disc, x => x.IgnoringCyclicReferences());
+
+			await CheckLibraryConsistency(typeof(SuspiciousAlbumTitleInconsistency));
 		}
 
 		[TestMethod]
@@ -314,6 +324,8 @@ namespace MusicLibrary.Services.IntegrationTests
 			var fileInfo = new FileInfo(imageFilePath);
 			fileInfo.Exists.Should().BeTrue();
 			fileInfo.Length.Should().Be(119957);
+
+			await CheckLibraryConsistency();
 		}
 
 		[TestMethod]
@@ -362,6 +374,8 @@ namespace MusicLibrary.Services.IntegrationTests
 			var fileInfo = new FileInfo(imageFilePath);
 			fileInfo.Exists.Should().BeTrue();
 			fileInfo.Length.Should().Be(119957);
+
+			await CheckLibraryConsistency();
 		}
 
 		[TestMethod]
@@ -413,6 +427,8 @@ namespace MusicLibrary.Services.IntegrationTests
 			fileInfo.Length.Should().Be(184257);
 
 			File.Exists(oldImageFilePath).Should().BeFalse();
+
+			await CheckLibraryConsistency();
 		}
 
 		[TestMethod]
@@ -449,6 +465,8 @@ namespace MusicLibrary.Services.IntegrationTests
 			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
 
 			Directory.Exists(discDirectoryPath).Should().BeFalse();
+
+			await CheckLibraryConsistency();
 		}
 
 		private async Task<ShallowFolderModel> GetFolder(ItemId folderId)
