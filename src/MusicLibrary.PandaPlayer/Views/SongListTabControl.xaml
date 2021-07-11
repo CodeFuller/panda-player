@@ -19,10 +19,10 @@
         </Grid.RowDefinitions>
         <!-- We wrap each SongListView with Grid, because otherwise setting visibility does not work -->
         <Grid Grid.Row="0"  Visibility="{Binding AreExplorerSongsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <local:SongListView DataContext="{Binding ExplorerSongsViewModel}" />
+            <local:DiscSongListView DataContext="{Binding ExplorerSongsViewModel}" />
         </Grid>
         <Grid Grid.Row="0" Visibility="{Binding ArePlaylistSongsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <local:SongListView DataContext="{Binding PlaylistSongsViewModel}" />
+            <local:PlaylistView DataContext="{Binding PlaylistSongsViewModel}" />
         </Grid>
         <GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
         <Grid Grid.Row="2">

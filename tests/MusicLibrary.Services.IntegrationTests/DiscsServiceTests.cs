@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MusicLibrary.Core.Models;
-using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.Dal.LocalDb.Inconsistencies.StorageInconsistencies;
 using MusicLibrary.Services.Diagnostic.Inconsistencies.DiscInconsistencies;
 using MusicLibrary.Services.IntegrationTests.Data;
@@ -154,7 +153,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			};
 
 			var allDiscs = await target.GetAllDiscs(CancellationToken.None);
-			allDiscs.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedDiscs, x => x.IgnoringCyclicReferences());
+			allDiscs.Should().BeEquivalentTo(expectedDiscs, x => x.IgnoringCyclicReferences());
 
 			var discDirectoryPath = Path.Combine(LibraryStorageRoot, relativeDiscDirectoryPath);
 			Directory.Exists(discDirectoryPath).Should().BeTrue();
@@ -185,7 +184,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				referenceData.DeletedDisc,
 			};
 
-			discs.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedDiscs, x => x.IgnoringCyclicReferences());
+			discs.Should().BeEquivalentTo(expectedDiscs, x => x.IgnoringCyclicReferences());
 		}
 
 		[TestMethod]

@@ -73,7 +73,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		private DiscModel PlaylistActiveDisc => PlaylistSongsViewModel.CurrentSong?.Disc ?? PlaylistSongsViewModel.PlayingDisc;
+		private DiscModel PlaylistActiveDisc => PlaylistSongsViewModel.CurrentDisc;
 
 		public ICommand LoadCommand { get; }
 
@@ -107,12 +107,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			CurrentSongListViewModel = ExplorerSongsViewModel;
 
 			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaySongList(e, CancellationToken.None));
-			Messenger.Default.Register<PlayDiscFromSongEventArgs>(this, e => OnPlayDiscFromSongLaunched(e, CancellationToken.None));
 			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, _ => OnPlayPlaylistStartingFromSong(CancellationToken.None));
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, OnPlaylistFinished);
 			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, _ => SwitchToExplorerSongs());
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, _ => OnPlaylistSongChanged());
-			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, _ => OnPlaylistSongChanged());
+			Messenger.Default.Register<PlaylistChangedEventArgs>(this, OnPlaylistSongChanged);
+			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, OnPlaylistSongChanged);
 			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => NavigateLibraryExplorerToDisc(e.Disc, CancellationToken.None));
 		}
 
@@ -150,16 +149,6 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			SwitchToPlaylistSongs();
 		}
 
-		private async void OnPlayDiscFromSongLaunched(PlayDiscFromSongEventArgs message, CancellationToken cancellationToken)
-		{
-			var disc = message.Song.Disc;
-
-			await PlaylistSongsViewModel.SetPlaylistSongs(disc.ActiveSongs, cancellationToken);
-			await PlaylistSongsViewModel.SwitchToSong(message.Song, cancellationToken);
-			await ResetPlayer(cancellationToken);
-			SwitchToPlaylistSongs();
-		}
-
 		private async void OnPlayPlaylistStartingFromSong(CancellationToken cancellationToken)
 		{
 			await ResetPlayer(cancellationToken);
@@ -177,9 +166,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			await MusicPlayerViewModel.Play(cancellationToken);
 		}
 
-		private void OnPlaylistSongChanged()
+		private void OnPlaylistSongChanged(BasicPlaylistEventArgs e)
 		{
-			Title = PlaylistSongsViewModel.CurrentSong != null ? BuildCurrentTitle(PlaylistSongsViewModel.CurrentSong) : DefaultTitle;
+			Title = e.CurrentSong != null ? BuildCurrentTitle(e.CurrentSong, e.CurrentSongIndex) : DefaultTitle;
 
 			if (ArePlaylistSongsSelected)
 			{
@@ -187,10 +176,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		private string BuildCurrentTitle(SongModel song)
+		private string BuildCurrentTitle(SongModel song, int? playlistSongIndex)
 		{
 			var songTitle = song.Artist != null ? $"{song.Artist.Name} - {song.Title}" : song.Title;
-			return $"{PlaylistSongsViewModel.CurrentSongIndex + 1}/{PlaylistSongsViewModel.SongsNumber} - {songTitle}";
+			return $"{playlistSongIndex + 1}/{PlaylistSongsViewModel.SongsNumber} - {songTitle}";
 		}
 
 		private void OnPlaylistFinished(PlaylistFinishedEventArgs e)

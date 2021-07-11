@@ -5,10 +5,6 @@
   </ImportGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="5.10.3" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\MusicLibrary.Dal.LocalDb\MusicLibrary.Dal.LocalDb.csproj" />
     <ProjectReference Include="..\..\src\MusicLibrary.Services\MusicLibrary.Services.csproj" />
   </ItemGroup>

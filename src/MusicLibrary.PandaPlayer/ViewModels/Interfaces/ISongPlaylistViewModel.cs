@@ -10,20 +10,24 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 	{
 		SongModel CurrentSong { get; }
 
-		int? CurrentSongIndex { get; }
-
 		/// <summary>
-		/// Gets currently playing disc, if all songs in playlist belong to one disc.
+		/// Gets currently played disc.
+		/// If CurrentSong is not null, returns disc of current song.
+		/// If CurrentSong is null and all songs in playlist belong to the same disc, returns this disc.
 		/// Otherwise, returns null.
 		/// </summary>
-		DiscModel PlayingDisc { get; }
+		DiscModel CurrentDisc { get; }
+
+		ICommand PlayFromSongCommand { get; }
+
+		ICommand RemoveSongsFromPlaylistCommand { get; }
+
+		ICommand ClearPlaylistCommand { get; }
 
 		ICommand NavigateToSongDiscCommand { get; }
 
 		Task SetPlaylistSongs(IEnumerable<SongModel> songs, CancellationToken cancellationToken);
 
 		Task SwitchToNextSong(CancellationToken cancellationToken);
-
-		Task SwitchToSong(SongModel song, CancellationToken cancellationToken);
 	}
 }

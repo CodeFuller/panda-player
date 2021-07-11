@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using MusicLibrary.Core.Models;
 
@@ -30,14 +28,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Interfaces
 
 		ICommand PlaySongsLastCommand { get; }
 
-		ICommand DeleteSongsFromDiscCommand { get; }
-
 		ICommand EditSongsPropertiesCommand { get; }
 
 		IReadOnlyCollection<SetRatingMenuItem> SetRatingMenuItems { get; }
 
 		void SetSongs(IEnumerable<SongModel> newSongs);
-
-		Task SetRatingForSelectedSongs(RatingModel rating, CancellationToken cancellationToken);
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
+using MusicLibrary.Core.Models;
 using MusicLibrary.Shared.Extensions;
 
 namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
@@ -15,10 +15,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 		{
 		}
 
-		public PlaylistData(ISongPlaylistViewModel songPlaylistViewModel)
+		public PlaylistData(IEnumerable<SongModel> songs, int? currentSongIndex)
 		{
-			Songs = songPlaylistViewModel.Songs.Select(s => new PlaylistSongData(s)).ToCollection();
-			CurrentSongIndex = songPlaylistViewModel.CurrentSongIndex;
+			Songs = songs.Select(s => new PlaylistSongData(s)).ToCollection();
+			CurrentSongIndex = currentSongIndex;
 		}
 	}
 }

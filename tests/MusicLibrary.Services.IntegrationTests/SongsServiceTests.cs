@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MusicLibrary.Core.Models;
-using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.Services.Diagnostic.Inconsistencies.DiscInconsistencies;
 using MusicLibrary.Services.IntegrationTests.Data;
 using MusicLibrary.Services.IntegrationTests.Extensions;
@@ -219,7 +218,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				referenceData.SongWithOptionalPropertiesMissing,
 			};
 
-			songs.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedSongs, x => x.IgnoringCyclicReferences());
+			songs.Should().BeEquivalentTo(expectedSongs, x => x.IgnoringCyclicReferences());
 		}
 
 		[TestMethod]
@@ -248,7 +247,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				referenceData.DeletedSong,
 			};
 
-			songs.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedSongs, x => x.IgnoringCyclicReferences());
+			songs.Should().BeEquivalentTo(expectedSongs, x => x.IgnoringCyclicReferences());
 		}
 
 		[TestMethod]
@@ -278,7 +277,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				referenceData.SongWithOptionalPropertiesMissing,
 			};
 
-			songs.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedSongs, x => x.IgnoringCyclicReferences());
+			songs.Should().BeEquivalentTo(expectedSongs, x => x.IgnoringCyclicReferences());
 		}
 
 		[TestMethod]

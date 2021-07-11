@@ -7,11 +7,7 @@
              xmlns:viewModels="clr-namespace:MusicLibrary.PandaPlayer.ViewModels.Interfaces"
              xmlns:controls="clr-namespace:CodeFuller.Library.Wpf.Controls;assembly=CodeFuller.Library.Wpf"
              mc:Ignorable="d"
-             d:DesignWidth="800" d:DesignHeight="600" d:DataContext="{d:DesignInstance viewModels:ISongPlaylistViewModel}">
-
-    <UserControl.InputBindings>
-        <KeyBinding Modifiers="Ctrl" Key="G" Command="{Binding NavigateToSongDiscCommand}" />
-    </UserControl.InputBindings>
+             d:DesignWidth="800" d:DesignHeight="600" d:DataContext="{d:DesignInstance viewModels:ISongListViewModel}">
 
     <UserControl.Resources>
         <valueConverters:SongDurationValueConverter x:Key="SongDurationValueConverter" />
@@ -47,33 +43,6 @@
               GridLinesVisibility="None" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="False"
               CellStyle="{StaticResource MaterialDesignDataGridCell}"
               ItemsSource="{Binding SongItems}" SelectedItem="{Binding SelectedSongItem}" SelectedItemsList="{Binding SelectedSongItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Play Next" Command="{Binding PlaySongsNextCommand}" />
-                    <MenuItem Header="Play Last" Command="{Binding PlaySongsLastCommand}" />
-                    <MenuItem Header="Set Rating" ItemsSource="{Binding SetRatingMenuItems}">
-                        <MenuItem.ItemContainerStyle>
-                            <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
-                                <Setter Property="HeaderTemplate">
-                                    <Setter.Value>
-                                        <DataTemplate>
-                                            <Image Height="15" Source="{Binding Rating, Converter={StaticResource RatingToImageValueConverter}}" />
-                                        </DataTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="Command" Value="{Binding Command}" />
-                            </Style>
-                        </MenuItem.ItemContainerStyle>
-                    </MenuItem>
-                    <MenuItem Header="Delete from Disc" Command="{Binding DeleteSongsFromDiscCommand}" />
-                    <MenuItem Header="Properties" Command="{Binding EditSongsPropertiesCommand}"/>
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-
-            <DataGrid.InputBindings>
-                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding PlayFromSongCommand}" />
-            </DataGrid.InputBindings>
 
             <DataGrid.Resources>
                 <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource MaterialDesignDataGridRow}">

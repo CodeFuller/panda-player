@@ -1,11 +1,12 @@
-﻿using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
+﻿using System.Collections.Generic;
+using MusicLibrary.Core.Models;
 
 namespace MusicLibrary.PandaPlayer.Events.SongListEvents
 {
-	public class PlaylistLoadedEventArgs : BaseSongListEventArgs
+	public class PlaylistLoadedEventArgs : BasicPlaylistEventArgs
 	{
-		public PlaylistLoadedEventArgs(ISongPlaylistViewModel playlist)
-			: base(playlist.Songs)
+		public PlaylistLoadedEventArgs(IEnumerable<SongModel> songs, SongModel currentSong, int? currentSongIndex)
+			: base(songs, currentSong, currentSongIndex)
 		{
 		}
 	}

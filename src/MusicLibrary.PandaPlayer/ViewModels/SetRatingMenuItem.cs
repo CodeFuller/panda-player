@@ -4,28 +4,19 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CodeFuller.Library.Wpf;
 using MusicLibrary.Core.Models;
-using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 
 namespace MusicLibrary.PandaPlayer.ViewModels
 {
 	public class SetRatingMenuItem
 	{
-		private readonly ISongListViewModel parentViewModel;
-
 		public RatingModel Rating { get; }
 
 		public ICommand Command { get; }
 
-		public SetRatingMenuItem(ISongListViewModel parentViewModel, RatingModel rating)
+		public SetRatingMenuItem(Func<RatingModel, CancellationToken, Task> setRatingAction, RatingModel rating)
 		{
-			this.parentViewModel = parentViewModel ?? throw new ArgumentNullException(nameof(parentViewModel));
-			this.Rating = rating;
-			Command = new AsyncRelayCommand(() => SetRating(rating, CancellationToken.None));
-		}
-
-		private async Task SetRating(RatingModel rating, CancellationToken cancellationToken)
-		{
-			await parentViewModel.SetRatingForSelectedSongs(rating, cancellationToken);
+			Rating = rating;
+			Command = new AsyncRelayCommand(() => setRatingAction(rating, CancellationToken.None));
 		}
 	}
 }

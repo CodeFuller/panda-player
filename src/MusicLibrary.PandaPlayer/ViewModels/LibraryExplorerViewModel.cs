@@ -32,7 +32,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		private readonly IWindowService windowService;
 
-		public ObservableCollection<BasicExplorerItem> Items { get; } = new ObservableCollection<BasicExplorerItem>();
+		public ObservableCollection<BasicExplorerItem> Items { get; } = new();
 
 		private ItemId ParentFolderId { get; set; }
 

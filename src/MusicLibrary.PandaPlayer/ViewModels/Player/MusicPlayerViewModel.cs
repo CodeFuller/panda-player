@@ -143,7 +143,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.Player
 			{
 				// We have reached the end of playlist.
 				IsPlaying = false;
-				Messenger.Default.Send(new PlaylistFinishedEventArgs(Playlist));
+				Messenger.Default.Send(new PlaylistFinishedEventArgs(Playlist.Songs));
 				return;
 			}
 

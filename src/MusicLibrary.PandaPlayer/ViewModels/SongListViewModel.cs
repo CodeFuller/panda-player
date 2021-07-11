@@ -7,14 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CodeFuller.Library.Wpf;
-using CodeFuller.Library.Wpf.Interfaces;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Core.Models;
 using MusicLibrary.PandaPlayer.Events.DiscEvents;
 using MusicLibrary.PandaPlayer.Events.SongEvents;
-using MusicLibrary.PandaPlayer.Events.SongListEvents;
 using MusicLibrary.PandaPlayer.Internal;
 using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
 using MusicLibrary.PandaPlayer.ViewModels.Internal;
@@ -25,9 +22,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 {
 	public abstract class SongListViewModel : ViewModelBase, ISongListViewModel
 	{
-		private readonly ISongsService songsService;
 		private readonly IViewNavigator viewNavigator;
-		private readonly IWindowService windowService;
+
+		protected ISongsService SongsService { get; }
 
 		public abstract bool DisplayTrackNumbers { get; }
 
@@ -51,7 +48,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 
 		public long TotalSongsFileSize => Songs.Select(s => s.Size ?? 0).Sum();
 
-		public TimeSpan TotalSongsDuration => Songs.Aggregate(TimeSpan.Zero, (currSum, currSong) => currSum + currSong.Duration);
+		public TimeSpan TotalSongsDuration => Songs.Aggregate(TimeSpan.Zero, (currentSum, currentSong) => currentSum + currentSong.Duration);
 
 		// Should be of type IList because of SelectedItem binding in SongListView
 		private IList selectedSongItems;
@@ -64,72 +61,33 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			set => Set(ref selectedSongItems, value);
 		}
 
-		public IEnumerable<SongModel> SelectedSongs => SelectedSongItems.OfType<SongListItem>().Select(it => it.Song);
+		public IEnumerable<SongModel> SelectedSongs => SelectedSongItems?.OfType<SongListItem>().Select(it => it.Song) ?? Enumerable.Empty<SongModel>();
 
-		public ICommand PlaySongsNextCommand { get; }
+		public abstract ICommand PlaySongsNextCommand { get; }
 
-		public ICommand PlaySongsLastCommand { get; }
-
-		public ICommand DeleteSongsFromDiscCommand { get; }
+		public abstract ICommand PlaySongsLastCommand { get; }
 
 		public ICommand EditSongsPropertiesCommand { get; }
 
-		public abstract ICommand PlayFromSongCommand { get; }
-
 		public IReadOnlyCollection<SetRatingMenuItem> SetRatingMenuItems { get; }
 
-		protected SongListViewModel(ISongsService songsService, IViewNavigator viewNavigator, IWindowService windowService)
+		protected SongListViewModel(ISongsService songsService, IViewNavigator viewNavigator)
 		{
-			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
+			this.SongsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
-			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
 
 			songItems = new ObservableCollection<SongListItem>();
 			SongItems = new ReadOnlyObservableCollection<SongListItem>(songItems);
 
-			PlaySongsNextCommand = new RelayCommand(PlaySongsNext);
-			PlaySongsLastCommand = new RelayCommand(PlaySongsLast);
-			DeleteSongsFromDiscCommand = new AsyncRelayCommand(() => DeleteSongsFromDisc(CancellationToken.None));
 			EditSongsPropertiesCommand = new AsyncRelayCommand(() => EditSongsProperties(CancellationToken.None));
 			SetRatingMenuItems = RatingHelpers.AllRatingValues
 				.OrderByDescending(r => r)
-				.Select(r => new SetRatingMenuItem(this, r))
+				.Select(r => new SetRatingMenuItem(SetRatingForSelectedSongs, r))
 				.ToList();
 
 			Messenger.Default.Register<SongChangedEventArgs>(this, e => OnSongChanged(e.Song, e.PropertyName));
-			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
 			Messenger.Default.Register<DiscChangedEventArgs>(this, e => OnDiscChanged(e.Disc, e.PropertyName));
-		}
-
-		protected virtual void OnSongItemsChanged()
-		{
-			RaisePropertyChanged(nameof(HasSongs));
-			RaisePropertyChanged(nameof(SongsNumber));
-			RaisePropertyChanged(nameof(TotalSongsFileSize));
-			RaisePropertyChanged(nameof(TotalSongsDuration));
-		}
-
-		internal async Task DeleteSongsFromDisc(CancellationToken cancellationToken)
-		{
-			var selectedSongs = SelectedSongs.ToList();
-			if (!selectedSongs.Any())
-			{
-				return;
-			}
-
-			if (windowService.ShowMessageBox($"Do you really want to delete {selectedSongs.Count} selected song(s)?", "Delete song(s)",
-					ShowMessageBoxButton.YesNo, ShowMessageBoxIcon.Question) != ShowMessageBoxResult.Yes)
-			{
-				return;
-			}
-
-			foreach (var song in selectedSongs)
-			{
-				await songsService.DeleteSong(song, cancellationToken);
-			}
-
-			// Above call to songsService.DeleteSong() updates song.DeleteDate.
-			// As result OnSongChanged() is called, which deletes song(s) from the list.
+			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
 		}
 
 		private async Task EditSongsProperties(CancellationToken cancellationToken)
@@ -141,15 +99,11 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
-		public virtual void SetSongs(IEnumerable<SongModel> newSongs)
+		public void SetSongs(IEnumerable<SongModel> newSongs)
 		{
 			songItems.Clear();
-			AddSongs(newSongs);
-		}
+			songItems.AddRange(newSongs.Select(song => new SongListItem(song)));
 
-		protected void AddSongs(IEnumerable<SongModel> addedSongs)
-		{
-			songItems.AddRange(addedSongs.Select(song => new SongListItem(song)));
 			OnSongItemsChanged();
 		}
 
@@ -163,49 +117,20 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			OnSongItemsChanged();
 		}
 
-		public async Task SetRatingForSelectedSongs(RatingModel rating, CancellationToken cancellationToken)
+		private async Task SetRatingForSelectedSongs(RatingModel rating, CancellationToken cancellationToken)
 		{
-			var updatedSongs = SelectedSongs.ToList();
-			if (updatedSongs.Any())
+			foreach (var song in SelectedSongs.ToList())
 			{
-				foreach (var song in updatedSongs)
-				{
-					song.Rating = rating;
-					await songsService.UpdateSong(song, cancellationToken);
-				}
-			}
-		}
-
-		internal void PlaySongsNext()
-		{
-			AddSongsToPlaylist(songs => new AddingSongsToPlaylistNextEventArgs(songs));
-		}
-
-		internal void PlaySongsLast()
-		{
-			AddSongsToPlaylist(songs => new AddingSongsToPlaylistLastEventArgs(songs));
-		}
-
-		private void AddSongsToPlaylist<TAddingSongsToPlaylistEventArgs>(Func<IEnumerable<SongModel>, TAddingSongsToPlaylistEventArgs> eventFactory)
-			where TAddingSongsToPlaylistEventArgs : AddingSongsToPlaylistEventArgs
-		{
-			var selectedSongs = SelectedSongs.ToList();
-			if (selectedSongs.Any())
-			{
-				Messenger.Default.Send(eventFactory(selectedSongs));
+				song.Rating = rating;
+				await SongsService.UpdateSong(song, cancellationToken);
 			}
 		}
 
 		private void OnSongChanged(SongModel changedSong, string propertyName)
 		{
-			var originalSongs = Songs.ToList();
-			foreach (var song in originalSongs)
+			// ToList() call is required to prevent exception "Collection was modified; enumeration operation may not execute."
+			foreach (var song in GetSongsForUpdate(changedSong).ToList())
 			{
-				if (song.Id != changedSong.Id || Object.ReferenceEquals(song, changedSong))
-				{
-					continue;
-				}
-
 				SongUpdater.UpdateSong(changedSong, song, propertyName);
 			}
 
@@ -236,31 +161,54 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 			}
 		}
 
+		protected void RemoveSongItems(IEnumerable<SongListItem> songItemsToRemove)
+		{
+			foreach (var songItem in songItemsToRemove)
+			{
+				songItems.Remove(songItem);
+			}
+
+			OnSongItemsChanged();
+		}
+
+		private void OnSongItemsChanged()
+		{
+			RaisePropertyChanged(nameof(HasSongs));
+			RaisePropertyChanged(nameof(SongsNumber));
+			RaisePropertyChanged(nameof(TotalSongsFileSize));
+			RaisePropertyChanged(nameof(TotalSongsDuration));
+		}
+
 		private void OnDiscChanged(DiscModel changedDisc, string propertyName)
 		{
-			foreach (var song in Songs)
+			foreach (var disc in GetDiscsForUpdate(changedDisc))
 			{
-				if (song.Disc.Id != changedDisc.Id || Object.ReferenceEquals(song.Disc, changedDisc))
-				{
-					continue;
-				}
-
-				DiscUpdater.UpdateDisc(changedDisc, song.Disc, propertyName);
+				DiscUpdater.UpdateDisc(changedDisc, disc, propertyName);
 			}
 		}
 
 		private void OnDiscImageChanged(DiscModel changedDisc)
 		{
-			var discsForUpdate = Songs
+			foreach (var disc in GetDiscsForUpdate(changedDisc))
+			{
+				disc.Images = changedDisc.Images;
+			}
+		}
+
+		private IEnumerable<SongModel> GetSongsForUpdate(SongModel changedSong)
+		{
+			return Songs
+				.Where(s => s.Id == changedSong.Id)
+				.Where(s => !Object.ReferenceEquals(s, changedSong));
+		}
+
+		private IEnumerable<DiscModel> GetDiscsForUpdate(DiscModel changedDisc)
+		{
+			return Songs
 				.Select(s => s.Disc)
 				.Where(d => d.Id == changedDisc.Id)
 				.Where(d => !Object.ReferenceEquals(d, changedDisc))
 				.Distinct();
-
-			foreach (var disc in discsForUpdate)
-			{
-				disc.Images = changedDisc.Images;
-			}
 		}
 	}
 }

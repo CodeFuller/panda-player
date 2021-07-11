@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CodeFuller.Library.Wpf.Interfaces;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Extensions.Logging;
 using MusicLibrary.Core.Models;
@@ -19,20 +18,19 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 		private const string SongPlaylistDataKey = "SongPlaylistData";
 
 		private readonly ISongsService songsService;
-
 		private readonly ISessionDataService sessionDataService;
 		private readonly ILogger<PersistentSongPlaylistViewModel> logger;
 
-		public PersistentSongPlaylistViewModel(ISongsService songsService, IViewNavigator viewNavigator, IWindowService windowService,
+		public PersistentSongPlaylistViewModel(ISongsService songsService, IViewNavigator viewNavigator,
 			ISessionDataService sessionDataService, ILogger<PersistentSongPlaylistViewModel> logger)
-			: base(songsService, viewNavigator, windowService)
+			: base(songsService, viewNavigator)
 		{
 			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
 			this.sessionDataService = sessionDataService ?? throw new ArgumentNullException(nameof(sessionDataService));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => Load(CancellationToken.None));
-			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => OnPlaylistFinished(CancellationToken.None));
+			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, _ => Load(CancellationToken.None));
+			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, _ => OnPlaylistFinished(CancellationToken.None));
 		}
 
 		private async void Load(CancellationToken cancellationToken)
@@ -40,10 +38,10 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 			var (songs, songIndex) = await LoadPlaylistData(cancellationToken);
 			if (songs != null)
 			{
-				SetSongsRaw(songs);
-				CurrentSongIndex = songIndex;
+				SetSongs(songs);
+				SetCurrentSong(songIndex);
 
-				Messenger.Default.Send(new PlaylistLoadedEventArgs(this));
+				Messenger.Default.Send(new PlaylistLoadedEventArgs(Songs, CurrentSong, CurrentSongIndex));
 			}
 			else
 			{
@@ -99,9 +97,9 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 				playListSongs.Add(loadedSong);
 			}
 
-			if (newSongIndex != null && (newSongIndex < 0 || newSongIndex >= loadedSongs.Count))
+			if (newSongIndex != null && (newSongIndex < 0 || newSongIndex >= playListSongs.Count))
 			{
-				logger.LogWarning($"Index of current song in saved playlist is invalid ({newSongIndex}, [0, {loadedSongs.Count})). Ignoring saved playlist.");
+				logger.LogWarning($"Index of current song in saved playlist is invalid ({newSongIndex}, [0, {playListSongs.Count})). Ignoring saved playlist.");
 				return (null, null);
 			}
 
@@ -128,7 +126,7 @@ namespace MusicLibrary.PandaPlayer.ViewModels.PersistentPlaylist
 
 		protected override async Task OnPlaylistChanged(CancellationToken cancellationToken)
 		{
-			var playlistData = new PlaylistData(this);
+			var playlistData = new PlaylistData(Songs, CurrentSongIndex);
 
 			await sessionDataService.SaveData(SongPlaylistDataKey, playlistData, cancellationToken);
 

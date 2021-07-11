@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MusicLibrary.Core.Models;
-using MusicLibrary.Dal.LocalDb.Extensions;
 using MusicLibrary.Services.IntegrationTests.Data;
 using MusicLibrary.Services.Interfaces;
 
@@ -57,7 +55,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
+			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
 
 			var expectedFolder = new FolderModel
 			{
@@ -118,7 +116,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
+			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
 
 			var expectedFolder = new FolderModel
 			{
@@ -179,7 +177,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
+			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
 
 			var expectedFolder = new FolderModel
 			{
@@ -232,7 +230,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
+			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
 
 			await CheckLibraryConsistency();
 		}
@@ -260,7 +258,7 @@ namespace MusicLibrary.Services.IntegrationTests
 				referenceData.DeletedFolder,
 			};
 
-			folders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders);
+			folders.Should().BeEquivalentTo(expectedFolders);
 		}
 
 		[TestMethod]
@@ -388,7 +386,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders);
+			allFolders.Should().BeEquivalentTo(expectedFolders);
 
 			Directory.Exists(directoryPath).Should().BeFalse();
 
@@ -421,7 +419,7 @@ namespace MusicLibrary.Services.IntegrationTests
 			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.OrderBy(x => x.Id.ToInt32()).Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
+			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
 
 			await CheckLibraryConsistency();
 		}

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CodeFuller.Library.Wpf.Interfaces;
+using CodeFuller.Library.Wpf;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using MusicLibrary.Core.Comparers;
@@ -20,143 +19,194 @@ namespace MusicLibrary.PandaPlayer.ViewModels
 {
 	public class SongPlaylistViewModel : SongListViewModel, ISongPlaylistViewModel
 	{
-		private int? currentSongIndex;
+		// CurrentSongIndex and CurrentItem are kept in-sync via method SetCurrentSong.
+		// Neither CurrentSongIndex nor CurrentItem should be set directly.
+		protected int? CurrentSongIndex { get; private set; }
 
-		public int? CurrentSongIndex
+		private SongListItem currentItem;
+
+		private SongListItem CurrentItem
 		{
-			get => currentSongIndex;
-			protected set
+			get => currentItem;
+			set
 			{
-				if (currentSongIndex == value)
+				if (ReferenceEquals(currentItem, value))
 				{
 					return;
 				}
 
-				if (CurrentItem != null)
+				if (currentItem != null)
 				{
-					CurrentItem.IsCurrentlyPlayed = false;
+					currentItem.IsCurrentlyPlayed = false;
 				}
 
-				currentSongIndex = value < SongItems.Count ? value : null;
+				currentItem = value;
 
-				if (CurrentItem != null)
+				if (currentItem != null)
 				{
-					CurrentItem.IsCurrentlyPlayed = true;
+					currentItem.IsCurrentlyPlayed = true;
 				}
 			}
 		}
-
-		private SongListItem CurrentItem => SongItems != null && CurrentSongIndex != null ? SongItems[CurrentSongIndex.Value] : null;
 
 		public override bool DisplayTrackNumbers => false;
 
 		public SongModel CurrentSong => CurrentItem?.Song;
 
-		public DiscModel PlayingDisc => Songs.UniqueOrDefault(new SongEqualityComparer())?.Disc;
+		public DiscModel CurrentDisc => CurrentSong != null ? CurrentSong.Disc : Songs.Select(s => s.Disc).UniqueOrDefault(new DiscEqualityComparer());
 
-		public override ICommand PlayFromSongCommand { get; }
+		public override ICommand PlaySongsNextCommand { get; }
+
+		public override ICommand PlaySongsLastCommand { get; }
+
+		public ICommand PlayFromSongCommand { get; }
+
+		public ICommand RemoveSongsFromPlaylistCommand { get; }
+
+		public ICommand ClearPlaylistCommand { get; }
 
 		public ICommand NavigateToSongDiscCommand { get; }
 
-		public SongPlaylistViewModel(ISongsService songsService, IViewNavigator viewNavigator, IWindowService windowService)
-			: base(songsService, viewNavigator, windowService)
+		public SongPlaylistViewModel(ISongsService songsService, IViewNavigator viewNavigator)
+			: base(songsService, viewNavigator)
 		{
-			PlayFromSongCommand = new RelayCommand(PlayFromSong);
+			PlayFromSongCommand = new AsyncRelayCommand(() => PlayFromSong(CancellationToken.None));
+			RemoveSongsFromPlaylistCommand = new AsyncRelayCommand(() => RemoveSongsFromPlaylist(CancellationToken.None));
+			ClearPlaylistCommand = new AsyncRelayCommand(() => ClearPlaylist(CancellationToken.None));
 			NavigateToSongDiscCommand = new RelayCommand(NavigateToSongDisc);
 
+			// There are 2 use cases of adding songs (Play Next & Play Last) to SongPlaylistViewModel:
+			//   1. Action is invoked from context menu in ExplorerSongListViewModel.
+			//      In this case ExplorerSongListViewModel sends AddingSongsToPlaylistNextEventArgs or AddingSongsToPlaylistLastEventArgs.
+			//      Songs are added to SongPlaylistViewModel from handlers of these events.
+			//
+			//   2. Action is invoked from context menu in SongPlaylistViewModel.
+			//      In ths case songs are added to SongPlaylistViewModel from handlers of PlaySongsNextCommand and PlaySongsLastCommand.
+			//
+			//   This is done to prevent anti-pattern when object sends event to itself.
+			PlaySongsNextCommand = new AsyncRelayCommand(() => AddSongsNext(SelectedSongs.ToList(), CancellationToken.None));
+			PlaySongsLastCommand = new AsyncRelayCommand(() => AddSongsLast(SelectedSongs.ToList(), CancellationToken.None));
 			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => OnAddingNextSongs(e.Songs, CancellationToken.None));
 			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => OnAddingLastSongs(e.Songs, CancellationToken.None));
 		}
 
+		protected void SetCurrentSong(int? songIndex)
+		{
+			CurrentSongIndex = songIndex;
+			CurrentItem = songIndex == null ? null : SongItems[songIndex.Value];
+		}
+
 		protected virtual Task OnPlaylistChanged(CancellationToken cancellationToken)
 		{
-			Messenger.Default.Send(new PlaylistChangedEventArgs(this));
+			Messenger.Default.Send(new PlaylistChangedEventArgs(Songs, CurrentSong, CurrentSongIndex));
 
 			return Task.CompletedTask;
 		}
 
 		public async Task SetPlaylistSongs(IEnumerable<SongModel> songs, CancellationToken cancellationToken)
 		{
-			CurrentSongIndex = null;
-			SetSongsRaw(songs);
-			await OnPlaylistChanged(cancellationToken);
-		}
+			SetCurrentSong(null);
+			SetSongs(songs);
 
-		protected void SetSongsRaw(IEnumerable<SongModel> newSongs)
-		{
-			SetSongs(newSongs);
+			await OnPlaylistChanged(cancellationToken);
 		}
 
 		public async Task SwitchToNextSong(CancellationToken cancellationToken)
 		{
-			CurrentSongIndex = CurrentSongIndex + 1 ?? 0;
-			await OnPlaylistChanged(cancellationToken);
-		}
-
-		public async Task SwitchToSong(SongModel song, CancellationToken cancellationToken)
-		{
-			CurrentSongIndex = GetSongIndex(song);
-			await OnPlaylistChanged(cancellationToken);
-		}
-
-		private int GetSongIndex(SongModel song)
-		{
-			var songIndexes = SongItems.Select((item, i) => new { item.Song, Index = i })
-				.Where(obj => obj.Song.Id == song.Id)
-				.Select(obj => obj.Index)
-				.ToList();
-
-			if (!songIndexes.Any())
+			int? newSongIndex = CurrentSongIndex + 1 ?? 0;
+			if (newSongIndex >= SongItems.Count)
 			{
-				throw new InvalidOperationException("No matched song in the list");
+				newSongIndex = null;
 			}
 
-			if (songIndexes.Count > 1)
-			{
-				throw new InvalidOperationException("Multiple matched songs in the list");
-			}
+			SetCurrentSong(newSongIndex);
 
-			return songIndexes.Single();
+			await OnPlaylistChanged(cancellationToken);
 		}
 
 		private async void OnAddingNextSongs(IReadOnlyCollection<SongModel> songs, CancellationToken cancellationToken)
 		{
-			var insertIndex = CurrentSongIndex + 1 ?? 0;
-			var firstSongIndex = insertIndex;
-			InsertSongs(insertIndex, songs);
+			await AddSongsNext(songs, cancellationToken);
+		}
 
-			if (CurrentItem == null && songs.Any())
-			{
-				CurrentSongIndex = firstSongIndex;
-			}
-
-			await OnPlaylistChanged(cancellationToken);
+		private async Task AddSongsNext(IReadOnlyCollection<SongModel> songs, CancellationToken cancellationToken)
+		{
+			await InsertSongs(songs, CurrentSongIndex + 1 ?? 0, cancellationToken);
 		}
 
 		private async void OnAddingLastSongs(IReadOnlyCollection<SongModel> songs, CancellationToken cancellationToken)
 		{
-			var firstSongIndex = SongItems.Count;
-			AddSongs(songs);
+			await AddSongsLast(songs, cancellationToken);
+		}
 
-			if (CurrentItem == null && songs.Any())
+		private async Task AddSongsLast(IReadOnlyCollection<SongModel> songs, CancellationToken cancellationToken)
+		{
+			await InsertSongs(songs, SongItems.Count, cancellationToken);
+		}
+
+		private async Task InsertSongs(IReadOnlyCollection<SongModel> songs, int insertIndex, CancellationToken cancellationToken)
+		{
+			if (!songs.Any())
 			{
-				CurrentSongIndex = firstSongIndex;
+				return;
+			}
+
+			InsertSongs(insertIndex, songs);
+
+			if (CurrentItem == null)
+			{
+				SetCurrentSong(insertIndex);
 			}
 
 			await OnPlaylistChanged(cancellationToken);
 		}
 
-		internal void PlayFromSong()
+		private async Task PlayFromSong(CancellationToken cancellationToken)
 		{
 			var selectedSongIndex = SongItems.IndexOf(SelectedSongItem);
-			if (selectedSongIndex != -1)
+			if (selectedSongIndex == -1)
 			{
-				CurrentSongIndex = selectedSongIndex;
-				Messenger.Default.Send(new PlayPlaylistStartingFromSongEventArgs(CurrentSong));
+				return;
 			}
+
+			SetCurrentSong(selectedSongIndex);
+
+			await OnPlaylistChanged(cancellationToken);
+
+			Messenger.Default.Send(new PlayPlaylistStartingFromSongEventArgs());
 		}
 
-		internal void NavigateToSongDisc()
+		private async Task RemoveSongsFromPlaylist(CancellationToken cancellationToken)
+		{
+			var songsToDelete = (SelectedSongItems?.OfType<SongListItem>() ?? Enumerable.Empty<SongListItem>()).ToList();
+			if (!songsToDelete.Any())
+			{
+				return;
+			}
+
+			RemoveSongItems(songsToDelete);
+
+			var newCurrentItemIndex = SongItems.IndexOf(CurrentItem);
+			SetCurrentSong(newCurrentItemIndex == -1 ? null : newCurrentItemIndex);
+
+			await OnPlaylistChanged(cancellationToken);
+		}
+
+		private async Task ClearPlaylist(CancellationToken cancellationToken)
+		{
+			if (!SongItems.Any())
+			{
+				return;
+			}
+
+			RemoveSongItems(SongItems.ToList());
+
+			SetCurrentSong(null);
+
+			await OnPlaylistChanged(cancellationToken);
+		}
+
+		private void NavigateToSongDisc()
 		{
 			var song = SelectedSongItem?.Song ?? CurrentSong;
 			if (song == null)

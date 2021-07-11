@@ -1,16 +1,13 @@
-﻿using MusicLibrary.Core.Models;
-using MusicLibrary.PandaPlayer.ViewModels.Interfaces;
+﻿using System.Collections.Generic;
+using MusicLibrary.Core.Models;
 
 namespace MusicLibrary.PandaPlayer.Events.SongListEvents
 {
-	public class PlaylistChangedEventArgs : BaseSongListEventArgs
+	public class PlaylistChangedEventArgs : BasicPlaylistEventArgs
 	{
-		public SongModel CurrentSong { get; }
-
-		public PlaylistChangedEventArgs(ISongPlaylistViewModel playlist)
-			: base(playlist.Songs)
+		public PlaylistChangedEventArgs(IEnumerable<SongModel> songs, SongModel currentSong, int? currentSongIndex)
+			: base(songs, currentSong, currentSongIndex)
 		{
-			CurrentSong = playlist.CurrentSong;
 		}
 	}
 }
