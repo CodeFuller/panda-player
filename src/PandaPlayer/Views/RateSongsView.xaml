@@ -1,0 +1,45 @@
+﻿<Window x:Class="PandaPlayer.Views.RateSongsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:valueConverters="clr-namespace:PandaPlayer.Views.ValueConverters"
+        mc:Ignorable="d"
+        Title="Rate Listened Songs" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+
+    <Window.Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}" />
+    </Window.Style>
+
+    <Window.Resources>
+        <valueConverters:RatingToImageNameValueConverter x:Key="RatingToImageValueConverter" />
+    </Window.Resources>
+
+    <StackPanel Margin="10" Orientation="Vertical">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Label HorizontalAlignment="Center" Content="Do you want to rate the songs you just listened to?" />
+            </Grid>
+            <Grid Grid.Row="1">
+                <ComboBox HorizontalAlignment="Center" VerticalAlignment="Top" ItemsSource="{Binding AvailableRatings}" SelectedItem="{Binding SelectedRating}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Image Height="15" Source="{Binding Path=., Converter={StaticResource RatingToImageValueConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
+        </Grid>
+
+        <UniformGrid Margin="0,15,0,5" Rows="1" Columns="2" HorizontalAlignment="Center">
+            <Button Margin="0,0,10,0" Content="Rate" IsDefault="True" Click="RateButton_Click" />
+            <Button Margin="10,0,0,0" Content="No, Thank You" IsCancel="true" />
+        </UniformGrid>
+    </StackPanel>
+
+</Window>

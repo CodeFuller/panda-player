@@ -1,0 +1,15 @@
+<Project>
+
+  <ImportGroup Label="Properties">
+    <Import Project="PandaPlayer.props" />
+  </ImportGroup>
+
+  <PropertyGroup>
+    <CrossCuttingPackagesVersion>5.0.0</CrossCuttingPackagesVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\..\PandaPlayer.src.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+</Project>

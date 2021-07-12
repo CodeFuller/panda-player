@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="PandaPlayer.DiscAdder.Views.EditSourceContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:views="clr-namespace:PandaPlayer.DiscAdder.Views"
+             xmlns:behaviors="clr-namespace:PandaPlayer.DiscAdder.Views.Behaviors"
+             mc:Ignorable="d" 
+             d:DesignWidth="800" d:DesignHeight="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0" x:Name="ButtonReloadRawContent" Content="Reload" Command="{Binding ReloadRawContentCommand}" HorizontalAlignment="Left" />
+        <Border Grid.Row="1" Margin="0,10,0,0" BorderThickness="2" BorderBrush="{DynamicResource MaterialDesignDivider}" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0" Padding="1" BorderThickness="0" x:Name="TextBoxRawReferenceDiscs" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="NoWrap" AcceptsReturn="True"
+                         Text="{Binding RawReferenceDiscs.Content, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.ScrollChanged="ScrollChanged" />
+                <GridSplitter Grid.Column="1" ResizeDirection="Columns" HorizontalAlignment="Stretch" />
+                <views:DiscTreeView Grid.Column="2" x:Name="TreeViewReferenceDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                    ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding ReferenceDiscs.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="False" />
+                <GridSplitter Grid.Column="3" ResizeDirection="Columns" HorizontalAlignment="Stretch" />
+                <views:DiscTreeView Grid.Column="4" x:Name="TreeViewCurrentDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                    ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding CurrentDiscs.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="True" />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

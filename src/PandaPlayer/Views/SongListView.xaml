@@ -1,0 +1,197 @@
+﻿<UserControl x:Class="PandaPlayer.Views.SongListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:CodeFuller.Library.Wpf.Controls;assembly=CodeFuller.Library.Wpf"
+             xmlns:valueConverters="clr-namespace:PandaPlayer.Views.ValueConverters"
+             mc:Ignorable="d"
+             d:DesignWidth="800" d:DesignHeight="600" d:DataContext="{d:DesignInstance viewModels:ISongListViewModel}">
+
+    <UserControl.Resources>
+        <valueConverters:SongDurationValueConverter x:Key="SongDurationValueConverter" />
+        <valueConverters:SongBitrateValueConverter x:Key="SongBitrateValueConverter" />
+        <valueConverters:SongFileSizeValueConverter x:Key="SongFileSizeValueConverter" />
+        <valueConverters:SongLastPlaybackValueConverter x:Key="SongLastPlaybackValueConverter" />
+        <valueConverters:RatingToImageNameValueConverter x:Key="RatingToImageValueConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
+
+        <Style x:Key="FirstColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style x:Key="NextColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+            <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}"/>
+            <Setter Property="BorderThickness" Value="1,0,0,0"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- https://stackoverflow.com/a/22074985/5740031 -->
+        <FrameworkElement Grid.Row="0" x:Name="DummyElement" Visibility="Collapsed" />
+
+        <controls:MultiSelectionDataGrid Grid.Row="1" x:Name="SongsDataGrid" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
+              GridLinesVisibility="None" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="False"
+              CellStyle="{StaticResource MaterialDesignDataGridCell}"
+              ItemsSource="{Binding SongItems}" SelectedItem="{Binding SelectedSongItem}" SelectedItemsList="{Binding SelectedSongItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsCurrentlyPlayed}" Value="True">
+                            <Setter Property="FontWeight" Value="Bold" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Artist" Width="1*" Binding="{Binding Song.Artist.Name}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource FirstColumnHeaderStyle}" />
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Track #" Binding="{Binding Song.TrackNumber}"
+                                Visibility="{Binding DataContext.DisplayTrackNumbers, Source={x:Reference DummyElement}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Title" Width="2*" Binding="{Binding Song.Title}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
+                    </DataGridTextColumn.HeaderStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Length" Binding="{Binding Song.Duration, Converter={StaticResource SongDurationValueConverter}}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Bit Rate" Binding="{Binding Song.BitRate, Converter={StaticResource SongBitrateValueConverter}}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="File Size" Binding="{Binding Song.Size, Converter={StaticResource SongFileSizeValueConverter}}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Played #" Binding="{Binding Song.PlaybacksCount}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <!-- Setting minimal width for Last Played column so that its content is not too close to neighbors -->
+                <DataGridTextColumn MinWidth="140" Header="Last Played" Binding="{Binding Song.LastPlaybackTime, Converter={StaticResource SongLastPlaybackValueConverter}}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="Rating" MinWidth="150" CellStyle="{StaticResource MaterialDesignDataGridCell}">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource NextColumnHeaderStyle}" />
+                    </DataGridTemplateColumn.HeaderStyle>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Height="15" HorizontalAlignment="Left" Source="{Binding Song.Rating, Converter={StaticResource RatingToImageValueConverter}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </controls:MultiSelectionDataGrid>
+        <GridSplitter Grid.Row="2" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
+        <StackPanel Grid.Row="3" MinHeight="30" Orientation="Horizontal">
+            <!-- Setting min widths for statistics labels to keep the same width when no songs are loaded in the list -->
+            <Label MinWidth="80" Margin="10,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource MaterialDesignLabel}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasSongs}" Value="True">
+                                <Setter Property="Content" Value="{Binding SongsNumber}" />
+                                <Setter Property="ContentStringFormat" Value="{}{0} song(s)" />
+                            </DataTrigger>
+                            <!-- Using 'space' instead of empty line so that Label height is the same in both cases -->
+                            <DataTrigger Binding="{Binding HasSongs}" Value="False">
+                                <Setter Property="Content" Value=" " />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Separator Width="2" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+            <Label MinWidth="60" Margin="10,0,10,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource MaterialDesignLabel}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasSongs}" Value="True">
+                                <Setter Property="Content" Value="{Binding TotalSongsDuration, Converter={StaticResource SongDurationValueConverter}}" />
+                            </DataTrigger>
+                            <!-- Using 'space' instead of empty line so that Label height is the same in both cases -->
+                            <DataTrigger Binding="{Binding HasSongs}" Value="False">
+                                <Setter Property="Content" Value=" " />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Separator Width="2" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+            <Label MinWidth="70" Margin="10,0,10,0"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource MaterialDesignLabel}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasSongs}" Value="True">
+                                <Setter Property="Content" Value="{Binding TotalSongsFileSize, Converter={StaticResource SongFileSizeValueConverter}}" />
+                            </DataTrigger>
+                            <!-- Using 'space' instead of empty line so that Label height is the same in both cases -->
+                            <DataTrigger Binding="{Binding HasSongs}" Value="False">
+                                <Setter Property="Content" Value=" " />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Separator Width="2" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
+        </StackPanel>
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="PandaPlayer.Views.LoggerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:valueConverters="clr-namespace:PandaPlayer.Views.ValueConverters"
+             mc:Ignorable="d" 
+             d:DesignWidth="800" d:DesignHeight="300"
+             Loaded="View_Loaded">
+
+    <UserControl.Resources>
+        <valueConverters:LogMessageLevelConverter x:Key="LogMessageLevelConverter"></valueConverters:LogMessageLevelConverter>
+    </UserControl.Resources>
+
+    <DataGrid Name="MessagesDataGrid" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="None" GridLinesVisibility="None"
+              CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" FontFamily="Lucida Sans Typewriter"
+              CellStyle="{StaticResource MaterialDesignDataGridCell}" ItemsSource="{Binding Messages}">
+        <DataGrid.Columns>
+            <DataGridTextColumn Binding="{Binding Message}" Width="*">
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Foreground" Value="{Binding Level, Converter={StaticResource LogMessageLevelConverter}}"/>
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+            </DataGridTextColumn>
+        </DataGrid.Columns>
+    </DataGrid>
+
+</UserControl>

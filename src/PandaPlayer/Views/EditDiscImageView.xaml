@@ -1,0 +1,63 @@
+﻿<Window x:Class="PandaPlayer.Views.EditDiscImageView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:valueConverters="clr-namespace:PandaPlayer.Views.ValueConverters"
+        mc:Ignorable="d"
+        Title="Edit Disc Image" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Loaded="Window_OnLoaded"
+        d:DesignWidth="425" d:DesignHeight="555">
+
+    <Window.Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}" />
+    </Window.Style>
+
+    <Window.Resources>
+        <valueConverters:ImageSourceValueConverter x:Key="ImageSourceValueConverter" />
+        <valueConverters:BooleanAndConverter x:Key="BooleanAndConverter" />
+    </Window.Resources>
+
+    <StackPanel Margin="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Width="400" Height="400" BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                <Image Name="DiscImage" Source="{Binding ImageFileName, Converter={StaticResource ImageSourceValueConverter}}" />
+            </Border>
+            <Label Grid.Row="1" Margin="0,10,0,0" Content="{Binding ImageProperties}" ContentStringFormat="Properties: {0}" />
+            <Label Grid.Row="2" Content="{Binding ImageStatus}">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource MaterialDesignLabel}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ImageIsValid}" Value="True">
+                                <Setter Property="Foreground" Value="Green"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ImageIsValid}" Value="False">
+                                <Setter Property="Foreground" Value="Red"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+
+            <UniformGrid Margin="0,15,0,5" Grid.Row="3" Rows="1" Columns="3" HorizontalAlignment="Center">
+                <Button Margin="10,0,10,0" Content="Search" Command="{Binding LaunchSearchForDiscImageCommand}" />
+                <Button Margin="10,0,10,0" Name="SaveButton" Content="Save" IsDefault="True" Click="SaveButton_Click">
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{StaticResource BooleanAndConverter}">
+                            <Binding Path="ImageIsValid" />
+                            <Binding Path="ImageWasChanged"  />
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
+                <Button Margin="10,0,10,0" Content="Cancel" IsCancel="true" Click="CancelButton_Click" />
+            </UniformGrid>
+        </Grid>
+    </StackPanel>
+
+</Window>

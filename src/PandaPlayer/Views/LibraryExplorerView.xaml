@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="PandaPlayer.Views.LibraryExplorerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignWidth="300" d:DesignHeight="600">
+
+    <DataGrid Name="ContentDataGrid" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" GridLinesVisibility="None"
+              CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
+              ColumnHeaderStyle="{StaticResource MaterialDesignDataGridColumnHeader}"
+              CellStyle="{StaticResource MaterialDesignDataGridCell}"
+              ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}"
+              SelectionChanged="DataGrid_SelectionChanged"
+              ContextMenuOpening="DataGrid_ContextMenuOpening"
+              KeyDown="ContentDataGrid_OnKeyDown">
+        <DataGrid.ContextMenu>
+            <ContextMenu>
+                <MenuItem>Menu Stub</MenuItem>
+            </ContextMenu>
+        </DataGrid.ContextMenu>
+        <DataGrid.InputBindings>
+            <KeyBinding Key="Enter" Command="{Binding ChangeFolderCommand}" />
+            <KeyBinding Key="F5" Command="{Binding PlayDiscCommand}" />
+            <KeyBinding Key="Home" Command="{Binding JumpToFirstItemCommand}" />
+            <KeyBinding Key="End" Command="{Binding JumpToLastItemCommand}" />
+            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding ChangeFolderCommand}" />
+        </DataGrid.InputBindings>
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Library Content" Width="*" Binding="{Binding Title}" />
+        </DataGrid.Columns>
+    </DataGrid>
+
+</UserControl>
