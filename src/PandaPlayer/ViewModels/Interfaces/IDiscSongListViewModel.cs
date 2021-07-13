@@ -2,7 +2,7 @@
 
 namespace PandaPlayer.ViewModels.Interfaces
 {
-	public interface IExplorerSongListViewModel : ISongListViewModel
+	public interface IDiscSongListViewModel : ISongListViewModel
 	{
 		ICommand DeleteSongsFromDiscCommand { get; }
 	}

@@ -18,10 +18,10 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <!-- We wrap each SongListView with Grid, because otherwise setting visibility does not work -->
-        <Grid Grid.Row="0"  Visibility="{Binding AreExplorerSongsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <views:DiscSongListView DataContext="{Binding ExplorerSongsViewModel}" />
+        <Grid Grid.Row="0"  Visibility="{Binding IsDiscSongListSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <views:DiscSongListView DataContext="{Binding DiscSongListViewModel}" />
         </Grid>
-        <Grid Grid.Row="0" Visibility="{Binding ArePlaylistSongsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Grid Grid.Row="0" Visibility="{Binding IsPlaylistSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
             <views:PlaylistView DataContext="{Binding PlaylistSongsViewModel}" />
         </Grid>
         <GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
@@ -32,11 +32,11 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="2"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="Content" Command="{Binding SwitchToExplorerSongsCommand}">
+            <Button Grid.Column="0" Content="Content" Command="{Binding SwitchToDiscSongListCommand}">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding AreExplorerSongsSelected}" Value="True">
+                            <DataTrigger Binding="{Binding IsDiscSongListSelected}" Value="True">
                                 <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -44,11 +44,11 @@
                 </Button.Style>
             </Button>
             <GridSplitter Grid.Column="1" ResizeDirection="Columns" HorizontalAlignment="Stretch" />
-            <Button Grid.Column="2" Content="Playlist" Command="{Binding SwitchToPlaylistSongsCommand}">
+            <Button Grid.Column="2" Content="Playlist" Command="{Binding SwitchToPlaylistCommand}">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ArePlaylistSongsSelected}" Value="True">
+                            <DataTrigger Binding="{Binding IsPlaylistSelected}" Value="True">
                                 <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
                             </DataTrigger>
                         </Style.Triggers>

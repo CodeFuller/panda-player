@@ -76,8 +76,8 @@ namespace PandaPlayer.ViewModels
 			NavigateToSongDiscCommand = new RelayCommand(NavigateToSongDisc);
 
 			// There are 2 use cases of adding songs (Play Next & Play Last) to SongPlaylistViewModel:
-			//   1. Action is invoked from context menu in ExplorerSongListViewModel.
-			//      In this case ExplorerSongListViewModel sends AddingSongsToPlaylistNextEventArgs or AddingSongsToPlaylistLastEventArgs.
+			//   1. Action is invoked from context menu in DiscSongListViewModel.
+			//      In this case DiscSongListViewModel sends AddingSongsToPlaylistNextEventArgs or AddingSongsToPlaylistLastEventArgs.
 			//      Songs are added to SongPlaylistViewModel from handlers of these events.
 			//
 			//   2. Action is invoked from context menu in SongPlaylistViewModel.

@@ -34,7 +34,7 @@ namespace PandaPlayer.ViewModels
 
 		public ILibraryExplorerViewModel LibraryExplorerViewModel => ViewModelHolder.LibraryExplorerViewModel;
 
-		public ISongListViewModel ExplorerSongsViewModel => LibraryExplorerViewModel.SongListViewModel;
+		public ISongListViewModel DiscSongListViewModel => LibraryExplorerViewModel.DiscSongListViewModel;
 
 		public ISongPlaylistViewModel PlaylistSongsViewModel => MusicPlayerViewModel.Playlist;
 
@@ -46,16 +46,16 @@ namespace PandaPlayer.ViewModels
 			set
 			{
 				Set(ref currentSongListViewModel, value);
-				RaisePropertyChanged(nameof(AreExplorerSongsSelected));
-				RaisePropertyChanged(nameof(ArePlaylistSongsSelected));
+				RaisePropertyChanged(nameof(IsDiscSongListSelected));
+				RaisePropertyChanged(nameof(IsPlaylistSelected));
 
-				ActiveDisc = AreExplorerSongsSelected ? LibraryExplorerViewModel.SelectedDisc : PlaylistActiveDisc;
+				ActiveDisc = IsDiscSongListSelected ? LibraryExplorerViewModel.SelectedDisc : PlaylistActiveDisc;
 			}
 		}
 
-		public bool AreExplorerSongsSelected => CurrentSongListViewModel == ExplorerSongsViewModel;
+		public bool IsDiscSongListSelected => CurrentSongListViewModel == DiscSongListViewModel;
 
-		public bool ArePlaylistSongsSelected => CurrentSongListViewModel == PlaylistSongsViewModel;
+		public bool IsPlaylistSelected => CurrentSongListViewModel == PlaylistSongsViewModel;
 
 		public IMusicPlayerViewModel MusicPlayerViewModel { get; }
 
@@ -85,9 +85,9 @@ namespace PandaPlayer.ViewModels
 
 		public ICommand ShowLibraryStatisticsCommand { get; }
 
-		public ICommand SwitchToExplorerSongsCommand { get; }
+		public ICommand SwitchToDiscSongListCommand { get; }
 
-		public ICommand SwitchToPlaylistSongsCommand { get; }
+		public ICommand SwitchToPlaylistCommand { get; }
 
 		public ApplicationViewModel(IApplicationViewModelHolder viewModelHolder, IMusicPlayerViewModel musicPlayerViewModel, IViewNavigator viewNavigator)
 		{
@@ -101,15 +101,15 @@ namespace PandaPlayer.ViewModels
 			ShowLibraryCheckerCommand = new AsyncRelayCommand(() => ShowLibraryChecker(CancellationToken.None));
 			ShowLibraryStatisticsCommand = new AsyncRelayCommand(() => ShowLibraryStatistics(CancellationToken.None));
 
-			SwitchToExplorerSongsCommand = new RelayCommand(SwitchToExplorerSongs);
-			SwitchToPlaylistSongsCommand = new RelayCommand(SwitchToPlaylistSongs);
+			SwitchToDiscSongListCommand = new RelayCommand(SwitchToDiscSongList);
+			SwitchToPlaylistCommand = new RelayCommand(SwitchToPlaylist);
 
-			CurrentSongListViewModel = ExplorerSongsViewModel;
+			CurrentSongListViewModel = DiscSongListViewModel;
 
 			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaySongList(e, CancellationToken.None));
 			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, _ => OnPlayPlaylistStartingFromSong(CancellationToken.None));
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, OnPlaylistFinished);
-			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, _ => SwitchToExplorerSongs());
+			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, _ => SwitchToDiscSongList());
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, OnPlaylistSongChanged);
 			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, OnPlaylistSongChanged);
 			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => NavigateLibraryExplorerToDisc(e.Disc, CancellationToken.None));
@@ -122,7 +122,7 @@ namespace PandaPlayer.ViewModels
 			// Setting playlist active if some previous playlist was loaded.
 			if (PlaylistSongsViewModel.Songs.Any())
 			{
-				SwitchToPlaylistSongs();
+				SwitchToPlaylist();
 			}
 		}
 
@@ -146,13 +146,13 @@ namespace PandaPlayer.ViewModels
 			await PlaylistSongsViewModel.SetPlaylistSongs(e.Songs, cancellationToken);
 			await PlaylistSongsViewModel.SwitchToNextSong(cancellationToken);
 			await ResetPlayer(cancellationToken);
-			SwitchToPlaylistSongs();
+			SwitchToPlaylist();
 		}
 
 		private async void OnPlayPlaylistStartingFromSong(CancellationToken cancellationToken)
 		{
 			await ResetPlayer(cancellationToken);
-			SwitchToPlaylistSongs();
+			SwitchToPlaylist();
 		}
 
 		internal async Task ReversePlaying(CancellationToken cancellationToken)
@@ -170,7 +170,7 @@ namespace PandaPlayer.ViewModels
 		{
 			Title = e.CurrentSong != null ? BuildCurrentTitle(e.CurrentSong, e.CurrentSongIndex) : DefaultTitle;
 
-			if (ArePlaylistSongsSelected)
+			if (IsPlaylistSelected)
 			{
 				ActiveDisc = PlaylistActiveDisc;
 			}
@@ -193,12 +193,12 @@ namespace PandaPlayer.ViewModels
 			viewNavigator.ShowRatePlaylistSongsView(songs);
 		}
 
-		private void SwitchToExplorerSongs()
+		private void SwitchToDiscSongList()
 		{
-			CurrentSongListViewModel = ExplorerSongsViewModel;
+			CurrentSongListViewModel = DiscSongListViewModel;
 		}
 
-		private void SwitchToPlaylistSongs()
+		private void SwitchToPlaylist()
 		{
 			CurrentSongListViewModel = PlaylistSongsViewModel;
 		}
@@ -206,7 +206,7 @@ namespace PandaPlayer.ViewModels
 		private async void NavigateLibraryExplorerToDisc(DiscModel disc, CancellationToken cancellationToken)
 		{
 			await LibraryExplorerViewModel.SwitchToDisc(disc, cancellationToken);
-			SwitchToExplorerSongs();
+			SwitchToDiscSongList();
 		}
 	}
 }

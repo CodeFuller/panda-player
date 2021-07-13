@@ -17,7 +17,7 @@ using PandaPlayer.ViewModels;
 namespace PandaPlayer.UnitTests.ViewModels
 {
 	[TestClass]
-	public class ExplorerSongListViewModelTests
+	public class DiscSongListViewModelTests
 	{
 		[TestInitialize]
 		public void Initialize()
@@ -31,7 +31,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<ExplorerSongListViewModel>();
+			var target = mocker.CreateInstance<DiscSongListViewModel>();
 
 			// Act
 
@@ -55,7 +55,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<ExplorerSongListViewModel>();
+			var target = mocker.CreateInstance<DiscSongListViewModel>();
 
 			target.SetSongs(songs);
 
@@ -82,7 +82,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<ExplorerSongListViewModel>();
+			var target = mocker.CreateInstance<DiscSongListViewModel>();
 			mocker.GetMock<IWindowService>().Setup(x => x.ShowMessageBox(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ShowMessageBoxButton>(), It.IsAny<ShowMessageBoxIcon>()))
 				.Returns(ShowMessageBoxResult.No);
 
@@ -116,7 +116,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<ExplorerSongListViewModel>();
+			var target = mocker.CreateInstance<DiscSongListViewModel>();
 			mocker.GetMock<IWindowService>().Setup(x => x.ShowMessageBox(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ShowMessageBoxButton>(), It.IsAny<ShowMessageBoxIcon>()))
 				.Returns(ShowMessageBoxResult.Yes);
 
@@ -153,7 +153,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<ExplorerSongListViewModel>();
+			var target = mocker.CreateInstance<DiscSongListViewModel>();
 			mocker.GetMock<IWindowService>().Setup(x => x.ShowMessageBox(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ShowMessageBoxButton>(), It.IsAny<ShowMessageBoxIcon>()))
 				.Returns(ShowMessageBoxResult.Yes);
 
@@ -196,7 +196,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<ExplorerSongListViewModel>();
+			var target = mocker.CreateInstance<DiscSongListViewModel>();
 
 			AddingSongsToPlaylistNextEventArgs addingSongsToPlaylistEvent = null;
 			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => e.RegisterEvent(ref addingSongsToPlaylistEvent));
@@ -237,7 +237,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<ExplorerSongListViewModel>();
+			var target = mocker.CreateInstance<DiscSongListViewModel>();
 
 			AddingSongsToPlaylistNextEventArgs addingSongsToPlaylistEvent = null;
 			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => e.RegisterEvent(ref addingSongsToPlaylistEvent));
@@ -267,7 +267,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<ExplorerSongListViewModel>();
+			var target = mocker.CreateInstance<DiscSongListViewModel>();
 
 			AddingSongsToPlaylistLastEventArgs addingSongsToPlaylistEvent = null;
 			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => e.RegisterEvent(ref addingSongsToPlaylistEvent));
@@ -308,7 +308,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<ExplorerSongListViewModel>();
+			var target = mocker.CreateInstance<DiscSongListViewModel>();
 
 			AddingSongsToPlaylistLastEventArgs addingSongsToPlaylistEvent = null;
 			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => e.RegisterEvent(ref addingSongsToPlaylistEvent));

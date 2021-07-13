@@ -49,12 +49,12 @@ namespace PandaPlayer.ViewModels
 				var selectedDisc = SelectedDisc;
 				if (selectedDisc != null)
 				{
-					SongListViewModel.SetSongs(selectedDisc.ActiveSongs);
+					DiscSongListViewModel.SetSongs(selectedDisc.ActiveSongs);
 					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(selectedDisc));
 				}
 				else
 				{
-					SongListViewModel.SetSongs(Enumerable.Empty<SongModel>());
+					DiscSongListViewModel.SetSongs(Enumerable.Empty<SongModel>());
 					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null));
 				}
 			}
@@ -62,7 +62,7 @@ namespace PandaPlayer.ViewModels
 
 		public DiscModel SelectedDisc => (selectedItem as DiscExplorerItem)?.Disc;
 
-		public IExplorerSongListViewModel SongListViewModel { get; }
+		public IDiscSongListViewModel DiscSongListViewModel { get; }
 
 		public ICommand ChangeFolderCommand { get; }
 
@@ -79,11 +79,11 @@ namespace PandaPlayer.ViewModels
 		public ICommand DeleteFolderCommand { get; }
 
 		public LibraryExplorerViewModel(IFoldersService foldersService, IDiscsService discsService,
-			IExplorerSongListViewModel songListViewModel, IViewNavigator viewNavigator, IWindowService windowService)
+			IDiscSongListViewModel songListListViewModel, IViewNavigator viewNavigator, IWindowService windowService)
 		{
 			this.foldersService = foldersService ?? throw new ArgumentNullException(nameof(foldersService));
 			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
-			SongListViewModel = songListViewModel ?? throw new ArgumentNullException(nameof(songListViewModel));
+			DiscSongListViewModel = songListListViewModel ?? throw new ArgumentNullException(nameof(songListListViewModel));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
 

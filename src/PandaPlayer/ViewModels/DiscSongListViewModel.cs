@@ -13,7 +13,7 @@ using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels
 {
-	public class ExplorerSongListViewModel : SongListViewModel, IExplorerSongListViewModel
+	public class DiscSongListViewModel : SongListViewModel, IDiscSongListViewModel
 	{
 		private readonly IWindowService windowService;
 
@@ -25,7 +25,7 @@ namespace PandaPlayer.ViewModels
 
 		public ICommand DeleteSongsFromDiscCommand { get; }
 
-		public ExplorerSongListViewModel(ISongsService songsService, IViewNavigator viewNavigator, IWindowService windowService)
+		public DiscSongListViewModel(ISongsService songsService, IViewNavigator viewNavigator, IWindowService windowService)
 			: base(songsService, viewNavigator)
 		{
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));

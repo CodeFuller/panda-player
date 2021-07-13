@@ -15,7 +15,7 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		DiscModel SelectedDisc { get; }
 
-		IExplorerSongListViewModel SongListViewModel { get; }
+		IDiscSongListViewModel DiscSongListViewModel { get; }
 
 		Task SwitchToDisc(DiscModel disc, CancellationToken cancellationToken);
 	}
