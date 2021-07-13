@@ -6,7 +6,7 @@ using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.ViewModels.Interfaces
 {
-	public interface ISongPlaylistViewModel : ISongListViewModel
+	public interface IPlaylistViewModel : ISongListViewModel
 	{
 		SongModel CurrentSong { get; }
 

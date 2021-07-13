@@ -36,7 +36,7 @@ namespace PandaPlayer.ViewModels
 
 		public ISongListViewModel DiscSongListViewModel => LibraryExplorerViewModel.DiscSongListViewModel;
 
-		public ISongPlaylistViewModel PlaylistSongsViewModel => MusicPlayerViewModel.Playlist;
+		public IPlaylistViewModel PlaylistViewModel => MusicPlayerViewModel.Playlist;
 
 		private ISongListViewModel currentSongListViewModel;
 
@@ -55,7 +55,7 @@ namespace PandaPlayer.ViewModels
 
 		public bool IsDiscSongListSelected => CurrentSongListViewModel == DiscSongListViewModel;
 
-		public bool IsPlaylistSelected => CurrentSongListViewModel == PlaylistSongsViewModel;
+		public bool IsPlaylistSelected => CurrentSongListViewModel == PlaylistViewModel;
 
 		public IMusicPlayerViewModel MusicPlayerViewModel { get; }
 
@@ -73,7 +73,7 @@ namespace PandaPlayer.ViewModels
 			}
 		}
 
-		private DiscModel PlaylistActiveDisc => PlaylistSongsViewModel.CurrentDisc;
+		private DiscModel PlaylistActiveDisc => PlaylistViewModel.CurrentDisc;
 
 		public ICommand LoadCommand { get; }
 
@@ -120,7 +120,7 @@ namespace PandaPlayer.ViewModels
 			Messenger.Default.Send(new ApplicationLoadedEventArgs());
 
 			// Setting playlist active if some previous playlist was loaded.
-			if (PlaylistSongsViewModel.Songs.Any())
+			if (PlaylistViewModel.Songs.Any())
 			{
 				SwitchToPlaylist();
 			}
@@ -143,8 +143,8 @@ namespace PandaPlayer.ViewModels
 
 		private async void OnPlaySongList(PlaySongsListEventArgs e, CancellationToken cancellationToken)
 		{
-			await PlaylistSongsViewModel.SetPlaylistSongs(e.Songs, cancellationToken);
-			await PlaylistSongsViewModel.SwitchToNextSong(cancellationToken);
+			await PlaylistViewModel.SetPlaylistSongs(e.Songs, cancellationToken);
+			await PlaylistViewModel.SwitchToNextSong(cancellationToken);
 			await ResetPlayer(cancellationToken);
 			SwitchToPlaylist();
 		}
@@ -179,7 +179,7 @@ namespace PandaPlayer.ViewModels
 		private string BuildCurrentTitle(SongModel song, int? playlistSongIndex)
 		{
 			var songTitle = song.Artist != null ? $"{song.Artist.Name} - {song.Title}" : song.Title;
-			return $"{playlistSongIndex + 1}/{PlaylistSongsViewModel.SongsNumber} - {songTitle}";
+			return $"{playlistSongIndex + 1}/{PlaylistViewModel.SongsNumber} - {songTitle}";
 		}
 
 		private void OnPlaylistFinished(PlaylistFinishedEventArgs e)
@@ -200,7 +200,7 @@ namespace PandaPlayer.ViewModels
 
 		private void SwitchToPlaylist()
 		{
-			CurrentSongListViewModel = PlaylistSongsViewModel;
+			CurrentSongListViewModel = PlaylistViewModel;
 		}
 
 		private async void NavigateLibraryExplorerToDisc(DiscModel disc, CancellationToken cancellationToken)

@@ -13,16 +13,16 @@ using PandaPlayer.Services.Interfaces;
 
 namespace PandaPlayer.ViewModels.PersistentPlaylist
 {
-	public class PersistentSongPlaylistViewModel : SongPlaylistViewModel
+	public class PersistentPlaylistViewModel : PlaylistViewModel
 	{
-		private const string SongPlaylistDataKey = "SongPlaylistData";
+		private const string PlaylistDataKey = "SongPlaylistData";
 
 		private readonly ISongsService songsService;
 		private readonly ISessionDataService sessionDataService;
-		private readonly ILogger<PersistentSongPlaylistViewModel> logger;
+		private readonly ILogger<PersistentPlaylistViewModel> logger;
 
-		public PersistentSongPlaylistViewModel(ISongsService songsService, IViewNavigator viewNavigator,
-			ISessionDataService sessionDataService, ILogger<PersistentSongPlaylistViewModel> logger)
+		public PersistentPlaylistViewModel(ISongsService songsService, IViewNavigator viewNavigator,
+			ISessionDataService sessionDataService, ILogger<PersistentPlaylistViewModel> logger)
 			: base(songsService, viewNavigator)
 		{
 			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
@@ -51,7 +51,7 @@ namespace PandaPlayer.ViewModels.PersistentPlaylist
 
 		private async Task<(IReadOnlyCollection<SongModel> Songs, int? CurrentSongIndex)> LoadPlaylistData(CancellationToken cancellationToken)
 		{
-			var playListData = await sessionDataService.GetData<PlaylistData>(SongPlaylistDataKey, cancellationToken);
+			var playListData = await sessionDataService.GetData<PlaylistData>(PlaylistDataKey, cancellationToken);
 			if (playListData == null)
 			{
 				logger.LogInformation("No previous playlist data loaded");
@@ -121,14 +121,14 @@ namespace PandaPlayer.ViewModels.PersistentPlaylist
 
 		private async void OnPlaylistFinished(CancellationToken cancellationToken)
 		{
-			await sessionDataService.PurgeData(SongPlaylistDataKey, cancellationToken);
+			await sessionDataService.PurgeData(PlaylistDataKey, cancellationToken);
 		}
 
 		protected override async Task OnPlaylistChanged(CancellationToken cancellationToken)
 		{
 			var playlistData = new PlaylistData(Songs, CurrentSongIndex);
 
-			await sessionDataService.SaveData(SongPlaylistDataKey, playlistData, cancellationToken);
+			await sessionDataService.SaveData(PlaylistDataKey, playlistData, cancellationToken);
 
 			await base.OnPlaylistChanged(cancellationToken);
 		}

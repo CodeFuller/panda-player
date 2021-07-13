@@ -68,7 +68,7 @@ namespace PandaPlayer
 			services.AddTransient<INavigatedViewModelHolder, NavigatedViewModelHolder>();
 			services.AddSingleton<ILibraryExplorerViewModel, LibraryExplorerViewModel>();
 			services.AddSingleton<IDiscSongListViewModel, DiscSongListViewModel>();
-			services.AddSingleton<ISongPlaylistViewModel, PersistentSongPlaylistViewModel>();
+			services.AddSingleton<IPlaylistViewModel, PersistentPlaylistViewModel>();
 			services.AddSingleton<IEditDiscPropertiesViewModel, EditDiscPropertiesViewModel>();
 			services.AddSingleton<IEditSongPropertiesViewModel, EditSongPropertiesViewModel>();
 			services.AddSingleton<IMusicPlayerViewModel, MusicPlayerViewModel>();

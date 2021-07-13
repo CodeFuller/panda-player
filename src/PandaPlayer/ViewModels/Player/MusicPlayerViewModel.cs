@@ -67,7 +67,7 @@ namespace PandaPlayer.ViewModels.Player
 			}
 		}
 
-		public ISongPlaylistViewModel Playlist { get; }
+		public IPlaylistViewModel Playlist { get; }
 
 		/// <summary>
 		/// Gets the song, which is currently loaded into audio player.
@@ -76,7 +76,7 @@ namespace PandaPlayer.ViewModels.Player
 
 		public ICommand ReversePlayingCommand { get; }
 
-		public MusicPlayerViewModel(ISongPlaylistViewModel playlist, IAudioPlayer audioPlayer, ISongPlaybacksRegistrator playbacksRegistrator)
+		public MusicPlayerViewModel(IPlaylistViewModel playlist, IAudioPlayer audioPlayer, ISongPlaybacksRegistrator playbacksRegistrator)
 		{
 			this.Playlist = playlist ?? throw new ArgumentNullException(nameof(playlist));
 			this.audioPlayer = audioPlayer ?? throw new ArgumentNullException(nameof(audioPlayer));

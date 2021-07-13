@@ -22,7 +22,7 @@
             <views:DiscSongListView DataContext="{Binding DiscSongListViewModel}" />
         </Grid>
         <Grid Grid.Row="0" Visibility="{Binding IsPlaylistSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <views:PlaylistView DataContext="{Binding PlaylistSongsViewModel}" />
+            <views:PlaylistView DataContext="{Binding PlaylistViewModel}" />
         </Grid>
         <GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
         <Grid Grid.Row="2">

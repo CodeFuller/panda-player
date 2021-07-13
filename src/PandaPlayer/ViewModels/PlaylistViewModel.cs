@@ -17,7 +17,7 @@ using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels
 {
-	public class SongPlaylistViewModel : SongListViewModel, ISongPlaylistViewModel
+	public class PlaylistViewModel : SongListViewModel, IPlaylistViewModel
 	{
 		// CurrentSongIndex and CurrentItem are kept in-sync via method SetCurrentSong.
 		// Neither CurrentSongIndex nor CurrentItem should be set directly.
@@ -67,7 +67,7 @@ namespace PandaPlayer.ViewModels
 
 		public ICommand NavigateToSongDiscCommand { get; }
 
-		public SongPlaylistViewModel(ISongsService songsService, IViewNavigator viewNavigator)
+		public PlaylistViewModel(ISongsService songsService, IViewNavigator viewNavigator)
 			: base(songsService, viewNavigator)
 		{
 			PlayFromSongCommand = new AsyncRelayCommand(() => PlayFromSong(CancellationToken.None));
@@ -75,13 +75,13 @@ namespace PandaPlayer.ViewModels
 			ClearPlaylistCommand = new AsyncRelayCommand(() => ClearPlaylist(CancellationToken.None));
 			NavigateToSongDiscCommand = new RelayCommand(NavigateToSongDisc);
 
-			// There are 2 use cases of adding songs (Play Next & Play Last) to SongPlaylistViewModel:
+			// There are 2 use cases of adding songs (Play Next & Play Last) to PlaylistViewModel:
 			//   1. Action is invoked from context menu in DiscSongListViewModel.
 			//      In this case DiscSongListViewModel sends AddingSongsToPlaylistNextEventArgs or AddingSongsToPlaylistLastEventArgs.
-			//      Songs are added to SongPlaylistViewModel from handlers of these events.
+			//      Songs are added to PlaylistViewModel from handlers of these events.
 			//
-			//   2. Action is invoked from context menu in SongPlaylistViewModel.
-			//      In ths case songs are added to SongPlaylistViewModel from handlers of PlaySongsNextCommand and PlaySongsLastCommand.
+			//   2. Action is invoked from context menu in PlaylistViewModel.
+			//      In ths case songs are added to PlaylistViewModel from handlers of PlaySongsNextCommand and PlaySongsLastCommand.
 			//
 			//   This is done to prevent anti-pattern when object sends event to itself.
 			PlaySongsNextCommand = new AsyncRelayCommand(() => AddSongsNext(SelectedSongs.ToList(), CancellationToken.None));

@@ -15,7 +15,7 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		double CurrentSongProgress { get; set; }
 
-		ISongPlaylistViewModel Playlist { get; }
+		IPlaylistViewModel Playlist { get; }
 
 		SongModel CurrentSong { get; }
 

@@ -18,7 +18,7 @@ using PandaPlayer.ViewModels;
 namespace PandaPlayer.UnitTests.ViewModels
 {
 	[TestClass]
-	public class SongPlaylistViewModelTests
+	public class PlaylistViewModelTests
 	{
 		[TestInitialize]
 		public void Initialize()
@@ -32,7 +32,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			// Act
 
@@ -76,7 +76,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			disc3.AllSongs = new[] { songs[2] };
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 			await target.SwitchToNextSong(CancellationToken.None);
@@ -117,7 +117,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			disc.AllSongs = songs;
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 
@@ -158,7 +158,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			disc2.AllSongs = new[] { songs[1] };
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 
@@ -185,7 +185,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
@@ -223,7 +223,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
@@ -260,7 +260,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 
@@ -291,7 +291,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 			await target.SwitchToNextSong(CancellationToken.None);
@@ -324,7 +324,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 			await target.SwitchToNextSong(CancellationToken.None);
@@ -357,7 +357,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 
@@ -388,7 +388,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 			target.SelectedSongItem = target.SongItems[1];
@@ -425,7 +425,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 
@@ -463,7 +463,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 
@@ -514,7 +514,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 			await target.SwitchToNextSong(CancellationToken.None);
@@ -561,7 +561,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 			await target.SwitchToNextSong(CancellationToken.None);
@@ -599,7 +599,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
@@ -634,7 +634,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 
@@ -685,7 +685,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 
@@ -733,7 +733,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 
@@ -781,7 +781,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 			target.CurrentSong.Should().BeNull();
@@ -798,9 +798,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 			navigateToDiscEventArgs.Should().BeNull();
 		}
 
-		// There are 2 ways to add songs to SongPlaylistViewModel: via command (e.g. PlaySongsNextCommand) or via event (e.g. AddingSongsToPlaylistNextEventArgs).
+		// There are 2 ways to add songs to PlaylistViewModel: via command (e.g. PlaySongsNextCommand) or via event (e.g. AddingSongsToPlaylistNextEventArgs).
 		// We test all possible cases via event handlers. For each command handlers we have only single basic test.
-		// See also comment in SongPlaylistViewModel constructor for command and event handlers.
+		// See also comment in PlaylistViewModel constructor for command and event handlers.
 		[TestMethod]
 		public async Task AddingSongsToPlaylistNextEventHandler_ForNonEmptyPlaylistWhenCurrentSongIsSet_DoesNotChangeCurrentSong()
 		{
@@ -820,7 +820,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 			await target.SwitchToNextSong(CancellationToken.None);
@@ -873,7 +873,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 
@@ -917,7 +917,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
@@ -951,7 +951,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 
@@ -987,7 +987,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 
@@ -1049,7 +1049,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 			await target.SwitchToNextSong(CancellationToken.None);
@@ -1102,7 +1102,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 
@@ -1146,7 +1146,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
@@ -1180,7 +1180,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 
@@ -1216,7 +1216,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<SongPlaylistViewModel>();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 

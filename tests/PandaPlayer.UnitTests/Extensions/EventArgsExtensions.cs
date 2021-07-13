@@ -34,10 +34,10 @@ namespace PandaPlayer.UnitTests.Extensions
 		{
 			var expectedProperties = new[]
 			{
-				nameof(SongPlaylistViewModel.HasSongs),
-				nameof(SongPlaylistViewModel.SongsNumber),
-				nameof(SongPlaylistViewModel.TotalSongsFileSize),
-				nameof(SongPlaylistViewModel.TotalSongsDuration),
+				nameof(PlaylistViewModel.HasSongs),
+				nameof(PlaylistViewModel.SongsNumber),
+				nameof(PlaylistViewModel.TotalSongsFileSize),
+				nameof(PlaylistViewModel.TotalSongsDuration),
 			};
 
 			events.Select(e => e.PropertyName).Should().BeEquivalentTo(expectedProperties);
