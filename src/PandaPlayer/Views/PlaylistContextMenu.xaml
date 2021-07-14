@@ -14,7 +14,7 @@
         <valueConverters:RatingToImageNameValueConverter x:Key="RatingToImageValueConverter" />
     </ContextMenu.Resources>
 
-    <MenuItem Header="Play From This Song" Command="{Binding PlaySongsNextCommand}" />
+    <MenuItem Header="Play From This Song" Command="{Binding PlayFromSongCommand}" />
     <MenuItem Header="Play Next" Command="{Binding PlaySongsNextCommand}" />
     <MenuItem Header="Play Last" Command="{Binding PlaySongsLastCommand}" />
     <MenuItem Header="Remove From Playlist" Command="{Binding RemoveSongsFromPlaylistCommand}" />
