@@ -23,7 +23,6 @@
         </DataGrid.ContextMenu>
         <DataGrid.InputBindings>
             <KeyBinding Key="Enter" Command="{Binding ChangeFolderCommand}" />
-            <KeyBinding Key="F5" Command="{Binding PlayDiscCommand}" />
             <KeyBinding Key="Home" Command="{Binding JumpToFirstItemCommand}" />
             <KeyBinding Key="End" Command="{Binding JumpToLastItemCommand}" />
             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding ChangeFolderCommand}" />

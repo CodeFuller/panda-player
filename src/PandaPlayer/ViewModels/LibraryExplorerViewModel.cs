@@ -68,6 +68,8 @@ namespace PandaPlayer.ViewModels
 
 		public ICommand PlayDiscCommand { get; }
 
+		public ICommand AddDiscToPlaylistCommand { get; }
+
 		public ICommand DeleteDiscCommand { get; }
 
 		public ICommand JumpToFirstItemCommand { get; }
@@ -89,6 +91,7 @@ namespace PandaPlayer.ViewModels
 
 			ChangeFolderCommand = new AsyncRelayCommand(() => ChangeToCurrentlySelectedFolder(CancellationToken.None));
 			PlayDiscCommand = new RelayCommand(PlayDisc);
+			AddDiscToPlaylistCommand = new RelayCommand(AddDiscToPlaylist);
 			DeleteDiscCommand = new AsyncRelayCommand(() => DeleteDisc(CancellationToken.None));
 			JumpToFirstItemCommand = new RelayCommand(() => SelectedItem = Items.FirstOrDefault());
 			JumpToLastItemCommand = new RelayCommand(() => SelectedItem = Items.LastOrDefault());
@@ -185,12 +188,22 @@ namespace PandaPlayer.ViewModels
 
 		private void PlayDisc()
 		{
-			if (!(SelectedItem is DiscExplorerItem discItem))
+			if (SelectedItem is not DiscExplorerItem discItem)
 			{
 				return;
 			}
 
 			Messenger.Default.Send(new PlaySongsListEventArgs(discItem.Disc));
+		}
+
+		private void AddDiscToPlaylist()
+		{
+			if (SelectedItem is not DiscExplorerItem discItem)
+			{
+				return;
+			}
+
+			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(discItem.Disc.ActiveSongs));
 		}
 
 		private async Task DeleteDisc(CancellationToken cancellationToken)

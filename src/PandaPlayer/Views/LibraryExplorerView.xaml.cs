@@ -113,6 +113,12 @@ namespace PandaPlayer.Views
 
 					new MenuItem
 					{
+						Header = "Add To Playlist",
+						Command = viewModel.AddDiscToPlaylistCommand,
+					},
+
+					new MenuItem
+					{
 						Header = "Delete Disc",
 						Command = viewModel.DeleteDiscCommand,
 					},

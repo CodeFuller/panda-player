@@ -22,6 +22,8 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		ICommand PlayDiscCommand { get; }
 
+		ICommand AddDiscToPlaylistCommand { get; }
+
 		ICommand DeleteDiscCommand { get; }
 
 		ICommand JumpToFirstItemCommand { get; }
