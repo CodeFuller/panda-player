@@ -5,8 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:CodeFuller.Library.Wpf.Controls;assembly=CodeFuller.Library.Wpf"
              xmlns:valueConverters="clr-namespace:PandaPlayer.Views.ValueConverters"
+             xmlns:interfaces="clr-namespace:PandaPlayer.ViewModels.Interfaces"
              mc:Ignorable="d"
-             d:DesignWidth="800" d:DesignHeight="600" d:DataContext="{d:DesignInstance viewModels:ISongListViewModel}">
+             d:DataContext="{d:DesignInstance interfaces:ISongListViewModel}"
+             d:DesignWidth="800" d:DesignHeight="600">
 
     <UserControl.Resources>
         <valueConverters:SongDurationValueConverter x:Key="SongDurationValueConverter" />
@@ -150,8 +152,8 @@
                                 <Setter Property="Content" Value="{Binding SongsNumber}" />
                                 <Setter Property="ContentStringFormat" Value="{}{0} song(s)" />
                             </DataTrigger>
-                            <!-- Using 'space' instead of empty line so that Label height is the same in both cases -->
                             <DataTrigger Binding="{Binding HasSongs}" Value="False">
+                                <!-- Using 'space' instead of empty line so that Label height is the same in both cases -->
                                 <Setter Property="Content" Value=" " />
                             </DataTrigger>
                         </Style.Triggers>

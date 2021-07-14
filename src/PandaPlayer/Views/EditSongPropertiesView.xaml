@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:system="clr-namespace:System;assembly=System.Runtime"
         xmlns:validationRules="clr-namespace:PandaPlayer.Views.ValidationRules"
+        xmlns:designInstances="clr-namespace:PandaPlayer.Views.DesignInstances"
         mc:Ignorable="d"
-        Title="Edit Song Properties" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize" d:DataContext="{d:DesignInstance di:EditSongPropertiesDesignData, IsDesignTimeCreatable=True}" >
+        Title="Edit Song Properties"
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance designInstances:EditSongPropertiesDesignData, IsDesignTimeCreatable=True}">
 
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}" />

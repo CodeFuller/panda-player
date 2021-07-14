@@ -19,7 +19,7 @@ namespace PandaPlayer.ViewModels.Player
 
 		private bool isPlaying;
 
-		public bool IsPlaying
+		private bool IsPlaying
 		{
 			get => isPlaying;
 			set
@@ -28,8 +28,6 @@ namespace PandaPlayer.ViewModels.Player
 				RaisePropertyChanged(nameof(ReversePlayingKind));
 			}
 		}
-
-		public string ReversePlayingKind => IsPlaying ? "Pause" : "Play";
 
 		public TimeSpan CurrentSongLength => audioPlayer.CurrSongLength;
 
@@ -70,9 +68,11 @@ namespace PandaPlayer.ViewModels.Player
 		public IPlaylistViewModel Playlist { get; }
 
 		/// <summary>
-		/// Gets the song, which is currently loaded into audio player.
+		/// Gets or sets the song, which is currently loaded into audio player.
 		/// </summary>
-		public SongModel CurrentSong { get; private set; }
+		private SongModel CurrentSong { get; set; }
+
+		public string ReversePlayingKind => IsPlaying ? "Pause" : "Play";
 
 		public ICommand ReversePlayingCommand { get; }
 
@@ -105,7 +105,7 @@ namespace PandaPlayer.ViewModels.Player
 			audioPlayer.Play();
 		}
 
-		public Task Pause()
+		private Task Pause()
 		{
 			IsPlaying = false;
 			audioPlayer.Pause();

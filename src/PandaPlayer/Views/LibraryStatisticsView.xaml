@@ -4,9 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:valueConverters="clr-namespace:PandaPlayer.Views.ValueConverters"
+        xmlns:interfaces="clr-namespace:PandaPlayer.ViewModels.Interfaces"
         mc:Ignorable="d"
-        Title="Library Statistics" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize">
+        Title="Library Statistics"
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance interfaces:ILibraryStatisticsViewModel}">
 
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}" />

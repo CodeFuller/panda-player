@@ -7,8 +7,6 @@ namespace PandaPlayer.ViewModels.Player
 	{
 		event EventHandler<SongMediaFinishedEventArgs> SongMediaFinished;
 
-		bool IsPlaying { get; }
-
 		TimeSpan CurrSongLength { get; }
 
 		TimeSpan CurrSongPosition { get; set; }

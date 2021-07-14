@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Input;
 
 namespace PandaPlayer.ViewModels.Interfaces
 {
@@ -6,6 +7,6 @@ namespace PandaPlayer.ViewModels.Interfaces
 	{
 		Uri CurrentImageUri { get; }
 
-		void EditDiscImage();
+		ICommand EditDiscImageCommand { get; }
 	}
 }

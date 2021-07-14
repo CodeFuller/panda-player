@@ -9,6 +9,8 @@ namespace PandaPlayer.ViewModels.Interfaces
 	{
 		bool SingleSongMode { get; }
 
+		public string TreeTitle { get; set; }
+
 		public string Title { get; set; }
 
 		public EditedSongProperty<ArtistModel> Artist { get; set; }
@@ -16,6 +18,10 @@ namespace PandaPlayer.ViewModels.Interfaces
 		public EditedSongProperty<GenreModel> Genre { get; set; }
 
 		public short? TrackNumber { get; set; }
+
+		IReadOnlyCollection<EditedSongProperty<ArtistModel>> AvailableArtists { get; }
+
+		IReadOnlyCollection<EditedSongProperty<GenreModel>> AvailableGenres { get; }
 
 		Task Load(IEnumerable<SongModel> songs, CancellationToken cancellationToken);
 

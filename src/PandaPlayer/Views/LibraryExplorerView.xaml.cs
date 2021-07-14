@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using PandaPlayer.ViewModels;
+using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.ViewModels.LibraryExplorerItems;
 
 namespace PandaPlayer.Views
@@ -96,7 +96,7 @@ namespace PandaPlayer.Views
 
 		private void DataGrid_ContextMenuOpening(object sender, ContextMenuEventArgs e)
 		{
-			if (!(e.Source is FrameworkElement frameworkElement) || !(DataContext is LibraryExplorerViewModel viewModel))
+			if (!(e.Source is FrameworkElement frameworkElement) || !(DataContext is ILibraryExplorerViewModel viewModel))
 			{
 				return;
 			}

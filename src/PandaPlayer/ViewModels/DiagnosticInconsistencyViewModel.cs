@@ -4,7 +4,7 @@ using PandaPlayer.Services.Diagnostic.Inconsistencies;
 
 namespace PandaPlayer.ViewModels
 {
-	internal class DiagnosticInconsistencyViewModel : ViewModelBase
+	public class DiagnosticInconsistencyViewModel : ViewModelBase
 	{
 		private readonly LibraryInconsistency inconsistency;
 

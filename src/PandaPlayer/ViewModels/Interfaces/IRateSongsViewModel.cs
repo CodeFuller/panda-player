@@ -7,6 +7,10 @@ namespace PandaPlayer.ViewModels.Interfaces
 {
 	public interface IRateSongsViewModel
 	{
+		IEnumerable<RatingModel> AvailableRatings { get; }
+
+		RatingModel SelectedRating { get; set; }
+
 		void Load(IEnumerable<SongModel> songs);
 
 		Task Save(CancellationToken cancellationToken);

@@ -12,6 +12,8 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		string AlbumTitle { get; set; }
 
+		int? Year { get; set; }
+
 		void Load(DiscModel disc);
 
 		Task Save(CancellationToken cancellationToken);

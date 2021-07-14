@@ -48,8 +48,6 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			set => Set(ref deleteSourceContent, value);
 		}
 
-		public ICommand AddToLibraryCommand { get; }
-
 		private int currentProgress;
 
 		public int CurrentProgress
@@ -84,6 +82,8 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			set => Set(ref progressMessages, value);
 		}
 
+		public ICommand AddToLibraryCommand { get; }
+
 		public AddToLibraryViewModel(ISongMediaInfoProvider songMediaInfoProvider, IWorkshopMusicStorage workshopMusicStorage,
 			IFoldersService foldersService, IDiscsService discService, ISongsService songService, IArtistsService artistService)
 		{
@@ -109,7 +109,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			addedDiscImages = images.ToList();
 		}
 
-		public async Task AddContentToLibrary(CancellationToken cancellationToken)
+		private async Task AddContentToLibrary(CancellationToken cancellationToken)
 		{
 			if (addedSongs == null)
 			{

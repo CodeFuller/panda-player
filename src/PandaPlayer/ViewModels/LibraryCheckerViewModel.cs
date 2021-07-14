@@ -140,7 +140,7 @@ namespace PandaPlayer.ViewModels
 
 		public ICommand RunCheckCommand { get; }
 
-		public ObservableCollection<DiagnosticInconsistencyViewModel> Inconsistencies { get; } = new ObservableCollection<DiagnosticInconsistencyViewModel>();
+		public ObservableCollection<DiagnosticInconsistencyViewModel> Inconsistencies { get; } = new();
 
 		public LibraryCheckerViewModel(IDiagnosticService diagnosticService)
 		{

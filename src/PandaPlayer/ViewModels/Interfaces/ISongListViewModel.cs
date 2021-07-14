@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -14,7 +15,12 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		IEnumerable<SongModel> Songs { get; }
 
-		SongListItem SelectedSongItem { get; }
+		SongListItem SelectedSongItem { get; set; }
+
+		// Should be of type IList because of SelectedItem binding in SongListView
+#pragma warning disable CA2227 // Collection properties should be read only - Collection is used in two-way binding
+		IList SelectedSongItems { get; set; }
+#pragma warning restore CA2227 // Collection properties should be read only
 
 		bool HasSongs { get; }
 

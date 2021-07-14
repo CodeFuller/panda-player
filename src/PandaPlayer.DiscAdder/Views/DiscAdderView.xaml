@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:PandaPlayer.DiscAdder.ViewModels"
         xmlns:views="clr-namespace:PandaPlayer.DiscAdder.Views"
+        xmlns:interfaces="clr-namespace:PandaPlayer.DiscAdder.ViewModels.Interfaces"
         mc:Ignorable="d"
-        Title="Disc Adder" Width="1600" Height="800" WindowState="Maximized">
+        Title="Disc Adder"
+        Width="1600" Height="800" WindowState="Maximized"
+        d:DataContext="{d:DesignInstance interfaces:IDiscAdderViewModel}">
 
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}" />

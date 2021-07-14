@@ -2,7 +2,7 @@
 
 namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
 {
-	internal interface IPageViewModel : INotifyPropertyChanged
+	public interface IPageViewModel : INotifyPropertyChanged
 	{
 		string Name { get; }
 

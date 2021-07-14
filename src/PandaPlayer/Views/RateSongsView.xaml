@@ -4,9 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:valueConverters="clr-namespace:PandaPlayer.Views.ValueConverters"
+        xmlns:interfaces="clr-namespace:PandaPlayer.ViewModels.Interfaces"
         mc:Ignorable="d"
-        Title="Rate Listened Songs" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize">
+        Title="Rate Listened Songs"
+        d:DataContext="{d:DesignInstance interfaces:IRateSongsViewModel}"
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
 
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}" />

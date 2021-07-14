@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.ViewModels.Interfaces
@@ -18,6 +19,8 @@ namespace PandaPlayer.ViewModels.Interfaces
 		string ImageProperties { get; }
 
 		string ImageStatus { get; }
+
+		public ICommand LaunchSearchForDiscImageCommand { get; }
 
 		Task SetImage(Uri imageUri);
 

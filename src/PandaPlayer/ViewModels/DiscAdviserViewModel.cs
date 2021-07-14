@@ -28,21 +28,21 @@ namespace PandaPlayer.ViewModels
 
 		private readonly ILogger<DiscAdviserViewModel> logger;
 
-		private readonly List<AdvisedPlaylist> currAdvises = new List<AdvisedPlaylist>();
+		private readonly List<AdvisedPlaylist> currentAdvises = new();
 
-		private int currAdviseIndex;
+		private int currentAdviseIndex;
 
-		private int CurrAdviseIndex
+		private int CurrentAdviseIndex
 		{
-			get => currAdviseIndex;
+			get => currentAdviseIndex;
 			set
 			{
-				currAdviseIndex = value;
+				currentAdviseIndex = value;
 				OnCurrentAdvisedChanged();
 			}
 		}
 
-		public AdvisedPlaylist CurrentAdvise => CurrAdviseIndex < currAdvises.Count ? currAdvises[CurrAdviseIndex] : null;
+		private AdvisedPlaylist CurrentAdvise => CurrentAdviseIndex < currentAdvises.Count ? currentAdvises[CurrentAdviseIndex] : null;
 
 		public string CurrentAdviseAnnouncement => CurrentAdvise?.Title ?? "N/A";
 
@@ -80,13 +80,13 @@ namespace PandaPlayer.ViewModels
 
 		private async Task SwitchToNextAdvise(CancellationToken cancellationToken)
 		{
-			++CurrAdviseIndex;
+			++CurrentAdviseIndex;
 			await RebuildAdvisesIfRequired(cancellationToken);
 		}
 
 		private async Task RebuildAdvisesIfRequired(CancellationToken cancellationToken)
 		{
-			if (CurrAdviseIndex >= currAdvises.Count)
+			if (CurrentAdviseIndex >= currentAdvises.Count)
 			{
 				await RebuildAdvises(cancellationToken);
 			}
@@ -99,9 +99,9 @@ namespace PandaPlayer.ViewModels
 			var advisedPlaylists = await playlistAdviser.Advise(discs, AdvisedPlaylistsNumber, cancellationToken);
 			logger.LogInformation("Finished advised playlists calculation");
 
-			currAdvises.Clear();
-			currAdvises.AddRange(advisedPlaylists);
-			CurrAdviseIndex = 0;
+			currentAdvises.Clear();
+			currentAdvises.AddRange(advisedPlaylists);
+			CurrentAdviseIndex = 0;
 		}
 
 		private async void OnPlaylistFinished(IEnumerable<SongModel> finishedSongs, CancellationToken cancellationToken)
@@ -110,12 +110,12 @@ namespace PandaPlayer.ViewModels
 
 			// Removing advises that could be covered by just finished playlist.
 			var advisesWereModified = false;
-			for (var i = currAdviseIndex; i < currAdvises.Count;)
+			for (var i = currentAdviseIndex; i < currentAdvises.Count;)
 			{
-				if (SongListCoversAdvise(finishedSongsList, currAdvises[i]))
+				if (SongListCoversAdvise(finishedSongsList, currentAdvises[i]))
 				{
-					currAdvises.RemoveAt(i);
-					advisesWereModified = advisesWereModified || (i == currAdviseIndex);
+					currentAdvises.RemoveAt(i);
+					advisesWereModified = advisesWereModified || (i == currentAdviseIndex);
 				}
 				else
 				{
@@ -133,7 +133,6 @@ namespace PandaPlayer.ViewModels
 
 		protected void OnCurrentAdvisedChanged()
 		{
-			RaisePropertyChanged(nameof(CurrentAdvise));
 			RaisePropertyChanged(nameof(CurrentAdviseAnnouncement));
 		}
 

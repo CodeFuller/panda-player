@@ -54,7 +54,7 @@ namespace PandaPlayer.ViewModels.DiscImages
 			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
 		}
 
-		public void EditDiscImage()
+		private void EditDiscImage()
 		{
 			var activeDisc = CurrentDisc;
 			if (activeDisc == null)

@@ -4,10 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:valueConverters="clr-namespace:PandaPlayer.Views.ValueConverters"
+        xmlns:interfaces="clr-namespace:PandaPlayer.ViewModels.Interfaces"
         mc:Ignorable="d"
-        Title="Library Checker" WindowStartupLocation="CenterOwner" WindowState="Maximized"
-        d:DesignWidth="800" d:DesignHeight="600"
-        Loaded="View_Loaded">
+        Loaded="View_Loaded"
+        Title="Library Checker"
+        WindowStartupLocation="CenterOwner" WindowState="Maximized"
+        d:DataContext="{d:DesignInstance interfaces:ILibraryCheckerViewModel}"
+        d:DesignWidth="800" d:DesignHeight="600">
 
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}" />

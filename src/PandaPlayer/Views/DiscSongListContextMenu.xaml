@@ -6,9 +6,9 @@
              xmlns:valueConverters="clr-namespace:PandaPlayer.Views.ValueConverters"
              xmlns:interfaces="clr-namespace:PandaPlayer.ViewModels.Interfaces"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
              Style="{DynamicResource MaterialDesignContextMenu}"
-             d:DataContext="{d:DesignInstance interfaces:IDiscSongListViewModel}">
+             d:DataContext="{d:DesignInstance interfaces:IDiscSongListViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800">
 
     <ContextMenu.Resources>
         <valueConverters:RatingToImageNameValueConverter x:Key="RatingToImageValueConverter" />

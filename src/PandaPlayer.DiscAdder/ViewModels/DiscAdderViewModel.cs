@@ -13,37 +13,17 @@ namespace PandaPlayer.DiscAdder.ViewModels
 {
 	internal class DiscAdderViewModel : ViewModelBase, IDiscAdderViewModel
 	{
-		private bool IsLoaded { get; set; }
-
-		public ICommand SwitchToPrevPageCommand { get; }
-
-		public ICommand SwitchToNextPageCommand { get; }
-
 		private readonly IEditSourceContentViewModel editSourceContentViewModel;
 		private readonly IEditDiscsDetailsViewModel editDiscsDetailsViewModel;
 		private readonly IEditSourceDiscImagesViewModel editSourceDiscImagesViewModel;
 		private readonly IEditSongsDetailsViewModel editSongsDetailsViewModel;
 		private readonly IAddToLibraryViewModel addToLibraryViewModel;
 
-		public DiscAdderViewModel(IEditSourceContentViewModel editSourceContentViewModel, IEditDiscsDetailsViewModel editDiscsDetailsViewModel,
-			IEditSourceDiscImagesViewModel editSourceDiscImagesViewModel, IEditSongsDetailsViewModel editSongsDetailsViewModel, IAddToLibraryViewModel addToLibraryViewModel)
-		{
-			this.editSourceContentViewModel = editSourceContentViewModel ?? throw new ArgumentNullException(nameof(editSourceContentViewModel));
-			this.editDiscsDetailsViewModel = editDiscsDetailsViewModel ?? throw new ArgumentNullException(nameof(editDiscsDetailsViewModel));
-			this.editSourceDiscImagesViewModel = editSourceDiscImagesViewModel ?? throw new ArgumentNullException(nameof(editSourceDiscImagesViewModel));
-			this.editSongsDetailsViewModel = editSongsDetailsViewModel ?? throw new ArgumentNullException(nameof(editSongsDetailsViewModel));
-			this.addToLibraryViewModel = addToLibraryViewModel ?? throw new ArgumentNullException(nameof(addToLibraryViewModel));
+		private bool IsLoaded { get; set; }
 
-			SwitchToPrevPageCommand = new RelayCommand(SwitchToPrevPage);
-			SwitchToNextPageCommand = new AsyncRelayCommand(() => SwitchToNextPage(CancellationToken.None));
+		public ICommand SwitchToPrevPageCommand { get; }
 
-			currentPage = editSourceContentViewModel;
-
-			foreach (var viewModel in ViewModels)
-			{
-				viewModel.PropertyChanged += ViewModel_PropertyChanged;
-			}
-		}
+		public ICommand SwitchToNextPageCommand { get; }
 
 		private IEnumerable<IPageViewModel> ViewModels
 		{
@@ -146,6 +126,26 @@ namespace PandaPlayer.DiscAdder.ViewModels
 				}
 
 				return null;
+			}
+		}
+
+		public DiscAdderViewModel(IEditSourceContentViewModel editSourceContentViewModel, IEditDiscsDetailsViewModel editDiscsDetailsViewModel,
+			IEditSourceDiscImagesViewModel editSourceDiscImagesViewModel, IEditSongsDetailsViewModel editSongsDetailsViewModel, IAddToLibraryViewModel addToLibraryViewModel)
+		{
+			this.editSourceContentViewModel = editSourceContentViewModel ?? throw new ArgumentNullException(nameof(editSourceContentViewModel));
+			this.editDiscsDetailsViewModel = editDiscsDetailsViewModel ?? throw new ArgumentNullException(nameof(editDiscsDetailsViewModel));
+			this.editSourceDiscImagesViewModel = editSourceDiscImagesViewModel ?? throw new ArgumentNullException(nameof(editSourceDiscImagesViewModel));
+			this.editSongsDetailsViewModel = editSongsDetailsViewModel ?? throw new ArgumentNullException(nameof(editSongsDetailsViewModel));
+			this.addToLibraryViewModel = addToLibraryViewModel ?? throw new ArgumentNullException(nameof(addToLibraryViewModel));
+
+			SwitchToPrevPageCommand = new RelayCommand(SwitchToPrevPage);
+			SwitchToNextPageCommand = new AsyncRelayCommand(() => SwitchToNextPage(CancellationToken.None));
+
+			currentPage = editSourceContentViewModel;
+
+			foreach (var viewModel in ViewModels)
+			{
+				viewModel.PropertyChanged += ViewModel_PropertyChanged;
 			}
 		}
 

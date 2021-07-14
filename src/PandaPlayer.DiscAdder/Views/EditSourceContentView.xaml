@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:views="clr-namespace:PandaPlayer.DiscAdder.Views"
              xmlns:behaviors="clr-namespace:PandaPlayer.DiscAdder.Views.Behaviors"
+             xmlns:interfaces="clr-namespace:PandaPlayer.DiscAdder.ViewModels.Interfaces"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance interfaces:IEditSourceContentViewModel}"
              d:DesignWidth="800" d:DesignHeight="400">
     <Grid>
         <Grid.RowDefinitions>

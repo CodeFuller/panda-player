@@ -42,15 +42,6 @@ namespace PandaPlayer.ViewModels
 			set => Set(ref selectedSongItem, value);
 		}
 
-		public bool HasSongs => SongsNumber > 0;
-
-		public int SongsNumber => Songs.Count();
-
-		public long TotalSongsFileSize => Songs.Select(s => s.Size ?? 0).Sum();
-
-		public TimeSpan TotalSongsDuration => Songs.Aggregate(TimeSpan.Zero, (currentSum, currentSong) => currentSum + currentSong.Duration);
-
-		// Should be of type IList because of SelectedItem binding in SongListView
 		private IList selectedSongItems;
 
 #pragma warning disable CA2227 // Collection properties should be read only - Collection is used in two-way binding
@@ -61,7 +52,15 @@ namespace PandaPlayer.ViewModels
 			set => Set(ref selectedSongItems, value);
 		}
 
-		public IEnumerable<SongModel> SelectedSongs => SelectedSongItems?.OfType<SongListItem>().Select(it => it.Song) ?? Enumerable.Empty<SongModel>();
+		protected IEnumerable<SongModel> SelectedSongs => SelectedSongItems?.OfType<SongListItem>().Select(it => it.Song) ?? Enumerable.Empty<SongModel>();
+
+		public bool HasSongs => SongsNumber > 0;
+
+		public int SongsNumber => Songs.Count();
+
+		public long TotalSongsFileSize => Songs.Select(s => s.Size ?? 0).Sum();
+
+		public TimeSpan TotalSongsDuration => Songs.Aggregate(TimeSpan.Zero, (currentSum, currentSong) => currentSum + currentSong.Duration);
 
 		public abstract ICommand PlaySongsNextCommand { get; }
 

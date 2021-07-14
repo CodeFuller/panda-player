@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:valueConverters="clr-namespace:PandaPlayer.Views.ValueConverters"
-             mc:Ignorable="d" 
+             xmlns:interfaces="clr-namespace:PandaPlayer.ViewModels.Interfaces"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance interfaces:IMusicPlayerViewModel}"
              d:DesignWidth="400" d:DesignHeight="30">
 
     <UserControl.Resources>

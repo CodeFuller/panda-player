@@ -17,8 +17,7 @@ namespace PandaPlayer.ViewModels
 
 		private IReadOnlyCollection<SongModel> Songs { get; set; }
 
-		public static IEnumerable<RatingModel> AvailableRatings => RatingHelpers.AllRatingValues
-			.OrderByDescending(r => r);
+		public IEnumerable<RatingModel> AvailableRatings => RatingHelpers.AllRatingValues.OrderByDescending(r => r);
 
 		private RatingModel selectedRating;
 
