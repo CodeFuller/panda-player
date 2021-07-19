@@ -14,6 +14,7 @@ namespace PandaPlayer.ViewModels.Player
 {
 	public class MusicPlayerViewModel : ViewModelBase, IMusicPlayerViewModel
 	{
+		private readonly IPlaylistViewModel playlist;
 		private readonly ISongPlaybacksRegistrator playbacksRegistrator;
 		private readonly IAudioPlayer audioPlayer;
 
@@ -65,8 +66,6 @@ namespace PandaPlayer.ViewModels.Player
 			}
 		}
 
-		public IPlaylistViewModel Playlist { get; }
-
 		/// <summary>
 		/// Gets or sets the song, which is currently loaded into audio player.
 		/// </summary>
@@ -78,7 +77,7 @@ namespace PandaPlayer.ViewModels.Player
 
 		public MusicPlayerViewModel(IPlaylistViewModel playlist, IAudioPlayer audioPlayer, ISongPlaybacksRegistrator playbacksRegistrator)
 		{
-			this.Playlist = playlist ?? throw new ArgumentNullException(nameof(playlist));
+			this.playlist = playlist ?? throw new ArgumentNullException(nameof(playlist));
 			this.audioPlayer = audioPlayer ?? throw new ArgumentNullException(nameof(audioPlayer));
 			this.playbacksRegistrator = playbacksRegistrator ?? throw new ArgumentNullException(nameof(playbacksRegistrator));
 
@@ -92,7 +91,7 @@ namespace PandaPlayer.ViewModels.Player
 		{
 			if (CurrentSong == null)
 			{
-				var currentSong = Playlist.CurrentSong;
+				var currentSong = playlist.CurrentSong;
 				if (currentSong == null)
 				{
 					return;
@@ -130,7 +129,7 @@ namespace PandaPlayer.ViewModels.Player
 
 		private async void AudioPlayer_SongFinished(CancellationToken cancellationToken)
 		{
-			var currentSong = Playlist.CurrentSong;
+			var currentSong = playlist.CurrentSong;
 			if (currentSong != null)
 			{
 				await playbacksRegistrator.RegisterPlaybackFinish(currentSong, cancellationToken);
@@ -138,12 +137,12 @@ namespace PandaPlayer.ViewModels.Player
 
 			CurrentSong = null;
 
-			await Playlist.SwitchToNextSong(cancellationToken);
-			if (Playlist.CurrentSong == null)
+			await playlist.SwitchToNextSong(cancellationToken);
+			if (playlist.CurrentSong == null)
 			{
 				// We have reached the end of playlist.
 				IsPlaying = false;
-				Messenger.Default.Send(new PlaylistFinishedEventArgs(Playlist.Songs));
+				Messenger.Default.Send(new PlaylistFinishedEventArgs(playlist.Songs));
 				return;
 			}
 

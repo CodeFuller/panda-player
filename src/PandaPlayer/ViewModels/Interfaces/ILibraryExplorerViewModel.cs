@@ -16,8 +16,6 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		DiscModel SelectedDisc { get; }
 
-		IDiscSongListViewModel DiscSongListViewModel { get; }
-
 		ICommand ChangeFolderCommand { get; }
 
 		ICommand PlayDiscCommand { get; }

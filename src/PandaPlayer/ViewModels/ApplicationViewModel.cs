@@ -30,13 +30,15 @@ namespace PandaPlayer.ViewModels
 			set => Set(ref title, value);
 		}
 
-		public IApplicationViewModelHolder ViewModelHolder { get; }
+		public ILibraryExplorerViewModel LibraryExplorerViewModel { get; }
 
-		public ILibraryExplorerViewModel LibraryExplorerViewModel => ViewModelHolder.LibraryExplorerViewModel;
+		public IDiscAdviserViewModel DiscAdviserViewModel { get; }
 
-		public ISongListViewModel DiscSongListViewModel => LibraryExplorerViewModel.DiscSongListViewModel;
+		public IDiscImageViewModel DiscImageViewModel { get; }
 
-		public IPlaylistViewModel PlaylistViewModel => MusicPlayerViewModel.Playlist;
+		public ISongListViewModel DiscSongListViewModel { get; }
+
+		public IPlaylistViewModel PlaylistViewModel { get; }
 
 		private ISongListViewModel currentSongListViewModel;
 
@@ -58,6 +60,8 @@ namespace PandaPlayer.ViewModels
 		public bool IsPlaylistSelected => CurrentSongListViewModel == PlaylistViewModel;
 
 		public IMusicPlayerViewModel MusicPlayerViewModel { get; }
+
+		public ILoggerViewModel LoggerViewModel { get; }
 
 		private DiscModel activeDisc;
 
@@ -89,11 +93,18 @@ namespace PandaPlayer.ViewModels
 
 		public ICommand SwitchToPlaylistCommand { get; }
 
-		public ApplicationViewModel(IApplicationViewModelHolder viewModelHolder, IMusicPlayerViewModel musicPlayerViewModel, IViewNavigator viewNavigator)
+		public ApplicationViewModel(ILibraryExplorerViewModel libraryExplorerViewModel, ISongListViewModel discSongListViewModel,
+			IPlaylistViewModel playlistViewModel, IDiscAdviserViewModel discAdviserViewModel, IDiscImageViewModel discImageViewModel,
+			IMusicPlayerViewModel musicPlayerViewModel, IViewNavigator viewNavigator, ILoggerViewModel loggerViewModel)
 		{
-			ViewModelHolder = viewModelHolder ?? throw new ArgumentNullException(nameof(viewModelHolder));
+			LibraryExplorerViewModel = libraryExplorerViewModel ?? throw new ArgumentNullException(nameof(libraryExplorerViewModel));
+			DiscSongListViewModel = discSongListViewModel ?? throw new ArgumentNullException(nameof(discSongListViewModel));
+			PlaylistViewModel = playlistViewModel ?? throw new ArgumentNullException(nameof(playlistViewModel));
+			DiscAdviserViewModel = discAdviserViewModel ?? throw new ArgumentNullException(nameof(discAdviserViewModel));
+			DiscImageViewModel = discImageViewModel ?? throw new ArgumentNullException(nameof(discImageViewModel));
 			MusicPlayerViewModel = musicPlayerViewModel ?? throw new ArgumentNullException(nameof(musicPlayerViewModel));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
+			LoggerViewModel = loggerViewModel ?? throw new ArgumentNullException(nameof(loggerViewModel));
 
 			LoadCommand = new RelayCommand(Load);
 			ReversePlayingCommand = new AsyncRelayCommand(() => ReversePlaying(CancellationToken.None));

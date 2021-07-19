@@ -65,9 +65,9 @@
                 </Grid.RowDefinitions>
                 <views:LibraryExplorerView Grid.Row="0" x:Name="LibraryExplorer" DataContext="{Binding LibraryExplorerViewModel}" />
                 <GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
-                <views:DiscImageView Grid.Row="2" DataContext="{Binding ViewModelHolder.DiscImageViewModel}" />
+                <views:DiscImageView Grid.Row="2" DataContext="{Binding DiscImageViewModel}" />
                 <GridSplitter Grid.Row="3" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
-                <views:DiscAdviserView Grid.Row="4" DataContext="{Binding ViewModelHolder.DiscAdviserViewModel}" />
+                <views:DiscAdviserView Grid.Row="4" DataContext="{Binding DiscAdviserViewModel}" />
                 <GridSplitter Grid.Row="5" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
                 <views:MusicPlayerView Grid.Row="6" DataContext="{Binding MusicPlayerViewModel}" />
             </Grid>
@@ -80,7 +80,7 @@
                 </Grid.RowDefinitions>
                 <views:SongListTabControl Grid.Row="0" />
                 <GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
-                <views:LoggerView Grid.Row="2" DataContext="{Binding ViewModelHolder.LoggerViewModel}" />
+                <views:LoggerView Grid.Row="2" DataContext="{Binding LoggerViewModel}" />
             </Grid>
         </Grid>
     </Grid>

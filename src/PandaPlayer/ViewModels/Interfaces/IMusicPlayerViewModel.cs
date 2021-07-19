@@ -13,8 +13,6 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		double CurrentSongProgress { get; set; }
 
-		IPlaylistViewModel Playlist { get; }
-
 		double Volume { get; set; }
 
 		Task Play(CancellationToken cancellationToken);

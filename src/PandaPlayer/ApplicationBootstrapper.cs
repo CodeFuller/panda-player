@@ -64,7 +64,6 @@ namespace PandaPlayer
 
 		private static void RegisterViewModels(IServiceCollection services)
 		{
-			services.AddTransient<IApplicationViewModelHolder, ApplicationViewModelHolder>();
 			services.AddTransient<INavigatedViewModelHolder, NavigatedViewModelHolder>();
 			services.AddSingleton<ILibraryExplorerViewModel, LibraryExplorerViewModel>();
 			services.AddSingleton<IDiscSongListViewModel, DiscSongListViewModel>();

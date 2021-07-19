@@ -24,6 +24,8 @@ namespace PandaPlayer.ViewModels
 {
 	public class LibraryExplorerViewModel : ViewModelBase, ILibraryExplorerViewModel
 	{
+		private readonly IDiscSongListViewModel discSongListViewModel;
+
 		private readonly IFoldersService foldersService;
 
 		private readonly IDiscsService discsService;
@@ -49,20 +51,18 @@ namespace PandaPlayer.ViewModels
 				var selectedDisc = SelectedDisc;
 				if (selectedDisc != null)
 				{
-					DiscSongListViewModel.SetSongs(selectedDisc.ActiveSongs);
+					discSongListViewModel.SetSongs(selectedDisc.ActiveSongs);
 					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(selectedDisc));
 				}
 				else
 				{
-					DiscSongListViewModel.SetSongs(Enumerable.Empty<SongModel>());
+					discSongListViewModel.SetSongs(Enumerable.Empty<SongModel>());
 					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null));
 				}
 			}
 		}
 
 		public DiscModel SelectedDisc => (selectedItem as DiscExplorerItem)?.Disc;
-
-		public IDiscSongListViewModel DiscSongListViewModel { get; }
 
 		public ICommand ChangeFolderCommand { get; }
 
@@ -80,12 +80,12 @@ namespace PandaPlayer.ViewModels
 
 		public ICommand DeleteFolderCommand { get; }
 
-		public LibraryExplorerViewModel(IFoldersService foldersService, IDiscsService discsService,
-			IDiscSongListViewModel songListListViewModel, IViewNavigator viewNavigator, IWindowService windowService)
+		public LibraryExplorerViewModel(IDiscSongListViewModel songListListViewModel, IFoldersService foldersService, IDiscsService discsService,
+			IViewNavigator viewNavigator, IWindowService windowService)
 		{
+			this.discSongListViewModel = songListListViewModel ?? throw new ArgumentNullException(nameof(songListListViewModel));
 			this.foldersService = foldersService ?? throw new ArgumentNullException(nameof(foldersService));
 			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
-			DiscSongListViewModel = songListListViewModel ?? throw new ArgumentNullException(nameof(songListListViewModel));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
 
