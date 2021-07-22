@@ -104,6 +104,7 @@ namespace PandaPlayer.ViewModels
 			Messenger.Default.Register<SongChangedEventArgs>(this, e => OnSongChanged(e.Song, e.PropertyName));
 			Messenger.Default.Register<DiscChangedEventArgs>(this, e => OnDiscChanged(e.Disc, e.PropertyName));
 			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
+			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => OnSwitchToDisc(e.Disc, CancellationToken.None));
 		}
 
 		private async Task ChangeToCurrentlySelectedFolder(CancellationToken cancellationToken)
@@ -325,6 +326,11 @@ namespace PandaPlayer.ViewModels
 				.Where(x => x.DiscId == disc.Id)
 				.Select(x => x.Disc)
 				.Where(d => !Object.ReferenceEquals(d, disc));
+		}
+
+		private async void OnSwitchToDisc(DiscModel disc, CancellationToken cancellationToken)
+		{
+			await SwitchToDisc(disc, cancellationToken);
 		}
 	}
 }

@@ -22,9 +22,5 @@ namespace PandaPlayer.ViewModels.Interfaces
 		ICommand ReversePlayingCommand { get; }
 
 		Task ReversePlaying(CancellationToken cancellationToken);
-
-#pragma warning disable CA1716 // Identifiers should not match keywords - 'Stop' is the best name in current semantics
-		void Stop();
-#pragma warning restore CA1716 // Identifiers should not match keywords
 	}
 }

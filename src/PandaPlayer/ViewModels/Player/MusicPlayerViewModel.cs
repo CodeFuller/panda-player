@@ -7,6 +7,7 @@ using CodeFuller.Library.Wpf;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using PandaPlayer.Core.Models;
+using PandaPlayer.Events.SongEvents;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.ViewModels.Interfaces;
 
@@ -82,9 +83,12 @@ namespace PandaPlayer.ViewModels.Player
 			this.playbacksRegistrator = playbacksRegistrator ?? throw new ArgumentNullException(nameof(playbacksRegistrator));
 
 			this.audioPlayer.PropertyChanged += AudioPlayer_PropertyChanged;
-			this.audioPlayer.SongMediaFinished += (s, e) => AudioPlayer_SongFinished(CancellationToken.None);
+			this.audioPlayer.SongMediaFinished += (_, _) => AudioPlayer_SongFinished(CancellationToken.None);
 
 			ReversePlayingCommand = new AsyncRelayCommand(() => ReversePlaying(CancellationToken.None));
+
+			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaySongList(e, CancellationToken.None));
+			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, _ => OnPlayPlaylistStartingFromSong(CancellationToken.None));
 		}
 
 		public async Task Play(CancellationToken cancellationToken)
@@ -117,7 +121,7 @@ namespace PandaPlayer.ViewModels.Player
 			return IsPlaying ? Pause() : Play(cancellationToken);
 		}
 
-		public void Stop()
+		private void Stop()
 		{
 			if (IsPlaying)
 			{
@@ -125,6 +129,25 @@ namespace PandaPlayer.ViewModels.Player
 				audioPlayer.Stop();
 				CurrentSong = null;
 			}
+		}
+
+		private async void OnPlaySongList(PlaySongsListEventArgs e, CancellationToken cancellationToken)
+		{
+			await playlist.SetPlaylistSongs(e.Songs, cancellationToken);
+			await playlist.SwitchToNextSong(cancellationToken);
+
+			await Reset(cancellationToken);
+		}
+
+		private async void OnPlayPlaylistStartingFromSong(CancellationToken cancellationToken)
+		{
+			await Reset(cancellationToken);
+		}
+
+		private async Task Reset(CancellationToken cancellationToken)
+		{
+			Stop();
+			await Play(cancellationToken);
 		}
 
 		private async void AudioPlayer_SongFinished(CancellationToken cancellationToken)

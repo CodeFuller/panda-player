@@ -78,7 +78,7 @@
                     <RowDefinition Height="2"/>
                     <RowDefinition Height="400"/>
                 </Grid.RowDefinitions>
-                <views:SongListTabControl Grid.Row="0" />
+                <views:SongListTabControl Grid.Row="0" DataContext="{Binding SongListTabViewModel}" />
                 <GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
                 <views:LoggerView Grid.Row="2" DataContext="{Binding LoggerViewModel}" />
             </Grid>
