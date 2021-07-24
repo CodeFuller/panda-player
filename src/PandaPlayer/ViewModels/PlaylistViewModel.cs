@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -105,15 +106,22 @@ namespace PandaPlayer.ViewModels
 
 		public async Task SetPlaylistSongs(IEnumerable<SongModel> songs, CancellationToken cancellationToken)
 		{
-			SetCurrentSong(null);
-			SetSongs(songs);
+			var songList = songs.ToList();
+
+			SetSongs(songList);
+			SetCurrentSong(songList.Any() ? 0 : null);
 
 			await OnPlaylistChanged(cancellationToken);
 		}
 
 		public async Task SwitchToNextSong(CancellationToken cancellationToken)
 		{
-			int? newSongIndex = CurrentSongIndex + 1 ?? 0;
+			if (CurrentSong == null)
+			{
+				throw new InvalidOperationException("Current song is not set");
+			}
+
+			var newSongIndex = CurrentSongIndex + 1;
 			if (newSongIndex >= SongItems.Count)
 			{
 				newSongIndex = null;

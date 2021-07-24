@@ -134,7 +134,6 @@ namespace PandaPlayer.ViewModels.Player
 		private async void OnPlaySongList(PlaySongsListEventArgs e, CancellationToken cancellationToken)
 		{
 			await playlist.SetPlaylistSongs(e.Songs, cancellationToken);
-			await playlist.SwitchToNextSong(cancellationToken);
 
 			await Reset(cancellationToken);
 		}

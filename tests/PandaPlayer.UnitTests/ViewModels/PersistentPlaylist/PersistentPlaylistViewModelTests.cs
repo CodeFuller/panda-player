@@ -464,8 +464,7 @@ namespace PandaPlayer.UnitTests.ViewModels.PersistentPlaylist
 
 			var target = mocker.CreateInstance<PersistentPlaylistViewModel>();
 
-			target.SetSongs(songs);
-			await target.SwitchToNextSong(CancellationToken.None);
+			await target.SetPlaylistSongs(songs, CancellationToken.None);
 			await target.SwitchToNextSong(CancellationToken.None);
 
 			savedPlaylistData = null;
@@ -508,8 +507,7 @@ namespace PandaPlayer.UnitTests.ViewModels.PersistentPlaylist
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<PersistentPlaylistViewModel>();
 
-			target.SetSongs(songs);
-			await target.SwitchToNextSong(CancellationToken.None);
+			await target.SetPlaylistSongs(songs, CancellationToken.None);
 			await target.SwitchToNextSong(CancellationToken.None);
 
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
