@@ -70,12 +70,12 @@ namespace PandaPlayer.ViewModels
 			var subfolders = folder.Subfolders
 				.Where(sf => !sf.IsDeleted)
 				.Select(sf => new FolderExplorerItem(sf))
-				.OrderBy(sf => sf.Title, StringComparer.OrdinalIgnoreCase);
+				.OrderBy(sf => sf.Title, StringComparer.InvariantCultureIgnoreCase);
 
 			var discs = folder.Discs
 				.Where(disc => !disc.IsDeleted)
 				.Select(disc => new DiscExplorerItem(disc))
-				.OrderBy(disc => disc.Title, StringComparer.OrdinalIgnoreCase);
+				.OrderBy(disc => disc.Title, StringComparer.InvariantCultureIgnoreCase);
 
 			Items.AddRange(subfolders);
 			Items.AddRange(discs);

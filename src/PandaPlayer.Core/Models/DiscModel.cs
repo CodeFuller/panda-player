@@ -54,8 +54,8 @@ namespace PandaPlayer.Core.Models
 			.OrderBy(s => s.TrackNumber == null)
 			.ThenBy(s => s.TrackNumber)
 			.ThenBy(s => s.Artist == null)
-			.ThenBy(s => s.Artist?.Name, StringComparer.OrdinalIgnoreCase)
-			.ThenBy(s => s.TreeTitle, StringComparer.OrdinalIgnoreCase)
+			.ThenBy(s => s.Artist?.Name, StringComparer.InvariantCultureIgnoreCase)
+			.ThenBy(s => s.TreeTitle, StringComparer.InvariantCultureIgnoreCase)
 			.ThenBy(s => s.Id.Value);
 
 		private List<DiscImageModel> images = new();

@@ -495,6 +495,65 @@ namespace PandaPlayer.UnitTests.ViewModels
 			target.SelectedItem.Should().Be(target.Items.First());
 		}
 
+		// Previously we have used StringComparer.OrdinalIgnoreCase for ordering items.
+		// This comparer puts titles starting from character 'Ё' before all other letters in Russian language.
+		[TestMethod]
+		public void LoadFolderItems_IfTitlesContainSpecialLocalCharacters_OrdersItemsCorrectly()
+		{
+			// Arrange
+
+			var folder1 = new ShallowFolderModel { Name = "Елена Никитаева" };
+			var folder2 = new ShallowFolderModel { Name = "Ёлка" };
+			var folder3 = new ShallowFolderModel { Name = "Жанна Агузарова" };
+
+			var disc1 = new DiscModel
+			{
+				TreeTitle = "Елена Никитаева",
+				AllSongs = new[] { new SongModel() },
+			};
+
+			var disc2 = new DiscModel
+			{
+				TreeTitle = "Ёлка",
+				AllSongs = new[] { new SongModel() },
+			};
+
+			var disc3 = new DiscModel
+			{
+				TreeTitle = "Жанна Агузарова",
+				AllSongs = new[] { new SongModel() },
+			};
+
+			var folder = new FolderModel
+			{
+				Subfolders = new[] { folder3, folder1, folder2 },
+				Discs = new[] { disc3, disc1, disc2, },
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
+
+			// Act
+
+			target.LoadFolderItems(folder);
+
+			// Assert
+
+			var expectedItems = new BasicExplorerItem[]
+			{
+				new FolderExplorerItem(folder1),
+				new FolderExplorerItem(folder2),
+				new FolderExplorerItem(folder3),
+
+				new DiscExplorerItem(disc1),
+				new DiscExplorerItem(disc2),
+				new DiscExplorerItem(disc3),
+			};
+
+			target.Items.Should().BeEquivalentTo(expectedItems, x => x.WithStrictOrdering());
+			target.SelectedItem.Should().Be(target.Items.First());
+		}
+
 		[TestMethod]
 		public void LoadFolderItems_SomeSubfoldersAreDeleted_DoesNotLoadDeletedSubfolders()
 		{
