@@ -98,7 +98,7 @@ namespace PandaPlayer.ViewModels
 			}
 		}
 
-		public void SetSongs(IEnumerable<SongModel> newSongs)
+		internal void SetSongs(IEnumerable<SongModel> newSongs)
 		{
 			songItems.Clear();
 			songItems.AddRange(newSongs.Select(song => new SongListItem(song)));

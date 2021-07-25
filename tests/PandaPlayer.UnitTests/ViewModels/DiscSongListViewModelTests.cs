@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
+using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.UnitTests.Extensions;
@@ -323,6 +324,78 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			addingSongsToPlaylistEvent.Should().BeNull();
 			target.Songs.Should().BeEquivalentTo(songs, x => x.WithStrictOrdering());
+		}
+
+		[TestMethod]
+		public void LibraryExplorerDiscChangedEventHandler_IfDiscIsNotNull_FillsListWithActiveDiscSongs()
+		{
+			// Arrange
+
+			var oldSongs = new[]
+			{
+				new SongModel { Id = new ItemId("Old 0") },
+				new SongModel { Id = new ItemId("Old 1") },
+			};
+
+			var newSongs = new[]
+			{
+				new SongModel { Id = new ItemId("New 0") },
+				new SongModel
+				{
+					Id = new ItemId("New 1"),
+					DeleteDate = new DateTime(2021, 07, 25),
+				},
+				new SongModel { Id = new ItemId("New 2") },
+			};
+
+			var newDisc = new DiscModel
+			{
+				AllSongs = newSongs,
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<DiscSongListViewModel>();
+
+			target.SetSongs(oldSongs);
+
+			// Act
+
+			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(newDisc));
+
+			// Assert
+
+			var expectedSongs = new[]
+			{
+				newSongs[0],
+				newSongs[2],
+			};
+
+			target.Songs.Should().BeEquivalentTo(expectedSongs, x => x.WithStrictOrdering());
+		}
+
+		[TestMethod]
+		public void LibraryExplorerDiscChangedEventHandler_IfDiscIsNull_ClearsSongList()
+		{
+			// Arrange
+
+			var oldSongs = new[]
+			{
+				new SongModel { Id = new ItemId("Old 0") },
+				new SongModel { Id = new ItemId("Old 1") },
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<DiscSongListViewModel>();
+
+			target.SetSongs(oldSongs);
+
+			// Act
+
+			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null));
+
+			// Assert
+
+			target.Songs.Should().BeEmpty();
 		}
 	}
 }

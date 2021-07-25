@@ -12,7 +12,7 @@
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
               ColumnHeaderStyle="{StaticResource MaterialDesignDataGridColumnHeader}"
               CellStyle="{StaticResource MaterialDesignDataGridCell}"
-              ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}"
+              ItemsSource="{Binding ItemListViewModel.Items}" SelectedItem="{Binding ItemListViewModel.SelectedItem}"
               SelectionChanged="DataGrid_SelectionChanged"
               ContextMenuOpening="DataGrid_ContextMenuOpening"
               KeyDown="ContentDataGrid_OnKeyDown">
@@ -22,10 +22,10 @@
             </ContextMenu>
         </DataGrid.ContextMenu>
         <DataGrid.InputBindings>
-            <KeyBinding Key="Enter" Command="{Binding ChangeFolderCommand}" />
-            <KeyBinding Key="Home" Command="{Binding JumpToFirstItemCommand}" />
-            <KeyBinding Key="End" Command="{Binding JumpToLastItemCommand}" />
-            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding ChangeFolderCommand}" />
+            <KeyBinding Key="Enter" Command="{Binding ItemListViewModel.ChangeFolderCommand}" />
+            <KeyBinding Key="Home" Command="{Binding ItemListViewModel.JumpToFirstItemCommand}" />
+            <KeyBinding Key="End" Command="{Binding ItemListViewModel.JumpToLastItemCommand}" />
+            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding ItemListViewModel.ChangeFolderCommand}" />
         </DataGrid.InputBindings>
         <DataGrid.Columns>
             <DataGridTextColumn Header="Library Content" Width="*" Binding="{Binding Title}" />

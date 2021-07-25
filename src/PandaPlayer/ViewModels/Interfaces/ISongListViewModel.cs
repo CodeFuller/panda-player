@@ -37,7 +37,5 @@ namespace PandaPlayer.ViewModels.Interfaces
 		ICommand EditSongsPropertiesCommand { get; }
 
 		IReadOnlyCollection<SetRatingMenuItem> SetRatingMenuItems { get; }
-
-		void SetSongs(IEnumerable<SongModel> newSongs);
 	}
 }

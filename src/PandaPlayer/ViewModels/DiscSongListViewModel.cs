@@ -7,6 +7,8 @@ using CodeFuller.Library.Wpf;
 using CodeFuller.Library.Wpf.Interfaces;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using PandaPlayer.Core.Models;
+using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.ViewModels.Interfaces;
@@ -33,6 +35,8 @@ namespace PandaPlayer.ViewModels
 			PlaySongsNextCommand = new RelayCommand(() => SendAddingSongsToPlaylistEvent(new AddingSongsToPlaylistNextEventArgs(SelectedSongs)));
 			PlaySongsLastCommand = new RelayCommand(() => SendAddingSongsToPlaylistEvent(new AddingSongsToPlaylistLastEventArgs(SelectedSongs)));
 			DeleteSongsFromDiscCommand = new AsyncRelayCommand(() => DeleteSongsFromDisc(CancellationToken.None));
+
+			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => OnExplorerDiscChanged(e.Disc));
 		}
 
 		private static void SendAddingSongsToPlaylistEvent<TAddingSongsToPlaylistEventArgs>(TAddingSongsToPlaylistEventArgs e)
@@ -65,6 +69,11 @@ namespace PandaPlayer.ViewModels
 
 			// Above call to songsService.DeleteSong() updates song.DeleteDate.
 			// As result OnSongChanged() is called, which deletes song(s) from the list.
+		}
+
+		private void OnExplorerDiscChanged(DiscModel newDisc)
+		{
+			SetSongs(newDisc?.ActiveSongs ?? Enumerable.Empty<SongModel>());
 		}
 	}
 }

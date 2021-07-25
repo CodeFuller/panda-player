@@ -5,15 +5,15 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 {
 	public class FolderExplorerItem : BasicExplorerItem
 	{
-		private readonly ShallowFolderModel folder;
+		public ItemId FolderId => Folder.Id;
 
-		public ItemId FolderId => folder.Id;
+		public ShallowFolderModel Folder { get; }
 
-		public override string Title => folder.Name;
+		public override string Title => Folder.Name;
 
 		public FolderExplorerItem(ShallowFolderModel folder)
 		{
-			this.folder = folder ?? throw new ArgumentNullException(nameof(folder));
+			Folder = folder ?? throw new ArgumentNullException(nameof(folder));
 		}
 	}
 }

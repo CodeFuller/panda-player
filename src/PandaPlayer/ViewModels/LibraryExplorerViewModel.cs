@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,20 +11,17 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
+using PandaPlayer.Events.LibraryExplorerEvents;
 using PandaPlayer.Events.SongEvents;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.Internal;
 using PandaPlayer.Services.Interfaces;
-using PandaPlayer.Shared.Extensions;
 using PandaPlayer.ViewModels.Interfaces;
-using PandaPlayer.ViewModels.LibraryExplorerItems;
 
 namespace PandaPlayer.ViewModels
 {
 	public class LibraryExplorerViewModel : ViewModelBase, ILibraryExplorerViewModel
 	{
-		private readonly IDiscSongListViewModel discSongListViewModel;
-
 		private readonly IFoldersService foldersService;
 
 		private readonly IDiscsService discsService;
@@ -34,91 +30,56 @@ namespace PandaPlayer.ViewModels
 
 		private readonly IWindowService windowService;
 
-		public ObservableCollection<BasicExplorerItem> Items { get; } = new();
+		public ILibraryExplorerItemListViewModel ItemListViewModel { get; }
 
-		private ItemId ParentFolderId { get; set; }
-
-		private ItemId LoadedFolderId { get; set; }
-
-		private BasicExplorerItem selectedItem;
-
-		public BasicExplorerItem SelectedItem
-		{
-			get => selectedItem;
-			set
-			{
-				Set(ref selectedItem, value);
-				var selectedDisc = SelectedDisc;
-				if (selectedDisc != null)
-				{
-					discSongListViewModel.SetSongs(selectedDisc.ActiveSongs);
-					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(selectedDisc));
-				}
-				else
-				{
-					discSongListViewModel.SetSongs(Enumerable.Empty<SongModel>());
-					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null));
-				}
-			}
-		}
-
-		public DiscModel SelectedDisc => (selectedItem as DiscExplorerItem)?.Disc;
-
-		public ICommand ChangeFolderCommand { get; }
+		public DiscModel SelectedDisc => ItemListViewModel.SelectedDisc;
 
 		public ICommand PlayDiscCommand { get; }
 
 		public ICommand AddDiscToPlaylistCommand { get; }
 
-		public ICommand DeleteDiscCommand { get; }
-
-		public ICommand JumpToFirstItemCommand { get; }
-
-		public ICommand JumpToLastItemCommand { get; }
-
 		public ICommand EditDiscPropertiesCommand { get; }
 
 		public ICommand DeleteFolderCommand { get; }
 
-		public LibraryExplorerViewModel(IDiscSongListViewModel songListListViewModel, IFoldersService foldersService, IDiscsService discsService,
-			IViewNavigator viewNavigator, IWindowService windowService)
+		public ICommand DeleteDiscCommand { get; }
+
+		public LibraryExplorerViewModel(ILibraryExplorerItemListViewModel itemListViewModel, IFoldersService foldersService,
+			IDiscsService discsService, IViewNavigator viewNavigator, IWindowService windowService)
 		{
-			this.discSongListViewModel = songListListViewModel ?? throw new ArgumentNullException(nameof(songListListViewModel));
+			ItemListViewModel = itemListViewModel ?? throw new ArgumentNullException(nameof(itemListViewModel));
 			this.foldersService = foldersService ?? throw new ArgumentNullException(nameof(foldersService));
 			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
 
-			ChangeFolderCommand = new AsyncRelayCommand(() => ChangeToCurrentlySelectedFolder(CancellationToken.None));
 			PlayDiscCommand = new RelayCommand(PlayDisc);
 			AddDiscToPlaylistCommand = new RelayCommand(AddDiscToPlaylist);
-			DeleteDiscCommand = new AsyncRelayCommand(() => DeleteDisc(CancellationToken.None));
-			JumpToFirstItemCommand = new RelayCommand(() => SelectedItem = Items.FirstOrDefault());
-			JumpToLastItemCommand = new RelayCommand(() => SelectedItem = Items.LastOrDefault());
 			EditDiscPropertiesCommand = new RelayCommand(EditDiscProperties);
 			DeleteFolderCommand = new AsyncRelayCommand(() => DeleteFolder(CancellationToken.None));
+			DeleteDiscCommand = new AsyncRelayCommand(() => DeleteDisc(CancellationToken.None));
 
-			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaylistChanged(e, CancellationToken.None));
+			Messenger.Default.Register<LoadParentFolderEventArgs>(this, e => OnLoadParentFolder(e, CancellationToken.None));
+			Messenger.Default.Register<LoadFolderEventArgs>(this, e => OnLoadFolder(e.FolderId, CancellationToken.None));
+			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaySongsList(e, CancellationToken.None));
 			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistLoaded(e, CancellationToken.None));
-			Messenger.Default.Register<NoPlaylistLoadedEventArgs>(this, e => OnNoPlaylistLoaded(CancellationToken.None));
+			Messenger.Default.Register<NoPlaylistLoadedEventArgs>(this, _ => OnNoPlaylistLoaded(CancellationToken.None));
+			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => OnSwitchToDisc(e.Disc, CancellationToken.None));
 			Messenger.Default.Register<SongChangedEventArgs>(this, e => OnSongChanged(e.Song, e.PropertyName));
 			Messenger.Default.Register<DiscChangedEventArgs>(this, e => OnDiscChanged(e.Disc, e.PropertyName));
 			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
-			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => OnSwitchToDisc(e.Disc, CancellationToken.None));
 		}
 
-		private async Task ChangeToCurrentlySelectedFolder(CancellationToken cancellationToken)
+		private async void OnLoadParentFolder(LoadParentFolderEventArgs e, CancellationToken cancellationToken)
 		{
-			switch (SelectedItem)
-			{
-				case ParentFolderExplorerItem _:
-					await LoadParentFolder(cancellationToken);
-					break;
+			await LoadFolder(e.ParentFolderId, cancellationToken);
 
-				case FolderExplorerItem folderItem:
-					await LoadFolder(folderItem.FolderId, cancellationToken);
-					break;
-			}
+			ItemListViewModel.SelectFolder(e.ChildFolderId);
+		}
+
+		private async void OnLoadFolder(ItemId folderId, CancellationToken cancellationToken)
+		{
+			await LoadFolder(folderId, cancellationToken);
 		}
 
 		private async Task LoadFolder(ItemId folderId, CancellationToken cancellationToken)
@@ -130,119 +91,49 @@ namespace PandaPlayer.ViewModels
 
 		private void LoadFolder(FolderModel folder)
 		{
-			SetFolderItems(folder);
-
-			SelectedItem = Items.FirstOrDefault();
-
-			ParentFolderId = folder.ParentFolder?.Id;
-			LoadedFolderId = folder.Id;
+			ItemListViewModel.LoadFolderItems(folder);
 		}
 
-		private async Task LoadParentFolder(CancellationToken cancellationToken)
+		private async Task SwitchToDisc(DiscModel disc, CancellationToken cancellationToken)
 		{
-			// Remembering current folder before it gets updated.
-			var prevFolderId = LoadedFolderId;
+			await LoadFolder(disc.Folder.Id, cancellationToken);
 
-			await LoadFolder(ParentFolderId, cancellationToken);
-
-			// Setting previously loaded folder as currently selected item.
-			FolderExplorerItem newSelectedItem = null;
-			if (prevFolderId != null)
-			{
-				newSelectedItem = Items.OfType<FolderExplorerItem>().FirstOrDefault(f => f.FolderId == prevFolderId);
-			}
-
-			SelectedItem = newSelectedItem ?? Items.FirstOrDefault();
-		}
-
-		private void SetFolderItems(FolderModel folder)
-		{
-			Items.Clear();
-
-			if (folder.ParentFolder != null)
-			{
-				Items.Add(new ParentFolderExplorerItem());
-			}
-
-			var subfolders = folder.Subfolders
-				.Where(sf => !sf.IsDeleted)
-				.Select(sf => new FolderExplorerItem(sf))
-				.OrderBy(sf => sf.Title, StringComparer.OrdinalIgnoreCase);
-
-			var discs = folder.Discs
-				.Where(disc => !disc.IsDeleted)
-				.Select(disc => new DiscExplorerItem(disc))
-				.OrderBy(disc => disc.Title, StringComparer.OrdinalIgnoreCase);
-
-			Items.AddRange(subfolders);
-			Items.AddRange(discs);
-		}
-
-		public async Task SwitchToDisc(DiscModel disc, CancellationToken cancellationToken)
-		{
-			var discFolder = await foldersService.GetFolder(disc.Folder.Id, cancellationToken);
-
-			LoadFolder(discFolder);
-
-			SelectedItem = Items.OfType<DiscExplorerItem>().FirstOrDefault(x => x.DiscId == disc.Id);
+			ItemListViewModel.SelectDisc(disc.Id);
 		}
 
 		private void PlayDisc()
 		{
-			if (SelectedItem is not DiscExplorerItem discItem)
+			if (SelectedDisc != null)
 			{
-				return;
+				Messenger.Default.Send(new PlaySongsListEventArgs(SelectedDisc));
 			}
-
-			Messenger.Default.Send(new PlaySongsListEventArgs(discItem.Disc));
 		}
 
 		private void AddDiscToPlaylist()
 		{
-			if (SelectedItem is not DiscExplorerItem discItem)
+			if (SelectedDisc != null)
 			{
-				return;
+				Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(SelectedDisc.ActiveSongs));
 			}
-
-			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(discItem.Disc.ActiveSongs));
-		}
-
-		private async Task DeleteDisc(CancellationToken cancellationToken)
-		{
-			if (!(SelectedItem is DiscExplorerItem discItem))
-			{
-				return;
-			}
-
-			if (windowService.ShowMessageBox($"Do you really want to delete the selected disc '{discItem.Disc.Title}'?", "Delete disc",
-				ShowMessageBoxButton.YesNo, ShowMessageBoxIcon.Question) != ShowMessageBoxResult.Yes)
-			{
-				return;
-			}
-
-			// We're sending this event to release any disc images hold by DiscImageViewModel.
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null));
-			await discsService.DeleteDisc(discItem.DiscId, cancellationToken);
-
-			Items.Remove(discItem);
 		}
 
 		private void EditDiscProperties()
 		{
-			if (SelectedItem is DiscExplorerItem discItem)
+			if (SelectedDisc != null)
 			{
-				viewNavigator.ShowDiscPropertiesView(discItem.Disc);
+				viewNavigator.ShowDiscPropertiesView(SelectedDisc);
 			}
 		}
 
 		private async Task DeleteFolder(CancellationToken cancellationToken)
 		{
-			if (!(SelectedItem is FolderExplorerItem folderItem))
+			var selectedFolder = ItemListViewModel.SelectedFolder;
+			if (selectedFolder == null)
 			{
 				return;
 			}
 
-			var folder = await foldersService.GetFolder(folderItem.FolderId, cancellationToken);
+			var folder = await foldersService.GetFolder(selectedFolder.Id, cancellationToken);
 
 			if (folder.HasContent)
 			{
@@ -250,18 +141,39 @@ namespace PandaPlayer.ViewModels
 				return;
 			}
 
-			if (windowService.ShowMessageBox($"Do you really want to delete the folder '{folderItem.Title}'?", "Delete folder",
+			if (windowService.ShowMessageBox($"Do you really want to delete the folder '{folder.Name}'?", "Delete folder",
 				ShowMessageBoxButton.YesNo, ShowMessageBoxIcon.Question) != ShowMessageBoxResult.Yes)
 			{
 				return;
 			}
 
-			await foldersService.DeleteFolder(folderItem.FolderId, cancellationToken);
+			await foldersService.DeleteFolder(folder.Id, cancellationToken);
 
-			Items.Remove(folderItem);
+			ItemListViewModel.RemoveFolder(folder.Id);
 		}
 
-		private async void OnPlaylistChanged(BaseSongListEventArgs e, CancellationToken cancellationToken)
+		private async Task DeleteDisc(CancellationToken cancellationToken)
+		{
+			var selectedDisc = SelectedDisc;
+			if (selectedDisc == null)
+			{
+				return;
+			}
+
+			if (windowService.ShowMessageBox($"Do you really want to delete the selected disc '{selectedDisc.Title}'?", "Delete disc",
+				ShowMessageBoxButton.YesNo, ShowMessageBoxIcon.Question) != ShowMessageBoxResult.Yes)
+			{
+				return;
+			}
+
+			// We are sending this event to release any disc images hold by DiscImageViewModel.
+			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null));
+			await discsService.DeleteDisc(selectedDisc.Id, cancellationToken);
+
+			ItemListViewModel.RemoveDisc(selectedDisc.Id);
+		}
+
+		private async void OnPlaySongsList(BaseSongListEventArgs e, CancellationToken cancellationToken)
 		{
 			if (e.Disc != null)
 			{
@@ -294,9 +206,13 @@ namespace PandaPlayer.ViewModels
 
 		private void OnSongChanged(SongModel changedSong, string propertyName)
 		{
-			foreach (var disc in GetMatchingDiscs(changedSong.Disc))
+			foreach (var disc in GetDiscsForUpdate(changedSong.Disc))
 			{
-				foreach (var song in disc.AllSongs.Where(s => s.Id == changedSong.Id))
+				var songsForUpdate = disc.AllSongs
+					.Where(s => s.Id == changedSong.Id)
+					.Where(s => !Object.ReferenceEquals(s, changedSong));
+
+				foreach (var song in songsForUpdate)
 				{
 					SongUpdater.UpdateSong(changedSong, song, propertyName);
 				}
@@ -305,7 +221,7 @@ namespace PandaPlayer.ViewModels
 
 		private void OnDiscChanged(DiscModel changedDisc, string propertyName)
 		{
-			foreach (var disc in GetMatchingDiscs(changedDisc))
+			foreach (var disc in GetDiscsForUpdate(changedDisc))
 			{
 				DiscUpdater.UpdateDisc(changedDisc, disc, propertyName);
 			}
@@ -313,19 +229,17 @@ namespace PandaPlayer.ViewModels
 
 		private void OnDiscImageChanged(DiscModel changedDisc)
 		{
-			foreach (var disc in GetMatchingDiscs(changedDisc))
+			foreach (var disc in GetDiscsForUpdate(changedDisc))
 			{
 				disc.Images = changedDisc.Images;
 			}
 		}
 
-		private IEnumerable<DiscModel> GetMatchingDiscs(DiscModel disc)
+		private IEnumerable<DiscModel> GetDiscsForUpdate(DiscModel changedDisc)
 		{
-			return Items
-				.OfType<DiscExplorerItem>()
-				.Where(x => x.DiscId == disc.Id)
-				.Select(x => x.Disc)
-				.Where(d => !Object.ReferenceEquals(d, disc));
+			return ItemListViewModel.Discs
+				.Where(d => d.Id == changedDisc.Id)
+				.Where(d => !Object.ReferenceEquals(d, changedDisc));
 		}
 
 		private async void OnSwitchToDisc(DiscModel disc, CancellationToken cancellationToken)

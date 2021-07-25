@@ -17,7 +17,7 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 		{
 			this.Disc = disc ?? throw new ArgumentNullException(nameof(disc));
 
-			Disc.PropertyChanged += (sender, args) =>
+			Disc.PropertyChanged += (_, args) =>
 			{
 				Messenger.Default.Send(new DiscChangedEventArgs(Disc, args.PropertyName));
 			};

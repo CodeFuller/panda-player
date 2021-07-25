@@ -22,7 +22,7 @@ namespace PandaPlayer.Views
 		// https://stackoverflow.com/a/29081353/5740031
 		private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			if (!(sender is DataGrid dg) || dg.SelectedIndex < 0)
+			if (sender is not DataGrid dg || dg.SelectedIndex < 0)
 			{
 				return;
 			}
@@ -33,7 +33,7 @@ namespace PandaPlayer.Views
 		private static void SelectRowByIndex(DataGrid dataGrid, int rowIndex)
 		{
 			// https://stackoverflow.com/a/27792628/5740031
-			if (!(dataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) is DataGridRow row))
+			if (dataGrid.ItemContainerGenerator.ContainerFromIndex(rowIndex) is not DataGridRow row)
 			{
 				dataGrid.UpdateLayout();
 				dataGrid.ScrollIntoView(dataGrid.Items[rowIndex]);
@@ -63,7 +63,7 @@ namespace PandaPlayer.Views
 				}
 			}
 
-			if (!(presenter.ItemContainerGenerator.ContainerFromIndex(column) is DataGridCell cell))
+			if (presenter.ItemContainerGenerator.ContainerFromIndex(column) is not DataGridCell cell)
 			{
 				// Bring the column into view in case it has been virtualized away
 				dataGrid.ScrollIntoView(rowContainer, dataGrid.Columns[column]);
@@ -96,12 +96,14 @@ namespace PandaPlayer.Views
 
 		private void DataGrid_ContextMenuOpening(object sender, ContextMenuEventArgs e)
 		{
-			if (!(e.Source is FrameworkElement frameworkElement) || !(DataContext is ILibraryExplorerViewModel viewModel))
+			if (e.Source is not FrameworkElement frameworkElement || DataContext is not ILibraryExplorerViewModel viewModel)
 			{
 				return;
 			}
 
-			if (viewModel.SelectedItem is DiscExplorerItem)
+			var itemListViewModel = viewModel.ItemListViewModel;
+
+			if (itemListViewModel.SelectedDisc != null)
 			{
 				var menuItems = new[]
 				{
@@ -132,7 +134,7 @@ namespace PandaPlayer.Views
 
 				frameworkElement.ContextMenu = CreateContextMenu(menuItems);
 			}
-			else if (viewModel.SelectedItem is FolderExplorerItem)
+			else if (itemListViewModel.SelectedFolder != null)
 			{
 				var menuItems = new[]
 				{
