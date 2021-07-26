@@ -20,6 +20,11 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 			Disc.PropertyChanged += (_, args) =>
 			{
 				Messenger.Default.Send(new DiscChangedEventArgs(Disc, args.PropertyName));
+
+				if (args.PropertyName == nameof(Disc.TreeTitle))
+				{
+					RaisePropertyChanged(nameof(Title));
+				}
 			};
 		}
 	}

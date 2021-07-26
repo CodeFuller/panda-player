@@ -8,6 +8,8 @@ namespace PandaPlayer.ViewModels
 {
 	public class SongListItem : ViewModelBase
 	{
+		// We bind to properties of SongModel directly, without intermediate properties in current class.
+		// Otherwise, we must handle Song.PropertyChanged and raise PropertyChanged for intermediate properties.
 		public SongModel Song { get; }
 
 		private bool isCurrentlyPlayed;
@@ -18,15 +20,11 @@ namespace PandaPlayer.ViewModels
 			set => Set(ref isCurrentlyPlayed, value);
 		}
 
-		public DateTimeOffset? LastPlaybackTime => Song.LastPlaybackTime;
-
-		public int PlaybacksCount => Song.PlaybacksCount;
-
 		public SongListItem(SongModel song)
 		{
 			Song = song ?? throw new ArgumentNullException(nameof(song));
 
-			Song.PropertyChanged += (sender, args) =>
+			Song.PropertyChanged += (_, args) =>
 			{
 				Messenger.Default.Send(new SongChangedEventArgs(Song, args.PropertyName));
 			};
