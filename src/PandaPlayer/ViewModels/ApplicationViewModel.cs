@@ -36,7 +36,7 @@ namespace PandaPlayer.ViewModels
 
 		public IDiscImageViewModel DiscImageViewModel { get; }
 
-		public IMusicPlayerViewModel MusicPlayerViewModel { get; }
+		public IPlaylistPlayerViewModel PlaylistPlayerViewModel { get; }
 
 		public ILoggerViewModel LoggerViewModel { get; }
 
@@ -51,13 +51,13 @@ namespace PandaPlayer.ViewModels
 		public ICommand ShowLibraryStatisticsCommand { get; }
 
 		public ApplicationViewModel(ILibraryExplorerViewModel libraryExplorerViewModel, ISongListTabViewModel songListTabViewModel, IDiscAdviserViewModel discAdviserViewModel,
-			IDiscImageViewModel discImageViewModel, IMusicPlayerViewModel musicPlayerViewModel, IViewNavigator viewNavigator, ILoggerViewModel loggerViewModel)
+			IDiscImageViewModel discImageViewModel, IPlaylistPlayerViewModel playlistPlayerViewModel, IViewNavigator viewNavigator, ILoggerViewModel loggerViewModel)
 		{
 			LibraryExplorerViewModel = libraryExplorerViewModel ?? throw new ArgumentNullException(nameof(libraryExplorerViewModel));
 			SongListTabViewModel = songListTabViewModel ?? throw new ArgumentNullException(nameof(songListTabViewModel));
 			DiscAdviserViewModel = discAdviserViewModel ?? throw new ArgumentNullException(nameof(discAdviserViewModel));
 			DiscImageViewModel = discImageViewModel ?? throw new ArgumentNullException(nameof(discImageViewModel));
-			MusicPlayerViewModel = musicPlayerViewModel ?? throw new ArgumentNullException(nameof(musicPlayerViewModel));
+			PlaylistPlayerViewModel = playlistPlayerViewModel ?? throw new ArgumentNullException(nameof(playlistPlayerViewModel));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 			LoggerViewModel = loggerViewModel ?? throw new ArgumentNullException(nameof(loggerViewModel));
 
@@ -79,7 +79,7 @@ namespace PandaPlayer.ViewModels
 
 		private Task ReversePlaying(CancellationToken cancellationToken)
 		{
-			return MusicPlayerViewModel.ReversePlaying(cancellationToken);
+			return PlaylistPlayerViewModel.ReversePlaying(cancellationToken);
 		}
 
 		private async Task ShowDiscAdder(CancellationToken cancellationToken)

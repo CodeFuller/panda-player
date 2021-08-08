@@ -4,7 +4,7 @@ using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.ViewModels.Player
 {
-	public interface ISongPlaybacksRegistrator
+	public interface ISongPlaybacksRegistrar
 	{
 		Task RegisterPlaybackStart(SongModel song, CancellationToken cancellationToken);
 

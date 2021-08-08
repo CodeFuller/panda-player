@@ -46,7 +46,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void ReversePlayingCommand_ReversesPlayingOnMusicPlayer()
+		public void ReversePlayingCommand_ReversesPlayingOnPlaylistPlayer()
 		{
 			// Arrange
 
@@ -59,7 +59,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			mocker.GetMock<IMusicPlayerViewModel>().Verify(x => x.ReversePlaying(It.IsAny<CancellationToken>()), Times.Once);
+			mocker.GetMock<IPlaylistPlayerViewModel>().Verify(x => x.ReversePlaying(It.IsAny<CancellationToken>()), Times.Once);
 		}
 
 		[TestMethod]

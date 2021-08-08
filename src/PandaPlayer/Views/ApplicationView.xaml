@@ -69,7 +69,7 @@
                 <GridSplitter Grid.Row="3" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
                 <views:DiscAdviserView Grid.Row="4" DataContext="{Binding DiscAdviserViewModel}" />
                 <GridSplitter Grid.Row="5" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
-                <views:MusicPlayerView Grid.Row="6" DataContext="{Binding MusicPlayerViewModel}" />
+                <views:PlaylistPlayerView Grid.Row="6" DataContext="{Binding PlaylistPlayerViewModel}" />
             </Grid>
             <GridSplitter Grid.Column="1" ResizeDirection="Columns" HorizontalAlignment="Stretch" />
             <Grid Grid.Column="2">

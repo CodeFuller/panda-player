@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Timers;
+using GalaSoft.MvvmLight.Messaging;
 using PandaPlayer.Facades;
 
 namespace PandaPlayer.ViewModels.Player
@@ -14,27 +15,23 @@ namespace PandaPlayer.ViewModels.Player
 
 		private readonly ITimerFacade timer;
 
-		private Uri currentSongUri;
-
 		public event PropertyChangedEventHandler PropertyChanged;
-
-		public event EventHandler<SongMediaFinishedEventArgs> SongMediaFinished;
 
 		private bool IsPlaying { get; set; }
 
-		private TimeSpan currSongLength;
+		private TimeSpan currentSongLength;
 
-		public TimeSpan CurrSongLength
+		public TimeSpan SongLength
 		{
-			get => currSongLength;
+			get => currentSongLength;
 			private set
 			{
-				currSongLength = value;
+				currentSongLength = value;
 				OnPropertyChanged();
 			}
 		}
 
-		public TimeSpan CurrSongPosition
+		public TimeSpan SongPosition
 		{
 			get => IsPlaying ? mediaPlayer.Position : TimeSpan.Zero;
 			set
@@ -67,22 +64,17 @@ namespace PandaPlayer.ViewModels.Player
 			this.mediaPlayer.MediaEnded += MediaPlayerOnMediaEnded;
 		}
 
-		public void SetCurrentSongContentUri(Uri contentUri)
+		public void Open(Uri contentUri)
 		{
 			mediaPlayer.Open(contentUri);
-			currentSongUri = contentUri;
 		}
 
 		public void Play()
 		{
-			if (currentSongUri == null)
-			{
-				throw new InvalidOperationException("Current song is not set");
-			}
-
-			IsPlaying = true;
 			mediaPlayer.Play();
 			timer.Start();
+
+			IsPlaying = true;
 		}
 
 		public void Pause()
@@ -97,30 +89,32 @@ namespace PandaPlayer.ViewModels.Player
 			OnPlaybackInterrupted();
 		}
 
-		protected void OnPlaybackInterrupted()
+		private void OnPlaybackInterrupted()
 		{
-			IsPlaying = false;
 			timer.Stop();
+			IsPlaying = false;
 		}
 
 		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			OnPropertyChanged(nameof(CurrSongPosition));
+			OnPropertyChanged(nameof(SongPosition));
 		}
 
 		private void MediaPlayerOnMediaOpened(object sender, EventArgs eventArgs)
 		{
-			CurrSongLength = mediaPlayer.NaturalDuration.TimeSpan;
+			SongLength = mediaPlayer.NaturalDuration.TimeSpan;
 		}
 
 		private void MediaPlayerOnMediaEnded(object sender, EventArgs eventArgs)
 		{
-			currentSongUri = null;
 			OnPlaybackInterrupted();
+
 			mediaPlayer.Close();
-			CurrSongPosition = TimeSpan.Zero;
-			CurrSongLength = TimeSpan.Zero;
-			SongMediaFinished?.Invoke(this, new SongMediaFinishedEventArgs());
+
+			SongPosition = TimeSpan.Zero;
+			SongLength = TimeSpan.Zero;
+
+			Messenger.Default.Send(new SongMediaFinishedEventArgs());
 		}
 
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

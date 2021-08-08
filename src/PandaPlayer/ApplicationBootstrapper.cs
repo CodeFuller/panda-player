@@ -44,7 +44,7 @@ namespace PandaPlayer
 			services.AddWpfWindowService();
 			services.AddTransient<IAudioPlayer, AudioPlayer>();
 			services.AddTransient<IMediaPlayerFacade, MediaPlayerFacade>();
-			services.AddTransient<ISongPlaybacksRegistrator, SongPlaybacksRegistrator>();
+			services.AddTransient<ISongPlaybacksRegistrar, SongPlaybacksRegistrar>();
 			services.AddTransient<IClock, SystemClock>();
 			services.AddTransient<IDocumentDownloader, HttpDocumentDownloader>();
 			services.AddTransient<IWebBrowser, SystemDefaultWebBrowser>();
@@ -72,7 +72,8 @@ namespace PandaPlayer
 			services.AddSingleton<IPlaylistViewModel, PersistentPlaylistViewModel>();
 			services.AddSingleton<IEditDiscPropertiesViewModel, EditDiscPropertiesViewModel>();
 			services.AddSingleton<IEditSongPropertiesViewModel, EditSongPropertiesViewModel>();
-			services.AddSingleton<IMusicPlayerViewModel, MusicPlayerViewModel>();
+			services.AddSingleton<IPlaylistPlayerViewModel, PlaylistPlayerViewModel>();
+			services.AddSingleton<ISongPlayerViewModel, SongPlayerViewModel>();
 			services.AddSingleton<IDiscAdviserViewModel, DiscAdviserViewModel>();
 			services.AddSingleton<IRateSongsViewModel, RateSongsViewModel>();
 			services.AddSingleton<IDiscImageViewModel, DiscImageViewModel>();

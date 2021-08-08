@@ -5,15 +5,13 @@ namespace PandaPlayer.ViewModels.Player
 {
 	public interface IAudioPlayer : INotifyPropertyChanged
 	{
-		event EventHandler<SongMediaFinishedEventArgs> SongMediaFinished;
+		TimeSpan SongLength { get; }
 
-		TimeSpan CurrSongLength { get; }
-
-		TimeSpan CurrSongPosition { get; set; }
+		TimeSpan SongPosition { get; set; }
 
 		double Volume { get; set; }
 
-		void SetCurrentSongContentUri(Uri contentUri);
+		void Open(Uri contentUri);
 
 		void Play();
 

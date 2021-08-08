@@ -9,13 +9,13 @@ using PandaPlayer.Services.Interfaces;
 
 namespace PandaPlayer.ViewModels.Player
 {
-	public class SongPlaybacksRegistrator : ISongPlaybacksRegistrator
+	public class SongPlaybacksRegistrar : ISongPlaybacksRegistrar
 	{
 		private readonly ISongsService songsService;
 		private readonly IScrobbler scrobbler;
 		private readonly IClock clock;
 
-		public SongPlaybacksRegistrator(ISongsService songsService, IScrobbler scrobbler, IClock clock)
+		public SongPlaybacksRegistrar(ISongsService songsService, IScrobbler scrobbler, IClock clock)
 		{
 			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
 			this.scrobbler = scrobbler ?? throw new ArgumentNullException(nameof(scrobbler));
