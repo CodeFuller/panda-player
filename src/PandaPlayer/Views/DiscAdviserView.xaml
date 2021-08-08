@@ -18,12 +18,12 @@
         </Grid.ColumnDefinitions>
         <Label Grid.Column="0" VerticalAlignment="Center" Content="{Binding CurrentAdviseAnnouncement}" ToolTip="{Binding CurrentAdviseAnnouncement}" />
         <Separator Grid.Column="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-        <Button Grid.Column="2" VerticalAlignment="Center" Padding="0" Style="{DynamicResource MaterialDesignToolButton}" ToolTip="Play Advise" Command="{Binding PlayCurrentAdviseCommand}">
-            <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="Play" />
+        <Button Grid.Column="2" VerticalAlignment="Center" Padding="3" Style="{DynamicResource MaterialDesignToolButton}" ToolTip="Play Advise" Command="{Binding PlayCurrentAdviseCommand}">
+            <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="ThumbUp" />
         </Button>
         <Separator Grid.Column="3" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0" />
-        <Button Grid.Column="4" VerticalAlignment="Center" Padding="0" Style="{DynamicResource MaterialDesignToolButton}" ToolTip="Next Advise" Command="{Binding SwitchToNextAdviseCommand}">
-            <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="Refresh" />
+        <Button Grid.Column="4" VerticalAlignment="Center" Padding="3" Style="{DynamicResource MaterialDesignToolButton}" ToolTip="Next Advise" Command="{Binding SwitchToNextAdviseCommand}">
+            <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="ThumbDown" />
         </Button>
     </Grid>
 </UserControl>
