@@ -66,7 +66,7 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 		}
 
 		[TestMethod]
-		public void SongProgressGetter_IfCurrentSongLengthIsNotZero_ReturnsCurrentSongProgressInPercentagesWithRounding()
+		public void SongProgressGetter_IfCurrentSongLengthIsNotZero_ReturnsCurrentSongProgressInPercentages()
 		{
 			// Arrange
 
@@ -85,7 +85,7 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 
 			// Assert
 
-			songProgress.Should().Be(48.8);
+			songProgress.Should().Be(48.75);
 		}
 
 		[TestMethod]

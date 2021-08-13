@@ -41,9 +41,7 @@ namespace PandaPlayer.ViewModels.Player
 					return 0;
 				}
 
-				// We return song progress accurate to 0.1%.
-				// This provides smooth progress and prevents excessive UI update.
-				return Math.Round(100 * songElapsed.TotalMilliseconds / songLength.TotalMilliseconds * 10) / 10;
+				return 100 * songElapsed.TotalMilliseconds / songLength.TotalMilliseconds;
 			}
 
 			set
