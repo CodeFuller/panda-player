@@ -9,15 +9,13 @@ namespace PandaPlayer.ViewModels.Player
 {
 	internal class AudioPlayer : IAudioPlayer
 	{
-		private const double SongPositionUpdateInterval = 200;
+		private const double SongPositionUpdateIntervalInMilliseconds = 200;
 
 		private readonly IMediaPlayerFacade mediaPlayer;
 
 		private readonly ITimerFacade timer;
 
 		public event PropertyChangedEventHandler PropertyChanged;
-
-		private bool IsPlaying { get; set; }
 
 		private TimeSpan currentSongLength;
 
@@ -33,14 +31,10 @@ namespace PandaPlayer.ViewModels.Player
 
 		public TimeSpan SongPosition
 		{
-			get => IsPlaying ? mediaPlayer.Position : TimeSpan.Zero;
+			get => mediaPlayer.Position;
 			set
 			{
-				if (IsPlaying)
-				{
-					mediaPlayer.Position = value;
-				}
-
+				mediaPlayer.Position = value;
 				OnPropertyChanged();
 			}
 		}
@@ -56,12 +50,11 @@ namespace PandaPlayer.ViewModels.Player
 			this.mediaPlayer = mediaPlayer ?? throw new ArgumentNullException(nameof(mediaPlayer));
 			this.timer = timer ?? throw new ArgumentNullException(nameof(timer));
 
-			this.timer = timer;
-			this.timer.Elapsed += Timer_Elapsed;
-			this.timer.Interval = SongPositionUpdateInterval;
-
 			this.mediaPlayer.MediaOpened += MediaPlayerOnMediaOpened;
 			this.mediaPlayer.MediaEnded += MediaPlayerOnMediaEnded;
+
+			this.timer.Elapsed += Timer_Elapsed;
+			this.timer.Interval = SongPositionUpdateIntervalInMilliseconds;
 		}
 
 		public void Open(Uri contentUri)
@@ -73,26 +66,20 @@ namespace PandaPlayer.ViewModels.Player
 		{
 			mediaPlayer.Play();
 			timer.Start();
-
-			IsPlaying = true;
 		}
 
 		public void Pause()
 		{
 			mediaPlayer.Pause();
-			OnPlaybackInterrupted();
+			timer.Stop();
 		}
 
 		public void Stop()
 		{
 			mediaPlayer.Stop();
-			OnPlaybackInterrupted();
-		}
+			OnPropertyChanged(nameof(SongPosition));
 
-		private void OnPlaybackInterrupted()
-		{
 			timer.Stop();
-			IsPlaying = false;
 		}
 
 		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -107,12 +94,13 @@ namespace PandaPlayer.ViewModels.Player
 
 		private void MediaPlayerOnMediaEnded(object sender, EventArgs eventArgs)
 		{
-			OnPlaybackInterrupted();
-
 			mediaPlayer.Close();
+			timer.Stop();
 
-			SongPosition = TimeSpan.Zero;
 			SongLength = TimeSpan.Zero;
+
+			// SongPosition value was affected by Close() method on mediaPlayer.
+			OnPropertyChanged(nameof(SongPosition));
 
 			Messenger.Default.Send(new SongMediaFinishedEventArgs());
 		}
