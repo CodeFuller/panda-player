@@ -263,7 +263,9 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 				nameof(AudioPlayer.SongLength),
 			};
 
-			propertyChangedEvents.Select(e => e.PropertyName).Should().BeEquivalentTo(expectedProperties);
+			// We check for strict ordering of PropertyChangedEvent here, i.e. that SongPosition is updated before SongLength.
+			// Otherwise, position / length is displayed oddly when track is switched - 4:12 / 0:00
+			propertyChangedEvents.Select(e => e.PropertyName).Should().BeEquivalentTo(expectedProperties, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]

@@ -97,10 +97,10 @@ namespace PandaPlayer.ViewModels.Player
 			mediaPlayer.Close();
 			timer.Stop();
 
-			SongLength = TimeSpan.Zero;
-
 			// SongPosition value was affected by Close() method on mediaPlayer.
 			OnPropertyChanged(nameof(SongPosition));
+
+			SongLength = TimeSpan.Zero;
 
 			Messenger.Default.Send(new SongMediaFinishedEventArgs());
 		}
