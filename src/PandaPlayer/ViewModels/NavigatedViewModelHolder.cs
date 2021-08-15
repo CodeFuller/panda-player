@@ -6,6 +6,8 @@ namespace PandaPlayer.ViewModels
 {
 	public class NavigatedViewModelHolder : INavigatedViewModelHolder
 	{
+		public ICreateAdviseGroupViewModel CreateAdviseGroupViewModel { get; }
+
 		public IEditDiscPropertiesViewModel EditDiscPropertiesViewModel { get; }
 
 		public IEditSongPropertiesViewModel EditSongPropertiesViewModel { get; }
@@ -20,10 +22,11 @@ namespace PandaPlayer.ViewModels
 
 		public ILibraryStatisticsViewModel LibraryStatisticsViewModel { get; }
 
-		public NavigatedViewModelHolder(IEditDiscPropertiesViewModel editDiscPropertiesViewModel, IEditSongPropertiesViewModel editSongPropertiesViewModel,
-			IRateSongsViewModel rateSongsViewModel, IEditDiscImageViewModel editDiscImageViewModel, IDiscAdderViewModel discAdderViewModel,
-			ILibraryCheckerViewModel libraryCheckerViewModel, ILibraryStatisticsViewModel libraryStatisticsViewModel)
+		public NavigatedViewModelHolder(ICreateAdviseGroupViewModel createAdviseGroupViewModel, IEditDiscPropertiesViewModel editDiscPropertiesViewModel,
+			IEditSongPropertiesViewModel editSongPropertiesViewModel, IRateSongsViewModel rateSongsViewModel, IEditDiscImageViewModel editDiscImageViewModel,
+			IDiscAdderViewModel discAdderViewModel, ILibraryCheckerViewModel libraryCheckerViewModel, ILibraryStatisticsViewModel libraryStatisticsViewModel)
 		{
+			CreateAdviseGroupViewModel = createAdviseGroupViewModel ?? throw new ArgumentNullException(nameof(createAdviseGroupViewModel));
 			EditDiscPropertiesViewModel = editDiscPropertiesViewModel ?? throw new ArgumentNullException(nameof(editDiscImageViewModel));
 			EditSongPropertiesViewModel = editSongPropertiesViewModel ?? throw new ArgumentNullException(nameof(editSongPropertiesViewModel));
 			RateSongsViewModel = rateSongsViewModel ?? throw new ArgumentNullException(nameof(rateSongsViewModel));

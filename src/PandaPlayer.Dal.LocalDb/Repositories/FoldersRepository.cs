@@ -97,14 +97,16 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 		private static IQueryable<FolderEntity> GetShallowFoldersQueryable(MusicDbContext context)
 		{
 			return context.Folders
-				.Include(f => f.ParentFolder);
+				.Include(f => f.ParentFolder).ThenInclude(f => f.AdviseGroup)
+				.Include(f => f.AdviseGroup);
 		}
 
 		private static IQueryable<FolderEntity> GetFoldersQueryable(MusicDbContext context)
 		{
 			return context.Folders
-				.Include(f => f.ParentFolder)
-				.Include(f => f.Subfolders)
+				.Include(f => f.ParentFolder).ThenInclude(f => f.AdviseGroup)
+				.Include(f => f.AdviseGroup)
+				.Include(f => f.Subfolders).ThenInclude(f => f.AdviseGroup)
 				.Include(f => f.Discs).ThenInclude(d => d.Songs).ThenInclude(s => s.Artist)
 				.Include(f => f.Discs).ThenInclude(d => d.Songs).ThenInclude(s => s.Genre)
 				.Include(f => f.Discs).ThenInclude(d => d.Images);

@@ -7,7 +7,7 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 	{
 		public static ArtistModel ToModel(this ArtistEntity artist)
 		{
-			return new ArtistModel
+			return new()
 			{
 				Id = artist.Id.ToItemId(),
 				Name = artist.Name,
@@ -16,7 +16,7 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 
 		public static ArtistEntity ToEntity(this ArtistModel artist)
 		{
-			return new ArtistEntity
+			return new()
 			{
 				Id = artist.Id?.ToInt32() ?? default,
 				Name = artist.Name,

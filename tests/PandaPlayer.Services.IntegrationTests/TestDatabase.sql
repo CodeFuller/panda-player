@@ -1,10 +1,14 @@
-﻿-- Create database tables with src\PandaPlayer.Dal.LocalDb\CreateDatabase.sql
+﻿-- Read tests\PandaPlayer.Services.IntegrationTests\README.md
 
-INSERT INTO [Folders]([Id], [ParentFolder_Id], [Name], [DeleteDate]) VALUES
-(2, 1, 'Belarusian', NULL),
-(3, 2, 'Neuro Dubel', NULL),
-(4, 3, 'Empty Folder', NULL),
-(5, 3, 'Deleted Folder', '2021-06-30 18:08:10');
+INSERT INTO [AdviseGroups]([Id], [Name]) VALUES
+(1, 'Late Neuro Dubel'),
+(2, 'Empty Group');
+
+INSERT INTO [Folders]([Id], [ParentFolder_Id], [AdviseGroup_Id], [Name], [DeleteDate]) VALUES
+(2, 1, NULL, 'Belarusian', NULL),
+(3, 2, 1, 'Neuro Dubel', NULL),
+(4, 3, NULL, 'Empty Folder', NULL),
+(5, 3, 1, 'Deleted Folder', '2021-06-30 18:08:10');
 
 INSERT INTO [Discs]([Id], [Folder_Id], [Year], [Title], [TreeTitle], [AlbumTitle]) VALUES
 (1, 3, 2010, 'Афтары правды (CD 1)', '2010 - Афтары правды (CD 1)', 'Афтары правды'),

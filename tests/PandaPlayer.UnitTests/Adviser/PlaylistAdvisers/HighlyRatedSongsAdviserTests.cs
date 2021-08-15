@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -36,7 +38,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void Advise_ReturnsSongsWithHighRatingListenedEarlierThanConfiguredTerm()
+		public async Task Advise_ReturnsSongsWithHighRatingListenedEarlierThanConfiguredTerm()
 		{
 			// Arrange
 
@@ -68,7 +70,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advises = target.Advise(discs, playbacksInfo).ToList();
+			var advises = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
@@ -77,7 +79,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void Advise_ReturnsHighlyRatedSongsWithoutPlaybacks()
+		public async Task Advise_ReturnsHighlyRatedSongsWithoutPlaybacks()
 		{
 			// Arrange
 
@@ -109,7 +111,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advises = target.Advise(discs, playbacksInfo).ToList();
+			var advises = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
@@ -118,7 +120,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void Advise_DoesNotReturnHighlyRatedSongsListenedRecently()
+		public async Task Advise_DoesNotReturnHighlyRatedSongsListenedRecently()
 		{
 			// Arrange
 
@@ -150,7 +152,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advises = target.Advise(discs, playbacksInfo).ToList();
+			var advises = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
@@ -158,7 +160,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void Advise_DoesNotReturnNonHighlyRatedSongs()
+		public async Task Advise_DoesNotReturnNonHighlyRatedSongs()
 		{
 			// Arrange
 
@@ -190,7 +192,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advises = target.Advise(discs, playbacksInfo).ToList();
+			var advises = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
@@ -198,7 +200,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void Advise_IfTooMuchSongsAreAdvised_SplitsThemIntoSmallerPlaylists()
+		public async Task Advise_IfTooMuchSongsAreAdvised_SplitsThemIntoSmallerPlaylists()
 		{
 			// Arrange
 
@@ -231,17 +233,19 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advises = target.Advise(discs, playbacksInfo).ToList();
+			var advises = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
 			Assert.AreEqual(2, advises.Count);
-			CollectionAssert.AreEqual(songs1, advises[0].Songs.ToList());
-			CollectionAssert.AreEqual(songs2, advises[1].Songs.ToList());
+
+			var advisesList = advises.ToList();
+			CollectionAssert.AreEqual(songs1, advisesList[0].Songs.ToList());
+			CollectionAssert.AreEqual(songs2, advisesList[1].Songs.ToList());
 		}
 
 		[TestMethod]
-		public void Advise_IfNumberOfAdvisedSongsIsNotEnough_ReturnsNoPlaylists()
+		public async Task Advise_IfNumberOfAdvisedSongsIsNotEnough_ReturnsNoPlaylists()
 		{
 			// Arrange
 
@@ -273,7 +277,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advises = target.Advise(discs, playbacksInfo).ToList();
+			var advises = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
@@ -281,7 +285,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void Advise_IfNumberOfSongsInLastAdviseIsNotEnough_SkipsLastAdvise()
+		public async Task Advise_IfNumberOfSongsInLastAdviseIsNotEnough_SkipsLastAdvise()
 		{
 			// Arrange
 
@@ -314,16 +318,16 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advises = target.Advise(discs, playbacksInfo).ToList();
+			var advises = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
 			Assert.AreEqual(1, advises.Count);
-			CollectionAssert.AreEqual(songs1, advises[0].Songs.ToList());
+			CollectionAssert.AreEqual(songs1, advises.Single().Songs.ToList());
 		}
 
 		[TestMethod]
-		public void Advise_IfSongsAreAdvised_ReturnsSongsWithHigherRankFirst()
+		public async Task Advise_IfSongsAreAdvised_ReturnsSongsWithHigherRankFirst()
 		{
 			// Arrange
 
@@ -363,16 +367,16 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advises = target.Advise(discs, playbacksInfo).ToList();
+			var advises = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
 			Assert.AreEqual(1, advises.Count);
-			CollectionAssert.AreEqual(new[] { song2, song3, song1 }, advises[0].Songs.ToList());
+			CollectionAssert.AreEqual(new[] { song2, song3, song1 }, advises.Single().Songs.ToList());
 		}
 
 		[TestMethod]
-		public void Advise_SongsHaveEqualRank_ReturnsSongsWithHigherRatingFirst()
+		public async Task Advise_SongsHaveEqualRank_ReturnsSongsWithHigherRatingFirst()
 		{
 			// Arrange
 
@@ -420,16 +424,16 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advises = target.Advise(discs, playbacksInfo).ToList();
+			var advises = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
 			Assert.AreEqual(1, advises.Count);
-			CollectionAssert.AreEqual(new[] { song2, song3, song1 }, advises[0].Songs.ToList());
+			CollectionAssert.AreEqual(new[] { song2, song3, song1 }, advises.Single().Songs.ToList());
 		}
 
 		[TestMethod]
-		public void Advise_CreatesAdvisedPlaylistOfCorrectType()
+		public async Task Advise_CreatesAdvisedPlaylistOfCorrectType()
 		{
 			// Arrange
 
@@ -461,12 +465,12 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advises = target.Advise(discs, playbacksInfo).ToList();
+			var advises = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
 			Assert.AreEqual(1, advises.Count);
-			Assert.AreEqual(AdvisedPlaylistType.HighlyRatedSongs, advises[0].AdvisedPlaylistType);
+			Assert.AreEqual(AdvisedPlaylistType.HighlyRatedSongs, advises.Single().AdvisedPlaylistType);
 		}
 
 		private static DiscModel CreateTestDisc(int id, IEnumerable<SongModel> songs)

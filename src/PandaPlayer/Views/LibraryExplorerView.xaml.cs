@@ -136,16 +136,7 @@ namespace PandaPlayer.Views
 			}
 			else if (itemListViewModel.SelectedFolder != null)
 			{
-				var menuItems = new[]
-				{
-					new MenuItem
-					{
-						Header = "Delete Folder",
-						Command = viewModel.DeleteFolderCommand,
-					},
-				};
-
-				frameworkElement.ContextMenu = CreateContextMenu(menuItems);
+				frameworkElement.ContextMenu = new FolderContextMenu();
 			}
 			else
 			{

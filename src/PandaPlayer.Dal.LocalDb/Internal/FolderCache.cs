@@ -44,6 +44,7 @@ namespace PandaPlayer.Dal.LocalDb.Internal
 			var context = contextFactory.CreateDbContext();
 
 			var allFolders = context.Folders
+				.Include(x => x.AdviseGroup)
 				.Select(f => f.ToShallowModel());
 
 			foreach (var folder in allFolders)

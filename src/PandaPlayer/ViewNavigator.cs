@@ -49,6 +49,20 @@ namespace PandaPlayer
 			}
 		}
 
+		public string ShowCreateAdviseGroupView(string initialAdviseGroupName, IEnumerable<string> existingAdviseGroupNames)
+		{
+			var viewModel = viewModelHolder.CreateAdviseGroupViewModel;
+			viewModel.Load(initialAdviseGroupName, existingAdviseGroupNames);
+			if (ShowDialog<CreateAdviseGroupView>(viewModel))
+			{
+				return viewModel.AdviseGroupName;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
 		public void ShowDiscPropertiesView(DiscModel disc)
 		{
 			var viewModel = viewModelHolder.EditDiscPropertiesViewModel;

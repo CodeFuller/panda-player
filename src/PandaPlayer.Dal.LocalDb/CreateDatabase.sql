@@ -1,11 +1,20 @@
+CREATE TABLE [AdviseGroups] (
+  [Id] INTEGER NOT NULL,
+  [Name] ntext NOT NULL,
+  CONSTRAINT [sqlite_master_PK_AdviseGroups] PRIMARY KEY ([Id]),
+  CONSTRAINT [sqlite_master_UC_AdviseGroups] UNIQUE ([Name])
+);
+
 CREATE TABLE [Folders] (
   [Id] INTEGER NOT NULL,
   [ParentFolder_Id] INTEGER NULL,
+  [AdviseGroup_Id] INTEGER NULL,
   [Name] ntext NOT NULL,
   [DeleteDate] datetime NULL,
   CONSTRAINT [sqlite_master_PK_Folders] PRIMARY KEY ([Id]),
   CONSTRAINT [sqlite_master_UC_Folders] UNIQUE ([ParentFolder_Id], [Name]),
-  FOREIGN KEY ([ParentFolder_Id]) REFERENCES [Folders] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION
+  FOREIGN KEY ([ParentFolder_Id]) REFERENCES [Folders] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY ([AdviseGroup_Id]) REFERENCES [AdviseGroups] ([Id]) ON DELETE SET NULL ON UPDATE NO ACTION
 );
 
 CREATE TABLE [Discs] (

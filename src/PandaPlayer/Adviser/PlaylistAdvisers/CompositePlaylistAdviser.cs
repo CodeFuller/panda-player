@@ -42,9 +42,9 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 			var discsList = discs.ToList();
 			var playbacksInfo = new PlaybacksInfo(discsList);
 
-			var highlyRatedSongsAdvises = highlyRatedSongsAdviser.Advise(discsList, playbacksInfo);
-			var favoriteArtistDiscsAdvises = favoriteArtistDiscsAdviser.Advise(discsList, playbacksInfo);
-			var rankedDiscsAdvises = rankedDiscsAdviser.Advise(discsList, playbacksInfo);
+			var highlyRatedSongsAdvises = await highlyRatedSongsAdviser.Advise(discsList, playbacksInfo, cancellationToken);
+			var favoriteArtistDiscsAdvises = await favoriteArtistDiscsAdviser.Advise(discsList, playbacksInfo, cancellationToken);
+			var rankedDiscsAdvises = await rankedDiscsAdviser.Advise(discsList, playbacksInfo, cancellationToken);
 
 			var playlistQueue = new CompositeAdvisedPlaylistQueue(highlyRatedSongsAdvises, favoriteArtistDiscsAdvises, rankedDiscsAdvises);
 

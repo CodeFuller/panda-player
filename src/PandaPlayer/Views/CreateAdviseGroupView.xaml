@@ -1,0 +1,48 @@
+﻿<Window x:Class="PandaPlayer.Views.CreateAdviseGroupView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:validationRules="clr-namespace:PandaPlayer.Views.ValidationRules"
+        xmlns:interfaces="clr-namespace:PandaPlayer.ViewModels.Interfaces"
+        mc:Ignorable="d"
+        Title="Create Advise Group"
+        SizeToContent="Height" Width="300" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        d:DataContext="{d:DesignInstance interfaces:ICreateAdviseGroupViewModel}">
+
+    <Window.Style>
+        <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}" />
+    </Window.Style>
+
+    <StackPanel Margin="10" Orientation="Vertical" VerticalAlignment="Center">
+
+        <Label Padding="0" HorizontalAlignment="Left" Content="Enter the new advise group name:" />
+
+        <TextBox HorizontalAlignment="Stretch">
+            <TextBox.Resources>
+                <validationRules:BindingProxy x:Key="Proxy" Data="{Binding}" />
+            </TextBox.Resources>
+            <TextBox.Text>
+                <Binding Path="AdviseGroupName" UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <validationRules:NotEmptyStringValidationRule ValidatesOnTargetUpdated="True" ValidationStep="RawProposedValue" />
+                        <validationRules:UniqueValueValidationRule ValidatesOnTargetUpdated="True" ValidationStep="RawProposedValue">
+                            <validationRules:UniqueValueValidationRule.ExistingValuesWrapper>
+                                <validationRules:ExistingValuesWrapper ValueTitle="Advise Group" ExistingValues="{Binding Data.ExistingAdviseGroupNames, Source={StaticResource Proxy}}" />
+                            </validationRules:UniqueValueValidationRule.ExistingValuesWrapper>
+                        </validationRules:UniqueValueValidationRule>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+
+        <UniformGrid Margin="0,15,0,5" Rows="1" Columns="2" HorizontalAlignment="Center">
+            <UniformGrid.CommandBindings>
+                <CommandBinding Command="Save" CanExecute="Save_CanExecute" Executed="Save_Executed" />
+            </UniformGrid.CommandBindings>
+            <Button Margin="0,0,10,0" Content="Save" Command="Save" />
+            <Button Margin="10,0,0,0" Content="Cancel" IsCancel="true" Click="CancelButton_Click" />
+        </UniformGrid>
+
+    </StackPanel>
+</Window>

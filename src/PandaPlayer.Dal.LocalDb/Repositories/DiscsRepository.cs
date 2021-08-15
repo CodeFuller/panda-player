@@ -65,7 +65,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 		private static IQueryable<DiscEntity> GetDiscsQueryable(MusicDbContext context)
 		{
 			return context.Discs
-				.Include(disc => disc.Folder)
+				.Include(disc => disc.Folder).ThenInclude(folder => folder.AdviseGroup)
 				.Include(disc => disc.Songs).ThenInclude(song => song.Artist)
 				.Include(disc => disc.Songs).ThenInclude(song => song.Genre)
 				.Include(disc => disc.Images);
@@ -108,7 +108,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 		{
 			var entityId = id.ToInt32();
 			return await GetDiscsQueryable(context)
-				.SingleAsync(s => s.Id == entityId, cancellationToken);
+				.SingleAsync(d => d.Id == entityId, cancellationToken);
 		}
 	}
 }

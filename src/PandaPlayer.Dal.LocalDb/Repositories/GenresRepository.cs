@@ -1,8 +1,11 @@
 ﻿using System;
-using System.Globalization;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PandaPlayer.Core.Models;
+using PandaPlayer.Dal.LocalDb.Extensions;
 using PandaPlayer.Dal.LocalDb.Internal;
 using PandaPlayer.Services.Interfaces.Dal;
 
@@ -17,17 +20,13 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
 		}
 
-		public IQueryable<GenreModel> GetAllGenres()
+		public async Task<IReadOnlyCollection<GenreModel>> GetAllGenres(CancellationToken cancellationToken)
 		{
-			var context = contextFactory.CreateDbContext();
+			await using var context = contextFactory.CreateDbContext();
 
-			return context.Genres
-				.Select(g => new GenreModel
-				{
-					Id = new ItemId(g.Id.ToString(CultureInfo.InvariantCulture)),
-					Name = g.Name,
-				})
-				.AsQueryable();
+			return (await context.Genres.ToListAsync(cancellationToken))
+				.Select(g => g.ToModel())
+				.ToList();
 		}
 	}
 }

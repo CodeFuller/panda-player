@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using PandaPlayer.Adviser.Interfaces;
 using PandaPlayer.Adviser.Internal;
 using PandaPlayer.Core.Models;
@@ -19,9 +21,9 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 			this.discGroupSorter = discGroupSorter ?? throw new ArgumentNullException(nameof(discGroupSorter));
 		}
 
-		public IEnumerable<AdvisedPlaylist> Advise(IEnumerable<DiscModel> discs, PlaybacksInfo playbacksInfo)
+		public async Task<IReadOnlyCollection<AdvisedPlaylist>> Advise(IEnumerable<DiscModel> discs, PlaybacksInfo playbacksInfo, CancellationToken cancellationToken)
 		{
-			var discGroups = discClassifier.GroupLibraryDiscs(discs)
+			var discGroups = (await discClassifier.GroupLibraryDiscs(discs, cancellationToken))
 				.Where(dg => !dg.Discs.All(d => d.IsDeleted));
 
 			var advisedDiscs = new Collection<DiscModel>();
@@ -34,7 +36,7 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 				}
 			}
 
-			return advisedDiscs.Select(AdvisedPlaylist.ForDisc);
+			return advisedDiscs.Select(AdvisedPlaylist.ForDisc).ToList();
 		}
 	}
 }

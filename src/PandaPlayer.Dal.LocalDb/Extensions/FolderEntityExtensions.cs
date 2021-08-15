@@ -15,6 +15,7 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 				ParentFolderId = folder.ParentFolderId?.ToItemId(),
 				ParentFolder = folder.ParentFolder?.ToShallowModel(),
 				Name = folder.Name,
+				AdviseGroup = folder.AdviseGroup?.ToModel(),
 				Subfolders = folder.Subfolders.Select(sf => sf.ToShallowModel()).ToList(),
 				DeleteDate = folder.DeleteDate,
 			};
@@ -26,22 +27,24 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 
 		public static ShallowFolderModel ToShallowModel(this FolderEntity folder)
 		{
-			return new ShallowFolderModel
+			return new()
 			{
 				Id = folder.Id.ToItemId(),
 				ParentFolderId = folder.ParentFolderId?.ToItemId(),
 				Name = folder.Name,
+				AdviseGroup = folder.AdviseGroup?.ToModel(),
 				DeleteDate = folder.DeleteDate,
 			};
 		}
 
 		public static FolderEntity ToEntity(this ShallowFolderModel folder)
 		{
-			return new FolderEntity
+			return new()
 			{
 				Id = folder.Id?.ToInt32() ?? default,
 				ParentFolderId = folder.ParentFolderId?.ToInt32(),
 				Name = folder.Name,
+				AdviseGroupId = folder.AdviseGroup?.Id.ToInt32(),
 				DeleteDate = folder.DeleteDate,
 			};
 		}

@@ -1,6 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Input;
 using PandaPlayer.Core.Models;
+using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.ViewModels.Interfaces
 {
@@ -9,6 +11,8 @@ namespace PandaPlayer.ViewModels.Interfaces
 		ILibraryExplorerItemListViewModel ItemListViewModel { get; }
 
 		DiscModel SelectedDisc { get; }
+
+		IReadOnlyCollection<SetAdviseGroupMenuItem> SetAdviseGroupMenuItems { get; }
 
 		ICommand PlayDiscCommand { get; }
 

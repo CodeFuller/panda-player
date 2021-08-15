@@ -4,6 +4,8 @@ namespace PandaPlayer.ViewModels.Interfaces
 {
 	public interface INavigatedViewModelHolder
 	{
+		ICreateAdviseGroupViewModel CreateAdviseGroupViewModel { get; }
+
 		IEditDiscPropertiesViewModel EditDiscPropertiesViewModel { get; }
 
 		IEditSongPropertiesViewModel EditSongPropertiesViewModel { get; }

@@ -17,6 +17,7 @@ using PandaPlayer.Services.Interfaces;
 using PandaPlayer.Shared.Extensions;
 using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.ViewModels.Internal;
+using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.ViewModels
 {

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using PandaPlayer.Core.Models;
@@ -9,6 +9,6 @@ namespace PandaPlayer.Services.Interfaces.Dal
 	{
 		Task CreateArtist(ArtistModel artist, CancellationToken cancellationToken);
 
-		IQueryable<ArtistModel> GetAllArtists();
+		Task<IReadOnlyCollection<ArtistModel>> GetAllArtists(CancellationToken cancellationToken);
 	}
 }

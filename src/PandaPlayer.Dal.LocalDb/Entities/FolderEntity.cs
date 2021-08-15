@@ -13,6 +13,10 @@ namespace PandaPlayer.Dal.LocalDb.Entities
 
 		public FolderEntity ParentFolder { get; set; }
 
+		public int? AdviseGroupId { get; set; }
+
+		public AdviseGroupEntity AdviseGroup { get; set; }
+
 		public IReadOnlyCollection<FolderEntity> Subfolders { get; set; }
 
 		public IReadOnlyCollection<DiscEntity> Discs { get; set; }

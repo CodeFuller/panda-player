@@ -18,13 +18,11 @@ namespace PandaPlayer.Services
 			this.genresRepository = genresRepository ?? throw new ArgumentNullException(nameof(genresRepository));
 		}
 
-		public Task<IReadOnlyCollection<GenreModel>> GetAllGenres(CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<GenreModel>> GetAllGenres(CancellationToken cancellationToken)
 		{
-			var artists = genresRepository.GetAllGenres()
-				.OrderBy(a => a.Name)
+			return (await genresRepository.GetAllGenres(cancellationToken))
+				.OrderBy(g => g.Name)
 				.ToList();
-
-			return Task.FromResult<IReadOnlyCollection<GenreModel>>(artists);
 		}
 	}
 }

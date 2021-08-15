@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
@@ -18,7 +20,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 	public class RankBasedDiscAdviserTests
 	{
 		[TestMethod]
-		public void Advise_SortsDiscGroups()
+		public async Task Advise_SortsDiscGroups()
 		{
 			// Arrange
 
@@ -36,7 +38,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var discGroups = new[] { discGroup1, discGroup2 };
 
 			var discClassifierStub = new Mock<IDiscClassifier>();
-			discClassifierStub.Setup(x => x.GroupLibraryDiscs(discs)).Returns(discGroups);
+			discClassifierStub.Setup(x => x.GroupLibraryDiscs(discs, It.IsAny<CancellationToken>())).ReturnsAsync(discGroups);
 
 			var discGroupSorterStub = new Mock<IDiscGroupSorter>();
 			discGroupSorterStub.Setup(x => x.SortDiscGroups(It.IsAny<IEnumerable<DiscGroup>>(), playbacksInfo)).Returns(new[] { discGroup2, discGroup1 });
@@ -50,17 +52,19 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advisedDiscs = target.Advise(discs, playbacksInfo).ToList();
+			var advises = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
-			Assert.AreEqual(2, advisedDiscs.Count);
-			Assert.AreSame(disc2, advisedDiscs[0].Disc);
-			Assert.AreSame(disc1, advisedDiscs[1].Disc);
+			Assert.AreEqual(2, advises.Count);
+
+			var advisesList = advises.ToList();
+			Assert.AreSame(disc2, advisesList[0].Disc);
+			Assert.AreSame(disc1, advisesList[1].Disc);
 		}
 
 		[TestMethod]
-		public void Advise_SortsDiscsWithinGroup()
+		public async Task Advise_SortsDiscsWithinGroup()
 		{
 			// Arrange
 
@@ -76,7 +80,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var discGroups = new[] { discGroup1 };
 
 			var discClassifierStub = new Mock<IDiscClassifier>();
-			discClassifierStub.Setup(x => x.GroupLibraryDiscs(discs)).Returns(discGroups);
+			discClassifierStub.Setup(x => x.GroupLibraryDiscs(discs, It.IsAny<CancellationToken>())).ReturnsAsync(discGroups);
 
 			var discGroupSorterStub = new Mock<IDiscGroupSorter>();
 			discGroupSorterStub.Setup(x => x.SortDiscGroups(It.IsAny<IEnumerable<DiscGroup>>(), playbacksInfo)).Returns<IEnumerable<DiscGroup>, PlaybacksInfo>((groups, _) => groups);
@@ -90,16 +94,16 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advisedDiscs = target.Advise(discs, playbacksInfo).ToList();
+			var advises = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
-			Assert.AreEqual(1, advisedDiscs.Count);
-			Assert.AreSame(disc2, advisedDiscs[0].Disc);
+			Assert.AreEqual(1, advises.Count);
+			Assert.AreSame(disc2, advises.Single().Disc);
 		}
 
 		[TestMethod]
-		public void Advise_IfSomeDiscsAreDeleted_SkipsDeletedDiscs()
+		public async Task Advise_IfSomeDiscsAreDeleted_SkipsDeletedDiscs()
 		{
 			// Arrange
 
@@ -117,7 +121,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var discGroups = new[] { discGroup1, discGroup2 };
 
 			var discClassifierStub = new Mock<IDiscClassifier>();
-			discClassifierStub.Setup(x => x.GroupLibraryDiscs(discs)).Returns(discGroups);
+			discClassifierStub.Setup(x => x.GroupLibraryDiscs(discs, It.IsAny<CancellationToken>())).ReturnsAsync(discGroups);
 
 			var discGroupSorterStub = new Mock<IDiscGroupSorter>();
 			discGroupSorterStub.Setup(x => x.SortDiscGroups(It.IsAny<IEnumerable<DiscGroup>>(), playbacksInfo)).Returns<IEnumerable<DiscGroup>, PlaybacksInfo>((groups, _) => groups);
@@ -131,16 +135,16 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advisedDiscs = target.Advise(discs, playbacksInfo).ToList();
+			var advises = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
-			Assert.AreEqual(1, advisedDiscs.Count);
-			Assert.AreSame(activeDisc, advisedDiscs[0].Disc);
+			Assert.AreEqual(1, advises.Count);
+			Assert.AreSame(activeDisc, advises.Single().Disc);
 		}
 
 		[TestMethod]
-		public void Advise_SomeDiscGroupsAreEmpty_SkipsSuchGroups()
+		public async Task Advise_SomeDiscGroupsAreEmpty_SkipsSuchGroups()
 		{
 			// Arrange
 
@@ -156,7 +160,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var discGroups = new[] { discGroup1, discGroup2 };
 
 			var discClassifierStub = new Mock<IDiscClassifier>();
-			discClassifierStub.Setup(x => x.GroupLibraryDiscs(discs)).Returns(discGroups);
+			discClassifierStub.Setup(x => x.GroupLibraryDiscs(discs, It.IsAny<CancellationToken>())).ReturnsAsync(discGroups);
 
 			var discGroupSorterStub = new Mock<IDiscGroupSorter>();
 			discGroupSorterStub.Setup(x => x.SortDiscGroups(It.IsAny<IEnumerable<DiscGroup>>(), playbacksInfo)).Returns<IEnumerable<DiscGroup>, PlaybacksInfo>((groups, _) => groups);
@@ -170,16 +174,16 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advisedDiscs = target.Advise(discs, playbacksInfo).ToList();
+			var advises = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
-			Assert.AreEqual(1, advisedDiscs.Count);
-			Assert.AreSame(disc, advisedDiscs[0].Disc);
+			Assert.AreEqual(1, advises.Count);
+			Assert.AreSame(disc, advises.Single().Disc);
 		}
 
 		[TestMethod]
-		public void Advise_CreatesAdvisedPlaylistOfCorrectType()
+		public async Task Advise_CreatesAdvisedPlaylistOfCorrectType()
 		{
 			// Arrange
 
@@ -197,7 +201,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var discGroups = new[] { discGroup1, discGroup2 };
 
 			var discClassifierStub = new Mock<IDiscClassifier>();
-			discClassifierStub.Setup(x => x.GroupLibraryDiscs(discs)).Returns(discGroups);
+			discClassifierStub.Setup(x => x.GroupLibraryDiscs(discs, It.IsAny<CancellationToken>())).ReturnsAsync(discGroups);
 
 			var discGroupSorterStub = new Mock<IDiscGroupSorter>();
 			discGroupSorterStub.Setup(x => x.SortDiscGroups(It.IsAny<IEnumerable<DiscGroup>>(), playbacksInfo)).Returns(new[] { discGroup2, discGroup1 });
@@ -211,12 +215,12 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advisedDiscs = target.Advise(discs, playbacksInfo).ToList();
+			var advises = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
-			Assert.AreEqual(2, advisedDiscs.Count);
-			Assert.IsTrue(advisedDiscs.All(x => x.AdvisedPlaylistType == AdvisedPlaylistType.Disc));
+			Assert.AreEqual(2, advises.Count);
+			Assert.IsTrue(advises.All(x => x.AdvisedPlaylistType == AdvisedPlaylistType.Disc));
 		}
 
 		private static DiscModel CreateTestDisc(int id, bool isDeleted = false)

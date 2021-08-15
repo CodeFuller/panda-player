@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -44,7 +46,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void AdviseDiscs_IfAllDiscsAreActive_AdvisesDiscsInCorrectOrder()
+		public async Task Advise_IfAllDiscsAreActive_AdvisesDiscsInCorrectOrder()
 		{
 			// Arrange
 
@@ -82,7 +84,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var playbacksInfo = new PlaybacksInfo(discs);
 
 			var discAdviserStub = new Mock<IPlaylistAdviser>();
-			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo)).Returns(discs.Select(AdvisedPlaylist.ForDisc));
+			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo, It.IsAny<CancellationToken>())).ReturnsAsync(discs.Select(AdvisedPlaylist.ForDisc).ToList());
 
 			var mocker = new AutoMocker();
 			mocker.Use(discAdviserStub);
@@ -92,7 +94,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advisedPlaylists = target.Advise(discs, playbacksInfo);
+			var advisedPlaylists = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
@@ -100,7 +102,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void AdviseDiscs_IfSomeDiscsAreDeleted_ConsidersAlsoLastPlaybackOfDeletedDiscs()
+		public async Task Advise_IfSomeDiscsAreDeleted_ConsidersAlsoLastPlaybackOfDeletedDiscs()
 		{
 			// Arrange
 
@@ -124,7 +126,8 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var playbacksInfo = new PlaybacksInfo(discs);
 
 			var discAdviserStub = new Mock<IPlaylistAdviser>();
-			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo)).Returns(new[] { disc12, disc21 }.Select(AdvisedPlaylist.ForDisc));
+			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo, It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new[] { disc12, disc21 }.Select(AdvisedPlaylist.ForDisc).ToList());
 
 			var mocker = new AutoMocker();
 			mocker.Use(discAdviserStub);
@@ -134,7 +137,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advisedPlaylists = target.Advise(discs, playbacksInfo);
+			var advisedPlaylists = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
@@ -142,7 +145,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void AdviseDiscs_AdvisesOnlyDiscsOfFavoriteArtists()
+		public async Task Advise_AdvisesOnlyDiscsOfFavoriteArtists()
 		{
 			// Arrange
 
@@ -164,7 +167,8 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var playbacksInfo = new PlaybacksInfo(discs);
 
 			var discAdviserStub = new Mock<IPlaylistAdviser>();
-			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo)).Returns(discs.Select(AdvisedPlaylist.ForDisc));
+			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo, It.IsAny<CancellationToken>()))
+				.ReturnsAsync(discs.Select(AdvisedPlaylist.ForDisc).ToList());
 
 			var mocker = new AutoMocker();
 			mocker.Use(discAdviserStub);
@@ -174,7 +178,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advisedPlaylists = target.Advise(discs, playbacksInfo);
+			var advisedPlaylists = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
@@ -184,7 +188,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void AdviseDiscs_SkipsDiscsWithoutArtist()
+		public async Task Advise_SkipsDiscsWithoutArtist()
 		{
 			// Arrange
 
@@ -202,7 +206,8 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var playbacksInfo = new PlaybacksInfo(discs);
 
 			var discAdviserStub = new Mock<IPlaylistAdviser>();
-			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo)).Returns(discs.Select(AdvisedPlaylist.ForDisc));
+			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo, It.IsAny<CancellationToken>()))
+				.ReturnsAsync(discs.Select(AdvisedPlaylist.ForDisc).ToList());
 
 			var mocker = new AutoMocker();
 			mocker.Use(discAdviserStub);
@@ -212,7 +217,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advisedPlaylists = target.Advise(discs, playbacksInfo);
+			var advisedPlaylists = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
@@ -220,7 +225,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void AdviseDiscs_ConvertsFromDiscAdviseToFavoriteArtistDiscAdviseCorrectly()
+		public async Task Advise_ConvertsFromDiscAdviseToFavoriteArtistDiscAdviseCorrectly()
 		{
 			// Arrange
 
@@ -239,7 +244,8 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var playbacksInfo = new PlaybacksInfo(discs);
 
 			var discAdviserStub = new Mock<IPlaylistAdviser>();
-			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo)).Returns(discs.Select(AdvisedPlaylist.ForDisc));
+			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo, It.IsAny<CancellationToken>()))
+				.ReturnsAsync(discs.Select(AdvisedPlaylist.ForDisc).ToList());
 
 			var mocker = new AutoMocker();
 			mocker.Use(discAdviserStub);
@@ -249,17 +255,17 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advisedDiscs = target.Advise(discs, playbacksInfo);
+			var advisedPlaylists = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
-			var advise = advisedDiscs.Single();
+			var advise = advisedPlaylists.Single();
 			Assert.AreEqual(AdvisedPlaylistType.FavoriteArtistDisc, advise.AdvisedPlaylistType);
 			Assert.AreSame(favoriteDisc, advise.Disc);
 		}
 
 		[TestMethod]
-		public void AdviseDiscs_OnFirstCallIfAllArtistsPresentInLibrary_DoesNotLogWarning()
+		public async Task Advise_OnFirstCallIfAllArtistsPresentInLibrary_DoesNotLogWarning()
 		{
 			// Arrange
 
@@ -284,7 +290,8 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var playbacksInfo = new PlaybacksInfo(discs);
 
 			var discAdviserStub = new Mock<IPlaylistAdviser>();
-			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo)).Returns(discs.Select(AdvisedPlaylist.ForDisc));
+			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo, It.IsAny<CancellationToken>()))
+				.ReturnsAsync(discs.Select(AdvisedPlaylist.ForDisc).ToList());
 
 			var loggerMock = new LoggerMock<FavoriteArtistDiscsAdviser>();
 
@@ -297,7 +304,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advisedDiscs = target.Advise(discs, playbacksInfo).ToList();
+			var advisedPlaylists = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
@@ -305,7 +312,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void AdviseDiscs_OnFirstCallIfSomeUnknownArtistsAreConfigured_LogsWarning()
+		public async Task Advise_OnFirstCallIfSomeUnknownArtistsAreConfigured_LogsWarning()
 		{
 			// Arrange
 
@@ -324,7 +331,8 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var playbacksInfo = new PlaybacksInfo(discs);
 
 			var discAdviserStub = new Mock<IPlaylistAdviser>();
-			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo)).Returns(discs.Select(AdvisedPlaylist.ForDisc));
+			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo, It.IsAny<CancellationToken>()))
+				.ReturnsAsync(discs.Select(AdvisedPlaylist.ForDisc).ToList());
 
 			var loggerMock = new LoggerMock<FavoriteArtistDiscsAdviser>();
 
@@ -337,7 +345,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advisedDiscs = target.Advise(discs, playbacksInfo).ToList();
+			var advisedPlaylists = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
@@ -345,7 +353,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void AdviseDiscs_OnSubsequentCallsIfSomeUnknownArtistsAreConfigured_DoesNotLogWarning()
+		public async Task Advise_OnSubsequentCallsIfSomeUnknownArtistsAreConfigured_DoesNotLogWarning()
 		{
 			// Arrange
 
@@ -364,7 +372,8 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var playbacksInfo = new PlaybacksInfo(discs);
 
 			var discAdviserStub = new Mock<IPlaylistAdviser>();
-			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo)).Returns(discs.Select(AdvisedPlaylist.ForDisc));
+			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo, It.IsAny<CancellationToken>()))
+				.ReturnsAsync(discs.Select(AdvisedPlaylist.ForDisc).ToList());
 
 			var loggerMock = new LoggerMock<FavoriteArtistDiscsAdviser>();
 
@@ -377,8 +386,8 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advisedDiscs1 = target.Advise(discs, playbacksInfo).ToList();
-			var advisedDiscs2 = target.Advise(discs, playbacksInfo).ToList();
+			await target.Advise(discs, playbacksInfo, CancellationToken.None);
+			await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
@@ -386,7 +395,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public void AdviseDiscs_NoFavoriteArtistsAreConfigured_LogsWarning()
+		public async Task Advise_NoFavoriteArtistsAreConfigured_LogsWarning()
 		{
 			// Arrange
 
@@ -402,7 +411,8 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var playbacksInfo = new PlaybacksInfo(discs);
 
 			var discAdviserStub = new Mock<IPlaylistAdviser>();
-			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo)).Returns(discs.Select(AdvisedPlaylist.ForDisc));
+			discAdviserStub.Setup(x => x.Advise(discs, playbacksInfo, It.IsAny<CancellationToken>()))
+				.ReturnsAsync(discs.Select(AdvisedPlaylist.ForDisc).ToList());
 
 			var loggerMock = new LoggerMock<FavoriteArtistDiscsAdviser>();
 
@@ -415,12 +425,12 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			var advisedDiscs = target.Advise(discs, playbacksInfo).ToList();
+			var advisedPlaylists = await target.Advise(discs, playbacksInfo, CancellationToken.None);
 
 			// Assert
 
 			Assert.AreEqual(1, loggerMock[LogLevel.Warning]);
-			Assert.IsFalse(advisedDiscs.Any());
+			Assert.IsFalse(advisedPlaylists.Any());
 		}
 
 		private static DiscModel CreateTestDisc(int id, IEnumerable<SongModel> songs)

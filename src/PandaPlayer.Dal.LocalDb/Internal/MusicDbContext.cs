@@ -5,6 +5,22 @@ namespace PandaPlayer.Dal.LocalDb.Internal
 {
 	internal class MusicDbContext : DbContext
 	{
+		public DbSet<FolderEntity> Folders { get; set; }
+
+		public DbSet<DiscEntity> Discs { get; set; }
+
+		public DbSet<ArtistEntity> Artists { get; set; }
+
+		public DbSet<GenreEntity> Genres { get; set; }
+
+		public DbSet<SongEntity> Songs { get; set; }
+
+		public DbSet<DiscImageEntity> DiscImages { get; set; }
+
+		public DbSet<AdviseGroupEntity> AdviseGroups { get; set; }
+
+		public DbSet<SessionDataEntity> SessionData { get; set; }
+
 		public MusicDbContext(DbContextOptions options)
 			: base(options)
 		{
@@ -19,12 +35,19 @@ namespace PandaPlayer.Dal.LocalDb.Internal
 				builder.ToTable("Folders");
 
 				builder.Property(f => f.Name).IsRequired();
-				builder.Property(s => s.ParentFolderId).HasColumnName("ParentFolder_Id");
+				builder.Property(f => f.ParentFolderId).HasColumnName("ParentFolder_Id");
+
+				builder.Property(di => di.AdviseGroupId).HasColumnName("AdviseGroup_Id");
 
 				builder.HasOne(f => f.ParentFolder)
 					.WithMany(f => f.Subfolders)
-					.HasForeignKey(d => d.ParentFolderId)
+					.HasForeignKey(f => f.ParentFolderId)
 					.OnDelete(DeleteBehavior.Restrict);
+
+				builder.HasOne(f => f.AdviseGroup)
+					.WithMany(ag => ag.Folders)
+					.HasForeignKey(f => f.AdviseGroupId)
+					.OnDelete(DeleteBehavior.ClientSetNull);
 
 				var rootFolder = new FolderEntity
 				{
@@ -87,6 +110,13 @@ namespace PandaPlayer.Dal.LocalDb.Internal
 				builder.Property(di => di.DiscId).HasColumnName("Disc_Id");
 			});
 
+			modelBuilder.Entity<AdviseGroupEntity>(builder =>
+			{
+				builder.ToTable("AdviseGroups");
+
+				builder.Property(ag => ag.Name).IsRequired();
+			});
+
 			modelBuilder.Entity<SessionDataEntity>(builder =>
 			{
 				builder.ToTable("SessionData");
@@ -94,19 +124,5 @@ namespace PandaPlayer.Dal.LocalDb.Internal
 				builder.HasKey(sd => sd.Key);
 			});
 		}
-
-		public DbSet<FolderEntity> Folders { get; set; }
-
-		public DbSet<DiscEntity> Discs { get; set; }
-
-		public DbSet<ArtistEntity> Artists { get; set; }
-
-		public DbSet<GenreEntity> Genres { get; set; }
-
-		public DbSet<SongEntity> Songs { get; set; }
-
-		public DbSet<DiscImageEntity> DiscImages { get; set; }
-
-		public DbSet<SessionDataEntity> SessionData { get; set; }
 	}
 }

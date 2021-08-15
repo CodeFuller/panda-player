@@ -4,6 +4,7 @@
 	{
 		public ReferenceData(string libraryStorageRoot, bool fillSongPlaybacks)
 		{
+			FillFolders();
 			FillDiscs(libraryStorageRoot);
 			FillSongs(libraryStorageRoot);
 

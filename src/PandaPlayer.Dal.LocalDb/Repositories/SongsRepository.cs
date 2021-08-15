@@ -59,7 +59,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			var id = songId.ToInt32();
 
 			var songDisc = await context.Discs
-				.Include(disc => disc.Folder)
+				.Include(disc => disc.Folder).ThenInclude(folder => folder.AdviseGroup)
 				.Include(disc => disc.Songs).ThenInclude(song => song.Artist)
 				.Include(disc => disc.Songs).ThenInclude(song => song.Genre)
 				.Include(disc => disc.Songs).ThenInclude(song => song.Playbacks)
@@ -165,7 +165,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			return context.Songs
 				.Include(song => song.Disc).ThenInclude(disc => disc.Songs)
 				.Include(song => song.Disc).ThenInclude(disc => disc.Images)
-				.Include(song => song.Disc).ThenInclude(disc => disc.Folder)
+				.Include(song => song.Disc).ThenInclude(disc => disc.Folder).ThenInclude(folder => folder.AdviseGroup)
 				.Include(song => song.Artist)
 				.Include(song => song.Genre);
 		}

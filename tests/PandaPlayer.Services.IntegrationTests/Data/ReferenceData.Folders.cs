@@ -17,40 +17,55 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 
 		public static ItemId NextFolderId => new("6");
 
-		public ShallowFolderModel RootFolder { get; } = new()
-		{
-			Id = RootFolderId,
-			ParentFolderId = null,
-			Name = "<ROOT>",
-		};
+		public ShallowFolderModel RootFolder { get; private set; }
 
-		public ShallowFolderModel SubFolder { get; } = new()
-		{
-			Id = SubFolderId,
-			ParentFolderId = RootFolderId,
-			Name = "Belarusian",
-		};
+		public ShallowFolderModel SubFolder { get; private set; }
 
-		public ShallowFolderModel ArtistFolder { get; } = new()
-		{
-			Id = ArtistFolderId,
-			ParentFolderId = SubFolderId,
-			Name = "Neuro Dubel",
-		};
+		public ShallowFolderModel ArtistFolder { get; private set; }
 
-		public ShallowFolderModel EmptyFolder { get; } = new()
-		{
-			Id = EmptyFolderId,
-			ParentFolderId = ArtistFolderId,
-			Name = "Empty Folder",
-		};
+		public ShallowFolderModel EmptyFolder { get; private set; }
 
-		public ShallowFolderModel DeletedFolder { get; } = new()
+		public ShallowFolderModel DeletedFolder { get; private set; }
+
+		private void FillFolders()
 		{
-			Id = DeletedFolderId,
-			ParentFolderId = ArtistFolderId,
-			Name = "Deleted Folder",
-			DeleteDate = new DateTimeOffset(2021, 06, 30, 18, 08, 10, TimeSpan.FromHours(3)),
-		};
+			RootFolder = new()
+			{
+				Id = RootFolderId,
+				ParentFolderId = null,
+				Name = "<ROOT>",
+			};
+
+			SubFolder = new()
+			{
+				Id = SubFolderId,
+				ParentFolderId = RootFolderId,
+				Name = "Belarusian",
+			};
+
+			ArtistFolder = new()
+			{
+				Id = ArtistFolderId,
+				ParentFolderId = SubFolderId,
+				Name = "Neuro Dubel",
+				AdviseGroup = AdviseGroup1,
+			};
+
+			EmptyFolder = new()
+			{
+				Id = EmptyFolderId,
+				ParentFolderId = ArtistFolderId,
+				Name = "Empty Folder",
+			};
+
+			DeletedFolder = new()
+			{
+				Id = DeletedFolderId,
+				ParentFolderId = ArtistFolderId,
+				Name = "Deleted Folder",
+				AdviseGroup = AdviseGroup1,
+				DeleteDate = new DateTimeOffset(2021, 06, 30, 18, 08, 10, TimeSpan.FromHours(3)),
+			};
+		}
 	}
 }

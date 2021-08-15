@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Globalization;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,17 +31,13 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			artist.Id = artistEntity.Id.ToItemId();
 		}
 
-		public IQueryable<ArtistModel> GetAllArtists()
+		public async Task<IReadOnlyCollection<ArtistModel>> GetAllArtists(CancellationToken cancellationToken)
 		{
-			var context = contextFactory.CreateDbContext();
+			await using var context = contextFactory.CreateDbContext();
 
-			return context.Artists
-				.Select(a => new ArtistModel
-				{
-					Id = new ItemId(a.Id.ToString(CultureInfo.InvariantCulture)),
-					Name = a.Name,
-				})
-				.AsQueryable();
+			return (await context.Artists.ToListAsync(cancellationToken))
+				.Select(a => a.ToModel())
+				.ToList();
 		}
 	}
 }

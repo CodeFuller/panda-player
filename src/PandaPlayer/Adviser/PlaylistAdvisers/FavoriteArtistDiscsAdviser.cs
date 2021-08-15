@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PandaPlayer.Adviser.Interfaces;
@@ -25,12 +27,12 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 			this.favoriteArtists = options.Value?.FavoriteArtists ?? throw new ArgumentNullException(nameof(options));
 		}
 
-		public IEnumerable<AdvisedPlaylist> Advise(IEnumerable<DiscModel> discs, PlaybacksInfo playbacksInfo)
+		public async Task<IReadOnlyCollection<AdvisedPlaylist>> Advise(IEnumerable<DiscModel> discs, PlaybacksInfo playbacksInfo, CancellationToken cancellationToken)
 		{
 			if (!favoriteArtists.Any())
 			{
 				logger.LogWarning("No favorite artists are set");
-				return Enumerable.Empty<AdvisedPlaylist>();
+				return new List<AdvisedPlaylist>();
 			}
 
 			var discsList = discs.ToList();
@@ -49,12 +51,13 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 				.ToDictionary(x => x.artistId, x => x.playbacksPassed);
 
 			// Selecting first advised disc for each artist. Artists are ordered by last playback.
-			return discAdviser.Advise(discsList, playbacksInfo)
+			return (await discAdviser.Advise(discsList, playbacksInfo, cancellationToken))
 				.Where(ap => GetDiscFavoriteSoloArtist(ap.Disc, artistOrders) != null)
 				.GroupBy(ap => ap.Disc.SoloArtist.Id)
 				.OrderByDescending(g => artistOrders[g.Key])
 				.Select(g => g.First())
-				.Select(a => AdvisedPlaylist.ForFavoriteArtistDisc(a.Disc));
+				.Select(a => AdvisedPlaylist.ForFavoriteArtistDisc(a.Disc))
+				.ToList();
 		}
 
 		private static ArtistModel GetDiscFavoriteSoloArtist(DiscModel disc, IReadOnlyDictionary<ItemId, int> favoriteArtists)

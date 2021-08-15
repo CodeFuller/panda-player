@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq.AutoMock;
 using PandaPlayer.Adviser.Grouping;
@@ -10,7 +12,7 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 	public class FolderDiscClassifierTests
 	{
 		[TestMethod]
-		public void GroupLibraryDiscs_AssignsAllDiscsFromOneFolderToOneGroup()
+		public async Task GroupLibraryDiscs_AssignsAllDiscsFromOneFolderToOneGroup()
 		{
 			// Arrange
 
@@ -26,7 +28,7 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 
 			// Act
 
-			var groups = target.GroupLibraryDiscs(new[] { disc11, disc21, disc12 }).ToList();
+			var groups = await target.GroupLibraryDiscs(new[] { disc11, disc21, disc12 }, CancellationToken.None);
 
 			// Assert
 

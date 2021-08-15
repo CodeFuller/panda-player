@@ -50,6 +50,20 @@ namespace PandaPlayer.Services
 			return foldersRepository.GetFolder(folderId, cancellationToken);
 		}
 
+		public async Task AssignAdviseGroup(ShallowFolderModel folder, AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
+		{
+			folder.AdviseGroup = adviseGroup;
+
+			await foldersRepository.UpdateFolder(folder, cancellationToken);
+		}
+
+		public async Task RemoveAdviseGroup(ShallowFolderModel folder, CancellationToken cancellationToken)
+		{
+			folder.AdviseGroup = null;
+
+			await foldersRepository.UpdateFolder(folder, cancellationToken);
+		}
+
 		public async Task DeleteFolder(ItemId folderId, CancellationToken cancellationToken)
 		{
 			var folder = await foldersRepository.GetFolder(folderId, cancellationToken);

@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using PandaPlayer.Core.Models;
+using PandaPlayer.Events;
 using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.Events.LibraryExplorerEvents;
 using PandaPlayer.Events.SongEvents;
@@ -17,6 +18,7 @@ using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.Internal;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.ViewModels.Interfaces;
+using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.ViewModels
 {
@@ -26,13 +28,35 @@ namespace PandaPlayer.ViewModels
 
 		private readonly IDiscsService discsService;
 
+		private readonly IAdviseGroupService adviseGroupService;
+
 		private readonly IViewNavigator viewNavigator;
 
 		private readonly IWindowService windowService;
 
 		public ILibraryExplorerItemListViewModel ItemListViewModel { get; }
 
+		public ShallowFolderModel SelectedFolder => ItemListViewModel.SelectedFolder;
+
 		public DiscModel SelectedDisc => ItemListViewModel.SelectedDisc;
+
+		private IReadOnlyCollection<AdviseGroupModel> AllAdviseGroups { get; set; }
+
+		public IReadOnlyCollection<SetAdviseGroupMenuItem> SetAdviseGroupMenuItems
+		{
+			get
+			{
+				var menuItems = new List<SetAdviseGroupMenuItem>
+				{
+					new("New Advise Group ...", false, ct => CreateNewAdviseGroup(SelectedFolder, ct)),
+				};
+
+				var currentAdviseGroupId = SelectedFolder?.AdviseGroup?.Id;
+				menuItems.AddRange(AllAdviseGroups.Select(x => new SetAdviseGroupMenuItem(x.Name, x.Id == currentAdviseGroupId, ct => ReverseAdviseGroup(SelectedFolder, x, ct))));
+
+				return menuItems;
+			}
+		}
 
 		public ICommand PlayDiscCommand { get; }
 
@@ -45,11 +69,12 @@ namespace PandaPlayer.ViewModels
 		public ICommand DeleteDiscCommand { get; }
 
 		public LibraryExplorerViewModel(ILibraryExplorerItemListViewModel itemListViewModel, IFoldersService foldersService,
-			IDiscsService discsService, IViewNavigator viewNavigator, IWindowService windowService)
+			IDiscsService discsService, IAdviseGroupService adviseGroupService, IViewNavigator viewNavigator, IWindowService windowService)
 		{
 			ItemListViewModel = itemListViewModel ?? throw new ArgumentNullException(nameof(itemListViewModel));
 			this.foldersService = foldersService ?? throw new ArgumentNullException(nameof(foldersService));
 			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
+			this.adviseGroupService = adviseGroupService ?? throw new ArgumentNullException(nameof(adviseGroupService));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
 
@@ -59,6 +84,7 @@ namespace PandaPlayer.ViewModels
 			DeleteFolderCommand = new AsyncRelayCommand(() => DeleteFolder(CancellationToken.None));
 			DeleteDiscCommand = new AsyncRelayCommand(() => DeleteDisc(CancellationToken.None));
 
+			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => OnApplicationLoaded(CancellationToken.None));
 			Messenger.Default.Register<LoadParentFolderEventArgs>(this, e => OnLoadParentFolder(e, CancellationToken.None));
 			Messenger.Default.Register<LoadFolderEventArgs>(this, e => OnLoadFolder(e.FolderId, CancellationToken.None));
 			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaySongsList(e, CancellationToken.None));
@@ -68,6 +94,57 @@ namespace PandaPlayer.ViewModels
 			Messenger.Default.Register<SongChangedEventArgs>(this, e => OnSongChanged(e.Song, e.PropertyName));
 			Messenger.Default.Register<DiscChangedEventArgs>(this, e => OnDiscChanged(e.Disc, e.PropertyName));
 			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
+		}
+
+		private async void OnApplicationLoaded(CancellationToken cancellationToken)
+		{
+			await UpdateAdviseGroups(cancellationToken);
+		}
+
+		private async Task CreateNewAdviseGroup(ShallowFolderModel folder, CancellationToken cancellationToken)
+		{
+			var initialAdviseGroupName = folder?.Name ?? String.Empty;
+			var newAdviseGroupName = viewNavigator.ShowCreateAdviseGroupView(initialAdviseGroupName, AllAdviseGroups.Select(x => x.Name));
+			if (newAdviseGroupName == null)
+			{
+				return;
+			}
+
+			var newAdviseGroup = new AdviseGroupModel
+			{
+				Name = newAdviseGroupName,
+			};
+
+			await adviseGroupService.CreateAdviseGroup(newAdviseGroup, cancellationToken);
+
+			if (folder != null)
+			{
+				await foldersService.AssignAdviseGroup(folder, newAdviseGroup, cancellationToken);
+			}
+
+			await UpdateAdviseGroups(cancellationToken);
+		}
+
+		private async Task UpdateAdviseGroups(CancellationToken cancellationToken)
+		{
+			AllAdviseGroups = await adviseGroupService.GetAllAdviseGroups(cancellationToken);
+		}
+
+		private async Task ReverseAdviseGroup(ShallowFolderModel folder, AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
+		{
+			if (folder == null)
+			{
+				return;
+			}
+
+			if (folder.AdviseGroup == null || folder.AdviseGroup.Id != adviseGroup.Id)
+			{
+				await foldersService.AssignAdviseGroup(folder, adviseGroup, cancellationToken);
+			}
+			else
+			{
+				await foldersService.RemoveAdviseGroup(folder, cancellationToken);
+			}
 		}
 
 		private async void OnLoadParentFolder(LoadParentFolderEventArgs e, CancellationToken cancellationToken)
@@ -127,7 +204,7 @@ namespace PandaPlayer.ViewModels
 
 		private async Task DeleteFolder(CancellationToken cancellationToken)
 		{
-			var selectedFolder = ItemListViewModel.SelectedFolder;
+			var selectedFolder = SelectedFolder;
 			if (selectedFolder == null)
 			{
 				return;
@@ -137,7 +214,7 @@ namespace PandaPlayer.ViewModels
 
 			if (folder.HasContent)
 			{
-				windowService.ShowMessageBox("You can not delete non-empty directory", "Warning", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation);
+				windowService.ShowMessageBox("You can not delete non-empty folder", "Warning", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation);
 				return;
 			}
 

@@ -9,6 +9,8 @@ namespace PandaPlayer
 	{
 		void ShowRatePlaylistSongsView(IEnumerable<SongModel> songs);
 
+		string ShowCreateAdviseGroupView(string initialAdviseGroupName, IEnumerable<string> existingAdviseGroupNames);
+
 		void ShowDiscPropertiesView(DiscModel disc);
 
 		Task ShowSongPropertiesView(IEnumerable<SongModel> songs, CancellationToken cancellationToken);

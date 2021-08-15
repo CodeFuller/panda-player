@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using PandaPlayer.Adviser.Extensions;
 using PandaPlayer.Adviser.Interfaces;
@@ -34,7 +36,7 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 				.ToDictionary(t => t.Rating, t => TimeSpan.FromDays(t.Days));
 		}
 
-		public IEnumerable<AdvisedPlaylist> Advise(IEnumerable<DiscModel> discs, PlaybacksInfo playbacksInfo)
+		public Task<IReadOnlyCollection<AdvisedPlaylist>> Advise(IEnumerable<DiscModel> discs, PlaybacksInfo playbacksInfo, CancellationToken cancellationToken)
 		{
 			var songsToAdvise = discs
 				.SelectMany(disc => disc.ActiveSongs)
@@ -43,9 +45,16 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 				.ThenByDescending(song => song.GetRatingOrDefault())
 				.ToList();
 
-			for (var i = 0; i + settings.OneAdviseSongsNumber <= songsToAdvise.Count; i += settings.OneAdviseSongsNumber)
+			var playlists = SplitSongsToPlaylists(songsToAdvise).ToList();
+
+			return Task.FromResult<IReadOnlyCollection<AdvisedPlaylist>>(playlists);
+		}
+
+		private IEnumerable<AdvisedPlaylist> SplitSongsToPlaylists(IReadOnlyCollection<SongModel> songs)
+		{
+			for (var i = 0; i + settings.OneAdviseSongsNumber <= songs.Count; i += settings.OneAdviseSongsNumber)
 			{
-				yield return AdvisedPlaylist.ForHighlyRatedSongs(songsToAdvise.Skip(i).Take(settings.OneAdviseSongsNumber));
+				yield return AdvisedPlaylist.ForHighlyRatedSongs(songs.Skip(i).Take(settings.OneAdviseSongsNumber));
 			}
 		}
 

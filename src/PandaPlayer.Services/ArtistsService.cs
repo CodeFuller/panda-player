@@ -23,13 +23,11 @@ namespace PandaPlayer.Services
 			return artistsRepository.CreateArtist(artist, cancellationToken);
 		}
 
-		public Task<IReadOnlyCollection<ArtistModel>> GetAllArtists(CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<ArtistModel>> GetAllArtists(CancellationToken cancellationToken)
 		{
-			var artists = artistsRepository.GetAllArtists()
+			return (await artistsRepository.GetAllArtists(cancellationToken))
 				.OrderBy(a => a.Name)
 				.ToList();
-
-			return Task.FromResult<IReadOnlyCollection<ArtistModel>>(artists);
 		}
 	}
 }

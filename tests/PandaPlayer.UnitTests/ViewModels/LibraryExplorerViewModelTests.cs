@@ -325,7 +325,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			windowServiceMock.Verify(x => x.ShowMessageBox("You can not delete non-empty directory", "Warning", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation), Times.Once);
+			windowServiceMock.Verify(x => x.ShowMessageBox("You can not delete non-empty folder", "Warning", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation), Times.Once);
 
 			var folderServiceMock = mocker.GetMock<IFoldersService>();
 			folderServiceMock.Verify(x => x.DeleteFolder(It.IsAny<ItemId>(), It.IsAny<CancellationToken>()), Times.Never);

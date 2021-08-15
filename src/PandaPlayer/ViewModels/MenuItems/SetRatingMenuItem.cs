@@ -5,7 +5,7 @@ using System.Windows.Input;
 using CodeFuller.Library.Wpf;
 using PandaPlayer.Core.Models;
 
-namespace PandaPlayer.ViewModels
+namespace PandaPlayer.ViewModels.MenuItems
 {
 	public class SetRatingMenuItem
 	{
