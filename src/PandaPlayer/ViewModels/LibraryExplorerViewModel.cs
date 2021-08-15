@@ -48,7 +48,7 @@ namespace PandaPlayer.ViewModels
 			{
 				var menuItems = new List<BasicMenuItem>
 				{
-					new SetAdviseGroupMenuItem("New Advise Group ...", false, ct => CreateNewAdviseGroup(SelectedFolder, ct)),
+					new NewAdviseGroupMenuItem(ct => CreateNewAdviseGroup(SelectedFolder, ct)),
 				};
 
 				if (AllAdviseGroups.Any())

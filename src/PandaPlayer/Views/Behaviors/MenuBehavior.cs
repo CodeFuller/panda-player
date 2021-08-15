@@ -32,31 +32,34 @@ namespace PandaPlayer.Views.Behaviors
 
 			if (e.OldValue != e.NewValue)
 			{
-				menu.ItemsSource = ConvertViewModelsToFrameworkElements((IEnumerable<BasicMenuItem>)e.NewValue);
+				menu.ItemsSource = ConvertMenuItems((IEnumerable<BasicMenuItem>)e.NewValue);
 			}
 		}
 
-		private static IEnumerable<FrameworkElement> ConvertViewModelsToFrameworkElements(IEnumerable<BasicMenuItem> viewModels)
+		private static IEnumerable<FrameworkElement> ConvertMenuItems(IEnumerable<BasicMenuItem> menuItems)
 		{
 			var frameworkElementList = new List<FrameworkElement>();
 
-			foreach (var viewModel in viewModels)
+			foreach (var menuItem in menuItems)
 			{
-				switch (viewModel)
+				switch (menuItem)
 				{
-					case NormalMenuItem mi:
+					case NormalMenuItem normalMenuItem:
 						frameworkElementList.Add(new MenuItem
 						{
-							Header = mi.Header,
-							IsCheckable = mi.IsCheckable,
-							IsChecked = mi.IsChecked,
-							Command = mi.Command,
+							Header = normalMenuItem.Header,
+							IsCheckable = normalMenuItem.IsCheckable,
+							IsChecked = normalMenuItem.IsChecked,
+							Command = normalMenuItem.Command,
 						});
 						break;
 
 					case SeparatorMenuItem:
 						frameworkElementList.Add(new Separator());
 						break;
+
+					default:
+						throw new NotSupportedException($"Menu item type {menuItem.GetType()} is not supported");
 				}
 			}
 
