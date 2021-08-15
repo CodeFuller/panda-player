@@ -12,7 +12,7 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		DiscModel SelectedDisc { get; }
 
-		IReadOnlyCollection<SetAdviseGroupMenuItem> SetAdviseGroupMenuItems { get; }
+		IReadOnlyCollection<BasicMenuItem> SetAdviseGroupMenuItems { get; }
 
 		ICommand PlayDiscCommand { get; }
 

@@ -42,17 +42,22 @@ namespace PandaPlayer.ViewModels
 
 		private IReadOnlyCollection<AdviseGroupModel> AllAdviseGroups { get; set; }
 
-		public IReadOnlyCollection<SetAdviseGroupMenuItem> SetAdviseGroupMenuItems
+		public IReadOnlyCollection<BasicMenuItem> SetAdviseGroupMenuItems
 		{
 			get
 			{
-				var menuItems = new List<SetAdviseGroupMenuItem>
+				var menuItems = new List<BasicMenuItem>
 				{
-					new("New Advise Group ...", false, ct => CreateNewAdviseGroup(SelectedFolder, ct)),
+					new SetAdviseGroupMenuItem("New Advise Group ...", false, ct => CreateNewAdviseGroup(SelectedFolder, ct)),
 				};
 
-				var currentAdviseGroupId = SelectedFolder?.AdviseGroup?.Id;
-				menuItems.AddRange(AllAdviseGroups.Select(x => new SetAdviseGroupMenuItem(x.Name, x.Id == currentAdviseGroupId, ct => ReverseAdviseGroup(SelectedFolder, x, ct))));
+				if (AllAdviseGroups.Any())
+				{
+					menuItems.Add(new SeparatorMenuItem());
+
+					var currentAdviseGroupId = SelectedFolder?.AdviseGroup?.Id;
+					menuItems.AddRange(AllAdviseGroups.Select(x => new SetAdviseGroupMenuItem(x.Name, x.Id == currentAdviseGroupId, ct => ReverseAdviseGroup(SelectedFolder, x, ct))));
+				}
 
 				return menuItems;
 			}
