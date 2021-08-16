@@ -28,7 +28,7 @@ namespace PandaPlayer.Adviser.Grouping
 			var folderAdviseGroupCache = new Dictionary<ItemId, AdviseGroupModel>();
 
 			// For each disc we search for closest parent folder with assigned advise group.
-			// If there are no assigned advise group ut to the root, then own parent folder is used as implicit group.
+			// If there are no assigned advise group up to the root, then own parent folder is used as implicit group.
 			foreach (var disc in discs)
 			{
 				var adviseGroup = GetFolderAdviseGroup(disc.Folder, folderAdviseGroupCache, allFolders);

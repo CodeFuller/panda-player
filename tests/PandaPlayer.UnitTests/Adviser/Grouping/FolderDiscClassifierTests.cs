@@ -1,10 +1,13 @@
-﻿using System.Linq;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using Moq.AutoMock;
 using PandaPlayer.Adviser.Grouping;
 using PandaPlayer.Core.Models;
+using PandaPlayer.Services.Interfaces;
 
 namespace PandaPlayer.UnitTests.Adviser.Grouping
 {
@@ -12,34 +15,154 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 	public class FolderDiscClassifierTests
 	{
 		[TestMethod]
-		public async Task GroupLibraryDiscs_AssignsAllDiscsFromOneFolderToOneGroup()
+		public async Task GroupLibraryDiscs_ForDiscsFromFolderBelongingToAdviseGroup_AssignsDiscsToSameDiscGroup()
 		{
 			// Arrange
 
-			var folder1 = new FolderModel { Id = new ItemId("Folder 1") };
-			var folder2 = new FolderModel { Id = new ItemId("Folder 2") };
+			var rootAdviseGroup = new AdviseGroupModel { Id = new ItemId("Advise Group 1") };
+			var adviseGroup1 = new AdviseGroupModel { Id = new ItemId("Advise Group 1") };
+			var adviseGroup2 = new AdviseGroupModel { Id = new ItemId("Advise Group 2") };
+			var adviseGroup11 = new AdviseGroupModel { Id = new ItemId("Advise Group 11") };
+			var adviseGroup21 = new AdviseGroupModel { Id = new ItemId("Advise Group 21") };
 
-			var disc11 = new DiscModel { Folder = folder1 };
-			var disc12 = new DiscModel { Folder = folder1 };
-			var disc21 = new DiscModel { Folder = folder2 };
+			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolderId = null, AdviseGroup = rootAdviseGroup };
+
+			var folder1 = new FolderModel { Id = new ItemId("Folder 1"), ParentFolderId = rootFolder.Id, AdviseGroup = adviseGroup1 };
+			var folder2 = new FolderModel { Id = new ItemId("Folder 2"), ParentFolderId = rootFolder.Id, AdviseGroup = adviseGroup2 };
+
+			var folder11 = new FolderModel { Id = new ItemId("Folder 11"), ParentFolderId = folder1.Id, AdviseGroup = adviseGroup11 };
+			var folder21 = new FolderModel { Id = new ItemId("Folder 21"), ParentFolderId = folder2.Id, AdviseGroup = adviseGroup21 };
+
+			var disc11 = new DiscModel { Folder = folder11, AllSongs = Array.Empty<SongModel>() };
+			var disc12 = new DiscModel { Folder = folder11, AllSongs = Array.Empty<SongModel>() };
+			var disc21 = new DiscModel { Folder = folder21, AllSongs = Array.Empty<SongModel>() };
+
+			var folderServiceStub = new Mock<IFoldersService>();
+			folderServiceStub.Setup(x => x.GetAllFolders(It.IsAny<CancellationToken>())).ReturnsAsync(new[] { rootFolder, folder1, folder2, folder11, folder21 });
 
 			var mocker = new AutoMocker();
+			mocker.Use(folderServiceStub);
+
 			var target = mocker.CreateInstance<FolderDiscClassifier>();
 
 			// Act
 
-			var groups = await target.GroupLibraryDiscs(new[] { disc11, disc21, disc12 }, CancellationToken.None);
+			var discGroups = await target.GroupLibraryDiscs(new[] { disc11, disc12, disc21 }, CancellationToken.None);
 
 			// Assert
 
-			var sortedGroups = groups.OrderBy(x => x.Id).ToList();
-			Assert.AreEqual(2, sortedGroups.Count);
+			var expectedDiscGroup1 = new DiscGroup("Advise Group: Advise Group 11");
+			expectedDiscGroup1.AddDisc(disc11);
+			expectedDiscGroup1.AddDisc(disc12);
 
-			Assert.AreEqual("Folder 1", sortedGroups[0].Id);
-			CollectionAssert.AreEqual(new[] { disc11, disc12 }, sortedGroups[0].Discs.ToList());
+			var expectedDiscGroup2 = new DiscGroup("Advise Group: Advise Group 21");
+			expectedDiscGroup2.AddDisc(disc21);
 
-			Assert.AreEqual("Folder 2", sortedGroups[1].Id);
-			CollectionAssert.AreEqual(new[] { disc21 }, sortedGroups[1].Discs.ToList());
+			var expectedGroups = new[]
+			{
+				expectedDiscGroup1,
+				expectedDiscGroup2,
+			};
+
+			discGroups.Should().BeEquivalentTo(expectedGroups);
+		}
+
+		[TestMethod]
+		public async Task GroupLibraryDiscs_IfSomeUpperFolderBelongsToAdviseGroup_AssignsDiscsToAdviseGroupFromClosestFolder()
+		{
+			// Arrange
+
+			var rootAdviseGroup = new AdviseGroupModel { Id = new ItemId("Advise Group 1") };
+			var adviseGroup1 = new AdviseGroupModel { Id = new ItemId("Advise Group 1") };
+			var adviseGroup2 = new AdviseGroupModel { Id = new ItemId("Advise Group 2") };
+
+			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolderId = null, AdviseGroup = rootAdviseGroup };
+
+			var folder1 = new FolderModel { Id = new ItemId("Folder 1"), ParentFolderId = rootFolder.Id, AdviseGroup = adviseGroup1 };
+			var folder2 = new FolderModel { Id = new ItemId("Folder 2"), ParentFolderId = rootFolder.Id, AdviseGroup = adviseGroup2 };
+
+			var folder11 = new FolderModel { Id = new ItemId("Folder 11"), ParentFolderId = folder1.Id };
+			var folder21 = new FolderModel { Id = new ItemId("Folder 21"), ParentFolderId = folder2.Id };
+
+			var disc11 = new DiscModel { Folder = folder11, AllSongs = Array.Empty<SongModel>() };
+			var disc12 = new DiscModel { Folder = folder11, AllSongs = Array.Empty<SongModel>() };
+			var disc21 = new DiscModel { Folder = folder21, AllSongs = Array.Empty<SongModel>() };
+
+			var folderServiceStub = new Mock<IFoldersService>();
+			folderServiceStub.Setup(x => x.GetAllFolders(It.IsAny<CancellationToken>())).ReturnsAsync(new[] { rootFolder, folder1, folder2, folder11, folder21 });
+
+			var mocker = new AutoMocker();
+			mocker.Use(folderServiceStub);
+
+			var target = mocker.CreateInstance<FolderDiscClassifier>();
+
+			// Act
+
+			var discGroups = await target.GroupLibraryDiscs(new[] { disc11, disc12, disc21 }, CancellationToken.None);
+
+			// Assert
+
+			var expectedDiscGroup1 = new DiscGroup("Advise Group: Advise Group 1");
+			expectedDiscGroup1.AddDisc(disc11);
+			expectedDiscGroup1.AddDisc(disc12);
+
+			var expectedDiscGroup2 = new DiscGroup("Advise Group: Advise Group 2");
+			expectedDiscGroup2.AddDisc(disc21);
+
+			var expectedGroups = new[]
+			{
+				expectedDiscGroup1,
+				expectedDiscGroup2,
+			};
+
+			discGroups.Should().BeEquivalentTo(expectedGroups);
+		}
+
+		[TestMethod]
+		public async Task GroupLibraryDiscs_IfNoFolderBelongsToAssignedGroupUpToRoot_AssignsDiscsFromSameFolderToOneGroup()
+		{
+			// Arrange
+
+			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolderId = null };
+
+			var folder1 = new FolderModel { Id = new ItemId("Folder 1"), ParentFolderId = rootFolder.Id };
+			var folder2 = new FolderModel { Id = new ItemId("Folder 2"), ParentFolderId = rootFolder.Id };
+
+			var folder11 = new FolderModel { Id = new ItemId("Folder 11"), ParentFolderId = folder1.Id };
+			var folder21 = new FolderModel { Id = new ItemId("Folder 21"), ParentFolderId = folder2.Id };
+
+			var disc11 = new DiscModel { Folder = folder11, AllSongs = Array.Empty<SongModel>() };
+			var disc12 = new DiscModel { Folder = folder11, AllSongs = Array.Empty<SongModel>() };
+			var disc21 = new DiscModel { Folder = folder21, AllSongs = Array.Empty<SongModel>() };
+
+			var folderServiceStub = new Mock<IFoldersService>();
+			folderServiceStub.Setup(x => x.GetAllFolders(It.IsAny<CancellationToken>())).ReturnsAsync(new[] { rootFolder, folder1, folder2, folder11, folder21 });
+
+			var mocker = new AutoMocker();
+			mocker.Use(folderServiceStub);
+
+			var target = mocker.CreateInstance<FolderDiscClassifier>();
+
+			// Act
+
+			var discGroups = await target.GroupLibraryDiscs(new[] { disc11, disc21, disc12 }, CancellationToken.None);
+
+			// Assert
+
+			var expectedDiscGroup1 = new DiscGroup("Folder Group: Folder 11");
+			expectedDiscGroup1.AddDisc(disc11);
+			expectedDiscGroup1.AddDisc(disc12);
+
+			var expectedDiscGroup2 = new DiscGroup("Folder Group: Folder 21");
+			expectedDiscGroup2.AddDisc(disc21);
+
+			var expectedGroups = new[]
+			{
+				expectedDiscGroup1,
+				expectedDiscGroup2,
+			};
+
+			discGroups.Should().BeEquivalentTo(expectedGroups);
 		}
 	}
 }
