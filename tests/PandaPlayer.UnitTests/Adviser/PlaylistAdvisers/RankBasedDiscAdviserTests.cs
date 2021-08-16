@@ -37,15 +37,15 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			var discGroups = new[] { discGroup1, discGroup2 };
 
-			var discClassifierStub = new Mock<IDiscClassifier>();
-			discClassifierStub.Setup(x => x.GroupLibraryDiscs(discs, It.IsAny<CancellationToken>())).ReturnsAsync(discGroups);
+			var discGrouperStub = new Mock<IDiscGrouper>();
+			discGrouperStub.Setup(x => x.GroupLibraryDiscs(discs, It.IsAny<CancellationToken>())).ReturnsAsync(discGroups);
 
 			var discGroupSorterStub = new Mock<IDiscGroupSorter>();
 			discGroupSorterStub.Setup(x => x.SortDiscGroups(It.IsAny<IEnumerable<DiscGroup>>(), playbacksInfo)).Returns(new[] { discGroup2, discGroup1 });
 			discGroupSorterStub.Setup(x => x.SortDiscsWithinGroup(It.IsAny<DiscGroup>(), playbacksInfo)).Returns<DiscGroup, PlaybacksInfo>((g, _) => g.Discs);
 
 			var mocker = new AutoMocker();
-			mocker.Use(discClassifierStub);
+			mocker.Use(discGrouperStub);
 			mocker.Use(discGroupSorterStub);
 
 			var target = mocker.CreateInstance<RankBasedDiscAdviser>();
@@ -79,15 +79,15 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			var discGroups = new[] { discGroup1 };
 
-			var discClassifierStub = new Mock<IDiscClassifier>();
-			discClassifierStub.Setup(x => x.GroupLibraryDiscs(discs, It.IsAny<CancellationToken>())).ReturnsAsync(discGroups);
+			var discGrouperStub = new Mock<IDiscGrouper>();
+			discGrouperStub.Setup(x => x.GroupLibraryDiscs(discs, It.IsAny<CancellationToken>())).ReturnsAsync(discGroups);
 
 			var discGroupSorterStub = new Mock<IDiscGroupSorter>();
 			discGroupSorterStub.Setup(x => x.SortDiscGroups(It.IsAny<IEnumerable<DiscGroup>>(), playbacksInfo)).Returns<IEnumerable<DiscGroup>, PlaybacksInfo>((groups, _) => groups);
 			discGroupSorterStub.Setup(x => x.SortDiscsWithinGroup(discGroup1, playbacksInfo)).Returns(new[] { disc2, disc1 });
 
 			var mocker = new AutoMocker();
-			mocker.Use(discClassifierStub);
+			mocker.Use(discGrouperStub);
 			mocker.Use(discGroupSorterStub);
 
 			var target = mocker.CreateInstance<RankBasedDiscAdviser>();
@@ -120,15 +120,15 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			var discGroups = new[] { discGroup1, discGroup2 };
 
-			var discClassifierStub = new Mock<IDiscClassifier>();
-			discClassifierStub.Setup(x => x.GroupLibraryDiscs(discs, It.IsAny<CancellationToken>())).ReturnsAsync(discGroups);
+			var discGrouperStub = new Mock<IDiscGrouper>();
+			discGrouperStub.Setup(x => x.GroupLibraryDiscs(discs, It.IsAny<CancellationToken>())).ReturnsAsync(discGroups);
 
 			var discGroupSorterStub = new Mock<IDiscGroupSorter>();
 			discGroupSorterStub.Setup(x => x.SortDiscGroups(It.IsAny<IEnumerable<DiscGroup>>(), playbacksInfo)).Returns<IEnumerable<DiscGroup>, PlaybacksInfo>((groups, _) => groups);
 			discGroupSorterStub.Setup(x => x.SortDiscsWithinGroup(It.IsAny<DiscGroup>(), playbacksInfo)).Returns<DiscGroup, PlaybacksInfo>((g, _) => g.Discs);
 
 			var mocker = new AutoMocker();
-			mocker.Use(discClassifierStub);
+			mocker.Use(discGrouperStub);
 			mocker.Use(discGroupSorterStub);
 
 			var target = mocker.CreateInstance<RankBasedDiscAdviser>();
@@ -159,15 +159,15 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			var discGroups = new[] { discGroup1, discGroup2 };
 
-			var discClassifierStub = new Mock<IDiscClassifier>();
-			discClassifierStub.Setup(x => x.GroupLibraryDiscs(discs, It.IsAny<CancellationToken>())).ReturnsAsync(discGroups);
+			var discGrouperStub = new Mock<IDiscGrouper>();
+			discGrouperStub.Setup(x => x.GroupLibraryDiscs(discs, It.IsAny<CancellationToken>())).ReturnsAsync(discGroups);
 
 			var discGroupSorterStub = new Mock<IDiscGroupSorter>();
 			discGroupSorterStub.Setup(x => x.SortDiscGroups(It.IsAny<IEnumerable<DiscGroup>>(), playbacksInfo)).Returns<IEnumerable<DiscGroup>, PlaybacksInfo>((groups, _) => groups);
 			discGroupSorterStub.Setup(x => x.SortDiscsWithinGroup(It.IsAny<DiscGroup>(), playbacksInfo)).Returns<DiscGroup, PlaybacksInfo>((g, _) => g.Discs);
 
 			var mocker = new AutoMocker();
-			mocker.Use(discClassifierStub);
+			mocker.Use(discGrouperStub);
 			mocker.Use(discGroupSorterStub);
 
 			var target = mocker.CreateInstance<RankBasedDiscAdviser>();
@@ -200,15 +200,15 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			var discGroups = new[] { discGroup1, discGroup2 };
 
-			var discClassifierStub = new Mock<IDiscClassifier>();
-			discClassifierStub.Setup(x => x.GroupLibraryDiscs(discs, It.IsAny<CancellationToken>())).ReturnsAsync(discGroups);
+			var discGrouperStub = new Mock<IDiscGrouper>();
+			discGrouperStub.Setup(x => x.GroupLibraryDiscs(discs, It.IsAny<CancellationToken>())).ReturnsAsync(discGroups);
 
 			var discGroupSorterStub = new Mock<IDiscGroupSorter>();
 			discGroupSorterStub.Setup(x => x.SortDiscGroups(It.IsAny<IEnumerable<DiscGroup>>(), playbacksInfo)).Returns(new[] { discGroup2, discGroup1 });
 			discGroupSorterStub.Setup(x => x.SortDiscsWithinGroup(It.IsAny<DiscGroup>(), playbacksInfo)).Returns<DiscGroup, PlaybacksInfo>((g, _) => g.Discs);
 
 			var mocker = new AutoMocker();
-			mocker.Use(discClassifierStub);
+			mocker.Use(discGrouperStub);
 			mocker.Use(discGroupSorterStub);
 
 			var target = mocker.CreateInstance<RankBasedDiscAdviser>();

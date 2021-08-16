@@ -12,18 +12,18 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 {
 	internal class RankBasedDiscAdviser : IPlaylistAdviser
 	{
-		private readonly IDiscClassifier discClassifier;
+		private readonly IDiscGrouper discGrouper;
 		private readonly IDiscGroupSorter discGroupSorter;
 
-		public RankBasedDiscAdviser(IDiscClassifier discClassifier, IDiscGroupSorter discGroupSorter)
+		public RankBasedDiscAdviser(IDiscGrouper discGrouper, IDiscGroupSorter discGroupSorter)
 		{
-			this.discClassifier = discClassifier ?? throw new ArgumentNullException(nameof(discClassifier));
+			this.discGrouper = discGrouper ?? throw new ArgumentNullException(nameof(discGrouper));
 			this.discGroupSorter = discGroupSorter ?? throw new ArgumentNullException(nameof(discGroupSorter));
 		}
 
 		public async Task<IReadOnlyCollection<AdvisedPlaylist>> Advise(IEnumerable<DiscModel> discs, PlaybacksInfo playbacksInfo, CancellationToken cancellationToken)
 		{
-			var discGroups = (await discClassifier.GroupLibraryDiscs(discs, cancellationToken))
+			var discGroups = (await discGrouper.GroupLibraryDiscs(discs, cancellationToken))
 				.Where(dg => !dg.Discs.All(d => d.IsDeleted));
 
 			var advisedDiscs = new Collection<DiscModel>();

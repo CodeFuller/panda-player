@@ -9,11 +9,11 @@ using PandaPlayer.Services.Interfaces;
 
 namespace PandaPlayer.Adviser.Grouping
 {
-	internal class FolderDiscClassifier : IDiscClassifier
+	internal class DiscGrouper : IDiscGrouper
 	{
 		private readonly IFoldersService foldersService;
 
-		public FolderDiscClassifier(IFoldersService foldersService)
+		public DiscGrouper(IFoldersService foldersService)
 		{
 			this.foldersService = foldersService ?? throw new ArgumentNullException(nameof(foldersService));
 		}

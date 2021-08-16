@@ -12,7 +12,7 @@ using PandaPlayer.Services.Interfaces;
 namespace PandaPlayer.UnitTests.Adviser.Grouping
 {
 	[TestClass]
-	public class FolderDiscClassifierTests
+	public class DiscGrouperTests
 	{
 		[TestMethod]
 		public async Task GroupLibraryDiscs_ForDiscsFromFolderBelongingToAdviseGroup_AssignsDiscsToSameDiscGroup()
@@ -43,7 +43,7 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			var mocker = new AutoMocker();
 			mocker.Use(folderServiceStub);
 
-			var target = mocker.CreateInstance<FolderDiscClassifier>();
+			var target = mocker.CreateInstance<DiscGrouper>();
 
 			// Act
 
@@ -94,7 +94,7 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			var mocker = new AutoMocker();
 			mocker.Use(folderServiceStub);
 
-			var target = mocker.CreateInstance<FolderDiscClassifier>();
+			var target = mocker.CreateInstance<DiscGrouper>();
 
 			// Act
 
@@ -141,7 +141,7 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			var mocker = new AutoMocker();
 			mocker.Use(folderServiceStub);
 
-			var target = mocker.CreateInstance<FolderDiscClassifier>();
+			var target = mocker.CreateInstance<DiscGrouper>();
 
 			// Act
 
