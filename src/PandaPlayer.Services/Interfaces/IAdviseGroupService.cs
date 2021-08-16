@@ -10,5 +10,9 @@ namespace PandaPlayer.Services.Interfaces
 		Task CreateAdviseGroup(AdviseGroupModel adviseGroup, CancellationToken cancellationToken);
 
 		Task<IReadOnlyCollection<AdviseGroupModel>> GetAllAdviseGroups(CancellationToken cancellationToken);
+
+		Task AssignAdviseGroup(ShallowFolderModel folder, AdviseGroupModel adviseGroup, CancellationToken cancellationToken);
+
+		Task RemoveAdviseGroup(ShallowFolderModel folder, CancellationToken cancellationToken);
 	}
 }

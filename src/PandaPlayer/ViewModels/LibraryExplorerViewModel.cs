@@ -124,7 +124,7 @@ namespace PandaPlayer.ViewModels
 
 			if (folder != null)
 			{
-				await foldersService.AssignAdviseGroup(folder, newAdviseGroup, cancellationToken);
+				await adviseGroupService.AssignAdviseGroup(folder, newAdviseGroup, cancellationToken);
 			}
 
 			await UpdateAdviseGroups(cancellationToken);
@@ -144,11 +144,11 @@ namespace PandaPlayer.ViewModels
 
 			if (folder.AdviseGroup == null || folder.AdviseGroup.Id != adviseGroup.Id)
 			{
-				await foldersService.AssignAdviseGroup(folder, adviseGroup, cancellationToken);
+				await adviseGroupService.AssignAdviseGroup(folder, adviseGroup, cancellationToken);
 			}
 			else
 			{
-				await foldersService.RemoveAdviseGroup(folder, cancellationToken);
+				await adviseGroupService.RemoveAdviseGroup(folder, cancellationToken);
 			}
 		}
 

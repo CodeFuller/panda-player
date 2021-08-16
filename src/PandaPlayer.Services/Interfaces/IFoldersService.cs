@@ -15,10 +15,6 @@ namespace PandaPlayer.Services.Interfaces
 
 		Task<FolderModel> GetFolder(ItemId folderId, CancellationToken cancellationToken);
 
-		Task AssignAdviseGroup(ShallowFolderModel folder, AdviseGroupModel adviseGroup, CancellationToken cancellationToken);
-
-		Task RemoveAdviseGroup(ShallowFolderModel folder, CancellationToken cancellationToken);
-
 		Task DeleteFolder(ItemId folderId, CancellationToken cancellationToken);
 	}
 }
