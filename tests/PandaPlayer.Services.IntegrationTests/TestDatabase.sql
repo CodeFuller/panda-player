@@ -1,16 +1,16 @@
 ﻿-- Read tests\PandaPlayer.Services.IntegrationTests\README.md
 
-INSERT INTO [AdviseGroups]([Id], [Name]) VALUES
-(1, 'Late Neuro Dubel'),
-(2, 'Empty Group');
+INSERT INTO [AdviseGroups] ([Id], [Name]) VALUES
+(1, 'Folder Advise Group'),
+(2, 'Disc Advise Group');
 
-INSERT INTO [Folders]([Id], [ParentFolder_Id], [AdviseGroup_Id], [Name], [DeleteDate]) VALUES
+INSERT INTO [Folders] ([Id], [ParentFolder_Id], [AdviseGroup_Id], [Name], [DeleteDate]) VALUES
 (2, 1, NULL, 'Belarusian', NULL),
 (3, 2, 1, 'Neuro Dubel', NULL),
 (4, 3, NULL, 'Empty Folder', NULL),
-(5, 3, 1, 'Deleted Folder', '2021-06-30 18:08:10');
+(5, 3, 2, 'Deleted Folder', '2021-06-30 18:08:10');
 
-INSERT INTO [Discs]([Id], [Folder_Id], [Year], [Title], [TreeTitle], [AlbumTitle]) VALUES
+INSERT INTO [Discs] ([Id], [Folder_Id], [Year], [Title], [TreeTitle], [AlbumTitle]) VALUES
 (1, 3, 2010, 'Афтары правды (CD 1)', '2010 - Афтары правды (CD 1)', 'Афтары правды'),
 (2, 3, NULL, 'Disc With Missing Fields', 'Disc With Missing Fields (CD 1)', NULL),
 (3, 3, 2021, 'Deleted Disc', '2021 - Deleted Disc', 'Deleted Disc');

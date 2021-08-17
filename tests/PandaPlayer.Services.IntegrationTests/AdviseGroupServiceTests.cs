@@ -43,8 +43,8 @@ namespace PandaPlayer.Services.IntegrationTests
 			var referenceData = GetReferenceData();
 			var expectedAdviseGroups = new[]
 			{
-				referenceData.AdviseGroup2,
-				referenceData.AdviseGroup1,
+				referenceData.DiscAdviseGroup,
+				referenceData.FolderAdviseGroup,
 				expectedAdviseGroup,
 			};
 
@@ -59,9 +59,11 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
+			var referenceData = GetReferenceData();
+
 			var newAdviseGroup = new AdviseGroupModel
 			{
-				Name = "Late Neuro Dubel",
+				Name = referenceData.FolderAdviseGroup.Name,
 			};
 
 			var target = CreateTestTarget();
@@ -74,11 +76,10 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			await call.Should().ThrowAsync<DbUpdateException>();
 
-			var referenceData = GetReferenceData();
 			var expectedAdviseGroups = new[]
 			{
-				referenceData.AdviseGroup2,
-				referenceData.AdviseGroup1,
+				referenceData.DiscAdviseGroup,
+				referenceData.FolderAdviseGroup,
 			};
 
 			var allAdviseGroups = await target.GetAllAdviseGroups(CancellationToken.None);
@@ -103,8 +104,8 @@ namespace PandaPlayer.Services.IntegrationTests
 			var referenceData = GetReferenceData();
 			var expectedAdviseGroups = new[]
 			{
-				referenceData.AdviseGroup2,
-				referenceData.AdviseGroup1,
+				referenceData.DiscAdviseGroup,
+				referenceData.FolderAdviseGroup,
 			};
 
 			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithStrictOrdering());
@@ -118,7 +119,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			var folder = await GetFolder(ReferenceData.SubFolderId);
 			folder.AdviseGroup.Should().BeNull();
 
-			var adviseGroup = await GetAdviseGroup(ReferenceData.AdviseGroup1Id);
+			var adviseGroup = await GetAdviseGroup(ReferenceData.FolderAdviseGroupId);
 
 			var target = CreateTestTarget();
 
@@ -130,7 +131,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var referenceData = GetReferenceData();
 			var expectedFolder = referenceData.SubFolder;
-			expectedFolder.AdviseGroup = referenceData.AdviseGroup1;
+			expectedFolder.AdviseGroup = referenceData.FolderAdviseGroup;
 
 			folder.Should().BeEquivalentTo(expectedFolder);
 
@@ -141,14 +142,14 @@ namespace PandaPlayer.Services.IntegrationTests
 		}
 
 		[TestMethod]
-		public async Task AssignAdviseGroup_ForFolderWithAdviseGroup_AssignsNewAdviseGroupCorrectly()
+		public async Task AssignAdviseGroup_ForFolderWithSingularAdviseGroup_AssignsNewAdviseGroupAndDeletesOldAdviseGroup()
 		{
 			// Arrange
 
 			var folder = await GetFolder(ReferenceData.ArtistFolderId);
-			folder.AdviseGroup.Id.Should().Be(ReferenceData.AdviseGroup1Id);
+			folder.AdviseGroup.Id.Should().Be(ReferenceData.FolderAdviseGroupId);
 
-			var adviseGroup = await GetAdviseGroup(ReferenceData.AdviseGroup2Id);
+			var adviseGroup = await GetAdviseGroup(ReferenceData.DiscAdviseGroupId);
 
 			var target = CreateTestTarget();
 
@@ -160,18 +161,69 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var referenceData = GetReferenceData();
 			var expectedFolder = referenceData.ArtistFolder;
-			expectedFolder.AdviseGroup = referenceData.AdviseGroup2;
+			expectedFolder.AdviseGroup = referenceData.DiscAdviseGroup;
 
 			folder.Should().BeEquivalentTo(expectedFolder);
 
 			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
 			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
 
+			var expectedAdviseGroups = new[]
+			{
+				referenceData.DiscAdviseGroup,
+			};
+
+			var adviseGroups = await target.GetAllAdviseGroups(CancellationToken.None);
+			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithStrictOrdering());
+
 			await CheckLibraryConsistency();
 		}
 
 		[TestMethod]
-		public async Task RemoveAdviseGroup_ForFolderWithAdviseGroup_RemovesAdviseGroupCorrectly()
+		public async Task AssignAdviseGroup_ForFolderWithPluralAdviseGroup_AssignsNewAdviseGroupAndDoesNotDeleteOldAdviseGroup()
+		{
+			// Arrange
+
+			var dirtyReferenceData = GetReferenceData();
+
+			// Assigning one more reference to FolderAdviseGroup.
+			var target = CreateTestTarget();
+			await target.AssignAdviseGroup(dirtyReferenceData.SubFolder, dirtyReferenceData.FolderAdviseGroup, CancellationToken.None);
+
+			var folder = await GetFolder(ReferenceData.ArtistFolderId);
+			folder.AdviseGroup.Id.Should().Be(ReferenceData.FolderAdviseGroupId);
+
+			var adviseGroup = await GetAdviseGroup(ReferenceData.DiscAdviseGroupId);
+
+			// Act
+
+			await target.AssignAdviseGroup(folder, adviseGroup, CancellationToken.None);
+
+			// Assert
+
+			var referenceData = GetReferenceData();
+			var expectedFolder = referenceData.ArtistFolder;
+			expectedFolder.AdviseGroup = referenceData.DiscAdviseGroup;
+
+			folder.Should().BeEquivalentTo(expectedFolder);
+
+			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
+
+			var expectedAdviseGroups = new[]
+			{
+				referenceData.DiscAdviseGroup,
+				referenceData.FolderAdviseGroup,
+			};
+
+			var adviseGroups = await target.GetAllAdviseGroups(CancellationToken.None);
+			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithStrictOrdering());
+
+			await CheckLibraryConsistency();
+		}
+
+		[TestMethod]
+		public async Task RemoveAdviseGroup_IfFolderIsLastHolderOfAdviseGroup_DeletesAssignedAdviseGroup()
 		{
 			// Arrange
 
@@ -194,6 +246,56 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
 			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
+
+			var expectedAdviseGroups = new[]
+			{
+				referenceData.DiscAdviseGroup,
+			};
+
+			var adviseGroups = await target.GetAllAdviseGroups(CancellationToken.None);
+			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithStrictOrdering());
+
+			await CheckLibraryConsistency();
+		}
+
+		[TestMethod]
+		public async Task RemoveAdviseGroup_IfFolderIsNotLastHolderOfAdviseGroup_DoesNotDeleteAssignedAdviseGroup()
+		{
+			// Arrange
+
+			var dirtyReferenceData = GetReferenceData();
+
+			// Assigning one more reference to FolderAdviseGroup.
+			var target = CreateTestTarget();
+			await target.AssignAdviseGroup(dirtyReferenceData.SubFolder, dirtyReferenceData.FolderAdviseGroup, CancellationToken.None);
+
+			var folder = await GetFolder(ReferenceData.ArtistFolderId);
+			folder.AdviseGroup.Should().BeEquivalentTo(dirtyReferenceData.FolderAdviseGroup);
+
+			// Act
+
+			await target.RemoveAdviseGroup(folder, CancellationToken.None);
+
+			// Assert
+
+			var referenceData = GetReferenceData();
+
+			var expectedFolder = referenceData.ArtistFolder;
+			expectedFolder.AdviseGroup = null;
+
+			folder.Should().BeEquivalentTo(expectedFolder);
+
+			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
+
+			var expectedAdviseGroups = new[]
+			{
+				referenceData.DiscAdviseGroup,
+				referenceData.FolderAdviseGroup,
+			};
+
+			var adviseGroups = await target.GetAllAdviseGroups(CancellationToken.None);
+			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency();
 		}

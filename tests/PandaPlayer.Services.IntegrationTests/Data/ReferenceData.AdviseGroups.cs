@@ -4,22 +4,22 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 {
 	public partial class ReferenceData
 	{
-		public static ItemId AdviseGroup1Id => new("1");
+		public static ItemId FolderAdviseGroupId => new("1");
 
-		public static ItemId AdviseGroup2Id => new("2");
+		public static ItemId DiscAdviseGroupId => new("2");
 
 		public static ItemId NextAdviseGroupId => new("3");
 
-		public AdviseGroupModel AdviseGroup1 { get; } = new()
+		public AdviseGroupModel FolderAdviseGroup { get; } = new()
 		{
-			Id = AdviseGroup1Id,
-			Name = "Late Neuro Dubel",
+			Id = FolderAdviseGroupId,
+			Name = "Folder Advise Group",
 		};
 
-		public AdviseGroupModel AdviseGroup2 { get; } = new()
+		public AdviseGroupModel DiscAdviseGroup { get; } = new()
 		{
-			Id = AdviseGroup2Id,
-			Name = "Empty Group",
+			Id = DiscAdviseGroupId,
+			Name = "Disc Advise Group",
 		};
 	}
 }

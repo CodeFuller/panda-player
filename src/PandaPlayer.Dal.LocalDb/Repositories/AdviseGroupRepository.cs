@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Dal.LocalDb.Extensions;
 using PandaPlayer.Dal.LocalDb.Internal;
@@ -15,9 +16,12 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 	{
 		private readonly IDbContextFactory<MusicDbContext> contextFactory;
 
-		public AdviseGroupRepository(IDbContextFactory<MusicDbContext> contextFactory)
+		private readonly ILogger<AdviseGroupRepository> logger;
+
+		public AdviseGroupRepository(IDbContextFactory<MusicDbContext> contextFactory, ILogger<AdviseGroupRepository> logger)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		public async Task CreateAdviseGroup(AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
@@ -38,6 +42,26 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			return (await context.AdviseGroups.ToListAsync(cancellationToken))
 				.Select(a => a.ToModel())
 				.ToList();
+		}
+
+		public async Task DeleteOrphanAdviseGroups(CancellationToken cancellationToken)
+		{
+			await using var context = contextFactory.CreateDbContext();
+
+			var orphanAdviseGroups = await context.AdviseGroups.Where(x => !x.Folders.Any()).ToListAsync(cancellationToken);
+
+			if (!orphanAdviseGroups.Any())
+			{
+				return;
+			}
+
+			foreach (var orphanAdviseGroup in orphanAdviseGroups)
+			{
+				logger.LogInformation($"Deleting advise group '{orphanAdviseGroup.Name}' ...");
+			}
+
+			context.AdviseGroups.RemoveRange(orphanAdviseGroups);
+			await context.SaveChangesAsync(cancellationToken);
 		}
 	}
 }

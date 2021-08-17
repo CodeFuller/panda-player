@@ -10,5 +10,7 @@ namespace PandaPlayer.Services.Interfaces.Dal
 		Task CreateAdviseGroup(AdviseGroupModel adviseGroup, CancellationToken cancellationToken);
 
 		Task<IReadOnlyCollection<AdviseGroupModel>> GetAllAdviseGroups(CancellationToken cancellationToken);
+
+		Task DeleteOrphanAdviseGroups(CancellationToken cancellationToken);
 	}
 }

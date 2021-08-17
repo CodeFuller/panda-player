@@ -48,7 +48,7 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 				Id = ArtistFolderId,
 				ParentFolderId = SubFolderId,
 				Name = "Neuro Dubel",
-				AdviseGroup = AdviseGroup1,
+				AdviseGroup = FolderAdviseGroup,
 			};
 
 			EmptyFolder = new()
@@ -63,8 +63,10 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 				Id = DeletedFolderId,
 				ParentFolderId = ArtistFolderId,
 				Name = "Deleted Folder",
-				AdviseGroup = AdviseGroup1,
 				DeleteDate = new DateTimeOffset(2021, 06, 30, 18, 08, 10, TimeSpan.FromHours(3)),
+
+				// TODO: Reassign this advise group to a disc.
+				AdviseGroup = DiscAdviseGroup,
 			};
 		}
 	}

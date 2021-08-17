@@ -150,6 +150,9 @@ namespace PandaPlayer.ViewModels
 			{
 				await adviseGroupService.RemoveAdviseGroup(folder, cancellationToken);
 			}
+
+			// Updating advise groups because orphan advise group could be deleted.
+			await UpdateAdviseGroups(cancellationToken);
 		}
 
 		private async void OnLoadParentFolder(LoadParentFolderEventArgs e, CancellationToken cancellationToken)

@@ -337,7 +337,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				ParentFolderId = ReferenceData.SubFolderId,
 				ParentFolder = referenceData.SubFolder,
 				Name = "Neuro Dubel",
-				AdviseGroup = referenceData.AdviseGroup1,
+				AdviseGroup = referenceData.FolderAdviseGroup,
 				Subfolders = new List<ShallowFolderModel>
 				{
 					referenceData.EmptyFolder,
@@ -390,6 +390,95 @@ namespace PandaPlayer.Services.IntegrationTests
 			allFolders.Should().BeEquivalentTo(expectedFolders);
 
 			Directory.Exists(directoryPath).Should().BeFalse();
+
+			await CheckLibraryConsistency();
+		}
+
+		[TestMethod]
+		public async Task DeleteFolder_IfFolderIsLastHolderOfAdviseGroup_DeletesAssignedAdviseGroup()
+		{
+			// Arrange
+
+			var target = CreateTestTarget();
+
+			var newFolder = new ShallowFolderModel
+			{
+				ParentFolderId = ReferenceData.ArtistFolderId,
+				Name = "Test Folder",
+			};
+
+			await target.CreateFolder(newFolder, CancellationToken.None);
+			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
+
+			var adviseGroup = new AdviseGroupModel
+			{
+				Name = "Test Advise Group",
+			};
+
+			var adviseGroupService = GetService<IAdviseGroupService>();
+			await adviseGroupService.CreateAdviseGroup(adviseGroup, CancellationToken.None);
+			await adviseGroupService.AssignAdviseGroup(newFolder, adviseGroup, CancellationToken.None);
+
+			// Act
+
+			await target.DeleteFolder(ReferenceData.NextFolderId, CancellationToken.None);
+
+			// Assert
+
+			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
+			folderFromRepository.AdviseGroup.Should().BeNull();
+
+			var referenceData = GetReferenceData();
+			var expectedAdviseGroups = new[]
+			{
+				referenceData.DiscAdviseGroup,
+				referenceData.FolderAdviseGroup,
+			};
+
+			var adviseGroups = await adviseGroupService.GetAllAdviseGroups(CancellationToken.None);
+			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithStrictOrdering());
+
+			await CheckLibraryConsistency();
+		}
+
+		[TestMethod]
+		public async Task DeleteFolder_IfFolderIsNotLastHolderOfAdviseGroup_DoesNotDeletesAssignedAdviseGroup()
+		{
+			// Arrange
+
+			var target = CreateTestTarget();
+
+			var newFolder = new ShallowFolderModel
+			{
+				ParentFolderId = ReferenceData.ArtistFolderId,
+				Name = "Test Folder",
+			};
+
+			await target.CreateFolder(newFolder, CancellationToken.None);
+			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
+
+			var referenceData = GetReferenceData();
+
+			var adviseGroupService = GetService<IAdviseGroupService>();
+			await adviseGroupService.AssignAdviseGroup(newFolder, referenceData.FolderAdviseGroup, CancellationToken.None);
+
+			// Act
+
+			await target.DeleteFolder(ReferenceData.NextFolderId, CancellationToken.None);
+
+			// Assert
+
+			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
+			folderFromRepository.AdviseGroup.Should().BeNull();
+
+			var expectedAdviseGroups = new[]
+			{
+				referenceData.DiscAdviseGroup,
+				referenceData.FolderAdviseGroup,
+			};
+
+			var adviseGroups = await adviseGroupService.GetAllAdviseGroups(CancellationToken.None);
+			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency();
 		}

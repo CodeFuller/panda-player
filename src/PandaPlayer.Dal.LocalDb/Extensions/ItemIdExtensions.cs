@@ -13,7 +13,7 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 
 		public static ItemId ToItemId(this Int32 id)
 		{
-			return new ItemId(id.ToString(CultureInfo.InvariantCulture));
+			return new(id.ToString(CultureInfo.InvariantCulture));
 		}
 	}
 }

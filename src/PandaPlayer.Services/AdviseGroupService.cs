@@ -35,9 +35,15 @@ namespace PandaPlayer.Services
 
 		public async Task AssignAdviseGroup(ShallowFolderModel folder, AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
 		{
-			folder.AdviseGroup = adviseGroup;
+			var hasAdviseGroup = folder.AdviseGroup != null;
 
+			folder.AdviseGroup = adviseGroup;
 			await foldersRepository.UpdateFolder(folder, cancellationToken);
+
+			if (hasAdviseGroup)
+			{
+				await adviseGroupRepository.DeleteOrphanAdviseGroups(cancellationToken);
+			}
 		}
 
 		public async Task RemoveAdviseGroup(ShallowFolderModel folder, CancellationToken cancellationToken)
@@ -45,6 +51,8 @@ namespace PandaPlayer.Services
 			folder.AdviseGroup = null;
 
 			await foldersRepository.UpdateFolder(folder, cancellationToken);
+
+			await adviseGroupRepository.DeleteOrphanAdviseGroups(cancellationToken);
 		}
 	}
 }
