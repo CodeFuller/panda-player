@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -105,34 +104,7 @@ namespace PandaPlayer.Views
 
 			if (itemListViewModel.SelectedDisc != null)
 			{
-				var menuItems = new[]
-				{
-					new MenuItem
-					{
-						Header = "Play Disc",
-						Command = viewModel.PlayDiscCommand,
-					},
-
-					new MenuItem
-					{
-						Header = "Add To Playlist",
-						Command = viewModel.AddDiscToPlaylistCommand,
-					},
-
-					new MenuItem
-					{
-						Header = "Delete Disc",
-						Command = viewModel.DeleteDiscCommand,
-					},
-
-					new MenuItem
-					{
-						Header = "Properties",
-						Command = viewModel.EditDiscPropertiesCommand,
-					},
-				};
-
-				frameworkElement.ContextMenu = CreateContextMenu(menuItems);
+				frameworkElement.ContextMenu = new DiscContextMenu();
 			}
 			else if (itemListViewModel.SelectedFolder != null)
 			{
@@ -142,18 +114,6 @@ namespace PandaPlayer.Views
 			{
 				frameworkElement.ContextMenu = null;
 			}
-		}
-
-		private static ContextMenu CreateContextMenu(IEnumerable<MenuItem> items)
-		{
-			var contextMenu = new ContextMenu();
-
-			foreach (var item in items)
-			{
-				contextMenu.Items.Add(item);
-			}
-
-			return contextMenu;
 		}
 
 		private void ContentDataGrid_OnKeyDown(object sender, KeyEventArgs e)
