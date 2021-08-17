@@ -17,6 +17,8 @@ namespace PandaPlayer.Core.Models
 
 		public ShallowFolderModel Folder { get; set; }
 
+		public AdviseGroupModel AdviseGroup { get; set; }
+
 		public int? Year { get; set; }
 
 		public string Title

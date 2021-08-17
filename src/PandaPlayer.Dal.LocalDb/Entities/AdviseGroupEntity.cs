@@ -9,5 +9,7 @@ namespace PandaPlayer.Dal.LocalDb.Entities
 		public string Name { get; set; }
 
 		public ICollection<FolderEntity> Folders { get; set; }
+
+		public ICollection<DiscEntity> Discs { get; set; }
 	}
 }

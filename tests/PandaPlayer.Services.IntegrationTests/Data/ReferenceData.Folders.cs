@@ -64,9 +64,6 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 				ParentFolderId = ArtistFolderId,
 				Name = "Deleted Folder",
 				DeleteDate = new DateTimeOffset(2021, 06, 30, 18, 08, 10, TimeSpan.FromHours(3)),
-
-				// TODO: Reassign this advise group to a disc.
-				AdviseGroup = DiscAdviseGroup,
 			};
 		}
 	}

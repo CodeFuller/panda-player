@@ -48,7 +48,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 		{
 			await using var context = contextFactory.CreateDbContext();
 
-			var orphanAdviseGroups = await context.AdviseGroups.Where(x => !x.Folders.Any()).ToListAsync(cancellationToken);
+			var orphanAdviseGroups = await context.AdviseGroups.Where(x => !x.Folders.Any() && !x.Discs.Any()).ToListAsync(cancellationToken);
 
 			if (!orphanAdviseGroups.Any())
 			{

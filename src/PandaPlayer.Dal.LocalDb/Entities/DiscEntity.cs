@@ -12,6 +12,10 @@ namespace PandaPlayer.Dal.LocalDb.Entities
 
 		public FolderEntity Folder { get; set; }
 
+		public int? AdviseGroupId { get; set; }
+
+		public AdviseGroupEntity AdviseGroup { get; set; }
+
 		public string Title { get; set; }
 
 		public string TreeTitle { get; set; }

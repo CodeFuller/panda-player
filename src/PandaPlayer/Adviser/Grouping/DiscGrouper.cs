@@ -31,7 +31,7 @@ namespace PandaPlayer.Adviser.Grouping
 			// If there are no assigned advise group up to the root, then own parent folder is used as implicit group.
 			foreach (var disc in discs)
 			{
-				var adviseGroup = GetFolderAdviseGroup(disc.Folder, folderAdviseGroupCache, allFolders);
+				var adviseGroup = disc.AdviseGroup ?? GetFolderAdviseGroup(disc.Folder, folderAdviseGroupCache, allFolders);
 
 				var groupId = adviseGroup != null ? $"Advise Group: {adviseGroup.Id}" : $"Folder Group: {disc.Folder.Id}";
 

@@ -20,13 +20,15 @@ CREATE TABLE [Folders] (
 CREATE TABLE [Discs] (
   [Id] INTEGER NOT NULL,
   [Folder_Id] INTEGER NOT NULL,
+  [AdviseGroup_Id] INTEGER NULL,
   [Year] int NULL,
   [Title] ntext NOT NULL,
   [TreeTitle] ntext NOT NULL,
   [AlbumTitle] ntext NULL,
   CONSTRAINT [sqlite_master_PK_Discs] PRIMARY KEY ([Id]),
   CONSTRAINT [sqlite_master_UC_Discs] UNIQUE ([Folder_Id], [TreeTitle]),
-  FOREIGN KEY ([Folder_Id]) REFERENCES [Folders] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION
+  FOREIGN KEY ([Folder_Id]) REFERENCES [Folders] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY ([AdviseGroup_Id]) REFERENCES [AdviseGroups] ([Id]) ON DELETE SET NULL ON UPDATE NO ACTION
 );
 
 CREATE TABLE [Artists] (

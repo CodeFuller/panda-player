@@ -17,6 +17,7 @@ using PandaPlayer.Events.SongEvents;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.Internal;
 using PandaPlayer.Services.Interfaces;
+using PandaPlayer.ViewModels.AdviseGroups;
 using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.ViewModels.MenuItems;
 
@@ -46,17 +47,32 @@ namespace PandaPlayer.ViewModels
 		{
 			get
 			{
+				BasicAdviseGroupHolder adviseGroupHolder;
+
+				if (SelectedFolder != null)
+				{
+					adviseGroupHolder = new FolderAdviseGroupHolder(SelectedFolder);
+				}
+				else if (SelectedDisc != null)
+				{
+					adviseGroupHolder = new DiscAdviseGroupHolder(SelectedDisc);
+				}
+				else
+				{
+					return new List<BasicMenuItem>();
+				}
+
 				var menuItems = new List<BasicMenuItem>
 				{
-					new NewAdviseGroupMenuItem(ct => CreateNewAdviseGroup(SelectedFolder, ct)),
+					new NewAdviseGroupMenuItem(ct => CreateNewAdviseGroup(adviseGroupHolder, ct)),
 				};
 
 				if (AllAdviseGroups.Any())
 				{
 					menuItems.Add(new SeparatorMenuItem());
 
-					var currentAdviseGroupId = SelectedFolder?.AdviseGroup?.Id;
-					menuItems.AddRange(AllAdviseGroups.Select(x => new SetAdviseGroupMenuItem(x.Name, x.Id == currentAdviseGroupId, ct => ReverseAdviseGroup(SelectedFolder, x, ct))));
+					var currentAdviseGroupId = adviseGroupHolder.AdviseGroup?.Id;
+					menuItems.AddRange(AllAdviseGroups.Select(x => new SetAdviseGroupMenuItem(x.Name, x.Id == currentAdviseGroupId, ct => ReverseAdviseGroup(adviseGroupHolder, x, ct))));
 				}
 
 				return menuItems;
@@ -106,10 +122,9 @@ namespace PandaPlayer.ViewModels
 			await UpdateAdviseGroups(cancellationToken);
 		}
 
-		private async Task CreateNewAdviseGroup(ShallowFolderModel folder, CancellationToken cancellationToken)
+		private async Task CreateNewAdviseGroup(BasicAdviseGroupHolder adviseGroupHolder, CancellationToken cancellationToken)
 		{
-			var initialAdviseGroupName = folder?.Name ?? String.Empty;
-			var newAdviseGroupName = viewNavigator.ShowCreateAdviseGroupView(initialAdviseGroupName, AllAdviseGroups.Select(x => x.Name));
+			var newAdviseGroupName = viewNavigator.ShowCreateAdviseGroupView(adviseGroupHolder.InitialAdviseGroupName, AllAdviseGroups.Select(x => x.Name));
 			if (newAdviseGroupName == null)
 			{
 				return;
@@ -122,10 +137,7 @@ namespace PandaPlayer.ViewModels
 
 			await adviseGroupService.CreateAdviseGroup(newAdviseGroup, cancellationToken);
 
-			if (folder != null)
-			{
-				await adviseGroupService.AssignAdviseGroup(folder, newAdviseGroup, cancellationToken);
-			}
+			await adviseGroupHolder.AssignAdviseGroup(adviseGroupService, newAdviseGroup, cancellationToken);
 
 			await UpdateAdviseGroups(cancellationToken);
 		}
@@ -135,20 +147,15 @@ namespace PandaPlayer.ViewModels
 			AllAdviseGroups = await adviseGroupService.GetAllAdviseGroups(cancellationToken);
 		}
 
-		private async Task ReverseAdviseGroup(ShallowFolderModel folder, AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
+		private async Task ReverseAdviseGroup(BasicAdviseGroupHolder adviseGroupHolder, AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
 		{
-			if (folder == null)
+			if (adviseGroupHolder.AdviseGroup == null || adviseGroupHolder.AdviseGroup.Id != adviseGroup.Id)
 			{
-				return;
-			}
-
-			if (folder.AdviseGroup == null || folder.AdviseGroup.Id != adviseGroup.Id)
-			{
-				await adviseGroupService.AssignAdviseGroup(folder, adviseGroup, cancellationToken);
+				await adviseGroupHolder.AssignAdviseGroup(adviseGroupService, adviseGroup, cancellationToken);
 			}
 			else
 			{
-				await adviseGroupService.RemoveAdviseGroup(folder, cancellationToken);
+				await adviseGroupHolder.RemoveAdviseGroup(adviseGroupService, cancellationToken);
 			}
 
 			// Updating advise groups because orphan advise group could be deleted.

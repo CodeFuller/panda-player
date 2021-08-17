@@ -36,8 +36,7 @@ namespace PandaPlayer.Dal.LocalDb.Internal
 
 				builder.Property(f => f.Name).IsRequired();
 				builder.Property(f => f.ParentFolderId).HasColumnName("ParentFolder_Id");
-
-				builder.Property(di => di.AdviseGroupId).HasColumnName("AdviseGroup_Id");
+				builder.Property(f => f.AdviseGroupId).HasColumnName("AdviseGroup_Id");
 
 				builder.HasOne(f => f.ParentFolder)
 					.WithMany(f => f.Subfolders)
@@ -66,6 +65,12 @@ namespace PandaPlayer.Dal.LocalDb.Internal
 				builder.Property(d => d.Title).IsRequired();
 				builder.Property(d => d.TreeTitle).IsRequired();
 				builder.Property(d => d.FolderId).HasColumnName("Folder_Id");
+				builder.Property(d => d.AdviseGroupId).HasColumnName("AdviseGroup_Id");
+
+				builder.HasOne(f => f.AdviseGroup)
+					.WithMany(ag => ag.Discs)
+					.HasForeignKey(f => f.AdviseGroupId)
+					.OnDelete(DeleteBehavior.ClientSetNull);
 			});
 
 			modelBuilder.Entity<ArtistEntity>(builder =>

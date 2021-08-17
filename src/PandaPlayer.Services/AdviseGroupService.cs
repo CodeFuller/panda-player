@@ -15,10 +15,13 @@ namespace PandaPlayer.Services
 
 		private readonly IFoldersRepository foldersRepository;
 
-		public AdviseGroupService(IAdviseGroupRepository adviseGroupRepository, IFoldersRepository foldersRepository)
+		private readonly IDiscsRepository discsRepository;
+
+		public AdviseGroupService(IAdviseGroupRepository adviseGroupRepository, IFoldersRepository foldersRepository, IDiscsRepository discsRepository)
 		{
 			this.adviseGroupRepository = adviseGroupRepository ?? throw new ArgumentNullException(nameof(adviseGroupRepository));
 			this.foldersRepository = foldersRepository ?? throw new ArgumentNullException(nameof(foldersRepository));
+			this.discsRepository = discsRepository ?? throw new ArgumentNullException(nameof(discsRepository));
 		}
 
 		public Task CreateAdviseGroup(AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
@@ -46,11 +49,33 @@ namespace PandaPlayer.Services
 			}
 		}
 
+		public async Task AssignAdviseGroup(DiscModel disc, AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
+		{
+			var hasAdviseGroup = disc.AdviseGroup != null;
+
+			disc.AdviseGroup = adviseGroup;
+			await discsRepository.UpdateDisc(disc, cancellationToken);
+
+			if (hasAdviseGroup)
+			{
+				await adviseGroupRepository.DeleteOrphanAdviseGroups(cancellationToken);
+			}
+		}
+
 		public async Task RemoveAdviseGroup(ShallowFolderModel folder, CancellationToken cancellationToken)
 		{
 			folder.AdviseGroup = null;
 
 			await foldersRepository.UpdateFolder(folder, cancellationToken);
+
+			await adviseGroupRepository.DeleteOrphanAdviseGroups(cancellationToken);
+		}
+
+		public async Task RemoveAdviseGroup(DiscModel disc, CancellationToken cancellationToken)
+		{
+			disc.AdviseGroup = null;
+
+			await discsRepository.UpdateDisc(disc, cancellationToken);
 
 			await adviseGroupRepository.DeleteOrphanAdviseGroups(cancellationToken);
 		}

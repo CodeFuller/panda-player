@@ -66,6 +66,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 		{
 			return context.Discs
 				.Include(disc => disc.Folder).ThenInclude(folder => folder.AdviseGroup)
+				.Include(disc => disc.AdviseGroup)
 				.Include(disc => disc.Songs).ThenInclude(song => song.Artist)
 				.Include(disc => disc.Songs).ThenInclude(song => song.Genre)
 				.Include(disc => disc.Images);

@@ -13,6 +13,7 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 			{
 				Id = disc.Id.ToItemId(),
 				Folder = folderModel,
+				AdviseGroup = disc.AdviseGroup?.ToModel(),
 				Year = disc.Year,
 				Title = disc.Title,
 				TreeTitle = disc.TreeTitle,
@@ -33,10 +34,11 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 
 		public static DiscEntity ToEntity(this DiscModel disc)
 		{
-			return new DiscEntity
+			return new()
 			{
 				Id = disc.Id?.ToInt32() ?? default,
 				FolderId = disc.Folder.Id.ToInt32(),
+				AdviseGroupId = disc.AdviseGroup?.Id.ToInt32(),
 				Year = disc.Year,
 				Title = disc.Title,
 				TreeTitle = disc.TreeTitle,
