@@ -12,7 +12,7 @@ namespace PandaPlayer.ViewModels.AdviseGroups
 
 		public override string InitialAdviseGroupName => folder.Name;
 
-		public override AdviseGroupModel AdviseGroup => folder.AdviseGroup;
+		public override AdviseGroupModel CurrentAdviseGroup => folder.AdviseGroup;
 
 		public FolderAdviseGroupHolder(ShallowFolderModel folder)
 		{

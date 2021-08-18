@@ -29,7 +29,7 @@ namespace PandaPlayer.ViewModels
 
 		private readonly IDiscsService discsService;
 
-		private readonly IAdviseGroupService adviseGroupService;
+		private readonly IAdviseGroupHelper adviseGroupHelper;
 
 		private readonly IViewNavigator viewNavigator;
 
@@ -41,9 +41,7 @@ namespace PandaPlayer.ViewModels
 
 		public DiscModel SelectedDisc => ItemListViewModel.SelectedDisc;
 
-		private IReadOnlyCollection<AdviseGroupModel> AllAdviseGroups { get; set; }
-
-		public IReadOnlyCollection<BasicMenuItem> SetAdviseGroupMenuItems
+		public IReadOnlyCollection<BasicMenuItem> AdviseGroupMenuItems
 		{
 			get
 			{
@@ -64,15 +62,16 @@ namespace PandaPlayer.ViewModels
 
 				var menuItems = new List<BasicMenuItem>
 				{
-					new NewAdviseGroupMenuItem(ct => CreateNewAdviseGroup(adviseGroupHolder, ct)),
+					new NewAdviseGroupMenuItem(ct => CreateAdviseGroup(adviseGroupHolder, ct)),
 				};
 
-				if (AllAdviseGroups.Any())
+				var adviseGroups = adviseGroupHelper.AdviseGroups;
+				if (adviseGroups.Any())
 				{
 					menuItems.Add(new SeparatorMenuItem());
 
-					var currentAdviseGroupId = adviseGroupHolder.AdviseGroup?.Id;
-					menuItems.AddRange(AllAdviseGroups.Select(x => new SetAdviseGroupMenuItem(x.Name, x.Id == currentAdviseGroupId, ct => ReverseAdviseGroup(adviseGroupHolder, x, ct))));
+					var currentAdviseGroupId = adviseGroupHolder.CurrentAdviseGroup?.Id;
+					menuItems.AddRange(adviseGroups.Select(x => new SetAdviseGroupMenuItem(x.Name, x.Id == currentAdviseGroupId, ct => adviseGroupHelper.ReverseAdviseGroup(adviseGroupHolder, x, ct))));
 				}
 
 				return menuItems;
@@ -90,12 +89,12 @@ namespace PandaPlayer.ViewModels
 		public ICommand DeleteDiscCommand { get; }
 
 		public LibraryExplorerViewModel(ILibraryExplorerItemListViewModel itemListViewModel, IFoldersService foldersService,
-			IDiscsService discsService, IAdviseGroupService adviseGroupService, IViewNavigator viewNavigator, IWindowService windowService)
+			IDiscsService discsService, IAdviseGroupHelper adviseGroupHelper, IViewNavigator viewNavigator, IWindowService windowService)
 		{
 			ItemListViewModel = itemListViewModel ?? throw new ArgumentNullException(nameof(itemListViewModel));
 			this.foldersService = foldersService ?? throw new ArgumentNullException(nameof(foldersService));
 			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
-			this.adviseGroupService = adviseGroupService ?? throw new ArgumentNullException(nameof(adviseGroupService));
+			this.adviseGroupHelper = adviseGroupHelper ?? throw new ArgumentNullException(nameof(adviseGroupHelper));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
 
@@ -119,47 +118,18 @@ namespace PandaPlayer.ViewModels
 
 		private async void OnApplicationLoaded(CancellationToken cancellationToken)
 		{
-			await UpdateAdviseGroups(cancellationToken);
+			await adviseGroupHelper.Load(cancellationToken);
 		}
 
-		private async Task CreateNewAdviseGroup(BasicAdviseGroupHolder adviseGroupHolder, CancellationToken cancellationToken)
+		private async Task CreateAdviseGroup(BasicAdviseGroupHolder adviseGroupHolder, CancellationToken cancellationToken)
 		{
-			var newAdviseGroupName = viewNavigator.ShowCreateAdviseGroupView(adviseGroupHolder.InitialAdviseGroupName, AllAdviseGroups.Select(x => x.Name));
+			var newAdviseGroupName = viewNavigator.ShowCreateAdviseGroupView(adviseGroupHolder.InitialAdviseGroupName, adviseGroupHelper.AdviseGroups.Select(x => x.Name));
 			if (newAdviseGroupName == null)
 			{
 				return;
 			}
 
-			var newAdviseGroup = new AdviseGroupModel
-			{
-				Name = newAdviseGroupName,
-			};
-
-			await adviseGroupService.CreateAdviseGroup(newAdviseGroup, cancellationToken);
-
-			await adviseGroupHolder.AssignAdviseGroup(adviseGroupService, newAdviseGroup, cancellationToken);
-
-			await UpdateAdviseGroups(cancellationToken);
-		}
-
-		private async Task UpdateAdviseGroups(CancellationToken cancellationToken)
-		{
-			AllAdviseGroups = await adviseGroupService.GetAllAdviseGroups(cancellationToken);
-		}
-
-		private async Task ReverseAdviseGroup(BasicAdviseGroupHolder adviseGroupHolder, AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
-		{
-			if (adviseGroupHolder.AdviseGroup == null || adviseGroupHolder.AdviseGroup.Id != adviseGroup.Id)
-			{
-				await adviseGroupHolder.AssignAdviseGroup(adviseGroupService, adviseGroup, cancellationToken);
-			}
-			else
-			{
-				await adviseGroupHolder.RemoveAdviseGroup(adviseGroupService, cancellationToken);
-			}
-
-			// Updating advise groups because orphan advise group could be deleted.
-			await UpdateAdviseGroups(cancellationToken);
+			await adviseGroupHelper.CreateAdviseGroup(adviseGroupHolder, newAdviseGroupName, cancellationToken);
 		}
 
 		private async void OnLoadParentFolder(LoadParentFolderEventArgs e, CancellationToken cancellationToken)

@@ -15,6 +15,7 @@ using PandaPlayer.Services.Extensions;
 using PandaPlayer.Settings;
 using PandaPlayer.Shared;
 using PandaPlayer.ViewModels;
+using PandaPlayer.ViewModels.AdviseGroups;
 using PandaPlayer.ViewModels.DiscImages;
 using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.ViewModels.PersistentPlaylist;
@@ -48,6 +49,8 @@ namespace PandaPlayer
 			services.AddTransient<IClock, SystemClock>();
 			services.AddTransient<IDocumentDownloader, HttpDocumentDownloader>();
 			services.AddTransient<IWebBrowser, SystemDefaultWebBrowser>();
+
+			services.AddSingleton<IAdviseGroupHelper, AdviseGroupHelper>();
 
 			services.AddLastFmScrobbler(settings => configuration.Bind("lastFmClient", settings));
 			services.WrapScrobbler<PersistentScrobbler>(ServiceLifetime.Singleton);

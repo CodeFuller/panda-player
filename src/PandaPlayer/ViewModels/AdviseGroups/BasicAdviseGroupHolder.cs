@@ -5,11 +5,11 @@ using PandaPlayer.Services.Interfaces;
 
 namespace PandaPlayer.ViewModels.AdviseGroups
 {
-	internal abstract class BasicAdviseGroupHolder
+	public abstract class BasicAdviseGroupHolder
 	{
 		public abstract string InitialAdviseGroupName { get; }
 
-		public abstract AdviseGroupModel AdviseGroup { get; }
+		public abstract AdviseGroupModel CurrentAdviseGroup { get; }
 
 		public abstract Task AssignAdviseGroup(IAdviseGroupService adviseGroupService, AdviseGroupModel adviseGroup, CancellationToken cancellationToken);
 

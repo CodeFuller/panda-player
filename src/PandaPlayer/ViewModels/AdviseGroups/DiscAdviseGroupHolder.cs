@@ -12,7 +12,7 @@ namespace PandaPlayer.ViewModels.AdviseGroups
 
 		public override string InitialAdviseGroupName => disc.AlbumTitle ?? disc.Title;
 
-		public override AdviseGroupModel AdviseGroup => disc.AdviseGroup;
+		public override AdviseGroupModel CurrentAdviseGroup => disc.AdviseGroup;
 
 		public DiscAdviseGroupHolder(DiscModel disc)
 		{
