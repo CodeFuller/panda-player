@@ -399,33 +399,27 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var target = CreateTestTarget();
-
-			var newFolder = new ShallowFolderModel
-			{
-				ParentFolderId = ReferenceData.ArtistFolderId,
-				Name = "Test Folder",
-			};
-
-			await target.CreateFolder(newFolder, CancellationToken.None);
-			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
-
+			// Creating advise group which will be assigned only to EmptyFolder.
 			var adviseGroup = new AdviseGroupModel
 			{
 				Name = "Test Advise Group",
 			};
 
+			var dirtyReferenceData = GetReferenceData();
+
 			var adviseGroupService = GetService<IAdviseGroupService>();
 			await adviseGroupService.CreateAdviseGroup(adviseGroup, CancellationToken.None);
-			await adviseGroupService.AssignAdviseGroup(newFolder, adviseGroup, CancellationToken.None);
+			await adviseGroupService.AssignAdviseGroup(dirtyReferenceData.EmptyFolder, adviseGroup, CancellationToken.None);
+
+			var target = CreateTestTarget();
 
 			// Act
 
-			await target.DeleteFolder(ReferenceData.NextFolderId, CancellationToken.None);
+			await target.DeleteFolder(ReferenceData.EmptyFolderId, CancellationToken.None);
 
 			// Assert
 
-			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
+			var folderFromRepository = await target.GetFolder(ReferenceData.EmptyFolderId, CancellationToken.None);
 			folderFromRepository.AdviseGroup.Should().BeNull();
 
 			var referenceData = GetReferenceData();
@@ -446,31 +440,23 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var target = CreateTestTarget();
-
-			var newFolder = new ShallowFolderModel
-			{
-				ParentFolderId = ReferenceData.ArtistFolderId,
-				Name = "Test Folder",
-			};
-
-			await target.CreateFolder(newFolder, CancellationToken.None);
-			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
-
-			var referenceData = GetReferenceData();
+			var dirtyReferenceData = GetReferenceData();
 
 			var adviseGroupService = GetService<IAdviseGroupService>();
-			await adviseGroupService.AssignAdviseGroup(newFolder, referenceData.FolderAdviseGroup, CancellationToken.None);
+			await adviseGroupService.AssignAdviseGroup(dirtyReferenceData.EmptyFolder, dirtyReferenceData.FolderAdviseGroup, CancellationToken.None);
+
+			var target = CreateTestTarget();
 
 			// Act
 
-			await target.DeleteFolder(ReferenceData.NextFolderId, CancellationToken.None);
+			await target.DeleteFolder(ReferenceData.EmptyFolderId, CancellationToken.None);
 
 			// Assert
 
-			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
+			var folderFromRepository = await target.GetFolder(ReferenceData.EmptyFolderId, CancellationToken.None);
 			folderFromRepository.AdviseGroup.Should().BeNull();
 
+			var referenceData = GetReferenceData();
 			var expectedAdviseGroups = new[]
 			{
 				referenceData.DiscAdviseGroup,

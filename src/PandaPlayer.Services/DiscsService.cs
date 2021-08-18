@@ -19,15 +19,19 @@ namespace PandaPlayer.Services
 
 		private readonly IStorageRepository storageRepository;
 
+		private readonly IAdviseGroupRepository adviseGroupRepository;
+
 		private readonly IClock clock;
 
 		private readonly ILogger<DiscsService> logger;
 
-		public DiscsService(IDiscsRepository discsRepository, ISongsService songsService, IStorageRepository storageRepository, IClock clock, ILogger<DiscsService> logger)
+		public DiscsService(IDiscsRepository discsRepository, ISongsService songsService, IStorageRepository storageRepository,
+			IAdviseGroupRepository adviseGroupRepository, IClock clock, ILogger<DiscsService> logger)
 		{
 			this.discsRepository = discsRepository ?? throw new ArgumentNullException(nameof(discsRepository));
 			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
-			this.storageRepository = storageRepository;
+			this.storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
+			this.adviseGroupRepository = adviseGroupRepository ?? throw new ArgumentNullException(nameof(adviseGroupRepository));
 			this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
@@ -112,6 +116,16 @@ namespace PandaPlayer.Services
 			{
 				logger.LogInformation($"Deleting disc cover image '{disc.CoverImage.TreeTitle}' ...");
 				await DeleteDiscCoverImage(disc, cancellationToken);
+			}
+
+			var hasAdviseGroup = disc.AdviseGroup != null;
+			if (hasAdviseGroup)
+			{
+				// We erase advise group so that it could be deleted when no references left.
+				disc.AdviseGroup = null;
+				await discsRepository.UpdateDisc(disc, cancellationToken);
+
+				await adviseGroupRepository.DeleteOrphanAdviseGroups(cancellationToken);
 			}
 
 			logger.LogInformation($"The Disc '{disc.TreeTitle}' was deleted successfully");

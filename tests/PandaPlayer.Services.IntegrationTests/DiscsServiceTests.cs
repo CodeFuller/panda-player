@@ -459,11 +459,75 @@ namespace PandaPlayer.Services.IntegrationTests
 			}
 
 			expectedDisc.Images = new List<DiscImageModel>();
+			expectedDisc.AdviseGroup = null;
 
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId, target);
 			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
 
 			Directory.Exists(discDirectoryPath).Should().BeFalse();
+
+			await CheckLibraryConsistency();
+		}
+
+		[TestMethod]
+		public async Task DeleteDisc_IfDiscIsLastHolderOfAdviseGroup_DeletesAssignedAdviseGroup()
+		{
+			// Arrange
+
+			var target = CreateTestTarget();
+
+			// Act
+
+			await target.DeleteDisc(ReferenceData.NormalDiscId, CancellationToken.None);
+
+			// Assert
+
+			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId, target);
+			discFromRepository.AdviseGroup.Should().BeNull();
+
+			var referenceData = GetReferenceData();
+			var expectedAdviseGroups = new[]
+			{
+				referenceData.FolderAdviseGroup,
+			};
+
+			var adviseGroupService = GetService<IAdviseGroupService>();
+			var adviseGroups = await adviseGroupService.GetAllAdviseGroups(CancellationToken.None);
+			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithStrictOrdering());
+
+			await CheckLibraryConsistency();
+		}
+
+		[TestMethod]
+		public async Task DeleteDisc_IfDiscIsNotLastHolderOfAdviseGroup_DoesNotDeletesAssignedAdviseGroup()
+		{
+			// Arrange
+
+			var dirtyReferenceData = GetReferenceData();
+
+			var adviseGroupService = GetService<IAdviseGroupService>();
+			await adviseGroupService.AssignAdviseGroup(dirtyReferenceData.EmptyFolder, dirtyReferenceData.DiscAdviseGroup, CancellationToken.None);
+
+			var target = CreateTestTarget();
+
+			// Act
+
+			await target.DeleteDisc(ReferenceData.NormalDiscId, CancellationToken.None);
+
+			// Assert
+
+			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId, target);
+			discFromRepository.AdviseGroup.Should().BeNull();
+
+			var referenceData = GetReferenceData();
+			var expectedAdviseGroups = new[]
+			{
+				referenceData.DiscAdviseGroup,
+				referenceData.FolderAdviseGroup,
+			};
+
+			var adviseGroups = await adviseGroupService.GetAllAdviseGroups(CancellationToken.None);
+			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency();
 		}
