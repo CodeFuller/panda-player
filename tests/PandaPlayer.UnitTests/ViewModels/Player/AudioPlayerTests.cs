@@ -347,6 +347,29 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 			timerMock.Verify(x => x.Start(), Times.Once);
 		}
 
+		// See comment for State property in AudioPlayer.
+		[TestMethod]
+		public void Play_ForPausedPlayer_DoesNotSendPropertyChangedEventForSongPosition()
+		{
+			// Arrange
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<AudioPlayer>();
+
+			target.Pause();
+
+			var propertyChangedEvents = new List<PropertyChangedEventArgs>();
+			target.PropertyChanged += (_, e) => propertyChangedEvents.Add(e);
+
+			// Act
+
+			target.Play();
+
+			// Assert
+
+			propertyChangedEvents.Should().BeEmpty();
+		}
+
 		[TestMethod]
 		public void Pause_PausesMedia()
 		{

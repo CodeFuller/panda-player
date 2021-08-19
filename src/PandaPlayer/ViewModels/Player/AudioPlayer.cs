@@ -9,6 +9,13 @@ namespace PandaPlayer.ViewModels.Player
 {
 	internal class AudioPlayer : IAudioPlayer
 	{
+		private enum PlayerState
+		{
+			Playing,
+			Paused,
+			Stopped,
+		}
+
 		private const double SongPositionUpdateIntervalInMilliseconds = 200;
 
 		private readonly IMediaPlayerFacade mediaPlayer;
@@ -16,6 +23,28 @@ namespace PandaPlayer.ViewModels.Player
 		private readonly ITimerFacade timer;
 
 		public event PropertyChangedEventHandler PropertyChanged;
+
+		private PlayerState state;
+
+		private PlayerState State
+		{
+			get => state;
+			set
+			{
+				state = value;
+
+				// We raise PropertyChanged event for SongPosition only for Stopped state, because this is the only case when song position visibly changes.
+				// When state is changed to Playing or Paused, song position remains the same.
+				// It could seem that this condition could be removed, but it is not so.
+				// When playing is resumed (switched from Paused to Playing state), mediaPlayer.Position will incorrectly return zero during short period of time.
+				// This is not a problem if song position is updated by the timer (enough time passes for mediaPlayer.Position update),
+				// but it becomes a problem if SongPosition is queried instantly due to PropertyChanged event.
+				if (state == PlayerState.Stopped)
+				{
+					OnPropertyChanged(nameof(SongPosition));
+				}
+			}
+		}
 
 		private TimeSpan currentSongLength;
 
@@ -31,10 +60,14 @@ namespace PandaPlayer.ViewModels.Player
 
 		public TimeSpan SongPosition
 		{
-			get => mediaPlayer.Position;
+			get => (State == PlayerState.Playing || State == PlayerState.Paused) ? mediaPlayer.Position : TimeSpan.Zero;
 			set
 			{
-				mediaPlayer.Position = value;
+				if (State == PlayerState.Playing || State == PlayerState.Paused)
+				{
+					mediaPlayer.Position = value;
+				}
+
 				OnPropertyChanged();
 			}
 		}
@@ -66,20 +99,24 @@ namespace PandaPlayer.ViewModels.Player
 		{
 			mediaPlayer.Play();
 			timer.Start();
+
+			State = PlayerState.Playing;
 		}
 
 		public void Pause()
 		{
 			mediaPlayer.Pause();
 			timer.Stop();
+
+			State = PlayerState.Paused;
 		}
 
 		public void Stop()
 		{
 			mediaPlayer.Stop();
-			OnPropertyChanged(nameof(SongPosition));
-
 			timer.Stop();
+
+			State = PlayerState.Stopped;
 		}
 
 		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -97,8 +134,7 @@ namespace PandaPlayer.ViewModels.Player
 			mediaPlayer.Close();
 			timer.Stop();
 
-			// SongPosition value was affected by Close() method on mediaPlayer.
-			OnPropertyChanged(nameof(SongPosition));
+			State = PlayerState.Stopped;
 
 			SongLength = TimeSpan.Zero;
 
