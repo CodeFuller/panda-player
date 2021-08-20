@@ -16,7 +16,7 @@
 
     <DataGrid Name="MessagesDataGrid" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="None" GridLinesVisibility="None"
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" FontFamily="Lucida Sans Typewriter"
-              CellStyle="{StaticResource MaterialDesignDataGridCell}" ItemsSource="{Binding Messages}">
+              CellStyle="{StaticResource InvisibleFocusDataGridCell}" ItemsSource="{Binding Messages}">
         <DataGrid.Columns>
             <DataGridTextColumn Binding="{Binding Message}" Width="*">
                 <DataGridTextColumn.ElementStyle>

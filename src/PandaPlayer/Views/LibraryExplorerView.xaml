@@ -11,7 +11,7 @@
     <DataGrid Name="ContentDataGrid" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" GridLinesVisibility="None"
               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
               ColumnHeaderStyle="{StaticResource MaterialDesignDataGridColumnHeader}"
-              CellStyle="{StaticResource MaterialDesignDataGridCell}"
+              CellStyle="{StaticResource InvisibleFocusDataGridCell}"
               ItemsSource="{Binding ItemListViewModel.Items}" SelectedItem="{Binding ItemListViewModel.SelectedItem}"
               SelectionChanged="DataGrid_SelectionChanged"
               ContextMenuOpening="DataGrid_ContextMenuOpening"

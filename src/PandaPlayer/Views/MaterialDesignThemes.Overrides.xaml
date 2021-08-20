@@ -4,4 +4,20 @@
 
     <Style TargetType="{x:Type controls:MultiSelectionDataGrid}" BasedOn="{StaticResource MaterialDesignDataGrid}" />
 
+    <!-- This style removes border & focus for selected cell - https://stackoverflow.com/questions/4547370/ -->
+    <Style x:Key="InvisibleFocusDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+        <Setter Property="BorderThickness" Value="0"/>
+        <!-- We add padding to compensate for removed border. Otherwise, columns and rows look very closely. -->
+        <Setter Property="Padding" Value="2"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    </Style>
+
+    <Style x:Key="CenterAlignmentDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource InvisibleFocusDataGridCell}">
+        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="RightAlignmentDataGridCell" TargetType="DataGridCell" BasedOn="{StaticResource InvisibleFocusDataGridCell}">
+        <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+    </Style>
+
 </ResourceDictionary>

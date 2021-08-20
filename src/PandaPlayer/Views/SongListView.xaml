@@ -42,7 +42,7 @@
 
         <controls:MultiSelectionDataGrid Grid.Row="1" x:Name="SongsDataGrid" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
               GridLinesVisibility="None" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="False"
-              CellStyle="{StaticResource MaterialDesignDataGridCell}"
+              CellStyle="{StaticResource InvisibleFocusDataGridCell}"
               ItemsSource="{Binding SongItems}" SelectedItem="{Binding SelectedSongItem}" SelectedItemsList="{Binding SelectedSongItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
             <DataGrid.Resources>
