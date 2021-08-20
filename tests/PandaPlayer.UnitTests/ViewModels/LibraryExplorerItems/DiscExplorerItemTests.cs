@@ -22,13 +22,13 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		}
 
 		[TestMethod]
-		public void TitleGetter_ReturnsDiscTitle()
+		public void TitleGetter_ReturnsDiscTreeTitle()
 		{
 			// Arrange
 
 			var disc = new DiscModel
 			{
-				Title = "Disc Title",
+				TreeTitle = "Disc Tree Title",
 			};
 
 			var target = new DiscExplorerItem(disc);
@@ -39,7 +39,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 
 			// Assert
 
-			title.Should().Be("Disc Title");
+			title.Should().Be("Disc Tree Title");
 		}
 
 		[TestMethod]
