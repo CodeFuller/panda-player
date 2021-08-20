@@ -14,7 +14,7 @@
             <DataGridTextColumn Header="Source File" Width="*" IsReadOnly="True" Binding="{Binding SourceFilePath}" />
             <DataGridTextColumn Header="Track" Binding="{Binding Track}" >
                 <DataGridTextColumn.CellStyle>
-                    <Style TargetType="DataGridCell">
+                    <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                         <Setter Property="TextBlock.TextAlignment" Value="Center"/>
                     </Style>
                 </DataGridTextColumn.CellStyle>

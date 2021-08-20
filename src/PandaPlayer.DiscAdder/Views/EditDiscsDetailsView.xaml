@@ -14,7 +14,7 @@
         <DataGrid.Columns>
             <DataGridTextColumn Header="Destination Folder" Width="*" IsReadOnly="True" Binding="{Binding DestinationFolder}">
                 <DataGridTextColumn.CellStyle>
-                    <Style TargetType="DataGridCell">
+                    <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding WarnAboutFolder}" Value="True">
                                 <Setter Property="Background" Value="Yellow" />
@@ -26,7 +26,7 @@
             </DataGridTextColumn>
             <DataGridTextColumn Header="Type" IsReadOnly="True" Binding="{Binding DiscTypeTitle}">
                 <DataGridTextColumn.CellStyle>
-                    <Style TargetType="DataGridCell">
+                    <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                         <Setter Property="TextBlock.TextAlignment" Value="Center"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding WarnAboutDiscType}" Value="True">
@@ -39,7 +39,7 @@
             </DataGridTextColumn>
             <DataGridComboBoxColumn Header="Artist" Width="*" SelectedItemBinding="{Binding Artist}">
                 <DataGridComboBoxColumn.CellStyle>
-                    <Style TargetType="DataGridCell">
+                    <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                         <Setter Property="IsEnabled" Value="{Binding ArtistIsEditable}" />
                     </Style>
                 </DataGridComboBoxColumn.CellStyle>
@@ -64,7 +64,7 @@
             <DataGridTextColumn Header="Tree Title" Width="*" IsReadOnly="True" Binding="{Binding TreeTitle}" />
             <DataGridTextColumn Header="Album Title" Width="*" Binding="{Binding AlbumTitle}">
                 <DataGridTextColumn.CellStyle>
-                    <Style TargetType="DataGridCell">
+                    <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                         <Setter Property="IsEnabled" Value="{Binding AlbumTitleIsEditable}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding WarnAboutAlbumTitle}" Value="True">
@@ -77,7 +77,7 @@
             </DataGridTextColumn>
             <DataGridTextColumn Header="Year" Binding="{Binding Year}" >
                 <DataGridTextColumn.CellStyle>
-                    <Style TargetType="DataGridCell">
+                    <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                         <Setter Property="TextBlock.TextAlignment" Value="Center"/>
                         <Setter Property="IsEnabled" Value="{Binding YearIsEditable}" />
                         <Style.Triggers>
@@ -91,7 +91,7 @@
             </DataGridTextColumn>
             <DataGridComboBoxColumn Header="Genre" MinWidth="150" SelectedItemBinding="{Binding Genre}">
                 <DataGridComboBoxColumn.CellStyle>
-                    <Style TargetType="{x:Type DataGridCell}">
+                    <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding GenreIsNotFilled}" Value="True">
                                 <Setter Property="Background" Value="Red" />

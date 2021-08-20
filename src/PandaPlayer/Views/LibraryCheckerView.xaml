@@ -57,7 +57,8 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Description}" Width="*">
                     <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MaterialDesignTextBlock}">
+                            <Setter Property="Padding" Value="0"/>
                             <Setter Property="Foreground" Value="{Binding Severity, Converter={StaticResource InconsistencySeverityLevelConverter}}"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
