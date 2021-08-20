@@ -17,7 +17,13 @@ namespace PandaPlayer.Core.Models
 
 		public ShallowFolderModel Folder { get; set; }
 
-		public AdviseGroupModel AdviseGroup { get; set; }
+		private AdviseGroupModel adviseGroup;
+
+		public AdviseGroupModel AdviseGroup
+		{
+			get => adviseGroup;
+			set => this.SetField(PropertyChanged, ref adviseGroup, value);
+		}
 
 		public int? Year { get; set; }
 

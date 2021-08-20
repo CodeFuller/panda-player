@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using FluentAssertions;
 using GalaSoft.MvvmLight.Messaging;
+using MaterialDesignThemes.Wpf;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
@@ -18,6 +19,69 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		public void Initialize()
 		{
 			Messenger.Reset();
+		}
+
+		[TestMethod]
+		public void TitleGetter_ReturnsDiscTitle()
+		{
+			// Arrange
+
+			var disc = new DiscModel
+			{
+				Title = "Disc Title",
+			};
+
+			var target = new DiscExplorerItem(disc);
+
+			// Act
+
+			var title = target.Title;
+
+			// Assert
+
+			title.Should().Be("Disc Title");
+		}
+
+		[TestMethod]
+		public void IconKindGetter_ForDiscWithoutAdviseGroup_ReturnsAlbumIconKind()
+		{
+			// Arrange
+
+			var disc = new DiscModel
+			{
+				AdviseGroup = null,
+			};
+
+			var target = new DiscExplorerItem(disc);
+
+			// Act
+
+			var iconKind = target.IconKind;
+
+			// Assert
+
+			iconKind.Should().Be(PackIconKind.Album);
+		}
+
+		[TestMethod]
+		public void IconKindGetter_ForDiscWithAdviseGroup_ReturnsDiscAlertIconKind()
+		{
+			// Arrange
+
+			var disc = new DiscModel
+			{
+				AdviseGroup = new AdviseGroupModel { Id = new ItemId("1"), Name = "Some Advise Group" },
+			};
+
+			var target = new DiscExplorerItem(disc);
+
+			// Act
+
+			var iconKind = target.IconKind;
+
+			// Assert
+
+			iconKind.Should().Be(PackIconKind.DiscAlert);
 		}
 
 		[TestMethod]
@@ -70,6 +134,35 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 			var expectedProperties = new[]
 			{
 				nameof(DiscExplorerItem.Title),
+			};
+
+			propertyChangedEvents.Select(e => e.PropertyName).Should().BeEquivalentTo(expectedProperties);
+		}
+
+		[TestMethod]
+		public void DiscExplorerItem_WhenDiscAdviseGroupIsChanged_SendsPropertyChangedEventForIconKind()
+		{
+			// Arrange
+
+			var disc = new DiscModel
+			{
+				AdviseGroup = null,
+			};
+
+			var target = new DiscExplorerItem(disc);
+
+			var propertyChangedEvents = new List<PropertyChangedEventArgs>();
+			target.PropertyChanged += (_, e) => propertyChangedEvents.Add(e);
+
+			// Act
+
+			disc.AdviseGroup = new AdviseGroupModel { Id = new ItemId("1"), Name = "New Advise Group" };
+
+			// Assert
+
+			var expectedProperties = new[]
+			{
+				nameof(DiscExplorerItem.IconKind),
 			};
 
 			propertyChangedEvents.Select(e => e.PropertyName).Should().BeEquivalentTo(expectedProperties);

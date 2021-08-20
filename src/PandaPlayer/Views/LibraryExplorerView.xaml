@@ -4,12 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:interfaces="clr-namespace:PandaPlayer.ViewModels.Interfaces"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance interfaces:ILibraryExplorerViewModel}"
              d:DesignWidth="300" d:DesignHeight="600">
 
     <DataGrid Name="ContentDataGrid" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" GridLinesVisibility="None"
-              SelectionMode="Single" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
+              SelectionMode="Single" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" CanUserSortColumns="False"
               ColumnHeaderStyle="{StaticResource MaterialDesignDataGridColumnHeader}"
               CellStyle="{StaticResource InvisibleFocusDataGridCell}"
               ItemsSource="{Binding ItemListViewModel.Items}" SelectedItem="{Binding ItemListViewModel.SelectedItem}"
@@ -28,6 +29,13 @@
             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding ItemListViewModel.ChangeFolderCommand}" />
         </DataGrid.InputBindings>
         <DataGrid.Columns>
+            <DataGridTemplateColumn Width="0">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <materialDesign:PackIcon Kind="{Binding IconKind}" />
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
             <DataGridTextColumn Header="Library Content" Width="*" Binding="{Binding Title}" />
         </DataGrid.Columns>
     </DataGrid>

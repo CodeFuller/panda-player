@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
+using PandaPlayer.Core.Extensions;
 
 namespace PandaPlayer.Core.Models
 {
-	public class ShallowFolderModel
+	public class ShallowFolderModel : INotifyPropertyChanged
 	{
 		public ItemId Id { get; set; }
 
@@ -10,12 +12,20 @@ namespace PandaPlayer.Core.Models
 
 		public string Name { get; set; }
 
-		public AdviseGroupModel AdviseGroup { get; set; }
+		private AdviseGroupModel adviseGroup;
+
+		public AdviseGroupModel AdviseGroup
+		{
+			get => adviseGroup;
+			set => this.SetField(PropertyChanged, ref adviseGroup, value);
+		}
 
 		public DateTimeOffset? DeleteDate { get; set; }
 
 		public bool IsDeleted => DeleteDate != null;
 
 		public bool IsRoot => ParentFolderId == null;
+
+		public event PropertyChangedEventHandler PropertyChanged;
 	}
 }

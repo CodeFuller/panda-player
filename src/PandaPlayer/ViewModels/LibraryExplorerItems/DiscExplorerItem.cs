@@ -1,5 +1,6 @@
 ﻿using System;
 using GalaSoft.MvvmLight.Messaging;
+using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
 
@@ -13,6 +14,8 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 
 		public override string Title => Disc.TreeTitle;
 
+		public override PackIconKind IconKind => Disc.AdviseGroup != null ? PackIconKind.DiscAlert : PackIconKind.Album;
+
 		public DiscExplorerItem(DiscModel disc)
 		{
 			this.Disc = disc ?? throw new ArgumentNullException(nameof(disc));
@@ -24,6 +27,11 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 				if (args.PropertyName == nameof(Disc.TreeTitle))
 				{
 					RaisePropertyChanged(nameof(Title));
+				}
+
+				if (args.PropertyName == nameof(Disc.AdviseGroup))
+				{
+					RaisePropertyChanged(nameof(IconKind));
 				}
 			};
 		}

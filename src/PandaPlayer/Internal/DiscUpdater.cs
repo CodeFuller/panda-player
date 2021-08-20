@@ -8,6 +8,7 @@ namespace PandaPlayer.Internal
 	{
 		private static readonly IReadOnlyDictionary<string, Action<DiscModel, DiscModel>> UpdateActions = new Dictionary<string, Action<DiscModel, DiscModel>>
 		{
+			{ nameof(DiscModel.AdviseGroup), (src, dst) => dst.AdviseGroup = src.AdviseGroup },
 			{ nameof(DiscModel.Title), (src, dst) => dst.Title = src.Title },
 			{ nameof(DiscModel.TreeTitle), (src, dst) => dst.TreeTitle = src.TreeTitle },
 			{ nameof(DiscModel.AlbumTitle), (src, dst) => dst.AlbumTitle = src.AlbumTitle },
