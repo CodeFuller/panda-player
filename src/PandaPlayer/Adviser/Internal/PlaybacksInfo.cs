@@ -60,6 +60,11 @@ namespace PandaPlayer.Adviser.Internal
 			return playbacksInfo;
 		}
 
+		public int GetPlaybacksPassed(AdviseGroupContent adviseGroupContent)
+		{
+			return adviseGroupContent.AdviseSets.Select(GetPlaybacksPassed).Min();
+		}
+
 		public int GetPlaybacksPassed(AdviseSetContent adviseSetContent)
 		{
 			if (adviseSetsPlaybacksInfo.TryGetValue(adviseSetContent.Id, out var playbacksPassed))

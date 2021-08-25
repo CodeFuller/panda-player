@@ -38,12 +38,14 @@ namespace PandaPlayer.Adviser.Internal
 			return GetFactorForAverageRating(adviseSet.Rating) * GetFactorForPlaybackAge(playbacksPassed);
 		}
 
-		public double CalculateAdviseGroupRank(RankedAdviseGroup adviseGroup)
+		public double CalculateAdviseGroupRank(AdviseGroupContent adviseGroup, PlaybacksInfo playbacksInfo)
 		{
-			return adviseGroup.PlaybacksPassed == Int32.MaxValue ? MaxRank :
+			var playbacksPassed = playbacksInfo.GetPlaybacksPassed(adviseGroup);
+
+			return playbacksPassed == Int32.MaxValue ? MaxRank :
 				GetFactorForAdviseGroupSize(adviseGroup.AdviseSets.Count(x => !x.IsDeleted)) *
 				GetFactorForAverageRating(adviseGroup.Rating) *
-				GetFactorForPlaybackAge(adviseGroup.PlaybacksPassed);
+				GetFactorForPlaybackAge(playbacksPassed);
 		}
 
 		private static double GetFactorForAdviseGroupSize(int adviseGroupSize)

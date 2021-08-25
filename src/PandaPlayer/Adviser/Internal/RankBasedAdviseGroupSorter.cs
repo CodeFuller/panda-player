@@ -18,9 +18,7 @@ namespace PandaPlayer.Adviser.Internal
 		public IEnumerable<AdviseGroupContent> SortAdviseGroups(IEnumerable<AdviseGroupContent> adviseGroups, PlaybacksInfo playbacksInfo)
 		{
 			return adviseGroups
-				.Select(x => new RankedAdviseGroup(x, playbacksInfo))
-				.OrderByDescending(x => adviseRankCalculator.CalculateAdviseGroupRank(x))
-				.Select(x => x.AdviseGroup);
+				.OrderByDescending(x => adviseRankCalculator.CalculateAdviseGroupRank(x, playbacksInfo));
 		}
 
 		public IEnumerable<AdviseSetContent> SortAdviseSets(IEnumerable<AdviseSetContent> adviseSets, PlaybacksInfo playbacksInfo)

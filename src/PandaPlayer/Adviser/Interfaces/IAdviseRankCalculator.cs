@@ -10,6 +10,6 @@ namespace PandaPlayer.Adviser.Interfaces
 
 		double CalculateAdviseSetRank(AdviseSetContent adviseSet, PlaybacksInfo playbacksInfo);
 
-		double CalculateAdviseGroupRank(RankedAdviseGroup adviseGroup);
+		double CalculateAdviseGroupRank(AdviseGroupContent adviseGroup, PlaybacksInfo playbacksInfo);
 	}
 }
