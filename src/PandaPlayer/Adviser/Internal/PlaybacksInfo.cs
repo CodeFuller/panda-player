@@ -1,45 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using PandaPlayer.Adviser.Extensions;
+using PandaPlayer.Adviser.Grouping;
 using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.Adviser.Internal
 {
 	internal class PlaybacksInfo
 	{
-		private readonly Dictionary<ItemId, int> discPlaybacksInfo;
+		private readonly Dictionary<string, int> adviseSetsPlaybacksInfo;
 
 		private readonly Dictionary<ItemId, int> songPlaybacksInfo;
 
-		public PlaybacksInfo(IEnumerable<DiscModel> discs)
+		public PlaybacksInfo(IEnumerable<AdviseSetContent> adviseSets)
 		{
-			var discsList = discs.ToList();
+			var adviseSetList = adviseSets.ToList();
 
-			discPlaybacksInfo = FillDiscPlaybacksInfo(discsList);
-			songPlaybacksInfo = FillSongPlaybacksInfo(discsList);
+			adviseSetsPlaybacksInfo = FillDiscPlaybacksInfo(adviseSetList);
+			songPlaybacksInfo = FillSongPlaybacksInfo(adviseSetList);
 		}
 
-		private static Dictionary<ItemId, int> FillDiscPlaybacksInfo(IEnumerable<DiscModel> discs)
+		private static Dictionary<string, int> FillDiscPlaybacksInfo(IEnumerable<AdviseSetContent> adviseSets)
 		{
-			var playbacksInfo = new Dictionary<ItemId, int>();
+			var playbacksInfo = new Dictionary<string, int>();
+
+			var pairs = adviseSets.Select(x => new
+				{
+					AdviseSet = x,
+					x.LastPlaybackTime,
+				})
+				.OrderByDescending(x => x.LastPlaybackTime);
 
 			var currentPlaybacksPassed = 0;
-			foreach (var disc in discs.OrderByDescending(d => d.GetLastPlaybackTime()))
+			foreach (var pair in pairs)
 			{
-				var playbacksPassed = disc.GetLastPlaybackTime().HasValue ? currentPlaybacksPassed++ : Int32.MaxValue;
-				playbacksInfo.Add(disc.Id, playbacksPassed);
+				var playbacksPassed = pair.LastPlaybackTime != null ? currentPlaybacksPassed++ : Int32.MaxValue;
+				playbacksInfo.Add(pair.AdviseSet.Id, playbacksPassed);
 			}
 
 			return playbacksInfo;
 		}
 
-		private static Dictionary<ItemId, int> FillSongPlaybacksInfo(IEnumerable<DiscModel> discs)
+		private static Dictionary<ItemId, int> FillSongPlaybacksInfo(IEnumerable<AdviseSetContent> adviseSets)
 		{
 			var playbacksInfo = new Dictionary<ItemId, int>();
 
+			var songs = adviseSets
+				.SelectMany(adviseSet => adviseSet.Discs)
+				.SelectMany(disc => disc.AllSongs)
+				.OrderByDescending(song => song.LastPlaybackTime);
+
 			var currentPlaybacksPassed = 0;
-			foreach (var song in discs.SelectMany(disc => disc.AllSongs).OrderByDescending(song => song.LastPlaybackTime))
+			foreach (var song in songs)
 			{
 				var playbacksPassed = song.LastPlaybackTime.HasValue ? currentPlaybacksPassed++ : Int32.MaxValue;
 				playbacksInfo.Add(song.Id, playbacksPassed);
@@ -48,14 +60,14 @@ namespace PandaPlayer.Adviser.Internal
 			return playbacksInfo;
 		}
 
-		public int GetPlaybacksPassed(DiscModel disc)
+		public int GetPlaybacksPassed(AdviseSetContent adviseSetContent)
 		{
-			if (discPlaybacksInfo.TryGetValue(disc.Id, out var playbacksPassed))
+			if (adviseSetsPlaybacksInfo.TryGetValue(adviseSetContent.Id, out var playbacksPassed))
 			{
 				return playbacksPassed;
 			}
 
-			throw new InvalidOperationException($"The number of passed playbacks for disc {disc.Id} is unknown");
+			throw new InvalidOperationException($"The number of passed playbacks for advise set {adviseSetContent.Id} is unknown");
 		}
 
 		public int GetPlaybacksPassed(SongModel song)

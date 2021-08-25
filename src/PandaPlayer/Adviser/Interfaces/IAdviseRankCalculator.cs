@@ -1,5 +1,5 @@
-﻿using PandaPlayer.Adviser.Internal;
-using PandaPlayer.Adviser.RankBasedAdviser;
+﻿using PandaPlayer.Adviser.Grouping;
+using PandaPlayer.Adviser.Internal;
 using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.Adviser.Interfaces
@@ -8,8 +8,8 @@ namespace PandaPlayer.Adviser.Interfaces
 	{
 		double CalculateSongRank(SongModel song, PlaybacksInfo playbacksInfo);
 
-		double CalculateDiscRank(DiscModel disc, PlaybacksInfo playbacksInfo);
+		double CalculateAdviseSetRank(AdviseSetContent adviseSet, PlaybacksInfo playbacksInfo);
 
-		double CalculateDiscGroupRank(RankedDiscGroup discGroup);
+		double CalculateAdviseGroupRank(RankedAdviseGroup adviseGroup);
 	}
 }

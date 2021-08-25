@@ -16,20 +16,22 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 	{
 		private const string PlaylistAdviserDataKey = "PlaylistAdviserData";
 
+		private readonly IDiscGrouper discGrouper;
 		private readonly IPlaylistAdviser rankedDiscsAdviser;
 		private readonly IPlaylistAdviser highlyRatedSongsAdviser;
-		private readonly IPlaylistAdviser favoriteArtistDiscsAdviser;
+		private readonly IPlaylistAdviser favoriteArtistAdviser;
 		private readonly ISessionDataService sessionDataService;
 		private readonly AdviserSettings settings;
 
 		private PlaylistAdviserMemo Memo { get; set; }
 
-		public CompositePlaylistAdviser(IPlaylistAdviser rankedDiscsAdviser, IPlaylistAdviser highlyRatedSongsAdviser,
-			IPlaylistAdviser favoriteArtistDiscsAdviser, ISessionDataService sessionDataService, IOptions<AdviserSettings> options)
+		public CompositePlaylistAdviser(IDiscGrouper discGrouper, IPlaylistAdviser rankedDiscsAdviser, IPlaylistAdviser highlyRatedSongsAdviser,
+			IPlaylistAdviser favoriteArtistAdviser, ISessionDataService sessionDataService, IOptions<AdviserSettings> options)
 		{
+			this.discGrouper = discGrouper ?? throw new ArgumentNullException(nameof(discGrouper));
 			this.rankedDiscsAdviser = rankedDiscsAdviser ?? throw new ArgumentNullException(nameof(rankedDiscsAdviser));
 			this.highlyRatedSongsAdviser = highlyRatedSongsAdviser ?? throw new ArgumentNullException(nameof(highlyRatedSongsAdviser));
-			this.favoriteArtistDiscsAdviser = favoriteArtistDiscsAdviser ?? throw new ArgumentNullException(nameof(favoriteArtistDiscsAdviser));
+			this.favoriteArtistAdviser = favoriteArtistAdviser ?? throw new ArgumentNullException(nameof(favoriteArtistAdviser));
 			this.sessionDataService = sessionDataService ?? throw new ArgumentNullException(nameof(sessionDataService));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
@@ -39,18 +41,20 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 			Memo ??= await sessionDataService.GetData<PlaylistAdviserMemo>(PlaylistAdviserDataKey, cancellationToken) ?? CreateDefaultMemo();
 			var playbacksMemo = Memo;
 
-			var discsList = discs.ToList();
-			var playbacksInfo = new PlaybacksInfo(discsList);
+			var adviseGroups = (await discGrouper.GroupLibraryDiscs(discs, cancellationToken)).ToList();
+			var adviseSets = adviseGroups.SelectMany(x => x.AdviseSets);
 
-			var highlyRatedSongsAdvises = await highlyRatedSongsAdviser.Advise(discsList, playbacksInfo, cancellationToken);
-			var favoriteArtistDiscsAdvises = await favoriteArtistDiscsAdviser.Advise(discsList, playbacksInfo, cancellationToken);
-			var rankedDiscsAdvises = await rankedDiscsAdviser.Advise(discsList, playbacksInfo, cancellationToken);
+			var playbacksInfo = new PlaybacksInfo(adviseSets);
+
+			var highlyRatedSongsAdvises = await highlyRatedSongsAdviser.Advise(adviseGroups, playbacksInfo, cancellationToken);
+			var favoriteArtistDiscsAdvises = await favoriteArtistAdviser.Advise(adviseGroups, playbacksInfo, cancellationToken);
+			var rankedDiscsAdvises = await rankedDiscsAdviser.Advise(adviseGroups, playbacksInfo, cancellationToken);
 
 			var playlistQueue = new CompositeAdvisedPlaylistQueue(highlyRatedSongsAdvises, favoriteArtistDiscsAdvises, rankedDiscsAdvises);
 
 			var advisedPlaylists = new List<AdvisedPlaylist>(requiredAdvisesCount);
 
-			var advisedDiscs = new HashSet<ItemId>();
+			var knownAdviseSets = new HashSet<string>();
 			while (advisedPlaylists.Count < requiredAdvisesCount)
 			{
 				var currentAdvise = GetNextAdvisedPlaylist(playbacksMemo, playlistQueue);
@@ -59,15 +63,15 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 					break;
 				}
 
-				var advisedDisc = currentAdvise.Disc;
-				if (advisedDisc != null)
+				var adviseSet = currentAdvise.AdviseSet;
+				if (adviseSet != null)
 				{
-					if (advisedDiscs.Contains(advisedDisc.Id))
+					if (knownAdviseSets.Contains(adviseSet.Id))
 					{
 						continue;
 					}
 
-					advisedDiscs.Add(advisedDisc.Id);
+					knownAdviseSets.Add(adviseSet.Id);
 				}
 
 				advisedPlaylists.Add(currentAdvise);

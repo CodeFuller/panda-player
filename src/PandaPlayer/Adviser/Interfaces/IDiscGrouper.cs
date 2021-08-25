@@ -8,6 +8,6 @@ namespace PandaPlayer.Adviser.Interfaces
 {
 	internal interface IDiscGrouper
 	{
-		Task<IReadOnlyCollection<DiscGroup>> GroupLibraryDiscs(IEnumerable<DiscModel> discs, CancellationToken cancellationToken);
+		Task<IReadOnlyCollection<AdviseGroupContent>> GroupLibraryDiscs(IEnumerable<DiscModel> discs, CancellationToken cancellationToken);
 	}
 }

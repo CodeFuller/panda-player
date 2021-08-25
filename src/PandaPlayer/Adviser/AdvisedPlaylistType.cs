@@ -3,7 +3,7 @@
 	internal enum AdvisedPlaylistType
 	{
 		None,
-		Disc,
+		AdviseSet,
 		FavoriteArtistDisc,
 		HighlyRatedSongs,
 	}

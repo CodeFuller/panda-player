@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using PandaPlayer.Adviser.Extensions;
+using PandaPlayer.Adviser.Grouping;
 using PandaPlayer.Adviser.Interfaces;
 using PandaPlayer.Adviser.Internal;
 using PandaPlayer.Adviser.Settings;
@@ -36,9 +37,11 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 				.ToDictionary(t => t.Rating, t => TimeSpan.FromDays(t.Days));
 		}
 
-		public Task<IReadOnlyCollection<AdvisedPlaylist>> Advise(IEnumerable<DiscModel> discs, PlaybacksInfo playbacksInfo, CancellationToken cancellationToken)
+		public Task<IReadOnlyCollection<AdvisedPlaylist>> Advise(IEnumerable<AdviseGroupContent> adviseGroups, PlaybacksInfo playbacksInfo, CancellationToken cancellationToken)
 		{
-			var songsToAdvise = discs
+			var songsToAdvise = adviseGroups
+				.SelectMany(adviseGroup => adviseGroup.AdviseSets)
+				.SelectMany(adviseSet => adviseSet.Discs)
 				.SelectMany(disc => disc.ActiveSongs)
 				.Where(IsTimeToListenHighlyRatedSong)
 				.OrderByDescending(song => adviseRankCalculator.CalculateSongRank(song, playbacksInfo))
@@ -46,7 +49,6 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 				.ToList();
 
 			var playlists = SplitSongsToPlaylists(songsToAdvise).ToList();
-
 			return Task.FromResult<IReadOnlyCollection<AdvisedPlaylist>>(playlists);
 		}
 

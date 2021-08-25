@@ -4,7 +4,6 @@ using PandaPlayer.Adviser.Grouping;
 using PandaPlayer.Adviser.Interfaces;
 using PandaPlayer.Adviser.Internal;
 using PandaPlayer.Adviser.PlaylistAdvisers;
-using PandaPlayer.Adviser.RankBasedAdviser;
 using PandaPlayer.Adviser.Settings;
 
 namespace PandaPlayer.Adviser.Extensions
@@ -14,17 +13,17 @@ namespace PandaPlayer.Adviser.Extensions
 		public static IServiceCollection AddPlaylistAdviser(this IServiceCollection services, Action<AdviserSettings> setupSettings)
 		{
 			services.AddSingleton<IDiscGrouper, DiscGrouper>();
-			services.AddSingleton<IDiscGroupSorter, RankBasedDiscGroupSorter>();
+			services.AddSingleton<IAdviseGroupSorter, RankBasedAdviseGroupSorter>();
 			services.AddSingleton<IAdviseRankCalculator, AdviseRankCalculator>();
 
-			services.AddSingleton<RankBasedDiscAdviser>();
+			services.AddSingleton<RankBasedAdviser>();
 			services.AddSingleton<HighlyRatedSongsAdviser>();
-			services.AddSingleton<FavoriteArtistDiscsAdviser>(sp =>
-				ActivatorUtilities.CreateInstance<FavoriteArtistDiscsAdviser>(sp, sp.GetRequiredService<RankBasedDiscAdviser>()));
+			services.AddSingleton<FavoriteArtistAdviser>(sp =>
+				ActivatorUtilities.CreateInstance<FavoriteArtistAdviser>(sp, sp.GetRequiredService<RankBasedAdviser>()));
 
 			services.AddTransient<ICompositePlaylistAdviser, CompositePlaylistAdviser>(sp =>
-				ActivatorUtilities.CreateInstance<CompositePlaylistAdviser>(sp, sp.GetRequiredService<RankBasedDiscAdviser>(),
-					sp.GetRequiredService<HighlyRatedSongsAdviser>(), sp.GetRequiredService<FavoriteArtistDiscsAdviser>()));
+				ActivatorUtilities.CreateInstance<CompositePlaylistAdviser>(sp, sp.GetRequiredService<RankBasedAdviser>(),
+					sp.GetRequiredService<HighlyRatedSongsAdviser>(), sp.GetRequiredService<FavoriteArtistAdviser>()));
 
 			services.Configure(setupSettings);
 			services.Configure<FavoriteArtistsAdviserSettings>(s => setupSettings(new AdviserSettings { FavoriteArtistsAdviser = s }));

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using PandaPlayer.Adviser.Extensions;
+using PandaPlayer.Adviser.Grouping;
 using PandaPlayer.Adviser.Interfaces;
-using PandaPlayer.Adviser.RankBasedAdviser;
 using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.Adviser.Internal
@@ -27,28 +27,28 @@ namespace PandaPlayer.Adviser.Internal
 			return factorForRating * factorForPlaybacksAge;
 		}
 
-		public double CalculateDiscRank(DiscModel disc, PlaybacksInfo playbacksInfo)
+		public double CalculateAdviseSetRank(AdviseSetContent adviseSet, PlaybacksInfo playbacksInfo)
 		{
-			if (!disc.GetLastPlaybackTime().HasValue)
+			if (adviseSet.LastPlaybackTime == null)
 			{
 				return MaxRank;
 			}
 
-			var playbacksPassed = playbacksInfo.GetPlaybacksPassed(disc);
-			return GetFactorForAverageRating(disc.GetRating()) * GetFactorForPlaybackAge(playbacksPassed);
+			var playbacksPassed = playbacksInfo.GetPlaybacksPassed(adviseSet);
+			return GetFactorForAverageRating(adviseSet.Rating) * GetFactorForPlaybackAge(playbacksPassed);
 		}
 
-		public double CalculateDiscGroupRank(RankedDiscGroup discGroup)
+		public double CalculateAdviseGroupRank(RankedAdviseGroup adviseGroup)
 		{
-			return discGroup.PlaybacksPassed == Int32.MaxValue ? MaxRank :
-				GetFactorForGroupDiscsNumber(discGroup.Discs.Count(d => !d.IsDeleted)) *
-				GetFactorForAverageRating(discGroup.Rating) *
-				GetFactorForPlaybackAge(discGroup.PlaybacksPassed);
+			return adviseGroup.PlaybacksPassed == Int32.MaxValue ? MaxRank :
+				GetFactorForAdviseGroupSize(adviseGroup.AdviseSets.Count(x => !x.IsDeleted)) *
+				GetFactorForAverageRating(adviseGroup.Rating) *
+				GetFactorForPlaybackAge(adviseGroup.PlaybacksPassed);
 		}
 
-		private static double GetFactorForGroupDiscsNumber(int discsNumber)
+		private static double GetFactorForAdviseGroupSize(int adviseGroupSize)
 		{
-			return Math.Sqrt(discsNumber);
+			return Math.Sqrt(adviseGroupSize);
 		}
 
 		private static double GetFactorForRating(RatingModel rating)

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using PandaPlayer.Adviser.Grouping;
+using PandaPlayer.Core.Comparers;
 using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.Adviser
@@ -12,31 +14,31 @@ namespace PandaPlayer.Adviser
 
 		public IReadOnlyCollection<SongModel> Songs { get; private init; }
 
-		public DiscModel Disc { get; private init; }
+		public AdviseSetContent AdviseSet { get; private init; }
 
 		private AdvisedPlaylist()
 		{
 		}
 
-		public static AdvisedPlaylist ForDisc(DiscModel disc)
+		public static AdvisedPlaylist ForAdviseSet(AdviseSetContent adviseSet)
 		{
 			return new()
 			{
-				AdvisedPlaylistType = AdvisedPlaylistType.Disc,
-				Title = FormatDiscTitle(disc),
-				Songs = disc.ActiveSongs.ToList(),
-				Disc = disc,
+				AdvisedPlaylistType = AdvisedPlaylistType.AdviseSet,
+				Title = GetTitleForAdviseSet(adviseSet),
+				Songs = adviseSet.Discs.SelectMany(x => x.ActiveSongs).ToList(),
+				AdviseSet = adviseSet,
 			};
 		}
 
-		public static AdvisedPlaylist ForFavoriteArtistDisc(DiscModel disc)
+		public static AdvisedPlaylist ForFavoriteArtistAdviseSet(AdviseSetContent adviseSet)
 		{
 			return new()
 			{
 				AdvisedPlaylistType = AdvisedPlaylistType.FavoriteArtistDisc,
-				Title = "*** " + FormatDiscTitle(disc),
-				Songs = disc.ActiveSongs.ToList(),
-				Disc = disc,
+				Title = "*** " + GetTitleForAdviseSet(adviseSet),
+				Songs = adviseSet.Discs.SelectMany(x => x.ActiveSongs).ToList(),
+				AdviseSet = adviseSet,
 			};
 		}
 
@@ -50,8 +52,22 @@ namespace PandaPlayer.Adviser
 			};
 		}
 
-		private static string FormatDiscTitle(DiscModel disc)
+		private static string GetTitleForAdviseSet(AdviseSetContent adviseSet)
 		{
+			var commonAdviseSet = adviseSet.Discs
+				.Select(x => x.AdviseSet)
+				.Distinct(new AdviseSetEqualityComparer())
+				.Single();
+
+			if (commonAdviseSet != null)
+			{
+				return commonAdviseSet.Name;
+			}
+
+			// We safely call Single() on discs.
+			// The only case when AdviseSetContent contains multiple discs is when they all have common advise set assigned.
+			// This case is covered by above if branch.
+			var disc = adviseSet.Discs.Single();
 			return $"{disc.Folder.Name} / {disc.Title}";
 		}
 	}

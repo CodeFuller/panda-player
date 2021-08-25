@@ -18,9 +18,9 @@ namespace PandaPlayer.Adviser.Grouping
 			this.foldersService = foldersService ?? throw new ArgumentNullException(nameof(foldersService));
 		}
 
-		public async Task<IReadOnlyCollection<DiscGroup>> GroupLibraryDiscs(IEnumerable<DiscModel> discs, CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<AdviseGroupContent>> GroupLibraryDiscs(IEnumerable<DiscModel> discs, CancellationToken cancellationToken)
 		{
-			var groups = new Dictionary<string, DiscGroup>();
+			var groups = new Dictionary<string, AdviseGroupContent>();
 
 			var allFolders = (await foldersService.GetAllFolders(cancellationToken))
 				.ToDictionary(x => x.Id, x => x);
@@ -37,7 +37,7 @@ namespace PandaPlayer.Adviser.Grouping
 
 				if (!groups.TryGetValue(groupId, out var group))
 				{
-					group = new DiscGroup(groupId);
+					group = new AdviseGroupContent(groupId);
 					groups.Add(groupId, group);
 				}
 
