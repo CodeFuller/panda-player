@@ -15,7 +15,7 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 	public class DiscGrouperTests
 	{
 		[TestMethod]
-		public async Task GroupLibraryDiscs_ForDiscsBelongingToSameAdviseGroup_AssignsDiscsToSameDiscGroup()
+		public async Task GroupLibraryDiscs_ForDiscsBelongingToSameAdviseGroup_AssignsDiscsToSameAdviseGroupContent()
 		{
 			// Arrange
 
@@ -45,28 +45,28 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 
 			// Act
 
-			var discGroups = await target.GroupLibraryDiscs(new[] { disc11, disc12, disc21 }, CancellationToken.None);
+			var adviseGroups = await target.GroupLibraryDiscs(new[] { disc11, disc12, disc21 }, CancellationToken.None);
 
 			// Assert
 
-			var expectedDiscGroup1 = new DiscGroup("Advise Group: Disc Advise Group 1");
-			expectedDiscGroup1.AddDisc(disc11);
-			expectedDiscGroup1.AddDisc(disc12);
+			var expectedAdviseGroup1 = new AdviseGroupContent("Advise Group: Disc Advise Group 1");
+			expectedAdviseGroup1.AddDisc(disc11);
+			expectedAdviseGroup1.AddDisc(disc12);
 
-			var expectedDiscGroup2 = new DiscGroup("Advise Group: Disc Advise Group 2");
-			expectedDiscGroup2.AddDisc(disc21);
+			var expectedAdviseGroup2 = new AdviseGroupContent("Advise Group: Disc Advise Group 2");
+			expectedAdviseGroup2.AddDisc(disc21);
 
-			var expectedGroups = new[]
+			var expectedAdviseGroups = new[]
 			{
-				expectedDiscGroup1,
-				expectedDiscGroup2,
+				expectedAdviseGroup1,
+				expectedAdviseGroup2,
 			};
 
-			discGroups.Should().BeEquivalentTo(expectedGroups);
+			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithoutStrictOrdering());
 		}
 
 		[TestMethod]
-		public async Task GroupLibraryDiscs_ForDiscsFromFolderBelongingToAdviseGroup_AssignsDiscsToSameDiscGroup()
+		public async Task GroupLibraryDiscs_ForDiscsFromFolderBelongingToAdviseGroup_AssignsDiscsToSameAdviseGroupContent()
 		{
 			// Arrange
 
@@ -98,24 +98,24 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 
 			// Act
 
-			var discGroups = await target.GroupLibraryDiscs(new[] { disc11, disc12, disc21 }, CancellationToken.None);
+			var adviseGroups = await target.GroupLibraryDiscs(new[] { disc11, disc12, disc21 }, CancellationToken.None);
 
 			// Assert
 
-			var expectedDiscGroup1 = new DiscGroup("Advise Group: Advise Group 11");
-			expectedDiscGroup1.AddDisc(disc11);
-			expectedDiscGroup1.AddDisc(disc12);
+			var expectedAdviseGroup1 = new AdviseGroupContent("Advise Group: Advise Group 11");
+			expectedAdviseGroup1.AddDisc(disc11);
+			expectedAdviseGroup1.AddDisc(disc12);
 
-			var expectedDiscGroup2 = new DiscGroup("Advise Group: Advise Group 21");
-			expectedDiscGroup2.AddDisc(disc21);
+			var expectedAdviseGroup2 = new AdviseGroupContent("Advise Group: Advise Group 21");
+			expectedAdviseGroup2.AddDisc(disc21);
 
-			var expectedGroups = new[]
+			var expectedAdviseGroups = new[]
 			{
-				expectedDiscGroup1,
-				expectedDiscGroup2,
+				expectedAdviseGroup1,
+				expectedAdviseGroup2,
 			};
 
-			discGroups.Should().BeEquivalentTo(expectedGroups);
+			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithoutStrictOrdering());
 		}
 
 		[TestMethod]
@@ -149,28 +149,28 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 
 			// Act
 
-			var discGroups = await target.GroupLibraryDiscs(new[] { disc11, disc12, disc21 }, CancellationToken.None);
+			var adviseGroups = await target.GroupLibraryDiscs(new[] { disc11, disc12, disc21 }, CancellationToken.None);
 
 			// Assert
 
-			var expectedDiscGroup1 = new DiscGroup("Advise Group: Advise Group 1");
-			expectedDiscGroup1.AddDisc(disc11);
-			expectedDiscGroup1.AddDisc(disc12);
+			var expectedAdviseGroup1 = new AdviseGroupContent("Advise Group: Advise Group 1");
+			expectedAdviseGroup1.AddDisc(disc11);
+			expectedAdviseGroup1.AddDisc(disc12);
 
-			var expectedDiscGroup2 = new DiscGroup("Advise Group: Advise Group 2");
-			expectedDiscGroup2.AddDisc(disc21);
+			var expectedAdviseGroup2 = new AdviseGroupContent("Advise Group: Advise Group 2");
+			expectedAdviseGroup2.AddDisc(disc21);
 
-			var expectedGroups = new[]
+			var expectedAdviseGroups = new[]
 			{
-				expectedDiscGroup1,
-				expectedDiscGroup2,
+				expectedAdviseGroup1,
+				expectedAdviseGroup2,
 			};
 
-			discGroups.Should().BeEquivalentTo(expectedGroups);
+			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithoutStrictOrdering());
 		}
 
 		[TestMethod]
-		public async Task GroupLibraryDiscs_IfNoFolderBelongsToAssignedGroupUpToRoot_AssignsDiscsFromSameFolderToOneGroup()
+		public async Task GroupLibraryDiscs_IfNoFolderBelongsToAssignedGroupUpToRoot_AssignsDiscsFromSameFolderToOneAdviseGroupContent()
 		{
 			// Arrange
 
@@ -196,24 +196,24 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 
 			// Act
 
-			var discGroups = await target.GroupLibraryDiscs(new[] { disc11, disc21, disc12 }, CancellationToken.None);
+			var adviseGroups = await target.GroupLibraryDiscs(new[] { disc11, disc21, disc12 }, CancellationToken.None);
 
 			// Assert
 
-			var expectedDiscGroup1 = new DiscGroup("Folder Group: Folder 11");
-			expectedDiscGroup1.AddDisc(disc11);
-			expectedDiscGroup1.AddDisc(disc12);
+			var expectedAdviseGroup1 = new AdviseGroupContent("Folder Group: Folder 11");
+			expectedAdviseGroup1.AddDisc(disc11);
+			expectedAdviseGroup1.AddDisc(disc12);
 
-			var expectedDiscGroup2 = new DiscGroup("Folder Group: Folder 21");
-			expectedDiscGroup2.AddDisc(disc21);
+			var expectedAdviseGroup2 = new AdviseGroupContent("Folder Group: Folder 21");
+			expectedAdviseGroup2.AddDisc(disc21);
 
-			var expectedGroups = new[]
+			var expectedAdviseGroups = new[]
 			{
-				expectedDiscGroup1,
-				expectedDiscGroup2,
+				expectedAdviseGroup1,
+				expectedAdviseGroup2,
 			};
 
-			discGroups.Should().BeEquivalentTo(expectedGroups);
+			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithoutStrictOrdering());
 		}
 	}
 }

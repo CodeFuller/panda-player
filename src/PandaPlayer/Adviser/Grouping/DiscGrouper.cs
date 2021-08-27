@@ -20,7 +20,7 @@ namespace PandaPlayer.Adviser.Grouping
 
 		public async Task<IReadOnlyCollection<AdviseGroupContent>> GroupLibraryDiscs(IEnumerable<DiscModel> discs, CancellationToken cancellationToken)
 		{
-			var groups = new Dictionary<string, AdviseGroupContent>();
+			var adviseGroups = new Dictionary<string, AdviseGroupContent>();
 
 			var allFolders = (await foldersService.GetAllFolders(cancellationToken))
 				.ToDictionary(x => x.Id, x => x);
@@ -35,16 +35,16 @@ namespace PandaPlayer.Adviser.Grouping
 
 				var groupId = adviseGroup != null ? $"Advise Group: {adviseGroup.Id}" : $"Folder Group: {disc.Folder.Id}";
 
-				if (!groups.TryGetValue(groupId, out var group))
+				if (!adviseGroups.TryGetValue(groupId, out var adviseGroupContent))
 				{
-					group = new AdviseGroupContent(groupId);
-					groups.Add(groupId, group);
+					adviseGroupContent = new AdviseGroupContent(groupId);
+					adviseGroups.Add(groupId, adviseGroupContent);
 				}
 
-				group.AddDisc(disc);
+				adviseGroupContent.AddDisc(disc);
 			}
 
-			return groups.Values;
+			return adviseGroups.Values;
 		}
 
 		private static AdviseGroupModel GetFolderAdviseGroup(ShallowFolderModel folder, IDictionary<ItemId, AdviseGroupModel> folderAdviseGroupCache, IReadOnlyDictionary<ItemId, ShallowFolderModel> allFolders)

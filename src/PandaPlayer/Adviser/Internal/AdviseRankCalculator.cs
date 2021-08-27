@@ -35,7 +35,7 @@ namespace PandaPlayer.Adviser.Internal
 			}
 
 			var playbacksPassed = playbacksInfo.GetPlaybacksPassed(adviseSet);
-			return GetFactorForAverageRating(adviseSet.Rating) * GetFactorForPlaybackAge(playbacksPassed);
+			return GetFactorForAverageRating(GetRating(adviseSet)) * GetFactorForPlaybackAge(playbacksPassed);
 		}
 
 		public double CalculateAdviseGroupRank(AdviseGroupContent adviseGroup, PlaybacksInfo playbacksInfo)
@@ -44,7 +44,7 @@ namespace PandaPlayer.Adviser.Internal
 
 			return playbacksPassed == Int32.MaxValue ? MaxRank :
 				GetFactorForAdviseGroupSize(adviseGroup.AdviseSets.Count(x => !x.IsDeleted)) *
-				GetFactorForAverageRating(adviseGroup.Rating) *
+				GetFactorForAverageRating(GetRating(adviseGroup)) *
 				GetFactorForPlaybackAge(playbacksPassed);
 		}
 
@@ -67,6 +67,22 @@ namespace PandaPlayer.Adviser.Internal
 		private static double GetFactorForPlaybackAge(int playbackAge)
 		{
 			return playbackAge;
+		}
+
+		private static double GetRating(AdviseGroupContent adviseGroupContent)
+		{
+			return adviseGroupContent.AdviseSets
+				.Where(x => !x.IsDeleted)
+				.Select(GetRating)
+				.Average();
+		}
+
+		private static double GetRating(AdviseSetContent adviseSetContent)
+		{
+			return adviseSetContent.Discs
+				.Where(x => !x.IsDeleted)
+				.Select(x => x.GetRating())
+				.Average();
 		}
 	}
 }

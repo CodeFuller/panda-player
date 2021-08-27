@@ -14,11 +14,6 @@ namespace PandaPlayer.Adviser.Grouping
 
 		public bool IsDeleted => AdviseSets.All(x => x.IsDeleted);
 
-		public double Rating => AdviseSets
-			.Where(x => !x.IsDeleted)
-			.Select(x => x.Rating)
-			.Average();
-
 		public AdviseGroupContent(string id)
 		{
 			Id = id;

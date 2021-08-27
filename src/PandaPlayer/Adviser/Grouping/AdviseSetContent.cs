@@ -17,11 +17,6 @@ namespace PandaPlayer.Adviser.Grouping
 
 		public bool IsDeleted => Discs.All(x => x.IsDeleted);
 
-		public double Rating => Discs
-			.Where(x => !x.IsDeleted)
-			.Select(x => x.GetRating())
-			.Average();
-
 		public DateTimeOffset? LastPlaybackTime
 		{
 			get
