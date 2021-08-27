@@ -35,7 +35,7 @@ namespace PandaPlayer.Adviser
 		{
 			return new()
 			{
-				AdvisedPlaylistType = AdvisedPlaylistType.FavoriteArtistDisc,
+				AdvisedPlaylistType = AdvisedPlaylistType.FavoriteArtistAdviseSet,
 				Title = "*** " + GetTitleForAdviseSet(adviseSet),
 				Songs = adviseSet.Discs.SelectMany(x => x.ActiveSongs).ToList(),
 				AdviseSet = adviseSet,

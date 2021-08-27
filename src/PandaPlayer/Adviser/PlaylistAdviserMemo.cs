@@ -22,7 +22,7 @@ namespace PandaPlayer.Adviser
 					? 0
 					: PlaybacksSinceHighlyRatedSongsPlaylist + 1;
 
-			var newPlaybacksSinceFavoriteArtistDisc = advisePlayback.AdvisedPlaylistType == AdvisedPlaylistType.FavoriteArtistDisc
+			var newPlaybacksSinceFavoriteArtistDisc = advisePlayback.AdvisedPlaylistType == AdvisedPlaylistType.FavoriteArtistAdviseSet
 				? 0
 				: PlaybacksSinceFavoriteArtistDisc + 1;
 
