@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PandaPlayer.Adviser;
 using PandaPlayer.Core.Models;
+using PandaPlayer.UnitTests.Extensions;
 
 namespace PandaPlayer.UnitTests.Adviser
 {
@@ -10,7 +12,7 @@ namespace PandaPlayer.UnitTests.Adviser
 	public class PlaylistAdviserMemoTests
 	{
 		[TestMethod]
-		public void RegisterPlayback_IfPlaybackAdviseIsFavoriteArtistDisc_SetsPlaybacksSinceFavoriteArtistDiscToZero()
+		public void RegisterPlayback_IfPlaybackAdviseIsFavoriteArtistAdviseSet_SetsPlaybacksSinceFavoriteArtistDiscToZero()
 		{
 			// Arrange
 
@@ -24,12 +26,12 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			// Act
 
-			var newMemo = target.RegisterPlayback(AdvisedPlaylist.ForFavoriteArtistDisc(disc));
+			var newMemo = target.RegisterPlayback(AdvisedPlaylist.ForFavoriteArtistAdviseSet(disc.ToAdviseSet()));
 
 			// Assert
 
-			Assert.AreEqual(0, newMemo.PlaybacksSinceFavoriteArtistDisc);
-			Assert.AreEqual(4, newMemo.PlaybacksSinceHighlyRatedSongsPlaylist);
+			var expectedMemo = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 4, playbacksSinceFavoriteArtistDisc: 0);
+			newMemo.Should().BeEquivalentTo(expectedMemo);
 		}
 
 		[TestMethod]
@@ -45,8 +47,8 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			// Assert
 
-			Assert.AreEqual(0, newMemo.PlaybacksSinceHighlyRatedSongsPlaylist);
-			Assert.AreEqual(6, newMemo.PlaybacksSinceFavoriteArtistDisc);
+			var expectedMemo = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 0, playbacksSinceFavoriteArtistDisc: 6);
+			newMemo.Should().BeEquivalentTo(expectedMemo);
 		}
 
 		[TestMethod]
@@ -64,12 +66,12 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			// Act
 
-			var newMemo = target.RegisterPlayback(AdvisedPlaylist.ForDisc(disc));
+			var newMemo = target.RegisterPlayback(AdvisedPlaylist.ForAdviseSet(disc.ToAdviseSet()));
 
 			// Assert
 
-			Assert.AreEqual(4, newMemo.PlaybacksSinceHighlyRatedSongsPlaylist);
-			Assert.AreEqual(6, newMemo.PlaybacksSinceFavoriteArtistDisc);
+			var expectedMemo = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 4, playbacksSinceFavoriteArtistDisc: 6);
+			newMemo.Should().BeEquivalentTo(expectedMemo);
 		}
 	}
 }
