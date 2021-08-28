@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq.AutoMock;
 using PandaPlayer.Adviser.Grouping;
 using PandaPlayer.Adviser.Internal;
-using PandaPlayer.Adviser.RankBasedAdviser;
 using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.UnitTests.Adviser.Internal
@@ -21,21 +21,21 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 
 			var song = CreateTestSong(11, lastPlaybackTime: null);
 
-			var disc1 = CreateTestDisc(1, new[] { song });
-			var disc2 = CreateTestDisc(2, Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
+			var adviseGroupContent1 = CreateTestAdviseGroupContent("1", new[] { song });
+			var adviseGroupContent2 = CreateTestAdviseGroupContent("2", Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
 
-			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2 });
+			var playbacksInfo = new PlaybacksInfo(new[] { adviseGroupContent1, adviseGroupContent2 });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
 
-			var result = target.CalculateSongRank(song, playbacksInfo);
+			var rank = target.CalculateSongRank(song, playbacksInfo);
 
 			// Assert
 
-			Assert.AreEqual(Double.MaxValue, result);
+			rank.Should().Be(Double.MaxValue);
 		}
 
 		[TestMethod]
@@ -47,10 +47,10 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 			var song2 = CreateTestSong(12, RatingModel.R7, new DateTime(2021, 06, 27));
 			var song3 = CreateTestSong(13, RatingModel.R4, new DateTime(2021, 06, 28));
 
-			var disc1 = CreateTestDisc(1, new[] { song1, song2, song3 });
-			var disc2 = CreateTestDisc(2, Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
+			var adviseGroupContent1 = CreateTestAdviseGroupContent("1", new[] { song1, song2, song3 });
+			var adviseGroupContent2 = CreateTestAdviseGroupContent("2", Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
 
-			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2 });
+			var playbacksInfo = new PlaybacksInfo(new[] { adviseGroupContent1, adviseGroupContent2 });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
@@ -64,13 +64,13 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 			// Assert
 
 			// (rating: 1.5 ^ 5) * (playbacks age: 12)
-			Assert.AreEqual(91.125, rank1);
+			rank1.Should().Be(91.125);
 
 			// (rating: 1.5 ^ 7) * (playbacks age: 11)
-			Assert.AreEqual(187.9453125, rank2);
+			rank2.Should().Be(187.9453125);
 
 			// (rating: 1.5 ^ 4) * (playbacks age: 10)
-			Assert.AreEqual(50.625, rank3);
+			rank3.Should().Be(50.625);
 		}
 
 		[TestMethod]
@@ -80,10 +80,10 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 
 			var song = CreateTestSong(11, rating: null, new DateTime(2021, 06, 28));
 
-			var disc1 = CreateTestDisc(1, new[] { song });
-			var disc2 = CreateTestDisc(2, Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
+			var adviseGroupContent1 = CreateTestAdviseGroupContent("1", new[] { song });
+			var adviseGroupContent2 = CreateTestAdviseGroupContent("2", Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
 
-			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2 });
+			var playbacksInfo = new PlaybacksInfo(new[] { adviseGroupContent1, adviseGroupContent2 });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
@@ -95,66 +95,66 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 			// Assert
 
 			// (rating: 1.5 ^ 5) * (playbacks age: 10)
-			Assert.AreEqual(75.9375, rank);
+			rank.Should().Be(75.9375);
 		}
 
 		[TestMethod]
-		public void CalculateDiscRank_ForDiscWithoutPlaybacks_ReturnsMaxRank()
+		public void CalculateAdviseSetRank_ForAdviseSetWithoutPlaybacks_ReturnsMaxRank()
 		{
 			// Arrange
 
-			var disc1 = CreateTestDisc(1, new[] { CreateTestSong(11, lastPlaybackTime: null) });
-			var disc2 = CreateTestDisc(2, Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
+			var adviseGroupContent1 = CreateTestAdviseGroupContent("1", new[] { CreateTestSong(11, lastPlaybackTime: null) });
+			var adviseGroupContent2 = CreateTestAdviseGroupContent("2", Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
 
-			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2 });
+			var playbacksInfo = new PlaybacksInfo(new[] { adviseGroupContent1, adviseGroupContent2 });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
 
-			var result = target.CalculateDiscRank(disc1, playbacksInfo);
+			var rank = target.CalculateAdviseSetRank(adviseGroupContent1.AdviseSets.Single(), playbacksInfo);
 
 			// Assert
 
-			Assert.AreEqual(Double.MaxValue, result);
+			rank.Should().Be(Double.MaxValue);
 		}
 
 		[TestMethod]
-		public void CalculateDiscRank_ForListenedDiscWithRatingDefined_ReturnsCorrectRank()
+		public void CalculateAdviseSetRank_ForListenedAdviseSetWithRatingDefined_ReturnsCorrectRank()
 		{
 			// Arrange
 
-			var disc1 = CreateTestDisc(1, new[] { CreateTestSong(11, RatingModel.R5, new DateTime(2021, 06, 26)) });
-			var disc2 = CreateTestDisc(2, new[] { CreateTestSong(12, RatingModel.R7, new DateTime(2021, 06, 27)) });
-			var disc3 = CreateTestDisc(3, new[] { CreateTestSong(13, RatingModel.R4, new DateTime(2021, 06, 28)) });
-			var disc4 = CreateTestDisc(4, Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
+			var adviseGroupContent1 = CreateTestAdviseGroupContent("1", new[] { CreateTestSong(11, RatingModel.R5, new DateTime(2021, 06, 26)) });
+			var adviseGroupContent2 = CreateTestAdviseGroupContent("2", new[] { CreateTestSong(12, RatingModel.R7, new DateTime(2021, 06, 27)) });
+			var adviseGroupContent3 = CreateTestAdviseGroupContent("3", new[] { CreateTestSong(13, RatingModel.R4, new DateTime(2021, 06, 28)) });
+			var adviseGroupContent4 = CreateTestAdviseGroupContent("4", Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
 
-			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2, disc3, disc4 });
+			var playbacksInfo = new PlaybacksInfo(new[] { adviseGroupContent1, adviseGroupContent2, adviseGroupContent3, adviseGroupContent4 });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
 
-			var rank1 = target.CalculateDiscRank(disc1, playbacksInfo);
-			var rank2 = target.CalculateDiscRank(disc2, playbacksInfo);
-			var rank3 = target.CalculateDiscRank(disc3, playbacksInfo);
+			var rank1 = target.CalculateAdviseSetRank(adviseGroupContent1.AdviseSets.Single(), playbacksInfo);
+			var rank2 = target.CalculateAdviseSetRank(adviseGroupContent2.AdviseSets.Single(), playbacksInfo);
+			var rank3 = target.CalculateAdviseSetRank(adviseGroupContent3.AdviseSets.Single(), playbacksInfo);
 
 			// Assert
 
 			// (rating: 1.5 ^ 5) * (playbacks age: 3)
-			Assert.AreEqual(22.78125, rank1);
+			rank1.Should().Be(22.78125);
 
 			// (rating: 1.5 ^ 7) * (playbacks age: 2)
-			Assert.AreEqual(34.171875, rank2);
+			rank2.Should().Be(34.171875);
 
 			// (rating: 1.5 ^ 4) * (playbacks age: 1)
-			Assert.AreEqual(5.0625, rank3);
+			rank3.Should().Be(5.0625);
 		}
 
 		[TestMethod]
-		public void CalculateDiscRank_ForDiscWithMixedSongRatings_ReturnsCorrectRank()
+		public void CalculateAdviseSetRank_ForAdviseSetWithMixedRatings_ReturnsCorrectRank()
 		{
 			// Arrange
 
@@ -166,207 +166,201 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 				CreateTestSong(14, rating: RatingModel.R4, new DateTime(2021, 06, 28)),
 			};
 
-			var disc1 = CreateTestDisc(1, songs);
-			var disc2 = CreateTestDisc(2, Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
+			var adviseGroupContent1 = CreateTestAdviseGroupContent("1", songs);
+			var adviseGroupContent2 = CreateTestAdviseGroupContent("2", Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
 
-			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2 });
+			var playbacksInfo = new PlaybacksInfo(new[] { adviseGroupContent1, adviseGroupContent2 });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
 
-			var rank = target.CalculateDiscRank(disc1, playbacksInfo);
+			var rank = target.CalculateAdviseSetRank(adviseGroupContent1.AdviseSets.Single(), playbacksInfo);
 
 			// Assert
 
 			// (rating: 1.5 ^ 2.5) * (playbacks age: 1)
-			Assert.AreEqual(4.133513940946613, rank);
+			rank.Should().Be(4.133513940946613);
 		}
 
 		[TestMethod]
-		public void CalculateDiscRank_ForListenedDiscWithNoRatingDefined_ReturnsCorrectRank()
+		public void CalculateAdviseSetRank_ForListenedAdviseSetWithNoRatingDefined_ReturnsCorrectRank()
 		{
 			// Arrange
 
-			var disc1 = CreateTestDisc(1, new[] { CreateTestSong(11, rating: null, new DateTime(2021, 06, 28)) });
-			var disc2 = CreateTestDisc(2, Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
+			var adviseGroupContent1 = CreateTestAdviseGroupContent("1", new[] { CreateTestSong(11, rating: null, new DateTime(2021, 06, 28)) });
+			var adviseGroupContent2 = CreateTestAdviseGroupContent("2", Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
 
-			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2 });
+			var playbacksInfo = new PlaybacksInfo(new[] { adviseGroupContent1, adviseGroupContent2 });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
 
-			var rank = target.CalculateDiscRank(disc1, playbacksInfo);
+			var rank = target.CalculateAdviseSetRank(adviseGroupContent1.AdviseSets.Single(), playbacksInfo);
 
 			// Assert
 
 			// (rating: 1.5 ^ 5) * (playbacks age: 1)
-			Assert.AreEqual(7.59375, rank);
+			rank.Should().Be(7.59375);
 		}
 
 		[TestMethod]
-		public void CalculateDiscGroupRank_ForDiscGroupWithoutPlaybacks_ReturnsMaxRank()
+		public void CalculateAdviseGroupRank_ForAdviseGroupWithoutPlaybacks_ReturnsMaxRank()
 		{
 			// Arrange
 
-			var disc1 = CreateTestDisc(1, new[] { CreateTestSong(11, lastPlaybackTime: null) });
-			var disc2 = CreateTestDisc(2, new[] { CreateTestSong(12, lastPlaybackTime: null) });
-			var disc3 = CreateTestDisc(3, Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
+			var adviseGroupContent1 = new AdviseGroupContent("1");
+			adviseGroupContent1.AddDisc(CreateTestDisc("1.1", new[] { CreateTestSong(11, lastPlaybackTime: null) }));
+			adviseGroupContent1.AddDisc(CreateTestDisc("1.2", new[] { CreateTestSong(12, lastPlaybackTime: null) }));
 
-			var discGroup = CreateTestDiscGroup("test", disc1, disc2);
+			var adviseGroupContent2 = CreateTestAdviseGroupContent("2", Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
 
-			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2, disc3 });
-			var rankedDiscGroup = new RankedDiscGroup(discGroup, playbacksInfo);
+			var playbacksInfo = new PlaybacksInfo(new[] { adviseGroupContent1, adviseGroupContent2 });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
 
-			var result = target.CalculateDiscGroupRank(rankedDiscGroup);
+			var rank = target.CalculateAdviseGroupRank(adviseGroupContent1, playbacksInfo);
 
 			// Assert
 
-			Assert.AreEqual(Double.MaxValue, result);
+			rank.Should().Be(Double.MaxValue);
 		}
 
 		[TestMethod]
-		public void CalculateDiscGroupRank_ForDiscGroupWithPlaybacksAndRatingsDefined_ReturnsCorrectRank()
+		public void CalculateAdviseGroupRank_ForAdviseGroupWithPlaybacksAndRatingsDefined_ReturnsCorrectRank()
 		{
 			// Arrange
 
-			var disc1 = CreateTestDisc(1, new[] { CreateTestSong(11, RatingModel.R5, new DateTime(2021, 06, 26)) });
-			var disc2 = CreateTestDisc(2, new[] { CreateTestSong(12, RatingModel.R7, new DateTime(2021, 06, 27)) });
-			var disc3 = CreateTestDisc(3, new[] { CreateTestSong(13, RatingModel.R4, new DateTime(2021, 06, 28)) });
-			var disc4 = CreateTestDisc(4, Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
+			var adviseGroupContent1 = CreateTestAdviseGroupContent("1", new[] { CreateTestSong(11, RatingModel.R5, new DateTime(2021, 06, 26)) });
+			var adviseGroupContent2 = CreateTestAdviseGroupContent("2", new[] { CreateTestSong(12, RatingModel.R7, new DateTime(2021, 06, 27)) });
+			var adviseGroupContent3 = CreateTestAdviseGroupContent("3", new[] { CreateTestSong(13, RatingModel.R4, new DateTime(2021, 06, 28)) });
+			var adviseGroupContent4 = CreateTestAdviseGroupContent("4", Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
 
-			var discGroup1 = CreateTestDiscGroup("group1", disc1);
-			var discGroup2 = CreateTestDiscGroup("group2", disc2);
-			var discGroup3 = CreateTestDiscGroup("group3", disc3);
-
-			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2, disc3, disc4 });
+			var playbacksInfo = new PlaybacksInfo(new[] { adviseGroupContent1, adviseGroupContent2, adviseGroupContent3, adviseGroupContent4 });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
 
-			var rank1 = target.CalculateDiscGroupRank(new RankedDiscGroup(discGroup1, playbacksInfo));
-			var rank2 = target.CalculateDiscGroupRank(new RankedDiscGroup(discGroup2, playbacksInfo));
-			var rank3 = target.CalculateDiscGroupRank(new RankedDiscGroup(discGroup3, playbacksInfo));
+			var rank1 = target.CalculateAdviseGroupRank(adviseGroupContent1, playbacksInfo);
+			var rank2 = target.CalculateAdviseGroupRank(adviseGroupContent2, playbacksInfo);
+			var rank3 = target.CalculateAdviseGroupRank(adviseGroupContent3, playbacksInfo);
 
 			// Assert
 
 			// (discs number: 1 ^ 0.5) * (rating: 1.5 ^ 5) * (playbacks age: 3)
-			Assert.AreEqual(22.78125, rank1);
+			rank1.Should().Be(22.78125);
 
 			// (discs number: 1 ^ 0.5) * (rating: 1.5 ^ 7) * (playbacks age: 2)
-			Assert.AreEqual(34.171875, rank2);
+			rank2.Should().Be(34.171875);
 
 			// (discs number: 1 ^ 0.5) * (rating: 1.5 ^ 4) * (playbacks age: 1)
-			Assert.AreEqual(5.0625, rank3);
+			rank3.Should().Be(5.0625);
 		}
 
 		[TestMethod]
-		public void CalculateDiscGroupRank_DiscGroupContainsMultipleDiscs_ReturnsCorrectRank()
+		public void CalculateAdviseGroupRank_IfAdviseGroupContainsMultipleAdviseSets_ReturnsCorrectRank()
 		{
 			// Arrange
 
-			var disc1 = CreateTestDisc(1, new[] { CreateTestSong(11, RatingModel.R5, new DateTime(2021, 06, 26)) });
-			var disc2 = CreateTestDisc(2, new[] { CreateTestSong(12, RatingModel.R7, new DateTime(2021, 06, 27)) });
-			var disc3 = CreateTestDisc(3, new[] { CreateTestSong(13, RatingModel.R6, new DateTime(2021, 06, 28)) });
-			var disc4 = CreateTestDisc(4, Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
+			var adviseGroupContent1 = new AdviseGroupContent("1");
+			adviseGroupContent1.AddDisc(CreateTestDisc("1.1", new[] { CreateTestSong(11, RatingModel.R5, new DateTime(2021, 06, 26)) }));
+			adviseGroupContent1.AddDisc(CreateTestDisc("1.2", new[] { CreateTestSong(12, RatingModel.R7, new DateTime(2021, 06, 27)) }));
+			adviseGroupContent1.AddDisc(CreateTestDisc("1.3", new[] { CreateTestSong(13, RatingModel.R6, new DateTime(2021, 06, 28)) }));
 
-			var discGroup = CreateTestDiscGroup("group1", disc1, disc2, disc3);
+			var adviseGroupContent2 = CreateTestAdviseGroupContent("2", Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
 
-			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2, disc3, disc4 });
+			var playbacksInfo = new PlaybacksInfo(new[] { adviseGroupContent1, adviseGroupContent2 });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
 
-			var rank = target.CalculateDiscGroupRank(new RankedDiscGroup(discGroup, playbacksInfo));
+			var rank = target.CalculateAdviseGroupRank(adviseGroupContent1, playbacksInfo);
 
 			// Assert
 
 			// (discs number: 3 ^ 0.5) * (rating: 1.5 ^ 6) * (playbacks age: 1)
-			Assert.AreEqual(19.729141, rank, 0.000001);
+			rank.Should().BeApproximately(19.729141, 0.000001);
 		}
 
 		[TestMethod]
-		public void CalculateDiscGroupRank_DiscGroupContainsDeletedDiscs_SkipsDeletedDiscsWhenCountingDiscsNumberAndAverageRating()
+		public void CalculateAdviseGroupRank_IfAdviseGroupContainsDeletedAdviseSets_SkipsDeletedAdviseSetsWhenCountingSetsNumberAndAverageRating()
 		{
 			// Arrange
 
-			var disc1 = CreateTestDisc(1, new[] { CreateTestSong(11, RatingModel.R5, new DateTime(2021, 06, 26)) });
-			var disc2 = CreateTestDisc(2, new[] { CreateTestSong(12, RatingModel.R3, new DateTime(2021, 06, 27)) });
-			var disc3 = CreateTestDisc(3, new[] { CreateTestSong(13, RatingModel.R6, new DateTime(2021, 06, 28), isDeleted: true) });
-			var disc4 = CreateTestDisc(4, Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
+			var adviseGroupContent1 = new AdviseGroupContent("1");
+			adviseGroupContent1.AddDisc(CreateTestDisc("1.1", new[] { CreateTestSong(11, RatingModel.R5, new DateTime(2021, 06, 26)) }));
+			adviseGroupContent1.AddDisc(CreateTestDisc("1.2", new[] { CreateTestSong(12, RatingModel.R3, new DateTime(2021, 06, 27)) }));
+			adviseGroupContent1.AddDisc(CreateTestDisc("1.3", new[] { CreateTestSong(13, RatingModel.R6, new DateTime(2021, 06, 28), isDeleted: true) }));
 
-			var discGroup = CreateTestDiscGroup("group1", disc1, disc2, disc3);
+			var adviseGroupContent2 = CreateTestAdviseGroupContent("2", Enumerable.Range(1, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
 
-			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2, disc3, disc4 });
+			var playbacksInfo = new PlaybacksInfo(new[] { adviseGroupContent1, adviseGroupContent2 });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
 
-			var rank = target.CalculateDiscGroupRank(new RankedDiscGroup(discGroup, playbacksInfo));
+			var rank = target.CalculateAdviseGroupRank(adviseGroupContent1, playbacksInfo);
 
 			// Assert
 
 			// (discs number: 2 ^ 0.5) * (rating: 1.5 ^ 6) * (playbacks age: 1)
-			Assert.AreEqual(7.15945616, rank, 0.000001);
+			rank.Should().BeApproximately(7.15945616, 0.000001);
 		}
 
 		[TestMethod]
-		public void CalculateDiscGroupRank_DiscGroupContainsDeletedDiscs_ConsidersDeletedDiscsWhenCounting()
+		public void CalculateAdviseGroupRank_IfAdviseGroupContainsDeletedAdviseSets_ConsidersDeletedAdviseSetsForPlaybacksAge()
 		{
 			// Arrange
 
-			var disc1 = CreateTestDisc(1, new[] { CreateTestSong(11, RatingModel.R5, new DateTime(2021, 06, 26)) });
-			var disc2 = CreateTestDisc(2, new[] { CreateTestSong(12, RatingModel.R5, new DateTime(2021, 06, 28), isDeleted: true) });
-			var disc3 = CreateTestDisc(3, Enumerable.Range(1, 5).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 27))));
-			var disc4 = CreateTestDisc(4, Enumerable.Range(6, 5).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
+			var adviseGroupContent1 = new AdviseGroupContent("1");
+			adviseGroupContent1.AddDisc(CreateTestDisc("1.1", new[] { CreateTestSong(11, RatingModel.R5, new DateTime(2021, 06, 26)) }));
+			adviseGroupContent1.AddDisc(CreateTestDisc("1.2", new[] { CreateTestSong(12, RatingModel.R5, new DateTime(2021, 06, 28), isDeleted: true) }));
 
-			var discGroup = CreateTestDiscGroup("group1", disc1, disc2);
+			var adviseGroupContent2 = CreateTestAdviseGroupContent("2", Enumerable.Range(1, 5).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 27))));
+			var adviseGroupContent3 = CreateTestAdviseGroupContent("3", Enumerable.Range(6, 5).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 06, 29))));
 
-			var playbacksInfo = new PlaybacksInfo(new[] { disc1, disc2, disc3, disc4 });
+			var playbacksInfo = new PlaybacksInfo(new[] { adviseGroupContent1, adviseGroupContent2, adviseGroupContent3 });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AdviseRankCalculator>();
 
 			// Act
 
-			var rank = target.CalculateDiscGroupRank(new RankedDiscGroup(discGroup, playbacksInfo));
+			var rank = target.CalculateAdviseGroupRank(adviseGroupContent1, playbacksInfo);
 
 			// Assert
 
 			// (discs number: 1 ^ 0.5) * (rating: 1.5 ^ 5) * (playbacks age: 1)
-			Assert.AreEqual(7.59375, rank);
+			rank.Should().Be(7.59375);
 		}
 
-		private static DiscGroup CreateTestDiscGroup(string id, params DiscModel[] discs)
+		private static AdviseGroupContent CreateTestAdviseGroupContent(string id, IEnumerable<SongModel> songs)
 		{
-			var discGroup = new DiscGroup(id);
-			foreach (var disc in discs)
-			{
-				discGroup.AddDisc(disc);
-			}
+			var disc = CreateTestDisc(id, songs);
 
-			return discGroup;
+			var adviseGroupContent = new AdviseGroupContent(id);
+			adviseGroupContent.AddDisc(disc);
+
+			return adviseGroupContent;
 		}
 
-		private static DiscModel CreateTestDisc(int id, IEnumerable<SongModel> songs)
+		private static DiscModel CreateTestDisc(string id, IEnumerable<SongModel> songs)
 		{
 			return new()
 			{
-				Id = new ItemId(id.ToString(CultureInfo.InvariantCulture)),
+				Id = new ItemId(id),
 				Folder = new ShallowFolderModel(),
 				AllSongs = songs.ToList(),
 			};

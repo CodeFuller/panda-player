@@ -42,9 +42,7 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 			var playbacksMemo = Memo;
 
 			var adviseGroups = (await discGrouper.GroupLibraryDiscs(discs, cancellationToken)).ToList();
-			var adviseSets = adviseGroups.SelectMany(x => x.AdviseSets);
-
-			var playbacksInfo = new PlaybacksInfo(adviseSets);
+			var playbacksInfo = new PlaybacksInfo(adviseGroups);
 
 			var highlyRatedSongsAdvises = await highlyRatedSongsAdviser.Advise(adviseGroups, playbacksInfo, cancellationToken);
 			var favoriteArtistDiscsAdvises = await favoriteArtistAdviser.Advise(adviseGroups, playbacksInfo, cancellationToken);

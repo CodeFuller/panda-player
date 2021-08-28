@@ -21,10 +21,16 @@ namespace PandaPlayer.Adviser.Grouping
 
 		public void AddDisc(DiscModel disc)
 		{
-			var adviseSet = new AdviseSetContent($"Disc: {disc.Id}");
-			adviseSet.AddDisc(disc);
+			var adviseSetId = disc.AdviseSet?.Id.Value ?? $"Disc: {disc.Id}";
 
-			adviseSets.Add(adviseSet);
+			var adviseSet = adviseSets.SingleOrDefault(x => x.Id == adviseSetId);
+			if (adviseSet == null)
+			{
+				adviseSet = new AdviseSetContent(adviseSetId);
+				adviseSets.Add(adviseSet);
+			}
+
+			adviseSet.AddDisc(disc);
 		}
 	}
 }

@@ -12,12 +12,12 @@ namespace PandaPlayer.Adviser.Internal
 
 		private readonly Dictionary<ItemId, int> songPlaybacksInfo;
 
-		public PlaybacksInfo(IEnumerable<AdviseSetContent> adviseSets)
+		public PlaybacksInfo(IEnumerable<AdviseGroupContent> adviseGroups)
 		{
-			var adviseSetList = adviseSets.ToList();
+			var adviseSets = adviseGroups.SelectMany(x => x.AdviseSets).ToList();
 
-			adviseSetsPlaybacksInfo = FillDiscPlaybacksInfo(adviseSetList);
-			songPlaybacksInfo = FillSongPlaybacksInfo(adviseSetList);
+			adviseSetsPlaybacksInfo = FillDiscPlaybacksInfo(adviseSets);
+			songPlaybacksInfo = FillSongPlaybacksInfo(adviseSets);
 		}
 
 		private static Dictionary<string, int> FillDiscPlaybacksInfo(IEnumerable<AdviseSetContent> adviseSets)
@@ -72,7 +72,7 @@ namespace PandaPlayer.Adviser.Internal
 				return playbacksPassed;
 			}
 
-			throw new InvalidOperationException($"The number of passed playbacks for advise set {adviseSetContent.Id} is unknown");
+			throw new InvalidOperationException($"The number of passed playbacks for advise set '{adviseSetContent.Id}' is unknown");
 		}
 
 		public int GetPlaybacksPassed(SongModel song)
@@ -82,7 +82,7 @@ namespace PandaPlayer.Adviser.Internal
 				return playbacksPassed;
 			}
 
-			throw new InvalidOperationException($"The number of passed playbacks for song {song.Id} is unknown");
+			throw new InvalidOperationException($"The number of passed playbacks for song '{song.Id}' is unknown");
 		}
 	}
 }
