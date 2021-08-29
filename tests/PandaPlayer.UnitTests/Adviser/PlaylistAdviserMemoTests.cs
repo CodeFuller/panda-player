@@ -18,6 +18,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			var disc = new DiscModel
 			{
+				Id = new ItemId("1"),
 				Folder = new ShallowFolderModel(),
 				AllSongs = new List<SongModel>(),
 			};
@@ -58,6 +59,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			var disc = new DiscModel
 			{
+				Id = new ItemId("1"),
 				Folder = new ShallowFolderModel(),
 				AllSongs = new List<SongModel>(),
 			};

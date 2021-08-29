@@ -16,11 +16,11 @@ namespace PandaPlayer.Adviser.Internal
 		{
 			var adviseSets = adviseGroups.SelectMany(x => x.AdviseSets).ToList();
 
-			adviseSetsPlaybacksInfo = FillDiscPlaybacksInfo(adviseSets);
+			adviseSetsPlaybacksInfo = FillAdviseSetsPlaybacksInfo(adviseSets);
 			songPlaybacksInfo = FillSongPlaybacksInfo(adviseSets);
 		}
 
-		private static Dictionary<string, int> FillDiscPlaybacksInfo(IEnumerable<AdviseSetContent> adviseSets)
+		private static Dictionary<string, int> FillAdviseSetsPlaybacksInfo(IEnumerable<AdviseSetContent> adviseSets)
 		{
 			var playbacksInfo = new Dictionary<string, int>();
 

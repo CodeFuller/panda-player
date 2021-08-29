@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -214,6 +215,43 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			};
 
 			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithoutStrictOrdering());
+		}
+
+		[TestMethod]
+		public async Task GroupLibraryDiscs_IfDiscsBelongToSameAdviseSet_AssignsDiscsToSameAdviseSetContent()
+		{
+			// Arrange
+
+			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolderId = null };
+
+			var adviseSet1 = new AdviseSetModel { Id = new ItemId("Advise Set 1") };
+			var adviseSet2 = new AdviseSetModel { Id = new ItemId("Advise Set 2") };
+
+			var disc11 = new DiscModel { Folder = rootFolder, AdviseSet = adviseSet1, AllSongs = Array.Empty<SongModel>() };
+			var disc12 = new DiscModel { Folder = rootFolder, AdviseSet = adviseSet1, AllSongs = Array.Empty<SongModel>() };
+			var disc21 = new DiscModel { Folder = rootFolder, AdviseSet = adviseSet2, AllSongs = Array.Empty<SongModel>() };
+
+			var folderServiceStub = new Mock<IFoldersService>();
+			folderServiceStub.Setup(x => x.GetAllFolders(It.IsAny<CancellationToken>())).ReturnsAsync(new[] { rootFolder });
+
+			var mocker = new AutoMocker();
+			mocker.Use(folderServiceStub);
+
+			var target = mocker.CreateInstance<DiscGrouper>();
+
+			// Act
+
+			var adviseGroups = await target.GroupLibraryDiscs(new[] { disc11, disc21, disc12 }, CancellationToken.None);
+
+			// Assert
+
+			adviseGroups.Count.Should().Be(1);
+
+			var adviseSets = adviseGroups.Single().AdviseSets.ToList();
+			adviseSets.Count.Should().Be(2);
+
+			adviseSets[0].Discs.Should().BeEquivalentTo(new[] { disc11, disc12 }, x => x.WithStrictOrdering());
+			adviseSets[1].Discs.Should().BeEquivalentTo(new[] { disc21 }, x => x.WithStrictOrdering());
 		}
 	}
 }

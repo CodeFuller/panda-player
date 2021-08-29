@@ -20,6 +20,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			var adviseSetContent = new DiscModel
 			{
+				Id = new ItemId("1"),
 				Folder = new FolderModel { Name = "Some Artist" },
 				AllSongs = new List<SongModel>(),
 			}.ToAdviseSet();
@@ -40,6 +41,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			var adviseSetContent = new DiscModel
 			{
+				Id = new ItemId("1"),
 				Folder = new FolderModel { Name = "Some Artist" },
 				Title = "Some Disc",
 				AllSongs = new List<SongModel>(),
@@ -67,6 +69,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			var disc1 = new DiscModel
 			{
+				Id = new ItemId("1"),
 				Folder = new FolderModel { Name = "Some Artist" },
 				AdviseSet = adviseSet,
 				Title = "Disc 1",
@@ -75,6 +78,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			var disc2 = new DiscModel
 			{
+				Id = new ItemId("2"),
 				Folder = new FolderModel { Name = "Some Artist" },
 				AdviseSet = adviseSet,
 				Title = "Disc 1",
@@ -95,7 +99,57 @@ namespace PandaPlayer.UnitTests.Adviser
 		}
 
 		[TestMethod]
-		public void ForAdviseSet_IfDiscContainsDeletedSongs_FillsPlaylistOnlyWithActiveSongs()
+		public void ForAdviseSet_IfAdviseSetContainsMultipleDiscs_OrdersPlaylistSongsCorrectly()
+		{
+			// Arrange
+
+			var adviseSet = new AdviseSetModel
+			{
+				Id = new ItemId("Advise Set Id"),
+				Name = "Some Advise Set",
+			};
+
+			var song1 = new SongModel { Id = new ItemId("Song 1.1") };
+			var disc1 = new DiscModel
+			{
+				Id = new ItemId("1"),
+				TreeTitle = "Disc 1",
+				AdviseSet = adviseSet,
+				AllSongs = new[] { song1 },
+			};
+
+			var song2 = new SongModel { Id = new ItemId("Song 2.1") };
+			var disc2 = new DiscModel
+			{
+				Id = new ItemId("2"),
+				TreeTitle = "Disc 2",
+				AdviseSet = adviseSet,
+				AllSongs = new[] { song2 },
+			};
+
+			var adviseSetContent = new AdviseSetContent("AdviseSetContent Id");
+
+			// We add disc2 first on purpose.
+			adviseSetContent.AddDisc(disc2);
+			adviseSetContent.AddDisc(disc1);
+
+			// Act
+
+			var target = AdvisedPlaylist.ForAdviseSet(adviseSetContent);
+
+			// Assert
+
+			var expectedSongs = new[]
+			{
+				song1,
+				song2,
+			};
+
+			target.Songs.Should().BeEquivalentTo(expectedSongs, x => x.WithStrictOrdering());
+		}
+
+		[TestMethod]
+		public void ForAdviseSet_IfAdviseSetContainsDeletedSongs_FillsPlaylistOnlyWithActiveSongs()
 		{
 			// Arrange
 
@@ -105,6 +159,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			var adviseSetContent = new DiscModel
 			{
+				Id = new ItemId("1"),
 				Folder = new FolderModel { Name = "Some Artist" },
 				AllSongs = new[] { deletedSong, activeSong1, activeSong2 },
 			}.ToAdviseSet();
@@ -125,6 +180,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			var adviseSetContent = new DiscModel
 			{
+				Id = new ItemId("1"),
 				Folder = new FolderModel { Name = "Some Artist" },
 				AllSongs = new List<SongModel>(),
 			}.ToAdviseSet();
@@ -145,6 +201,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			var adviseSetContent = new DiscModel
 			{
+				Id = new ItemId("1"),
 				Folder = new FolderModel { Name = "Some Artist" },
 				AllSongs = new List<SongModel>(),
 			}.ToAdviseSet();
@@ -165,6 +222,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			var adviseSetContent = new DiscModel
 			{
+				Id = new ItemId("1"),
 				Folder = new FolderModel { Name = "Some Artist" },
 				Title = "Some Disc",
 				AllSongs = new[]
@@ -187,7 +245,7 @@ namespace PandaPlayer.UnitTests.Adviser
 		}
 
 		[TestMethod]
-		public void ForFavoriteArtistAdviseSet_IfDiscContainsDeletedSongs_FillsPlaylistOnlyWithActiveSongs()
+		public void ForFavoriteArtistAdviseSet_IfAdviseSetContainsDeletedSongs_FillsPlaylistOnlyWithActiveSongs()
 		{
 			// Arrange
 
@@ -197,6 +255,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			var adviseSetContent = new DiscModel
 			{
+				Id = new ItemId("1"),
 				Folder = new FolderModel { Name = "Some Artist" },
 				AllSongs = new[] { deletedSong, activeSong1, activeSong2 },
 			}.ToAdviseSet();
@@ -217,6 +276,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			var adviseSetContent = new DiscModel
 			{
+				Id = new ItemId("1"),
 				Folder = new FolderModel { Name = "Some Artist" },
 				AllSongs = new List<SongModel>(),
 			}.ToAdviseSet();

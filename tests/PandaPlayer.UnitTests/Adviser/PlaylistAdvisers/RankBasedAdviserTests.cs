@@ -96,13 +96,17 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public async Task Advise_IfSomeAdviseSetsAreDeleted_SkipsDeletedAdviseSets()
+		public async Task Advise_IfSomeAdviseGroupsAreDeleted_SkipsDeletedAdviseGroups()
 		{
 			// Arrange
 
 			var deletedAdviseSet = CreateTestAdviseSet("1", isDeleted: true);
 			var activeAdviseSet = CreateTestAdviseSet("2", isDeleted: false);
-			var adviseGroups = CreateAdviseGroups(deletedAdviseSet, activeAdviseSet);
+
+			var deletedAdviseGroup = deletedAdviseSet.ToAdviseGroup();
+			var activeAdviseGroup = activeAdviseSet.ToAdviseGroup();
+
+			var adviseGroups = new[] { deletedAdviseGroup, activeAdviseGroup, };
 			var playbacksInfo = new PlaybacksInfo(adviseGroups);
 
 			var adviseGroupSorterStub = new Mock<IAdviseGroupSorter>();
@@ -125,6 +129,46 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var expectedAdvises = new[]
 			{
 				AdvisedPlaylist.ForAdviseSet(activeAdviseSet),
+			};
+
+			advises.Should().BeEquivalentTo(expectedAdvises, x => x.WithStrictOrdering());
+		}
+
+		[TestMethod]
+		public async Task Advise_IfSomeAdviseSetsAreDeleted_SkipsDeletedAdviseSets()
+		{
+			// Arrange
+
+			var deletedDisc = CreateTestDisc("1", isDeleted: true);
+			var activeDisc = CreateTestDisc("2", isDeleted: false);
+
+			var adviseGroup = new AdviseGroupContent("1");
+			adviseGroup.AddDisc(deletedDisc);
+			adviseGroup.AddDisc(activeDisc);
+
+			var adviseGroups = new[] { adviseGroup };
+			var playbacksInfo = new PlaybacksInfo(adviseGroups);
+
+			var adviseGroupSorterStub = new Mock<IAdviseGroupSorter>();
+			adviseGroupSorterStub.Setup(x => x.SortAdviseGroups(It.IsAny<IEnumerable<AdviseGroupContent>>(), playbacksInfo))
+				.Returns<IEnumerable<AdviseGroupContent>, PlaybacksInfo>((adviseGroups, _) => adviseGroups);
+			adviseGroupSorterStub.Setup(x => x.SortAdviseSets(It.IsAny<IEnumerable<AdviseSetContent>>(), playbacksInfo))
+				.Returns<IEnumerable<AdviseSetContent>, PlaybacksInfo>((adviseSets, _) => adviseSets);
+
+			var mocker = new AutoMocker();
+			mocker.Use(adviseGroupSorterStub);
+
+			var target = mocker.CreateInstance<RankBasedAdviser>();
+
+			// Act
+
+			var advises = await target.Advise(adviseGroups, playbacksInfo, CancellationToken.None);
+
+			// Assert
+
+			var expectedAdvises = new[]
+			{
+				AdvisedPlaylist.ForAdviseSet(activeDisc.ToAdviseSet()),
 			};
 
 			advises.Should().BeEquivalentTo(expectedAdvises, x => x.WithStrictOrdering());

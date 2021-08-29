@@ -79,8 +79,15 @@ namespace PandaPlayer.Adviser.Internal
 
 		private static double GetRating(AdviseSetContent adviseSetContent)
 		{
+			// Below check was added just in case.
+			// It should not happen that advise set contains both active and deleted discs.
+			// If all discs in advise set are deleted, then the whole advise set is considered as deleted and should be filtered by the caller.
+			if (adviseSetContent.Discs.Any(x => x.IsDeleted))
+			{
+				throw new InvalidOperationException("Advise set contains both active and deleted discs");
+			}
+
 			return adviseSetContent.Discs
-				.Where(x => !x.IsDeleted)
 				.Select(x => x.GetRating())
 				.Average();
 		}

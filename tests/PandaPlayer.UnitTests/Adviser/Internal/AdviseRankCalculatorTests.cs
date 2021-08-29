@@ -208,6 +208,37 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 		}
 
 		[TestMethod]
+		public void CalculateAdviseSetRank_ForAdviseSetWithMultipleDiscs_ReturnsCorrectRank()
+		{
+			// Arrange
+
+			var disc1 = CreateTestDisc("1.1", new[] { CreateTestSong(1, RatingModel.R5, new DateTime(2021, 08, 28)) });
+			var disc2 = CreateTestDisc("1.2", new[] { CreateTestSong(2, RatingModel.R7, new DateTime(2021, 08, 28)) });
+			disc1.AdviseSet = disc2.AdviseSet = new AdviseSetModel { Id = new ItemId("1") };
+
+			var adviseGroupContent1 = new AdviseGroupContent("1");
+			adviseGroupContent1.AddDisc(disc1);
+			adviseGroupContent1.AddDisc(disc2);
+
+			var adviseGroupContent2 = CreateTestAdviseGroupContent("2", Enumerable.Range(11, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 08, 27))));
+			var adviseGroupContent3 = CreateTestAdviseGroupContent("3", Enumerable.Range(21, 10).Select(id => CreateTestSong(id, RatingModel.R5, new DateTime(2021, 08, 29))));
+
+			var playbacksInfo = new PlaybacksInfo(new[] { adviseGroupContent1, adviseGroupContent2, adviseGroupContent3 });
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<AdviseRankCalculator>();
+
+			// Act
+
+			var rank = target.CalculateAdviseSetRank(adviseGroupContent1.AdviseSets.Single(), playbacksInfo);
+
+			// Assert
+
+			// (rating: 1.5 ^ 6) * (playbacks age: 1)
+			rank.Should().Be(11.390625);
+		}
+
+		[TestMethod]
 		public void CalculateAdviseGroupRank_ForAdviseGroupWithoutPlaybacks_ReturnsMaxRank()
 		{
 			// Arrange
