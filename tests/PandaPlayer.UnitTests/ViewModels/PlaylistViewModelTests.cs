@@ -310,11 +310,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			Task Call() => target.SwitchToNextSong(CancellationToken.None);
+			Func<Task> call = () => target.SwitchToNextSong(CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<InvalidOperationException>(Call);
+			await call.Should().ThrowAsync<InvalidOperationException>();
 		}
 
 		[TestMethod]

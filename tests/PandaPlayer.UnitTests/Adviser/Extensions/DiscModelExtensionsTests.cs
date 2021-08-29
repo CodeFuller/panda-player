@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PandaPlayer.Adviser.Extensions;
 using PandaPlayer.Core.Models;
@@ -31,7 +32,7 @@ namespace PandaPlayer.UnitTests.Adviser.Extensions
 
 			// Assert
 
-			Assert.AreEqual(new DateTime(2021, 06, 27), lastPlaybackTime);
+			lastPlaybackTime.Should().Be(new DateTime(2021, 06, 27));
 		}
 
 		[TestMethod]
@@ -55,7 +56,7 @@ namespace PandaPlayer.UnitTests.Adviser.Extensions
 
 			// Assert
 
-			Assert.AreEqual(new DateTime(2021, 06, 27), lastPlaybackTime);
+			lastPlaybackTime.Should().Be(new DateTime(2021, 06, 27));
 		}
 
 		[TestMethod]
@@ -78,7 +79,7 @@ namespace PandaPlayer.UnitTests.Adviser.Extensions
 
 			// Assert
 
-			Assert.AreEqual(new DateTime(2021, 06, 27), lastPlaybackTime);
+			lastPlaybackTime.Should().Be(new DateTime(2021, 06, 27));
 		}
 
 		private static SongModel CreateTestSong(int id, RatingModel? rating = null, DateTimeOffset? lastPlaybackTime = null, bool isDeleted = false)

@@ -33,11 +33,11 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Act
 
-			HighlyRatedSongsAdviser Call() => new(Mock.Of<IAdviseRankCalculator>(), Mock.Of<IClock>(), Options.Create(settings));
+			Func<HighlyRatedSongsAdviser> call = () => new(Mock.Of<IAdviseRankCalculator>(), Mock.Of<IClock>(), Options.Create(settings));
 
 			// Assert
 
-			Assert.ThrowsException<InvalidOperationException>(Call);
+			call.Should().Throw<InvalidOperationException>();
 		}
 
 		[TestMethod]

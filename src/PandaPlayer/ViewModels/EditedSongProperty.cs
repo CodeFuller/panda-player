@@ -37,14 +37,14 @@ namespace PandaPlayer.ViewModels
 			}
 		}
 
-		public EditedSongProperty(T initialValue)
-		{
-			Value = initialValue;
-		}
-
 		public EditedSongProperty()
 		{
 			HasValue = false;
+		}
+
+		public EditedSongProperty(T initialValue)
+		{
+			Value = initialValue;
 		}
 
 		public override string ToString()

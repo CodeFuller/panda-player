@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
@@ -36,9 +37,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			Assert.AreEqual("Some Title", target.Title);
-			Assert.AreEqual("Some Tree Title", target.TreeTitle);
-			Assert.AreEqual((short)7, target.TrackNumber);
+			target.Title.Should().Be("Some Title");
+			target.TreeTitle.Should().Be("Some Tree Title");
+			target.TrackNumber.Should().Be(7);
 		}
 
 		[TestMethod]
@@ -69,9 +70,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			Assert.IsNull(target.Title);
-			Assert.IsNull(target.TreeTitle);
-			Assert.IsNull(target.TrackNumber);
+			target.Title.Should().BeNull();
+			target.TreeTitle.Should().BeNull();
+			target.TrackNumber.Should().BeNull();
 		}
 
 		[TestMethod]
@@ -93,22 +94,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			var availableArtistsList = target.AvailableArtists.ToList();
-			Assert.AreEqual(3, availableArtistsList.Count);
+			var expectedAvailableArtists = new[]
+			{
+				new EditedSongProperty<ArtistModel>(null),
+				new EditedSongProperty<ArtistModel>(artist1),
+				new EditedSongProperty<ArtistModel>(artist2),
+			};
 
-			// '<blank>' item
-			Assert.IsTrue(availableArtistsList[0].HasBlankValue);
-
-			// 'Some Artist' item
-			Assert.IsTrue(availableArtistsList[1].HasValue);
-			Assert.AreSame(artist1, availableArtistsList[1].Value);
-
-			// 'Another Artist' item
-			Assert.IsTrue(availableArtistsList[2].HasValue);
-			Assert.AreSame(artist2, availableArtistsList[2].Value);
-
-			// 'Some Artist' item must be selected
-			Assert.AreSame(availableArtistsList[2], target.Artist);
+			target.AvailableArtists.Should().BeEquivalentTo(expectedAvailableArtists, x => x.WithStrictOrdering());
+			target.Artist.Should().BeEquivalentTo(expectedAvailableArtists[2]);
 		}
 
 		[TestMethod]
@@ -130,22 +124,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			var availableArtistsList = target.AvailableArtists.ToList();
-			Assert.AreEqual(3, availableArtistsList.Count);
+			var expectedAvailableArtists = new[]
+			{
+				new EditedSongProperty<ArtistModel>(null),
+				new EditedSongProperty<ArtistModel>(artist1),
+				new EditedSongProperty<ArtistModel>(artist2),
+			};
 
-			// '<blank>' item
-			Assert.IsTrue(availableArtistsList[0].HasBlankValue);
-
-			// 'Some Artist' item
-			Assert.IsTrue(availableArtistsList[1].HasValue);
-			Assert.AreSame(artist1, availableArtistsList[1].Value);
-
-			// 'Another Artist' item
-			Assert.IsTrue(availableArtistsList[2].HasValue);
-			Assert.AreSame(artist2, availableArtistsList[2].Value);
-
-			// '<blank>' item must be selected
-			Assert.AreSame(availableArtistsList[0], target.Artist);
+			target.AvailableArtists.Should().BeEquivalentTo(expectedAvailableArtists, x => x.WithStrictOrdering());
+			target.Artist.Should().BeEquivalentTo(expectedAvailableArtists[0]);
 		}
 
 		[TestMethod]
@@ -168,22 +155,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			var availableArtistsList = target.AvailableArtists.ToList();
-			Assert.AreEqual(3, availableArtistsList.Count);
+			var expectedAvailableArtists = new[]
+			{
+				new EditedSongProperty<ArtistModel>(null),
+				new EditedSongProperty<ArtistModel>(artist1),
+				new EditedSongProperty<ArtistModel>(artist2),
+			};
 
-			// '<blank>' item
-			Assert.IsTrue(availableArtistsList[0].HasBlankValue);
-
-			// 'Some Artist' item
-			Assert.IsTrue(availableArtistsList[1].HasValue);
-			Assert.AreSame(artist1, availableArtistsList[1].Value);
-
-			// 'Another Artist' item
-			Assert.IsTrue(availableArtistsList[2].HasValue);
-			Assert.AreSame(artist2, availableArtistsList[2].Value);
-
-			// 'Some Artist' item must be selected
-			Assert.AreSame(availableArtistsList[2], target.Artist);
+			target.AvailableArtists.Should().BeEquivalentTo(expectedAvailableArtists, x => x.WithStrictOrdering());
+			target.Artist.Should().BeEquivalentTo(expectedAvailableArtists[2]);
 		}
 
 		[TestMethod]
@@ -206,22 +186,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			var availableArtistsList = target.AvailableArtists.ToList();
-			Assert.AreEqual(3, availableArtistsList.Count);
+			var expectedAvailableArtists = new[]
+			{
+				new EditedSongProperty<ArtistModel>(null),
+				new EditedSongProperty<ArtistModel>(artist1),
+				new EditedSongProperty<ArtistModel>(artist2),
+			};
 
-			// '<blank>' item
-			Assert.IsTrue(availableArtistsList[0].HasBlankValue);
-
-			// 'Some Artist' item
-			Assert.IsTrue(availableArtistsList[1].HasValue);
-			Assert.AreSame(artist1, availableArtistsList[1].Value);
-
-			// 'Another Artist' item
-			Assert.IsTrue(availableArtistsList[2].HasValue);
-			Assert.AreSame(artist2, availableArtistsList[2].Value);
-
-			// '<blank>' item must be selected
-			Assert.AreSame(availableArtistsList[0], target.Artist);
+			target.AvailableArtists.Should().BeEquivalentTo(expectedAvailableArtists, x => x.WithStrictOrdering());
+			target.Artist.Should().BeEquivalentTo(expectedAvailableArtists[0]);
 		}
 
 		[TestMethod]
@@ -244,25 +217,16 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			var availableArtistsList = target.AvailableArtists.ToList();
-			Assert.AreEqual(4, availableArtistsList.Count);
+			var expectedAvailableArtists = new[]
+			{
+				new EditedSongProperty<ArtistModel>(),
+				new EditedSongProperty<ArtistModel>(null),
+				new EditedSongProperty<ArtistModel>(artist1),
+				new EditedSongProperty<ArtistModel>(artist2),
+			};
 
-			// '<keep>' item
-			Assert.IsFalse(availableArtistsList[0].HasValue);
-
-			// '<blank>' item
-			Assert.IsTrue(availableArtistsList[1].HasBlankValue);
-
-			// 'Some Artist' item
-			Assert.IsTrue(availableArtistsList[2].HasValue);
-			Assert.AreSame(artist1, availableArtistsList[2].Value);
-
-			// 'Another Artist' item
-			Assert.IsTrue(availableArtistsList[3].HasValue);
-			Assert.AreSame(artist2, availableArtistsList[3].Value);
-
-			// '<keep>' item must be selected
-			Assert.AreSame(availableArtistsList[0], target.Artist);
+			target.AvailableArtists.Should().BeEquivalentTo(expectedAvailableArtists, x => x.WithStrictOrdering());
+			target.Artist.Should().BeEquivalentTo(expectedAvailableArtists[0]);
 		}
 
 		[TestMethod]
@@ -284,22 +248,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			var availableGenresList = target.AvailableGenres.ToList();
-			Assert.AreEqual(3, availableGenresList.Count);
+			var expectedAvailableGenres = new[]
+			{
+				new EditedSongProperty<GenreModel>(null),
+				new EditedSongProperty<GenreModel>(genre1),
+				new EditedSongProperty<GenreModel>(genre2),
+			};
 
-			// '<blank>' item
-			Assert.IsTrue(availableGenresList[0].HasBlankValue);
-
-			// 'Some Genre' item
-			Assert.IsTrue(availableGenresList[1].HasValue);
-			Assert.AreSame(genre1, availableGenresList[1].Value);
-
-			// 'Another Genre' item
-			Assert.IsTrue(availableGenresList[2].HasValue);
-			Assert.AreSame(genre2, availableGenresList[2].Value);
-
-			// 'Some Genre' item must be selected
-			Assert.AreSame(availableGenresList[2], target.Genre);
+			target.AvailableGenres.Should().BeEquivalentTo(expectedAvailableGenres, x => x.WithStrictOrdering());
+			target.Genre.Should().BeEquivalentTo(expectedAvailableGenres[2]);
 		}
 
 		[TestMethod]
@@ -321,22 +278,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			var availableGenresList = target.AvailableGenres.ToList();
-			Assert.AreEqual(3, availableGenresList.Count);
+			var expectedAvailableGenres = new[]
+			{
+				new EditedSongProperty<GenreModel>(null),
+				new EditedSongProperty<GenreModel>(genre1),
+				new EditedSongProperty<GenreModel>(genre2),
+			};
 
-			// '<blank>' item
-			Assert.IsTrue(availableGenresList[0].HasBlankValue);
-
-			// 'Some Genre' item
-			Assert.IsTrue(availableGenresList[1].HasValue);
-			Assert.AreSame(genre1, availableGenresList[1].Value);
-
-			// 'Another Genre' item
-			Assert.IsTrue(availableGenresList[2].HasValue);
-			Assert.AreSame(genre2, availableGenresList[2].Value);
-
-			// '<blank>' item must be selected
-			Assert.AreSame(availableGenresList[0], target.Genre);
+			target.AvailableGenres.Should().BeEquivalentTo(expectedAvailableGenres, x => x.WithStrictOrdering());
+			target.Genre.Should().BeEquivalentTo(expectedAvailableGenres[0]);
 		}
 
 		[TestMethod]
@@ -359,22 +309,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			var availableGenresList = target.AvailableGenres.ToList();
-			Assert.AreEqual(3, availableGenresList.Count);
+			var expectedAvailableGenres = new[]
+			{
+				new EditedSongProperty<GenreModel>(null),
+				new EditedSongProperty<GenreModel>(genre1),
+				new EditedSongProperty<GenreModel>(genre2),
+			};
 
-			// '<blank>' item
-			Assert.IsTrue(availableGenresList[0].HasBlankValue);
-
-			// 'Some Genre' item
-			Assert.IsTrue(availableGenresList[1].HasValue);
-			Assert.AreSame(genre1, availableGenresList[1].Value);
-
-			// 'Another Genre' item
-			Assert.IsTrue(availableGenresList[2].HasValue);
-			Assert.AreSame(genre2, availableGenresList[2].Value);
-
-			// 'Some Genre' item must be selected
-			Assert.AreSame(availableGenresList[2], target.Genre);
+			target.AvailableGenres.Should().BeEquivalentTo(expectedAvailableGenres, x => x.WithStrictOrdering());
+			target.Genre.Should().BeEquivalentTo(expectedAvailableGenres[2]);
 		}
 
 		[TestMethod]
@@ -397,22 +340,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			var availableGenresList = target.AvailableGenres.ToList();
-			Assert.AreEqual(3, availableGenresList.Count);
+			var expectedAvailableGenres = new[]
+			{
+				new EditedSongProperty<GenreModel>(null),
+				new EditedSongProperty<GenreModel>(genre1),
+				new EditedSongProperty<GenreModel>(genre2),
+			};
 
-			// '<blank>' item
-			Assert.IsTrue(availableGenresList[0].HasBlankValue);
-
-			// 'Some Genre' item
-			Assert.IsTrue(availableGenresList[1].HasValue);
-			Assert.AreSame(genre1, availableGenresList[1].Value);
-
-			// 'Another Genre' item
-			Assert.IsTrue(availableGenresList[2].HasValue);
-			Assert.AreSame(genre2, availableGenresList[2].Value);
-
-			// '<blank>' item must be selected
-			Assert.AreSame(availableGenresList[0], target.Genre);
+			target.AvailableGenres.Should().BeEquivalentTo(expectedAvailableGenres, x => x.WithStrictOrdering());
+			target.Genre.Should().BeEquivalentTo(expectedAvailableGenres[0]);
 		}
 
 		[TestMethod]
@@ -435,25 +371,16 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			var availableGenresList = target.AvailableGenres.ToList();
-			Assert.AreEqual(4, availableGenresList.Count);
+			var expectedAvailableGenres = new[]
+			{
+				new EditedSongProperty<GenreModel>(),
+				new EditedSongProperty<GenreModel>(null),
+				new EditedSongProperty<GenreModel>(genre1),
+				new EditedSongProperty<GenreModel>(genre2),
+			};
 
-			// '<keep>' item
-			Assert.IsFalse(availableGenresList[0].HasValue);
-
-			// '<blank>' item
-			Assert.IsTrue(availableGenresList[1].HasBlankValue);
-
-			// 'Some Genre' item
-			Assert.IsTrue(availableGenresList[2].HasValue);
-			Assert.AreSame(genre1, availableGenresList[2].Value);
-
-			// 'Another Genre' item
-			Assert.IsTrue(availableGenresList[3].HasValue);
-			Assert.AreSame(genre2, availableGenresList[3].Value);
-
-			// '<keep>' item must be selected
-			Assert.AreSame(availableGenresList[0], target.Genre);
+			target.AvailableGenres.Should().BeEquivalentTo(expectedAvailableGenres, x => x.WithStrictOrdering());
+			target.Genre.Should().BeEquivalentTo(expectedAvailableGenres[0]);
 		}
 
 		[TestMethod]
@@ -466,11 +393,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			Task Call() => target.Load(Enumerable.Empty<SongModel>(), CancellationToken.None);
+			Func<Task> call = () => target.Load(Enumerable.Empty<SongModel>(), CancellationToken.None);
 
 			// Assert
 
-			await Assert.ThrowsExceptionAsync<InvalidOperationException>(Call);
+			await call.Should().ThrowAsync<InvalidOperationException>();
 		}
 
 		[TestMethod]
@@ -485,11 +412,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			void Call() => target.TreeTitle = "New Tree Title";
+			Action call = () => target.TreeTitle = "New Tree Title";
 
 			// Assert
 
-			Assert.ThrowsException<InvalidOperationException>(Call);
+			call.Should().Throw<InvalidOperationException>();
 		}
 
 		[DataRow(null)]
@@ -507,11 +434,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			void Call() => target.TreeTitle = newTreeTitle;
+			Action call = () => target.TreeTitle = newTreeTitle;
 
 			// Assert
 
-			Assert.ThrowsException<InvalidOperationException>(Call);
+			call.Should().Throw<InvalidOperationException>();
 		}
 
 		[TestMethod]
@@ -526,11 +453,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			void Call() => target.Title = "New Title";
+			Action call = () => target.Title = "New Title";
 
 			// Assert
 
-			Assert.ThrowsException<InvalidOperationException>(Call);
+			call.Should().Throw<InvalidOperationException>();
 		}
 
 		[DataRow(null)]
@@ -548,11 +475,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			void Call() => target.Title = newTitle;
+			Action call = () => target.Title = newTitle;
 
 			// Assert
 
-			Assert.ThrowsException<InvalidOperationException>(Call);
+			call.Should().Throw<InvalidOperationException>();
 		}
 
 		[TestMethod]
@@ -567,11 +494,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			void Call() => target.TrackNumber = 1;
+			Action call = () => target.TrackNumber = 1;
 
 			// Assert
 
-			Assert.ThrowsException<InvalidOperationException>(Call);
+			call.Should().Throw<InvalidOperationException>();
 		}
 
 		[TestMethod]
