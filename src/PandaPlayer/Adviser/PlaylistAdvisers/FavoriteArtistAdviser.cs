@@ -17,15 +17,15 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 {
 	internal class FavoriteArtistAdviser : IPlaylistAdviser
 	{
-		private readonly IPlaylistAdviser discAdviser;
+		private readonly IPlaylistAdviser rankBasedAdviser;
 		private readonly ILogger<FavoriteArtistAdviser> logger;
 		private readonly IReadOnlyCollection<string> favoriteArtists;
 
 		private bool CheckedArtists { get; set; }
 
-		public FavoriteArtistAdviser(IPlaylistAdviser discAdviser, ILogger<FavoriteArtistAdviser> logger, IOptions<FavoriteArtistsAdviserSettings> options)
+		public FavoriteArtistAdviser(IPlaylistAdviser rankBasedAdviser, ILogger<FavoriteArtistAdviser> logger, IOptions<FavoriteArtistsAdviserSettings> options)
 		{
-			this.discAdviser = discAdviser ?? throw new ArgumentNullException(nameof(discAdviser));
+			this.rankBasedAdviser = rankBasedAdviser ?? throw new ArgumentNullException(nameof(rankBasedAdviser));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			favoriteArtists = options.Value?.FavoriteArtists ?? throw new ArgumentNullException(nameof(options));
 		}
@@ -39,23 +39,24 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 			}
 
 			var adviseGroupsList = adviseGroups.ToList();
-			var activeAdviseSets = adviseGroupsList.SelectMany(x => x.AdviseSets).Where(x => !x.IsDeleted).ToList();
+			var adviseSets = adviseGroupsList.SelectMany(x => x.AdviseSets).ToList();
 
 			if (!CheckedArtists)
 			{
-				CheckConfigurationForFavoriteArtists(activeAdviseSets);
+				CheckConfigurationForFavoriteArtists(adviseSets);
 				CheckedArtists = true;
 			}
 
-			var favoriteArtistAdviseSets = activeAdviseSets
+			// We also include deleted advise sets here for correct calculation of passed playbacks.
+			var favoriteArtistAdviseSets = adviseSets
 				.Where(adviseSet => GetSoloArtist(adviseSet) != null && favoriteArtists.Any(fa => String.Equals(fa, GetSoloArtist(adviseSet).Name, StringComparison.Ordinal)));
 
 			var artistOrders = favoriteArtistAdviseSets.GroupBy(adviseSet => GetSoloArtist(adviseSet).Id)
 				.Select(g => (artistId: g.Key, playbacksPassed: g.Min(playbacksInfo.GetPlaybacksPassed)))
 				.ToDictionary(x => x.artistId, x => x.playbacksPassed);
 
-			// Selecting first advised disc for each artist. Artists are ordered by last playback.
-			return (await discAdviser.Advise(adviseGroupsList, playbacksInfo, cancellationToken))
+			// Selecting first advised set for each artist. Artists are ordered by last playback.
+			return (await rankBasedAdviser.Advise(adviseGroupsList, playbacksInfo, cancellationToken))
 				.Select(x => new
 				{
 					x.AdviseSet,
@@ -88,6 +89,7 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 		{
 			// Checking that library contains all configured favorite artists.
 			var soloArtists = adviseSets
+				.Where(adviseSet => !adviseSet.IsDeleted)
 				.Select(GetSoloArtist)
 				.Where(artist => artist != null)
 				.Select(artist => artist.Name)
@@ -103,7 +105,6 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 		private static ArtistModel GetSoloArtist(AdviseSetContent adviseSetContent)
 		{
 			return adviseSetContent.Discs
-				.Where(x => !x.IsDeleted)
 				.Select(x => x.SoloArtist)
 				.UniqueOrDefault(new ArtistEqualityComparer());
 		}
