@@ -2,7 +2,7 @@
 
 namespace PandaPlayer.ViewModels.Interfaces
 {
-	internal interface IDiscAdviserViewModel
+	internal interface IPlaylistAdviserViewModel
 	{
 		string CurrentAdviseAnnouncement { get; }
 

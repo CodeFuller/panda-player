@@ -32,7 +32,7 @@ namespace PandaPlayer.ViewModels
 
 		public ISongListTabViewModel SongListTabViewModel { get; }
 
-		public IDiscAdviserViewModel DiscAdviserViewModel { get; }
+		public IPlaylistAdviserViewModel PlaylistAdviserViewModel { get; }
 
 		public IDiscImageViewModel DiscImageViewModel { get; }
 
@@ -50,12 +50,12 @@ namespace PandaPlayer.ViewModels
 
 		public ICommand ShowLibraryStatisticsCommand { get; }
 
-		public ApplicationViewModel(ILibraryExplorerViewModel libraryExplorerViewModel, ISongListTabViewModel songListTabViewModel, IDiscAdviserViewModel discAdviserViewModel,
+		public ApplicationViewModel(ILibraryExplorerViewModel libraryExplorerViewModel, ISongListTabViewModel songListTabViewModel, IPlaylistAdviserViewModel playlistAdviserViewModel,
 			IDiscImageViewModel discImageViewModel, IPlaylistPlayerViewModel playlistPlayerViewModel, IViewNavigator viewNavigator, ILoggerViewModel loggerViewModel)
 		{
 			LibraryExplorerViewModel = libraryExplorerViewModel ?? throw new ArgumentNullException(nameof(libraryExplorerViewModel));
 			SongListTabViewModel = songListTabViewModel ?? throw new ArgumentNullException(nameof(songListTabViewModel));
-			DiscAdviserViewModel = discAdviserViewModel ?? throw new ArgumentNullException(nameof(discAdviserViewModel));
+			PlaylistAdviserViewModel = playlistAdviserViewModel ?? throw new ArgumentNullException(nameof(playlistAdviserViewModel));
 			DiscImageViewModel = discImageViewModel ?? throw new ArgumentNullException(nameof(discImageViewModel));
 			PlaylistPlayerViewModel = playlistPlayerViewModel ?? throw new ArgumentNullException(nameof(playlistPlayerViewModel));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));

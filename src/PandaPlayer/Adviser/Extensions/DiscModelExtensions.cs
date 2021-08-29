@@ -16,7 +16,7 @@ namespace PandaPlayer.Adviser.Extensions
 		{
 			return disc.ActiveSongs
 				.Select(song => song.GetRatingOrDefault())
-				.Select(rating => rating.GetRatingValueForDiscAdviser())
+				.Select(rating => rating.GetRatingValueForAdviser())
 				.Average();
 		}
 	}

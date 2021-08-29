@@ -18,7 +18,7 @@ using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels
 {
-	internal class DiscAdviserViewModel : ViewModelBase, IDiscAdviserViewModel
+	internal class PlaylistAdviserViewModel : ViewModelBase, IPlaylistAdviserViewModel
 	{
 		private const int AdvisedPlaylistsNumber = 30;
 
@@ -26,7 +26,7 @@ namespace PandaPlayer.ViewModels
 
 		private readonly ICompositePlaylistAdviser playlistAdviser;
 
-		private readonly ILogger<DiscAdviserViewModel> logger;
+		private readonly ILogger<PlaylistAdviserViewModel> logger;
 
 		private readonly List<AdvisedPlaylist> currentAdvises = new();
 
@@ -50,7 +50,7 @@ namespace PandaPlayer.ViewModels
 
 		public ICommand SwitchToNextAdviseCommand { get; }
 
-		public DiscAdviserViewModel(IDiscsService discsService, ICompositePlaylistAdviser playlistAdviser, ILogger<DiscAdviserViewModel> logger)
+		public PlaylistAdviserViewModel(IDiscsService discsService, ICompositePlaylistAdviser playlistAdviser, ILogger<PlaylistAdviserViewModel> logger)
 		{
 			this.playlistAdviser = playlistAdviser ?? throw new ArgumentNullException(nameof(playlistAdviser));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));

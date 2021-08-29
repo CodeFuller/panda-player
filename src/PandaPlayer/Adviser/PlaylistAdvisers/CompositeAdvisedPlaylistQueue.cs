@@ -6,15 +6,15 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 	{
 		private readonly Queue<AdvisedPlaylist> highlyRatedSongsAdvises;
 		private readonly Queue<AdvisedPlaylist> favoriteArtistDiscsAdvises;
-		private readonly Queue<AdvisedPlaylist> rankedDiscsAdvises;
+		private readonly Queue<AdvisedPlaylist> rankedAdvises;
 
 		public CompositeAdvisedPlaylistQueue(
 			IEnumerable<AdvisedPlaylist> highlyRatedSongsAdvises,
-			IEnumerable<AdvisedPlaylist> favoriteArtistDiscsAdvises, IEnumerable<AdvisedPlaylist> rankedDiscsAdvises)
+			IEnumerable<AdvisedPlaylist> favoriteArtistDiscsAdvises, IEnumerable<AdvisedPlaylist> rankedAdvises)
 		{
 			this.highlyRatedSongsAdvises = new Queue<AdvisedPlaylist>(highlyRatedSongsAdvises);
 			this.favoriteArtistDiscsAdvises = new Queue<AdvisedPlaylist>(favoriteArtistDiscsAdvises);
-			this.rankedDiscsAdvises = new Queue<AdvisedPlaylist>(rankedDiscsAdvises);
+			this.rankedAdvises = new Queue<AdvisedPlaylist>(rankedAdvises);
 		}
 
 		public bool TryDequeueHighlyRatedSongsAdvise(out AdvisedPlaylist currentAdvise)
@@ -27,9 +27,9 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 			return favoriteArtistDiscsAdvises.TryDequeue(out currentAdvise);
 		}
 
-		public bool TryDequeueRankedDiscsAdvise(out AdvisedPlaylist currentAdvise)
+		public bool TryDequeueRankedAdvise(out AdvisedPlaylist currentAdvise)
 		{
-			return rankedDiscsAdvises.TryDequeue(out currentAdvise);
+			return rankedAdvises.TryDequeue(out currentAdvise);
 		}
 	}
 }

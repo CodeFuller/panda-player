@@ -55,7 +55,7 @@ namespace PandaPlayer.Adviser.Internal
 
 		private static double GetFactorForRating(RatingModel rating)
 		{
-			var ratingValue = rating.GetRatingValueForDiscAdviser();
+			var ratingValue = rating.GetRatingValueForAdviser();
 			return GetFactorForAverageRating(ratingValue);
 		}
 

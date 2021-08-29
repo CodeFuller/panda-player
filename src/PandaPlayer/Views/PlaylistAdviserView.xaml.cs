@@ -2,9 +2,9 @@
 
 namespace PandaPlayer.Views
 {
-	public partial class DiscAdviserView : UserControl
+	public partial class PlaylistAdviserView : UserControl
 	{
-		public DiscAdviserView()
+		public PlaylistAdviserView()
 		{
 			InitializeComponent();
 		}

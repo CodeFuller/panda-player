@@ -20,7 +20,7 @@ namespace PandaPlayer.Adviser.Extensions
 			{ RatingModel.R10, 10 },
 		};
 
-		public static double GetRatingValueForDiscAdviser(this RatingModel rating)
+		public static double GetRatingValueForAdviser(this RatingModel rating)
 		{
 			if (RatingValues.TryGetValue(rating, out var value))
 			{
