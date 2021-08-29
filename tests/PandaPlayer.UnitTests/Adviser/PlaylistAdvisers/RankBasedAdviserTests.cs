@@ -13,7 +13,7 @@ using PandaPlayer.Adviser.Interfaces;
 using PandaPlayer.Adviser.Internal;
 using PandaPlayer.Adviser.PlaylistAdvisers;
 using PandaPlayer.Core.Models;
-using PandaPlayer.UnitTests.Helpers;
+using PandaPlayer.UnitTests.Extensions;
 
 namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 {
@@ -138,11 +138,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		private static AdviseSetContent CreateTestAdviseSet(string id, bool isDeleted = false)
 		{
 			var disc = CreateTestDisc(id, isDeleted);
-
-			var adviseGroupContent = new AdviseGroupContent(id);
-			adviseGroupContent.AddDisc(disc);
-
-			return adviseGroupContent.AdviseSets.Single();
+			return disc.ToAdviseSet();
 		}
 
 		private static DiscModel CreateTestDisc(string id, bool isDeleted = false)

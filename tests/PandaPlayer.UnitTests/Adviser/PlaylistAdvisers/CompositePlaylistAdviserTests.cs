@@ -16,6 +16,7 @@ using PandaPlayer.Adviser.PlaylistAdvisers;
 using PandaPlayer.Adviser.Settings;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
+using PandaPlayer.UnitTests.Extensions;
 
 namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 {
@@ -341,10 +342,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 				AllSongs = new List<SongModel>(),
 			};
 
-			var adviseSet = new AdviseSetContent(stringId);
-			adviseSet.AddDisc(disc);
-
-			return adviseSet;
+			return disc.ToAdviseSet();
 		}
 	}
 }

@@ -17,7 +17,7 @@ using PandaPlayer.Adviser.PlaylistAdvisers;
 using PandaPlayer.Adviser.Settings;
 using PandaPlayer.Core.Facades;
 using PandaPlayer.Core.Models;
-using PandaPlayer.UnitTests.Helpers;
+using PandaPlayer.UnitTests.Extensions;
 
 namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 {
@@ -472,11 +472,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		private static AdviseSetContent CreateTestAdviseSet(string id, IEnumerable<SongModel> songs)
 		{
 			var disc = CreateTestDisc(id, songs);
-
-			var adviseGroupContent = new AdviseGroupContent(id);
-			adviseGroupContent.AddDisc(disc);
-
-			return adviseGroupContent.AdviseSets.Single();
+			return disc.ToAdviseSet();
 		}
 
 		private static DiscModel CreateTestDisc(string id, IEnumerable<SongModel> songs)

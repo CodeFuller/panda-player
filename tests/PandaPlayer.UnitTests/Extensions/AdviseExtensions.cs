@@ -1,6 +1,7 @@
 ﻿using PandaPlayer.Adviser.Grouping;
+using PandaPlayer.Core.Models;
 
-namespace PandaPlayer.UnitTests.Helpers
+namespace PandaPlayer.UnitTests.Extensions
 {
 	internal static class AdviseExtensions
 	{
@@ -13,6 +14,14 @@ namespace PandaPlayer.UnitTests.Helpers
 			}
 
 			return adviseGroup;
+		}
+
+		public static AdviseSetContent ToAdviseSet(this DiscModel disc)
+		{
+			var adviseSet = new AdviseSetContent($"Disc: {disc.Id}");
+			adviseSet.AddDisc(disc);
+
+			return adviseSet;
 		}
 	}
 }
