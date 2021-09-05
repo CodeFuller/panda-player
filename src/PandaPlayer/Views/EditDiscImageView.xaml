@@ -54,7 +54,7 @@
                     <Button.IsEnabled>
                         <MultiBinding Converter="{StaticResource BooleanAndConverter}">
                             <Binding Path="ImageIsValid" />
-                            <Binding Path="ImageWasChanged"  />
+                            <Binding Path="ImageWasChanged" />
                         </MultiBinding>
                     </Button.IsEnabled>
                 </Button>

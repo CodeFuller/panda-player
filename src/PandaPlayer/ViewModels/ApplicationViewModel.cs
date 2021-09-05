@@ -44,6 +44,8 @@ namespace PandaPlayer.ViewModels
 
 		public ICommand ReversePlayingCommand { get; }
 
+		public ICommand ShowAdviseSetsEditorCommand { get; }
+
 		public ICommand ShowDiscAdderCommand { get; }
 
 		public ICommand ShowLibraryCheckerCommand { get; }
@@ -63,6 +65,7 @@ namespace PandaPlayer.ViewModels
 
 			LoadCommand = new RelayCommand(Load);
 			ReversePlayingCommand = new AsyncRelayCommand(() => ReversePlaying(CancellationToken.None));
+			ShowAdviseSetsEditorCommand = new AsyncRelayCommand(() => ShowAdviseSetsEditor(CancellationToken.None));
 			ShowDiscAdderCommand = new AsyncRelayCommand(() => ShowDiscAdder(CancellationToken.None));
 			ShowLibraryCheckerCommand = new AsyncRelayCommand(() => ShowLibraryChecker(CancellationToken.None));
 			ShowLibraryStatisticsCommand = new AsyncRelayCommand(() => ShowLibraryStatistics(CancellationToken.None));
@@ -80,6 +83,11 @@ namespace PandaPlayer.ViewModels
 		private Task ReversePlaying(CancellationToken cancellationToken)
 		{
 			return PlaylistPlayerViewModel.ReversePlaying(cancellationToken);
+		}
+
+		private async Task ShowAdviseSetsEditor(CancellationToken cancellationToken)
+		{
+			await viewNavigator.ShowAdviseSetsEditorView(cancellationToken);
 		}
 
 		private async Task ShowDiscAdder(CancellationToken cancellationToken)

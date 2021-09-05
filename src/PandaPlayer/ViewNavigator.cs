@@ -44,7 +44,7 @@ namespace PandaPlayer
 			}
 			else
 			{
-				var message = "You've just finished listening of playlist that have some songs unrated. Please devote some time and rate them.";
+				const string message = "You've just finished listening of playlist that have some songs unrated. Please devote some time and rate them.";
 				windowService.ShowMessageBox(message, "Rate listened songs", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation);
 			}
 		}
@@ -84,6 +84,14 @@ namespace PandaPlayer
 			ShowDialog<EditDiscImageView>(viewModel);
 		}
 
+		public async Task ShowAdviseSetsEditorView(CancellationToken cancellationToken)
+		{
+			var viewModel = viewModelHolder.AdviseSetsEditorViewModel;
+			await viewModel.Load(cancellationToken);
+
+			ShowView<AdviseSetsEditorView>(viewModel);
+		}
+
 		public async Task ShowDiscAdderView(CancellationToken cancellationToken)
 		{
 			var viewModel = viewModelHolder.DiscAdderViewModel;
@@ -121,7 +129,7 @@ namespace PandaPlayer
 		private static TView CreateView<TView>(object dataContext)
 			where TView : Window, new()
 		{
-			return new TView
+			return new()
 			{
 				DataContext = dataContext,
 				Owner = ApplicationWindow,

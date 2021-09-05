@@ -20,6 +20,7 @@ namespace PandaPlayer.Services.Extensions
 			services.AddSingleton<IGenresService, GenresService>();
 			services.AddSingleton<IArtistsService, ArtistsService>();
 			services.AddSingleton<IAdviseGroupService, AdviseGroupService>();
+			services.AddSingleton<IAdviseSetService, AdviseSetService>();
 			services.AddSingleton<ISessionDataService, SessionDataService>();
 			services.AddSingleton<IStatisticsService, StatisticsService>();
 			services.AddSingleton<IDiagnosticService, DiagnosticService>();

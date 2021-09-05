@@ -14,6 +14,8 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		IEditDiscImageViewModel EditDiscImageViewModel { get; }
 
+		IAdviseSetsEditorViewModel AdviseSetsEditorViewModel { get; }
+
 		IDiscAdderViewModel DiscAdderViewModel { get; }
 
 		ILibraryCheckerViewModel LibraryCheckerViewModel { get; }

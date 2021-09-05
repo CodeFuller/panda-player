@@ -16,6 +16,7 @@ using PandaPlayer.Settings;
 using PandaPlayer.Shared;
 using PandaPlayer.ViewModels;
 using PandaPlayer.ViewModels.AdviseGroups;
+using PandaPlayer.ViewModels.AdviseSetsEditor;
 using PandaPlayer.ViewModels.DiscImages;
 using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.ViewModels.PersistentPlaylist;
@@ -84,6 +85,7 @@ namespace PandaPlayer
 			services.AddSingleton<IEditDiscImageViewModel, EditDiscImageViewModel>();
 			services.AddSingleton<ILibraryCheckerViewModel, LibraryCheckerViewModel>();
 			services.AddSingleton<ILibraryStatisticsViewModel, LibraryStatisticsViewModel>();
+			services.AddSingleton<IAdviseSetsEditorViewModel, AdviseSetsEditorViewModel>();
 
 			services.AddSingleton<LoggerViewModel>();
 			services.AddSingleton<ILoggerViewModel, LoggerViewModel>(sp => sp.GetRequiredService<LoggerViewModel>());

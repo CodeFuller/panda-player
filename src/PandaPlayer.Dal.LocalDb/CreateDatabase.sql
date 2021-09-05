@@ -5,6 +5,13 @@ CREATE TABLE [AdviseGroups] (
   CONSTRAINT [sqlite_master_UC_AdviseGroups] UNIQUE ([Name])
 );
 
+CREATE TABLE [AdviseSets] (
+  [Id] INTEGER NOT NULL,
+  [Name] ntext NOT NULL,
+  CONSTRAINT [sqlite_master_PK_AdviseSets] PRIMARY KEY ([Id]),
+  CONSTRAINT [sqlite_master_UC_AdviseSets] UNIQUE ([Name])
+);
+
 CREATE TABLE [Folders] (
   [Id] INTEGER NOT NULL,
   [ParentFolder_Id] INTEGER NULL,
@@ -21,14 +28,18 @@ CREATE TABLE [Discs] (
   [Id] INTEGER NOT NULL,
   [Folder_Id] INTEGER NOT NULL,
   [AdviseGroup_Id] INTEGER NULL,
+  [AdviseSet_Id] INTEGER NULL,
+  [AdviseSetOrder] int NULL,
   [Year] int NULL,
   [Title] ntext NOT NULL,
   [TreeTitle] ntext NOT NULL,
   [AlbumTitle] ntext NULL,
   CONSTRAINT [sqlite_master_PK_Discs] PRIMARY KEY ([Id]),
   CONSTRAINT [sqlite_master_UC_Discs] UNIQUE ([Folder_Id], [TreeTitle]),
+  CONSTRAINT [sqlite_master_UC_AdviseSetOrder] UNIQUE ([AdviseSet_Id], [AdviseSetOrder]),
   FOREIGN KEY ([Folder_Id]) REFERENCES [Folders] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  FOREIGN KEY ([AdviseGroup_Id]) REFERENCES [AdviseGroups] ([Id]) ON DELETE SET NULL ON UPDATE NO ACTION
+  FOREIGN KEY ([AdviseGroup_Id]) REFERENCES [AdviseGroups] ([Id]) ON DELETE SET NULL ON UPDATE NO ACTION,
+  FOREIGN KEY ([AdviseSet_Id]) REFERENCES [AdviseSets] ([Id]) ON DELETE SET NULL ON UPDATE NO ACTION
 );
 
 CREATE TABLE [Artists] (

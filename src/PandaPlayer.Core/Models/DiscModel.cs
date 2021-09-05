@@ -27,6 +27,8 @@ namespace PandaPlayer.Core.Models
 
 		public AdviseSetModel AdviseSet { get; set; }
 
+		public int? AdviseSetOrder { get; set; }
+
 		public int? Year { get; set; }
 
 		public string Title

@@ -17,6 +17,8 @@ namespace PandaPlayer
 
 		void ShowEditDiscImageView(DiscModel disc);
 
+		Task ShowAdviseSetsEditorView(CancellationToken cancellationToken);
+
 		Task ShowDiscAdderView(CancellationToken cancellationToken);
 
 		Task ShowLibraryCheckerView(CancellationToken cancellationToken);

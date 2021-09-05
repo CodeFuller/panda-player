@@ -10,8 +10,7 @@ namespace PandaPlayer.Views.Extensions
 		// https://stackoverflow.com/a/4650392/5740031
 		public static bool IsValid(this DependencyObject obj)
 		{
-			return !Validation.GetHasError(obj) &&
-			       LogicalTreeHelper.GetChildren(obj).OfType<DependencyObject>().All(IsValid);
+			return !Validation.GetHasError(obj) && LogicalTreeHelper.GetChildren(obj).OfType<DependencyObject>().All(IsValid);
 		}
 	}
 }
