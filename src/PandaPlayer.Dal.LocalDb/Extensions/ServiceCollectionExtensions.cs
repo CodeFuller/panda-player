@@ -21,6 +21,7 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 			services.AddSingleton<IGenresRepository, GenresRepository>();
 			services.AddSingleton<IArtistsRepository, ArtistsRepository>();
 			services.AddSingleton<IAdviseGroupRepository, AdviseGroupRepository>();
+			services.AddSingleton<IAdviseSetRepository, AdviseSetRepository>();
 			services.AddSingleton<ISessionDataRepository, SessionDataRepository>();
 
 			services.AddSingleton<StorageRepository>();

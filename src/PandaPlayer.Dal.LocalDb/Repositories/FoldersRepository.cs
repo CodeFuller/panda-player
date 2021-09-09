@@ -108,6 +108,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 				.Include(f => f.AdviseGroup)
 				.Include(f => f.Subfolders).ThenInclude(f => f.AdviseGroup)
 				.Include(f => f.Discs).ThenInclude(d => d.AdviseGroup)
+				.Include(f => f.Discs).ThenInclude(d => d.AdviseSet)
 				.Include(f => f.Discs).ThenInclude(d => d.Songs).ThenInclude(s => s.Artist)
 				.Include(f => f.Discs).ThenInclude(d => d.Songs).ThenInclude(s => s.Genre)
 				.Include(f => f.Discs).ThenInclude(d => d.Images);

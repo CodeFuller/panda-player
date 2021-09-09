@@ -3,19 +3,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using PandaPlayer.Core.Models;
 
-namespace PandaPlayer.Services.Interfaces
+namespace PandaPlayer.Services.Interfaces.Dal
 {
-	public interface IAdviseSetService
+	public interface IAdviseSetRepository
 	{
 		Task CreateAdviseSet(AdviseSetModel adviseSet, CancellationToken cancellationToken);
 
 		Task<IReadOnlyCollection<AdviseSetModel>> GetAllAdviseSets(CancellationToken cancellationToken);
-
-		Task AddDiscs(AdviseSetModel adviseSet, IEnumerable<DiscModel> addedDiscs, CancellationToken cancellationToken);
-
-		Task RemoveDiscs(AdviseSetModel adviseSet, IEnumerable<DiscModel> removedDiscs, CancellationToken cancellationToken);
-
-		Task ReorderDiscs(AdviseSetModel adviseSet, IEnumerable<DiscModel> newDiscsOrder, CancellationToken cancellationToken);
 
 		Task UpdateAdviseSet(AdviseSetModel adviseSet, CancellationToken cancellationToken);
 

@@ -4,16 +4,20 @@ INSERT INTO [AdviseGroups] ([Id], [Name]) VALUES
 (1, 'Folder Advise Group'),
 (2, 'Disc Advise Group');
 
+INSERT INTO [AdviseSets] ([Id], [Name]) VALUES
+(1, 'Some Advise Set'),
+(2, 'Another Advise Set');
+
 INSERT INTO [Folders] ([Id], [ParentFolder_Id], [AdviseGroup_Id], [Name], [DeleteDate]) VALUES
 (2, 1, NULL, 'Belarusian', NULL),
 (3, 2, 1, 'Neuro Dubel', NULL),
 (4, 3, NULL, 'Empty Folder', NULL),
 (5, 3, NULL, 'Deleted Folder', '2021-06-30 18:08:10');
 
-INSERT INTO [Discs] ([Id], [Folder_Id], [AdviseGroup_Id], [Year], [Title], [TreeTitle], [AlbumTitle]) VALUES
-(1, 3, 2, 2010, 'Афтары правды (CD 1)', '2010 - Афтары правды (CD 1)', 'Афтары правды'),
-(2, 3, NULL, NULL, 'Disc With Missing Fields', 'Disc With Missing Fields (CD 1)', NULL),
-(3, 3, NULL, 2021, 'Deleted Disc', '2021 - Deleted Disc', 'Deleted Disc');
+INSERT INTO [Discs] ([Id], [Folder_Id], [AdviseGroup_Id], [AdviseSet_Id], [AdviseSetOrder], [Year], [Title], [TreeTitle], [AlbumTitle]) VALUES
+(1, 3, 2, 1, 1, 2010, 'Афтары правды (CD 1)', '2010 - Афтары правды (CD 1)', 'Афтары правды'),
+(2, 3, NULL, NULL, NULL, NULL, 'Disc With Missing Fields', 'Disc With Missing Fields (CD 1)', NULL),
+(3, 3, NULL, NULL, NULL, 2021, 'Deleted Disc', '2021 - Deleted Disc', 'Deleted Disc');
 
 INSERT INTO [Artists] ([Id], [Name]) VALUES
 (1, 'Guano Apes'),

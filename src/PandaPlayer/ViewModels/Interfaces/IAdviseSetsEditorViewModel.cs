@@ -39,7 +39,7 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		ICommand DeleteAdviseSetCommand { get; }
 
-		ICommand AddDiscCommand { get; }
+		ICommand AddDiscsCommand { get; }
 
 		ICommand RemoveDiscCommand { get; }
 

@@ -43,15 +43,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			var discEntities = await GetDiscsQueryable(context)
 				.ToListAsync(cancellationToken);
 
-			var folderModels = discEntities
-				.Select(disc => disc.Folder)
-				.Distinct()
-				.Select(folder => folder.ToShallowModel())
-				.ToDictionary(folder => folder.Id, folder => folder);
-
-			return discEntities
-					.Select(disc => disc.ToModel(folderModels[disc.Folder.Id.ToItemId()], contentUriProvider))
-					.ToList();
+			return ConvertDiscEntities(discEntities);
 		}
 
 		public async Task<DiscModel> GetDisc(ItemId discId, CancellationToken cancellationToken)
@@ -62,14 +54,41 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			return disc.ToModel(contentUriProvider);
 		}
 
+		public async Task<IReadOnlyCollection<DiscModel>> GetAdviseSetDiscs(ItemId adviseSetId, CancellationToken cancellationToken)
+		{
+			await using var context = contextFactory.CreateDbContext();
+
+			var adviseSetEntityId = adviseSetId.ToInt32();
+
+			var discEntities = await GetDiscsQueryable(context)
+				.Where(x => x.AdviseSetId == adviseSetEntityId)
+				.ToListAsync(cancellationToken);
+
+			return ConvertDiscEntities(discEntities);
+		}
+
 		private static IQueryable<DiscEntity> GetDiscsQueryable(MusicDbContext context)
 		{
 			return context.Discs
 				.Include(disc => disc.Folder).ThenInclude(folder => folder.AdviseGroup)
 				.Include(disc => disc.AdviseGroup)
+				.Include(disc => disc.AdviseSet)
 				.Include(disc => disc.Songs).ThenInclude(song => song.Artist)
 				.Include(disc => disc.Songs).ThenInclude(song => song.Genre)
 				.Include(disc => disc.Images);
+		}
+
+		private IReadOnlyCollection<DiscModel> ConvertDiscEntities(IReadOnlyCollection<DiscEntity> discEntities)
+		{
+			var folderModels = discEntities
+				.Select(disc => disc.Folder)
+				.Distinct()
+				.Select(folder => folder.ToShallowModel())
+				.ToDictionary(folder => folder.Id, folder => folder);
+
+			return discEntities
+				.Select(disc => disc.ToModel(folderModels[disc.Folder.Id.ToItemId()], contentUriProvider))
+				.ToList();
 		}
 
 		public async Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken)

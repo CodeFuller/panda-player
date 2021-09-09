@@ -39,7 +39,7 @@ CREATE TABLE [Discs] (
   CONSTRAINT [sqlite_master_UC_AdviseSetOrder] UNIQUE ([AdviseSet_Id], [AdviseSetOrder]),
   FOREIGN KEY ([Folder_Id]) REFERENCES [Folders] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION,
   FOREIGN KEY ([AdviseGroup_Id]) REFERENCES [AdviseGroups] ([Id]) ON DELETE SET NULL ON UPDATE NO ACTION,
-  FOREIGN KEY ([AdviseSet_Id]) REFERENCES [AdviseSets] ([Id]) ON DELETE SET NULL ON UPDATE NO ACTION
+  FOREIGN KEY ([AdviseSet_Id]) REFERENCES [AdviseSets] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 CREATE TABLE [Artists] (

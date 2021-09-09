@@ -32,6 +32,8 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 				Id = NormalDiscId,
 				Folder = ArtistFolder,
 				AdviseGroup = DiscAdviseGroup,
+				AdviseSet = AdviseSet1,
+				AdviseSetOrder = 1,
 				Year = 2010,
 				Title = "Афтары правды (CD 1)",
 				TreeTitle = "2010 - Афтары правды (CD 1)",

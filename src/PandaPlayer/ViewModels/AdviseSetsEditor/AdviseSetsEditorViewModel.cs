@@ -43,7 +43,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 				CurrentAdviseSetDiscs.Clear();
 				if (selectedAdviseSet != null)
 				{
-					CurrentAdviseSetDiscs.AddRange(selectedAdviseSet.Discs);
+					CurrentAdviseSetDiscs.AddRange(ActiveDiscs.Where(x => x.AdviseSet?.Id == selectedAdviseSet.Id));
 				}
 
 				RaisePropertyChangedForAdviseSetButtons();
@@ -76,6 +76,8 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 		public bool CanMoveDiscDown => SelectedAdviseSet != null && SelectedAdviseSetDisc != null && SelectedAdviseSetDiscIndex + 1 < CurrentAdviseSetDiscs.Count;
 
+		private List<DiscModel> ActiveDiscs { get; set; }
+
 		private List<AvailableDiscViewModel> availableDiscs;
 
 		public IReadOnlyCollection<AvailableDiscViewModel> AvailableDiscs => availableDiscs;
@@ -102,7 +104,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 		public ICommand DeleteAdviseSetCommand { get; }
 
-		public ICommand AddDiscCommand { get; }
+		public ICommand AddDiscsCommand { get; }
 
 		public ICommand RemoveDiscCommand { get; }
 
@@ -119,7 +121,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 			this.CreateAdviseSetCommand = new AsyncRelayCommand(() => CreateAdviseSet(CancellationToken.None));
 			this.DeleteAdviseSetCommand = new AsyncRelayCommand(() => DeleteAdviseSet(CancellationToken.None));
-			this.AddDiscCommand = new AsyncRelayCommand(() => AddDisc(CancellationToken.None));
+			this.AddDiscsCommand = new AsyncRelayCommand(() => AddDiscs(CancellationToken.None));
 			this.RemoveDiscCommand = new AsyncRelayCommand(() => RemoveDisc(CancellationToken.None));
 			this.MoveDiscUpCommand = new AsyncRelayCommand(() => MoveDiscUp(CancellationToken.None));
 			this.MoveDiscDownCommand = new AsyncRelayCommand(() => MoveDiscDown(CancellationToken.None));
@@ -132,8 +134,9 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			var discs = await discService.GetAllDiscs(cancellationToken);
 			var folders = await folderService.GetAllFolders(cancellationToken);
 
-			availableDiscs = discs
-				.Where(x => !x.IsDeleted)
+			ActiveDiscs = discs.Where(x => !x.IsDeleted).ToList();
+
+			availableDiscs = ActiveDiscs
 				.Select(x => new AvailableDiscViewModel(x, GetAvailableDiscTitle(x, folders)))
 				.OrderBy(x => x.Title, StringComparer.InvariantCultureIgnoreCase)
 				.ToList();
@@ -195,7 +198,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 			if (discs.Any())
 			{
-				await adviseSetService.SetAdviseSetDiscs(newAdviseSet, discs, cancellationToken);
+				await adviseSetService.AddDiscs(newAdviseSet, discs, cancellationToken);
 			}
 
 			await ReloadAdviseSets(newAdviseSet.Id, cancellationToken);
@@ -224,18 +227,14 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			await ReloadAdviseSets(cancellationToken);
 		}
 
-		private async Task AddDisc(CancellationToken cancellationToken)
+		private async Task AddDiscs(CancellationToken cancellationToken)
 		{
 			if (!CanAddDisc)
 			{
 				return;
 			}
 
-			var newDiscs = SelectedAdviseSet.Discs
-				.Concat(SelectedAvailableDiscsForAdding.Select(x => x.Disc))
-				.ToList();
-
-			await adviseSetService.SetAdviseSetDiscs(SelectedAdviseSet, newDiscs, cancellationToken);
+			await adviseSetService.AddDiscs(SelectedAdviseSet, SelectedAvailableDiscsForAdding.Select(x => x.Disc), cancellationToken);
 
 			await ReloadAdviseSets(cancellationToken);
 		}
@@ -247,11 +246,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 				return;
 			}
 
-			var newDiscs = SelectedAdviseSet.Discs
-				.Except(new[] { SelectedAdviseSetDisc }, new DiscEqualityComparer())
-				.ToList();
-
-			await adviseSetService.SetAdviseSetDiscs(SelectedAdviseSet, newDiscs, cancellationToken);
+			await adviseSetService.RemoveDiscs(SelectedAdviseSet, new[] { SelectedAdviseSetDisc }, cancellationToken);
 
 			await ReloadAdviseSets(cancellationToken);
 		}
@@ -289,7 +284,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 				[newSelectedDiscIndex] = CurrentAdviseSetDiscs[oldSelectedDiscIndex],
 			};
 
-			await adviseSetService.SetAdviseSetDiscs(SelectedAdviseSet, discs, cancellationToken);
+			await adviseSetService.ReorderDiscs(SelectedAdviseSet, discs, cancellationToken);
 
 			await ReloadAdviseSets(cancellationToken);
 

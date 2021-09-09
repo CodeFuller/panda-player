@@ -19,6 +19,8 @@ namespace PandaPlayer.Dal.LocalDb.Internal
 
 		public DbSet<AdviseGroupEntity> AdviseGroups { get; set; }
 
+		public DbSet<AdviseSetEntity> AdviseSets { get; set; }
+
 		public DbSet<SessionDataEntity> SessionData { get; set; }
 
 		public MusicDbContext(DbContextOptions options)
@@ -66,10 +68,16 @@ namespace PandaPlayer.Dal.LocalDb.Internal
 				builder.Property(d => d.TreeTitle).IsRequired();
 				builder.Property(d => d.FolderId).HasColumnName("Folder_Id");
 				builder.Property(d => d.AdviseGroupId).HasColumnName("AdviseGroup_Id");
+				builder.Property(d => d.AdviseSetId).HasColumnName("AdviseSet_Id");
 
-				builder.HasOne(f => f.AdviseGroup)
+				builder.HasOne(d => d.AdviseGroup)
 					.WithMany(ag => ag.Discs)
-					.HasForeignKey(f => f.AdviseGroupId)
+					.HasForeignKey(d => d.AdviseGroupId)
+					.OnDelete(DeleteBehavior.ClientSetNull);
+
+				builder.HasOne(d => d.AdviseSet)
+					.WithMany(x => x.Discs)
+					.HasForeignKey(d => d.AdviseSetId)
 					.OnDelete(DeleteBehavior.ClientSetNull);
 			});
 
@@ -120,6 +128,13 @@ namespace PandaPlayer.Dal.LocalDb.Internal
 				builder.ToTable("AdviseGroups");
 
 				builder.Property(ag => ag.Name).IsRequired();
+			});
+
+			modelBuilder.Entity<AdviseSetEntity>(builder =>
+			{
+				builder.ToTable("AdviseSets");
+
+				builder.Property(x => x.Name).IsRequired();
 			});
 
 			modelBuilder.Entity<SessionDataEntity>(builder =>
