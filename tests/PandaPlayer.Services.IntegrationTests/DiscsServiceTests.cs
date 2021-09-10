@@ -503,10 +503,8 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var dirtyReferenceData = GetReferenceData();
-
-			var adviseGroupService = GetService<IAdviseGroupService>();
-			await adviseGroupService.AssignAdviseGroup(dirtyReferenceData.EmptyFolder, dirtyReferenceData.DiscAdviseGroup, CancellationToken.None);
+			// Assigning one more reference to DiscAdviseGroup.
+			await AssignAdviseGroupToFolder(ReferenceData.EmptyFolderId, ReferenceData.DiscAdviseGroupId);
 
 			var target = CreateTestTarget();
 
@@ -526,7 +524,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				referenceData.FolderAdviseGroup,
 			};
 
-			var adviseGroups = await adviseGroupService.GetAllAdviseGroups(CancellationToken.None);
+			var adviseGroups = await GetAllAdviseGroups();
 			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency();
@@ -542,6 +540,27 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			var allDiscs = await discService.GetAllDiscs(CancellationToken.None);
 			return allDiscs.Single(x => x.Id == discId);
+		}
+
+		private Task<IReadOnlyCollection<AdviseGroupModel>> GetAllAdviseGroups()
+		{
+			var adviseGroupService = GetService<IAdviseGroupService>();
+			return adviseGroupService.GetAllAdviseGroups(CancellationToken.None);
+		}
+
+		private async Task<AdviseGroupModel> GetAdviseGroup(ItemId adviseGroupId)
+		{
+			var allAdviseGroups = await GetAllAdviseGroups();
+			return allAdviseGroups.Single(x => x.Id == adviseGroupId);
+		}
+
+		private async Task AssignAdviseGroupToFolder(ItemId folderId, ItemId adviseGroupId)
+		{
+			var folder = await GetFolder(folderId);
+			var adviseGroup = await GetAdviseGroup(adviseGroupId);
+
+			var adviseGroupService = GetService<IAdviseGroupService>();
+			await adviseGroupService.AssignAdviseGroup(folder, adviseGroup, CancellationToken.None);
 		}
 	}
 }

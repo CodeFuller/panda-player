@@ -184,20 +184,19 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var dirtyReferenceData = GetReferenceData();
-
 			// Assigning one more reference to FolderAdviseGroup.
+			await AssignAdviseGroupToFolder(ReferenceData.SubFolderId, ReferenceData.FolderAdviseGroupId);
+
+			var assignedFolder = await GetFolder(ReferenceData.ArtistFolderId);
+			assignedFolder.AdviseGroup.Id.Should().Be(ReferenceData.FolderAdviseGroupId);
+
+			var assignedAdviseGroup = await GetAdviseGroup(ReferenceData.DiscAdviseGroupId);
+
 			var target = CreateTestTarget();
-			await target.AssignAdviseGroup(dirtyReferenceData.SubFolder, dirtyReferenceData.FolderAdviseGroup, CancellationToken.None);
-
-			var folder = await GetFolder(ReferenceData.ArtistFolderId);
-			folder.AdviseGroup.Id.Should().Be(ReferenceData.FolderAdviseGroupId);
-
-			var adviseGroup = await GetAdviseGroup(ReferenceData.DiscAdviseGroupId);
 
 			// Act
 
-			await target.AssignAdviseGroup(folder, adviseGroup, CancellationToken.None);
+			await target.AssignAdviseGroup(assignedFolder, assignedAdviseGroup, CancellationToken.None);
 
 			// Assert
 
@@ -205,7 +204,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedFolder = referenceData.ArtistFolder;
 			expectedFolder.AdviseGroup = referenceData.DiscAdviseGroup;
 
-			folder.Should().BeEquivalentTo(expectedFolder);
+			assignedFolder.Should().BeEquivalentTo(expectedFolder);
 
 			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
 			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
@@ -295,20 +294,19 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var dirtyReferenceData = GetReferenceData();
-
 			// Assigning one more reference to DiscAdviseGroup.
+			await AssignAdviseGroupToDisc(ReferenceData.DiscWithMissingFieldsId, ReferenceData.DiscAdviseGroupId);
+
+			var assignedDisc = await GetDisc(ReferenceData.NormalDiscId);
+			assignedDisc.AdviseGroup.Id.Should().Be(ReferenceData.DiscAdviseGroupId);
+
+			var assignedAdviseGroup = await GetAdviseGroup(ReferenceData.FolderAdviseGroupId);
+
 			var target = CreateTestTarget();
-			await target.AssignAdviseGroup(dirtyReferenceData.DiscWithMissingFields, dirtyReferenceData.DiscAdviseGroup, CancellationToken.None);
-
-			var disc = await GetDisc(ReferenceData.NormalDiscId);
-			disc.AdviseGroup.Id.Should().Be(ReferenceData.DiscAdviseGroupId);
-
-			var adviseGroup = await GetAdviseGroup(ReferenceData.FolderAdviseGroupId);
 
 			// Act
 
-			await target.AssignAdviseGroup(disc, adviseGroup, CancellationToken.None);
+			await target.AssignAdviseGroup(assignedDisc, assignedAdviseGroup, CancellationToken.None);
 
 			// Assert
 
@@ -316,7 +314,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedDisc = referenceData.NormalDisc;
 			expectedDisc.AdviseGroup = referenceData.FolderAdviseGroup;
 
-			disc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			assignedDisc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
 
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
 			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
@@ -374,14 +372,13 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var dirtyReferenceData = GetReferenceData();
-
 			// Assigning one more reference to FolderAdviseGroup.
-			var target = CreateTestTarget();
-			await target.AssignAdviseGroup(dirtyReferenceData.SubFolder, dirtyReferenceData.FolderAdviseGroup, CancellationToken.None);
+			await AssignAdviseGroupToFolder(ReferenceData.SubFolderId, ReferenceData.FolderAdviseGroupId);
 
 			var folder = await GetFolder(ReferenceData.ArtistFolderId);
-			folder.AdviseGroup.Should().BeEquivalentTo(dirtyReferenceData.FolderAdviseGroup);
+			folder.AdviseGroup.Id.Should().Be(ReferenceData.FolderAdviseGroupId);
+
+			var target = CreateTestTarget();
 
 			// Act
 
@@ -452,14 +449,13 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var dirtyReferenceData = GetReferenceData();
-
 			// Assigning one more reference to DiscAdviseGroup.
-			var target = CreateTestTarget();
-			await target.AssignAdviseGroup(dirtyReferenceData.DiscWithMissingFields, dirtyReferenceData.DiscAdviseGroup, CancellationToken.None);
+			await AssignAdviseGroupToDisc(ReferenceData.DiscWithMissingFieldsId, ReferenceData.DiscAdviseGroupId);
 
 			var disc = await GetDisc(ReferenceData.NormalDiscId);
-			disc.AdviseGroup.Should().BeEquivalentTo(dirtyReferenceData.DiscAdviseGroup);
+			disc.AdviseGroup.Id.Should().BeEquivalentTo(ReferenceData.DiscAdviseGroupId);
+
+			var target = CreateTestTarget();
 
 			// Act
 
@@ -507,6 +503,24 @@ namespace PandaPlayer.Services.IntegrationTests
 			var adviseGroupService = GetService<IAdviseGroupService>();
 			var allAdviseGroups = await adviseGroupService.GetAllAdviseGroups(CancellationToken.None);
 			return allAdviseGroups.Single(x => x.Id == adviseGroupId);
+		}
+
+		private async Task AssignAdviseGroupToFolder(ItemId folderId, ItemId adviseGroupId)
+		{
+			var folder = await GetFolder(folderId);
+			var adviseGroup = await GetAdviseGroup(adviseGroupId);
+
+			var adviseGroupService = GetService<IAdviseGroupService>();
+			await adviseGroupService.AssignAdviseGroup(folder, adviseGroup, CancellationToken.None);
+		}
+
+		private async Task AssignAdviseGroupToDisc(ItemId discId, ItemId adviseGroupId)
+		{
+			var disc = await GetDisc(discId);
+			var adviseGroup = await GetAdviseGroup(adviseGroupId);
+
+			var adviseGroupService = GetService<IAdviseGroupService>();
+			await adviseGroupService.AssignAdviseGroup(disc, adviseGroup, CancellationToken.None);
 		}
 	}
 }

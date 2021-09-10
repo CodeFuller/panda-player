@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -405,11 +406,11 @@ namespace PandaPlayer.Services.IntegrationTests
 				Name = "Test Advise Group",
 			};
 
-			var dirtyReferenceData = GetReferenceData();
+			var holdingFolder = await GetFolder(ReferenceData.EmptyFolderId);
 
 			var adviseGroupService = GetService<IAdviseGroupService>();
 			await adviseGroupService.CreateAdviseGroup(adviseGroup, CancellationToken.None);
-			await adviseGroupService.AssignAdviseGroup(dirtyReferenceData.EmptyFolder, adviseGroup, CancellationToken.None);
+			await adviseGroupService.AssignAdviseGroup(holdingFolder, adviseGroup, CancellationToken.None);
 
 			var target = CreateTestTarget();
 
@@ -440,10 +441,8 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var dirtyReferenceData = GetReferenceData();
-
-			var adviseGroupService = GetService<IAdviseGroupService>();
-			await adviseGroupService.AssignAdviseGroup(dirtyReferenceData.EmptyFolder, dirtyReferenceData.FolderAdviseGroup, CancellationToken.None);
+			// Assigning one more reference to FolderAdviseGroup.
+			await AssignAdviseGroupToFolder(ReferenceData.EmptyFolderId, ReferenceData.FolderAdviseGroupId);
 
 			var target = CreateTestTarget();
 
@@ -463,7 +462,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				referenceData.FolderAdviseGroup,
 			};
 
-			var adviseGroups = await adviseGroupService.GetAllAdviseGroups(CancellationToken.None);
+			var adviseGroups = await GetAllAdviseGroups();
 			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency();
@@ -498,6 +497,34 @@ namespace PandaPlayer.Services.IntegrationTests
 			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
 
 			await CheckLibraryConsistency();
+		}
+
+		private async Task<ShallowFolderModel> GetFolder(ItemId folderId)
+		{
+			var folderService = GetService<IFoldersService>();
+			return await folderService.GetFolder(folderId, CancellationToken.None);
+		}
+
+		private Task<IReadOnlyCollection<AdviseGroupModel>> GetAllAdviseGroups()
+		{
+			var adviseGroupService = GetService<IAdviseGroupService>();
+			return adviseGroupService.GetAllAdviseGroups(CancellationToken.None);
+		}
+
+		private async Task<AdviseGroupModel> GetAdviseGroup(ItemId adviseGroupId)
+		{
+			var adviseGroupService = GetService<IAdviseGroupService>();
+			var allAdviseGroups = await GetAllAdviseGroups();
+			return allAdviseGroups.Single(x => x.Id == adviseGroupId);
+		}
+
+		private async Task AssignAdviseGroupToFolder(ItemId folderId, ItemId adviseGroupId)
+		{
+			var folder = await GetFolder(folderId);
+			var adviseGroup = await GetAdviseGroup(adviseGroupId);
+
+			var adviseGroupService = GetService<IAdviseGroupService>();
+			await adviseGroupService.AssignAdviseGroup(folder, adviseGroup, CancellationToken.None);
 		}
 	}
 }

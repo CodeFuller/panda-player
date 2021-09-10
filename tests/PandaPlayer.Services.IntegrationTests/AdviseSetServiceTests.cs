@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -116,19 +117,21 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var dirtyReferenceData = GetReferenceData();
-			dirtyReferenceData.DiscWithMissingFields.AdviseSet.Should().BeNull();
+			var discForAdding = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
+			discForAdding.AdviseSet.Should().BeNull();
+
+			var adviseSet = await GetAdviseSet(ReferenceData.AdviseSet2Id);
 
 			var target = CreateTestTarget();
 
 			// Act
 
-			await target.AddDiscs(dirtyReferenceData.AdviseSet2, new[] { dirtyReferenceData.DiscWithMissingFields }, CancellationToken.None);
+			await target.AddDiscs(adviseSet, new[] { discForAdding }, CancellationToken.None);
 
 			// Assert
 
-			dirtyReferenceData.DiscWithMissingFields.AdviseSet.Should().Be(dirtyReferenceData.AdviseSet2);
-			dirtyReferenceData.DiscWithMissingFields.AdviseSetOrder.Should().Be(1);
+			discForAdding.AdviseSet.Should().Be(adviseSet);
+			discForAdding.AdviseSetOrder.Should().Be(1);
 
 			var referenceData = GetReferenceData();
 			referenceData.DiscWithMissingFields.AdviseSet = referenceData.AdviseSet2;
@@ -148,28 +151,68 @@ namespace PandaPlayer.Services.IntegrationTests
 		}
 
 		[TestMethod]
+		public async Task AddDiscs_ForNonEmptyAdviseSet_AddsDiscsCorrectly()
+		{
+			// Arrange
+
+			var discForAdding = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
+			discForAdding.AdviseSet.Should().BeNull();
+
+			var adviseSet = await GetAdviseSet(ReferenceData.AdviseSet1Id);
+
+			var target = CreateTestTarget();
+
+			// Act
+
+			await target.AddDiscs(adviseSet, new[] { discForAdding }, CancellationToken.None);
+
+			// Assert
+
+			discForAdding.AdviseSet.Should().Be(adviseSet);
+			discForAdding.AdviseSetOrder.Should().Be(2);
+
+			var referenceData = GetReferenceData();
+			referenceData.DiscWithMissingFields.AdviseSet = referenceData.AdviseSet1;
+			referenceData.DiscWithMissingFields.AdviseSetOrder = 2;
+
+			var expectedDiscs = new[]
+			{
+				referenceData.NormalDisc,
+				referenceData.DiscWithMissingFields,
+				referenceData.DeletedDisc,
+			};
+
+			var discsFromRepository = await GetAllDiscs();
+			discsFromRepository.Should().BeEquivalentTo(expectedDiscs, x => x.WithStrictOrdering().IgnoringCyclicReferences());
+
+			await CheckLibraryConsistency();
+		}
+
+		[TestMethod]
 		public async Task ReorderDiscs_ReordersDiscsCorrectly()
 		{
 			// Arrange
 
-			var dirtyReferenceData = GetReferenceData();
-			dirtyReferenceData.DiscWithMissingFields.AdviseSet.Should().BeNull();
-
 			var target = CreateTestTarget();
 
-			await target.AddDiscs(dirtyReferenceData.AdviseSet1, new[] { dirtyReferenceData.DiscWithMissingFields }, CancellationToken.None);
+			var disc1 = await GetDisc(ReferenceData.NormalDiscId);
+			var disc2 = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
+
+			// Adding one more disc to advise set.
+			var adviseSet = await GetAdviseSet(ReferenceData.AdviseSet1Id);
+			await target.AddDiscs(adviseSet, new[] { disc2 }, CancellationToken.None);
 
 			// Act
 
-			await target.ReorderDiscs(dirtyReferenceData.AdviseSet1, new[] { dirtyReferenceData.DiscWithMissingFields, dirtyReferenceData.NormalDisc }, CancellationToken.None);
+			await target.ReorderDiscs(adviseSet, new[] { disc2, disc1 }, CancellationToken.None);
 
 			// Assert
 
-			dirtyReferenceData.DiscWithMissingFields.AdviseSet.Should().Be(dirtyReferenceData.AdviseSet1);
-			dirtyReferenceData.DiscWithMissingFields.AdviseSetOrder.Should().Be(1);
+			disc1.AdviseSet.Should().Be(adviseSet);
+			disc1.AdviseSetOrder.Should().Be(2);
 
-			dirtyReferenceData.NormalDisc.AdviseSet.Should().Be(dirtyReferenceData.AdviseSet1);
-			dirtyReferenceData.NormalDisc.AdviseSetOrder.Should().Be(2);
+			disc2.AdviseSet.Should().Be(adviseSet);
+			disc2.AdviseSetOrder.Should().Be(1);
 
 			var referenceData = GetReferenceData();
 			referenceData.DiscWithMissingFields.AdviseSet = referenceData.AdviseSet1;
@@ -194,16 +237,14 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var dirtyReferenceData = GetReferenceData();
-			dirtyReferenceData.DiscWithMissingFields.AdviseSet.Should().BeNull();
-
-			var removedDisc = dirtyReferenceData.NormalDisc;
+			var removedDisc = await GetDisc(ReferenceData.NormalDiscId);
+			var adviseSet = await GetAdviseSet(ReferenceData.AdviseSet1Id);
 
 			var target = CreateTestTarget();
 
 			// Act
 
-			await target.RemoveDiscs(dirtyReferenceData.AdviseSet1, new[] { removedDisc }, CancellationToken.None);
+			await target.RemoveDiscs(adviseSet, new[] { removedDisc }, CancellationToken.None);
 
 			// Assert
 
@@ -232,19 +273,18 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var dirtyReferenceData = GetReferenceData();
-			dirtyReferenceData.DiscWithMissingFields.AdviseSet.Should().BeNull();
-
-			var removedDisc = dirtyReferenceData.NormalDisc;
-			var leftDisc = dirtyReferenceData.DiscWithMissingFields;
-
 			var target = CreateTestTarget();
 
-			await target.AddDiscs(dirtyReferenceData.AdviseSet1, new[] { leftDisc }, CancellationToken.None);
+			var removedDisc = await GetDisc(ReferenceData.NormalDiscId);
+			var leftDisc = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
+
+			// Adding one more disc to advise set.
+			var adviseSet = await GetAdviseSet(ReferenceData.AdviseSet1Id);
+			await target.AddDiscs(adviseSet, new[] { leftDisc }, CancellationToken.None);
 
 			// Act
 
-			await target.RemoveDiscs(dirtyReferenceData.AdviseSet1, new[] { removedDisc }, CancellationToken.None);
+			await target.RemoveDiscs(adviseSet, new[] { removedDisc }, CancellationToken.None);
 
 			// Assert
 
@@ -275,8 +315,7 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var dirtyReferenceData = GetReferenceData();
-			var adviseSet = dirtyReferenceData.AdviseSet1;
+			var adviseSet = await GetAdviseSet(ReferenceData.AdviseSet1Id);
 
 			var target = CreateTestTarget();
 
@@ -308,8 +347,7 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var dirtyReferenceData = GetReferenceData();
-			var adviseSet = dirtyReferenceData.AdviseSet2;
+			var adviseSet = await GetAdviseSet(ReferenceData.AdviseSet2Id);
 
 			var target = CreateTestTarget();
 
@@ -336,8 +374,7 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var dirtyReferenceData = GetReferenceData();
-			var adviseSet = dirtyReferenceData.AdviseSet1;
+			var adviseSet = await GetAdviseSet(ReferenceData.AdviseSet1Id);
 
 			var target = CreateTestTarget();
 
@@ -372,10 +409,24 @@ namespace PandaPlayer.Services.IntegrationTests
 			await CheckLibraryConsistency();
 		}
 
+		private async Task<AdviseSetModel> GetAdviseSet(ItemId adviseSetId)
+		{
+			var adviseSetService = GetService<IAdviseSetService>();
+			var allAdviseSets = await adviseSetService.GetAllAdviseSets(CancellationToken.None);
+
+			return allAdviseSets.Single(x => x.Id == adviseSetId);
+		}
+
 		private async Task<IReadOnlyCollection<DiscModel>> GetAllDiscs()
 		{
 			var discService = GetService<IDiscsService>();
 			return await discService.GetAllDiscs(CancellationToken.None);
+		}
+
+		private async Task<DiscModel> GetDisc(ItemId discId)
+		{
+			var allDiscs = await GetAllDiscs();
+			return allDiscs.Single(x => x.Id == discId);
 		}
 	}
 }
