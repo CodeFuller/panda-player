@@ -227,9 +227,9 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			var adviseSet1 = new AdviseSetModel { Id = new ItemId("Advise Set 1") };
 			var adviseSet2 = new AdviseSetModel { Id = new ItemId("Advise Set 2") };
 
-			var disc11 = new DiscModel { Folder = rootFolder, AdviseSet = adviseSet1, AllSongs = Array.Empty<SongModel>() };
-			var disc12 = new DiscModel { Folder = rootFolder, AdviseSet = adviseSet1, AllSongs = Array.Empty<SongModel>() };
-			var disc21 = new DiscModel { Folder = rootFolder, AdviseSet = adviseSet2, AllSongs = Array.Empty<SongModel>() };
+			var disc11 = new DiscModel { Folder = rootFolder, AdviseSetInfo = new AdviseSetInfo(adviseSet1, 1), AllSongs = Array.Empty<SongModel>() };
+			var disc12 = new DiscModel { Folder = rootFolder, AdviseSetInfo = new AdviseSetInfo(adviseSet1, 2), AllSongs = Array.Empty<SongModel>() };
+			var disc21 = new DiscModel { Folder = rootFolder, AdviseSetInfo = new AdviseSetInfo(adviseSet2, 1), AllSongs = Array.Empty<SongModel>() };
 
 			var folderServiceStub = new Mock<IFoldersService>();
 			folderServiceStub.Setup(x => x.GetAllFolders(It.IsAny<CancellationToken>())).ReturnsAsync(new[] { rootFolder });

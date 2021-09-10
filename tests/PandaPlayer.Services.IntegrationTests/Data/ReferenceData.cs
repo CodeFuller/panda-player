@@ -7,7 +7,6 @@
 			FillFolders();
 			FillDiscs(libraryStorageRoot);
 			FillSongs(libraryStorageRoot);
-			FillAdviseSets();
 
 			if (fillSongPlaybacks)
 			{

@@ -21,7 +21,7 @@ namespace PandaPlayer.Adviser.Grouping
 
 		public void AddDisc(DiscModel disc)
 		{
-			var adviseSetId = disc.AdviseSet?.Id.Value ?? $"Disc: {disc.Id}";
+			var adviseSetId = disc.AdviseSetInfo?.AdviseSet.Id.Value ?? $"Disc: {disc.Id}";
 
 			var adviseSet = adviseSets.SingleOrDefault(x => x.Id == adviseSetId);
 			if (adviseSet == null)

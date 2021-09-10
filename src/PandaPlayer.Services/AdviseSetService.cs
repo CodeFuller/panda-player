@@ -38,12 +38,11 @@ namespace PandaPlayer.Services
 		{
 			var currentDiscs = await discsRepository.GetAdviseSetDiscs(adviseSet.Id, cancellationToken);
 
-			var nextOrder = (currentDiscs.LastOrDefault()?.AdviseSetOrder ?? 0) + 1;
+			var lastAdviseSetInfo = currentDiscs.LastOrDefault()?.AdviseSetInfo;
+			var nextOrder = (lastAdviseSetInfo?.Order ?? 0) + 1;
 			foreach (var addedDisc in addedDiscs)
 			{
-				addedDisc.AdviseSet = adviseSet;
-				addedDisc.AdviseSetOrder = nextOrder++;
-
+				addedDisc.AdviseSetInfo = new AdviseSetInfo(adviseSet, nextOrder++);
 				await discsRepository.UpdateDisc(addedDisc, cancellationToken);
 			}
 		}
@@ -59,18 +58,16 @@ namespace PandaPlayer.Services
 			{
 				if (removedDiscsMap.TryGetValue(disc.Id, out var removedDisc))
 				{
-					disc.AdviseSet = null;
-					disc.AdviseSetOrder = null;
+					disc.AdviseSetInfo = null;
 					await discsRepository.UpdateDisc(disc, cancellationToken);
 
-					removedDisc.AdviseSet = null;
-					removedDisc.AdviseSetOrder = null;
+					removedDisc.AdviseSetInfo = null;
 				}
 				else
 				{
-					if (disc.AdviseSetOrder != nextOrder)
+					if (disc.AdviseSetInfo.Order != nextOrder)
 					{
-						disc.AdviseSetOrder = nextOrder;
+						disc.AdviseSetInfo = disc.AdviseSetInfo.WithOrder(nextOrder);
 						await discsRepository.UpdateDisc(disc, cancellationToken);
 					}
 
@@ -97,9 +94,7 @@ namespace PandaPlayer.Services
 			// Updating input models.
 			foreach (var (disc, order) in newDiscsOrderList.Select((disc, i) => (Disc: disc, Order: i + 1)))
 			{
-				disc.AdviseSet = adviseSet;
-				disc.AdviseSetOrder = order;
-
+				disc.AdviseSetInfo = new AdviseSetInfo(adviseSet, order);
 				newOrders.Add(disc.Id, order);
 			}
 
@@ -107,9 +102,9 @@ namespace PandaPlayer.Services
 			foreach (var disc in currentDiscs)
 			{
 				var newOrder = newOrders[disc.Id];
-				if (disc.AdviseSetOrder != newOrder)
+				if (disc.AdviseSetInfo.Order != newOrder)
 				{
-					disc.AdviseSetOrder = null;
+					disc.AdviseSetInfo = null;
 					await discsRepository.UpdateDisc(disc, cancellationToken);
 				}
 			}
@@ -118,10 +113,9 @@ namespace PandaPlayer.Services
 			foreach (var disc in currentDiscs)
 			{
 				var newOrder = newOrders[disc.Id];
-				if (disc.AdviseSetOrder != newOrder || disc.AdviseSet?.Id != adviseSet.Id)
+				if (disc.AdviseSetInfo == null)
 				{
-					disc.AdviseSet = adviseSet;
-					disc.AdviseSetOrder = newOrder;
+					disc.AdviseSetInfo = new AdviseSetInfo(adviseSet, newOrder);
 					await discsRepository.UpdateDisc(disc, cancellationToken);
 				}
 			}
@@ -138,8 +132,7 @@ namespace PandaPlayer.Services
 
 			foreach (var disc in currentDiscs)
 			{
-				disc.AdviseSet = null;
-				disc.AdviseSetOrder = null;
+				disc.AdviseSetInfo = null;
 				await discsRepository.UpdateDisc(disc, cancellationToken);
 			}
 

@@ -56,7 +56,7 @@ namespace PandaPlayer.Adviser
 		private static string GetTitleForAdviseSet(AdviseSetContent adviseSet)
 		{
 			var commonAdviseSet = adviseSet.Discs
-				.Select(x => x.AdviseSet)
+				.Select(x => x.AdviseSetInfo?.AdviseSet)
 				.Distinct(new AdviseSetEqualityComparer())
 				.Single();
 

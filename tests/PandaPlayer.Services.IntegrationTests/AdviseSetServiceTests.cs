@@ -117,7 +117,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			// Arrange
 
 			var discForAdding = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
-			discForAdding.AdviseSet.Should().BeNull();
+			discForAdding.AdviseSetInfo.Should().BeNull();
 
 			var adviseSet = await GetAdviseSet(ReferenceData.AdviseSet2Id);
 
@@ -129,12 +129,10 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Assert
 
-			discForAdding.AdviseSet.Should().Be(adviseSet);
-			discForAdding.AdviseSetOrder.Should().Be(1);
+			discForAdding.AdviseSetInfo.Should().BeEquivalentTo(new AdviseSetInfo(adviseSet, 1));
 
 			var referenceData = GetReferenceData();
-			referenceData.DiscWithMissingFields.AdviseSet = referenceData.AdviseSet2;
-			referenceData.DiscWithMissingFields.AdviseSetOrder = 1;
+			referenceData.DiscWithMissingFields.AdviseSetInfo = new AdviseSetInfo(referenceData.AdviseSet2, 1);
 
 			var expectedDiscs = new[]
 			{
@@ -155,7 +153,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			// Arrange
 
 			var discForAdding = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
-			discForAdding.AdviseSet.Should().BeNull();
+			discForAdding.AdviseSetInfo.Should().BeNull();
 
 			var adviseSet = await GetAdviseSet(ReferenceData.AdviseSet1Id);
 
@@ -167,12 +165,10 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Assert
 
-			discForAdding.AdviseSet.Should().Be(adviseSet);
-			discForAdding.AdviseSetOrder.Should().Be(2);
+			discForAdding.AdviseSetInfo.Should().BeEquivalentTo(new AdviseSetInfo(adviseSet, 2));
 
 			var referenceData = GetReferenceData();
-			referenceData.DiscWithMissingFields.AdviseSet = referenceData.AdviseSet1;
-			referenceData.DiscWithMissingFields.AdviseSetOrder = 2;
+			referenceData.DiscWithMissingFields.AdviseSetInfo = new AdviseSetInfo(referenceData.AdviseSet1, 2);
 
 			var expectedDiscs = new[]
 			{
@@ -207,16 +203,12 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Assert
 
-			disc1.AdviseSet.Should().Be(adviseSet);
-			disc1.AdviseSetOrder.Should().Be(2);
-
-			disc2.AdviseSet.Should().Be(adviseSet);
-			disc2.AdviseSetOrder.Should().Be(1);
+			disc1.AdviseSetInfo.Should().BeEquivalentTo(new AdviseSetInfo(adviseSet, 2));
+			disc2.AdviseSetInfo.Should().BeEquivalentTo(new AdviseSetInfo(adviseSet, 1));
 
 			var referenceData = GetReferenceData();
-			referenceData.DiscWithMissingFields.AdviseSet = referenceData.AdviseSet1;
-			referenceData.DiscWithMissingFields.AdviseSetOrder = 1;
-			referenceData.NormalDisc.AdviseSetOrder = 2;
+			referenceData.DiscWithMissingFields.AdviseSetInfo = new AdviseSetInfo(referenceData.AdviseSet1, 1);
+			referenceData.NormalDisc.AdviseSetInfo = referenceData.NormalDisc.AdviseSetInfo.WithOrder(2);
 
 			var expectedDiscs = new[]
 			{
@@ -247,12 +239,10 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Assert
 
-			removedDisc.AdviseSet.Should().BeNull();
-			removedDisc.AdviseSetOrder.Should().BeNull();
+			removedDisc.AdviseSetInfo.Should().BeNull();
 
 			var referenceData = GetReferenceData();
-			referenceData.NormalDisc.AdviseSet = null;
-			referenceData.NormalDisc.AdviseSetOrder = null;
+			referenceData.NormalDisc.AdviseSetInfo = null;
 
 			var expectedDiscs = new[]
 			{
@@ -287,14 +277,11 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Assert
 
-			removedDisc.AdviseSet.Should().BeNull();
-			removedDisc.AdviseSetOrder.Should().BeNull();
+			removedDisc.AdviseSetInfo.Should().BeNull();
 
 			var referenceData = GetReferenceData();
-			referenceData.NormalDisc.AdviseSet = null;
-			referenceData.NormalDisc.AdviseSetOrder = null;
-			referenceData.DiscWithMissingFields.AdviseSet = referenceData.AdviseSet1;
-			referenceData.DiscWithMissingFields.AdviseSetOrder = 1;
+			referenceData.NormalDisc.AdviseSetInfo = null;
+			referenceData.DiscWithMissingFields.AdviseSetInfo = new AdviseSetInfo(referenceData.AdviseSet1, 1);
 
 			var expectedDiscs = new[]
 			{
@@ -392,8 +379,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			var adviseSetsFromRepository = await target.GetAllAdviseSets(CancellationToken.None);
 			adviseSetsFromRepository.Should().BeEquivalentTo(expectedAdviseSets, x => x.WithStrictOrdering());
 
-			referenceData.NormalDisc.AdviseSet = null;
-			referenceData.NormalDisc.AdviseSetOrder = null;
+			referenceData.NormalDisc.AdviseSetInfo = null;
 
 			var expectedDiscs = new[]
 			{

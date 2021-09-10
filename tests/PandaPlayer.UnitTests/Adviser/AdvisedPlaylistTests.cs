@@ -71,7 +71,7 @@ namespace PandaPlayer.UnitTests.Adviser
 			{
 				Id = new ItemId("1"),
 				Folder = new FolderModel { Name = "Some Artist" },
-				AdviseSet = adviseSet,
+				AdviseSetInfo = new AdviseSetInfo(adviseSet, 1),
 				Title = "Disc 1",
 				AllSongs = new List<SongModel>(),
 			};
@@ -80,8 +80,8 @@ namespace PandaPlayer.UnitTests.Adviser
 			{
 				Id = new ItemId("2"),
 				Folder = new FolderModel { Name = "Some Artist" },
-				AdviseSet = adviseSet,
-				Title = "Disc 1",
+				AdviseSetInfo = new AdviseSetInfo(adviseSet, 2),
+				Title = "Disc 2",
 				AllSongs = new List<SongModel>(),
 			};
 
@@ -114,7 +114,7 @@ namespace PandaPlayer.UnitTests.Adviser
 			{
 				Id = new ItemId("1"),
 				TreeTitle = "Disc 1",
-				AdviseSet = adviseSet,
+				AdviseSetInfo = new AdviseSetInfo(adviseSet, 1),
 				AllSongs = new[] { song1 },
 			};
 
@@ -123,7 +123,7 @@ namespace PandaPlayer.UnitTests.Adviser
 			{
 				Id = new ItemId("2"),
 				TreeTitle = "Disc 2",
-				AdviseSet = adviseSet,
+				AdviseSetInfo = new AdviseSetInfo(adviseSet, 2),
 				AllSongs = new[] { song2 },
 			};
 

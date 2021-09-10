@@ -43,7 +43,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 				CurrentAdviseSetDiscs.Clear();
 				if (selectedAdviseSet != null)
 				{
-					CurrentAdviseSetDiscs.AddRange(ActiveDiscs.Where(x => x.AdviseSet?.Id == selectedAdviseSet.Id));
+					CurrentAdviseSetDiscs.AddRange(ActiveDiscs.Where(x => x.AdviseSetInfo?.AdviseSet.Id == selectedAdviseSet.Id));
 				}
 
 				RaisePropertyChangedForAdviseSetButtons();

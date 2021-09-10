@@ -21,11 +21,5 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 			Id = AdviseSet2Id,
 			Name = "Another Advise Set",
 		};
-
-		private void FillAdviseSets()
-		{
-			NormalDisc.AdviseSet = AdviseSet1;
-			NormalDisc.AdviseSetOrder = 1;
-		}
 	}
 }

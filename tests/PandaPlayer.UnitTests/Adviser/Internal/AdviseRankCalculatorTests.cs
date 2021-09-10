@@ -214,7 +214,9 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 
 			var disc1 = CreateTestDisc("1.1", new[] { CreateTestSong(1, RatingModel.R5, new DateTime(2021, 08, 28)) });
 			var disc2 = CreateTestDisc("1.2", new[] { CreateTestSong(2, RatingModel.R7, new DateTime(2021, 08, 28)) });
-			disc1.AdviseSet = disc2.AdviseSet = new AdviseSetModel { Id = new ItemId("1") };
+			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
+			disc1.AdviseSetInfo = new AdviseSetInfo(adviseSet, 1);
+			disc2.AdviseSetInfo = new AdviseSetInfo(adviseSet, 2);
 
 			var adviseGroupContent1 = new AdviseGroupContent("1");
 			adviseGroupContent1.AddDisc(disc1);

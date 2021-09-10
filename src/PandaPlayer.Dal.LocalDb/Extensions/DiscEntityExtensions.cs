@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Dal.LocalDb.Entities;
 using PandaPlayer.Dal.LocalDb.Interfaces;
@@ -14,13 +15,18 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 				Id = disc.Id.ToItemId(),
 				Folder = folderModel,
 				AdviseGroup = disc.AdviseGroup?.ToModel(),
-				AdviseSet = disc.AdviseSet?.ToModel(),
-				AdviseSetOrder = disc.AdviseSetOrder,
 				Year = disc.Year,
 				Title = disc.Title,
 				TreeTitle = disc.TreeTitle,
 				AlbumTitle = disc.AlbumTitle,
 			};
+
+			if ((disc.AdviseSet == null) ^ (disc.AdviseSetOrder == null))
+			{
+				throw new InvalidOperationException($"Advise set & order are inconsistent for disc '{disc.Title}'");
+			}
+
+			discModel.AdviseSetInfo = disc.AdviseSet != null ? new AdviseSetInfo(disc.AdviseSet.ToModel(), disc.AdviseSetOrder.Value) : null;
 
 			discModel.AllSongs = disc.Songs.Select(s => s.ToModel(discModel, contentUriProvider)).ToList();
 			discModel.Images = disc.Images.Select(im => im.ToModel(discModel, contentUriProvider)).ToList();
@@ -41,8 +47,8 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 				Id = disc.Id?.ToInt32() ?? default,
 				FolderId = disc.Folder.Id.ToInt32(),
 				AdviseGroupId = disc.AdviseGroup?.Id.ToInt32(),
-				AdviseSetId = disc.AdviseSet?.Id.ToInt32(),
-				AdviseSetOrder = disc.AdviseSetOrder,
+				AdviseSetId = disc.AdviseSetInfo?.AdviseSet.Id.ToInt32(),
+				AdviseSetOrder = disc.AdviseSetInfo?.Order,
 				Year = disc.Year,
 				Title = disc.Title,
 				TreeTitle = disc.TreeTitle,

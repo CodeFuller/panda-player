@@ -25,9 +25,7 @@ namespace PandaPlayer.Core.Models
 			set => this.SetField(PropertyChanged, ref adviseGroup, value);
 		}
 
-		public AdviseSetModel AdviseSet { get; set; }
-
-		public int? AdviseSetOrder { get; set; }
+		public AdviseSetInfo AdviseSetInfo { get; set; }
 
 		public int? Year { get; set; }
 
