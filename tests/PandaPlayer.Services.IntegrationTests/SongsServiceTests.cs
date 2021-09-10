@@ -492,13 +492,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			await CheckLibraryConsistency();
 		}
 
-		private async Task<DiscModel> GetDisc(ItemId discId)
-		{
-			var discService = GetService<IDiscsService>();
-			var allDiscs = await discService.GetAllDiscs(CancellationToken.None);
-			return allDiscs.Single(x => x.Id == discId);
-		}
-
 		private async Task<ArtistModel> GetArtist(ItemId artistId)
 		{
 			var artistService = GetService<IArtistsService>();

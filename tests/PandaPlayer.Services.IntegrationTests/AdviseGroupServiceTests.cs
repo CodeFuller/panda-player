@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -483,35 +482,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency();
-		}
-
-		private async Task<ShallowFolderModel> GetFolder(ItemId folderId)
-		{
-			var folderService = GetService<IFoldersService>();
-			return await folderService.GetFolder(folderId, CancellationToken.None);
-		}
-
-		private async Task<DiscModel> GetDisc(ItemId discId)
-		{
-			var discService = GetService<IDiscsService>();
-			var allDiscs = await discService.GetAllDiscs(CancellationToken.None);
-			return allDiscs.Single(x => x.Id == discId);
-		}
-
-		private async Task<AdviseGroupModel> GetAdviseGroup(ItemId adviseGroupId)
-		{
-			var adviseGroupService = GetService<IAdviseGroupService>();
-			var allAdviseGroups = await adviseGroupService.GetAllAdviseGroups(CancellationToken.None);
-			return allAdviseGroups.Single(x => x.Id == adviseGroupId);
-		}
-
-		private async Task AssignAdviseGroupToFolder(ItemId folderId, ItemId adviseGroupId)
-		{
-			var folder = await GetFolder(folderId);
-			var adviseGroup = await GetAdviseGroup(adviseGroupId);
-
-			var adviseGroupService = GetService<IAdviseGroupService>();
-			await adviseGroupService.AssignAdviseGroup(folder, adviseGroup, CancellationToken.None);
 		}
 
 		private async Task AssignAdviseGroupToDisc(ItemId discId, ItemId adviseGroupId)

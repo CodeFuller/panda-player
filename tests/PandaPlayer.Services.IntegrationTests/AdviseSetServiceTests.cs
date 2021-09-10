@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -415,18 +414,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			var allAdviseSets = await adviseSetService.GetAllAdviseSets(CancellationToken.None);
 
 			return allAdviseSets.Single(x => x.Id == adviseSetId);
-		}
-
-		private async Task<IReadOnlyCollection<DiscModel>> GetAllDiscs()
-		{
-			var discService = GetService<IDiscsService>();
-			return await discService.GetAllDiscs(CancellationToken.None);
-		}
-
-		private async Task<DiscModel> GetDisc(ItemId discId)
-		{
-			var allDiscs = await GetAllDiscs();
-			return allDiscs.Single(x => x.Id == discId);
 		}
 	}
 }

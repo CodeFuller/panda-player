@@ -197,7 +197,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var target = CreateTestTarget();
 
-			var disc = await GetDisc(ReferenceData.NormalDiscId, target);
+			var disc = await GetDisc(ReferenceData.NormalDiscId);
 
 			// Act
 
@@ -217,7 +217,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			disc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
 
-			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId, target);
+			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
 			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
 
 			Directory.Exists(oldDiscDirectoryPath).Should().BeFalse();
@@ -235,7 +235,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var target = CreateTestTarget();
 
-			var disc = await GetDisc(ReferenceData.NormalDiscId, target);
+			var disc = await GetDisc(ReferenceData.NormalDiscId);
 
 			// Act
 
@@ -258,7 +258,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			disc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
 
-			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId, target);
+			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
 			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
 
 			var songTagger = GetService<ISongTagger>();
@@ -271,7 +271,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			tagData2.Year.Should().Be(1998);
 			tagData2.Album.Should().Be("Охотник и сайгак");
 
-			var updatedDisc = await GetDisc(ReferenceData.NormalDiscId, target);
+			var updatedDisc = await GetDisc(ReferenceData.NormalDiscId);
 			updatedDisc.Should().BeEquivalentTo(disc, x => x.IgnoringCyclicReferences());
 
 			await CheckLibraryConsistency(typeof(SuspiciousAlbumTitleInconsistency));
@@ -289,7 +289,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var discCoverImage = new DiscImageModel
 			{
-				Disc = await GetDisc(ReferenceData.DiscWithMissingFieldsId, target),
+				Disc = await GetDisc(ReferenceData.DiscWithMissingFieldsId),
 				TreeTitle = "cover.jpg",
 				ImageType = DiscImageType.Cover,
 			};
@@ -317,7 +317,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
 
-			var discFromRepository = await GetDisc(ReferenceData.DiscWithMissingFieldsId, target);
+			var discFromRepository = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
 			discFromRepository.CoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
 
 			var fileInfo = new FileInfo(imageFilePath);
@@ -339,7 +339,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var discCoverImage = new DiscImageModel
 			{
-				Disc = await GetDisc(ReferenceData.NormalDiscId, target),
+				Disc = await GetDisc(ReferenceData.NormalDiscId),
 				TreeTitle = "cover.jpg",
 				ImageType = DiscImageType.Cover,
 			};
@@ -367,7 +367,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
 
-			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId, target);
+			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
 			discFromRepository.CoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
 
 			var fileInfo = new FileInfo(imageFilePath);
@@ -389,7 +389,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var discCoverImage = new DiscImageModel
 			{
-				Disc = await GetDisc(ReferenceData.NormalDiscId, target),
+				Disc = await GetDisc(ReferenceData.NormalDiscId),
 				TreeTitle = "cover.png",
 				ImageType = DiscImageType.Cover,
 			};
@@ -417,7 +417,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
 
-			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId, target);
+			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
 			discFromRepository.CoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
 
 			var imageFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "cover.png");
@@ -461,7 +461,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			expectedDisc.Images = new List<DiscImageModel>();
 			expectedDisc.AdviseGroup = null;
 
-			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId, target);
+			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
 			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
 
 			Directory.Exists(discDirectoryPath).Should().BeFalse();
@@ -482,7 +482,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Assert
 
-			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId, target);
+			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
 			discFromRepository.AdviseGroup.Should().BeNull();
 
 			var referenceData = GetReferenceData();
@@ -514,7 +514,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Assert
 
-			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId, target);
+			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
 			discFromRepository.AdviseGroup.Should().BeNull();
 
 			var referenceData = GetReferenceData();
@@ -528,39 +528,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency();
-		}
-
-		private async Task<ShallowFolderModel> GetFolder(ItemId folderId)
-		{
-			var folderService = GetService<IFoldersService>();
-			return await folderService.GetFolder(folderId, CancellationToken.None);
-		}
-
-		private static async Task<DiscModel> GetDisc(ItemId discId, IDiscsService discService)
-		{
-			var allDiscs = await discService.GetAllDiscs(CancellationToken.None);
-			return allDiscs.Single(x => x.Id == discId);
-		}
-
-		private Task<IReadOnlyCollection<AdviseGroupModel>> GetAllAdviseGroups()
-		{
-			var adviseGroupService = GetService<IAdviseGroupService>();
-			return adviseGroupService.GetAllAdviseGroups(CancellationToken.None);
-		}
-
-		private async Task<AdviseGroupModel> GetAdviseGroup(ItemId adviseGroupId)
-		{
-			var allAdviseGroups = await GetAllAdviseGroups();
-			return allAdviseGroups.Single(x => x.Id == adviseGroupId);
-		}
-
-		private async Task AssignAdviseGroupToFolder(ItemId folderId, ItemId adviseGroupId)
-		{
-			var folder = await GetFolder(folderId);
-			var adviseGroup = await GetAdviseGroup(adviseGroupId);
-
-			var adviseGroupService = GetService<IAdviseGroupService>();
-			await adviseGroupService.AssignAdviseGroup(folder, adviseGroup, CancellationToken.None);
 		}
 	}
 }

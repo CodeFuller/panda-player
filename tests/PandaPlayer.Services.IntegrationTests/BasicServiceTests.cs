@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using PandaPlayer.Core.Facades;
+using PandaPlayer.Core.Models;
 using PandaPlayer.Dal.LocalDb.Extensions;
 using PandaPlayer.Services.Diagnostic;
 using PandaPlayer.Services.Diagnostic.Inconsistencies;
@@ -171,6 +172,45 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			ServiceProvider.Dispose();
 			ServiceProvider = null;
+		}
+
+		protected async Task<ShallowFolderModel> GetFolder(ItemId folderId)
+		{
+			var folderService = GetService<IFoldersService>();
+			return await folderService.GetFolder(folderId, CancellationToken.None);
+		}
+
+		protected async Task<IReadOnlyCollection<DiscModel>> GetAllDiscs()
+		{
+			var discService = GetService<IDiscsService>();
+			return await discService.GetAllDiscs(CancellationToken.None);
+		}
+
+		protected async Task<DiscModel> GetDisc(ItemId discId)
+		{
+			var allDiscs = await GetAllDiscs();
+			return allDiscs.Single(x => x.Id == discId);
+		}
+
+		protected Task<IReadOnlyCollection<AdviseGroupModel>> GetAllAdviseGroups()
+		{
+			var adviseGroupService = GetService<IAdviseGroupService>();
+			return adviseGroupService.GetAllAdviseGroups(CancellationToken.None);
+		}
+
+		protected async Task<AdviseGroupModel> GetAdviseGroup(ItemId adviseGroupId)
+		{
+			var allAdviseGroups = await GetAllAdviseGroups();
+			return allAdviseGroups.Single(x => x.Id == adviseGroupId);
+		}
+
+		protected async Task AssignAdviseGroupToFolder(ItemId folderId, ItemId adviseGroupId)
+		{
+			var folder = await GetFolder(folderId);
+			var adviseGroup = await GetAdviseGroup(adviseGroupId);
+
+			var adviseGroupService = GetService<IAdviseGroupService>();
+			await adviseGroupService.AssignAdviseGroup(folder, adviseGroup, CancellationToken.None);
 		}
 	}
 }
