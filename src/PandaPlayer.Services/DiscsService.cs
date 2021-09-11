@@ -118,13 +118,34 @@ namespace PandaPlayer.Services
 				await DeleteDiscCoverImage(disc, cancellationToken);
 			}
 
-			var hasAdviseGroup = disc.AdviseGroup != null;
-			if (hasAdviseGroup)
+			var updateDisc = false;
+			var deleteOrphanAdviseGroups = false;
+			if (disc.AdviseGroup != null)
 			{
 				// We erase advise group so that it could be deleted when no references left.
 				disc.AdviseGroup = null;
-				await discsRepository.UpdateDisc(disc, cancellationToken);
+				updateDisc = true;
+				deleteOrphanAdviseGroups = true;
+			}
 
+			if (disc.AdviseSetInfo != null)
+			{
+				// We erase advise set for several reasons:
+				// 1. In order to unnecessary (empty) advise sets could be deleted (manually).
+				// 2. In order to deleted discs do not interfere with active discs within same advise set.
+				//    Otherwise some care should be taken in adviser for handling this case.
+				// Overall there is no any use of advise sets for deleted discs.
+				disc.AdviseSetInfo = null;
+				updateDisc = true;
+			}
+
+			if (updateDisc)
+			{
+				await discsRepository.UpdateDisc(disc, cancellationToken);
+			}
+
+			if (deleteOrphanAdviseGroups)
+			{
 				await adviseGroupRepository.DeleteOrphanAdviseGroups(cancellationToken);
 			}
 

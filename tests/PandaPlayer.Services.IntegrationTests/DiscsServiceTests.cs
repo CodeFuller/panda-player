@@ -460,6 +460,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			expectedDisc.Images = new List<DiscImageModel>();
 			expectedDisc.AdviseGroup = null;
+			expectedDisc.AdviseSetInfo = null;
 
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
 			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
