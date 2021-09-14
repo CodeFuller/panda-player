@@ -35,7 +35,7 @@
                                 Style="{StaticResource MaterialDesignDataGrid}" CellStyle="{StaticResource InvisibleFocusDataGridCell}" GridLinesVisibility="None"
                                 AutoGenerateColumns="False" IsReadOnly="False" HeadersVisibility="None"
                                 CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="False"
-                                ItemsSource="{Binding AdviseSets}" SelectedItem="{Binding Path=SelectedAdviseSet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                ItemsSource="{Binding AdviseSets}" SelectedItem="{Binding SelectedAdviseSet}">
             <DataGrid.Columns>
                 <DataGridTextColumn Width="*" Binding="{Binding Name}" />
             </DataGrid.Columns>

@@ -13,6 +13,8 @@ namespace PandaPlayer.Views
 	{
 		private IAdviseSetsEditorViewModel ViewModel => DataContext as IAdviseSetsEditorViewModel;
 
+		private bool IsEditMode { get; set; }
+
 		public AdviseSetsDataGrid()
 		{
 			Messenger.Default.Register<AdviseSetCreatedEventArgs>(this, OnAdviseSetCreated);
@@ -33,6 +35,20 @@ namespace PandaPlayer.Views
 			Dispatcher.BeginInvoke(new Action(() => BeginEdit()), DispatcherPriority.Background);
 		}
 
+		protected override void OnExecutedBeginEdit(ExecutedRoutedEventArgs e)
+		{
+			base.OnExecutedBeginEdit(e);
+
+			IsEditMode = true;
+		}
+
+		protected override void OnExecutedCancelEdit(ExecutedRoutedEventArgs e)
+		{
+			base.OnExecutedCancelEdit(e);
+
+			IsEditMode = false;
+		}
+
 		protected override void OnExecutedCommitEdit(ExecutedRoutedEventArgs e)
 		{
 			var adviseSet = ViewModel.SelectedAdviseSet;
@@ -41,6 +57,21 @@ namespace PandaPlayer.Views
 
 			ViewModel.RenameAdviseSet(adviseSet, CancellationToken.None)
 				.GetAwaiter().GetResult();
+
+			IsEditMode = false;
+		}
+
+		protected override void OnPreviewKeyDown(KeyEventArgs e)
+		{
+			base.OnPreviewKeyDown(e);
+
+			// Preventing switch to the next row when Enter is pressed.
+			// We want to keep current advise set active, so that user can continue editing its discs.
+			if (IsEditMode && (e.Key == Key.Enter || e.Key == Key.Return))
+			{
+				CommitEdit();
+				e.Handled = true;
+			}
 		}
 	}
 }
