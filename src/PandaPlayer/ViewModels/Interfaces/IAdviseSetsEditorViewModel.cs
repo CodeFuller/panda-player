@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using PandaPlayer.Core.Models;
-using PandaPlayer.ViewModels.AdviseSetsEditor;
 
 namespace PandaPlayer.ViewModels.Interfaces
 {
@@ -29,11 +26,7 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		bool CanMoveDiscDown { get; }
 
-		IReadOnlyCollection<AvailableDiscViewModel> AvailableDiscs { get; }
-
-#pragma warning disable CA2227 // Collection properties should be read only
-		IList SelectedAvailableDiscItems { get; set; }
-#pragma warning restore CA2227 // Collection properties should be read only
+		IAvailableDiscsViewModel AvailableDiscsViewModel { get; }
 
 		ICommand CreateAdviseSetCommand { get; }
 

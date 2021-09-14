@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +10,6 @@ using CodeFuller.Library.Wpf;
 using CodeFuller.Library.Wpf.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
-using PandaPlayer.Core.Comparers;
 using PandaPlayer.Core.Extensions;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
@@ -24,8 +23,6 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 		private readonly IAdviseSetService adviseSetService;
 
 		private readonly IDiscsService discService;
-
-		private readonly IFoldersService folderService;
 
 		private readonly IWindowService windowService;
 
@@ -68,7 +65,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 		private int SelectedAdviseSetDiscIndex => CurrentAdviseSetDiscs.Select((x, i) => new { Disc = x, Index = i }).FirstOrDefault(x => x.Disc.Id == SelectedAdviseSetDisc.Id)?.Index ?? -1;
 
-		public bool CanAddDisc => SelectedAdviseSet != null && SelectedAvailableDiscsForAdding.Any();
+		public bool CanAddDisc => SelectedAdviseSet != null && AvailableDiscsViewModel.SelectedDiscs.Any();
 
 		public bool CanRemoveDisc => SelectedAdviseSet != null && SelectedAdviseSetDisc != null;
 
@@ -76,29 +73,9 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 		public bool CanMoveDiscDown => SelectedAdviseSet != null && SelectedAdviseSetDisc != null && SelectedAdviseSetDiscIndex + 1 < CurrentAdviseSetDiscs.Count;
 
+		public IAvailableDiscsViewModel AvailableDiscsViewModel { get; }
+
 		private List<DiscModel> ActiveDiscs { get; set; }
-
-		private List<AvailableDiscViewModel> availableDiscs;
-
-		public IReadOnlyCollection<AvailableDiscViewModel> AvailableDiscs => availableDiscs;
-
-		private IList selectedAvailableDiscItems;
-
-		public IList SelectedAvailableDiscItems
-		{
-			get => selectedAvailableDiscItems;
-			set
-			{
-				Set(ref selectedAvailableDiscItems, value);
-
-				RaisePropertyChanged(nameof(CanAddDisc));
-			}
-		}
-
-		private IEnumerable<AvailableDiscViewModel> SelectedAvailableDiscs => SelectedAvailableDiscItems?.Cast<AvailableDiscViewModel>() ?? Enumerable.Empty<AvailableDiscViewModel>();
-
-		private IEnumerable<AvailableDiscViewModel> SelectedAvailableDiscsForAdding => SelectedAvailableDiscs
-			.Where(selectedAvailableDisc => !CurrentAdviseSetDiscs.Contains(selectedAvailableDisc.Disc, new DiscEqualityComparer()));
 
 		public ICommand CreateAdviseSetCommand { get; }
 
@@ -112,11 +89,11 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 		public ICommand MoveDiscDownCommand { get; }
 
-		public AdviseSetsEditorViewModel(IAdviseSetService adviseSetService, IDiscsService discService, IFoldersService folderService, IWindowService windowService)
+		public AdviseSetsEditorViewModel(IAvailableDiscsViewModel availableDiscsViewModel, IAdviseSetService adviseSetService, IDiscsService discService, IWindowService windowService)
 		{
+			this.AvailableDiscsViewModel = availableDiscsViewModel ?? throw new ArgumentNullException(nameof(availableDiscsViewModel));
 			this.adviseSetService = adviseSetService ?? throw new ArgumentNullException(nameof(adviseSetService));
 			this.discService = discService ?? throw new ArgumentNullException(nameof(discService));
-			this.folderService = folderService ?? throw new ArgumentNullException(nameof(folderService));
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
 
 			this.CreateAdviseSetCommand = new AsyncRelayCommand(() => CreateAdviseSet(CancellationToken.None));
@@ -125,6 +102,8 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			this.RemoveDiscCommand = new AsyncRelayCommand(() => RemoveDisc(CancellationToken.None));
 			this.MoveDiscUpCommand = new AsyncRelayCommand(() => MoveDiscUp(CancellationToken.None));
 			this.MoveDiscDownCommand = new AsyncRelayCommand(() => MoveDiscDown(CancellationToken.None));
+
+			AvailableDiscsViewModel.PropertyChanged += AvailableDiscsViewModelOnPropertyChanged;
 		}
 
 		public async Task Load(CancellationToken cancellationToken)
@@ -132,14 +111,9 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			await LoadAdviseSets(cancellationToken);
 
 			var discs = await discService.GetAllDiscs(cancellationToken);
-			var folders = await folderService.GetAllFolders(cancellationToken);
-
 			ActiveDiscs = discs.Where(x => !x.IsDeleted).ToList();
 
-			availableDiscs = ActiveDiscs
-				.Select(x => new AvailableDiscViewModel(x, GetAvailableDiscTitle(x, folders)))
-				.OrderBy(x => x.Title, StringComparer.InvariantCultureIgnoreCase)
-				.ToList();
+			await AvailableDiscsViewModel.LoadDiscs(ActiveDiscs, cancellationToken);
 		}
 
 		public async Task RenameAdviseSet(AdviseSetModel adviseSet, CancellationToken cancellationToken)
@@ -170,24 +144,14 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			RaisePropertyChangedForAdviseSetButtons();
 		}
 
-		private static string GetAvailableDiscTitle(DiscModel disc, IReadOnlyCollection<ShallowFolderModel> folders)
+		private Task ReloadAvailableDiscs(CancellationToken cancellationToken)
 		{
-			var foldersMap = folders.ToDictionary(x => x.Id, x => x);
-
-			var folderNames = new List<string>();
-			for (var folder = disc.Folder; !folder.IsRoot; folder = foldersMap[folder.ParentFolderId])
-			{
-				folderNames.Add(folder.Name);
-			}
-
-			folderNames.Reverse();
-
-			return $"/{String.Join("/", folderNames)}/{disc.TreeTitle}";
+			return AvailableDiscsViewModel.LoadDiscs(ActiveDiscs, cancellationToken);
 		}
 
 		private async Task CreateAdviseSet(CancellationToken cancellationToken)
 		{
-			var discs = SelectedAvailableDiscsForAdding.Select(x => x.Disc).ToList();
+			var discs = AvailableDiscsViewModel.SelectedDiscs.ToList();
 			var adviseSetName = discs.Select(disc => disc.AlbumTitle).UniqueOrDefault(StringComparer.Ordinal) ?? "New Advise Set";
 			var newAdviseSet = new AdviseSetModel
 			{
@@ -224,7 +188,14 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 			await adviseSetService.DeleteAdviseSet(SelectedAdviseSet, cancellationToken);
 
+			// Clearing advise set for in-memory disc models.
+			foreach (var disc in CurrentAdviseSetDiscs)
+			{
+				disc.AdviseSetInfo = null;
+			}
+
 			await ReloadAdviseSets(cancellationToken);
+			await ReloadAvailableDiscs(cancellationToken);
 		}
 
 		private async Task AddDiscs(CancellationToken cancellationToken)
@@ -234,9 +205,10 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 				return;
 			}
 
-			await adviseSetService.AddDiscs(SelectedAdviseSet, SelectedAvailableDiscsForAdding.Select(x => x.Disc), cancellationToken);
+			await adviseSetService.AddDiscs(SelectedAdviseSet, AvailableDiscsViewModel.SelectedDiscs, cancellationToken);
 
 			await ReloadAdviseSets(cancellationToken);
+			await ReloadAvailableDiscs(cancellationToken);
 		}
 
 		private async Task RemoveDisc(CancellationToken cancellationToken)
@@ -249,6 +221,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			await adviseSetService.RemoveDiscs(SelectedAdviseSet, new[] { SelectedAdviseSetDisc }, cancellationToken);
 
 			await ReloadAdviseSets(cancellationToken);
+			await ReloadAvailableDiscs(cancellationToken);
 		}
 
 		private async Task MoveDiscUp(CancellationToken cancellationToken)
@@ -298,6 +271,14 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			RaisePropertyChanged(nameof(CanRemoveDisc));
 			RaisePropertyChanged(nameof(CanMoveDiscUp));
 			RaisePropertyChanged(nameof(CanMoveDiscDown));
+		}
+
+		private void AvailableDiscsViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == nameof(AvailableDiscsViewModel.SelectedItems))
+			{
+				RaisePropertyChanged(nameof(CanAddDisc));
+			}
 		}
 	}
 }

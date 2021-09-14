@@ -75,7 +75,7 @@
         <Label Grid.Column="3" Grid.Row="0" Margin="5,0,0,0" Content="Available Discs:" />
         <controls:MultiSelectionListBox Grid.Column="3" Grid.Row="1" Margin="5,0,0,0" BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}"
                                      Style="{StaticResource MaterialDesignListBox}" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectionMode="Extended"
-                                     ItemsSource="{Binding AvailableDiscs}" SelectedItemsList="{Binding SelectedAvailableDiscItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                     ItemsSource="{Binding AvailableDiscsViewModel.AvailableDiscs}" SelectedItemsList="{Binding AvailableDiscsViewModel.SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
                     <Setter Property="Margin" Value="1"/>
