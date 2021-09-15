@@ -20,5 +20,7 @@ namespace PandaPlayer.ViewModels.Interfaces
 		IEnumerable<DiscModel> SelectedDiscs { get; }
 
 		Task LoadDiscs(IEnumerable<DiscModel> activeLibraryDiscs, CancellationToken cancellationToken);
+
+		void LoadAvailableDiscsForAdviseSet(IReadOnlyCollection<DiscModel> adviseSetDiscs);
 	}
 }

@@ -18,7 +18,7 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		DiscModel SelectedAdviseSetDisc { get; set; }
 
-		bool CanAddDisc { get; }
+		bool CanAddDiscs { get; }
 
 		bool CanRemoveDisc { get; }
 

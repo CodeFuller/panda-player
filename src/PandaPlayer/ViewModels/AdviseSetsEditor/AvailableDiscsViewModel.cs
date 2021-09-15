@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using PandaPlayer.Core.Comparers;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.Shared.Extensions;
@@ -16,6 +17,8 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 	public class AvailableDiscsViewModel : ViewModelBase, IAvailableDiscsViewModel
 	{
 		private readonly IFoldersService folderService;
+
+		private IReadOnlyCollection<AvailableDiscViewModel> AllAvailableDiscs { get; set; }
 
 		public ObservableCollection<AvailableDiscViewModel> AvailableDiscs { get; } = new();
 
@@ -28,7 +31,12 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			get => selectedItems;
 			set
 			{
-				Set(ref selectedItems, value);
+				selectedItems = value;
+
+				// We do not use Set() helper and raise PropertyChanged manually.
+				// On subsequent calls, selectedItems and value will reference the same collection.
+				// ViewModelBase.Set() method does not raise PropertyChanged in such case.
+				RaisePropertyChanged(nameof(SelectedItems));
 			}
 		}
 
@@ -43,13 +51,56 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 		{
 			var folders = await folderService.GetAllFolders(cancellationToken);
 
-			var availableDiscs = activeLibraryDiscs
+			AllAvailableDiscs = activeLibraryDiscs
 				.Where(x => x.AdviseSetInfo == null)
 				.Select(x => new AvailableDiscViewModel(x, GetAvailableDiscTitle(x, folders)))
-				.OrderBy(x => x.Title, StringComparer.InvariantCultureIgnoreCase);
+				.OrderBy(x => x.Title, StringComparer.InvariantCultureIgnoreCase)
+				.ToList();
 
 			AvailableDiscs.Clear();
-			AvailableDiscs.AddRange(availableDiscs);
+			AvailableDiscs.AddRange(AllAvailableDiscs);
+		}
+
+		public void LoadAvailableDiscsForAdviseSet(IReadOnlyCollection<DiscModel> adviseSetDiscs)
+		{
+			AvailableDiscs.Clear();
+			AvailableDiscs.AddRange(AllAvailableDiscs.Where(x => DiscIsAvailableForAdviseSet(x.Disc, adviseSetDiscs)));
+		}
+
+		private static bool DiscIsAvailableForAdviseSet(DiscModel disc, IReadOnlyCollection<DiscModel> adviseSetDiscs)
+		{
+			// Disc is not available for advise set if it already has assigned advise set.
+			if (disc.AdviseSetInfo != null)
+			{
+				return false;
+			}
+
+			// Disc is available for advise set if this advise set is empty.
+			if (!adviseSetDiscs.Any())
+			{
+				return true;
+			}
+
+			if (disc.AdviseGroup != null)
+			{
+				var adviseGroupForAdviseSetDiscs = adviseSetDiscs
+					.Select(x => x.AdviseGroup)
+					.Distinct(new AdviseGroupEqualityComparer())
+					.Single();
+
+				// Disc is available for advise set if disc and advise set have same advise group.
+				return disc.AdviseGroup.Id == adviseGroupForAdviseSetDiscs?.Id;
+			}
+
+			var parentFolderForAdviseSetDiscs = adviseSetDiscs
+				.Select(x => x.Folder)
+				.Distinct(new ShallowFolderEqualityComparer())
+				.Single();
+
+			// Disc is available for advise set if it does not assigned advise group and all discs belong to the same folder.
+			// Note: this logic is not 100% accurate. disc or adviseSetDiscs can have assigned advise group on higher level (for some directory).
+			// We do not cover this case for simplicity. It is assumed that advise set will contain discs from the same directory.
+			return disc.Folder.Id == parentFolderForAdviseSetDiscs.Id;
 		}
 
 		private static string GetAvailableDiscTitle(DiscModel disc, IReadOnlyCollection<ShallowFolderModel> folders)

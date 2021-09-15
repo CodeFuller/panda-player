@@ -43,6 +43,8 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 					CurrentAdviseSetDiscs.AddRange(ActiveDiscs.Where(x => x.AdviseSetInfo?.AdviseSet.Id == selectedAdviseSet.Id));
 				}
 
+				AvailableDiscsViewModel.LoadAvailableDiscsForAdviseSet(CurrentAdviseSetDiscs);
+
 				RaisePropertyChangedForAdviseSetButtons();
 			}
 		}
@@ -65,7 +67,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 		private int SelectedAdviseSetDiscIndex => CurrentAdviseSetDiscs.Select((x, i) => new { Disc = x, Index = i }).FirstOrDefault(x => x.Disc.Id == SelectedAdviseSetDisc.Id)?.Index ?? -1;
 
-		public bool CanAddDisc => SelectedAdviseSet != null && AvailableDiscsViewModel.SelectedDiscs.Any();
+		public bool CanAddDiscs => SelectedAdviseSet != null && AvailableDiscsViewModel.SelectedDiscs.Any();
 
 		public bool CanRemoveDisc => SelectedAdviseSet != null && SelectedAdviseSetDisc != null;
 
@@ -120,7 +122,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 		{
 			await adviseSetService.UpdateAdviseSet(adviseSet, cancellationToken);
 
-			await ReloadAdviseSets(cancellationToken);
+			await ReloadAdviseSets(reloadAvailableDiscs: false, cancellationToken);
 		}
 
 		private async Task LoadAdviseSets(CancellationToken cancellationToken)
@@ -131,22 +133,23 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			AdviseSets.AddRange(adviseSets);
 		}
 
-		private Task ReloadAdviseSets(CancellationToken cancellationToken)
+		private Task ReloadAdviseSets(bool reloadAvailableDiscs, CancellationToken cancellationToken)
 		{
-			return ReloadAdviseSets(SelectedAdviseSet?.Id, cancellationToken);
+			return ReloadAdviseSets(SelectedAdviseSet?.Id, reloadAvailableDiscs, cancellationToken);
 		}
 
-		private async Task ReloadAdviseSets(ItemId selectedItemId, CancellationToken cancellationToken)
+		private async Task ReloadAdviseSets(ItemId selectedItemId, bool reloadAvailableDiscs, CancellationToken cancellationToken)
 		{
 			await LoadAdviseSets(cancellationToken);
 
+			if (reloadAvailableDiscs)
+			{
+				await AvailableDiscsViewModel.LoadDiscs(ActiveDiscs, cancellationToken);
+			}
+
+			// Selected advise set should be set after reloading available discs, because setter invokes LoadAvailableDiscsForAdviseSet().
 			SelectedAdviseSet = selectedItemId != null ? AdviseSets.FirstOrDefault(x => x.Id == selectedItemId) : null;
 			RaisePropertyChangedForAdviseSetButtons();
-		}
-
-		private Task ReloadAvailableDiscs(CancellationToken cancellationToken)
-		{
-			return AvailableDiscsViewModel.LoadDiscs(ActiveDiscs, cancellationToken);
 		}
 
 		private async Task CreateAdviseSet(CancellationToken cancellationToken)
@@ -165,7 +168,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 				await adviseSetService.AddDiscs(newAdviseSet, discs, cancellationToken);
 			}
 
-			await ReloadAdviseSets(newAdviseSet.Id, cancellationToken);
+			await ReloadAdviseSets(newAdviseSet.Id, reloadAvailableDiscs: true, cancellationToken);
 
 			if (SelectedAdviseSet != null)
 			{
@@ -194,21 +197,19 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 				disc.AdviseSetInfo = null;
 			}
 
-			await ReloadAdviseSets(cancellationToken);
-			await ReloadAvailableDiscs(cancellationToken);
+			await ReloadAdviseSets(reloadAvailableDiscs: true, cancellationToken);
 		}
 
 		private async Task AddDiscs(CancellationToken cancellationToken)
 		{
-			if (!CanAddDisc)
+			if (!CanAddDiscs)
 			{
 				return;
 			}
 
 			await adviseSetService.AddDiscs(SelectedAdviseSet, AvailableDiscsViewModel.SelectedDiscs, cancellationToken);
 
-			await ReloadAdviseSets(cancellationToken);
-			await ReloadAvailableDiscs(cancellationToken);
+			await ReloadAdviseSets(reloadAvailableDiscs: true, cancellationToken);
 		}
 
 		private async Task RemoveDisc(CancellationToken cancellationToken)
@@ -220,8 +221,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 			await adviseSetService.RemoveDiscs(SelectedAdviseSet, new[] { SelectedAdviseSetDisc }, cancellationToken);
 
-			await ReloadAdviseSets(cancellationToken);
-			await ReloadAvailableDiscs(cancellationToken);
+			await ReloadAdviseSets(reloadAvailableDiscs: true, cancellationToken);
 		}
 
 		private async Task MoveDiscUp(CancellationToken cancellationToken)
@@ -259,7 +259,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 			await adviseSetService.ReorderDiscs(SelectedAdviseSet, discs, cancellationToken);
 
-			await ReloadAdviseSets(cancellationToken);
+			await ReloadAdviseSets(reloadAvailableDiscs: false, cancellationToken);
 
 			SelectedAdviseSetDisc = CurrentAdviseSetDiscs.FirstOrDefault(x => x.Id == selectedDiscId);
 		}
@@ -267,7 +267,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 		private void RaisePropertyChangedForAdviseSetButtons()
 		{
 			RaisePropertyChanged(nameof(CanDeleteAdviseSet));
-			RaisePropertyChanged(nameof(CanAddDisc));
+			RaisePropertyChanged(nameof(CanAddDiscs));
 			RaisePropertyChanged(nameof(CanRemoveDisc));
 			RaisePropertyChanged(nameof(CanMoveDiscUp));
 			RaisePropertyChanged(nameof(CanMoveDiscDown));
@@ -277,7 +277,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 		{
 			if (e.PropertyName == nameof(AvailableDiscsViewModel.SelectedItems))
 			{
-				RaisePropertyChanged(nameof(CanAddDisc));
+				RaisePropertyChanged(nameof(CanAddDiscs));
 			}
 		}
 	}
