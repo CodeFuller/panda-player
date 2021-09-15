@@ -24,6 +24,7 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="2*"/>
@@ -41,8 +42,17 @@
             </DataGrid.Columns>
         </views:AdviseSetsDataGrid>
 
-        <Label Grid.Column="1" Grid.Row="0" Margin="5,0,5,0" Content="Included Discs:" />
-        <ListBox Grid.Column="1" Grid.Row="1" Margin="5,0,5,0" BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}"
+        <StackPanel Grid.Column="1" Grid.Row="1" Margin="5,0,5,0" Orientation="Vertical">
+            <Button IsEnabled="{Binding CanCreateAdviseSet}" Command="{Binding CreateAdviseSetCommand}" ToolTip="Create new advise set">
+                <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="PlusCircle" />
+            </Button>
+            <Button Margin="0,5,0,0" IsEnabled="{Binding CanDeleteAdviseSet}" Command="{Binding DeleteAdviseSetCommand}" ToolTip="Delete advise set">
+                <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="DeleteForever" />
+            </Button>
+        </StackPanel>
+
+        <Label Grid.Column="2" Grid.Row="0" Margin="5,0,5,0" Content="Included Discs:" />
+        <ListBox Grid.Column="2" Grid.Row="1" Margin="5,0,5,0" BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}"
                  ItemsSource="{Binding CurrentAdviseSetDiscs}" SelectedItem="{Binding Path=SelectedAdviseSetDisc, Mode=TwoWay}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -51,14 +61,8 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <StackPanel Grid.Column="2" Grid.Row="1" Margin="5,0,5,0" Orientation="Vertical">
-            <Button IsEnabled="{Binding CanCreateAdviseSet}" Command="{Binding CreateAdviseSetCommand}" ToolTip="Create new advise set">
-                <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="PlusCircle" />
-            </Button>
-            <Button Margin="0,5,0,0" IsEnabled="{Binding CanDeleteAdviseSet}" Command="{Binding DeleteAdviseSetCommand}" ToolTip="Delete advise set">
-                <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="DeleteForever" />
-            </Button>
-            <Button Margin="0,5,0,0" IsEnabled="{Binding CanAddDiscs}" Command="{Binding AddDiscsCommand}" ToolTip="Add selected disc(s) to advise set">
+        <StackPanel Grid.Column="3" Grid.Row="1" Margin="5,0,5,0" Orientation="Vertical">
+            <Button IsEnabled="{Binding CanAddDiscs}" Command="{Binding AddDiscsCommand}" ToolTip="Add selected disc(s) to advise set">
                 <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="ArrowLeftBold" />
             </Button>
             <Button Margin="0,5,0,0" IsEnabled="{Binding CanRemoveDisc}" Command="{Binding RemoveDiscCommand}" ToolTip="Remove selected disc from advise set">
@@ -72,8 +76,8 @@
             </Button>
         </StackPanel>
 
-        <Label Grid.Column="3" Grid.Row="0" Margin="5,0,0,0" Content="Available Discs:" />
-        <controls:MultiSelectionListBox Grid.Column="3" Grid.Row="1" Margin="5,0,0,0" BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}"
+        <Label Grid.Column="4" Grid.Row="0" Margin="5,0,0,0" Content="Available Discs:" />
+        <controls:MultiSelectionListBox Grid.Column="4" Grid.Row="1" Margin="5,0,0,0" BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}"
                                      Style="{StaticResource MaterialDesignListBox}" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectionMode="Extended"
                                      ItemsSource="{Binding AvailableDiscsViewModel.AvailableDiscs}" SelectedItemsList="{Binding AvailableDiscsViewModel.SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <ListBox.ItemContainerStyle>
