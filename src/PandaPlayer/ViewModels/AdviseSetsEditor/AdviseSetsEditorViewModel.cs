@@ -10,6 +10,7 @@ using CodeFuller.Library.Wpf;
 using CodeFuller.Library.Wpf.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
+using PandaPlayer.Core.Comparers;
 using PandaPlayer.Core.Extensions;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
@@ -177,12 +178,18 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			}
 		}
 
-		private string GetDefaultNameForNewAdviseSet(IEnumerable<DiscModel> adviseSetDiscs)
+		private string GetDefaultNameForNewAdviseSet(IReadOnlyCollection<DiscModel> adviseSetDiscs)
 		{
+			var parentFolder = adviseSetDiscs
+				.Select(x => x.Folder)
+				.UniqueOrDefault(new ShallowFolderEqualityComparer());
+
+			var folderPrefix = parentFolder != null ? $"{parentFolder.Name} / " : String.Empty;
+
 			var albumTitle = adviseSetDiscs.Select(disc => disc.AlbumTitle).UniqueOrDefault(StringComparer.Ordinal);
 			if (albumTitle != null)
 			{
-				return albumTitle;
+				return $"{folderPrefix}{albumTitle}";
 			}
 
 			var existingNames = AdviseSets.Select(x => x.Name).ToHashSet();
@@ -190,7 +197,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			// "New Advise Set", "New Advise Set (2)", "New Advise Set (3)", ...
 			for (var i = 1; ; ++i)
 			{
-				var newAdviseSetName = "New Advise Set";
+				var newAdviseSetName = $"{folderPrefix}New Advise Set";
 				if (i > 1)
 				{
 					newAdviseSetName += $" ({i:N0})";
