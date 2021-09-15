@@ -157,10 +157,9 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 		private async Task CreateAdviseSet(CancellationToken cancellationToken)
 		{
 			var discs = AvailableDiscsViewModel.SelectedDiscs.ToList();
-			var adviseSetName = discs.Select(disc => disc.AlbumTitle).UniqueOrDefault(StringComparer.Ordinal) ?? "New Advise Set";
 			var newAdviseSet = new AdviseSetModel
 			{
-				Name = adviseSetName,
+				Name = GetDefaultNameForNewAdviseSet(discs),
 			};
 
 			await adviseSetService.CreateAdviseSet(newAdviseSet, cancellationToken);
@@ -175,6 +174,32 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			if (SelectedAdviseSet != null)
 			{
 				Messenger.Default.Send(new AdviseSetCreatedEventArgs(SelectedAdviseSet));
+			}
+		}
+
+		private string GetDefaultNameForNewAdviseSet(IEnumerable<DiscModel> adviseSetDiscs)
+		{
+			var albumTitle = adviseSetDiscs.Select(disc => disc.AlbumTitle).UniqueOrDefault(StringComparer.Ordinal);
+			if (albumTitle != null)
+			{
+				return albumTitle;
+			}
+
+			var existingNames = AdviseSets.Select(x => x.Name).ToHashSet();
+
+			// "New Advise Set", "New Advise Set (2)", "New Advise Set (3)", ...
+			for (var i = 1; ; ++i)
+			{
+				var newAdviseSetName = "New Advise Set";
+				if (i > 1)
+				{
+					newAdviseSetName += $" ({i:N0})";
+				}
+
+				if (!existingNames.Contains(newAdviseSetName))
+				{
+					return newAdviseSetName;
+				}
 			}
 		}
 
