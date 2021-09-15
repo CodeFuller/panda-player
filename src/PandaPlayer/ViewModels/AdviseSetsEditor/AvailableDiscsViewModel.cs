@@ -67,6 +67,18 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			AvailableDiscs.AddRange(AllAvailableDiscs.Where(x => DiscIsAvailableForAdviseSet(x.Disc, adviseSetDiscs)));
 		}
 
+		public bool SelectedDiscsCanBeAddedToAdviseSet(IReadOnlyCollection<DiscModel> adviseSetDiscs)
+		{
+			var selectedDiscs = SelectedDiscs.ToList();
+
+			if (!selectedDiscs.Any())
+			{
+				return false;
+			}
+
+			return DiscsAreValidForAdviseSet(selectedDiscs.Concat(adviseSetDiscs).ToList());
+		}
+
 		private static bool DiscIsAvailableForAdviseSet(DiscModel disc, IReadOnlyCollection<DiscModel> adviseSetDiscs)
 		{
 			// Disc is not available for advise set if it already has assigned advise set.
@@ -81,26 +93,25 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 				return true;
 			}
 
-			if (disc.AdviseGroup != null)
-			{
-				var adviseGroupForAdviseSetDiscs = adviseSetDiscs
-					.Select(x => x.AdviseGroup)
-					.Distinct(new AdviseGroupEqualityComparer())
-					.Single();
+			return DiscsAreValidForAdviseSet(new[] { disc }.Concat(adviseSetDiscs).ToList());
+		}
 
-				// Disc is available for advise set if disc and advise set have same advise group.
-				return disc.AdviseGroup.Id == adviseGroupForAdviseSetDiscs?.Id;
+		private static bool DiscsAreValidForAdviseSet(IReadOnlyCollection<DiscModel> discs)
+		{
+			var parentFolders = discs
+				.Select(x => x.Folder)
+				.Distinct(new ShallowFolderEqualityComparer());
+
+			if (parentFolders.Count() > 1)
+			{
+				return false;
 			}
 
-			var parentFolderForAdviseSetDiscs = adviseSetDiscs
-				.Select(x => x.Folder)
-				.Distinct(new ShallowFolderEqualityComparer())
-				.Single();
+			var adviseGroups = discs
+				.Select(x => x.AdviseGroup)
+				.Distinct(new AdviseGroupEqualityComparer());
 
-			// Disc is available for advise set if it does not assigned advise group and all discs belong to the same folder.
-			// Note: this logic is not 100% accurate. disc or adviseSetDiscs can have assigned advise group on higher level (for some directory).
-			// We do not cover this case for simplicity. It is assumed that advise set will contain discs from the same directory.
-			return disc.Folder.Id == parentFolderForAdviseSetDiscs.Id;
+			return adviseGroups.Count() <= 1;
 		}
 
 		private static string GetAvailableDiscTitle(DiscModel disc, IReadOnlyCollection<ShallowFolderModel> folders)

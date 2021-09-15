@@ -52,7 +52,7 @@
         </ListBox>
 
         <StackPanel Grid.Column="2" Grid.Row="1" Margin="5,0,5,0" Orientation="Vertical">
-            <Button Command="{Binding CreateAdviseSetCommand}" ToolTip="Create new advise set">
+            <Button IsEnabled="{Binding CanCreateAdviseSet}" Command="{Binding CreateAdviseSetCommand}" ToolTip="Create new advise set">
                 <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="PlusCircle" />
             </Button>
             <Button Margin="0,5,0,0" IsEnabled="{Binding CanDeleteAdviseSet}" Command="{Binding DeleteAdviseSetCommand}" ToolTip="Delete advise set">

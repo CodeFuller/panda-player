@@ -12,6 +12,8 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		AdviseSetModel SelectedAdviseSet { get; set; }
 
+		bool CanCreateAdviseSet { get; }
+
 		bool CanDeleteAdviseSet { get; }
 
 		ObservableCollection<DiscModel> CurrentAdviseSetDiscs { get; }

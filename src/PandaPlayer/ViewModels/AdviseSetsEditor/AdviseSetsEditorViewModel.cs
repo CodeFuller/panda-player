@@ -49,6 +49,8 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			}
 		}
 
+		public bool CanCreateAdviseSet => !AvailableDiscsViewModel.SelectedDiscs.Any() || AvailableDiscsViewModel.SelectedDiscsCanBeAddedToAdviseSet(Array.Empty<DiscModel>());
+
 		public bool CanDeleteAdviseSet => SelectedAdviseSet != null;
 
 		public ObservableCollection<DiscModel> CurrentAdviseSetDiscs { get; } = new();
@@ -67,7 +69,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 		private int SelectedAdviseSetDiscIndex => CurrentAdviseSetDiscs.Select((x, i) => new { Disc = x, Index = i }).FirstOrDefault(x => x.Disc.Id == SelectedAdviseSetDisc.Id)?.Index ?? -1;
 
-		public bool CanAddDiscs => SelectedAdviseSet != null && AvailableDiscsViewModel.SelectedDiscs.Any();
+		public bool CanAddDiscs => SelectedAdviseSet != null && AvailableDiscsViewModel.SelectedDiscsCanBeAddedToAdviseSet(CurrentAdviseSetDiscs);
 
 		public bool CanRemoveDisc => SelectedAdviseSet != null && SelectedAdviseSetDisc != null;
 
@@ -277,6 +279,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 		{
 			if (e.PropertyName == nameof(AvailableDiscsViewModel.SelectedItems))
 			{
+				RaisePropertyChanged(nameof(CanCreateAdviseSet));
 				RaisePropertyChanged(nameof(CanAddDiscs));
 			}
 		}
