@@ -6,11 +6,11 @@ using PandaPlayer.Adviser.Interfaces;
 
 namespace PandaPlayer.Adviser.Internal
 {
-	internal class RankBasedAdviseGroupSorter : IAdviseGroupSorter
+	internal class RankBasedAdviseContentSorter : IAdviseContentSorter
 	{
 		private readonly IAdviseRankCalculator adviseRankCalculator;
 
-		public RankBasedAdviseGroupSorter(IAdviseRankCalculator adviseRankCalculator)
+		public RankBasedAdviseContentSorter(IAdviseRankCalculator adviseRankCalculator)
 		{
 			this.adviseRankCalculator = adviseRankCalculator ?? throw new ArgumentNullException(nameof(adviseRankCalculator));
 		}

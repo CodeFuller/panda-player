@@ -13,7 +13,7 @@ using PandaPlayer.UnitTests.Extensions;
 namespace PandaPlayer.UnitTests.Adviser.Internal
 {
 	[TestClass]
-	public class RankBasedAdviseGroupSorterTests
+	public class RankBasedAdviseContentSorterTests
 	{
 		[TestMethod]
 		public void SortAdviseGroups_SortsAdviseGroupsByTheirRank()
@@ -34,7 +34,7 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 			var mocker = new AutoMocker();
 			mocker.Use(adviseRankCalculatorStub);
 
-			var target = mocker.CreateInstance<RankBasedAdviseGroupSorter>();
+			var target = mocker.CreateInstance<RankBasedAdviseContentSorter>();
 
 			// Act
 
@@ -71,7 +71,7 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 			var mocker = new AutoMocker();
 			mocker.Use(adviseRankCalculatorStub);
 
-			var target = mocker.CreateInstance<RankBasedAdviseGroupSorter>();
+			var target = mocker.CreateInstance<RankBasedAdviseContentSorter>();
 
 			// Act
 

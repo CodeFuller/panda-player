@@ -11,11 +11,11 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 {
 	internal class RankBasedAdviser : IPlaylistAdviser
 	{
-		private readonly IAdviseGroupSorter adviseGroupSorter;
+		private readonly IAdviseContentSorter adviseContentSorter;
 
-		public RankBasedAdviser(IAdviseGroupSorter adviseGroupSorter)
+		public RankBasedAdviser(IAdviseContentSorter adviseContentSorter)
 		{
-			this.adviseGroupSorter = adviseGroupSorter ?? throw new ArgumentNullException(nameof(adviseGroupSorter));
+			this.adviseContentSorter = adviseContentSorter ?? throw new ArgumentNullException(nameof(adviseContentSorter));
 		}
 
 		public Task<IReadOnlyCollection<AdvisedPlaylist>> Advise(IEnumerable<AdviseGroupContent> adviseGroups, PlaybacksInfo playbacksInfo, CancellationToken cancellationToken)
@@ -31,10 +31,10 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 		{
 			var activeAdviseGroups = adviseGroups.Where(x => !x.IsDeleted);
 
-			foreach (var adviseGroup in adviseGroupSorter.SortAdviseGroups(activeAdviseGroups, playbacksInfo))
+			foreach (var adviseGroup in adviseContentSorter.SortAdviseGroups(activeAdviseGroups, playbacksInfo))
 			{
 				var activeAdviseSets = adviseGroup.AdviseSets.Where(x => !x.IsDeleted);
-				yield return adviseGroupSorter.SortAdviseSets(activeAdviseSets, playbacksInfo).First();
+				yield return adviseContentSorter.SortAdviseSets(activeAdviseSets, playbacksInfo).First();
 			}
 		}
 	}

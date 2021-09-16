@@ -13,7 +13,7 @@ namespace PandaPlayer.Adviser.Extensions
 		public static IServiceCollection AddPlaylistAdviser(this IServiceCollection services, Action<AdviserSettings> setupSettings)
 		{
 			services.AddSingleton<IDiscGrouper, DiscGrouper>();
-			services.AddSingleton<IAdviseGroupSorter, RankBasedAdviseGroupSorter>();
+			services.AddSingleton<IAdviseContentSorter, RankBasedAdviseContentSorter>();
 			services.AddSingleton<IAdviseRankCalculator, AdviseRankCalculator>();
 
 			services.AddSingleton<RankBasedAdviser>();

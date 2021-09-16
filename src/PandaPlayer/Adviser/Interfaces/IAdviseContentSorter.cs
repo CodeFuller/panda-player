@@ -4,7 +4,7 @@ using PandaPlayer.Adviser.Internal;
 
 namespace PandaPlayer.Adviser.Interfaces
 {
-	internal interface IAdviseGroupSorter
+	internal interface IAdviseContentSorter
 	{
 		IEnumerable<AdviseGroupContent> SortAdviseGroups(IEnumerable<AdviseGroupContent> adviseGroups, PlaybacksInfo playbacksInfo);
 

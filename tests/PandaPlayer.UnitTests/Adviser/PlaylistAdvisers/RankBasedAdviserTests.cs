@@ -30,13 +30,13 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var adviseGroups = CreateAdviseGroups(adviseSet1, adviseSet2).ToList();
 			var playbacksInfo = new PlaybacksInfo(adviseGroups);
 
-			var adviseGroupSorterStub = new Mock<IAdviseGroupSorter>();
-			adviseGroupSorterStub.Setup(x => x.SortAdviseGroups(adviseGroups, playbacksInfo)).Returns(new[] { adviseGroups[1], adviseGroups[0] });
-			adviseGroupSorterStub.Setup(x => x.SortAdviseSets(It.IsAny<IEnumerable<AdviseSetContent>>(), playbacksInfo))
+			var adviseContentSorterStub = new Mock<IAdviseContentSorter>();
+			adviseContentSorterStub.Setup(x => x.SortAdviseGroups(adviseGroups, playbacksInfo)).Returns(new[] { adviseGroups[1], adviseGroups[0] });
+			adviseContentSorterStub.Setup(x => x.SortAdviseSets(It.IsAny<IEnumerable<AdviseSetContent>>(), playbacksInfo))
 				.Returns<IEnumerable<AdviseSetContent>, PlaybacksInfo>((adviseSets, _) => adviseSets);
 
 			var mocker = new AutoMocker();
-			mocker.Use(adviseGroupSorterStub);
+			mocker.Use(adviseContentSorterStub);
 
 			var target = mocker.CreateInstance<RankBasedAdviser>();
 
@@ -71,13 +71,13 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			var playbacksInfo = new PlaybacksInfo(new[] { adviseGroup });
 
-			var adviseGroupSorterStub = new Mock<IAdviseGroupSorter>();
-			adviseGroupSorterStub.Setup(x => x.SortAdviseGroups(It.IsAny<IEnumerable<AdviseGroupContent>>(), playbacksInfo))
+			var adviseContentSorterStub = new Mock<IAdviseContentSorter>();
+			adviseContentSorterStub.Setup(x => x.SortAdviseGroups(It.IsAny<IEnumerable<AdviseGroupContent>>(), playbacksInfo))
 				.Returns<IEnumerable<AdviseGroupContent>, PlaybacksInfo>((adviseGroups, _) => adviseGroups);
-			adviseGroupSorterStub.Setup(x => x.SortAdviseSets(adviseSets, playbacksInfo)).Returns(new[] { adviseSets[1], adviseSets[0] });
+			adviseContentSorterStub.Setup(x => x.SortAdviseSets(adviseSets, playbacksInfo)).Returns(new[] { adviseSets[1], adviseSets[0] });
 
 			var mocker = new AutoMocker();
-			mocker.Use(adviseGroupSorterStub);
+			mocker.Use(adviseContentSorterStub);
 
 			var target = mocker.CreateInstance<RankBasedAdviser>();
 
@@ -109,14 +109,14 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var adviseGroups = new[] { deletedAdviseGroup, activeAdviseGroup, };
 			var playbacksInfo = new PlaybacksInfo(adviseGroups);
 
-			var adviseGroupSorterStub = new Mock<IAdviseGroupSorter>();
-			adviseGroupSorterStub.Setup(x => x.SortAdviseGroups(It.IsAny<IEnumerable<AdviseGroupContent>>(), playbacksInfo))
+			var adviseContentSorterStub = new Mock<IAdviseContentSorter>();
+			adviseContentSorterStub.Setup(x => x.SortAdviseGroups(It.IsAny<IEnumerable<AdviseGroupContent>>(), playbacksInfo))
 				.Returns<IEnumerable<AdviseGroupContent>, PlaybacksInfo>((adviseGroups, _) => adviseGroups);
-			adviseGroupSorterStub.Setup(x => x.SortAdviseSets(It.IsAny<IEnumerable<AdviseSetContent>>(), playbacksInfo))
+			adviseContentSorterStub.Setup(x => x.SortAdviseSets(It.IsAny<IEnumerable<AdviseSetContent>>(), playbacksInfo))
 				.Returns<IEnumerable<AdviseSetContent>, PlaybacksInfo>((adviseSets, _) => adviseSets);
 
 			var mocker = new AutoMocker();
-			mocker.Use(adviseGroupSorterStub);
+			mocker.Use(adviseContentSorterStub);
 
 			var target = mocker.CreateInstance<RankBasedAdviser>();
 
@@ -149,14 +149,14 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var adviseGroups = new[] { adviseGroup };
 			var playbacksInfo = new PlaybacksInfo(adviseGroups);
 
-			var adviseGroupSorterStub = new Mock<IAdviseGroupSorter>();
-			adviseGroupSorterStub.Setup(x => x.SortAdviseGroups(It.IsAny<IEnumerable<AdviseGroupContent>>(), playbacksInfo))
+			var adviseContentSorterStub = new Mock<IAdviseContentSorter>();
+			adviseContentSorterStub.Setup(x => x.SortAdviseGroups(It.IsAny<IEnumerable<AdviseGroupContent>>(), playbacksInfo))
 				.Returns<IEnumerable<AdviseGroupContent>, PlaybacksInfo>((adviseGroups, _) => adviseGroups);
-			adviseGroupSorterStub.Setup(x => x.SortAdviseSets(It.IsAny<IEnumerable<AdviseSetContent>>(), playbacksInfo))
+			adviseContentSorterStub.Setup(x => x.SortAdviseSets(It.IsAny<IEnumerable<AdviseSetContent>>(), playbacksInfo))
 				.Returns<IEnumerable<AdviseSetContent>, PlaybacksInfo>((adviseSets, _) => adviseSets);
 
 			var mocker = new AutoMocker();
-			mocker.Use(adviseGroupSorterStub);
+			mocker.Use(adviseContentSorterStub);
 
 			var target = mocker.CreateInstance<RankBasedAdviser>();
 
