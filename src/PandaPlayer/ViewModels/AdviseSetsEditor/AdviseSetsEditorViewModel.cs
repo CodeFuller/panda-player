@@ -41,7 +41,11 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 				CurrentAdviseSetDiscs.Clear();
 				if (selectedAdviseSet != null)
 				{
-					CurrentAdviseSetDiscs.AddRange(ActiveDiscs.Where(x => x.AdviseSetInfo?.AdviseSet.Id == selectedAdviseSet.Id));
+					var adviseSetDiscs = ActiveDiscs
+						.Where(x => x.AdviseSetInfo?.AdviseSet.Id == selectedAdviseSet.Id)
+						.OrderBy(x => x.AdviseSetInfo.Order);
+
+					CurrentAdviseSetDiscs.AddRange(adviseSetDiscs);
 				}
 
 				AvailableDiscsViewModel.LoadAvailableDiscsForAdviseSet(CurrentAdviseSetDiscs);
