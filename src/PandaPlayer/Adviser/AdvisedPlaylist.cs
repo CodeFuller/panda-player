@@ -74,15 +74,15 @@ namespace PandaPlayer.Adviser
 
 		private static IReadOnlyCollection<SongModel> GetAdviseSetSongs(AdviseSetContent adviseSet)
 		{
-			var discsSortedById = adviseSet.Discs.OrderBy(x => x.Id.Value).ToList();
-			var discsSortedByTreeTitle = adviseSet.Discs.OrderBy(x => x.TreeTitle, StringComparer.InvariantCultureIgnoreCase).ToList();
-
-			if (!discsSortedById.SequenceEqual(discsSortedByTreeTitle))
+			if (adviseSet.Discs.Count > 1 && adviseSet.Discs.Any(x => x.AdviseSetInfo == null))
 			{
-				throw new InvalidOperationException($"Can not guess discs order within advise set '{adviseSet.Id}'");
+				throw new InvalidOperationException($"Some discs from {nameof(AdviseSetContent)} do not have advise set assigned");
 			}
 
-			return discsSortedById.SelectMany(x => x.ActiveSongs).ToList();
+			return adviseSet.Discs
+				.OrderBy(x => x.AdviseSetInfo?.Order)
+				.SelectMany(x => x.ActiveSongs)
+				.ToList();
 		}
 	}
 }

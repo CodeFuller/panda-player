@@ -109,13 +109,14 @@ namespace PandaPlayer.UnitTests.Adviser
 				Name = "Some Advise Set",
 			};
 
-			var song1 = new SongModel { Id = new ItemId("Song 1.1") };
+			var song11 = new SongModel { Id = new ItemId("Song 1.1") };
+			var song12 = new SongModel { Id = new ItemId("Song 1.2") };
 			var disc1 = new DiscModel
 			{
 				Id = new ItemId("1"),
 				TreeTitle = "Disc 1",
-				AdviseSetInfo = new AdviseSetInfo(adviseSet, 1),
-				AllSongs = new[] { song1 },
+				AdviseSetInfo = new AdviseSetInfo(adviseSet, 2),
+				AllSongs = new[] { song11, song12 },
 			};
 
 			var song2 = new SongModel { Id = new ItemId("Song 2.1") };
@@ -123,15 +124,24 @@ namespace PandaPlayer.UnitTests.Adviser
 			{
 				Id = new ItemId("2"),
 				TreeTitle = "Disc 2",
-				AdviseSetInfo = new AdviseSetInfo(adviseSet, 2),
+				AdviseSetInfo = new AdviseSetInfo(adviseSet, 1),
 				AllSongs = new[] { song2 },
+			};
+
+			var song3 = new SongModel { Id = new ItemId("Song 3.1") };
+			var disc3 = new DiscModel
+			{
+				Id = new ItemId("3"),
+				TreeTitle = "Disc 3",
+				AdviseSetInfo = new AdviseSetInfo(adviseSet, 3),
+				AllSongs = new[] { song3 },
 			};
 
 			var adviseSetContent = new AdviseSetContent("AdviseSetContent Id");
 
-			// We add disc2 first on purpose.
-			adviseSetContent.AddDisc(disc2);
 			adviseSetContent.AddDisc(disc1);
+			adviseSetContent.AddDisc(disc2);
+			adviseSetContent.AddDisc(disc3);
 
 			// Act
 
@@ -141,8 +151,10 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			var expectedSongs = new[]
 			{
-				song1,
 				song2,
+				song11,
+				song12,
+				song3,
 			};
 
 			target.Songs.Should().BeEquivalentTo(expectedSongs, x => x.WithStrictOrdering());
