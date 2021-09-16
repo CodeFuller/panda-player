@@ -43,13 +43,14 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		}
 
 		[TestMethod]
-		public void IconKindGetter_ForDiscWithoutAdviseGroup_ReturnsAlbumIconKind()
+		public void IconKindGetter_ForDiscWithoutAdviseGroupAndAdviseSet_ReturnsAlbumIconKind()
 		{
 			// Arrange
 
 			var disc = new DiscModel
 			{
 				AdviseGroup = null,
+				AdviseSetInfo = null,
 			};
 
 			var target = new DiscExplorerItem(disc);
@@ -71,6 +72,27 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 			var disc = new DiscModel
 			{
 				AdviseGroup = new AdviseGroupModel { Id = new ItemId("1"), Name = "Some Advise Group" },
+			};
+
+			var target = new DiscExplorerItem(disc);
+
+			// Act
+
+			var iconKind = target.IconKind;
+
+			// Assert
+
+			iconKind.Should().Be(PackIconKind.DiscAlert);
+		}
+
+		[TestMethod]
+		public void IconKindGetter_ForDiscWithAdviseSet_ReturnsDiscAlertIconKind()
+		{
+			// Arrange
+
+			var disc = new DiscModel
+			{
+				AdviseSetInfo = new AdviseSetInfo(new AdviseSetModel(), 1),
 			};
 
 			var target = new DiscExplorerItem(disc);

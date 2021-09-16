@@ -14,7 +14,7 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 
 		public override string Title => Disc.TreeTitle;
 
-		public override PackIconKind IconKind => Disc.AdviseGroup != null ? PackIconKind.DiscAlert : PackIconKind.Album;
+		public override PackIconKind IconKind => Disc.AdviseGroup != null || Disc.AdviseSetInfo != null ? PackIconKind.DiscAlert : PackIconKind.Album;
 
 		public DiscExplorerItem(DiscModel disc)
 		{
