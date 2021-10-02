@@ -125,26 +125,6 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			await AvailableDiscsViewModel.LoadDiscs(ActiveDiscs, cancellationToken);
 		}
 
-		public async Task RenameAdviseSet(AdviseSetModel adviseSet, CancellationToken cancellationToken)
-		{
-			await adviseSetService.UpdateAdviseSet(adviseSet, cancellationToken);
-
-			await ReloadAdviseSets(reloadAvailableDiscs: false, cancellationToken);
-		}
-
-		private async Task LoadAdviseSets(CancellationToken cancellationToken)
-		{
-			var adviseSets = await adviseSetService.GetAllAdviseSets(cancellationToken);
-
-			AdviseSets.Clear();
-			AdviseSets.AddRange(adviseSets);
-		}
-
-		private Task ReloadAdviseSets(bool reloadAvailableDiscs, CancellationToken cancellationToken)
-		{
-			return ReloadAdviseSets(SelectedAdviseSet?.Id, reloadAvailableDiscs, cancellationToken);
-		}
-
 		private async Task ReloadAdviseSets(ItemId selectedItemId, bool reloadAvailableDiscs, CancellationToken cancellationToken)
 		{
 			await LoadAdviseSets(cancellationToken);
@@ -157,6 +137,26 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			// Selected advise set should be set after reloading available discs, because setter invokes LoadAvailableDiscsForAdviseSet().
 			SelectedAdviseSet = selectedItemId != null ? AdviseSets.FirstOrDefault(x => x.Id == selectedItemId) : null;
 			RaisePropertyChangedForAdviseSetButtons();
+		}
+
+		private Task ReloadAdviseSets(bool reloadAvailableDiscs, CancellationToken cancellationToken)
+		{
+			return ReloadAdviseSets(SelectedAdviseSet?.Id, reloadAvailableDiscs, cancellationToken);
+		}
+
+		private async Task LoadAdviseSets(CancellationToken cancellationToken)
+		{
+			var adviseSets = await adviseSetService.GetAllAdviseSets(cancellationToken);
+
+			AdviseSets.Clear();
+			AdviseSets.AddRange(adviseSets);
+		}
+
+		public async Task RenameAdviseSet(AdviseSetModel adviseSet, CancellationToken cancellationToken)
+		{
+			await adviseSetService.UpdateAdviseSet(adviseSet, cancellationToken);
+
+			await ReloadAdviseSets(reloadAvailableDiscs: false, cancellationToken);
 		}
 
 		private async Task CreateAdviseSet(CancellationToken cancellationToken)
