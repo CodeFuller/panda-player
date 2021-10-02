@@ -15,7 +15,6 @@ using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.ViewModels.AdviseSetsEditor;
 using PandaPlayer.ViewModels.Interfaces;
-using PandaPlayer.ViewModels.Player;
 
 namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 {
