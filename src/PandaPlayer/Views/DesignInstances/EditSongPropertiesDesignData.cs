@@ -19,6 +19,8 @@ namespace PandaPlayer.Views.DesignInstances
 
 		public EditedSongProperty<ArtistModel> Artist { get; set; }
 
+		public string NewArtistName { get; set; }
+
 		public EditedSongProperty<GenreModel> Genre { get; set; }
 
 		public short? TrackNumber { get; set; } = 7;

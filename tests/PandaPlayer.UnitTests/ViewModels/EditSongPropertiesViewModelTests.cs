@@ -546,6 +546,41 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
+		public async Task Save_ForSingleSongWhenNewArtistIsCreated_UpdatesSongCorrectly()
+		{
+			// Arrange
+
+			var oldArtist = new ArtistModel { Id = new ItemId("1"), Name = "Old Artist" };
+
+			var mocker = CreateMocker(artists: new[] { oldArtist }, genres: Array.Empty<GenreModel>());
+			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
+
+			var song = new SongModel
+			{
+				Artist = oldArtist,
+			};
+
+			await target.Load(new[] { song }, CancellationToken.None);
+
+			// Act
+
+			target.Artist = null;
+			target.NewArtistName = "New Artist";
+
+			await target.Save(CancellationToken.None);
+
+			// Assert
+
+			var artistServiceMock = mocker.GetMock<IArtistsService>();
+			Func<ArtistModel, bool> checkArtist = x => x.Name == "New Artist";
+			artistServiceMock.Verify(x => x.CreateArtist(It.Is<ArtistModel>(y => checkArtist(y)), It.IsAny<CancellationToken>()), Times.Once);
+
+			var songServiceMock = mocker.GetMock<ISongsService>();
+			Func<SongModel, bool> checkSong = x => x.Artist.Name == "New Artist";
+			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(y => checkSong(y)), It.IsAny<CancellationToken>()), Times.Once);
+		}
+
+		[TestMethod]
 		public async Task Save_ForSingleSongWhenPropertiesAreCleared_UpdatesSongCorrectly()
 		{
 			// Arrange
@@ -633,7 +668,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var songServiceMock = mocker.GetMock<ISongsService>();
 
 			Func<SongModel, bool> checkSong1 = x => x.Title == "Old Title 1" && x.TreeTitle == "Old Tree Title 1" && x.TrackNumber == 1 &&
-			                                       Object.ReferenceEquals(x.Artist, newArtist) && Object.ReferenceEquals(x.Genre, newGenre);
+			                                        Object.ReferenceEquals(x.Artist, newArtist) && Object.ReferenceEquals(x.Genre, newGenre);
 			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(y => checkSong1(y)), It.IsAny<CancellationToken>()), Times.Once);
 
 			Func<SongModel, bool> checkSong2 = x => x.Title == "Old Title 2" && x.TreeTitle == "Old Tree Title 2" && x.TrackNumber == 2 &&
@@ -641,6 +676,48 @@ namespace PandaPlayer.UnitTests.ViewModels
 			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(y => checkSong2(y)), It.IsAny<CancellationToken>()), Times.Once);
 
 			songServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+		}
+
+		[TestMethod]
+		public async Task Save_ForMultipleSongsWhenNewArtistIsCreated_UpdatesSongCorrectly()
+		{
+			// Arrange
+
+			var oldArtist = new ArtistModel { Id = new ItemId("1"), Name = "Old Artist" };
+
+			var mocker = CreateMocker(artists: new[] { oldArtist }, genres: Array.Empty<GenreModel>());
+			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
+
+			var song1 = new SongModel
+			{
+				Id = new ItemId("1"),
+				Artist = oldArtist,
+			};
+
+			var song2 = new SongModel
+			{
+				Id = new ItemId("2"),
+				Artist = oldArtist,
+			};
+
+			await target.Load(new[] { song1, song2, }, CancellationToken.None);
+
+			// Act
+
+			target.Artist = null;
+			target.NewArtistName = "New Artist";
+
+			await target.Save(CancellationToken.None);
+
+			// Assert
+
+			var artistServiceMock = mocker.GetMock<IArtistsService>();
+			Func<ArtistModel, bool> checkArtist = x => x.Name == "New Artist";
+			artistServiceMock.Verify(x => x.CreateArtist(It.Is<ArtistModel>(y => checkArtist(y)), It.IsAny<CancellationToken>()), Times.Once);
+
+			var songServiceMock = mocker.GetMock<ISongsService>();
+			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(y => y.Id == new ItemId("1") && y.Artist.Name == "New Artist"), It.IsAny<CancellationToken>()), Times.Once);
+			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(y => y.Id == new ItemId("2") && y.Artist.Name == "New Artist"), It.IsAny<CancellationToken>()), Times.Once);
 		}
 
 		[TestMethod]

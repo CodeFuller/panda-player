@@ -94,6 +94,8 @@ namespace PandaPlayer.ViewModels
 
 		public EditedSongProperty<ArtistModel> Artist { get; set; }
 
+		public string NewArtistName { get; set; }
+
 		public EditedSongProperty<GenreModel> Genre { get; set; }
 
 		public IReadOnlyCollection<EditedSongProperty<ArtistModel>> AvailableArtists { get; private set; }
@@ -139,7 +141,10 @@ namespace PandaPlayer.ViewModels
 
 		public async Task Save(CancellationToken cancellationToken)
 		{
-			foreach (var song in GetUpdatedSongs())
+			var songs = editedSongs;
+			await UpdateSongModels(songs, cancellationToken);
+
+			foreach (var song in songs)
 			{
 				await songsService.UpdateSong(song, cancellationToken);
 			}
@@ -169,9 +174,20 @@ namespace PandaPlayer.ViewModels
 			return availableItems;
 		}
 
-		private IEnumerable<SongModel> GetUpdatedSongs()
+		private async Task UpdateSongModels(IEnumerable<SongModel> songs, CancellationToken cancellationToken)
 		{
-			foreach (var song in editedSongs)
+			ArtistModel newArtist = null;
+			if (Artist == null && !String.IsNullOrEmpty(NewArtistName))
+			{
+				newArtist = new ArtistModel
+				{
+					Name = NewArtistName,
+				};
+
+				await artistsService.CreateArtist(newArtist, cancellationToken);
+			}
+
+			foreach (var song in songs)
 			{
 				if (SingleSongMode)
 				{
@@ -180,7 +196,11 @@ namespace PandaPlayer.ViewModels
 					song.TrackNumber = TrackNumber;
 				}
 
-				if (Artist.HasValue)
+				if (newArtist != null)
+				{
+					song.Artist = newArtist;
+				}
+				else if (Artist.HasValue)
 				{
 					song.Artist = Artist.Value;
 				}
@@ -189,8 +209,6 @@ namespace PandaPlayer.ViewModels
 				{
 					song.Genre = Genre.Value;
 				}
-
-				yield return song;
 			}
 		}
 

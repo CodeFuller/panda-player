@@ -53,7 +53,7 @@
             </TextBox>
 
             <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Content="Artist:" />
-            <ComboBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding AvailableArtists}" SelectedItem="{Binding Artist}" />
+            <ComboBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" IsEditable="True" ItemsSource="{Binding AvailableArtists}" Text="{Binding NewArtistName}" SelectedItem="{Binding Artist}" />
 
             <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" Content="Genre:" />
             <ComboBox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding AvailableGenres}" SelectedItem="{Binding Genre}" />
