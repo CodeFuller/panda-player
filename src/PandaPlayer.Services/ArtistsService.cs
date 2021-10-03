@@ -24,7 +24,7 @@ namespace PandaPlayer.Services
 
 		public Task CreateArtist(ArtistModel artist, CancellationToken cancellationToken)
 		{
-			logger.LogInformation($"Creating artist {artist.Name} ...");
+			logger.LogInformation($"Creating artist '{artist.Name}' ...");
 
 			return artistsRepository.CreateArtist(artist, cancellationToken);
 		}
