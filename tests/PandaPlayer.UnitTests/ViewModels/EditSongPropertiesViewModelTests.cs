@@ -581,6 +581,77 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
+		public async Task Save_ForSingleSongWhenExistingArtistNameIsTyped_UpdatesSongCorrectly()
+		{
+			// Arrange
+
+			var oldArtist = new ArtistModel { Id = new ItemId("1"), Name = "Old Artist" };
+			var existingArtist = new ArtistModel { Id = new ItemId("2"), Name = "Existing Artist" };
+
+			var mocker = CreateMocker(artists: new[] { oldArtist, existingArtist }, genres: Array.Empty<GenreModel>());
+			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
+
+			var song = new SongModel
+			{
+				Artist = oldArtist,
+			};
+
+			await target.Load(new[] { song }, CancellationToken.None);
+
+			// Act
+
+			target.Artist = target.AvailableArtists.Last();
+			target.NewArtistName = "Existing Artist";
+
+			await target.Save(CancellationToken.None);
+
+			// Assert
+
+			var artistServiceMock = mocker.GetMock<IArtistsService>();
+			artistServiceMock.Verify(x => x.CreateArtist(It.IsAny<ArtistModel>(), It.IsAny<CancellationToken>()), Times.Never);
+
+			var songServiceMock = mocker.GetMock<ISongsService>();
+			Func<SongModel, bool> checkSong = x => x.Artist.Name == "Existing Artist";
+			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(y => checkSong(y)), It.IsAny<CancellationToken>()), Times.Once);
+		}
+
+		[TestMethod]
+		public async Task Save_ForSingleSongWhenPartiallyMatchingArtistNameIsTyped_UpdatesSongCorrectly()
+		{
+			// Arrange
+
+			var oldArtist = new ArtistModel { Id = new ItemId("1"), Name = "Old Artist" };
+			var existingArtist = new ArtistModel { Id = new ItemId("2"), Name = "Metallica & Nirvana" };
+
+			var mocker = CreateMocker(artists: new[] { oldArtist, existingArtist }, genres: Array.Empty<GenreModel>());
+			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
+
+			var song = new SongModel
+			{
+				Artist = oldArtist,
+			};
+
+			await target.Load(new[] { song }, CancellationToken.None);
+
+			// Act
+
+			target.Artist = target.AvailableArtists.Last();
+			target.NewArtistName = "Metallica";
+
+			await target.Save(CancellationToken.None);
+
+			// Assert
+
+			var artistServiceMock = mocker.GetMock<IArtistsService>();
+			Func<ArtistModel, bool> checkArtist = x => x.Name == "Metallica";
+			artistServiceMock.Verify(x => x.CreateArtist(It.Is<ArtistModel>(y => checkArtist(y)), It.IsAny<CancellationToken>()), Times.Once);
+
+			var songServiceMock = mocker.GetMock<ISongsService>();
+			Func<SongModel, bool> checkSong = x => x.Artist.Name == "Metallica";
+			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(y => checkSong(y)), It.IsAny<CancellationToken>()), Times.Once);
+		}
+
+		[TestMethod]
 		public async Task Save_ForSingleSongWhenPropertiesAreCleared_UpdatesSongCorrectly()
 		{
 			// Arrange

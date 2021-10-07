@@ -176,8 +176,16 @@ namespace PandaPlayer.ViewModels
 
 		private async Task UpdateSongModels(IEnumerable<SongModel> songs, CancellationToken cancellationToken)
 		{
+			// Possible cases:
+			//   1. NewArtistName == null: User has not typed new artist name (artist was left unchanged or existing artist from the list was selected).
+			//   2. NewArtistName != null && Artist == null: User has typed new artist name.
+			//   3. NewArtistName != null && Artist != null && NewArtistName == Artist.Name: User has typed existing artist name.
+			//   4. NewArtistName != null && Artist != null && NewArtistName != Artist.Name: User has typed new artist name which partially matches existing artist name,
+			//      e.g. NewArtistName == "Metallica" while "Metallica & Nirvana" exists in the list.
+			//
+			// We are creating new artist for the cases #2 and #4.
 			ArtistModel newArtist = null;
-			if (Artist == null && !String.IsNullOrEmpty(NewArtistName))
+			if (!String.IsNullOrEmpty(NewArtistName) && (Artist == null || NewArtistName != Artist.Value.Name))
 			{
 				newArtist = new ArtistModel
 				{
