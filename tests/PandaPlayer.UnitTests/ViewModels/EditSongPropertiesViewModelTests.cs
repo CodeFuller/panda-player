@@ -679,6 +679,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Act
 
 			target.Artist = target.AvailableArtists.Single(x => x.HasBlankValue);
+			target.NewArtistName = target.Artist.ToString();
 			target.Genre = target.AvailableGenres.Single(x => x.HasBlankValue);
 			target.TrackNumber = null;
 
@@ -688,8 +689,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var songServiceMock = mocker.GetMock<ISongsService>();
 
-			Func<SongModel, bool> checkSong = x => x.Title == "Some Title" && x.TreeTitle == "Some Tree Title" && x.TrackNumber == null &&
-			                                       x.Artist == null && x.Genre == null;
+			Func<SongModel, bool> checkSong = x => x.Title == "Some Title" && x.TreeTitle == "Some Tree Title" &&
+			                                       x.TrackNumber == null && x.Artist == null && x.Genre == null;
 			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(y => checkSong(y)), It.IsAny<CancellationToken>()), Times.Once);
 		}
 
