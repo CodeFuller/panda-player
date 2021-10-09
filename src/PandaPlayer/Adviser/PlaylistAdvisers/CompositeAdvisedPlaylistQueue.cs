@@ -5,15 +5,15 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 	internal class CompositeAdvisedPlaylistQueue
 	{
 		private readonly Queue<AdvisedPlaylist> highlyRatedSongsAdvises;
-		private readonly Queue<AdvisedPlaylist> favoriteArtistDiscsAdvises;
+		private readonly Queue<AdvisedPlaylist> favoriteAdviseGroupsAdvises;
 		private readonly Queue<AdvisedPlaylist> rankedAdvises;
 
 		public CompositeAdvisedPlaylistQueue(
 			IEnumerable<AdvisedPlaylist> highlyRatedSongsAdvises,
-			IEnumerable<AdvisedPlaylist> favoriteArtistDiscsAdvises, IEnumerable<AdvisedPlaylist> rankedAdvises)
+			IEnumerable<AdvisedPlaylist> favoriteAdviseGroupsAdvises, IEnumerable<AdvisedPlaylist> rankedAdvises)
 		{
 			this.highlyRatedSongsAdvises = new Queue<AdvisedPlaylist>(highlyRatedSongsAdvises);
-			this.favoriteArtistDiscsAdvises = new Queue<AdvisedPlaylist>(favoriteArtistDiscsAdvises);
+			this.favoriteAdviseGroupsAdvises = new Queue<AdvisedPlaylist>(favoriteAdviseGroupsAdvises);
 			this.rankedAdvises = new Queue<AdvisedPlaylist>(rankedAdvises);
 		}
 
@@ -22,9 +22,9 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 			return highlyRatedSongsAdvises.TryDequeue(out currentAdvise);
 		}
 
-		public bool TryDequeueFavoriteArtistDiscsAdvise(out AdvisedPlaylist currentAdvise)
+		public bool TryDequeueFavoriteAdviseGroupAdvise(out AdvisedPlaylist currentAdvise)
 		{
-			return favoriteArtistDiscsAdvises.TryDequeue(out currentAdvise);
+			return favoriteAdviseGroupsAdvises.TryDequeue(out currentAdvise);
 		}
 
 		public bool TryDequeueRankedAdvise(out AdvisedPlaylist currentAdvise)

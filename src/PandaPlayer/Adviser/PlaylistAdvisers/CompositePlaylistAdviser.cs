@@ -19,19 +19,19 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 		private readonly IDiscGrouper discGrouper;
 		private readonly IPlaylistAdviser rankBasedAdviser;
 		private readonly IPlaylistAdviser highlyRatedSongsAdviser;
-		private readonly IPlaylistAdviser favoriteArtistAdviser;
+		private readonly IPlaylistAdviser favoriteAdviseGroupsAdviser;
 		private readonly ISessionDataService sessionDataService;
 		private readonly AdviserSettings settings;
 
 		private PlaylistAdviserMemo Memo { get; set; }
 
 		public CompositePlaylistAdviser(IDiscGrouper discGrouper, IPlaylistAdviser rankBasedAdviser, IPlaylistAdviser highlyRatedSongsAdviser,
-			IPlaylistAdviser favoriteArtistAdviser, ISessionDataService sessionDataService, IOptions<AdviserSettings> options)
+			IPlaylistAdviser favoriteAdviseGroupsAdviser, ISessionDataService sessionDataService, IOptions<AdviserSettings> options)
 		{
 			this.discGrouper = discGrouper ?? throw new ArgumentNullException(nameof(discGrouper));
 			this.rankBasedAdviser = rankBasedAdviser ?? throw new ArgumentNullException(nameof(rankBasedAdviser));
 			this.highlyRatedSongsAdviser = highlyRatedSongsAdviser ?? throw new ArgumentNullException(nameof(highlyRatedSongsAdviser));
-			this.favoriteArtistAdviser = favoriteArtistAdviser ?? throw new ArgumentNullException(nameof(favoriteArtistAdviser));
+			this.favoriteAdviseGroupsAdviser = favoriteAdviseGroupsAdviser ?? throw new ArgumentNullException(nameof(favoriteAdviseGroupsAdviser));
 			this.sessionDataService = sessionDataService ?? throw new ArgumentNullException(nameof(sessionDataService));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
@@ -45,10 +45,10 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 			var playbacksInfo = new PlaybacksInfo(adviseGroups);
 
 			var highlyRatedSongsAdvises = await highlyRatedSongsAdviser.Advise(adviseGroups, playbacksInfo, cancellationToken);
-			var favoriteArtistDiscsAdvises = await favoriteArtistAdviser.Advise(adviseGroups, playbacksInfo, cancellationToken);
+			var favoriteAdviseGroupAdvises = await favoriteAdviseGroupsAdviser.Advise(adviseGroups, playbacksInfo, cancellationToken);
 			var rankedAdvises = await rankBasedAdviser.Advise(adviseGroups, playbacksInfo, cancellationToken);
 
-			var playlistQueue = new CompositeAdvisedPlaylistQueue(highlyRatedSongsAdvises, favoriteArtistDiscsAdvises, rankedAdvises);
+			var playlistQueue = new CompositeAdvisedPlaylistQueue(highlyRatedSongsAdvises, favoriteAdviseGroupAdvises, rankedAdvises);
 
 			var advisedPlaylists = new List<AdvisedPlaylist>(requiredAdvisesCount);
 
@@ -87,8 +87,8 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 				return currentAdvise;
 			}
 
-			if (playbacksMemo.PlaybacksSinceFavoriteArtistDisc + 1 >= settings.FavoriteArtistsAdviser.PlaybacksBetweenFavoriteArtistDiscs &&
-			    playlistQueue.TryDequeueFavoriteArtistDiscsAdvise(out currentAdvise))
+			if (playbacksMemo.PlaybacksSinceFavoriteAdviseGroup + 1 >= settings.PlaybacksBetweenFavoriteAdviseGroups &&
+			    playlistQueue.TryDequeueFavoriteAdviseGroupAdvise(out currentAdvise))
 			{
 				return currentAdvise;
 			}
@@ -99,7 +99,7 @@ namespace PandaPlayer.Adviser.PlaylistAdvisers
 		private PlaylistAdviserMemo CreateDefaultMemo()
 		{
 			// If no previous PlaylistAdviserMemo exist, we're initializing memo with threshold values so that promoted advises go first.
-			return new(settings.HighlyRatedSongsAdviser.PlaybacksBetweenHighlyRatedSongs, settings.FavoriteArtistsAdviser.PlaybacksBetweenFavoriteArtistDiscs);
+			return new(settings.HighlyRatedSongsAdviser.PlaybacksBetweenHighlyRatedSongs, settings.PlaybacksBetweenFavoriteAdviseGroups);
 		}
 
 		public async Task RegisterAdvicePlayback(AdvisedPlaylist advise, CancellationToken cancellationToken)

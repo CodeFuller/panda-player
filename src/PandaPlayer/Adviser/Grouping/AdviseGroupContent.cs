@@ -12,11 +12,14 @@ namespace PandaPlayer.Adviser.Grouping
 
 		public IReadOnlyCollection<AdviseSetContent> AdviseSets => adviseSets;
 
+		public bool IsFavorite { get; }
+
 		public bool IsDeleted => AdviseSets.All(x => x.IsDeleted);
 
-		public AdviseGroupContent(string id)
+		public AdviseGroupContent(string id, bool isFavorite)
 		{
 			Id = id;
+			IsFavorite = isFavorite;
 		}
 
 		public void AddDisc(DiscModel disc)

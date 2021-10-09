@@ -50,11 +50,11 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 
 			// Assert
 
-			var expectedAdviseGroup1 = new AdviseGroupContent("Advise Group: Disc Advise Group 1");
+			var expectedAdviseGroup1 = new AdviseGroupContent("Advise Group: Disc Advise Group 1", isFavorite: false);
 			expectedAdviseGroup1.AddDisc(disc11);
 			expectedAdviseGroup1.AddDisc(disc12);
 
-			var expectedAdviseGroup2 = new AdviseGroupContent("Advise Group: Disc Advise Group 2");
+			var expectedAdviseGroup2 = new AdviseGroupContent("Advise Group: Disc Advise Group 2", isFavorite: false);
 			expectedAdviseGroup2.AddDisc(disc21);
 
 			var expectedAdviseGroups = new[]
@@ -103,11 +103,11 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 
 			// Assert
 
-			var expectedAdviseGroup1 = new AdviseGroupContent("Advise Group: Advise Group 11");
+			var expectedAdviseGroup1 = new AdviseGroupContent("Advise Group: Advise Group 11", isFavorite: false);
 			expectedAdviseGroup1.AddDisc(disc11);
 			expectedAdviseGroup1.AddDisc(disc12);
 
-			var expectedAdviseGroup2 = new AdviseGroupContent("Advise Group: Advise Group 21");
+			var expectedAdviseGroup2 = new AdviseGroupContent("Advise Group: Advise Group 21", isFavorite: false);
 			expectedAdviseGroup2.AddDisc(disc21);
 
 			var expectedAdviseGroups = new[]
@@ -154,11 +154,11 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 
 			// Assert
 
-			var expectedAdviseGroup1 = new AdviseGroupContent("Advise Group: Advise Group 1");
+			var expectedAdviseGroup1 = new AdviseGroupContent("Advise Group: Advise Group 1", isFavorite: false);
 			expectedAdviseGroup1.AddDisc(disc11);
 			expectedAdviseGroup1.AddDisc(disc12);
 
-			var expectedAdviseGroup2 = new AdviseGroupContent("Advise Group: Advise Group 2");
+			var expectedAdviseGroup2 = new AdviseGroupContent("Advise Group: Advise Group 2", isFavorite: false);
 			expectedAdviseGroup2.AddDisc(disc21);
 
 			var expectedAdviseGroups = new[]
@@ -201,11 +201,11 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 
 			// Assert
 
-			var expectedAdviseGroup1 = new AdviseGroupContent("Folder Group: Folder 11");
+			var expectedAdviseGroup1 = new AdviseGroupContent("Folder Group: Folder 11", isFavorite: false);
 			expectedAdviseGroup1.AddDisc(disc11);
 			expectedAdviseGroup1.AddDisc(disc12);
 
-			var expectedAdviseGroup2 = new AdviseGroupContent("Folder Group: Folder 21");
+			var expectedAdviseGroup2 = new AdviseGroupContent("Folder Group: Folder 21", isFavorite: false);
 			expectedAdviseGroup2.AddDisc(disc21);
 
 			var expectedAdviseGroups = new[]

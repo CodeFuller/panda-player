@@ -37,7 +37,7 @@ namespace PandaPlayer.Adviser.Grouping
 
 				if (!adviseGroups.TryGetValue(groupId, out var adviseGroupContent))
 				{
-					adviseGroupContent = new AdviseGroupContent(groupId);
+					adviseGroupContent = new AdviseGroupContent(groupId, isFavorite: adviseGroup?.IsFavorite ?? false);
 					adviseGroups.Add(groupId, adviseGroupContent);
 				}
 

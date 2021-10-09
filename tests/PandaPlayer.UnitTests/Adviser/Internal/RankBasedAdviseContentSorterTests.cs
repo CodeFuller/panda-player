@@ -20,9 +20,9 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 		{
 			// Arrange
 
-			var adviseGroup1 = new AdviseGroupContent("group1");
-			var adviseGroup2 = new AdviseGroupContent("group2");
-			var adviseGroup3 = new AdviseGroupContent("group3");
+			var adviseGroup1 = new AdviseGroupContent("group1", isFavorite: false);
+			var adviseGroup2 = new AdviseGroupContent("group2", isFavorite: false);
+			var adviseGroup3 = new AdviseGroupContent("group3", isFavorite: false);
 
 			var playbacksInfo = new PlaybacksInfo(Enumerable.Empty<AdviseGroupContent>());
 

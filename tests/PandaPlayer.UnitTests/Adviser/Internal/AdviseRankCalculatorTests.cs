@@ -218,7 +218,7 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 			disc1.AdviseSetInfo = new AdviseSetInfo(adviseSet, 1);
 			disc2.AdviseSetInfo = new AdviseSetInfo(adviseSet, 2);
 
-			var adviseGroupContent1 = new AdviseGroupContent("1");
+			var adviseGroupContent1 = new AdviseGroupContent("1", isFavorite: false);
 			adviseGroupContent1.AddDisc(disc1);
 			adviseGroupContent1.AddDisc(disc2);
 
@@ -245,7 +245,7 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 		{
 			// Arrange
 
-			var adviseGroupContent1 = new AdviseGroupContent("1");
+			var adviseGroupContent1 = new AdviseGroupContent("1", isFavorite: false);
 			adviseGroupContent1.AddDisc(CreateTestDisc("1.1", new[] { CreateTestSong(11, lastPlaybackTime: null) }));
 			adviseGroupContent1.AddDisc(CreateTestDisc("1.2", new[] { CreateTestSong(12, lastPlaybackTime: null) }));
 
@@ -303,7 +303,7 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 		{
 			// Arrange
 
-			var adviseGroupContent1 = new AdviseGroupContent("1");
+			var adviseGroupContent1 = new AdviseGroupContent("1", isFavorite: false);
 			adviseGroupContent1.AddDisc(CreateTestDisc("1.1", new[] { CreateTestSong(11, RatingModel.R5, new DateTime(2021, 06, 26)) }));
 			adviseGroupContent1.AddDisc(CreateTestDisc("1.2", new[] { CreateTestSong(12, RatingModel.R7, new DateTime(2021, 06, 27)) }));
 			adviseGroupContent1.AddDisc(CreateTestDisc("1.3", new[] { CreateTestSong(13, RatingModel.R6, new DateTime(2021, 06, 28)) }));
@@ -330,7 +330,7 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 		{
 			// Arrange
 
-			var adviseGroupContent1 = new AdviseGroupContent("1");
+			var adviseGroupContent1 = new AdviseGroupContent("1", isFavorite: false);
 			adviseGroupContent1.AddDisc(CreateTestDisc("1.1", new[] { CreateTestSong(11, RatingModel.R5, new DateTime(2021, 06, 26)) }));
 			adviseGroupContent1.AddDisc(CreateTestDisc("1.2", new[] { CreateTestSong(12, RatingModel.R3, new DateTime(2021, 06, 27)) }));
 			adviseGroupContent1.AddDisc(CreateTestDisc("1.3", new[] { CreateTestSong(13, RatingModel.R6, new DateTime(2021, 06, 28), isDeleted: true) }));
@@ -357,7 +357,7 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 		{
 			// Arrange
 
-			var adviseGroupContent1 = new AdviseGroupContent("1");
+			var adviseGroupContent1 = new AdviseGroupContent("1", isFavorite: false);
 			adviseGroupContent1.AddDisc(CreateTestDisc("1.1", new[] { CreateTestSong(11, RatingModel.R5, new DateTime(2021, 06, 26)) }));
 			adviseGroupContent1.AddDisc(CreateTestDisc("1.2", new[] { CreateTestSong(12, RatingModel.R5, new DateTime(2021, 06, 28), isDeleted: true) }));
 
@@ -383,7 +383,7 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 		{
 			var disc = CreateTestDisc(id, songs);
 
-			var adviseGroupContent = new AdviseGroupContent(id);
+			var adviseGroupContent = new AdviseGroupContent(id, isFavorite: false);
 			adviseGroupContent.AddDisc(disc);
 
 			return adviseGroupContent;

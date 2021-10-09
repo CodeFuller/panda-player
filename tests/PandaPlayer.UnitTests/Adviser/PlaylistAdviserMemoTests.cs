@@ -12,7 +12,7 @@ namespace PandaPlayer.UnitTests.Adviser
 	public class PlaylistAdviserMemoTests
 	{
 		[TestMethod]
-		public void RegisterPlayback_IfPlaybackAdviseIsFavoriteArtistAdviseSet_SetsPlaybacksSinceFavoriteArtistDiscToZero()
+		public void RegisterPlayback_IfPlaybackAdviseIsForAdviseSetFromFavoriteAdviseGroup_SetsPlaybacksSinceFavoriteAdviseGroupToZero()
 		{
 			// Arrange
 
@@ -23,15 +23,15 @@ namespace PandaPlayer.UnitTests.Adviser
 				AllSongs = new List<SongModel>(),
 			};
 
-			var target = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 3, playbacksSinceFavoriteArtistDisc: 5);
+			var target = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 3, playbacksSinceFavoriteAdviseGroup: 5);
 
 			// Act
 
-			var newMemo = target.RegisterPlayback(AdvisedPlaylist.ForFavoriteArtistAdviseSet(disc.ToAdviseSet()));
+			var newMemo = target.RegisterPlayback(AdvisedPlaylist.ForAdviseSetFromFavoriteAdviseGroup(disc.ToAdviseSet()));
 
 			// Assert
 
-			var expectedMemo = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 4, playbacksSinceFavoriteArtistDisc: 0);
+			var expectedMemo = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 4, playbacksSinceFavoriteAdviseGroup: 0);
 			newMemo.Should().BeEquivalentTo(expectedMemo);
 		}
 
@@ -40,7 +40,7 @@ namespace PandaPlayer.UnitTests.Adviser
 		{
 			// Arrange
 
-			var target = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 3, playbacksSinceFavoriteArtistDisc: 5);
+			var target = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 3, playbacksSinceFavoriteAdviseGroup: 5);
 
 			// Act
 
@@ -48,7 +48,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			// Assert
 
-			var expectedMemo = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 0, playbacksSinceFavoriteArtistDisc: 6);
+			var expectedMemo = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 0, playbacksSinceFavoriteAdviseGroup: 6);
 			newMemo.Should().BeEquivalentTo(expectedMemo);
 		}
 
@@ -64,7 +64,7 @@ namespace PandaPlayer.UnitTests.Adviser
 				AllSongs = new List<SongModel>(),
 			};
 
-			var target = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 3, playbacksSinceFavoriteArtistDisc: 5);
+			var target = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 3, playbacksSinceFavoriteAdviseGroup: 5);
 
 			// Act
 
@@ -72,7 +72,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			// Assert
 
-			var expectedMemo = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 4, playbacksSinceFavoriteArtistDisc: 6);
+			var expectedMemo = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 4, playbacksSinceFavoriteAdviseGroup: 6);
 			newMemo.Should().BeEquivalentTo(expectedMemo);
 		}
 	}

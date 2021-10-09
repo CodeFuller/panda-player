@@ -61,7 +61,6 @@ namespace PandaPlayer
 			services.AddPlaylistAdviser(settings =>
 			{
 				configuration.Bind("adviser", settings);
-				configuration.Bind("adviser:favoriteArtistsAdviser", settings.FavoriteArtistsAdviser);
 				configuration.Bind("adviser:highlyRatedSongsAdviser", settings.HighlyRatedSongsAdviser);
 			});
 		}

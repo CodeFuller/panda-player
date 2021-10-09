@@ -1,16 +1,9 @@
 ﻿{
 	"adviser": {
-		"favoriteArtistsAdviser": {
-			"playbacksBetweenFavoriteArtistDiscs": 7,
-
-			"favoriteArtists": [
-			]
-		},
+		"playbacksBetweenFavoriteAdviseGroups": 7,
 
 		"highlyRatedSongsAdviser": {
-
 			"playbacksBetweenHighlyRatedSongs": 10,
-
 			"oneAdviseSongsNumber": 12,
 			"maxTerms": [
 				{

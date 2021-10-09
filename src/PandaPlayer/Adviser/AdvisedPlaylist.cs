@@ -32,11 +32,11 @@ namespace PandaPlayer.Adviser
 			};
 		}
 
-		public static AdvisedPlaylist ForFavoriteArtistAdviseSet(AdviseSetContent adviseSet)
+		public static AdvisedPlaylist ForAdviseSetFromFavoriteAdviseGroup(AdviseSetContent adviseSet)
 		{
 			return new()
 			{
-				AdvisedPlaylistType = AdvisedPlaylistType.FavoriteArtistAdviseSet,
+				AdvisedPlaylistType = AdvisedPlaylistType.AdviseSetFromFavoriteAdviseGroup,
 				Title = "*** " + GetTitleForAdviseSet(adviseSet),
 				Songs = GetAdviseSetSongs(adviseSet),
 				AdviseSet = adviseSet,

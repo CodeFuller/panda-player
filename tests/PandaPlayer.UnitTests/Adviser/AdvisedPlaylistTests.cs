@@ -207,7 +207,7 @@ namespace PandaPlayer.UnitTests.Adviser
 		}
 
 		[TestMethod]
-		public void ForFavoriteArtistAdviseSet_FillsPlaylistTypeCorrectly()
+		public void ForAdviseSetFromFavoriteAdviseGroup_FillsPlaylistTypeCorrectly()
 		{
 			// Arrange
 
@@ -220,15 +220,15 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			// Act
 
-			var target = AdvisedPlaylist.ForFavoriteArtistAdviseSet(adviseSetContent);
+			var target = AdvisedPlaylist.ForAdviseSetFromFavoriteAdviseGroup(adviseSetContent);
 
 			// Assert
 
-			target.AdvisedPlaylistType.Should().Be(AdvisedPlaylistType.FavoriteArtistAdviseSet);
+			target.AdvisedPlaylistType.Should().Be(AdvisedPlaylistType.AdviseSetFromFavoriteAdviseGroup);
 		}
 
 		[TestMethod]
-		public void ForFavoriteArtistAdviseSet_FillsTitleCorrectly()
+		public void ForAdviseSetFromFavoriteAdviseGroup_FillsTitleCorrectly()
 		{
 			// Arrange
 
@@ -249,7 +249,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			// Act
 
-			var target = AdvisedPlaylist.ForFavoriteArtistAdviseSet(adviseSetContent);
+			var target = AdvisedPlaylist.ForAdviseSetFromFavoriteAdviseGroup(adviseSetContent);
 
 			// Assert
 
@@ -257,7 +257,7 @@ namespace PandaPlayer.UnitTests.Adviser
 		}
 
 		[TestMethod]
-		public void ForFavoriteArtistAdviseSet_IfAdviseSetContainsDeletedSongs_FillsPlaylistOnlyWithActiveSongs()
+		public void ForAdviseSetFromFavoriteAdviseGroup_IfAdviseSetContainsDeletedSongs_FillsPlaylistOnlyWithActiveSongs()
 		{
 			// Arrange
 
@@ -274,7 +274,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			// Act
 
-			var target = AdvisedPlaylist.ForFavoriteArtistAdviseSet(adviseSetContent);
+			var target = AdvisedPlaylist.ForAdviseSetFromFavoriteAdviseGroup(adviseSetContent);
 
 			// Assert
 
@@ -282,7 +282,7 @@ namespace PandaPlayer.UnitTests.Adviser
 		}
 
 		[TestMethod]
-		public void ForFavoriteArtistAdviseSet_FillsAdviseSetCorrectly()
+		public void ForAdviseSetFromFavoriteAdviseGroup_FillsAdviseSetCorrectly()
 		{
 			// Arrange
 
@@ -295,7 +295,7 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			// Act
 
-			var target = AdvisedPlaylist.ForFavoriteArtistAdviseSet(adviseSetContent);
+			var target = AdvisedPlaylist.ForAdviseSetFromFavoriteAdviseGroup(adviseSetContent);
 
 			// Assert
 

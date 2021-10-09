@@ -2,7 +2,7 @@
 {
 	internal class AdviserSettings
 	{
-		public FavoriteArtistsAdviserSettings FavoriteArtistsAdviser { get; set; } = new();
+		public int PlaybacksBetweenFavoriteAdviseGroups { get; set; }
 
 		public HighlyRatedSongsAdviserSettings HighlyRatedSongsAdviser { get; set; } = new();
 	}

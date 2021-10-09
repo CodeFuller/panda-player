@@ -4,7 +4,7 @@
 	{
 		None,
 		AdviseSet,
-		FavoriteArtistAdviseSet,
+		AdviseSetFromFavoriteAdviseGroup,
 		HighlyRatedSongs,
 	}
 }

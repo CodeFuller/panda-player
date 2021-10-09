@@ -6,13 +6,13 @@ namespace PandaPlayer.Adviser
 	{
 		public int PlaybacksSinceHighlyRatedSongsPlaylist { get; }
 
-		public int PlaybacksSinceFavoriteArtistDisc { get; }
+		public int PlaybacksSinceFavoriteAdviseGroup { get; }
 
 		// TODO: Change properties to init only and avoid constructor parameters. Will deserialization work correctly?
-		public PlaylistAdviserMemo(int playbacksSinceHighlyRatedSongsPlaylist, int playbacksSinceFavoriteArtistDisc)
+		public PlaylistAdviserMemo(int playbacksSinceHighlyRatedSongsPlaylist, int playbacksSinceFavoriteAdviseGroup)
 		{
 			PlaybacksSinceHighlyRatedSongsPlaylist = playbacksSinceHighlyRatedSongsPlaylist;
-			PlaybacksSinceFavoriteArtistDisc = playbacksSinceFavoriteArtistDisc;
+			PlaybacksSinceFavoriteAdviseGroup = playbacksSinceFavoriteAdviseGroup;
 		}
 
 		[Pure]
@@ -22,11 +22,11 @@ namespace PandaPlayer.Adviser
 					? 0
 					: PlaybacksSinceHighlyRatedSongsPlaylist + 1;
 
-			var newPlaybacksSinceFavoriteArtistDisc = advisePlayback.AdvisedPlaylistType == AdvisedPlaylistType.FavoriteArtistAdviseSet
+			var newPlaybacksSinceFavoriteAdviseGroup = advisePlayback.AdvisedPlaylistType == AdvisedPlaylistType.AdviseSetFromFavoriteAdviseGroup
 				? 0
-				: PlaybacksSinceFavoriteArtistDisc + 1;
+				: PlaybacksSinceFavoriteAdviseGroup + 1;
 
-			return new PlaylistAdviserMemo(newPlaybacksSinceHighlyRatedSongsPlaylist, newPlaybacksSinceFavoriteArtistDisc);
+			return new PlaylistAdviserMemo(newPlaybacksSinceHighlyRatedSongsPlaylist, newPlaybacksSinceFavoriteAdviseGroup);
 		}
 	}
 }

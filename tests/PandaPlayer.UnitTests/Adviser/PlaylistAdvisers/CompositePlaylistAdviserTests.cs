@@ -87,7 +87,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			var sessionDataServiceStub = new Mock<ISessionDataService>();
 			sessionDataServiceStub.Setup(x => x.GetData<PlaylistAdviserMemo>("PlaylistAdviserData", CancellationToken.None))
-				.ReturnsAsync(new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 2, playbacksSinceFavoriteArtistDisc: 0));
+				.ReturnsAsync(new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 2, playbacksSinceFavoriteAdviseGroup: 0));
 
 			var target = new CompositePlaylistAdviser(StubDiscGrouper(), rankBasedAdviserStub.Object, highlyRatedSongsAdviserStub.Object,
 				StubEmptyPlaylistAdviser(), sessionDataServiceStub.Object, Options.Create(settings));
@@ -104,31 +104,28 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 		}
 
 		[TestMethod]
-		public async Task Advise_IfFavoriteArtistAdviseSetsAdvisesProvided_AdvisesFavoriteArtistAdviseSetsAtConfiguredIntervals()
+		public async Task Advise_IfAdvisesForFavoriteAdviseGroupsProvided_AdvisesAdviseSetFromFavoriteAdviseGroupsAtConfiguredIntervals()
 		{
 			// Arrange
 
 			var settings = new AdviserSettings
 			{
-				FavoriteArtistsAdviser = new FavoriteArtistsAdviserSettings
-				{
-					PlaybacksBetweenFavoriteArtistDiscs = 10,
-				},
+				PlaybacksBetweenFavoriteAdviseGroups = 10,
 			};
 
-			var favoriteArtistAdvise1 = AdvisedPlaylist.ForFavoriteArtistAdviseSet(CreateTestAdviseSet(101));
-			var favoriteArtistAdvise2 = AdvisedPlaylist.ForFavoriteArtistAdviseSet(CreateTestAdviseSet(102));
+			var favoriteAdviseGroupAdvise1 = AdvisedPlaylist.ForAdviseSetFromFavoriteAdviseGroup(CreateTestAdviseSet(101));
+			var favoriteAdviseGroupAdvise2 = AdvisedPlaylist.ForAdviseSetFromFavoriteAdviseGroup(CreateTestAdviseSet(102));
 
 			var rankBasedAdviserStub = new Mock<IPlaylistAdviser>();
 			rankBasedAdviserStub.Setup(x => x.Advise(It.IsAny<IEnumerable<AdviseGroupContent>>(), It.IsAny<PlaybacksInfo>(), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(Enumerable.Range(0, 100).Select(i => AdvisedPlaylist.ForAdviseSet(CreateTestAdviseSet(i))).ToList());
 
-			var favoriteArtistAdviserStub = new Mock<IPlaylistAdviser>();
-			favoriteArtistAdviserStub.Setup(x => x.Advise(It.IsAny<IEnumerable<AdviseGroupContent>>(), It.IsAny<PlaybacksInfo>(), It.IsAny<CancellationToken>()))
-				.ReturnsAsync(new[] { favoriteArtistAdvise1, favoriteArtistAdvise2 });
+			var favoriteAdviseGroupsAdviserStub = new Mock<IPlaylistAdviser>();
+			favoriteAdviseGroupsAdviserStub.Setup(x => x.Advise(It.IsAny<IEnumerable<AdviseGroupContent>>(), It.IsAny<PlaybacksInfo>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new[] { favoriteAdviseGroupAdvise1, favoriteAdviseGroupAdvise2 });
 
 			var target = new CompositePlaylistAdviser(StubDiscGrouper(), rankBasedAdviserStub.Object, StubEmptyPlaylistAdviser(),
-				favoriteArtistAdviserStub.Object, Mock.Of<ISessionDataService>(), Options.Create(settings));
+				favoriteAdviseGroupsAdviserStub.Object, Mock.Of<ISessionDataService>(), Options.Create(settings));
 
 			// Act
 
@@ -136,41 +133,38 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Assert
 
-			advises.Where(x => x.AdvisedPlaylistType == AdvisedPlaylistType.FavoriteArtistAdviseSet).Should().HaveCount(2);
-			advises[0].Should().BeSameAs(favoriteArtistAdvise1);
-			advises[10].Should().BeSameAs(favoriteArtistAdvise2);
+			advises.Where(x => x.AdvisedPlaylistType == AdvisedPlaylistType.AdviseSetFromFavoriteAdviseGroup).Should().HaveCount(2);
+			advises[0].Should().BeSameAs(favoriteAdviseGroupAdvise1);
+			advises[10].Should().BeSameAs(favoriteAdviseGroupAdvise2);
 		}
 
 		[TestMethod]
-		public async Task Advise_IfPlaylistAdviserMemoIsLoaded_UsesPreviousPlaybacksSinceFavoriteArtistAdviseSet()
+		public async Task Advise_IfPlaylistAdviserMemoIsLoaded_UsesPreviousPlaybacksSinceFavoriteAdviseGroup()
 		{
 			// Arrange
 
 			var settings = new AdviserSettings
 			{
-				FavoriteArtistsAdviser = new FavoriteArtistsAdviserSettings
-				{
-					PlaybacksBetweenFavoriteArtistDiscs = 10,
-				},
+				PlaybacksBetweenFavoriteAdviseGroups = 10,
 			};
 
-			var favoriteArtistAdvise1 = AdvisedPlaylist.ForFavoriteArtistAdviseSet(CreateTestAdviseSet(101));
-			var favoriteArtistAdvise2 = AdvisedPlaylist.ForFavoriteArtistAdviseSet(CreateTestAdviseSet(102));
+			var favoriteAdviseGroupAdvise1 = AdvisedPlaylist.ForAdviseSetFromFavoriteAdviseGroup(CreateTestAdviseSet(101));
+			var favoriteAdviseGroupAdvise2 = AdvisedPlaylist.ForAdviseSetFromFavoriteAdviseGroup(CreateTestAdviseSet(102));
 
 			var rankBasedAdviserStub = new Mock<IPlaylistAdviser>();
 			rankBasedAdviserStub.Setup(x => x.Advise(It.IsAny<IEnumerable<AdviseGroupContent>>(), It.IsAny<PlaybacksInfo>(), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(Enumerable.Range(0, 100).Select(i => AdvisedPlaylist.ForAdviseSet(CreateTestAdviseSet(i))).ToList());
 
-			var favoriteArtistAdviserStub = new Mock<IPlaylistAdviser>();
-			favoriteArtistAdviserStub.Setup(x => x.Advise(It.IsAny<IEnumerable<AdviseGroupContent>>(), It.IsAny<PlaybacksInfo>(), It.IsAny<CancellationToken>()))
-				.ReturnsAsync(new[] { favoriteArtistAdvise1, favoriteArtistAdvise2 });
+			var favoriteAdviseGroupsAdviserStub = new Mock<IPlaylistAdviser>();
+			favoriteAdviseGroupsAdviserStub.Setup(x => x.Advise(It.IsAny<IEnumerable<AdviseGroupContent>>(), It.IsAny<PlaybacksInfo>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new[] { favoriteAdviseGroupAdvise1, favoriteAdviseGroupAdvise2 });
 
 			var sessionDataServiceStub = new Mock<ISessionDataService>();
 			sessionDataServiceStub.Setup(x => x.GetData<PlaylistAdviserMemo>("PlaylistAdviserData", CancellationToken.None))
-				.ReturnsAsync(new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 0, playbacksSinceFavoriteArtistDisc: 2));
+				.ReturnsAsync(new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 0, playbacksSinceFavoriteAdviseGroup: 2));
 
 			var target = new CompositePlaylistAdviser(StubDiscGrouper(), rankBasedAdviserStub.Object, StubEmptyPlaylistAdviser(),
-				favoriteArtistAdviserStub.Object, sessionDataServiceStub.Object, Options.Create(settings));
+				favoriteAdviseGroupsAdviserStub.Object, sessionDataServiceStub.Object, Options.Create(settings));
 
 			// Act
 
@@ -178,9 +172,9 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Assert
 
-			advises.Where(x => x.AdvisedPlaylistType == AdvisedPlaylistType.FavoriteArtistAdviseSet).Should().HaveCount(2);
-			advises[7].Should().BeSameAs(favoriteArtistAdvise1);
-			advises[17].Should().BeSameAs(favoriteArtistAdvise2);
+			advises.Where(x => x.AdvisedPlaylistType == AdvisedPlaylistType.AdviseSetFromFavoriteAdviseGroup).Should().HaveCount(2);
+			advises[7].Should().BeSameAs(favoriteAdviseGroupAdvise1);
+			advises[17].Should().BeSameAs(favoriteAdviseGroupAdvise2);
 		}
 
 		[TestMethod]
@@ -190,17 +184,14 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			var settings = new AdviserSettings
 			{
-				FavoriteArtistsAdviser = new FavoriteArtistsAdviserSettings
-				{
-					PlaybacksBetweenFavoriteArtistDiscs = 10,
-				},
+				PlaybacksBetweenFavoriteAdviseGroups = 10,
 			};
 
 			var adviseSet1 = CreateTestAdviseSet(101);
 			var adviseSet2 = CreateTestAdviseSet(102);
 
-			var favoriteArtistAdvise1 = AdvisedPlaylist.ForFavoriteArtistAdviseSet(adviseSet1);
-			var favoriteArtistAdvise2 = AdvisedPlaylist.ForFavoriteArtistAdviseSet(adviseSet2);
+			var favoriteAdviseGroupAdvise1 = AdvisedPlaylist.ForAdviseSetFromFavoriteAdviseGroup(adviseSet1);
+			var favoriteAdviseGroupAdvise2 = AdvisedPlaylist.ForAdviseSetFromFavoriteAdviseGroup(adviseSet2);
 
 			var rankedBasedAdvises = Enumerable.Range(0, 10).Select(i => AdvisedPlaylist.ForAdviseSet(CreateTestAdviseSet(i)))
 				.Concat(new[] { AdvisedPlaylist.ForAdviseSet(adviseSet1) })
@@ -211,12 +202,12 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var rankBasedAdviserStub = new Mock<IPlaylistAdviser>();
 			rankBasedAdviserStub.Setup(x => x.Advise(It.IsAny<IEnumerable<AdviseGroupContent>>(), It.IsAny<PlaybacksInfo>(), It.IsAny<CancellationToken>())).ReturnsAsync(rankedBasedAdvises);
 
-			var favoriteArtistAdviserStub = new Mock<IPlaylistAdviser>();
-			favoriteArtistAdviserStub.Setup(x => x.Advise(It.IsAny<IEnumerable<AdviseGroupContent>>(), It.IsAny<PlaybacksInfo>(), It.IsAny<CancellationToken>()))
-				.ReturnsAsync(new[] { favoriteArtistAdvise1, favoriteArtistAdvise2 });
+			var favoriteAdviseGroupsAdviserStub = new Mock<IPlaylistAdviser>();
+			favoriteAdviseGroupsAdviserStub.Setup(x => x.Advise(It.IsAny<IEnumerable<AdviseGroupContent>>(), It.IsAny<PlaybacksInfo>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new[] { favoriteAdviseGroupAdvise1, favoriteAdviseGroupAdvise2 });
 
 			var target = new CompositePlaylistAdviser(StubDiscGrouper(), rankBasedAdviserStub.Object, StubEmptyPlaylistAdviser(),
-				favoriteArtistAdviserStub.Object, Mock.Of<ISessionDataService>(), Options.Create(settings));
+				favoriteAdviseGroupsAdviserStub.Object, Mock.Of<ISessionDataService>(), Options.Create(settings));
 
 			// Act
 
@@ -236,8 +227,8 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var highlyRatedSongsAdvise1 = AdvisedPlaylist.ForHighlyRatedSongs(Enumerable.Empty<SongModel>());
 			var highlyRatedSongsAdvise2 = AdvisedPlaylist.ForHighlyRatedSongs(Enumerable.Empty<SongModel>());
 
-			var favoriteArtistAdvise1 = AdvisedPlaylist.ForFavoriteArtistAdviseSet(CreateTestAdviseSet(101));
-			var favoriteArtistAdvise2 = AdvisedPlaylist.ForFavoriteArtistAdviseSet(CreateTestAdviseSet(102));
+			var favoriteAdviseGroupAdvise1 = AdvisedPlaylist.ForAdviseSetFromFavoriteAdviseGroup(CreateTestAdviseSet(101));
+			var favoriteAdviseGroupAdvise2 = AdvisedPlaylist.ForAdviseSetFromFavoriteAdviseGroup(CreateTestAdviseSet(102));
 
 			var rankedBasedAdvises = Enumerable.Range(1, 10).Select(i => AdvisedPlaylist.ForAdviseSet(CreateTestAdviseSet(i))).ToList();
 
@@ -248,17 +239,13 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			highlyRatedSongsAdviserStub.Setup(x => x.Advise(It.IsAny<IEnumerable<AdviseGroupContent>>(), It.IsAny<PlaybacksInfo>(), It.IsAny<CancellationToken>()))
 				.ReturnsAsync(new[] { highlyRatedSongsAdvise1, highlyRatedSongsAdvise2 });
 
-			var favoriteArtistAdviserStub = new Mock<IPlaylistAdviser>();
-			favoriteArtistAdviserStub.Setup(x => x.Advise(It.IsAny<IEnumerable<AdviseGroupContent>>(), It.IsAny<PlaybacksInfo>(), It.IsAny<CancellationToken>()))
-				.ReturnsAsync(new[] { favoriteArtistAdvise1, favoriteArtistAdvise2 });
+			var favoriteAdviseGroupsAdviserStub = new Mock<IPlaylistAdviser>();
+			favoriteAdviseGroupsAdviserStub.Setup(x => x.Advise(It.IsAny<IEnumerable<AdviseGroupContent>>(), It.IsAny<PlaybacksInfo>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(new[] { favoriteAdviseGroupAdvise1, favoriteAdviseGroupAdvise2 });
 
 			var settings = new AdviserSettings
 			{
-				FavoriteArtistsAdviser = new FavoriteArtistsAdviserSettings
-				{
-					PlaybacksBetweenFavoriteArtistDiscs = 5,
-				},
-
+				PlaybacksBetweenFavoriteAdviseGroups = 5,
 				HighlyRatedSongsAdviser = new HighlyRatedSongsAdviserSettings
 				{
 					PlaybacksBetweenHighlyRatedSongs = 10,
@@ -266,7 +253,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			};
 
 			var target = new CompositePlaylistAdviser(StubDiscGrouper(), rankBasedAdviserStub.Object, highlyRatedSongsAdviserStub.Object,
-				favoriteArtistAdviserStub.Object, Mock.Of<ISessionDataService>(), Options.Create(settings));
+				favoriteAdviseGroupsAdviserStub.Object, Mock.Of<ISessionDataService>(), Options.Create(settings));
 
 			// Act
 
@@ -277,9 +264,9 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var expectedAdvises = new[]
 			{
 						highlyRatedSongsAdvise1,
-						favoriteArtistAdvise1,
+						favoriteAdviseGroupAdvise1,
 						rankedBasedAdvises[0], rankedBasedAdvises[1], rankedBasedAdvises[2], rankedBasedAdvises[3],
-						favoriteArtistAdvise2,
+						favoriteAdviseGroupAdvise2,
 						rankedBasedAdvises[4], rankedBasedAdvises[5], rankedBasedAdvises[6],
 						highlyRatedSongsAdvise2,
 						rankedBasedAdvises[7], rankedBasedAdvises[8], rankedBasedAdvises[9],
@@ -295,7 +282,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			var sessionDataServiceMock = new Mock<ISessionDataService>();
 			sessionDataServiceMock.Setup(x => x.GetData<PlaylistAdviserMemo>("PlaylistAdviserData", CancellationToken.None))
-				.ReturnsAsync(new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 3, playbacksSinceFavoriteArtistDisc: 5));
+				.ReturnsAsync(new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 3, playbacksSinceFavoriteAdviseGroup: 5));
 
 			var target = new CompositePlaylistAdviser(StubDiscGrouper(), StubEmptyPlaylistAdviser(), StubEmptyPlaylistAdviser(),
 				StubEmptyPlaylistAdviser(), sessionDataServiceMock.Object, Options.Create(new AdviserSettings()));
@@ -309,7 +296,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 			// Assert
 
-			Func<PlaylistAdviserMemo, bool> validateSavedMemo = memo => memo.PlaybacksSinceHighlyRatedSongsPlaylist == 4 && memo.PlaybacksSinceFavoriteArtistDisc == 6;
+			Func<PlaylistAdviserMemo, bool> validateSavedMemo = memo => memo.PlaybacksSinceHighlyRatedSongsPlaylist == 4 && memo.PlaybacksSinceFavoriteAdviseGroup == 6;
 			sessionDataServiceMock.Verify(x => x.SaveData("PlaylistAdviserData", It.Is<PlaylistAdviserMemo>(memo => validateSavedMemo(memo)), CancellationToken.None), Times.Once);
 		}
 

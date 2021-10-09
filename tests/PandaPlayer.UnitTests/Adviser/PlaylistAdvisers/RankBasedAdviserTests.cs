@@ -63,7 +63,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var disc1 = CreateTestDisc("Disc 1");
 			var disc2 = CreateTestDisc("Disc 2");
 
-			var adviseGroup = new AdviseGroupContent("1");
+			var adviseGroup = new AdviseGroupContent("1", isFavorite: false);
 			adviseGroup.AddDisc(disc1);
 			adviseGroup.AddDisc(disc2);
 
@@ -142,7 +142,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var deletedDisc = CreateTestDisc("1", isDeleted: true);
 			var activeDisc = CreateTestDisc("2", isDeleted: false);
 
-			var adviseGroup = new AdviseGroupContent("1");
+			var adviseGroup = new AdviseGroupContent("1", isFavorite: false);
 			adviseGroup.AddDisc(deletedDisc);
 			adviseGroup.AddDisc(activeDisc);
 

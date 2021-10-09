@@ -7,7 +7,7 @@ namespace PandaPlayer.UnitTests.Extensions
 	{
 		public static AdviseGroupContent ToAdviseGroup(this AdviseSetContent adviseSetContent)
 		{
-			var adviseGroup = new AdviseGroupContent(adviseSetContent.Id);
+			var adviseGroup = new AdviseGroupContent(adviseSetContent.Id, isFavorite: false);
 			foreach (var disc in adviseSetContent.Discs)
 			{
 				adviseGroup.AddDisc(disc);
