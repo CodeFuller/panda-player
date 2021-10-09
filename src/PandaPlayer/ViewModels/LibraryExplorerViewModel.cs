@@ -235,19 +235,21 @@ namespace PandaPlayer.ViewModels
 			ItemListViewModel.RemoveDisc(selectedDisc.Id);
 		}
 
-		private async void OnPlaySongsList(BaseSongListEventArgs e, CancellationToken cancellationToken)
+		private async void OnPlaySongsList(PlaySongsListEventArgs e, CancellationToken cancellationToken)
 		{
-			if (e.Disc != null)
+			var disc = e.Disc;
+			if (disc != null)
 			{
-				await SwitchToDisc(e.Disc, cancellationToken);
+				await SwitchToDisc(disc, cancellationToken);
 			}
 		}
 
-		private async void OnPlaylistLoaded(BaseSongListEventArgs e, CancellationToken cancellationToken)
+		private async void OnPlaylistLoaded(PlaylistLoadedEventArgs e, CancellationToken cancellationToken)
 		{
-			if (e.Disc != null)
+			var disc = e.Disc;
+			if (disc != null)
 			{
-				await SwitchToDisc(e.Disc, cancellationToken);
+				await SwitchToDisc(disc, cancellationToken);
 			}
 			else
 			{

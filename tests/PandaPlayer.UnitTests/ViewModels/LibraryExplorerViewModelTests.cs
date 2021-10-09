@@ -39,23 +39,18 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var activeSong1 = new SongModel { Id = new ItemId("Active Song 1") };
-			var activeSong2 = new SongModel { Id = new ItemId("Active Song 2") };
-			var deletedSong = new SongModel
-			{
-				Id = new ItemId("Deleted Songs"),
-				DeleteDate = new DateTime(2021, 07, 25),
-			};
+			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
+			var selectedDisc = new DiscModel { Id = new ItemId("Some Disc"), Folder = discFolder };
 
-			var selectedDisc = new DiscModel
+			var activeSong1 = new SongModel { Id = new ItemId("Active Song 1"), Disc = selectedDisc };
+			var activeSong2 = new SongModel { Id = new ItemId("Active Song 2"), Disc = selectedDisc };
+			var deletedSong = new SongModel { Id = new ItemId("Deleted Songs"), Disc = selectedDisc, DeleteDate = new DateTime(2021, 07, 25) };
+
+			selectedDisc.AllSongs = new[]
 			{
-				Id = new ItemId("Some Disc"),
-				AllSongs = new[]
-				{
-					activeSong1,
-					deletedSong,
-					activeSong2,
-				},
+				activeSong1,
+				deletedSong,
+				activeSong2,
 			};
 
 			var mocker = new AutoMocker();
@@ -595,28 +590,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var discFolder = new FolderModel
-			{
-				Id = new ItemId("Some Folder"),
-			};
+			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
+			var disc = new DiscModel { Id = new ItemId("Some Disc"), Folder = new ShallowFolderModel { Id = new ItemId("Some Folder") } };
 
-			var disc = new DiscModel
-			{
-				Id = new ItemId("Some Disc"),
-				Folder = new ShallowFolderModel { Id = new ItemId("Some Folder") },
-			};
-
-			var song1 = new SongModel
-			{
-				Id = new ItemId("1"),
-				Disc = disc,
-			};
-
-			var song2 = new SongModel
-			{
-				Id = new ItemId("2"),
-				Disc = disc,
-			};
+			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc };
+			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc };
 
 			var mocker = new AutoMocker();
 			mocker.GetMock<IFoldersService>()
@@ -634,6 +612,37 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			itemListViewModelMock.Verify(x => x.LoadFolderItems(discFolder), Times.Once);
 			itemListViewModelMock.Verify(x => x.SelectDisc(new ItemId("Some Disc")), Times.Once);
+		}
+
+		[TestMethod]
+		public void PlaySongsListEventHandler_AllSongsBelongToSameAdviseSet_SwitchesToFirstDiscInAdviseSet()
+		{
+			// Arrange
+
+			var adviseSet = new AdviseSetModel { Id = new ItemId("Some Advise Set") };
+			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
+			var disc1 = new DiscModel { Id = new ItemId("Some Disc 1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1), Folder = new ShallowFolderModel { Id = new ItemId("Some Folder") } };
+			var disc2 = new DiscModel { Id = new ItemId("Some Disc 2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2), Folder = new ShallowFolderModel { Id = new ItemId("Some Folder") } };
+
+			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc1 };
+			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc2 };
+
+			var mocker = new AutoMocker();
+			mocker.GetMock<IFoldersService>()
+				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(discFolder);
+
+			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
+
+			// Act
+
+			Messenger.Default.Send(new PlaySongsListEventArgs(new[] { song1, song2 }));
+
+			// Assert
+
+			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
+
+			itemListViewModelMock.Verify(x => x.LoadFolderItems(discFolder), Times.Once);
+			itemListViewModelMock.Verify(x => x.SelectDisc(new ItemId("Some Disc 1")), Times.Once);
 		}
 
 		[TestMethod]
@@ -677,28 +686,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var discFolder = new FolderModel
-			{
-				Id = new ItemId("Some Folder"),
-			};
+			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
+			var disc = new DiscModel { Id = new ItemId("Some Disc"), Folder = new ShallowFolderModel { Id = new ItemId("Some Folder") } };
 
-			var disc = new DiscModel
-			{
-				Id = new ItemId("Some Disc"),
-				Folder = new ShallowFolderModel { Id = new ItemId("Some Folder") },
-			};
-
-			var song1 = new SongModel
-			{
-				Id = new ItemId("1"),
-				Disc = disc,
-			};
-
-			var song2 = new SongModel
-			{
-				Id = new ItemId("2"),
-				Disc = disc,
-			};
+			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc };
+			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc };
 
 			var mocker = new AutoMocker();
 			mocker.GetMock<IFoldersService>()
@@ -719,23 +711,45 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
+		public void PlaylistLoadedEventHandler_AllSongsBelongToSameAdviseSet_OpensDiscForCurrentPlaylistSong()
+		{
+			// Arrange
+
+			var adviseSet = new AdviseSetModel { Id = new ItemId("Some Advise Set") };
+			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
+			var disc1 = new DiscModel { Id = new ItemId("Some Disc 1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1), Folder = new ShallowFolderModel { Id = new ItemId("Some Folder") } };
+			var disc2 = new DiscModel { Id = new ItemId("Some Disc 2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2), Folder = new ShallowFolderModel { Id = new ItemId("Some Folder") } };
+
+			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc1 };
+			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc2 };
+
+			var mocker = new AutoMocker();
+			mocker.GetMock<IFoldersService>()
+				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(discFolder);
+
+			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
+
+			// Act
+
+			Messenger.Default.Send(new PlaylistLoadedEventArgs(new[] { song1, song2 }, song2, 1));
+
+			// Assert
+
+			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
+
+			itemListViewModelMock.Verify(x => x.LoadFolderItems(discFolder), Times.Once);
+			itemListViewModelMock.Verify(x => x.SelectDisc(new ItemId("Some Disc 2")), Times.Once);
+		}
+
+		[TestMethod]
 		public void PlaylistLoadedEventHandler_SongsBelongToDifferentDiscs_LoadsRootFolder()
 		{
 			// Arrange
 
 			var rootFolder = new FolderModel();
 
-			var song1 = new SongModel
-			{
-				Id = new ItemId("1"),
-				Disc = new DiscModel { Id = new ItemId("Disc 1") },
-			};
-
-			var song2 = new SongModel
-			{
-				Id = new ItemId("2"),
-				Disc = new DiscModel { Id = new ItemId("Disc 2") },
-			};
+			var song1 = new SongModel { Id = new ItemId("1"), Disc = new DiscModel { Id = new ItemId("Disc 1") } };
+			var song2 = new SongModel { Id = new ItemId("2"), Disc = new DiscModel { Id = new ItemId("Disc 2") } };
 
 			var mocker = new AutoMocker();
 			mocker.GetMock<IFoldersService>()

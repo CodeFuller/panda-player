@@ -11,9 +11,13 @@ namespace PandaPlayer.Events.SongListEvents
 	{
 		public IReadOnlyCollection<SongModel> Songs { get; }
 
-		public DiscModel Disc => Songs
-			.Select(song => song.Disc)
-			.UniqueOrDefault(new DiscEqualityComparer());
+		protected IEnumerable<DiscModel> Discs => Songs.Select(song => song.Disc);
+
+		protected DiscModel UniqueDisc => Discs.UniqueOrDefault(new DiscEqualityComparer());
+
+		protected AdviseSetModel UniqueAdviseSet => Discs
+			.Select(disc => disc.AdviseSetInfo?.AdviseSet)
+			.UniqueOrDefault(new AdviseSetEqualityComparer());
 
 		protected BaseSongListEventArgs(IEnumerable<SongModel> songs)
 		{
