@@ -22,7 +22,7 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 
 			var folderAdviseGroup = new AdviseGroupModel { Id = new ItemId("Folder Advise Group") };
 			var discAdviseGroup1 = new AdviseGroupModel { Id = new ItemId("Disc Advise Group 1") };
-			var discAdviseGroup2 = new AdviseGroupModel { Id = new ItemId("Disc Advise Group 2") };
+			var discAdviseGroup2 = new AdviseGroupModel { Id = new ItemId("Disc Advise Group 2"), IsFavorite = true };
 
 			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolderId = null };
 
@@ -54,7 +54,7 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			expectedAdviseGroup1.AddDisc(disc11);
 			expectedAdviseGroup1.AddDisc(disc12);
 
-			var expectedAdviseGroup2 = new AdviseGroupContent("Advise Group: Disc Advise Group 2", isFavorite: false);
+			var expectedAdviseGroup2 = new AdviseGroupContent("Advise Group: Disc Advise Group 2", isFavorite: true);
 			expectedAdviseGroup2.AddDisc(disc21);
 
 			var expectedAdviseGroups = new[]
@@ -75,7 +75,7 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			var adviseGroup1 = new AdviseGroupModel { Id = new ItemId("Advise Group 1") };
 			var adviseGroup2 = new AdviseGroupModel { Id = new ItemId("Advise Group 2") };
 			var adviseGroup11 = new AdviseGroupModel { Id = new ItemId("Advise Group 11") };
-			var adviseGroup21 = new AdviseGroupModel { Id = new ItemId("Advise Group 21") };
+			var adviseGroup21 = new AdviseGroupModel { Id = new ItemId("Advise Group 21"), IsFavorite = true };
 
 			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolderId = null, AdviseGroup = rootAdviseGroup };
 
@@ -107,7 +107,7 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			expectedAdviseGroup1.AddDisc(disc11);
 			expectedAdviseGroup1.AddDisc(disc12);
 
-			var expectedAdviseGroup2 = new AdviseGroupContent("Advise Group: Advise Group 21", isFavorite: false);
+			var expectedAdviseGroup2 = new AdviseGroupContent("Advise Group: Advise Group 21", isFavorite: true);
 			expectedAdviseGroup2.AddDisc(disc21);
 
 			var expectedAdviseGroups = new[]
@@ -126,7 +126,7 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 
 			var rootAdviseGroup = new AdviseGroupModel { Id = new ItemId("Advise Group Root") };
 			var adviseGroup1 = new AdviseGroupModel { Id = new ItemId("Advise Group 1") };
-			var adviseGroup2 = new AdviseGroupModel { Id = new ItemId("Advise Group 2") };
+			var adviseGroup2 = new AdviseGroupModel { Id = new ItemId("Advise Group 2"), IsFavorite = true };
 
 			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolderId = null, AdviseGroup = rootAdviseGroup };
 
@@ -158,7 +158,7 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			expectedAdviseGroup1.AddDisc(disc11);
 			expectedAdviseGroup1.AddDisc(disc12);
 
-			var expectedAdviseGroup2 = new AdviseGroupContent("Advise Group: Advise Group 2", isFavorite: false);
+			var expectedAdviseGroup2 = new AdviseGroupContent("Advise Group: Advise Group 2", isFavorite: true);
 			expectedAdviseGroup2.AddDisc(disc21);
 
 			var expectedAdviseGroups = new[]
