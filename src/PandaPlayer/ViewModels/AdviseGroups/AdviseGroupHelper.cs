@@ -52,6 +52,13 @@ namespace PandaPlayer.ViewModels.AdviseGroups
 			await UpdateAdviseGroups(cancellationToken);
 		}
 
+		public async Task ReverseFavoriteStatus(AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
+		{
+			adviseGroup.IsFavorite = !adviseGroup.IsFavorite;
+
+			await adviseGroupService.UpdateAdviseGroup(adviseGroup, cancellationToken);
+		}
+
 		private async Task UpdateAdviseGroups(CancellationToken cancellationToken)
 		{
 			AdviseGroups = await adviseGroupService.GetAllAdviseGroups(cancellationToken);

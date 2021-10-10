@@ -11,6 +11,8 @@ namespace PandaPlayer.Services.Interfaces.Dal
 
 		Task<IReadOnlyCollection<AdviseGroupModel>> GetAllAdviseGroups(CancellationToken cancellationToken);
 
+		Task UpdateAdviseGroup(AdviseGroupModel adviseGroup, CancellationToken cancellationToken);
+
 		Task DeleteOrphanAdviseGroups(CancellationToken cancellationToken);
 	}
 }

@@ -10,7 +10,6 @@ namespace PandaPlayer.ViewModels.MenuItems
 		public NewAdviseGroupMenuItem(Func<CancellationToken, Task> commandAction)
 		{
 			Header = "New Advise Group ...";
-			IsCheckable = false;
 			Command = new AsyncRelayCommand(() => commandAction(CancellationToken.None));
 		}
 	}

@@ -67,7 +67,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			await context.SaveChangesAsync(cancellationToken);
 		}
 
-		public static async Task<AdviseSetEntity> FindAdviseSet(MusicDbContext context, ItemId id, CancellationToken cancellationToken)
+		private static async Task<AdviseSetEntity> FindAdviseSet(MusicDbContext context, ItemId id, CancellationToken cancellationToken)
 		{
 			var entityId = id.ToInt32();
 			return await context.AdviseSets

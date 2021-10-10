@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using MaterialDesignThemes.Wpf;
 
 namespace PandaPlayer.ViewModels.MenuItems
 {
@@ -6,9 +7,7 @@ namespace PandaPlayer.ViewModels.MenuItems
 	{
 		public string Header { get; init; }
 
-		public bool IsCheckable { get; init; }
-
-		public bool IsChecked { get; init; }
+		public PackIconKind? IconKind { get; init; }
 
 		public ICommand Command { get; init; }
 	}

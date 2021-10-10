@@ -111,6 +111,38 @@ namespace PandaPlayer.Services.IntegrationTests
 		}
 
 		[TestMethod]
+		public async Task UpdateAdviseGroup_IfFavoriteStatusIsReversed_UpdatesAdviseGroupCorrectly()
+		{
+			// Arrange
+
+			var adviseGroup = await GetAdviseGroup(ReferenceData.FolderAdviseGroupId);
+			adviseGroup.IsFavorite.Should().BeFalse();
+
+			var target = CreateTestTarget();
+
+			// Act
+
+			adviseGroup.IsFavorite = true;
+			await target.UpdateAdviseGroup(adviseGroup, CancellationToken.None);
+
+			// Assert
+
+			var referenceData = GetReferenceData();
+			referenceData.FolderAdviseGroup.IsFavorite = true;
+
+			var expectedAdviseGroups = new[]
+			{
+				referenceData.DiscAdviseGroup,
+				referenceData.FolderAdviseGroup,
+			};
+
+			var adviseGroups = await target.GetAllAdviseGroups(CancellationToken.None);
+			adviseGroups.Should().BeEquivalentTo(expectedAdviseGroups, x => x.WithStrictOrdering());
+
+			await CheckLibraryConsistency();
+		}
+
+		[TestMethod]
 		public async Task AssignAdviseGroup_ForFolderWithoutAdviseGroup_AssignsAdviseGroupCorrectly()
 		{
 			// Arrange

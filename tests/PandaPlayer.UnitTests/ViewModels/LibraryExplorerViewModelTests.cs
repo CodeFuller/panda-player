@@ -1101,8 +1101,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				new NewAdviseGroupMenuItem(_ => Task.CompletedTask),
 				new SeparatorMenuItem(),
-				new SetAdviseGroupMenuItem("Advise Group 1", false, _ => Task.CompletedTask),
-				new SetAdviseGroupMenuItem("Advise Group 2", false, _ => Task.CompletedTask),
+				new SetAdviseGroupMenuItem(adviseGroups[0], false, _ => Task.CompletedTask),
+				new SetAdviseGroupMenuItem(adviseGroups[1], false, _ => Task.CompletedTask),
 			};
 
 			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
@@ -1146,10 +1146,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var expectedMenuItems = new BasicMenuItem[]
 			{
 				new NewAdviseGroupMenuItem(_ => Task.CompletedTask),
+				new ReverseFavoriteStatusForAdviseGroupMenuItem(adviseGroups[1], (_, _) => Task.CompletedTask),
 				new SeparatorMenuItem(),
-				new SetAdviseGroupMenuItem("Advise Group 1", false, _ => Task.CompletedTask),
-				new SetAdviseGroupMenuItem("Advise Group 2", true, _ => Task.CompletedTask),
-				new SetAdviseGroupMenuItem("Advise Group 3", false, _ => Task.CompletedTask),
+				new SetAdviseGroupMenuItem(adviseGroups[0], false, _ => Task.CompletedTask),
+				new SetAdviseGroupMenuItem(adviseGroups[1], true, _ => Task.CompletedTask),
+				new SetAdviseGroupMenuItem(adviseGroups[2], false, _ => Task.CompletedTask),
 			};
 
 			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
@@ -1224,8 +1225,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				new NewAdviseGroupMenuItem(_ => Task.CompletedTask),
 				new SeparatorMenuItem(),
-				new SetAdviseGroupMenuItem("Advise Group 1", false, _ => Task.CompletedTask),
-				new SetAdviseGroupMenuItem("Advise Group 2", false, _ => Task.CompletedTask),
+				new SetAdviseGroupMenuItem(adviseGroups[0], false, _ => Task.CompletedTask),
+				new SetAdviseGroupMenuItem(adviseGroups[1], false, _ => Task.CompletedTask),
 			};
 
 			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
@@ -1269,10 +1270,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var expectedMenuItems = new BasicMenuItem[]
 			{
 				new NewAdviseGroupMenuItem(_ => Task.CompletedTask),
+				new ReverseFavoriteStatusForAdviseGroupMenuItem(adviseGroups[1], (_, _) => Task.CompletedTask),
 				new SeparatorMenuItem(),
-				new SetAdviseGroupMenuItem("Advise Group 1", false, _ => Task.CompletedTask),
-				new SetAdviseGroupMenuItem("Advise Group 2", true, _ => Task.CompletedTask),
-				new SetAdviseGroupMenuItem("Advise Group 3", false, _ => Task.CompletedTask),
+				new SetAdviseGroupMenuItem(adviseGroups[0], false, _ => Task.CompletedTask),
+				new SetAdviseGroupMenuItem(adviseGroups[1], true, _ => Task.CompletedTask),
+				new SetAdviseGroupMenuItem(adviseGroups[2], false, _ => Task.CompletedTask),
 			};
 
 			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());

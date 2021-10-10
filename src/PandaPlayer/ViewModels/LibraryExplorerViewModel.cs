@@ -65,13 +65,21 @@ namespace PandaPlayer.ViewModels
 					new NewAdviseGroupMenuItem(ct => CreateAdviseGroup(adviseGroupHolder, ct)),
 				};
 
+				if (adviseGroupHolder.CurrentAdviseGroup != null)
+				{
+					var reverseFavoriteMenuItem = new ReverseFavoriteStatusForAdviseGroupMenuItem(
+						adviseGroupHolder.CurrentAdviseGroup, (g, ct) => adviseGroupHelper.ReverseFavoriteStatus(g, ct));
+
+					menuItems.Add(reverseFavoriteMenuItem);
+				}
+
 				var adviseGroups = adviseGroupHelper.AdviseGroups;
 				if (adviseGroups.Any())
 				{
 					menuItems.Add(new SeparatorMenuItem());
 
 					var currentAdviseGroupId = adviseGroupHolder.CurrentAdviseGroup?.Id;
-					menuItems.AddRange(adviseGroups.Select(x => new SetAdviseGroupMenuItem(x.Name, x.Id == currentAdviseGroupId, ct => adviseGroupHelper.ReverseAdviseGroup(adviseGroupHolder, x, ct))));
+					menuItems.AddRange(adviseGroups.Select(x => new SetAdviseGroupMenuItem(x, x.Id == currentAdviseGroupId, ct => adviseGroupHelper.ReverseAdviseGroup(adviseGroupHolder, x, ct))));
 				}
 
 				return menuItems;

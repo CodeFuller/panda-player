@@ -1,6 +1,7 @@
 CREATE TABLE [AdviseGroups] (
   [Id] INTEGER NOT NULL,
   [Name] ntext NOT NULL,
+  [IsFavorite] int NOT NULL,
   CONSTRAINT [sqlite_master_PK_AdviseGroups] PRIMARY KEY ([Id]),
   CONSTRAINT [sqlite_master_UC_AdviseGroups] UNIQUE ([Name])
 );

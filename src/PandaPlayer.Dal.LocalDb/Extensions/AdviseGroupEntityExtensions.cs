@@ -11,6 +11,7 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 			{
 				Id = adviseGroup.Id.ToItemId(),
 				Name = adviseGroup.Name,
+				IsFavorite = adviseGroup.IsFavorite,
 			};
 		}
 
@@ -20,6 +21,7 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 			{
 				Id = adviseGroup.Id?.ToInt32() ?? default,
 				Name = adviseGroup.Name,
+				IsFavorite = adviseGroup.IsFavorite,
 			};
 		}
 	}

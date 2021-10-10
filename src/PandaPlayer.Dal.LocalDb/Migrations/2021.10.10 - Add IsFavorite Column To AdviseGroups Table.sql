@@ -1,0 +1,5 @@
+BEGIN TRANSACTION;
+
+ALTER TABLE [AdviseGroups] ADD [IsFavorite] int NOT NULL DEFAULT 0;
+
+COMMIT;

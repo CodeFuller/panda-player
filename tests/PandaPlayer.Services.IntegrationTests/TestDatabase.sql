@@ -1,8 +1,8 @@
 ﻿-- Read tests\PandaPlayer.Services.IntegrationTests\README.md
 
-INSERT INTO [AdviseGroups] ([Id], [Name]) VALUES
-(1, 'Folder Advise Group'),
-(2, 'Disc Advise Group');
+INSERT INTO [AdviseGroups] ([Id], [Name], [IsFavorite]) VALUES
+(1, 'Folder Advise Group', 0),
+(2, 'Disc Advise Group', 1);
 
 INSERT INTO [AdviseSets] ([Id], [Name]) VALUES
 (1, 'Some Advise Set'),

@@ -14,12 +14,14 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 		{
 			Id = FolderAdviseGroupId,
 			Name = "Folder Advise Group",
+			IsFavorite = false,
 		};
 
 		public AdviseGroupModel DiscAdviseGroup { get; } = new()
 		{
 			Id = DiscAdviseGroupId,
 			Name = "Disc Advise Group",
+			IsFavorite = true,
 		};
 	}
 }

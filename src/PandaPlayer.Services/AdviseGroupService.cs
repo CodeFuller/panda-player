@@ -36,6 +36,11 @@ namespace PandaPlayer.Services
 				.ToList();
 		}
 
+		public Task UpdateAdviseGroup(AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
+		{
+			return adviseGroupRepository.UpdateAdviseGroup(adviseGroup, cancellationToken);
+		}
+
 		public async Task AssignAdviseGroup(ShallowFolderModel folder, AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
 		{
 			var hasAdviseGroup = folder.AdviseGroup != null;

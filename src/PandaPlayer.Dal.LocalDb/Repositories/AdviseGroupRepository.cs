@@ -44,6 +44,19 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 				.ToList();
 		}
 
+		public async Task UpdateAdviseGroup(AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
+		{
+			await using var context = contextFactory.CreateDbContext();
+
+			var currentEntity = await context.AdviseGroups
+				.SingleAsync(x => x.Id == adviseGroup.Id.ToInt32(), cancellationToken);
+
+			var updatedEntity = adviseGroup.ToEntity();
+			context.Entry(currentEntity).CurrentValues.SetValues(updatedEntity);
+
+			await context.SaveChangesAsync(cancellationToken);
+		}
+
 		public async Task DeleteOrphanAdviseGroups(CancellationToken cancellationToken)
 		{
 			await using var context = contextFactory.CreateDbContext();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using MaterialDesignThemes.Wpf;
 using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.Views.Behaviors
@@ -48,9 +49,8 @@ namespace PandaPlayer.Views.Behaviors
 						frameworkElementList.Add(new MenuItem
 						{
 							Header = normalMenuItem.Header,
-							IsCheckable = normalMenuItem.IsCheckable,
-							IsChecked = normalMenuItem.IsChecked,
 							Command = normalMenuItem.Command,
+							Icon = normalMenuItem.IconKind != null ? new PackIcon { Kind = normalMenuItem.IconKind.Value } : null,
 						});
 						break;
 
