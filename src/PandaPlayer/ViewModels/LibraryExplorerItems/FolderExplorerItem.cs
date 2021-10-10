@@ -12,7 +12,18 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 
 		public override string Title => Folder.Name;
 
-		public override PackIconKind IconKind => Folder.AdviseGroup != null ? PackIconKind.FolderStar : PackIconKind.Folder;
+		public override PackIconKind IconKind
+		{
+			get
+			{
+				if (Folder.AdviseGroup == null)
+				{
+					return PackIconKind.Folder;
+				}
+
+				return Folder.AdviseGroup.IsFavorite ? PackIconKind.FolderHeart : PackIconKind.FolderStar;
+			}
+		}
 
 		public FolderExplorerItem(ShallowFolderModel folder)
 		{

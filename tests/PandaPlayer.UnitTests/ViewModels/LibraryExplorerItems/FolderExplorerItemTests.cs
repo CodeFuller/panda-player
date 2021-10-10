@@ -62,13 +62,18 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		}
 
 		[TestMethod]
-		public void IconKindGetter_ForFolderWithAdviseGroup_ReturnsFolderStarIconKind()
+		public void IconKindGetter_ForFolderWithNonFavoriteAdviseGroup_ReturnsFolderStarIconKind()
 		{
 			// Arrange
 
 			var folder = new ShallowFolderModel
 			{
-				AdviseGroup = new AdviseGroupModel { Id = new ItemId("1"), Name = "Some Advise Group" },
+				AdviseGroup = new AdviseGroupModel
+				{
+					Id = new ItemId("1"),
+					Name = "Some Advise Group",
+					IsFavorite = false,
+				},
 			};
 
 			var target = new FolderExplorerItem(folder);
@@ -80,6 +85,32 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 			// Assert
 
 			iconKind.Should().Be(PackIconKind.FolderStar);
+		}
+
+		[TestMethod]
+		public void IconKindGetter_ForFolderWithFavoriteAdviseGroup_ReturnsFolderHeartIconKind()
+		{
+			// Arrange
+
+			var folder = new ShallowFolderModel
+			{
+				AdviseGroup = new AdviseGroupModel
+				{
+					Id = new ItemId("1"),
+					Name = "Some Advise Group",
+					IsFavorite = true,
+				},
+			};
+
+			var target = new FolderExplorerItem(folder);
+
+			// Act
+
+			var iconKind = target.IconKind;
+
+			// Assert
+
+			iconKind.Should().Be(PackIconKind.FolderHeart);
 		}
 
 		[TestMethod]
