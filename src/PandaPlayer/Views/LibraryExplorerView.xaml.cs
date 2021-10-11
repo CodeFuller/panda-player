@@ -146,5 +146,15 @@ namespace PandaPlayer.Views
 			var result = NativeMethods.ToUnicode((uint)virtualKey, scanCode, keyboardState, stringBuilder, stringBuilder.Capacity, 0);
 			return result >= 1 ? stringBuilder.ToString() : String.Empty;
 		}
+
+		private void ContentDataGrid_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+		{
+			if (DataContext is not ILibraryExplorerViewModel viewModel)
+			{
+				return;
+			}
+
+			viewModel.ItemListViewModel.ChangeFolderCommand.Execute(null);
+		}
 	}
 }

@@ -16,7 +16,7 @@
               ItemsSource="{Binding ItemListViewModel.Items}" SelectedItem="{Binding ItemListViewModel.SelectedItem}"
               SelectionChanged="DataGrid_SelectionChanged"
               ContextMenuOpening="DataGrid_ContextMenuOpening"
-              KeyDown="ContentDataGrid_OnKeyDown">
+              KeyDown="ContentDataGrid_OnKeyDown" MouseDoubleClick="ContentDataGrid_OnMouseDoubleClick">
         <DataGrid.ContextMenu>
             <ContextMenu>
                 <MenuItem>Menu Stub</MenuItem>
@@ -26,7 +26,6 @@
             <KeyBinding Key="Enter" Command="{Binding ItemListViewModel.ChangeFolderCommand}" />
             <KeyBinding Key="Home" Command="{Binding ItemListViewModel.JumpToFirstItemCommand}" />
             <KeyBinding Key="End" Command="{Binding ItemListViewModel.JumpToLastItemCommand}" />
-            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding ItemListViewModel.ChangeFolderCommand}" />
         </DataGrid.InputBindings>
         <DataGrid.Columns>
             <DataGridTemplateColumn Width="0">
