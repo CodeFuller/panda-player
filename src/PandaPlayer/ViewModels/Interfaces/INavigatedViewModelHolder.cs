@@ -21,5 +21,7 @@ namespace PandaPlayer.ViewModels.Interfaces
 		ILibraryCheckerViewModel LibraryCheckerViewModel { get; }
 
 		ILibraryStatisticsViewModel LibraryStatisticsViewModel { get; }
+
+		IDeleteContentViewModel DeleteContentViewModel { get; }
 	}
 }

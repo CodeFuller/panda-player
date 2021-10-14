@@ -24,9 +24,12 @@ namespace PandaPlayer.ViewModels
 
 		public ILibraryStatisticsViewModel LibraryStatisticsViewModel { get; }
 
+		public IDeleteContentViewModel DeleteContentViewModel { get; }
+
 		public NavigatedViewModelHolder(ICreateAdviseGroupViewModel createAdviseGroupViewModel, IEditDiscPropertiesViewModel editDiscPropertiesViewModel,
 			IEditSongPropertiesViewModel editSongPropertiesViewModel, IRateSongsViewModel rateSongsViewModel, IEditDiscImageViewModel editDiscImageViewModel,
-			IAdviseSetsEditorViewModel adviseSetsEditorViewModel, IDiscAdderViewModel discAdderViewModel, ILibraryCheckerViewModel libraryCheckerViewModel, ILibraryStatisticsViewModel libraryStatisticsViewModel)
+			IAdviseSetsEditorViewModel adviseSetsEditorViewModel, IDiscAdderViewModel discAdderViewModel, ILibraryCheckerViewModel libraryCheckerViewModel,
+			ILibraryStatisticsViewModel libraryStatisticsViewModel, IDeleteContentViewModel deleteContentViewModel)
 		{
 			CreateAdviseGroupViewModel = createAdviseGroupViewModel ?? throw new ArgumentNullException(nameof(createAdviseGroupViewModel));
 			EditDiscPropertiesViewModel = editDiscPropertiesViewModel ?? throw new ArgumentNullException(nameof(editDiscImageViewModel));
@@ -37,6 +40,7 @@ namespace PandaPlayer.ViewModels
 			DiscAdderViewModel = discAdderViewModel ?? throw new ArgumentNullException(nameof(discAdderViewModel));
 			LibraryCheckerViewModel = libraryCheckerViewModel ?? throw new ArgumentNullException(nameof(libraryCheckerViewModel));
 			LibraryStatisticsViewModel = libraryStatisticsViewModel ?? throw new ArgumentNullException(nameof(libraryStatisticsViewModel));
+			DeleteContentViewModel = deleteContentViewModel ?? throw new ArgumentNullException(nameof(deleteContentViewModel));
 		}
 	}
 }

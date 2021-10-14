@@ -28,17 +28,17 @@ INSERT INTO [Genres] ([Id], [Name]) VALUES
 (2, 'Alternative Rock');
 
 INSERT INTO [Songs] ([Id], [Artist_Id], [Disc_Id], [Genre_Id], [TrackNumber], [Title], [TreeTitle], [Duration],
-			[Rating], [FileSize], [Checksum], [Bitrate], [LastPlaybackTime], [PlaybacksCount], [DeleteDate]) VALUES
-(1, 2, 1, 1, 1, 'Про женщин', '01 - Про женщин.mp3', 10626, 6, 405582, 721007018, 320000, '2021-04-03 10:33:53.3517221+03:00', 2, NULL),
-(2, 2, 1, 1, 2, 'Про жизнь дяди Саши', '02 - Про жизнь дяди Саши.mp3', 10600, 6, 404555, -465811692, 320000, '2021-04-03 10:37:42.1257252+03:00', 2, NULL);
+			[Rating], [FileSize], [Checksum], [Bitrate], [LastPlaybackTime], [PlaybacksCount], [DeleteDate], [DeleteComment]) VALUES
+(1, 2, 1, 1, 1, 'Про женщин', '01 - Про женщин.mp3', 10626, 6, 405582, 721007018, 320000, '2021-04-03 10:33:53.3517221+03:00', 2, NULL, NULL),
+(2, 2, 1, 1, 2, 'Про жизнь дяди Саши', '02 - Про жизнь дяди Саши.mp3', 10600, 6, 404555, -465811692, 320000, '2021-04-03 10:37:42.1257252+03:00', 2, NULL, NULL);
 
 INSERT INTO [Songs] ([Id], [Artist_Id], [Disc_Id], [Genre_Id], [TrackNumber], [Title], [TreeTitle], [Duration],
-			[Rating], [FileSize], [Checksum], [Bitrate], [LastPlaybackTime], [PlaybacksCount], [DeleteDate]) VALUES
-(3, NULL, 2, NULL, NULL, 'Song With Missing Fields', 'Song With Missing Fields.mp3', 11618, NULL, 445175, 751499818, 320000, NULL, 0, NULL);
+			[Rating], [FileSize], [Checksum], [Bitrate], [LastPlaybackTime], [PlaybacksCount], [DeleteDate], [DeleteComment]) VALUES
+(3, NULL, 2, NULL, NULL, 'Song With Missing Fields', 'Song With Missing Fields.mp3', 11618, NULL, 445175, 751499818, 320000, NULL, 0, NULL, NULL);
 
 INSERT INTO [Songs] ([Id], [Artist_Id], [Disc_Id], [Genre_Id], [TrackNumber], [Title], [TreeTitle], [Duration],
-			[Rating], [FileSize], [Checksum], [Bitrate], [LastPlaybackTime], [PlaybacksCount], [DeleteDate]) VALUES
-(4, 2, 3, 2, 1, 'Deleted Song', '01 - Deleted Song.mp3', 486739, 4, NULL, NULL, NULL, '2021-03-28 09:33:39.2582742+03:00', 1, '2021-03-28 14:10:59.3191807+03:00');
+			[Rating], [FileSize], [Checksum], [Bitrate], [LastPlaybackTime], [PlaybacksCount], [DeleteDate], [DeleteComment]) VALUES
+(4, 2, 3, 2, 1, 'Deleted Song', '01 - Deleted Song.mp3', 486739, 4, NULL, NULL, NULL, '2021-03-28 09:33:39.2582742+03:00', 1, '2021-03-28 14:10:59.3191807+03:00', 'Boring');
 
 INSERT INTO [DiscImages] ([Id], [Disc_Id], [TreeTitle], [ImageType], [FileSize], [Checksum]) VALUES
 (1, 1, 'cover.jpg', 1, 359119, -1502263015);

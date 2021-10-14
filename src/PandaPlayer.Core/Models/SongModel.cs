@@ -92,6 +92,8 @@ namespace PandaPlayer.Core.Models
 			set => this.SetField(PropertyChanged, ref deleteDate, value);
 		}
 
+		public string DeleteComment { get; set; }
+
 		public bool IsDeleted => DeleteDate != null;
 
 		public event PropertyChangedEventHandler PropertyChanged;

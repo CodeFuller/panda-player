@@ -114,6 +114,20 @@ namespace PandaPlayer
 			ShowDialog<LibraryStatisticsView>(viewModel);
 		}
 
+		public bool ShowDeleteDiscView(DiscModel disc)
+		{
+			var viewModel = viewModelHolder.DeleteContentViewModel;
+			viewModel.LoadForDisc(disc);
+			return ShowDialog<DeleteContentView>(viewModel);
+		}
+
+		public bool ShowDeleteDiscSongsView(IReadOnlyCollection<SongModel> songs)
+		{
+			var viewModel = viewModelHolder.DeleteContentViewModel;
+			viewModel.LoadForSongs(songs);
+			return ShowDialog<DeleteContentView>(viewModel);
+		}
+
 		private static void ShowView<TView>(object dataContext)
 			where TView : Window, new()
 		{

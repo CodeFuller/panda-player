@@ -23,9 +23,9 @@ namespace PandaPlayer.ViewModels
 {
 	public abstract class SongListViewModel : ViewModelBase, ISongListViewModel
 	{
-		private readonly IViewNavigator viewNavigator;
+		private readonly ISongsService songsService;
 
-		protected ISongsService SongsService { get; }
+		protected IViewNavigator ViewNavigator { get; }
 
 		public abstract bool DisplayTrackNumbers { get; }
 
@@ -73,8 +73,8 @@ namespace PandaPlayer.ViewModels
 
 		protected SongListViewModel(ISongsService songsService, IViewNavigator viewNavigator)
 		{
-			this.SongsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
-			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
+			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
+			ViewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 
 			songItems = new ObservableCollection<SongListItem>();
 			SongItems = new ReadOnlyObservableCollection<SongListItem>(songItems);
@@ -95,7 +95,7 @@ namespace PandaPlayer.ViewModels
 			var selectedSongs = SelectedSongs.ToList();
 			if (selectedSongs.Any())
 			{
-				await viewNavigator.ShowSongPropertiesView(selectedSongs, cancellationToken);
+				await ViewNavigator.ShowSongPropertiesView(selectedSongs, cancellationToken);
 			}
 		}
 
@@ -122,7 +122,7 @@ namespace PandaPlayer.ViewModels
 			foreach (var song in SelectedSongs.ToList())
 			{
 				song.Rating = rating;
-				await SongsService.UpdateSong(song, cancellationToken);
+				await songsService.UpdateSong(song, cancellationToken);
 			}
 		}
 

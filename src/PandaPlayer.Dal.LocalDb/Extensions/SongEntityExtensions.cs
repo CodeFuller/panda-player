@@ -28,6 +28,7 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 				PlaybacksCount = song.PlaybacksCount,
 				Playbacks = song.Playbacks?.Select(p => p.ToModel()).ToList(),
 				DeleteDate = song.DeleteDate,
+				DeleteComment = song.DeleteComment,
 			};
 
 			if (!model.IsDeleted)
@@ -40,7 +41,7 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 
 		public static SongEntity ToEntity(this SongModel song)
 		{
-			return new SongEntity
+			return new()
 			{
 				Id = song.Id?.ToInt32() ?? default,
 				DiscId = song.Disc.Id.ToInt32(),
@@ -57,6 +58,7 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 				LastPlaybackTime = song.LastPlaybackTime,
 				PlaybacksCount = song.PlaybacksCount,
 				DeleteDate = song.DeleteDate,
+				DeleteComment = song.DeleteComment,
 			};
 		}
 

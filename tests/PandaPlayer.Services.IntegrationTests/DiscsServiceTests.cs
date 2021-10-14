@@ -443,7 +443,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Act
 
-			await target.DeleteDisc(ReferenceData.NormalDiscId, CancellationToken.None);
+			await target.DeleteDisc(ReferenceData.NormalDiscId, "Some Delete Comment", CancellationToken.None);
 
 			// Assert
 
@@ -452,6 +452,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			foreach (var song in expectedDisc.ActiveSongs)
 			{
 				song.DeleteDate = deleteDate;
+				song.DeleteComment = "Some Delete Comment";
 				song.BitRate = null;
 				song.Size = null;
 				song.Checksum = null;
@@ -479,7 +480,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Act
 
-			await target.DeleteDisc(ReferenceData.NormalDiscId, CancellationToken.None);
+			await target.DeleteDisc(ReferenceData.NormalDiscId, null, CancellationToken.None);
 
 			// Assert
 
@@ -511,7 +512,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Act
 
-			await target.DeleteDisc(ReferenceData.NormalDiscId, CancellationToken.None);
+			await target.DeleteDisc(ReferenceData.NormalDiscId, null, CancellationToken.None);
 
 			// Assert
 

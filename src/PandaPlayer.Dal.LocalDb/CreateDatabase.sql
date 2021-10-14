@@ -73,6 +73,7 @@ CREATE TABLE [Songs] (
   [LastPlaybackTime] datetime NULL,
   [PlaybacksCount] int NOT NULL,
   [DeleteDate] datetime NULL,
+  [DeleteComment] ntext NULL,
   CONSTRAINT [sqlite_master_PK_Songs] PRIMARY KEY ([Id]),
   CONSTRAINT [sqlite_master_UC_Songs] UNIQUE ([Disc_Id], [TreeTitle]),
   FOREIGN KEY ([Genre_Id]) REFERENCES [Genres] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION,

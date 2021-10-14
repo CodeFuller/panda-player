@@ -464,12 +464,13 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Act
 
-			await target.DeleteSong(song, CancellationToken.None);
+			await target.DeleteSong(song, "Some Delete Comment", CancellationToken.None);
 
 			// Assert
 
 			var expectedSongWithoutPlaybacks = GetReferenceData(fillSongPlaybacks: false).SongWithOptionalPropertiesFilled2;
 			expectedSongWithoutPlaybacks.DeleteDate = deleteDate;
+			expectedSongWithoutPlaybacks.DeleteComment = "Some Delete Comment";
 			expectedSongWithoutPlaybacks.BitRate = null;
 			expectedSongWithoutPlaybacks.Size = null;
 			expectedSongWithoutPlaybacks.Checksum = null;
@@ -479,6 +480,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var expectedSongWithPlaybacks = GetReferenceData(fillSongPlaybacks: true).SongWithOptionalPropertiesFilled2;
 			expectedSongWithPlaybacks.DeleteDate = deleteDate;
+			expectedSongWithPlaybacks.DeleteComment = "Some Delete Comment";
 			expectedSongWithPlaybacks.BitRate = null;
 			expectedSongWithPlaybacks.Size = null;
 			expectedSongWithPlaybacks.Checksum = null;

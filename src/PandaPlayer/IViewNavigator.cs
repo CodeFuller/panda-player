@@ -24,5 +24,9 @@ namespace PandaPlayer
 		Task ShowLibraryCheckerView(CancellationToken cancellationToken);
 
 		Task ShowLibraryStatisticsView(CancellationToken cancellationToken);
+
+		bool ShowDeleteDiscView(DiscModel disc);
+
+		bool ShowDeleteDiscSongsView(IReadOnlyCollection<SongModel> songs);
 	}
 }

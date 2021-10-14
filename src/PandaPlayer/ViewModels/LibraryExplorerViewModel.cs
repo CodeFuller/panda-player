@@ -27,8 +27,6 @@ namespace PandaPlayer.ViewModels
 	{
 		private readonly IFoldersService foldersService;
 
-		private readonly IDiscsService discsService;
-
 		private readonly IAdviseGroupHelper adviseGroupHelper;
 
 		private readonly IViewNavigator viewNavigator;
@@ -97,11 +95,10 @@ namespace PandaPlayer.ViewModels
 		public ICommand DeleteDiscCommand { get; }
 
 		public LibraryExplorerViewModel(ILibraryExplorerItemListViewModel itemListViewModel, IFoldersService foldersService,
-			IDiscsService discsService, IAdviseGroupHelper adviseGroupHelper, IViewNavigator viewNavigator, IWindowService windowService)
+			IAdviseGroupHelper adviseGroupHelper, IViewNavigator viewNavigator, IWindowService windowService)
 		{
 			ItemListViewModel = itemListViewModel ?? throw new ArgumentNullException(nameof(itemListViewModel));
 			this.foldersService = foldersService ?? throw new ArgumentNullException(nameof(foldersService));
-			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
 			this.adviseGroupHelper = adviseGroupHelper ?? throw new ArgumentNullException(nameof(adviseGroupHelper));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
@@ -110,7 +107,7 @@ namespace PandaPlayer.ViewModels
 			AddDiscToPlaylistCommand = new RelayCommand(AddDiscToPlaylist);
 			EditDiscPropertiesCommand = new RelayCommand(EditDiscProperties);
 			DeleteFolderCommand = new AsyncRelayCommand(() => DeleteFolder(CancellationToken.None));
-			DeleteDiscCommand = new AsyncRelayCommand(() => DeleteDisc(CancellationToken.None));
+			DeleteDiscCommand = new RelayCommand(DeleteDisc);
 
 			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => OnApplicationLoaded(CancellationToken.None));
 			Messenger.Default.Register<LoadParentFolderEventArgs>(this, e => OnLoadParentFolder(e, CancellationToken.None));
@@ -222,7 +219,7 @@ namespace PandaPlayer.ViewModels
 			ItemListViewModel.RemoveFolder(folder.Id);
 		}
 
-		private async Task DeleteDisc(CancellationToken cancellationToken)
+		private void DeleteDisc()
 		{
 			var selectedDisc = SelectedDisc;
 			if (selectedDisc == null)
@@ -230,15 +227,10 @@ namespace PandaPlayer.ViewModels
 				return;
 			}
 
-			if (windowService.ShowMessageBox($"Do you really want to delete the selected disc '{selectedDisc.Title}'?", "Delete disc",
-				ShowMessageBoxButton.YesNo, ShowMessageBoxIcon.Question) != ShowMessageBoxResult.Yes)
+			if (!viewNavigator.ShowDeleteDiscView(selectedDisc))
 			{
 				return;
 			}
-
-			// We are sending this event to release any disc images hold by DiscImageViewModel.
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null));
-			await discsService.DeleteDisc(selectedDisc.Id, cancellationToken);
 
 			ItemListViewModel.RemoveDisc(selectedDisc.Id);
 		}

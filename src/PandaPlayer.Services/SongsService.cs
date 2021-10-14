@@ -83,18 +83,19 @@ namespace PandaPlayer.Services
 			return songsRepository.UpdateSongLastPlayback(song, cancellationToken);
 		}
 
-		public Task DeleteSong(SongModel song, CancellationToken cancellationToken)
+		public Task DeleteSong(SongModel song, string deleteComment, CancellationToken cancellationToken)
 		{
-			return ((ISongsService)this).DeleteSong(song, clock.Now, cancellationToken);
+			return ((ISongsService)this).DeleteSong(song, clock.Now, deleteComment, cancellationToken);
 		}
 
-		async Task ISongsService.DeleteSong(SongModel song, DateTimeOffset deleteTime, CancellationToken cancellationToken)
+		async Task ISongsService.DeleteSong(SongModel song, DateTimeOffset deleteTime, string deleteComment, CancellationToken cancellationToken)
 		{
 			logger.LogInformation($"Deleting song '{song.TreeTitle}' ...");
 
 			await storageRepository.DeleteSong(song, cancellationToken);
 
 			song.DeleteDate = deleteTime;
+			song.DeleteComment = deleteComment;
 			song.BitRate = null;
 			song.Size = null;
 			song.Checksum = null;

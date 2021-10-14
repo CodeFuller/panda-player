@@ -100,7 +100,7 @@ namespace PandaPlayer.Services
 			await discsRepository.AddDiscImage(coverImage, cancellationToken);
 		}
 
-		public async Task DeleteDisc(ItemId discId, CancellationToken cancellationToken)
+		public async Task DeleteDisc(ItemId discId, string deleteComment, CancellationToken cancellationToken)
 		{
 			var deleteTime = clock.Now;
 
@@ -109,7 +109,7 @@ namespace PandaPlayer.Services
 
 			foreach (var song in disc.ActiveSongs)
 			{
-				await songsService.DeleteSong(song, deleteTime, cancellationToken);
+				await songsService.DeleteSong(song, deleteTime, deleteComment, cancellationToken);
 			}
 
 			if (disc.CoverImage != null)

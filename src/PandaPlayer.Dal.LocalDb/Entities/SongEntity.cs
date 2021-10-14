@@ -42,5 +42,7 @@ namespace PandaPlayer.Dal.LocalDb.Entities
 		public ICollection<PlaybackEntity> Playbacks { get; set; }
 
 		public DateTimeOffset? DeleteDate { get; set; }
+
+		public string DeleteComment { get; set; }
 	}
 }

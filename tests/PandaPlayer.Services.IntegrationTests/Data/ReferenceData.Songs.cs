@@ -93,6 +93,7 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 				LastPlaybackTime = DateTimeOffset.Parse("2021-03-28 09:33:39.2582742+03:00", CultureInfo.InvariantCulture),
 				PlaybacksCount = 1,
 				DeleteDate = DateTimeOffset.Parse("2021-03-28 14:10:59.3191807+03:00", CultureInfo.InvariantCulture),
+				DeleteComment = "Boring",
 			};
 
 			NormalDisc.AllSongs = new List<SongModel> { SongWithOptionalPropertiesFilled1, SongWithOptionalPropertiesFilled2, };

@@ -86,6 +86,7 @@ namespace PandaPlayer
 			services.AddSingleton<ILibraryStatisticsViewModel, LibraryStatisticsViewModel>();
 			services.AddSingleton<IAdviseSetsEditorViewModel, AdviseSetsEditorViewModel>();
 			services.AddSingleton<IAvailableDiscsViewModel, AvailableDiscsViewModel>();
+			services.AddSingleton<IDeleteContentViewModel, DeleteContentViewModel>();
 
 			services.AddSingleton<LoggerViewModel>();
 			services.AddSingleton<ILoggerViewModel, LoggerViewModel>(sp => sp.GetRequiredService<LoggerViewModel>());
