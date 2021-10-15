@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.16.0 - 2021-10-15
+- Added support of delete comment.
+
 ## 3.15.1 - 2021-10-11
 - Fixed double click on unselected folder in library explorer.
 
