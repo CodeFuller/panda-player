@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Delete Content"
         d:DataContext="{d:DesignInstance interfaces:IDeleteContentViewModel}"
-        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+        SizeToContent="Height" Width="600" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
 
     <Window.Style>
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}" />

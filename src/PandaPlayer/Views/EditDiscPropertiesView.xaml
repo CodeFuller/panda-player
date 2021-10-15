@@ -8,7 +8,7 @@
         xmlns:interfaces="clr-namespace:PandaPlayer.ViewModels.Interfaces"
         mc:Ignorable="d"
         Title="Edit Disc Properties"
-        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        SizeToContent="Height" Width="600" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         d:DataContext="{d:DesignInstance interfaces:IEditDiscPropertiesViewModel}">
 
     <Window.Style>
@@ -27,12 +27,13 @@
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="100" />
-                <ColumnDefinition MinWidth="300" Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Content="Tree Title:" />
-            <TextBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch">
+            <TextBox Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch">
                 <TextBox.Text>
                     <Binding Path="TreeTitle" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
@@ -43,7 +44,7 @@
             </TextBox>
 
             <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Content="Disc Title:" />
-            <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch">
+            <TextBox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch">
                 <TextBox.Text>
                     <Binding Path="Title" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
@@ -54,10 +55,10 @@
             </TextBox>
 
             <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Content="Album Title:" />
-            <TextBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding AlbumTitle}" />
+            <TextBox Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" Text="{Binding AlbumTitle}" />
 
             <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" Content="Year:" />
-            <TextBox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding Year, TargetNullValue={x:Static system:String.Empty}}" />
+            <TextBox Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch" Text="{Binding Year, TargetNullValue={x:Static system:String.Empty}}" />
 
         </Grid>
 

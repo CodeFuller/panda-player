@@ -7,7 +7,7 @@
         xmlns:interfaces="clr-namespace:PandaPlayer.ViewModels.Interfaces"
         mc:Ignorable="d"
         Title="Create Advise Group"
-        SizeToContent="Height" Width="300" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        SizeToContent="Height" Width="400" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         d:DataContext="{d:DesignInstance interfaces:ICreateAdviseGroupViewModel}">
 
     <Window.Style>

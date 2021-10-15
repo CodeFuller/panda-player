@@ -8,7 +8,7 @@
         xmlns:designInstances="clr-namespace:PandaPlayer.Views.DesignInstances"
         mc:Ignorable="d"
         Title="Edit Song Properties"
-        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        SizeToContent="Height" Width="600" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         d:DataContext="{d:DesignInstance designInstances:EditSongPropertiesDesignData, IsDesignTimeCreatable=True}">
 
     <Window.Style>
@@ -26,12 +26,13 @@
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="100" />
-                <ColumnDefinition MinWidth="300" Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Content="Tree Title:" />
-            <TextBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" IsEnabled="{Binding SingleSongMode}">
+            <TextBox Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" IsEnabled="{Binding SingleSongMode}">
                 <TextBox.Text>
                     <Binding Path="TreeTitle" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
@@ -42,7 +43,7 @@
             </TextBox>
 
             <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Content="Title:" />
-            <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" IsEnabled="{Binding SingleSongMode}">
+            <TextBox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch" IsEnabled="{Binding SingleSongMode}">
                 <TextBox.Text>
                     <Binding Path="Title" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
@@ -53,13 +54,13 @@
             </TextBox>
 
             <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Content="Artist:" />
-            <ComboBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" IsEditable="True" ItemsSource="{Binding AvailableArtists}" Text="{Binding NewArtistName}" SelectedItem="{Binding Artist}" />
+            <ComboBox Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" IsEditable="True" ItemsSource="{Binding AvailableArtists}" Text="{Binding NewArtistName}" SelectedItem="{Binding Artist}" />
 
             <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" Content="Genre:" />
-            <ComboBox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding AvailableGenres}" SelectedItem="{Binding Genre}" />
+            <ComboBox Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch" ItemsSource="{Binding AvailableGenres}" SelectedItem="{Binding Genre}" />
 
             <Label Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" Content="Track #:" />
-            <TextBox Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" Text="{Binding TrackNumber, TargetNullValue={x:Static system:String.Empty}}" IsEnabled="{Binding SingleSongMode}" />
+            <TextBox Grid.Row="4" Grid.Column="2" HorizontalAlignment="Stretch" Text="{Binding TrackNumber, TargetNullValue={x:Static system:String.Empty}}" IsEnabled="{Binding SingleSongMode}" />
 
         </Grid>
 
