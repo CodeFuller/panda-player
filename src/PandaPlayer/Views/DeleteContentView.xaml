@@ -25,7 +25,7 @@
             <Label VerticalAlignment="Center" Content="{Binding ConfirmationMessage}" />
         </StackPanel>
         <Label Padding="0,20,0,5" Content="Delete comment:" />
-        <TextBox Text="{Binding DeleteComment}" />
+        <TextBox Height="100" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding DeleteComment}" />
 
         <UniformGrid Margin="0,15,0,5" Rows="1" Columns="2" HorizontalAlignment="Center">
             <Button Margin="0,0,10,0" Content="Delete" IsDefault="True" Click="DeleteButton_Click" />
