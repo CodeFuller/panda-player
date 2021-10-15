@@ -31,6 +31,7 @@ namespace PandaPlayer.ViewModels
 		public void LoadForSongs(IReadOnlyCollection<SongModel> songs)
 		{
 			ConfirmationMessage = $"Do you really want to delete {songs.Count} selected song(s)?";
+			DeleteComment = null;
 
 			DeleteAction = async cancellationToken =>
 			{
@@ -44,6 +45,7 @@ namespace PandaPlayer.ViewModels
 		public void LoadForDisc(DiscModel disc)
 		{
 			ConfirmationMessage = $"Do you really want to delete the selected disc '{disc.Title}'?";
+			DeleteComment = null;
 
 			DeleteAction = cancellationToken =>
 			{

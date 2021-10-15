@@ -46,6 +46,59 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
+		public void LoadForSongs_ForSubsequentCall_ClearsPreviousDeleteComment()
+		{
+			// Arrange
+
+			var songs = new[]
+			{
+				new SongModel(),
+				new SongModel(),
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<DeleteContentViewModel>();
+
+			// Act
+
+			target.LoadForSongs(songs);
+
+			target.DeleteComment = "Some Delete Comment";
+
+			target.LoadForSongs(songs);
+
+			// Assert
+
+			target.DeleteComment.Should().BeNull();
+		}
+
+		[TestMethod]
+		public void LoadForDisc_ForSubsequentCall_ClearsPreviousDeleteComment()
+		{
+			// Arrange
+
+			var disc = new DiscModel
+			{
+				Title = "Some Disc",
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<DeleteContentViewModel>();
+
+			// Act
+
+			target.LoadForDisc(disc);
+
+			target.DeleteComment = "Some Delete Comment";
+
+			target.LoadForDisc(disc);
+
+			// Assert
+
+			target.DeleteComment.Should().BeNull();
+		}
+
+		[TestMethod]
 		public void LoadForDisc_SetsCorrectConfirmationMessage()
 		{
 			// Arrange
