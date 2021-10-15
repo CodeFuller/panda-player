@@ -421,29 +421,21 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
-			LibraryExplorerDiscChangedEventArgs libraryExplorerDiscChangedEvent = null;
-			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => e.RegisterEvent(ref libraryExplorerDiscChangedEvent));
-
 			// Act
 
 			target.DeleteDiscCommand.Execute(null);
 
 			// Assert
 
-			libraryExplorerDiscChangedEvent.Should().BeNull();
-
-			var windowServiceMock = mocker.GetMock<IWindowService>();
-			windowServiceMock.Verify(x => x.ShowMessageBox(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ShowMessageBoxButton>(), It.IsAny<ShowMessageBoxIcon>()), Times.Never);
-
-			var discServiceMock = mocker.GetMock<IDiscsService>();
-			discServiceMock.Verify(x => x.DeleteDisc(It.IsAny<ItemId>(), It.IsAny<CancellationToken>()), Times.Never);
+			var viewNavigatorMock = mocker.GetMock<IViewNavigator>();
+			viewNavigatorMock.Verify(x => x.ShowDeleteDiscView(It.IsAny<DiscModel>()), Times.Never);
 
 			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
 			itemListViewModelMock.Verify(x => x.RemoveDisc(It.IsAny<ItemId>()), Times.Never);
 		}
 
 		[TestMethod]
-		public void DeleteDiscCommand_IfDeletionIsNotConfirmed_DoesNotDeleteDisc()
+		public void DeleteDiscCommand_IfSomeDiscIsSelected_InvokesShowDeleteDiscViewForSelectedDisc()
 		{
 			// Arrange
 
@@ -454,13 +446,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			mocker.GetMock<ILibraryExplorerItemListViewModel>()
 				.Setup(x => x.SelectedDisc).Returns(selectedDisc);
 
-			mocker.GetMock<IWindowService>()
-				.Setup(x => x.ShowMessageBox(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ShowMessageBoxButton>(), It.IsAny<ShowMessageBoxIcon>())).Returns(ShowMessageBoxResult.No);
-
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			LibraryExplorerDiscChangedEventArgs libraryExplorerDiscChangedEvent = null;
-			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => e.RegisterEvent(ref libraryExplorerDiscChangedEvent));
 
 			// Act
 
@@ -468,17 +454,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			libraryExplorerDiscChangedEvent.Should().BeNull();
-
-			var discServiceMock = mocker.GetMock<IDiscsService>();
-			discServiceMock.Verify(x => x.DeleteDisc(It.IsAny<ItemId>(), It.IsAny<CancellationToken>()), Times.Never);
-
-			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelMock.Verify(x => x.RemoveDisc(It.IsAny<ItemId>()), Times.Never);
+			var viewNavigatorMock = mocker.GetMock<IViewNavigator>();
+			viewNavigatorMock.Verify(x => x.ShowDeleteDiscView(selectedDisc), Times.Once);
 		}
 
 		[TestMethod]
-		public void DeleteDiscCommand_IfDeletionIsConfirmed_DeletesSelectedDisc()
+		public void DeleteDiscCommand_IfDiscIsDeleted_RemovesDiscFromItemList()
 		{
 			// Arrange
 
@@ -489,28 +470,46 @@ namespace PandaPlayer.UnitTests.ViewModels
 			mocker.GetMock<ILibraryExplorerItemListViewModel>()
 				.Setup(x => x.SelectedDisc).Returns(selectedDisc);
 
-			mocker.GetMock<IWindowService>()
-				.Setup(x => x.ShowMessageBox(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ShowMessageBoxButton>(), It.IsAny<ShowMessageBoxIcon>())).Returns(ShowMessageBoxResult.Yes);
+			mocker.GetMock<IViewNavigator>()
+				.Setup(x => x.ShowDeleteDiscView(It.IsAny<DiscModel>())).Returns(true);
 
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			LibraryExplorerDiscChangedEventArgs libraryExplorerDiscChangedEvent = null;
-			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => e.RegisterEvent(ref libraryExplorerDiscChangedEvent));
 
 			// Act
 
 			target.DeleteDiscCommand.Execute(null);
 
 			// Assert
-
-			libraryExplorerDiscChangedEvent.Should().NotBeNull();
-			libraryExplorerDiscChangedEvent.Disc.Should().BeNull();
-
-			var discServiceMock = mocker.GetMock<IDiscsService>();
-			discServiceMock.Verify(x => x.DeleteDisc(new ItemId("Some Disc"), It.IsAny<CancellationToken>()), Times.Once);
 
 			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
 			itemListViewModelMock.Verify(x => x.RemoveDisc(new ItemId("Some Disc")), Times.Once);
+		}
+
+		[TestMethod]
+		public void DeleteDiscCommand_IfDiscIsNotDeleted_DoesNotRemoveDiscFromItemList()
+		{
+			// Arrange
+
+			var selectedDisc = new DiscModel { Id = new ItemId("Some Disc") };
+
+			var mocker = new AutoMocker();
+
+			mocker.GetMock<ILibraryExplorerItemListViewModel>()
+				.Setup(x => x.SelectedDisc).Returns(selectedDisc);
+
+			mocker.GetMock<IViewNavigator>()
+				.Setup(x => x.ShowDeleteDiscView(It.IsAny<DiscModel>())).Returns(false);
+
+			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
+
+			// Act
+
+			target.DeleteDiscCommand.Execute(null);
+
+			// Assert
+
+			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
+			itemListViewModelMock.Verify(x => x.RemoveDisc(It.IsAny<ItemId>()), Times.Never);
 		}
 
 		[TestMethod]
