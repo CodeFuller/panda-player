@@ -20,10 +20,16 @@
     </Window.Resources>
 
     <StackPanel Margin="10" Orientation="Vertical">
-        <StackPanel Orientation="Horizontal">
-            <Image Width="32" Height="32" Source="{Binding Source={x:Static draw:SystemIcons.Warning}, Converter={StaticResource IconToImageSourceConverter}, Mode=OneWay}" />
-            <Label VerticalAlignment="Center" Content="{Binding ConfirmationMessage}" />
-        </StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Image Grid.Column="0" Width="32" Height="32" Margin="0,0,10,0" Source="{Binding Source={x:Static draw:SystemIcons.Warning}, Converter={StaticResource IconToImageSourceConverter}, Mode=OneWay}" />
+            <TextBlock Grid.Column="1" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding ConfirmationMessage}" />
+        </Grid>
+
         <Label Padding="0,20,0,5" Content="Delete comment:" />
         <TextBox Height="100" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding DeleteComment}" />
 
