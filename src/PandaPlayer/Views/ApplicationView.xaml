@@ -8,6 +8,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:views="clr-namespace:PandaPlayer.Views"
         xmlns:viewModels="clr-namespace:PandaPlayer.ViewModels"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="{Binding Title}"
         Width="800" Height="600" WindowState="Maximized"
@@ -23,16 +24,15 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Window.InputBindings>
-        <KeyBinding Key="F9" Command="{Binding ShowAdviseSetsEditorCommand}" />
-        <KeyBinding Key="F10" Command="{Binding ShowDiscAdderCommand}" />
-        <KeyBinding Key="F11" Command="{Binding ShowLibraryCheckerCommand}" />
-        <KeyBinding Key="F12" Command="{Binding ShowLibraryStatisticsCommand}" />
-    </Window.InputBindings>
-
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <Grid>
+        <Grid Grid.Row="0">
             <!-- http://www.codeproject.com/Articles/36468/WPF-NotifyIcon -->
             <tb:TaskbarIcon Name="TaskbarIcon"
                 IconSource="/Views/Icons/PandaPlayer.ico"
@@ -46,8 +46,16 @@
             </tb:TaskbarIcon>
         </Grid>
 
-        <Grid>
+        <ToolBar Grid.Row="1" ToolBarTray.IsLocked="True" Background="{DynamicResource PrimaryHueDarkBackgroundBrush}">
+            <Button VerticalAlignment="Center" Padding="3" ToolTip="Edit advise sets" Content="{materialDesign:PackIcon Kind=CircleEditOutline}" Style="{DynamicResource MaterialDesignToolButton}" Command="{Binding ShowAdviseSetsEditorCommand}" />
+            <Button VerticalAlignment="Center" Padding="3" ToolTip="Add new discs" Content="{materialDesign:PackIcon Kind=PlusCircle}" Style="{DynamicResource MaterialDesignToolButton}" Command="{Binding ShowDiscAdderCommand}" />
+            <Button VerticalAlignment="Center" Padding="3" ToolTip="Check library" Content="{materialDesign:PackIcon Kind=FileFind}" Style="{DynamicResource MaterialDesignToolButton}" Command="{Binding ShowLibraryCheckerCommand}" />
+            <Button VerticalAlignment="Center" Padding="3" ToolTip="Show library statistics" Content="{materialDesign:PackIcon Kind=Percent}" Style="{DynamicResource MaterialDesignToolButton}" Command="{Binding ShowLibraryStatisticsCommand}" />
+        </ToolBar>
 
+        <GridSplitter Grid.Row="2" ResizeDirection="Rows" HorizontalAlignment="Stretch" />
+
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="400"/>
                 <ColumnDefinition Width="2"/>
