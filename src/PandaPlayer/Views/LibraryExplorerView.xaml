@@ -17,11 +17,6 @@
               SelectionChanged="DataGrid_SelectionChanged"
               ContextMenuOpening="DataGrid_ContextMenuOpening"
               KeyDown="ContentDataGrid_OnKeyDown" MouseDoubleClick="ContentDataGrid_OnMouseDoubleClick">
-        <DataGrid.ContextMenu>
-            <ContextMenu>
-                <MenuItem>Menu Stub</MenuItem>
-            </ContextMenu>
-        </DataGrid.ContextMenu>
         <DataGrid.InputBindings>
             <KeyBinding Key="Enter" Command="{Binding ItemListViewModel.ChangeFolderCommand}" />
             <KeyBinding Key="Home" Command="{Binding ItemListViewModel.JumpToFirstItemCommand}" />

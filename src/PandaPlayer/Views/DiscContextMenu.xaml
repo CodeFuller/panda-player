@@ -5,15 +5,36 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:interfaces="clr-namespace:PandaPlayer.ViewModels.Interfaces"
              xmlns:behaviors="clr-namespace:PandaPlayer.Views.Behaviors"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              Style="{DynamicResource MaterialDesignContextMenu}"
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance interfaces:ILibraryExplorerViewModel}">
 
-    <MenuItem Header="Set Advise Group" behaviors:MenuBehavior.MenuItems="{Binding Path=AdviseGroupMenuItems, Mode=OneWay}" />
-    <MenuItem Header="Play Disc" Command="{Binding PlayDiscCommand}" />
-    <MenuItem Header="Add To Playlist" Command="{Binding AddDiscToPlaylistCommand}" />
-    <MenuItem Header="Delete Disc" Command="{Binding DeleteDiscCommand}" />
-    <MenuItem Header="Properties" Command="{Binding EditDiscPropertiesCommand}" />
+    <MenuItem Header="Set Advise Group" behaviors:MenuBehavior.MenuItems="{Binding Path=AdviseGroupMenuItems, Mode=OneWay}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="FolderStar" />
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Header="Play Disc" Command="{Binding PlayDiscCommand}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="Play" />
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Header="Add To Playlist" Command="{Binding AddDiscToPlaylistCommand}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="PlaylistPlus" />
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Header="Delete Disc" Command="{Binding DeleteDiscCommand}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="DeleteForever" />
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Header="Properties" Command="{Binding EditDiscPropertiesCommand}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="Pencil" />
+        </MenuItem.Icon>
+    </MenuItem>
 
 </ContextMenu>

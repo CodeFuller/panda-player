@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:valueConverters="clr-namespace:PandaPlayer.Views.ValueConverters"
              xmlns:interfaces="clr-namespace:PandaPlayer.ViewModels.Interfaces"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              Style="{DynamicResource MaterialDesignContextMenu}"
              d:DataContext="{d:DesignInstance interfaces:IDiscSongListViewModel}"
@@ -14,9 +15,20 @@
         <valueConverters:RatingToImageNameValueConverter x:Key="RatingToImageValueConverter" />
     </ContextMenu.Resources>
 
-    <MenuItem Header="Play Next" Command="{Binding PlaySongsNextCommand}" />
-    <MenuItem Header="Play Last" Command="{Binding PlaySongsLastCommand}" />
+    <MenuItem Header="Play Next" Command="{Binding PlaySongsNextCommand}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="PlaylistAdd" />
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Header="Play Last" Command="{Binding PlaySongsLastCommand}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="PlaylistAdd" />
+        </MenuItem.Icon>
+    </MenuItem>
     <MenuItem Header="Set Rating" ItemsSource="{Binding SetRatingMenuItems}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="Star" />
+        </MenuItem.Icon>
         <MenuItem.ItemContainerStyle>
             <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
                 <Setter Property="HeaderTemplate">
@@ -30,7 +42,15 @@
             </Style>
         </MenuItem.ItemContainerStyle>
     </MenuItem>
-    <MenuItem Header="Delete from Disc" Command="{Binding DeleteSongsFromDiscCommand}" />
-    <MenuItem Header="Properties" Command="{Binding EditSongsPropertiesCommand}"/>
+    <MenuItem Header="Delete from Disc" Command="{Binding DeleteSongsFromDiscCommand}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="DeleteForever" />
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Header="Properties" Command="{Binding EditSongsPropertiesCommand}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="Pencil" />
+        </MenuItem.Icon>
+    </MenuItem>
 
 </ContextMenu>

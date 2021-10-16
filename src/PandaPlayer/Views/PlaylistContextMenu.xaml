@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:valueConverters="clr-namespace:PandaPlayer.Views.ValueConverters"
              xmlns:interfaces="clr-namespace:PandaPlayer.ViewModels.Interfaces"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              Style="{DynamicResource MaterialDesignContextMenu}"
              d:DesignHeight="450" d:DesignWidth="800"
@@ -14,13 +15,40 @@
         <valueConverters:RatingToImageNameValueConverter x:Key="RatingToImageValueConverter" />
     </ContextMenu.Resources>
 
-    <MenuItem Header="Play From This Song" Command="{Binding PlayFromSongCommand}" />
-    <MenuItem Header="Play Next" Command="{Binding PlaySongsNextCommand}" />
-    <MenuItem Header="Play Last" Command="{Binding PlaySongsLastCommand}" />
-    <MenuItem Header="Remove From Playlist" Command="{Binding RemoveSongsFromPlaylistCommand}" />
-    <MenuItem Header="Clear Playlist" Command="{Binding ClearPlaylistCommand}" />
-    <MenuItem Header="Go To Disc" Command="{Binding NavigateToSongDiscCommand}" />
+    <MenuItem Header="Play From This Song" Command="{Binding PlayFromSongCommand}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="Play" />
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Header="Play Next" Command="{Binding PlaySongsNextCommand}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="PlaylistAdd" />
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Header="Play Last" Command="{Binding PlaySongsLastCommand}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="PlaylistAdd" />
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Header="Remove From Playlist" Command="{Binding RemoveSongsFromPlaylistCommand}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="PlaylistMinus" />
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Header="Clear Playlist" Command="{Binding ClearPlaylistCommand}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="PlaylistRemove" />
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Header="Go To Disc" Command="{Binding NavigateToSongDiscCommand}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="Album" />
+        </MenuItem.Icon>
+    </MenuItem>
     <MenuItem Header="Set Rating" ItemsSource="{Binding SetRatingMenuItems}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="Star" />
+        </MenuItem.Icon>
         <MenuItem.ItemContainerStyle>
             <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
                 <Setter Property="HeaderTemplate">
@@ -34,6 +62,10 @@
             </Style>
         </MenuItem.ItemContainerStyle>
     </MenuItem>
-    <MenuItem Header="Properties" Command="{Binding EditSongsPropertiesCommand}"/>
+    <MenuItem Header="Properties" Command="{Binding EditSongsPropertiesCommand}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="Pencil" />
+        </MenuItem.Icon>
+    </MenuItem>
 
 </ContextMenu>
