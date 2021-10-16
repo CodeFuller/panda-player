@@ -50,7 +50,7 @@ namespace PandaPlayer.ViewModels
 			DeleteAction = cancellationToken =>
 			{
 				// We are sending this event to release any disc images hold by DiscImageViewModel.
-				Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null));
+				Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null, deletedContentIsShown: false));
 				return discService.DeleteDisc(disc.Id, DeleteComment, cancellationToken);
 			};
 		}

@@ -19,7 +19,19 @@ namespace PandaPlayer.ViewModels
 	{
 		public ObservableCollection<BasicExplorerItem> Items { get; } = new();
 
-		private ShallowFolderModel LoadedFolder { get; set; }
+		private bool showDeletedContent;
+
+		public bool ShowDeletedContent
+		{
+			get => showDeletedContent;
+			set
+			{
+				Set(ref showDeletedContent, value);
+				LoadFolderItems(LoadedFolder);
+			}
+		}
+
+		private FolderModel LoadedFolder { get; set; }
 
 		private IEnumerable<FolderExplorerItem> FolderItems => Items.OfType<FolderExplorerItem>();
 
@@ -40,7 +52,7 @@ namespace PandaPlayer.ViewModels
 			{
 				if (Set(ref selectedItem, value))
 				{
-					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(SelectedDisc));
+					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(SelectedDisc, deletedContentIsShown: ShowDeletedContent));
 				}
 			}
 		}
@@ -60,6 +72,9 @@ namespace PandaPlayer.ViewModels
 
 		public void LoadFolderItems(FolderModel folder)
 		{
+			// Remembering selected item for the case when the same folder is reloaded (ShowDeletedContent is changed).
+			var selectedItem = SelectedItem;
+
 			Items.Clear();
 
 			if (folder.ParentFolder != null)
@@ -68,12 +83,12 @@ namespace PandaPlayer.ViewModels
 			}
 
 			var subfolders = folder.Subfolders
-				.Where(sf => !sf.IsDeleted)
+				.Where(sf => ShowDeletedContent || !sf.IsDeleted)
 				.Select(sf => new FolderExplorerItem(sf))
 				.OrderBy(sf => sf.Title, StringComparer.InvariantCultureIgnoreCase);
 
 			var discs = folder.Discs
-				.Where(disc => !disc.IsDeleted)
+				.Where(disc => ShowDeletedContent || !disc.IsDeleted)
 				.Select(disc => new DiscExplorerItem(disc))
 				.OrderBy(disc => disc.Title, StringComparer.InvariantCultureIgnoreCase);
 
@@ -81,7 +96,19 @@ namespace PandaPlayer.ViewModels
 			Items.AddRange(discs);
 
 			LoadedFolder = folder;
-			SelectedItem = Items.FirstOrDefault();
+
+			switch (selectedItem)
+			{
+				case FolderExplorerItem selectedFolder:
+					SelectFolder(selectedFolder.FolderId);
+					break;
+
+				case DiscExplorerItem selectedDisc:
+					SelectDisc(selectedDisc.DiscId);
+					break;
+			}
+
+			SelectedItem ??= Items.FirstOrDefault();
 		}
 
 		public void SelectFolder(ItemId folderId)

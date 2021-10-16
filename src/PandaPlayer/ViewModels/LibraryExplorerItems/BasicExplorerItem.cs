@@ -8,5 +8,7 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 		public abstract string Title { get; }
 
 		public abstract PackIconKind IconKind { get; }
+
+		public abstract bool IsDeleted { get; }
 	}
 }

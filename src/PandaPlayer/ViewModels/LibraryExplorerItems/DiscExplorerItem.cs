@@ -16,6 +16,8 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 
 		public override PackIconKind IconKind => Disc.AdviseGroup != null || Disc.AdviseSetInfo != null ? PackIconKind.DiscAlert : PackIconKind.Album;
 
+		public override bool IsDeleted => Disc.IsDeleted;
+
 		public DiscExplorerItem(DiscModel disc)
 		{
 			this.Disc = disc ?? throw new ArgumentNullException(nameof(disc));

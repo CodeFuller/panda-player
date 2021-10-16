@@ -51,6 +51,9 @@
                         <DataTrigger Binding="{Binding IsCurrentlyPlayed}" Value="True">
                             <Setter Property="FontWeight" Value="Bold" />
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding Song.IsDeleted}" Value="True">
+                            <Setter Property="Opacity" Value=".50"/>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </DataGrid.Resources>

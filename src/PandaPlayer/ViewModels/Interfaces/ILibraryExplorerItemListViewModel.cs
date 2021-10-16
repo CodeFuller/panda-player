@@ -10,6 +10,8 @@ namespace PandaPlayer.ViewModels.Interfaces
 	{
 		ObservableCollection<BasicExplorerItem> Items { get; }
 
+		bool ShowDeletedContent { get; set; }
+
 		BasicExplorerItem SelectedItem { get; set; }
 
 		IEnumerable<DiscModel> Discs { get; }

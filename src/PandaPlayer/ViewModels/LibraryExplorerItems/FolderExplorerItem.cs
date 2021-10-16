@@ -25,6 +25,8 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 			}
 		}
 
+		public override bool IsDeleted => Folder.IsDeleted;
+
 		public FolderExplorerItem(ShallowFolderModel folder)
 		{
 			Folder = folder ?? throw new ArgumentNullException(nameof(folder));

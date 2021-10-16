@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -27,7 +28,7 @@ namespace PandaPlayer.ViewModels
 			PlaySongsLastCommand = new RelayCommand(() => SendAddingSongsToPlaylistEvent(new AddingSongsToPlaylistLastEventArgs(SelectedSongs)));
 			DeleteSongsFromDiscCommand = new RelayCommand(DeleteSongsFromDisc);
 
-			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => OnExplorerDiscChanged(e.Disc));
+			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => OnExplorerDiscChanged(e.Disc, e.DeletedContentIsShown));
 		}
 
 		private static void SendAddingSongsToPlaylistEvent<TAddingSongsToPlaylistEventArgs>(TAddingSongsToPlaylistEventArgs e)
@@ -53,9 +54,23 @@ namespace PandaPlayer.ViewModels
 			// As result OnSongChanged() is called, which deletes song(s) from the list.
 		}
 
-		private void OnExplorerDiscChanged(DiscModel newDisc)
+		private void OnExplorerDiscChanged(DiscModel newDisc, bool deletedContentIsShown)
 		{
-			SetSongs(newDisc?.ActiveSongs ?? Enumerable.Empty<SongModel>());
+			IEnumerable<SongModel> songs;
+			if (newDisc == null)
+			{
+				songs = Enumerable.Empty<SongModel>();
+			}
+			else if (deletedContentIsShown)
+			{
+				songs = newDisc.AllSongs;
+			}
+			else
+			{
+				songs = newDisc.ActiveSongs;
+			}
+
+			SetSongs(songs);
 		}
 	}
 }

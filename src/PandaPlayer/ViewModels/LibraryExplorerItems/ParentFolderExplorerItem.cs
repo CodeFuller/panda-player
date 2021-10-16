@@ -7,5 +7,7 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 		public override string Title => "..";
 
 		public override PackIconKind IconKind => PackIconKind.ArrowUpBold;
+
+		public override bool IsDeleted => false;
 	}
 }
