@@ -14,6 +14,7 @@ using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.Events.SongEvents;
 using PandaPlayer.Internal;
 using PandaPlayer.Services.Interfaces;
+using PandaPlayer.Shared;
 using PandaPlayer.Shared.Extensions;
 using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.ViewModels.Internal;
@@ -59,7 +60,7 @@ namespace PandaPlayer.ViewModels
 
 		public int SongsNumber => Songs.Count();
 
-		public long TotalSongsFileSize => Songs.Select(s => s.Size ?? 0).Sum();
+		public string TotalSongsFileSize => Songs.All(x => x.IsDeleted) ? "N/A" : FileSizeFormatter.GetFormattedFileSize(Songs.Select(s => s.Size ?? 0).Sum());
 
 		public TimeSpan TotalSongsDuration => Songs.Aggregate(TimeSpan.Zero, (currentSum, currentSong) => currentSum + currentSong.Duration);
 

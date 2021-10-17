@@ -14,14 +14,9 @@ namespace PandaPlayer.Views.ValueConverters
 				return null;
 			}
 
-			if (value is Int32)
+			if (value is long longValue)
 			{
-				return FileSizeFormatter.GetFormattedFileSize((int)value);
-			}
-
-			if (value is Int64)
-			{
-				return FileSizeFormatter.GetFormattedFileSize((long)value);
+				return FileSizeFormatter.GetFormattedFileSize(longValue);
 			}
 
 			return null;
@@ -29,7 +24,7 @@ namespace PandaPlayer.Views.ValueConverters
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 	}
 }

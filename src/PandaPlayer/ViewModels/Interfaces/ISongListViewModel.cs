@@ -27,7 +27,7 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		int SongsNumber { get; }
 
-		long TotalSongsFileSize { get; }
+		string TotalSongsFileSize { get; }
 
 		TimeSpan TotalSongsDuration { get; }
 

@@ -14,7 +14,7 @@ namespace PandaPlayer.Services.Media
 			{
 				Size = (int)new FileInfo(songFileName).Length,
 
-				// TagLib returns bitrate in Kb/s, e.g. 320 for 320 Kb/s
+				// TagLib returns bit rate in Kb/s, e.g. 320 for 320 Kb/s
 				// Adjusting the value to b/s.
 				Bitrate = 1000 * properties.AudioBitrate,
 				Duration = properties.Duration,
