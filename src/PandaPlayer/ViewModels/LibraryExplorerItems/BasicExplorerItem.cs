@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using CodeFuller.Library.Wpf;
 using GalaSoft.MvvmLight;
 using MaterialDesignThemes.Wpf;
+using PandaPlayer.Core.Models;
 using PandaPlayer.ViewModels.AdviseGroups;
 using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.ViewModels.MenuItems;
@@ -22,13 +25,23 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 		{
 			var menuItems = new List<BasicMenuItem>
 			{
-				new NewAdviseGroupMenuItem(ct => libraryExplorerViewModel.CreateAdviseGroup(adviseGroupHolder, ct)),
+				new CommandMenuItem
+				{
+					Header = "New Advise Group ...",
+					IconKind = PackIconKind.FolderPlus,
+					Command = new AsyncRelayCommand(() => libraryExplorerViewModel.CreateAdviseGroup(adviseGroupHolder, CancellationToken.None)),
+				},
 			};
 
-			if (adviseGroupHolder.CurrentAdviseGroup != null)
+			var currentAdviseGroup = adviseGroupHolder.CurrentAdviseGroup;
+			if (currentAdviseGroup != null)
 			{
-				var reverseFavoriteMenuItem = new ReverseFavoriteStatusForAdviseGroupMenuItem(
-					adviseGroupHolder.CurrentAdviseGroup, adviseGroupHelper.ReverseFavoriteStatus);
+				var reverseFavoriteMenuItem = new CommandMenuItem
+				{
+					Header = $"{(currentAdviseGroup.IsFavorite ? "Unmark" : "Mark")} '{currentAdviseGroup.Name}' as favorite",
+					Command = new AsyncRelayCommand(() => adviseGroupHelper.ReverseFavoriteStatus(currentAdviseGroup, CancellationToken.None)),
+					IconKind = currentAdviseGroup.IsFavorite ? PackIconKind.HeartBroken : PackIconKind.Heart,
+				};
 
 				menuItems.Add(reverseFavoriteMenuItem);
 			}
@@ -38,11 +51,33 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 			{
 				menuItems.Add(new SeparatorMenuItem());
 
-				var currentAdviseGroupId = adviseGroupHolder.CurrentAdviseGroup?.Id;
-				menuItems.AddRange(adviseGroups.Select(x => new SetAdviseGroupMenuItem(x, x.Id == currentAdviseGroupId, ct => adviseGroupHelper.ReverseAdviseGroup(adviseGroupHolder, x, ct))));
+				menuItems.AddRange(adviseGroups.Select(x => CreateSetAdviseGroupMenuItem(adviseGroupHolder, adviseGroupHelper, x)));
 			}
 
 			return menuItems;
+		}
+
+		private static CommandMenuItem CreateSetAdviseGroupMenuItem(BasicAdviseGroupHolder adviseGroupHolder, IAdviseGroupHelper adviseGroupHelper, AdviseGroupModel adviseGroup)
+		{
+			PackIconKind? iconKind = null;
+
+			if (adviseGroup.Id == adviseGroupHolder.CurrentAdviseGroup?.Id)
+			{
+				// We do not use checkable menu items, because there is no easy way to have checkable item with an icon (https://stackoverflow.com/questions/3842493).
+				iconKind = PackIconKind.Check;
+			}
+
+			if (adviseGroup.IsFavorite)
+			{
+				iconKind = PackIconKind.Heart;
+			}
+
+			return new CommandMenuItem
+			{
+				Header = adviseGroup.Name,
+				IconKind = iconKind,
+				Command = new AsyncRelayCommand(() => adviseGroupHelper.ReverseAdviseGroup(adviseGroupHolder, adviseGroup, CancellationToken.None)),
+			};
 		}
 	}
 }
