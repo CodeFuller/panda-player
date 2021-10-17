@@ -7,7 +7,7 @@ using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.ViewModels.MenuItems
 {
-	public class SetAdviseGroupMenuItem : NormalMenuItem
+	public class SetAdviseGroupMenuItem : CommandMenuItem
 	{
 		public SetAdviseGroupMenuItem(AdviseGroupModel adviseGroup, bool isAssignedAdviseGroup, Func<CancellationToken, Task> commandAction)
 		{

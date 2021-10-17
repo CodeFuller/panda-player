@@ -6,7 +6,7 @@ using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.ViewModels.MenuItems
 {
-	public class ReverseFavoriteStatusForAdviseGroupMenuItem : NormalMenuItem
+	public class ReverseFavoriteStatusForAdviseGroupMenuItem : CommandMenuItem
 	{
 		public ReverseFavoriteStatusForAdviseGroupMenuItem(AdviseGroupModel adviseGroup, Func<AdviseGroupModel, CancellationToken, Task> commandAction)
 		{

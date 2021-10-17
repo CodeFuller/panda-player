@@ -26,8 +26,10 @@ namespace PandaPlayer.ViewModels
 			get => showDeletedContent;
 			set
 			{
-				Set(ref showDeletedContent, value);
-				LoadFolderItems(LoadedFolder);
+				if (Set(ref showDeletedContent, value))
+				{
+					LoadFolderItems(LoadedFolder);
+				}
 			}
 		}
 
@@ -41,7 +43,7 @@ namespace PandaPlayer.ViewModels
 
 		public ShallowFolderModel SelectedFolder => (SelectedItem as FolderExplorerItem)?.Folder;
 
-		public DiscModel SelectedDisc => (selectedItem as DiscExplorerItem)?.Disc;
+		public DiscModel SelectedDisc => (SelectedItem as DiscExplorerItem)?.Disc;
 
 		private BasicExplorerItem selectedItem;
 

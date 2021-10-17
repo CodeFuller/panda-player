@@ -1,6 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using CodeFuller.Library.Wpf;
 using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Models;
+using PandaPlayer.ViewModels.AdviseGroups;
+using PandaPlayer.ViewModels.Interfaces;
+using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.ViewModels.LibraryExplorerItems
 {
@@ -37,6 +43,28 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 				{
 					RaisePropertyChanged(nameof(IconKind));
 				}
+			};
+		}
+
+		public override IEnumerable<BasicMenuItem> GetContextMenuItems(ILibraryExplorerViewModel libraryExplorerViewModel, IAdviseGroupHelper adviseGroupHelper)
+		{
+			if (IsDeleted)
+			{
+				yield break;
+			}
+
+			yield return new ExpandableMenuItem
+			{
+				Header = "Set Advise Group",
+				IconKind = PackIconKind.FolderStar,
+				Items = GetAdviseGroupMenuItems(new FolderAdviseGroupHolder(Folder), libraryExplorerViewModel, adviseGroupHelper),
+			};
+
+			yield return new CommandMenuItem
+			{
+				Header = "Delete Folder",
+				IconKind = PackIconKind.DeleteForever,
+				Command = new AsyncRelayCommand(() => libraryExplorerViewModel.DeleteFolder(FolderId, CancellationToken.None)),
 			};
 		}
 	}

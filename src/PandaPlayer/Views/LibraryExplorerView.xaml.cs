@@ -100,20 +100,13 @@ namespace PandaPlayer.Views
 				return;
 			}
 
-			var itemListViewModel = viewModel.ItemListViewModel;
+			var contextMenu = new ContextMenu();
+			foreach (var menuItem in viewModel.ContextMenuItemsForSelectedItem.Select(x => x.MenuItemControl))
+			{
+				contextMenu.Items.Add(menuItem);
+			}
 
-			if (itemListViewModel.SelectedDisc != null)
-			{
-				frameworkElement.ContextMenu = new DiscContextMenu();
-			}
-			else if (itemListViewModel.SelectedFolder != null)
-			{
-				frameworkElement.ContextMenu = new FolderContextMenu();
-			}
-			else
-			{
-				frameworkElement.ContextMenu = null;
-			}
+			frameworkElement.ContextMenu = contextMenu;
 		}
 
 		private void ContentDataGrid_OnKeyDown(object sender, KeyEventArgs e)

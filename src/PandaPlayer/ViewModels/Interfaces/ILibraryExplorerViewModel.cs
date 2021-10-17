@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows.Input;
+using System.Threading;
+using System.Threading.Tasks;
 using PandaPlayer.Core.Models;
+using PandaPlayer.ViewModels.AdviseGroups;
 using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.ViewModels.Interfaces
@@ -12,16 +14,18 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		DiscModel SelectedDisc { get; }
 
-		IReadOnlyCollection<BasicMenuItem> AdviseGroupMenuItems { get; }
+		IEnumerable<BasicMenuItem> ContextMenuItemsForSelectedItem { get; }
 
-		ICommand PlayDiscCommand { get; }
+		Task CreateAdviseGroup(BasicAdviseGroupHolder adviseGroupHolder, CancellationToken cancellationToken);
 
-		ICommand AddDiscToPlaylistCommand { get; }
+		void PlayDisc(DiscModel disc);
 
-		ICommand EditDiscPropertiesCommand { get; }
+		void AddDiscToPlaylist(DiscModel disc);
 
-		ICommand DeleteFolderCommand { get; }
+		void EditDiscProperties(DiscModel disc);
 
-		ICommand DeleteDiscCommand { get; }
+		Task DeleteFolder(ItemId folderId, CancellationToken cancellationToken);
+
+		void DeleteDisc(DiscModel disc);
 	}
 }

@@ -5,7 +5,7 @@ using CodeFuller.Library.Wpf;
 
 namespace PandaPlayer.ViewModels.MenuItems
 {
-	public class NewAdviseGroupMenuItem : NormalMenuItem
+	public class NewAdviseGroupMenuItem : CommandMenuItem
 	{
 		public NewAdviseGroupMenuItem(Func<CancellationToken, Task> commandAction)
 		{

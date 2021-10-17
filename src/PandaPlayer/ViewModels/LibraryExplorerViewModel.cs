@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using CodeFuller.Library.Wpf;
 using CodeFuller.Library.Wpf.Interfaces;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events;
@@ -39,60 +37,7 @@ namespace PandaPlayer.ViewModels
 
 		public DiscModel SelectedDisc => ItemListViewModel.SelectedDisc;
 
-		public IReadOnlyCollection<BasicMenuItem> AdviseGroupMenuItems
-		{
-			get
-			{
-				BasicAdviseGroupHolder adviseGroupHolder;
-
-				if (SelectedFolder != null)
-				{
-					adviseGroupHolder = new FolderAdviseGroupHolder(SelectedFolder);
-				}
-				else if (SelectedDisc != null)
-				{
-					adviseGroupHolder = new DiscAdviseGroupHolder(SelectedDisc);
-				}
-				else
-				{
-					return new List<BasicMenuItem>();
-				}
-
-				var menuItems = new List<BasicMenuItem>
-				{
-					new NewAdviseGroupMenuItem(ct => CreateAdviseGroup(adviseGroupHolder, ct)),
-				};
-
-				if (adviseGroupHolder.CurrentAdviseGroup != null)
-				{
-					var reverseFavoriteMenuItem = new ReverseFavoriteStatusForAdviseGroupMenuItem(
-						adviseGroupHolder.CurrentAdviseGroup, (g, ct) => adviseGroupHelper.ReverseFavoriteStatus(g, ct));
-
-					menuItems.Add(reverseFavoriteMenuItem);
-				}
-
-				var adviseGroups = adviseGroupHelper.AdviseGroups;
-				if (adviseGroups.Any())
-				{
-					menuItems.Add(new SeparatorMenuItem());
-
-					var currentAdviseGroupId = adviseGroupHolder.CurrentAdviseGroup?.Id;
-					menuItems.AddRange(adviseGroups.Select(x => new SetAdviseGroupMenuItem(x, x.Id == currentAdviseGroupId, ct => adviseGroupHelper.ReverseAdviseGroup(adviseGroupHolder, x, ct))));
-				}
-
-				return menuItems;
-			}
-		}
-
-		public ICommand PlayDiscCommand { get; }
-
-		public ICommand AddDiscToPlaylistCommand { get; }
-
-		public ICommand EditDiscPropertiesCommand { get; }
-
-		public ICommand DeleteFolderCommand { get; }
-
-		public ICommand DeleteDiscCommand { get; }
+		public IEnumerable<BasicMenuItem> ContextMenuItemsForSelectedItem => ItemListViewModel.SelectedItem?.GetContextMenuItems(this, adviseGroupHelper) ?? Enumerable.Empty<BasicMenuItem>();
 
 		public LibraryExplorerViewModel(ILibraryExplorerItemListViewModel itemListViewModel, IFoldersService foldersService,
 			IAdviseGroupHelper adviseGroupHelper, IViewNavigator viewNavigator, IWindowService windowService)
@@ -102,12 +47,6 @@ namespace PandaPlayer.ViewModels
 			this.adviseGroupHelper = adviseGroupHelper ?? throw new ArgumentNullException(nameof(adviseGroupHelper));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
-
-			PlayDiscCommand = new RelayCommand(PlayDisc);
-			AddDiscToPlaylistCommand = new RelayCommand(AddDiscToPlaylist);
-			EditDiscPropertiesCommand = new RelayCommand(EditDiscProperties);
-			DeleteFolderCommand = new AsyncRelayCommand(() => DeleteFolder(CancellationToken.None));
-			DeleteDiscCommand = new RelayCommand(DeleteDisc);
 
 			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => OnApplicationLoaded(CancellationToken.None));
 			Messenger.Default.Register<LoadParentFolderEventArgs>(this, e => OnLoadParentFolder(e, CancellationToken.None));
@@ -126,7 +65,7 @@ namespace PandaPlayer.ViewModels
 			await adviseGroupHelper.Load(cancellationToken);
 		}
 
-		private async Task CreateAdviseGroup(BasicAdviseGroupHolder adviseGroupHolder, CancellationToken cancellationToken)
+		public async Task CreateAdviseGroup(BasicAdviseGroupHolder adviseGroupHolder, CancellationToken cancellationToken)
 		{
 			var newAdviseGroupName = viewNavigator.ShowCreateAdviseGroupView(adviseGroupHolder.InitialAdviseGroupName, adviseGroupHelper.AdviseGroups.Select(x => x.Name));
 			if (newAdviseGroupName == null)
@@ -135,6 +74,52 @@ namespace PandaPlayer.ViewModels
 			}
 
 			await adviseGroupHelper.CreateAdviseGroup(adviseGroupHolder, newAdviseGroupName, cancellationToken);
+		}
+
+		public void PlayDisc(DiscModel disc)
+		{
+			Messenger.Default.Send(new PlaySongsListEventArgs(disc));
+		}
+
+		public void AddDiscToPlaylist(DiscModel disc)
+		{
+			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(disc.ActiveSongs));
+		}
+
+		public void EditDiscProperties(DiscModel disc)
+		{
+			viewNavigator.ShowDiscPropertiesView(disc);
+		}
+
+		public async Task DeleteFolder(ItemId folderId, CancellationToken cancellationToken)
+		{
+			var folder = await foldersService.GetFolder(folderId, cancellationToken);
+
+			if (folder.HasContent)
+			{
+				windowService.ShowMessageBox("You can not delete non-empty folder", "Warning", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation);
+				return;
+			}
+
+			if (windowService.ShowMessageBox($"Do you really want to delete the folder '{folder.Name}'?", "Delete folder",
+				ShowMessageBoxButton.YesNo, ShowMessageBoxIcon.Question) != ShowMessageBoxResult.Yes)
+			{
+				return;
+			}
+
+			await foldersService.DeleteFolder(folder.Id, cancellationToken);
+
+			ItemListViewModel.RemoveFolder(folder.Id);
+		}
+
+		public void DeleteDisc(DiscModel disc)
+		{
+			if (!viewNavigator.ShowDeleteDiscView(disc))
+			{
+				return;
+			}
+
+			ItemListViewModel.RemoveDisc(disc.Id);
 		}
 
 		private async void OnLoadParentFolder(LoadParentFolderEventArgs e, CancellationToken cancellationToken)
@@ -166,73 +151,6 @@ namespace PandaPlayer.ViewModels
 			await LoadFolder(disc.Folder.Id, cancellationToken);
 
 			ItemListViewModel.SelectDisc(disc.Id);
-		}
-
-		private void PlayDisc()
-		{
-			if (SelectedDisc != null)
-			{
-				Messenger.Default.Send(new PlaySongsListEventArgs(SelectedDisc));
-			}
-		}
-
-		private void AddDiscToPlaylist()
-		{
-			if (SelectedDisc != null)
-			{
-				Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(SelectedDisc.ActiveSongs));
-			}
-		}
-
-		private void EditDiscProperties()
-		{
-			if (SelectedDisc != null)
-			{
-				viewNavigator.ShowDiscPropertiesView(SelectedDisc);
-			}
-		}
-
-		private async Task DeleteFolder(CancellationToken cancellationToken)
-		{
-			var selectedFolder = SelectedFolder;
-			if (selectedFolder == null)
-			{
-				return;
-			}
-
-			var folder = await foldersService.GetFolder(selectedFolder.Id, cancellationToken);
-
-			if (folder.HasContent)
-			{
-				windowService.ShowMessageBox("You can not delete non-empty folder", "Warning", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation);
-				return;
-			}
-
-			if (windowService.ShowMessageBox($"Do you really want to delete the folder '{folder.Name}'?", "Delete folder",
-				ShowMessageBoxButton.YesNo, ShowMessageBoxIcon.Question) != ShowMessageBoxResult.Yes)
-			{
-				return;
-			}
-
-			await foldersService.DeleteFolder(folder.Id, cancellationToken);
-
-			ItemListViewModel.RemoveFolder(folder.Id);
-		}
-
-		private void DeleteDisc()
-		{
-			var selectedDisc = SelectedDisc;
-			if (selectedDisc == null)
-			{
-				return;
-			}
-
-			if (!viewNavigator.ShowDeleteDiscView(selectedDisc))
-			{
-				return;
-			}
-
-			ItemListViewModel.RemoveDisc(selectedDisc.Id);
 		}
 
 		private async void OnPlaySongsList(PlaySongsListEventArgs e, CancellationToken cancellationToken)
