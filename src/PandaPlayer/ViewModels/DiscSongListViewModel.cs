@@ -63,7 +63,7 @@ namespace PandaPlayer.ViewModels
 			}
 			else if (deletedContentIsShown)
 			{
-				songs = newDisc.AllSongs;
+				songs = newDisc.AllSongsSorted;
 			}
 			else
 			{

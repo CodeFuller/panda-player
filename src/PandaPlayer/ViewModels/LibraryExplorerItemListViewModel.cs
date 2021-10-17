@@ -73,7 +73,7 @@ namespace PandaPlayer.ViewModels
 		public void LoadFolderItems(FolderModel folder)
 		{
 			// Remembering selected item for the case when the same folder is reloaded (ShowDeletedContent is changed).
-			var selectedItem = SelectedItem;
+			var previousSelectedItem = SelectedItem;
 
 			Items.Clear();
 
@@ -97,7 +97,7 @@ namespace PandaPlayer.ViewModels
 
 			LoadedFolder = folder;
 
-			switch (selectedItem)
+			switch (previousSelectedItem)
 			{
 				case FolderExplorerItem selectedFolder:
 					SelectFolder(selectedFolder.FolderId);

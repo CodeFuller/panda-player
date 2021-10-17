@@ -59,14 +59,15 @@ namespace PandaPlayer.Core.Models
 
 		public IReadOnlyCollection<SongModel> AllSongs { get; set; }
 
-		public IEnumerable<SongModel> ActiveSongs => AllSongs
-			.Where(song => !song.IsDeleted)
+		public IEnumerable<SongModel> AllSongsSorted => AllSongs
 			.OrderBy(s => s.TrackNumber == null)
 			.ThenBy(s => s.TrackNumber)
 			.ThenBy(s => s.Artist == null)
 			.ThenBy(s => s.Artist?.Name, StringComparer.InvariantCultureIgnoreCase)
 			.ThenBy(s => s.TreeTitle, StringComparer.InvariantCultureIgnoreCase)
 			.ThenBy(s => s.Id.Value);
+
+		public IEnumerable<SongModel> ActiveSongs => AllSongsSorted.Where(song => !song.IsDeleted);
 
 		private List<DiscImageModel> images = new();
 
