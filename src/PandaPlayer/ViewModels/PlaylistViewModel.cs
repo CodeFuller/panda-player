@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using CodeFuller.Library.Wpf;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Comparers;
 using PandaPlayer.Core.Extensions;
 using PandaPlayer.Core.Models;
@@ -15,6 +15,7 @@ using PandaPlayer.Events.SongEvents;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.ViewModels.Interfaces;
+using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.ViewModels
 {
@@ -56,26 +57,87 @@ namespace PandaPlayer.ViewModels
 
 		public DiscModel CurrentDisc => CurrentSong != null ? CurrentSong.Disc : Songs.Select(s => s.Disc).UniqueOrDefault(new DiscEqualityComparer());
 
-		public override ICommand PlaySongsNextCommand { get; }
+		public IEnumerable<BasicMenuItem> ContextMenuItems
+		{
+			get
+			{
+				var selectedSongItem = SelectedSongItem;
+				var selectedSong = selectedSongItem?.Song;
 
-		public override ICommand PlaySongsLastCommand { get; }
+				var selectedSongItems = (SelectedSongItems?.OfType<SongListItem>() ?? Enumerable.Empty<SongListItem>()).ToList();
+				var selectedSongs = selectedSongItems.Select(x => x.Song).ToList();
 
-		public ICommand PlayFromSongCommand { get; }
+				if (selectedSongItem != null)
+				{
+					yield return new CommandMenuItem
+					{
+						Header = "Play From This Song",
+						IconKind = PackIconKind.Play,
+						Command = new AsyncRelayCommand(() => PlayFromSong(selectedSongItem, CancellationToken.None)),
+					};
+				}
 
-		public ICommand RemoveSongsFromPlaylistCommand { get; }
+				if (selectedSongItems.Any())
+				{
+					yield return new CommandMenuItem
+					{
+						Header = "Play Next",
+						IconKind = PackIconKind.PlaylistAdd,
+						Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(selectedSongs))),
+					};
 
-		public ICommand ClearPlaylistCommand { get; }
+					yield return new CommandMenuItem
+					{
+						Header = "Play Last",
+						IconKind = PackIconKind.PlaylistAdd,
+						Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(selectedSongs))),
+					};
 
-		public ICommand NavigateToSongDiscCommand { get; }
+					yield return new CommandMenuItem
+					{
+						Header = "Remove From Playlist",
+						IconKind = PackIconKind.PlaylistMinus,
+						Command = new AsyncRelayCommand(() => RemoveSongsFromPlaylist(selectedSongItems, CancellationToken.None)),
+					};
+				}
+
+				if (SongItems.Any())
+				{
+					yield return new CommandMenuItem
+					{
+						Header = "Clear Playlist",
+						IconKind = PackIconKind.PlaylistRemove,
+						Command = new AsyncRelayCommand(() => ClearPlaylist(CancellationToken.None)),
+					};
+				}
+
+				if (selectedSong != null)
+				{
+					yield return new CommandMenuItem
+					{
+						Header = "Go To Disc",
+						IconKind = PackIconKind.Album,
+						Command = new RelayCommand(() => Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(selectedSong.Disc))),
+					};
+				}
+
+				if (selectedSongs.Any())
+				{
+					yield return GetSetRatingContextMenuItem(selectedSongs);
+
+					yield return new CommandMenuItem
+					{
+						Header = "Properties",
+						IconKind = PackIconKind.Pencil,
+						Command = new AsyncRelayCommand(() => EditSongsProperties(selectedSongs, CancellationToken.None)),
+					};
+				}
+			}
+		}
 
 		public PlaylistViewModel(ISongsService songsService, IViewNavigator viewNavigator)
 			: base(songsService, viewNavigator)
 		{
-			PlayFromSongCommand = new AsyncRelayCommand(() => PlayFromSong(CancellationToken.None));
-			RemoveSongsFromPlaylistCommand = new AsyncRelayCommand(() => RemoveSongsFromPlaylist(CancellationToken.None));
-			ClearPlaylistCommand = new AsyncRelayCommand(() => ClearPlaylist(CancellationToken.None));
-			NavigateToSongDiscCommand = new RelayCommand(NavigateToSongDisc);
-
 			// There are 2 use cases of adding songs (Play Next & Play Last) to PlaylistViewModel:
 			//   1. Action is invoked from context menu in DiscSongListViewModel.
 			//      In this case DiscSongListViewModel sends AddingSongsToPlaylistNextEventArgs or AddingSongsToPlaylistLastEventArgs.
@@ -85,8 +147,6 @@ namespace PandaPlayer.ViewModels
 			//      In ths case songs are added to PlaylistViewModel from handlers of PlaySongsNextCommand and PlaySongsLastCommand.
 			//
 			//   This is done to prevent anti-pattern when object sends event to itself.
-			PlaySongsNextCommand = new AsyncRelayCommand(() => AddSongsNext(SelectedSongs.ToList(), CancellationToken.None));
-			PlaySongsLastCommand = new AsyncRelayCommand(() => AddSongsLast(SelectedSongs.ToList(), CancellationToken.None));
 			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => OnAddingNextSongs(e.Songs, CancellationToken.None));
 			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => OnAddingLastSongs(e.Songs, CancellationToken.None));
 		}
@@ -169,9 +229,9 @@ namespace PandaPlayer.ViewModels
 			await OnPlaylistChanged(cancellationToken);
 		}
 
-		private async Task PlayFromSong(CancellationToken cancellationToken)
+		private async Task PlayFromSong(SongListItem selectedSongItem, CancellationToken cancellationToken)
 		{
-			var selectedSongIndex = SongItems.IndexOf(SelectedSongItem);
+			var selectedSongIndex = SongItems.IndexOf(selectedSongItem);
 			if (selectedSongIndex == -1)
 			{
 				return;
@@ -184,15 +244,9 @@ namespace PandaPlayer.ViewModels
 			Messenger.Default.Send(new PlayPlaylistStartingFromSongEventArgs());
 		}
 
-		private async Task RemoveSongsFromPlaylist(CancellationToken cancellationToken)
+		private async Task RemoveSongsFromPlaylist(IReadOnlyCollection<SongListItem> songItems, CancellationToken cancellationToken)
 		{
-			var songsToDelete = (SelectedSongItems?.OfType<SongListItem>() ?? Enumerable.Empty<SongListItem>()).ToList();
-			if (!songsToDelete.Any())
-			{
-				return;
-			}
-
-			RemoveSongItems(songsToDelete);
+			RemoveSongItems(songItems);
 
 			var newCurrentItemIndex = SongItems.IndexOf(CurrentItem);
 			SetCurrentSong(newCurrentItemIndex == -1 ? null : newCurrentItemIndex);
@@ -202,27 +256,11 @@ namespace PandaPlayer.ViewModels
 
 		private async Task ClearPlaylist(CancellationToken cancellationToken)
 		{
-			if (!SongItems.Any())
-			{
-				return;
-			}
-
 			RemoveSongItems(SongItems.ToList());
 
 			SetCurrentSong(null);
 
 			await OnPlaylistChanged(cancellationToken);
-		}
-
-		private void NavigateToSongDisc()
-		{
-			var song = SelectedSongItem?.Song ?? CurrentSong;
-			if (song == null)
-			{
-				return;
-			}
-
-			Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(song.Disc));
 		}
 	}
 }

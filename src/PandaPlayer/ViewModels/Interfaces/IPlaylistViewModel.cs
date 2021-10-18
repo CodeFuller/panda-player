@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using PandaPlayer.Core.Models;
+using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.ViewModels.Interfaces
 {
@@ -18,13 +18,7 @@ namespace PandaPlayer.ViewModels.Interfaces
 		/// </summary>
 		DiscModel CurrentDisc { get; }
 
-		ICommand PlayFromSongCommand { get; }
-
-		ICommand RemoveSongsFromPlaylistCommand { get; }
-
-		ICommand ClearPlaylistCommand { get; }
-
-		ICommand NavigateToSongDiscCommand { get; }
+		IEnumerable<BasicMenuItem> ContextMenuItems { get; }
 
 		Task SetPlaylistSongs(IEnumerable<SongModel> songs, CancellationToken cancellationToken);
 

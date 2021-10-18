@@ -1,22 +1,42 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using CodeFuller.Library.Wpf;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using PandaPlayer.Core.Models;
+using PandaPlayer.Views.Extensions;
 
 namespace PandaPlayer.ViewModels.MenuItems
 {
-	public class SetRatingMenuItem
+	public class SetRatingMenuItem : CommandMenuItem
 	{
-		public RatingModel Rating { get; }
+		private readonly RatingModel rating;
 
-		public ICommand Command { get; }
-
-		public SetRatingMenuItem(Func<RatingModel, CancellationToken, Task> setRatingAction, RatingModel rating)
+		public SetRatingMenuItem(RatingModel rating)
 		{
-			Rating = rating;
-			Command = new AsyncRelayCommand(() => setRatingAction(rating, CancellationToken.None));
+			this.rating = rating;
+		}
+
+		public override MenuItem MenuItemControl
+		{
+			get
+			{
+				var menuItem = base.MenuItemControl;
+
+				var ratingImageFileName = rating.ToRatingImageFileName();
+				var ratingImage = new BitmapImage(new Uri($"pack://application:,,,/PandaPlayer;component{ratingImageFileName}", UriKind.Absolute));
+
+				// https://stackoverflow.com/a/248638/5740031
+				var image = new FrameworkElementFactory(typeof(Image));
+				image.SetValue(FrameworkElement.HeightProperty, 15d);
+				image.SetValue(Image.SourceProperty, ratingImage);
+
+				menuItem.HeaderTemplate = new DataTemplate
+				{
+					VisualTree = image,
+				};
+
+				return menuItem;
+			}
 		}
 	}
 }

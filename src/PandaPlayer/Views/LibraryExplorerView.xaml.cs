@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.ViewModels.LibraryExplorerItems;
+using PandaPlayer.Views.Extensions;
 
 namespace PandaPlayer.Views
 {
@@ -100,13 +101,7 @@ namespace PandaPlayer.Views
 				return;
 			}
 
-			var contextMenu = new ContextMenu();
-			foreach (var menuItem in viewModel.ContextMenuItemsForSelectedItem.Select(x => x.MenuItemControl))
-			{
-				contextMenu.Items.Add(menuItem);
-			}
-
-			frameworkElement.ContextMenu = contextMenu;
+			frameworkElement.ContextMenu = viewModel.ContextMenuItemsForSelectedItem.ToContextMenu();
 		}
 
 		private void ContentDataGrid_OnKeyDown(object sender, KeyEventArgs e)

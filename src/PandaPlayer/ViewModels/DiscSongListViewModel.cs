@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
+using System.Threading;
+using CodeFuller.Library.Wpf;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.ViewModels.Interfaces;
+using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.ViewModels
 {
@@ -15,29 +18,57 @@ namespace PandaPlayer.ViewModels
 	{
 		public override bool DisplayTrackNumbers => true;
 
-		public override ICommand PlaySongsNextCommand { get; }
+		public IEnumerable<BasicMenuItem> ContextMenuItems
+		{
+			get
+			{
+				var selectedSongs = SelectedSongs.ToList();
+				if (!selectedSongs.Any())
+				{
+					yield break;
+				}
 
-		public override ICommand PlaySongsLastCommand { get; }
+				if (selectedSongs.Any(x => x.IsDeleted))
+				{
+					yield break;
+				}
 
-		public ICommand DeleteSongsFromDiscCommand { get; }
+				yield return new CommandMenuItem
+				{
+					Header = "Play Next",
+					IconKind = PackIconKind.PlaylistAdd,
+					Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(selectedSongs))),
+				};
+
+				yield return new CommandMenuItem
+				{
+					Header = "Play Last",
+					IconKind = PackIconKind.PlaylistAdd,
+					Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(selectedSongs))),
+				};
+
+				yield return GetSetRatingContextMenuItem(selectedSongs);
+
+				yield return new CommandMenuItem
+				{
+					Header = "Delete From Disc",
+					IconKind = PackIconKind.DeleteForever,
+					Command = new RelayCommand(DeleteSongsFromDisc),
+				};
+
+				yield return new CommandMenuItem
+				{
+					Header = "Properties",
+					IconKind = PackIconKind.Pencil,
+					Command = new AsyncRelayCommand(() => EditSongsProperties(selectedSongs, CancellationToken.None)),
+				};
+			}
+		}
 
 		public DiscSongListViewModel(ISongsService songsService, IViewNavigator viewNavigator)
 			: base(songsService, viewNavigator)
 		{
-			PlaySongsNextCommand = new RelayCommand(() => SendAddingSongsToPlaylistEvent(new AddingSongsToPlaylistNextEventArgs(SelectedSongs)));
-			PlaySongsLastCommand = new RelayCommand(() => SendAddingSongsToPlaylistEvent(new AddingSongsToPlaylistLastEventArgs(SelectedSongs)));
-			DeleteSongsFromDiscCommand = new RelayCommand(DeleteSongsFromDisc);
-
 			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => OnExplorerDiscChanged(e.Disc, e.DeletedContentIsShown));
-		}
-
-		private static void SendAddingSongsToPlaylistEvent<TAddingSongsToPlaylistEventArgs>(TAddingSongsToPlaylistEventArgs e)
-			where TAddingSongsToPlaylistEventArgs : AddingSongsToPlaylistEventArgs
-		{
-			if (e.Songs.Any())
-			{
-				Messenger.Default.Send(e);
-			}
 		}
 
 		private void DeleteSongsFromDisc()

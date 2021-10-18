@@ -5,10 +5,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using CodeFuller.Library.Wpf;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
+using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.Events.SongEvents;
@@ -64,14 +64,6 @@ namespace PandaPlayer.ViewModels
 
 		public TimeSpan TotalSongsDuration => Songs.Aggregate(TimeSpan.Zero, (currentSum, currentSong) => currentSum + currentSong.Duration);
 
-		public abstract ICommand PlaySongsNextCommand { get; }
-
-		public abstract ICommand PlaySongsLastCommand { get; }
-
-		public ICommand EditSongsPropertiesCommand { get; }
-
-		public IReadOnlyCollection<SetRatingMenuItem> SetRatingMenuItems { get; }
-
 		protected SongListViewModel(ISongsService songsService, IViewNavigator viewNavigator)
 		{
 			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
@@ -80,24 +72,29 @@ namespace PandaPlayer.ViewModels
 			songItems = new ObservableCollection<SongListItem>();
 			SongItems = new ReadOnlyObservableCollection<SongListItem>(songItems);
 
-			EditSongsPropertiesCommand = new AsyncRelayCommand(() => EditSongsProperties(CancellationToken.None));
-			SetRatingMenuItems = RatingHelpers.AllRatingValues
-				.OrderByDescending(r => r)
-				.Select(r => new SetRatingMenuItem(SetRatingForSelectedSongs, r))
-				.ToList();
-
 			Messenger.Default.Register<SongChangedEventArgs>(this, e => OnSongChanged(e.Song, e.PropertyName));
 			Messenger.Default.Register<DiscChangedEventArgs>(this, e => OnDiscChanged(e.Disc, e.PropertyName));
 			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
 		}
 
-		private async Task EditSongsProperties(CancellationToken cancellationToken)
+		protected Task EditSongsProperties(IEnumerable<SongModel> songs, CancellationToken cancellationToken)
 		{
-			var selectedSongs = SelectedSongs.ToList();
-			if (selectedSongs.Any())
+			return ViewNavigator.ShowSongPropertiesView(songs, cancellationToken);
+		}
+
+		protected ExpandableMenuItem GetSetRatingContextMenuItem(IEnumerable<SongModel> songs)
+		{
+			return new()
 			{
-				await ViewNavigator.ShowSongPropertiesView(selectedSongs, cancellationToken);
-			}
+				Header = "Set Rating",
+				IconKind = PackIconKind.Star,
+				Items = RatingHelpers.AllRatingValues
+					.OrderByDescending(r => r)
+					.Select(rating => new SetRatingMenuItem(rating)
+					{
+						Command = new AsyncRelayCommand(() => SetRatingForSongs(songs, rating, CancellationToken.None)),
+					}),
+			};
 		}
 
 		internal void SetSongs(IEnumerable<SongModel> newSongs)
@@ -118,9 +115,9 @@ namespace PandaPlayer.ViewModels
 			OnSongItemsChanged();
 		}
 
-		private async Task SetRatingForSelectedSongs(RatingModel rating, CancellationToken cancellationToken)
+		private async Task SetRatingForSongs(IEnumerable<SongModel> songs, RatingModel rating, CancellationToken cancellationToken)
 		{
-			foreach (var song in SelectedSongs.ToList())
+			foreach (var song in songs)
 			{
 				song.Rating = rating;
 				await songsService.UpdateSong(song, cancellationToken);

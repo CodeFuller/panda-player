@@ -1,4 +1,9 @@
-﻿namespace PandaPlayer.Views
+﻿using System.Windows;
+using System.Windows.Controls;
+using PandaPlayer.ViewModels.Interfaces;
+using PandaPlayer.Views.Extensions;
+
+namespace PandaPlayer.Views
 {
 	// It is not possible to have XAML for UserControl which inherits from another UserControl.
 	// That's why we define this control only via code-behind.
@@ -9,10 +14,17 @@
 		{
 			InitializeComponent();
 
-			this.Loaded += (_, _) =>
+			SongsDataGrid.ContextMenuOpening += DataGrid_ContextMenuOpening;
+		}
+
+		private void DataGrid_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+		{
+			if (e.Source is not FrameworkElement frameworkElement || DataContext is not IPlaylistViewModel viewModel)
 			{
-				SongsDataGrid.ContextMenu = new PlaylistContextMenu();
-			};
+				return;
+			}
+
+			frameworkElement.ContextMenu = viewModel.ContextMenuItems.ToContextMenu();
 		}
 	}
 }

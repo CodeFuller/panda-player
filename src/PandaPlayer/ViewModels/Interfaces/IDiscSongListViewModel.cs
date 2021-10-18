@@ -1,9 +1,10 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.Generic;
+using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.ViewModels.Interfaces
 {
 	public interface IDiscSongListViewModel : ISongListViewModel
 	{
-		ICommand DeleteSongsFromDiscCommand { get; }
+		IEnumerable<BasicMenuItem> ContextMenuItems { get; }
 	}
 }
