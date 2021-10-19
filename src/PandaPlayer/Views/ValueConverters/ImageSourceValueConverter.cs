@@ -19,38 +19,33 @@ namespace PandaPlayer.Views.ValueConverters
 				return DependencyProperty.UnsetValue;
 			}
 
-			string imageFileName;
-
-			if (value is Uri imageUri)
+			return value switch
 			{
-				if (!imageUri.IsFile)
-				{
-					throw new NotSupportedException("Displaying of non-file URIs is not supported");
-				}
-
-				imageFileName = imageUri.OriginalString;
-			}
-			else if (value is string imagePath)
-			{
-				imageFileName = imagePath;
-			}
-			else
-			{
-				return DependencyProperty.UnsetValue;
-			}
-
-			return LoadImage(imageFileName);
+				Uri imageUri => LoadImage(imageUri),
+				string imagePath => LoadImageFromFile(imagePath),
+				_ => DependencyProperty.UnsetValue,
+			};
 		}
 
-		private static BitmapImage LoadImage(string imageFileName)
+		private static BitmapImage LoadImage(Uri imageUri)
 		{
-			if (!File.Exists(imageFileName))
+			if (imageUri.Scheme == "pack")
 			{
-				return new BitmapImage(new Uri("pack://application:,,,/PandaPlayer;component/Views/Icons/ImageNotFound.png", UriKind.Absolute));
+				return new BitmapImage(imageUri);
 			}
 
+			if (imageUri.IsFile)
+			{
+				return LoadImageFromFile(imageUri.OriginalString);
+			}
+
+			throw new NotSupportedException($"Image URL is not supported: '{imageUri}'");
+		}
+
+		private static BitmapImage LoadImageFromFile(string imagePath)
+		{
 			var image = new BitmapImage();
-			using var fs = new FileStream(imageFileName, FileMode.Open, FileAccess.Read);
+			using var fs = new FileStream(imagePath, FileMode.Open, FileAccess.Read);
 			image.BeginInit();
 			image.CacheOption = BitmapCacheOption.OnLoad;
 			image.StreamSource = fs;

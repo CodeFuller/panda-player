@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -21,24 +22,36 @@ namespace PandaPlayer.ViewModels.DiscImages
 			set
 			{
 				Set(ref currentDisc, value);
-				CurrentImageUri = currentDisc?.CoverImage?.ContentUri;
+				RaisePropertyChanged(nameof(CurrentImageUri));
 			}
 		}
 
-		private Uri currentImageUri;
-
 		public Uri CurrentImageUri
 		{
-			get => currentImageUri;
-			private set
+			get
 			{
-				// Why don't we use ViewModelBase.Set(ref currentImageUri, value)?
-				// When disc image is updated with new file, CurrentImageUri is not actually changed, however
-				// we need PropertyChanged event to be fired so that Image control updated image in the view.
-				// Seems like ViewModelBase.Set() has some internal check whether new value equals to the old one
-				// and don't fire the event in this case. That's why we should raise event manually.
-				currentImageUri = value;
-				RaisePropertyChanged();
+				if (currentDisc == null)
+				{
+					return null;
+				}
+
+				if (currentDisc.IsDeleted)
+				{
+					return new Uri("pack://application:,,,/PandaPlayer;component/Views/Icons/Deleted.png", UriKind.Absolute);
+				}
+
+				if (currentDisc.CoverImage == null)
+				{
+					return null;
+				}
+
+				var imageContentUri = currentDisc.CoverImage.ContentUri;
+				if (!File.Exists(imageContentUri.OriginalString))
+				{
+					return new Uri("pack://application:,,,/PandaPlayer;component/Views/Icons/ImageNotFound.png", UriKind.Absolute);
+				}
+
+				return imageContentUri;
 			}
 		}
 
@@ -69,7 +82,7 @@ namespace PandaPlayer.ViewModels.DiscImages
 		{
 			if (disc.Id == CurrentDisc?.Id)
 			{
-				CurrentImageUri = disc.CoverImage?.ContentUri;
+				RaisePropertyChanged(nameof(CurrentImageUri));
 			}
 		}
 	}
