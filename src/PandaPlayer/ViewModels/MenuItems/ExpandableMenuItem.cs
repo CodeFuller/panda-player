@@ -8,19 +8,16 @@ namespace PandaPlayer.ViewModels.MenuItems
 	{
 		public IEnumerable<BasicMenuItem> Items { get; init; }
 
-		public override MenuItem MenuItemControl
+		public override MenuItem GetMenuItemControl()
 		{
-			get
+			var menuItem = base.GetMenuItemControl();
+
+			foreach (var subItem in Items.Select(x => x.GetMenuItemControl()))
 			{
-				var menuItem = base.MenuItemControl;
-
-				foreach (var subItem in Items.Select(x => x.MenuItemControl))
-				{
-					menuItem.Items.Add(subItem);
-				}
-
-				return menuItem;
+				menuItem.Items.Add(subItem);
 			}
+
+			return menuItem;
 		}
 	}
 }

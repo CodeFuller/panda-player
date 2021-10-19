@@ -10,7 +10,7 @@ namespace PandaPlayer.Views.Extensions
 		public static ContextMenu ToContextMenu(this IEnumerable<BasicMenuItem> menuItems)
 		{
 			var contextMenu = new ContextMenu();
-			foreach (var menuItem in menuItems.Select(x => x.MenuItemControl))
+			foreach (var menuItem in menuItems.Select(x => x.GetMenuItemControl()))
 			{
 				contextMenu.Items.Add(menuItem);
 			}

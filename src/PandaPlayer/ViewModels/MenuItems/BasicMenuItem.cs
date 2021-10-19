@@ -4,6 +4,6 @@ namespace PandaPlayer.ViewModels.MenuItems
 {
 	public abstract class BasicMenuItem
 	{
-		public abstract Control MenuItemControl { get; }
+		public abstract Control GetMenuItemControl();
 	}
 }

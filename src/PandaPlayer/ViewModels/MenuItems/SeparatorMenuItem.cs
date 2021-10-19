@@ -4,6 +4,9 @@ namespace PandaPlayer.ViewModels.MenuItems
 {
 	public class SeparatorMenuItem : BasicMenuItem
 	{
-		public override Control MenuItemControl => new Separator();
+		public override Control GetMenuItemControl()
+		{
+			return new Separator();
+		}
 	}
 }

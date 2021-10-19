@@ -7,15 +7,12 @@ namespace PandaPlayer.ViewModels.MenuItems
 	{
 		public ICommand Command { get; init; }
 
-		public override MenuItem MenuItemControl
+		public override MenuItem GetMenuItemControl()
 		{
-			get
-			{
-				var menuItem = base.MenuItemControl;
-				menuItem.Command = Command;
+			var menuItem = base.GetMenuItemControl();
+			menuItem.Command = Command;
 
-				return menuItem;
-			}
+			return menuItem;
 		}
 	}
 }

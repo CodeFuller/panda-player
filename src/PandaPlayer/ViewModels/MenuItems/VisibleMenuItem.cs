@@ -9,10 +9,13 @@ namespace PandaPlayer.ViewModels.MenuItems
 
 		public PackIconKind? IconKind { get; init; }
 
-		public override MenuItem MenuItemControl => new()
+		public override MenuItem GetMenuItemControl()
 		{
-			Header = Header,
-			Icon = IconKind != null ? new PackIcon { Kind = IconKind.Value } : null,
-		};
+			return new()
+			{
+				Header = Header,
+				Icon = IconKind != null ? new PackIcon { Kind = IconKind.Value } : null,
+			};
+		}
 	}
 }
