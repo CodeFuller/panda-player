@@ -48,7 +48,7 @@ namespace PandaPlayer.ViewModels.DiscImages
 				var imageContentUri = currentDisc.CoverImage.ContentUri;
 				if (!File.Exists(imageContentUri.OriginalString))
 				{
-					return new Uri("pack://application:,,,/PandaPlayer;component/Views/Icons/ImageNotFound.png", UriKind.Absolute);
+					return new Uri("pack://application:,,,/PandaPlayer;component/Views/Icons/Image-Not-Found.png", UriKind.Absolute);
 				}
 
 				return imageContentUri;
