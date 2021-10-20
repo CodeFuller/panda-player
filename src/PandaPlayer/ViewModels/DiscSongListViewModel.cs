@@ -37,14 +37,14 @@ namespace PandaPlayer.ViewModels
 				{
 					Header = "Play Next",
 					IconKind = PackIconKind.PlaylistAdd,
-					Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(selectedSongs))),
+					Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(selectedSongs)), keepTargetAlive: true),
 				};
 
 				yield return new CommandMenuItem
 				{
 					Header = "Play Last",
 					IconKind = PackIconKind.PlaylistAdd,
-					Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(selectedSongs))),
+					Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(selectedSongs)), keepTargetAlive: true),
 				};
 
 				yield return GetSetRatingContextMenuItem(selectedSongs);
@@ -53,7 +53,7 @@ namespace PandaPlayer.ViewModels
 				{
 					Header = "Delete From Disc",
 					IconKind = PackIconKind.DeleteForever,
-					Command = new RelayCommand(DeleteSongsFromDisc),
+					Command = new RelayCommand(() => DeleteSongsFromDisc(selectedSongs), keepTargetAlive: true),
 				};
 
 				yield return new CommandMenuItem
@@ -71,15 +71,9 @@ namespace PandaPlayer.ViewModels
 			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => OnExplorerDiscChanged(e.Disc, e.DeletedContentIsShown));
 		}
 
-		private void DeleteSongsFromDisc()
+		private void DeleteSongsFromDisc(IReadOnlyCollection<SongModel> songs)
 		{
-			var selectedSongs = SelectedSongs.ToList();
-			if (!selectedSongs.Any())
-			{
-				return;
-			}
-
-			ViewNavigator.ShowDeleteDiscSongsView(selectedSongs);
+			ViewNavigator.ShowDeleteDiscSongsView(songs);
 
 			// If songs are deleted, call to songsService.DeleteSong() updates song.DeleteDate.
 			// As result OnSongChanged() is called, which deletes song(s) from the list.

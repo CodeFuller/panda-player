@@ -61,28 +61,28 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 			{
 				Header = "Play Disc",
 				IconKind = PackIconKind.Play,
-				Command = new RelayCommand(() => libraryExplorerViewModel.PlayDisc(Disc)),
+				Command = new RelayCommand(() => libraryExplorerViewModel.PlayDisc(Disc), keepTargetAlive: true),
 			};
 
 			yield return new CommandMenuItem
 			{
 				Header = "Add To Playlist",
 				IconKind = PackIconKind.PlaylistPlus,
-				Command = new RelayCommand(() => libraryExplorerViewModel.AddDiscToPlaylist(Disc)),
+				Command = new RelayCommand(() => libraryExplorerViewModel.AddDiscToPlaylist(Disc), keepTargetAlive: true),
 			};
 
 			yield return new CommandMenuItem
 			{
 				Header = "Delete Disc",
 				IconKind = PackIconKind.DeleteForever,
-				Command = new RelayCommand(() => libraryExplorerViewModel.DeleteDisc(Disc)),
+				Command = new RelayCommand(() => libraryExplorerViewModel.DeleteDisc(Disc), keepTargetAlive: true),
 			};
 
 			yield return new CommandMenuItem
 			{
 				Header = "Properties",
 				IconKind = PackIconKind.Pencil,
-				Command = new RelayCommand(() => libraryExplorerViewModel.EditDiscProperties(Disc)),
+				Command = new RelayCommand(() => libraryExplorerViewModel.EditDiscProperties(Disc), keepTargetAlive: true),
 			};
 		}
 	}

@@ -83,14 +83,14 @@ namespace PandaPlayer.ViewModels
 					{
 						Header = "Play Next",
 						IconKind = PackIconKind.PlaylistAdd,
-						Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(selectedSongs))),
+						Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(selectedSongs)), keepTargetAlive: true),
 					};
 
 					yield return new CommandMenuItem
 					{
 						Header = "Play Last",
 						IconKind = PackIconKind.PlaylistAdd,
-						Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(selectedSongs))),
+						Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(selectedSongs)), keepTargetAlive: true),
 					};
 
 					yield return new CommandMenuItem
@@ -117,7 +117,7 @@ namespace PandaPlayer.ViewModels
 					{
 						Header = "Go To Disc",
 						IconKind = PackIconKind.Album,
-						Command = new RelayCommand(() => Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(selectedSong.Disc))),
+						Command = new RelayCommand(() => Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(selectedSong.Disc)), keepTargetAlive: true),
 					};
 				}
 
