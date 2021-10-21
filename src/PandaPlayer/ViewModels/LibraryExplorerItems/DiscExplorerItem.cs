@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using CodeFuller.Library.Wpf;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using MaterialDesignThemes.Wpf;
@@ -75,7 +77,7 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 			{
 				Header = "Delete Disc",
 				IconKind = PackIconKind.DeleteForever,
-				Command = new RelayCommand(() => libraryExplorerViewModel.DeleteDisc(Disc), keepTargetAlive: true),
+				Command = new AsyncRelayCommand(() => libraryExplorerViewModel.DeleteDisc(Disc, CancellationToken.None)),
 			};
 
 			yield return new CommandMenuItem

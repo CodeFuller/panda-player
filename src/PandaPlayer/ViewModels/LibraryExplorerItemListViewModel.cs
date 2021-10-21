@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -28,7 +29,7 @@ namespace PandaPlayer.ViewModels
 			{
 				if (Set(ref showDeletedContent, value))
 				{
-					LoadFolderItems(LoadedFolder);
+					ReloadCurrentFolder();
 				}
 			}
 		}
@@ -113,6 +114,11 @@ namespace PandaPlayer.ViewModels
 			SelectedItem ??= Items.FirstOrDefault();
 		}
 
+		private void ReloadCurrentFolder()
+		{
+			LoadFolderItems(LoadedFolder);
+		}
+
 		public void SelectFolder(ItemId folderId)
 		{
 			SelectedItem = GetFolderItem(folderId);
@@ -123,19 +129,29 @@ namespace PandaPlayer.ViewModels
 			SelectedItem = GetDiscItem(discId);
 		}
 
-		public void RemoveFolder(ItemId folderId)
+		public async Task OnFolderDeleted(ItemId folderId, Func<ItemId, Task<FolderModel>> folderLoader)
 		{
-			RemoveItem(GetFolderItem(folderId));
+			await OnContentDeleted(GetFolderItem(folderId), folderLoader);
 		}
 
-		public void RemoveDisc(ItemId discId)
+		public async Task OnDiscDeleted(ItemId discId, Func<ItemId, Task<FolderModel>> folderLoader)
 		{
-			RemoveItem(GetDiscItem(discId));
+			await OnContentDeleted(GetDiscItem(discId), folderLoader);
 		}
 
-		private void RemoveItem(BasicExplorerItem item)
+		public async Task OnContentDeleted(BasicExplorerItem item, Func<ItemId, Task<FolderModel>> folderLoader)
 		{
-			if (item != null)
+			if (item == null)
+			{
+				return;
+			}
+
+			if (ShowDeletedContent)
+			{
+				var folder = await folderLoader(LoadedFolder.Id);
+				LoadFolderItems(folder);
+			}
+			else
 			{
 				Items.Remove(item);
 			}

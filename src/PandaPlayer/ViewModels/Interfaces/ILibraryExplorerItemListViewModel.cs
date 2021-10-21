@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using PandaPlayer.Core.Models;
 using PandaPlayer.ViewModels.LibraryExplorerItems;
@@ -32,8 +34,8 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		void SelectDisc(ItemId discId);
 
-		void RemoveFolder(ItemId folderId);
+		Task OnFolderDeleted(ItemId folderId, Func<ItemId, Task<FolderModel>> folderLoader);
 
-		void RemoveDisc(ItemId discId);
+		Task OnDiscDeleted(ItemId discId, Func<ItemId, Task<FolderModel>> folderLoader);
 	}
 }

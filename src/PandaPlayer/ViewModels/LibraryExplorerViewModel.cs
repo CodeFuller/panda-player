@@ -109,17 +109,17 @@ namespace PandaPlayer.ViewModels
 
 			await foldersService.DeleteFolder(folder.Id, cancellationToken);
 
-			ItemListViewModel.RemoveFolder(folder.Id);
+			await ItemListViewModel.OnFolderDeleted(folder.Id, id => foldersService.GetFolder(id, cancellationToken));
 		}
 
-		public void DeleteDisc(DiscModel disc)
+		public async Task DeleteDisc(DiscModel disc, CancellationToken cancellationToken)
 		{
 			if (!viewNavigator.ShowDeleteDiscView(disc))
 			{
 				return;
 			}
 
-			ItemListViewModel.RemoveDisc(disc.Id);
+			await ItemListViewModel.OnDiscDeleted(disc.Id, id => foldersService.GetFolder(id, cancellationToken));
 		}
 
 		private async void OnLoadParentFolder(LoadParentFolderEventArgs e, CancellationToken cancellationToken)

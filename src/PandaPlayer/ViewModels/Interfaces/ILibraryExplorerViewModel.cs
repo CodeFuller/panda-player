@@ -26,6 +26,6 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		Task DeleteFolder(ItemId folderId, CancellationToken cancellationToken);
 
-		void DeleteDisc(DiscModel disc);
+		Task DeleteDisc(DiscModel disc, CancellationToken cancellationToken);
 	}
 }
