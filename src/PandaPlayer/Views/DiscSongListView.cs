@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.Views.Extensions;
 
@@ -10,21 +9,21 @@ namespace PandaPlayer.Views
 	// https://stackoverflow.com/questions/269106/
 	public class DiscSongListView : SongListView
 	{
+		private IDiscSongListViewModel ViewModel => DataContext.GetViewModel<IDiscSongListViewModel>();
+
 		public DiscSongListView()
 		{
 			InitializeComponent();
+
+			// Without this, context menu will not open first time.
+			SongsDataGrid.ContextMenu = new ContextMenu();
 
 			SongsDataGrid.ContextMenuOpening += DataGrid_ContextMenuOpening;
 		}
 
 		private void DataGrid_ContextMenuOpening(object sender, ContextMenuEventArgs e)
 		{
-			if (e.Source is not FrameworkElement frameworkElement || DataContext is not IDiscSongListViewModel viewModel)
-			{
-				return;
-			}
-
-			frameworkElement.ContextMenu = viewModel.ContextMenuItems.ToContextMenu();
+			SongsDataGrid.ContextMenu = ViewModel.ContextMenuItems.ToContextMenu();
 		}
 	}
 }

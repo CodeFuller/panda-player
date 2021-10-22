@@ -14,9 +14,14 @@ namespace PandaPlayer.Views
 {
 	public partial class LibraryExplorerView : UserControl
 	{
+		private ILibraryExplorerViewModel ViewModel => DataContext.GetViewModel<ILibraryExplorerViewModel>();
+
 		public LibraryExplorerView()
 		{
 			InitializeComponent();
+
+			// Without this, context menu will not open first time.
+			ContentDataGrid.ContextMenu = new ContextMenu();
 		}
 
 		// https://stackoverflow.com/a/29081353/5740031
@@ -96,12 +101,7 @@ namespace PandaPlayer.Views
 
 		private void DataGrid_ContextMenuOpening(object sender, ContextMenuEventArgs e)
 		{
-			if (e.Source is not FrameworkElement frameworkElement || DataContext is not ILibraryExplorerViewModel viewModel)
-			{
-				return;
-			}
-
-			frameworkElement.ContextMenu = viewModel.ContextMenuItemsForSelectedItem.ToContextMenu();
+			ContentDataGrid.ContextMenu = ViewModel.ContextMenuItemsForSelectedItem.ToContextMenu();
 		}
 
 		private void ContentDataGrid_OnKeyDown(object sender, KeyEventArgs e)
@@ -137,12 +137,7 @@ namespace PandaPlayer.Views
 
 		private void ContentDataGrid_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
-			if (DataContext is not ILibraryExplorerViewModel viewModel)
-			{
-				return;
-			}
-
-			viewModel.ItemListViewModel.ChangeFolderCommand.Execute(null);
+			ViewModel.ItemListViewModel.ChangeFolderCommand.Execute(null);
 		}
 	}
 }
