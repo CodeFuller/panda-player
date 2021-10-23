@@ -18,7 +18,7 @@ namespace PandaPlayer.ViewModels
 	{
 		public override bool DisplayTrackNumbers => true;
 
-		public IEnumerable<BasicMenuItem> ContextMenuItems
+		public override IEnumerable<BasicMenuItem> ContextMenuItems
 		{
 			get
 			{

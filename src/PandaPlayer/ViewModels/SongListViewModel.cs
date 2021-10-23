@@ -64,6 +64,8 @@ namespace PandaPlayer.ViewModels
 
 		public TimeSpan TotalSongsDuration => Songs.Aggregate(TimeSpan.Zero, (currentSum, currentSong) => currentSum + currentSong.Duration);
 
+		public abstract IEnumerable<BasicMenuItem> ContextMenuItems { get; }
+
 		protected SongListViewModel(ISongsService songsService, IViewNavigator viewNavigator)
 		{
 			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));

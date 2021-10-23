@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using PandaPlayer.Core.Models;
+using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.ViewModels.Interfaces
 {
@@ -28,5 +29,7 @@ namespace PandaPlayer.ViewModels.Interfaces
 		string TotalSongsFileSize { get; }
 
 		TimeSpan TotalSongsDuration { get; }
+
+		IEnumerable<BasicMenuItem> ContextMenuItems { get; }
 	}
 }

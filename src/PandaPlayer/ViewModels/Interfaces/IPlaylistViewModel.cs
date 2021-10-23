@@ -18,8 +18,6 @@ namespace PandaPlayer.ViewModels.Interfaces
 		/// </summary>
 		DiscModel CurrentDisc { get; }
 
-		IEnumerable<BasicMenuItem> ContextMenuItems { get; }
-
 		Task SetPlaylistSongs(IEnumerable<SongModel> songs, CancellationToken cancellationToken);
 
 		Task SwitchToNextSong(CancellationToken cancellationToken);

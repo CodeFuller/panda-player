@@ -57,7 +57,7 @@ namespace PandaPlayer.ViewModels
 
 		public DiscModel CurrentDisc => CurrentSong != null ? CurrentSong.Disc : Songs.Select(s => s.Disc).UniqueOrDefault(new DiscEqualityComparer());
 
-		public IEnumerable<BasicMenuItem> ContextMenuItems
+		public override IEnumerable<BasicMenuItem> ContextMenuItems
 		{
 			get
 			{
