@@ -271,8 +271,40 @@ namespace PandaPlayer.Services.IntegrationTests
 			tagData2.Year.Should().Be(1998);
 			tagData2.Album.Should().Be("Охотник и сайгак");
 
-			var updatedDisc = await GetDisc(ReferenceData.NormalDiscId);
-			updatedDisc.Should().BeEquivalentTo(disc, x => x.IgnoringCyclicReferences());
+			await CheckLibraryConsistency(typeof(SuspiciousAlbumTitleInconsistency));
+		}
+
+		[TestMethod]
+		public async Task UpdateDisc_ForDeletedDisc_UpdatesDiscCorrectly()
+		{
+			// Arrange
+
+			var target = CreateTestTarget();
+
+			var disc = await GetDisc(ReferenceData.DeletedDiscId);
+
+			// Act
+
+			disc.TreeTitle = "1998 - Охотник и сайгак";
+			disc.Title = "Охотник и сайгак";
+			disc.AlbumTitle = "Охотник и сайгак";
+			disc.Year = 1998;
+
+			await target.UpdateDisc(disc, CancellationToken.None);
+
+			// Assert
+
+			var referenceData = GetReferenceData();
+			var expectedDisc = referenceData.DeletedDisc;
+			expectedDisc.TreeTitle = "1998 - Охотник и сайгак";
+			expectedDisc.Title = "Охотник и сайгак";
+			expectedDisc.AlbumTitle = "Охотник и сайгак";
+			expectedDisc.Year = 1998;
+
+			disc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+
+			var discFromRepository = await GetDisc(ReferenceData.DeletedDiscId);
+			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
 
 			await CheckLibraryConsistency(typeof(SuspiciousAlbumTitleInconsistency));
 		}

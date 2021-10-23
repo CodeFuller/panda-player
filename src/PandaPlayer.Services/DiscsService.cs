@@ -56,7 +56,7 @@ namespace PandaPlayer.Services
 			// 2. Avoid overwriting of changes made by another clients.
 			var currentDisc = await discsRepository.GetDisc(disc.Id, cancellationToken);
 
-			if (disc.TreeTitle != currentDisc.TreeTitle)
+			if (!disc.IsDeleted && disc.TreeTitle != currentDisc.TreeTitle)
 			{
 				await storageRepository.UpdateDiscTreeTitle(currentDisc, disc, cancellationToken);
 			}

@@ -374,6 +374,45 @@ namespace PandaPlayer.Services.IntegrationTests
 		}
 
 		[TestMethod]
+		public async Task UpdateSong_ForDeletedSong_UpdatesSongDataCorrectly()
+		{
+			// Arrange
+
+			var updatedSong = await GetSong(ReferenceData.DeletedSongId);
+
+			var target = CreateTestTarget();
+
+			// Act
+
+			updatedSong.TrackNumber = 17;
+			updatedSong.TreeTitle = "11 - Дети Галактики.mp3";
+			updatedSong.Title = "Дети Галактики";
+			updatedSong.Artist = await GetArtist(ReferenceData.Artist1Id);
+			updatedSong.Genre = await GetGenre(ReferenceData.Genre2Id);
+			updatedSong.DeleteComment = "New Delete Comment";
+
+			await target.UpdateSong(updatedSong, CancellationToken.None);
+
+			// Assert
+
+			var referenceData = GetReferenceData();
+			var expectedSong = referenceData.DeletedSong;
+			expectedSong.TrackNumber = 17;
+			expectedSong.TreeTitle = "11 - Дети Галактики.mp3";
+			expectedSong.Title = "Дети Галактики";
+			expectedSong.Artist = referenceData.Artist1;
+			expectedSong.Genre = referenceData.Genre2;
+			expectedSong.DeleteComment = "New Delete Comment";
+
+			updatedSong.Should().BeEquivalentTo(expectedSong, x => x.IgnoringCyclicReferences());
+
+			var songFromRepository = await GetSong(ReferenceData.DeletedSongId);
+			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.IgnoringCyclicReferences());
+
+			await CheckLibraryConsistency(typeof(BadTrackNumbersInconsistency), typeof(MultipleDiscGenresInconsistency));
+		}
+
+		[TestMethod]
 		public async Task AddSongPlayback_ForSongWithoutPlaybacks_AddsPlaybackCorrectly()
 		{
 			// Arrange
