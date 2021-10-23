@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -647,32 +648,18 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				Subfolders = new[]
 				{
-					new ShallowFolderModel { Name = "Old Folder" },
+					new ShallowFolderModel { Id = new ItemId("OldSubfolder"), Name = "Old Folder" },
 				},
 
 				Discs = new[]
 				{
-					new DiscModel
-					{
-						TreeTitle = "Old Disc",
-						AllSongs = new[] { new SongModel() },
-					},
+					new DiscModel { Id = new ItemId("OldDisc"), TreeTitle = "Old Disc", AllSongs = new[] { new SongModel { Id = new ItemId("1") } } },
 				},
 			};
 
-			var newSubfolder = new ShallowFolderModel { Name = "New Folder" };
-
-			var newDisc = new DiscModel
-			{
-				TreeTitle = "New Disc",
-				AllSongs = new[] { new SongModel() },
-			};
-
-			var newFolder = new FolderModel
-			{
-				Subfolders = new[] { newSubfolder },
-				Discs = new[] { newDisc },
-			};
+			var newSubfolder = new ShallowFolderModel { Id = new ItemId("NewSubfolder"), Name = "New Folder" };
+			var newDisc = new DiscModel { Id = new ItemId("NewSubfolder"), TreeTitle = "New Disc", AllSongs = new[] { new SongModel { Id = new ItemId("2") } } };
+			var newFolder = new FolderModel { Id = new ItemId("NewFolder"), Subfolders = new[] { newSubfolder }, Discs = new[] { newDisc } };
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -886,7 +873,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void RemoveFolder_IfFolderPresentsInList_RemovesThisFolder()
+		public async Task OnFolderDeleted_IfFolderPresentsInList_RemovesThisFolder()
 		{
 			// Arrange
 
@@ -929,7 +916,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.RemoveFolder(new ItemId("2"));
+			await target.OnFolderDeleted(new ItemId("2"), _ => Task.FromResult<FolderModel>(null));
 
 			// Assert
 
@@ -944,7 +931,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void RemoveFolder_IfFolderDoesNotPresentInList_DoesNothing()
+		public async Task OnFolderDeleted_IfFolderDoesNotPresentInList_DoesNothing()
 		{
 			// Arrange
 
@@ -975,7 +962,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.RemoveFolder(new ItemId("1"));
+			await target.OnFolderDeleted(new ItemId("1"), _ => Task.FromResult<FolderModel>(null));
 
 			// Assert
 
@@ -989,7 +976,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void RemoveDisc_IfDiscPresentsInList_RemovesThisDisc()
+		public async Task OnDiscDeleted_IfDiscPresentsInList_RemovesThisDisc()
 		{
 			// Arrange
 
@@ -1034,7 +1021,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.RemoveDisc(new ItemId("2"));
+			await target.OnDiscDeleted(new ItemId("2"), _ => Task.FromResult<FolderModel>(null));
 
 			// Assert
 
@@ -1049,7 +1036,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void RemoveDisc_IfDiscDoesNotPresentInList_DoesNothing()
+		public async Task OnDiscDeleted_IfDiscDoesNotPresentInList_DoesNothing()
 		{
 			// Arrange
 
@@ -1080,7 +1067,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.RemoveDisc(new ItemId("1"));
+			await target.OnDiscDeleted(new ItemId("1"), _ => Task.FromResult<FolderModel>(null));
 
 			// Assert
 

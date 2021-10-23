@@ -48,7 +48,7 @@ namespace PandaPlayer.ViewModels
 			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => OnExplorerDiscChanged(e.Disc, e.DeletedContentIsShown));
 		}
 
-		private void DeleteSongsFromDisc(IReadOnlyCollection<SongModel> songs)
+		internal void DeleteSongsFromDisc(IReadOnlyCollection<SongModel> songs)
 		{
 			ViewNavigator.ShowDeleteDiscSongsView(songs);
 

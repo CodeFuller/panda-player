@@ -7,8 +7,6 @@ using Moq;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
-using PandaPlayer.Events.SongListEvents;
-using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.ViewModels;
 
 namespace PandaPlayer.UnitTests.ViewModels
@@ -40,7 +38,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void DeleteSongsFromDiscCommand_NoSongsAreSelected_DoesNothing()
+		public void DeleteSongsFromDisc_InvokesDeleteDiscSongsView()
 		{
 			// Arrange
 
@@ -58,39 +56,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.DeleteSongsFromDiscCommand.Execute(null);
-
-			// Assert
-
-			mocker.GetMock<IViewNavigator>().Verify(x => x.ShowDeleteDiscSongsView(It.IsAny<IReadOnlyCollection<SongModel>>()), Times.Never);
-		}
-
-		[TestMethod]
-		public void DeleteSongsFromDiscCommand_SomeSongsAreSelected_InvokesDeleteDiscSongsViewForSelectedSongs()
-		{
-			// Arrange
-
-			var songs = new[]
-			{
-				new SongModel { Id = new ItemId("0") },
-				new SongModel { Id = new ItemId("1") },
-				new SongModel { Id = new ItemId("2") },
-			};
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<DiscSongListViewModel>();
-
-			target.SetSongs(songs);
-
-			target.SelectedSongItems = new[]
-			{
-				target.SongItems[0],
-				target.SongItems[2],
-			};
-
-			// Act
-
-			target.DeleteSongsFromDiscCommand.Execute(null);
+			target.DeleteSongsFromDisc(new[] { songs[0], songs[2] });
 
 			// Assert
 
@@ -98,7 +64,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void DeleteSongsFromDiscCommand_WhenSongsAreDeleted_SongItemsAreRemovedFromList()
+		public void DeleteSongsFromDisc_WhenSongsAreDeleted_SongItemsAreRemovedFromList()
 		{
 			// Arrange
 
@@ -124,15 +90,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			target.SetSongs(songs);
 
-			target.SelectedSongItems = new[]
-			{
-				target.SongItems[0],
-				target.SongItems[2],
-			};
-
 			// Act
 
-			target.DeleteSongsFromDiscCommand.Execute(null);
+			target.DeleteSongsFromDisc(new[] { songs[0], songs[2] });
 
 			// Assert
 
@@ -143,148 +103,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			target.Songs.Should().BeEquivalentTo(expectedSongs, x => x.WithStrictOrdering());
-		}
-
-		[TestMethod]
-		public void PlaySongsNextCommand_SomeSongsAreSelected_SendsAddingSongsToPlaylistNextEventWithSelectedSongs()
-		{
-			// Arrange
-
-			var songs = new[]
-			{
-				new SongModel { Id = new ItemId("0") },
-				new SongModel { Id = new ItemId("1") },
-				new SongModel { Id = new ItemId("2") },
-			};
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<DiscSongListViewModel>();
-
-			AddingSongsToPlaylistNextEventArgs addingSongsToPlaylistEvent = null;
-			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => e.RegisterEvent(ref addingSongsToPlaylistEvent));
-
-			target.SetSongs(songs);
-			target.SelectedSongItems = new List<SongListItem>
-			{
-				target.SongItems[0],
-				target.SongItems[2],
-			};
-
-			// Act
-
-			target.PlaySongsNextCommand.Execute(null);
-
-			// Assert
-
-			var expectedSongs = new[]
-			{
-				songs[0],
-				songs[2],
-			};
-
-			addingSongsToPlaylistEvent.Songs.Should().BeEquivalentTo(expectedSongs, x => x.WithStrictOrdering());
-			target.Songs.Should().BeEquivalentTo(songs, x => x.WithStrictOrdering());
-		}
-
-		[TestMethod]
-		public void PlaySongsNextCommand_NoSongsAreSelected_DoesNotSendAddingSongsToPlaylistNextEvent()
-		{
-			// Arrange
-
-			var songs = new[]
-			{
-				new SongModel { Id = new ItemId("0") },
-				new SongModel { Id = new ItemId("1") },
-				new SongModel { Id = new ItemId("2") },
-			};
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<DiscSongListViewModel>();
-
-			AddingSongsToPlaylistNextEventArgs addingSongsToPlaylistEvent = null;
-			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => e.RegisterEvent(ref addingSongsToPlaylistEvent));
-
-			target.SetSongs(songs);
-
-			// Act
-
-			target.PlaySongsNextCommand.Execute(null);
-
-			// Assert
-
-			addingSongsToPlaylistEvent.Should().BeNull();
-			target.Songs.Should().BeEquivalentTo(songs, x => x.WithStrictOrdering());
-		}
-
-		[TestMethod]
-		public void PlaySongsLastCommand_SomeSongsAreSelected_SendsAddingSongsToPlaylistLastEventWithSelectedSongs()
-		{
-			// Arrange
-
-			var songs = new[]
-			{
-				new SongModel { Id = new ItemId("0") },
-				new SongModel { Id = new ItemId("1") },
-				new SongModel { Id = new ItemId("2") },
-			};
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<DiscSongListViewModel>();
-
-			AddingSongsToPlaylistLastEventArgs addingSongsToPlaylistEvent = null;
-			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => e.RegisterEvent(ref addingSongsToPlaylistEvent));
-
-			target.SetSongs(songs);
-			target.SelectedSongItems = new List<SongListItem>
-			{
-				target.SongItems[0],
-				target.SongItems[2],
-			};
-
-			// Act
-
-			target.PlaySongsLastCommand.Execute(null);
-
-			// Assert
-
-			var expectedSongs = new[]
-			{
-				songs[0],
-				songs[2],
-			};
-
-			addingSongsToPlaylistEvent.Songs.Should().BeEquivalentTo(expectedSongs, x => x.WithStrictOrdering());
-			target.Songs.Should().BeEquivalentTo(songs, x => x.WithStrictOrdering());
-		}
-
-		[TestMethod]
-		public void PlaySongsLastCommand_NoSongsAreSelected_DoesNotSendAddingSongsToPlaylistLastEvent()
-		{
-			// Arrange
-
-			var songs = new[]
-			{
-				new SongModel { Id = new ItemId("0") },
-				new SongModel { Id = new ItemId("1") },
-				new SongModel { Id = new ItemId("2") },
-			};
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<DiscSongListViewModel>();
-
-			AddingSongsToPlaylistLastEventArgs addingSongsToPlaylistEvent = null;
-			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => e.RegisterEvent(ref addingSongsToPlaylistEvent));
-
-			target.SetSongs(songs);
-
-			// Act
-
-			target.PlaySongsLastCommand.Execute(null);
-
-			// Assert
-
-			addingSongsToPlaylistEvent.Should().BeNull();
-			target.Songs.Should().BeEquivalentTo(songs, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -321,7 +139,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(newDisc));
+			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(newDisc, deletedContentIsShown: false));
 
 			// Assert
 
@@ -352,7 +170,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null));
+			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null, deletedContentIsShown: false));
 
 			// Assert
 

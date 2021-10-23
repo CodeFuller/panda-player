@@ -227,7 +227,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(new DiscModel()));
+			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(new DiscModel(), deletedContentIsShown: false));
 
 			// Assert
 

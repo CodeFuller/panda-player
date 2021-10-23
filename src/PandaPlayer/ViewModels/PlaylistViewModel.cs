@@ -83,14 +83,14 @@ namespace PandaPlayer.ViewModels
 					{
 						Header = "Play Next",
 						IconKind = PackIconKind.PlaylistAdd,
-						Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(selectedSongs)), keepTargetAlive: true),
+						Command = new AsyncRelayCommand(() => AddSongsNext(SelectedSongs.ToList(), CancellationToken.None)),
 					};
 
 					yield return new CommandMenuItem
 					{
 						Header = "Play Last",
 						IconKind = PackIconKind.PlaylistAdd,
-						Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(selectedSongs)), keepTargetAlive: true),
+						Command = new AsyncRelayCommand(() => AddSongsLast(SelectedSongs.ToList(), CancellationToken.None)),
 					};
 
 					yield return new CommandMenuItem
@@ -144,7 +144,7 @@ namespace PandaPlayer.ViewModels
 			//      Songs are added to PlaylistViewModel from handlers of these events.
 			//
 			//   2. Action is invoked from context menu in PlaylistViewModel.
-			//      In ths case songs are added to PlaylistViewModel from handlers of PlaySongsNextCommand and PlaySongsLastCommand.
+			//      In ths case songs are added to PlaylistViewModel directly by calling AddSongsNext() & AddSongsLast() methods.
 			//
 			//   This is done to prevent anti-pattern when object sends event to itself.
 			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => OnAddingNextSongs(e.Songs, CancellationToken.None));
@@ -197,7 +197,7 @@ namespace PandaPlayer.ViewModels
 			await AddSongsNext(songs, cancellationToken);
 		}
 
-		private async Task AddSongsNext(IReadOnlyCollection<SongModel> songs, CancellationToken cancellationToken)
+		internal async Task AddSongsNext(IReadOnlyCollection<SongModel> songs, CancellationToken cancellationToken)
 		{
 			await InsertSongs(songs, CurrentSongIndex + 1 ?? 0, cancellationToken);
 		}
@@ -207,7 +207,7 @@ namespace PandaPlayer.ViewModels
 			await AddSongsLast(songs, cancellationToken);
 		}
 
-		private async Task AddSongsLast(IReadOnlyCollection<SongModel> songs, CancellationToken cancellationToken)
+		internal async Task AddSongsLast(IReadOnlyCollection<SongModel> songs, CancellationToken cancellationToken)
 		{
 			await InsertSongs(songs, SongItems.Count, cancellationToken);
 		}
@@ -229,9 +229,9 @@ namespace PandaPlayer.ViewModels
 			await OnPlaylistChanged(cancellationToken);
 		}
 
-		private async Task PlayFromSong(SongListItem selectedSongItem, CancellationToken cancellationToken)
+		internal async Task PlayFromSong(SongListItem songItem, CancellationToken cancellationToken)
 		{
-			var selectedSongIndex = SongItems.IndexOf(selectedSongItem);
+			var selectedSongIndex = SongItems.IndexOf(songItem);
 			if (selectedSongIndex == -1)
 			{
 				return;
@@ -244,7 +244,7 @@ namespace PandaPlayer.ViewModels
 			Messenger.Default.Send(new PlayPlaylistStartingFromSongEventArgs());
 		}
 
-		private async Task RemoveSongsFromPlaylist(IReadOnlyCollection<SongListItem> songItems, CancellationToken cancellationToken)
+		internal async Task RemoveSongsFromPlaylist(IReadOnlyCollection<SongListItem> songItems, CancellationToken cancellationToken)
 		{
 			RemoveSongItems(songItems);
 
@@ -254,7 +254,7 @@ namespace PandaPlayer.ViewModels
 			await OnPlaylistChanged(cancellationToken);
 		}
 
-		private async Task ClearPlaylist(CancellationToken cancellationToken)
+		internal async Task ClearPlaylist(CancellationToken cancellationToken)
 		{
 			RemoveSongItems(SongItems.ToList());
 

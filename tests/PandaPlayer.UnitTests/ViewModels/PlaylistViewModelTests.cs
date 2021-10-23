@@ -9,7 +9,6 @@ using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
-using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.Events.SongEvents;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.UnitTests.Extensions;
@@ -386,37 +385,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public async Task PlayFromSongCommand_NoSongIsSelected_DoesNothing()
-		{
-			// Arrange
-
-			var songs = new[]
-			{
-				new SongModel { Id = new ItemId("0") },
-				new SongModel { Id = new ItemId("1") },
-			};
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<PlaylistViewModel>();
-
-			await target.SetPlaylistSongs(songs, CancellationToken.None);
-
-			PlayPlaylistStartingFromSongEventArgs playPlaylistEventArgs = null;
-			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, e => e.RegisterEvent(ref playPlaylistEventArgs));
-
-			// Act
-
-			target.PlayFromSongCommand.Execute(null);
-
-			// Assert
-
-			target.CurrentSong.Should().Be(songs[0]);
-
-			playPlaylistEventArgs.Should().BeNull();
-		}
-
-		[TestMethod]
-		public async Task PlayFromSongCommand_SomeSongIsSelected_SetsThisSongAsCurrentAndSendsPlayPlaylistStartingFromSongEvent()
+		public async Task PlayFromSong_ForSongFromTheList_SetsThisSongAsCurrentAndSendsPlayPlaylistStartingFromSongEvent()
 		{
 			// Arrange
 
@@ -431,7 +400,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
-			target.SelectedSongItem = target.SongItems[1];
 
 			PlayPlaylistStartingFromSongEventArgs playPlaylistEventArgs = null;
 			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, e => e.RegisterEvent(ref playPlaylistEventArgs));
@@ -441,7 +409,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.PlayFromSongCommand.Execute(null);
+			await target.PlayFromSong(target.SongItems[1], CancellationToken.None);
 
 			// Assert
 
@@ -453,43 +421,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public async Task RemoveSongsFromPlaylistCommand_NoSongsAreSelected_DoesNothing()
-		{
-			// Arrange
-
-			var songs = new[]
-			{
-				new SongModel { Id = new ItemId("0") },
-				new SongModel { Id = new ItemId("1") },
-				new SongModel { Id = new ItemId("2") },
-			};
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<PlaylistViewModel>();
-
-			await target.SetPlaylistSongs(songs, CancellationToken.None);
-
-			PlaylistChangedEventArgs playlistChangedEventArgs = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
-
-			var propertyChangedEvents = new List<PropertyChangedEventArgs>();
-			target.PropertyChanged += (_, e) => propertyChangedEvents.Add(e);
-
-			// Act
-
-			target.RemoveSongsFromPlaylistCommand.Execute(null);
-
-			// Assert
-
-			target.Songs.Should().BeEquivalentTo(songs, x => x.WithStrictOrdering());
-			target.CurrentSong.Should().Be(songs[0]);
-
-			playlistChangedEventArgs.Should().BeNull();
-			propertyChangedEvents.Should().BeEmpty();
-		}
-
-		[TestMethod]
-		public async Task RemoveSongsFromPlaylistCommand_SomeSongsAreSelected_RemovesSelectedSongsFromPlaylist()
+		public async Task RemoveSongsFromPlaylist_ForSongsFromTheList_RemovesSongsFromPlaylist()
 		{
 			// Arrange
 
@@ -507,13 +439,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 
-			target.SelectedSongItems = new List<SongListItem>
-			{
-				target.SongItems[0],
-				target.SongItems[2],
-				target.SongItems[4],
-			};
-
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
 
@@ -522,7 +447,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.RemoveSongsFromPlaylistCommand.Execute(null);
+			await target.RemoveSongsFromPlaylist(new[] { target.SongItems[0], target.SongItems[2], target.SongItems[4] }, CancellationToken.None);
 
 			// Assert
 
@@ -540,7 +465,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public async Task RemoveSongsFromPlaylistCommand_CurrentSongIsRemoved_SetsCurrentSongToNull()
+		public async Task RemoveSongsFromPlaylist_CurrentSongIsRemoved_SetsCurrentSongToNull()
 		{
 			// Arrange
 
@@ -561,21 +486,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 			await target.SwitchToNextSong(CancellationToken.None);
 			target.CurrentSong.Should().Be(songs[2]);
 
-			target.SelectedSongItems = new List<SongListItem>
-			{
-				target.SongItems[1],
-				target.SongItems[2],
-				target.SongItems[3],
-			};
-
-			target.CurrentSong.Should().Be(songs[2]);
-
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
 
 			// Act
 
-			target.RemoveSongsFromPlaylistCommand.Execute(null);
+			await target.RemoveSongsFromPlaylist(new[] { target.SongItems[1], target.SongItems[2], target.SongItems[3] }, CancellationToken.None);
 
 			// Assert
 
@@ -587,7 +503,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public async Task RemoveSongsFromPlaylistCommand_CurrentSongIsNotRemoved_LeavesCurrentSongUnchanged()
+		public async Task RemoveSongsFromPlaylist_CurrentSongIsNotRemoved_LeavesCurrentSongUnchanged()
 		{
 			// Arrange
 
@@ -608,20 +524,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 			await target.SwitchToNextSong(CancellationToken.None);
 			target.CurrentSong.Should().Be(songs[2]);
 
-			target.SelectedSongItems = new List<SongListItem>
-			{
-				target.SongItems[1],
-				target.SongItems[3],
-			};
-
-			target.CurrentSong.Should().Be(songs[2]);
-
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
 
 			// Act
 
-			target.RemoveSongsFromPlaylistCommand.Execute(null);
+			await target.RemoveSongsFromPlaylist(new[] { target.SongItems[1], target.SongItems[3] }, CancellationToken.None);
 
 			// Assert
 
@@ -634,35 +542,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void ClearPlaylistCommand_ForEmptyPlaylist_DoesNothing()
-		{
-			// Arrange
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<PlaylistViewModel>();
-
-			PlaylistChangedEventArgs playlistChangedEventArgs = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
-
-			var propertyChangedEvents = new List<PropertyChangedEventArgs>();
-			target.PropertyChanged += (_, e) => propertyChangedEvents.Add(e);
-
-			// Act
-
-			target.ClearPlaylistCommand.Execute(null);
-
-			// Assert
-
-			target.Songs.Should().BeEmpty();
-			target.CurrentSong.Should().BeNull();
-
-			playlistChangedEventArgs.Should().BeNull();
-
-			propertyChangedEvents.Should().BeEmpty();
-		}
-
-		[TestMethod]
-		public async Task ClearPlaylistCommand_ForNonEmptyPlaylist_ClearsPlaylistCorrectly()
+		public async Task ClearPlaylist_ForNonEmptyPlaylist_ClearsPlaylistCorrectly()
 		{
 			// Arrange
 
@@ -686,7 +566,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.ClearPlaylistCommand.Execute(null);
+			await target.ClearPlaylist(CancellationToken.None);
 
 			// Assert
 
@@ -697,151 +577,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 			propertyChangedEvents.VerifySongListPropertyChangedEvents();
 		}
 
+		// There are 2 ways to add songs to PlaylistViewModel: via context menu command (e.g. AddSongsNext) or via event (e.g. AddingSongsToPlaylistNextEventArgs).
+		// We test all possible cases via direct method calls to AddSongsNext and AddSongsLast. For each event handler we have only single basic test.
+		// See also comment in PlaylistViewModel constructor.
 		[TestMethod]
-		public async Task NavigateToSongDiscCommand_SomeSongIsSelected_NavigatesToDiscForSelectedSong()
-		{
-			// Arrange
-
-			var disc1 = new DiscModel();
-			var disc2 = new DiscModel();
-
-			var songs = new[]
-			{
-				new SongModel
-				{
-					Id = new ItemId("0"),
-					Disc = disc1,
-				},
-				new SongModel
-				{
-					Id = new ItemId("1"),
-					Disc = disc1,
-				},
-				new SongModel
-				{
-					Id = new ItemId("2"),
-					Disc = disc2,
-				},
-			};
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<PlaylistViewModel>();
-
-			await target.SetPlaylistSongs(songs, CancellationToken.None);
-			target.SelectedSongItem = target.SongItems[2];
-			target.CurrentSong.Should().Be(songs[0]);
-
-			NavigateLibraryExplorerToDiscEventArgs navigateToDiscEventArgs = null;
-			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => e.RegisterEvent(ref navigateToDiscEventArgs));
-
-			// Act
-
-			target.NavigateToSongDiscCommand.Execute(null);
-
-			// Assert
-
-			navigateToDiscEventArgs.Disc.Should().Be(disc2);
-		}
-
-		[TestMethod]
-		public async Task NavigateToSongDiscCommand_NoSongIsSelected_NavigatesToDiscForCurrentSong()
-		{
-			// Arrange
-
-			var disc1 = new DiscModel();
-			var disc2 = new DiscModel();
-
-			var songs = new[]
-			{
-				new SongModel
-				{
-					Id = new ItemId("0"),
-					Disc = disc1,
-				},
-				new SongModel
-				{
-					Id = new ItemId("1"),
-					Disc = disc2,
-				},
-				new SongModel
-				{
-					Id = new ItemId("2"),
-					Disc = disc1,
-				},
-			};
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<PlaylistViewModel>();
-
-			await target.SetPlaylistSongs(songs, CancellationToken.None);
-			await target.SwitchToNextSong(CancellationToken.None);
-			target.CurrentSong.Should().Be(songs[1]);
-
-			NavigateLibraryExplorerToDiscEventArgs navigateToDiscEventArgs = null;
-			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => e.RegisterEvent(ref navigateToDiscEventArgs));
-
-			// Act
-
-			target.NavigateToSongDiscCommand.Execute(null);
-
-			// Assert
-
-			navigateToDiscEventArgs.Disc.Should().Be(disc2);
-		}
-
-		[TestMethod]
-		public async Task NavigateToSongDiscCommand_NoSongIsSelectedOrPlaying_DoesNotNavigateToAnyDisc()
-		{
-			// Arrange
-
-			var disc1 = new DiscModel();
-			var disc2 = new DiscModel();
-
-			var songs = new[]
-			{
-				new SongModel
-				{
-					Id = new ItemId("0"),
-					Disc = disc1,
-				},
-				new SongModel
-				{
-					Id = new ItemId("1"),
-					Disc = disc2,
-				},
-				new SongModel
-				{
-					Id = new ItemId("2"),
-					Disc = disc1,
-				},
-			};
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<PlaylistViewModel>();
-
-			await target.SetPlaylistSongs(songs, CancellationToken.None);
-			await target.SwitchToNextSong(CancellationToken.None);
-			await target.SwitchToNextSong(CancellationToken.None);
-			await target.SwitchToNextSong(CancellationToken.None);
-			target.CurrentSong.Should().BeNull();
-
-			NavigateLibraryExplorerToDiscEventArgs navigateToDiscEventArgs = null;
-			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => e.RegisterEvent(ref navigateToDiscEventArgs));
-
-			// Act
-
-			target.NavigateToSongDiscCommand.Execute(null);
-
-			// Assert
-
-			navigateToDiscEventArgs.Should().BeNull();
-		}
-
-		// There are 2 ways to add songs to PlaylistViewModel: via command (e.g. PlaySongsNextCommand) or via event (e.g. AddingSongsToPlaylistNextEventArgs).
-		// We test all possible cases via event handlers. For each command handlers we have only single basic test.
-		// See also comment in PlaylistViewModel constructor for command and event handlers.
-		[TestMethod]
-		public async Task AddingSongsToPlaylistNextEventHandler_ForNonEmptyPlaylistWhenCurrentSongIsSet_DoesNotChangeCurrentSong()
+		public async Task AddSongsNext_ForNonEmptyPlaylistWhenCurrentSongIsSet_DoesNotChangeCurrentSong()
 		{
 			// Arrange
 
@@ -873,7 +613,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(songsToAdd));
+			await target.AddSongsNext(songsToAdd, CancellationToken.None);
 
 			// Assert
 
@@ -894,7 +634,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public async Task AddingSongsToPlaylistNextEventHandler_ForNonEmptyPlaylistWhenCurrentSongIsNotSet_SetsCurrentSongToFirstAddedSong()
+		public async Task AddSongsNext_ForNonEmptyPlaylistWhenCurrentSongIsNotSet_SetsCurrentSongToFirstAddedSong()
 		{
 			// Arrange
 
@@ -928,7 +668,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(songsToAdd));
+			await target.AddSongsNext(songsToAdd, CancellationToken.None);
 
 			// Assert
 
@@ -949,7 +689,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void AddingSongsToPlaylistNextEventHandler_ForEmptyPlaylist_FillsPlaylistWithPassedSongs()
+		public async Task AddSongsNext_ForEmptyPlaylist_FillsPlaylistWithPassedSongs()
 		{
 			// Arrange
 
@@ -970,7 +710,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(songsToAdd));
+			await target.AddSongsNext(songsToAdd, CancellationToken.None);
 
 			// Assert
 
@@ -982,13 +722,17 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public async Task AddingSongsToPlaylistNextEventHandler_IfAddedSongListIsEmpty_DoesNothing()
+		public async Task AddingSongsToPlaylistNextEventHandler_ForNonEmptyPlaylistWhenCurrentSongIsNotSet_AddsSongsAtPlaylistStart()
 		{
 			// Arrange
 
 			var songs = new[]
 			{
 				new SongModel { Id = new ItemId("0") },
+			};
+
+			var songsToAdd = new[]
+			{
 				new SongModel { Id = new ItemId("1") },
 				new SongModel { Id = new ItemId("2") },
 			};
@@ -997,6 +741,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
+			await target.SwitchToNextSong(CancellationToken.None);
+			target.CurrentSong.Should().BeNull();
 
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
@@ -1006,75 +752,21 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(Enumerable.Empty<SongModel>()));
+			Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(songsToAdd));
 
 			// Assert
 
-			target.Songs.Should().BeEquivalentTo(songs, x => x.WithStrictOrdering());
-			target.CurrentSong.Should().Be(songs[0]);
-
-			playlistChangedEventArgs.Should().BeNull();
-			propertyChangedEvents.Should().BeEmpty();
-		}
-
-		[TestMethod]
-		public async Task PlaySongsNextCommand_SomeSongsAreSelected_AddsSelectedSongsToPlaylist()
-		{
-			// Arrange
-
-			var songs = new[]
-			{
-				new SongModel { Id = new ItemId("0") },
-				new SongModel { Id = new ItemId("1") },
-				new SongModel { Id = new ItemId("2") },
-			};
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<PlaylistViewModel>();
-
-			await target.SetPlaylistSongs(songs, CancellationToken.None);
-
-			target.SelectedSongItems = new[]
-			{
-				target.SongItems[0],
-				target.SongItems[2],
-			};
-
-			PlaylistChangedEventArgs playlistChangedEventArgs = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
-
-			var propertyChangedEvents = new List<PropertyChangedEventArgs>();
-			target.PropertyChanged += (_, e) => propertyChangedEvents.Add(e);
-
-			AddingSongsToPlaylistNextEventArgs addingSongsToPlaylistNextEventArgs = null;
-			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => e.RegisterEvent(ref addingSongsToPlaylistNextEventArgs));
-
-			// Act
-
-			target.PlaySongsNextCommand.Execute(null);
-
-			// Assert
-
-			var expectedSongs = new[]
-			{
-				songs[0],
-				songs[0],
-				songs[2],
-				songs[1],
-				songs[2],
-			};
+			var expectedSongs = songsToAdd.Concat(songs).ToList();
 
 			target.Songs.Should().BeEquivalentTo(expectedSongs, x => x.WithStrictOrdering());
-			target.CurrentSong.Should().Be(expectedSongs[0]);
+			target.CurrentSong.Should().Be(songsToAdd[0]);
 
 			playlistChangedEventArgs.VerifyPlaylistEvent(expectedSongs, 0);
 			propertyChangedEvents.VerifySongListPropertyChangedEvents();
-
-			addingSongsToPlaylistNextEventArgs.Should().BeNull();
 		}
 
 		[TestMethod]
-		public async Task AddingSongsToPlaylistLastEventHandler_ForNonEmptyPlaylistWhenCurrentSongIsSet_DoesNotChangeCurrentSong()
+		public async Task AddSongsLast_ForNonEmptyPlaylistWhenCurrentSongIsSet_DoesNotChangeCurrentSong()
 		{
 			// Arrange
 
@@ -1106,7 +798,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(songsToAdd));
+			await target.AddSongsLast(songsToAdd, CancellationToken.None);
 
 			// Assert
 
@@ -1127,7 +819,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public async Task AddingSongsToPlaylistLastEventHandler_ForNonEmptyPlaylistWhenCurrentSongIsNotSet_SetsCurrentSongToFirstAddedSong()
+		public async Task AddSongsLast_ForNonEmptyPlaylistWhenCurrentSongIsNotSet_SetsCurrentSongToFirstAddedSong()
 		{
 			// Arrange
 
@@ -1161,7 +853,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(songsToAdd));
+			await target.AddSongsLast(songsToAdd, CancellationToken.None);
 
 			// Assert
 
@@ -1182,7 +874,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void AddingSongsToPlaylistLastEventHandler_ForEmptyPlaylist_FillsPlaylistWithPassedSongs()
+		public async Task AddSongsLast_ForEmptyPlaylist_FillsPlaylistWithPassedSongs()
 		{
 			// Arrange
 
@@ -1203,7 +895,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(songsToAdd));
+			await target.AddSongsLast(songsToAdd, CancellationToken.None);
 
 			// Assert
 
@@ -1215,13 +907,17 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public async Task AddingSongsToPlaylistLastEventHandler_IfAddedSongListIsEmpty_DoesNothing()
+		public async Task AddingSongsToPlaylistLastEventHandler_ForNonEmptyPlaylistWhenCurrentSongIsNotSet_AddsSongsAtPlaylistEnd()
 		{
 			// Arrange
 
 			var songs = new[]
 			{
 				new SongModel { Id = new ItemId("0") },
+			};
+
+			var songsToAdd = new[]
+			{
 				new SongModel { Id = new ItemId("1") },
 				new SongModel { Id = new ItemId("2") },
 			};
@@ -1230,6 +926,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var target = mocker.CreateInstance<PlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
+			await target.SwitchToNextSong(CancellationToken.None);
+			target.CurrentSong.Should().BeNull();
 
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
 			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
@@ -1239,71 +937,17 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(Enumerable.Empty<SongModel>()));
+			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(songsToAdd));
 
 			// Assert
 
-			target.Songs.Should().BeEquivalentTo(songs, x => x.WithStrictOrdering());
-			target.CurrentSong.Should().Be(songs[0]);
-
-			playlistChangedEventArgs.Should().BeNull();
-			propertyChangedEvents.Should().BeEmpty();
-		}
-
-		[TestMethod]
-		public async Task PlaySongsLastCommand_SomeSongsAreSelected_AddsSelectedSongsToPlaylist()
-		{
-			// Arrange
-
-			var songs = new[]
-			{
-				new SongModel { Id = new ItemId("0") },
-				new SongModel { Id = new ItemId("1") },
-				new SongModel { Id = new ItemId("2") },
-			};
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<PlaylistViewModel>();
-
-			await target.SetPlaylistSongs(songs, CancellationToken.None);
-
-			target.SelectedSongItems = new[]
-			{
-				target.SongItems[0],
-				target.SongItems[2],
-			};
-
-			PlaylistChangedEventArgs playlistChangedEventArgs = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
-
-			var propertyChangedEvents = new List<PropertyChangedEventArgs>();
-			target.PropertyChanged += (_, e) => propertyChangedEvents.Add(e);
-
-			AddingSongsToPlaylistLastEventArgs addingSongsToPlaylistLastEventArgs = null;
-			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => e.RegisterEvent(ref addingSongsToPlaylistLastEventArgs));
-
-			// Act
-
-			target.PlaySongsLastCommand.Execute(null);
-
-			// Assert
-
-			var expectedSongs = new[]
-			{
-				songs[0],
-				songs[1],
-				songs[2],
-				songs[0],
-				songs[2],
-			};
+			var expectedSongs = songs.Concat(songsToAdd).ToList();
 
 			target.Songs.Should().BeEquivalentTo(expectedSongs, x => x.WithStrictOrdering());
-			target.CurrentSong.Should().Be(expectedSongs[0]);
+			target.CurrentSong.Should().Be(songsToAdd[0]);
 
-			playlistChangedEventArgs.VerifyPlaylistEvent(expectedSongs, 0);
+			playlistChangedEventArgs.VerifyPlaylistEvent(expectedSongs, 1);
 			propertyChangedEvents.VerifySongListPropertyChangedEvents();
-
-			addingSongsToPlaylistLastEventArgs.Should().BeNull();
 		}
 	}
 }

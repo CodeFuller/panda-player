@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,7 +20,6 @@ using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.ViewModels;
 using PandaPlayer.ViewModels.AdviseGroups;
 using PandaPlayer.ViewModels.Interfaces;
-using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.UnitTests.ViewModels
 {
@@ -35,18 +33,18 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void PlayDiscCommand_IfSomeDiscIsSelected_SendsPlaySongsListEventWithSelectedDisc()
+		public void PlayDisc_SendsPlaySongsListEventForActiveDiscSongs()
 		{
 			// Arrange
 
 			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
-			var selectedDisc = new DiscModel { Id = new ItemId("Some Disc"), Folder = discFolder };
+			var disc = new DiscModel { Id = new ItemId("Some Disc"), Folder = discFolder };
 
-			var activeSong1 = new SongModel { Id = new ItemId("Active Song 1"), Disc = selectedDisc };
-			var activeSong2 = new SongModel { Id = new ItemId("Active Song 2"), Disc = selectedDisc };
-			var deletedSong = new SongModel { Id = new ItemId("Deleted Songs"), Disc = selectedDisc, DeleteDate = new DateTime(2021, 07, 25) };
+			var activeSong1 = new SongModel { Id = new ItemId("Active Song 1"), Disc = disc };
+			var activeSong2 = new SongModel { Id = new ItemId("Active Song 2"), Disc = disc };
+			var deletedSong = new SongModel { Id = new ItemId("Deleted Songs"), Disc = disc, DeleteDate = new DateTime(2021, 07, 25) };
 
-			selectedDisc.AllSongs = new[]
+			disc.AllSongs = new[]
 			{
 				activeSong1,
 				deletedSong,
@@ -54,9 +52,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.SelectedDisc).Returns(selectedDisc);
-
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			PlaySongsListEventArgs playSongsListEvent = null;
@@ -64,7 +59,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.PlayDiscCommand.Execute(null);
+			target.PlayDisc(disc);
 
 			// Assert
 
@@ -79,30 +74,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void PlayDiscCommand_IfNoDiscIsSelected_DoesNotSendPlaySongsListEvent()
-		{
-			// Arrange
-
-			var mocker = new AutoMocker();
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.SelectedDisc).Returns<DiscModel>(null);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			PlaySongsListEventArgs playSongsListEvent = null;
-			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => e.RegisterEvent(ref playSongsListEvent));
-
-			// Act
-
-			target.PlayDiscCommand.Execute(null);
-
-			// Assert
-
-			playSongsListEvent.Should().BeNull();
-		}
-
-		[TestMethod]
-		public void AddDiscToPlaylistCommand_IfSomeDiscIsSelected_SendsAddingSongsToPlaylistLastEventWithActiveSongs()
+		public void AddDiscToPlaylist_SendsAddingSongsToPlaylistLastEventWithActiveSongs()
 		{
 			// Arrange
 
@@ -114,7 +86,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 				DeleteDate = new DateTime(2021, 07, 25),
 			};
 
-			var selectedDisc = new DiscModel
+			var disc = new DiscModel
 			{
 				Id = new ItemId("Some Disc"),
 				AllSongs = new[]
@@ -126,9 +98,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.SelectedDisc).Returns(selectedDisc);
-
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			AddingSongsToPlaylistLastEventArgs addingSongsToPlaylistLastEvent = null;
@@ -136,7 +105,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.AddDiscToPlaylistCommand.Execute(null);
+			target.AddDiscToPlaylist(disc);
 
 			// Assert
 
@@ -151,105 +120,31 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void AddDiscToPlaylistCommand_IfNoDiscIsSelected_DoesNotSendAddingSongsToPlaylistLastEvent()
+		public void EditDiscProperties_ShowDiscPropertiesView()
 		{
 			// Arrange
 
-			var mocker = new AutoMocker();
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.SelectedDisc).Returns<DiscModel>(null);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			AddingSongsToPlaylistLastEventArgs addingSongsToPlaylistLastEvent = null;
-			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => e.RegisterEvent(ref addingSongsToPlaylistLastEvent));
-
-			// Act
-
-			target.AddDiscToPlaylistCommand.Execute(null);
-
-			// Assert
-
-			addingSongsToPlaylistLastEvent.Should().BeNull();
-		}
-
-		[TestMethod]
-		public void EditDiscPropertiesCommand_IfSomeDiscIsSelected_ShowDiscPropertiesViewForSelectedDisc()
-		{
-			// Arrange
-
-			var selectedDisc = new DiscModel { Id = new ItemId("Some Disc") };
+			var disc = new DiscModel { Id = new ItemId("Some Disc") };
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.SelectedDisc).Returns(selectedDisc);
-
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
 
-			target.EditDiscPropertiesCommand.Execute(null);
+			target.EditDiscProperties(disc);
 
 			// Assert
 
 			var viewNavigatorMock = mocker.GetMock<IViewNavigator>();
-			viewNavigatorMock.Verify(x => x.ShowDiscPropertiesView(selectedDisc), Times.Once);
+			viewNavigatorMock.Verify(x => x.ShowDiscPropertiesView(disc), Times.Once);
 		}
 
 		[TestMethod]
-		public void EditDiscPropertiesCommand_IfNoDiscIsSelected_DoesNotShowDiscPropertiesView()
+		public async Task DeleteFolder_IfFolderDeletionIsNotConfirmed_DoesNotDeleteFolder()
 		{
 			// Arrange
 
-			var mocker = new AutoMocker();
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.SelectedDisc).Returns<DiscModel>(null);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			target.EditDiscPropertiesCommand.Execute(null);
-
-			// Assert
-
-			var viewNavigatorMock = mocker.GetMock<IViewNavigator>();
-			viewNavigatorMock.Verify(x => x.ShowDiscPropertiesView(It.IsAny<DiscModel>()), Times.Never);
-		}
-
-		[TestMethod]
-		public void DeleteFolderCommand_IfNoFolderIsSelected_DoesNothing()
-		{
-			// Arrange
-
-			var mocker = new AutoMocker();
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.SelectedFolder).Returns<FolderModel>(null);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			target.DeleteFolderCommand.Execute(null);
-
-			// Assert
-
-			var windowServiceMock = mocker.GetMock<IWindowService>();
-			windowServiceMock.Verify(x => x.ShowMessageBox(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ShowMessageBoxButton>(), It.IsAny<ShowMessageBoxIcon>()), Times.Never);
-
-			var folderServiceMock = mocker.GetMock<IFoldersService>();
-			folderServiceMock.Verify(x => x.DeleteFolder(It.IsAny<ItemId>(), It.IsAny<CancellationToken>()), Times.Never);
-
-			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelMock.Verify(x => x.RemoveFolder(It.IsAny<ItemId>()), Times.Never);
-		}
-
-		[TestMethod]
-		public void DeleteFolderCommand_IfFolderDeletionIsNotConfirmed_DoesNotDeleteFolder()
-		{
-			// Arrange
-
-			var selectedFolder = new FolderModel
+			var folder = new FolderModel
 			{
 				Id = new ItemId("Some Folder"),
 				Subfolders = Array.Empty<ShallowFolderModel>(),
@@ -258,11 +153,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var mocker = new AutoMocker();
 
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.SelectedFolder).Returns(selectedFolder);
-
 			mocker.GetMock<IFoldersService>()
-				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(selectedFolder);
+				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(folder);
 
 			mocker.GetMock<IWindowService>()
 				.Setup(x => x.ShowMessageBox(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ShowMessageBoxButton>(), It.IsAny<ShowMessageBoxIcon>())).Returns(ShowMessageBoxResult.No);
@@ -271,7 +163,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.DeleteFolderCommand.Execute(null);
+			await target.DeleteFolder(new ItemId("Some Folder"), CancellationToken.None);
 
 			// Assert
 
@@ -279,15 +171,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 			folderServiceMock.Verify(x => x.DeleteFolder(It.IsAny<ItemId>(), It.IsAny<CancellationToken>()), Times.Never);
 
 			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelMock.Verify(x => x.RemoveFolder(It.IsAny<ItemId>()), Times.Never);
+			itemListViewModelMock.Verify(x => x.OnFolderDeleted(It.IsAny<ItemId>(), It.IsAny<Func<ItemId, Task<FolderModel>>>()), Times.Never);
 		}
 
 		[TestMethod]
-		public void DeleteFolderCommand_IfSelectedFolderHasSomeContent_ShowsWarningWithoutDeletingFolder()
+		public async Task DeleteFolder_IfFolderHasSomeContent_ShowsWarningWithoutDeletingFolder()
 		{
 			// Arrange
 
-			var selectedFolder = new FolderModel
+			var folder = new FolderModel
 			{
 				Id = new ItemId("Some Folder"),
 				Subfolders = Array.Empty<ShallowFolderModel>(),
@@ -306,11 +198,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var mocker = new AutoMocker();
 
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.SelectedFolder).Returns(selectedFolder);
-
 			mocker.GetMock<IFoldersService>()
-				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(selectedFolder);
+				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(folder);
 
 			// We stub ShowMessageBoxResult.Yes just in case, to check that folder is not deleted due to content existence and not due to message result.
 			var windowServiceMock = mocker.GetMock<IWindowService>();
@@ -321,7 +210,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.DeleteFolderCommand.Execute(null);
+			await target.DeleteFolder(new ItemId("Some Folder"), CancellationToken.None);
 
 			// Assert
 
@@ -331,15 +220,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 			folderServiceMock.Verify(x => x.DeleteFolder(It.IsAny<ItemId>(), It.IsAny<CancellationToken>()), Times.Never);
 
 			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelMock.Verify(x => x.RemoveFolder(It.IsAny<ItemId>()), Times.Never);
+			itemListViewModelMock.Verify(x => x.OnFolderDeleted(It.IsAny<ItemId>(), It.IsAny<Func<ItemId, Task<FolderModel>>>()), Times.Never);
 		}
 
 		[TestMethod]
-		public void DeleteFolderCommand_IfDeletionIsNotConfirmed_DoesNotDeleteFolder()
+		public async Task DeleteFolder_IfDeletionIsNotConfirmed_DoesNotDeleteFolder()
 		{
 			// Arrange
 
-			var selectedFolder = new FolderModel
+			var folder = new FolderModel
 			{
 				Id = new ItemId("Some Folder"),
 				Subfolders = Array.Empty<ShallowFolderModel>(),
@@ -348,11 +237,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var mocker = new AutoMocker();
 
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.SelectedFolder).Returns(selectedFolder);
-
 			mocker.GetMock<IFoldersService>()
-				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(selectedFolder);
+				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(folder);
 
 			mocker.GetMock<IWindowService>()
 				.Setup(x => x.ShowMessageBox(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ShowMessageBoxButton>(), It.IsAny<ShowMessageBoxIcon>())).Returns(ShowMessageBoxResult.No);
@@ -361,7 +247,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.DeleteFolderCommand.Execute(null);
+			await target.DeleteFolder(new ItemId("Some Folder"), CancellationToken.None);
 
 			// Assert
 
@@ -369,15 +255,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 			folderServiceMock.Verify(x => x.DeleteFolder(It.IsAny<ItemId>(), It.IsAny<CancellationToken>()), Times.Never);
 
 			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelMock.Verify(x => x.RemoveFolder(It.IsAny<ItemId>()), Times.Never);
+			itemListViewModelMock.Verify(x => x.OnFolderDeleted(It.IsAny<ItemId>(), It.IsAny<Func<ItemId, Task<FolderModel>>>()), Times.Never);
 		}
 
 		[TestMethod]
-		public void DeleteFolderCommand_IfDeletionIsConfirmed_DeletesSelectedFolder()
+		public async Task DeleteFolder_IfDeletionIsConfirmed_DeletesFolder()
 		{
 			// Arrange
 
-			var selectedFolder = new FolderModel
+			var folder = new FolderModel
 			{
 				Id = new ItemId("Some Folder"),
 				Subfolders = Array.Empty<ShallowFolderModel>(),
@@ -386,11 +272,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var mocker = new AutoMocker();
 
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.SelectedFolder).Returns(selectedFolder);
-
 			mocker.GetMock<IFoldersService>()
-				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(selectedFolder);
+				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(folder);
 
 			mocker.GetMock<IWindowService>()
 				.Setup(x => x.ShowMessageBox(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ShowMessageBoxButton>(), It.IsAny<ShowMessageBoxIcon>())).Returns(ShowMessageBoxResult.Yes);
@@ -399,7 +282,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.DeleteFolderCommand.Execute(null);
+			await target.DeleteFolder(new ItemId("Some Folder"), CancellationToken.None);
 
 			// Assert
 
@@ -407,68 +290,37 @@ namespace PandaPlayer.UnitTests.ViewModels
 			folderServiceMock.Verify(x => x.DeleteFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>()), Times.Once);
 
 			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelMock.Verify(x => x.RemoveFolder(new ItemId("Some Folder")), Times.Once);
+			itemListViewModelMock.Verify(x => x.OnFolderDeleted(It.IsAny<ItemId>(), It.IsAny<Func<ItemId, Task<FolderModel>>>()), Times.Once);
 		}
 
 		[TestMethod]
-		public void DeleteDiscCommand_IfNoDiscIsSelected_DoesNothing()
+		public async Task DeleteDisc_InvokesShowDeleteDiscView()
 		{
 			// Arrange
 
-			var mocker = new AutoMocker();
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.SelectedDisc).Returns<DiscModel>(null);
+			var disc = new DiscModel { Id = new ItemId("Some Disc") };
 
+			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
 
-			target.DeleteDiscCommand.Execute(null);
+			await target.DeleteDisc(disc, CancellationToken.None);
 
 			// Assert
 
 			var viewNavigatorMock = mocker.GetMock<IViewNavigator>();
-			viewNavigatorMock.Verify(x => x.ShowDeleteDiscView(It.IsAny<DiscModel>()), Times.Never);
-
-			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelMock.Verify(x => x.RemoveDisc(It.IsAny<ItemId>()), Times.Never);
+			viewNavigatorMock.Verify(x => x.ShowDeleteDiscView(disc), Times.Once);
 		}
 
 		[TestMethod]
-		public void DeleteDiscCommand_IfSomeDiscIsSelected_InvokesShowDeleteDiscViewForSelectedDisc()
+		public async Task DeleteDisc_IfDiscIsDeleted_InvokesOnDiscDeleted()
 		{
 			// Arrange
 
-			var selectedDisc = new DiscModel { Id = new ItemId("Some Disc") };
+			var disc = new DiscModel { Id = new ItemId("Some Disc") };
 
 			var mocker = new AutoMocker();
-
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.SelectedDisc).Returns(selectedDisc);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			target.DeleteDiscCommand.Execute(null);
-
-			// Assert
-
-			var viewNavigatorMock = mocker.GetMock<IViewNavigator>();
-			viewNavigatorMock.Verify(x => x.ShowDeleteDiscView(selectedDisc), Times.Once);
-		}
-
-		[TestMethod]
-		public void DeleteDiscCommand_IfDiscIsDeleted_RemovesDiscFromItemList()
-		{
-			// Arrange
-
-			var selectedDisc = new DiscModel { Id = new ItemId("Some Disc") };
-
-			var mocker = new AutoMocker();
-
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.SelectedDisc).Returns(selectedDisc);
 
 			mocker.GetMock<IViewNavigator>()
 				.Setup(x => x.ShowDeleteDiscView(It.IsAny<DiscModel>())).Returns(true);
@@ -477,25 +329,22 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.DeleteDiscCommand.Execute(null);
+			await target.DeleteDisc(disc, CancellationToken.None);
 
 			// Assert
 
 			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelMock.Verify(x => x.RemoveDisc(new ItemId("Some Disc")), Times.Once);
+			itemListViewModelMock.Verify(x => x.OnDiscDeleted(new ItemId("Some Disc"), It.IsAny<Func<ItemId, Task<FolderModel>>>()), Times.Once);
 		}
 
 		[TestMethod]
-		public void DeleteDiscCommand_IfDiscIsNotDeleted_DoesNotRemoveDiscFromItemList()
+		public async Task DeleteDisc_IfDiscIsNotDeleted_DoesNotInvokesOnDiscDeleted()
 		{
 			// Arrange
 
-			var selectedDisc = new DiscModel { Id = new ItemId("Some Disc") };
+			var disc = new DiscModel { Id = new ItemId("Some Disc") };
 
 			var mocker = new AutoMocker();
-
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.SelectedDisc).Returns(selectedDisc);
 
 			mocker.GetMock<IViewNavigator>()
 				.Setup(x => x.ShowDeleteDiscView(It.IsAny<DiscModel>())).Returns(false);
@@ -504,12 +353,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.DeleteDiscCommand.Execute(null);
+			await target.DeleteDisc(disc, CancellationToken.None);
 
 			// Assert
 
 			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelMock.Verify(x => x.RemoveDisc(It.IsAny<ItemId>()), Times.Never);
+			itemListViewModelMock.Verify(x => x.OnDiscDeleted(It.IsAny<ItemId>(), It.IsAny<Func<ItemId, Task<FolderModel>>>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -982,439 +831,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			disc1.Images.Should().BeEquivalentTo(oldDiscImages1, x => x.WithStrictOrdering());
 			disc2.Images.Should().BeEquivalentTo(newDiscImages, x => x.WithStrictOrdering());
 			disc3.Images.Should().BeEquivalentTo(oldDiscImages3, x => x.WithStrictOrdering());
-		}
-
-		[TestMethod]
-		public void AdviseGroupMenuItems_IfNoItemIsSelected_ReturnsEmptyCollection()
-		{
-			// Arrange
-
-			var adviseGroups = new[]
-			{
-				new AdviseGroupModel { Id = new ItemId("1"), Name = "Some Advise Group" },
-			};
-
-			var adviseGroupHelperStub = new Mock<IAdviseGroupHelper>();
-			adviseGroupHelperStub.Setup(x => x.AdviseGroups).Returns(adviseGroups);
-
-			var mocker = new AutoMocker();
-			mocker.Use(adviseGroupHelperStub);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-			target.SelectedFolder.Should().BeNull();
-			target.SelectedDisc.Should().BeNull();
-
-			// Act
-
-			var menuItems = target.AdviseGroupMenuItems;
-
-			// Assert
-
-			menuItems.Should().BeEmpty();
-		}
-
-		[TestMethod]
-		public void AdviseGroupMenuItems_IfFolderIsSelectedAndNoAdviseGroupsExist_ReturnsCorrectMenuItems()
-		{
-			// Arrange
-
-			var itemListViewModelStub = new Mock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelStub.Setup(x => x.SelectedFolder).Returns(new ShallowFolderModel());
-
-			var adviseGroupHelperStub = new Mock<IAdviseGroupHelper>();
-			adviseGroupHelperStub.Setup(x => x.AdviseGroups).Returns(Array.Empty<AdviseGroupModel>());
-
-			var mocker = new AutoMocker();
-			mocker.Use(itemListViewModelStub);
-			mocker.Use(adviseGroupHelperStub);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			var menuItems = target.AdviseGroupMenuItems;
-
-			// Assert
-
-			menuItems.Should().HaveCount(1);
-			menuItems.Single().Should().BeOfType(typeof(NewAdviseGroupMenuItem));
-		}
-
-		[TestMethod]
-		public void AdviseGroupMenuItems_IfDiscIsSelectedAndNoAdviseGroupsExist_ReturnsCorrectMenuItems()
-		{
-			// Arrange
-
-			var itemListViewModelStub = new Mock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelStub.Setup(x => x.SelectedDisc).Returns(new DiscModel());
-
-			var adviseGroupHelperStub = new Mock<IAdviseGroupHelper>();
-			adviseGroupHelperStub.Setup(x => x.AdviseGroups).Returns(Array.Empty<AdviseGroupModel>());
-
-			var mocker = new AutoMocker();
-			mocker.Use(itemListViewModelStub);
-			mocker.Use(adviseGroupHelperStub);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			var menuItems = target.AdviseGroupMenuItems;
-
-			// Assert
-
-			menuItems.Should().HaveCount(1);
-			menuItems.Single().Should().BeOfType(typeof(NewAdviseGroupMenuItem));
-		}
-
-		[TestMethod]
-		public void AdviseGroupMenuItems_IfAdviseGroupsExistAndFolderWithoutAdviseGroupIsSelected_ReturnsCorrectMenuItems()
-		{
-			// Arrange
-
-			var adviseGroups = new[]
-			{
-				new AdviseGroupModel { Id = new ItemId("1"), Name = "Advise Group 1" },
-				new AdviseGroupModel { Id = new ItemId("2"), Name = "Advise Group 2" },
-			};
-
-			var itemListViewModelStub = new Mock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelStub.Setup(x => x.SelectedFolder).Returns(new ShallowFolderModel());
-
-			var adviseGroupHelperStub = new Mock<IAdviseGroupHelper>();
-			adviseGroupHelperStub.Setup(x => x.AdviseGroups).Returns(adviseGroups);
-
-			var mocker = new AutoMocker();
-			mocker.Use(itemListViewModelStub);
-			mocker.Use(adviseGroupHelperStub);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			var menuItems = target.AdviseGroupMenuItems;
-
-			// Assert
-
-			var expectedMenuItems = new BasicMenuItem[]
-			{
-				new NewAdviseGroupMenuItem(_ => Task.CompletedTask),
-				new SeparatorMenuItem(),
-				new SetAdviseGroupMenuItem(adviseGroups[0], false, _ => Task.CompletedTask),
-				new SetAdviseGroupMenuItem(adviseGroups[1], false, _ => Task.CompletedTask),
-			};
-
-			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
-		}
-
-		[TestMethod]
-		public void AdviseGroupMenuItems_IfAdviseGroupsExistAndFolderWithAdviseGroupIsSelected_ReturnsCorrectMenuItems()
-		{
-			// Arrange
-
-			var adviseGroups = new[]
-			{
-				new AdviseGroupModel { Id = new ItemId("1"), Name = "Advise Group 1" },
-				new AdviseGroupModel { Id = new ItemId("2"), Name = "Advise Group 2" },
-				new AdviseGroupModel { Id = new ItemId("3"), Name = "Advise Group 3" },
-			};
-
-			var selectedFolder = new ShallowFolderModel
-			{
-				AdviseGroup = adviseGroups[1],
-			};
-
-			var itemListViewModelStub = new Mock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelStub.Setup(x => x.SelectedFolder).Returns(selectedFolder);
-
-			var adviseGroupHelperStub = new Mock<IAdviseGroupHelper>();
-			adviseGroupHelperStub.Setup(x => x.AdviseGroups).Returns(adviseGroups);
-
-			var mocker = new AutoMocker();
-			mocker.Use(itemListViewModelStub);
-			mocker.Use(adviseGroupHelperStub);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			var menuItems = target.AdviseGroupMenuItems;
-
-			// Assert
-
-			var expectedMenuItems = new BasicMenuItem[]
-			{
-				new NewAdviseGroupMenuItem(_ => Task.CompletedTask),
-				new ReverseFavoriteStatusForAdviseGroupMenuItem(adviseGroups[1], (_, _) => Task.CompletedTask),
-				new SeparatorMenuItem(),
-				new SetAdviseGroupMenuItem(adviseGroups[0], false, _ => Task.CompletedTask),
-				new SetAdviseGroupMenuItem(adviseGroups[1], true, _ => Task.CompletedTask),
-				new SetAdviseGroupMenuItem(adviseGroups[2], false, _ => Task.CompletedTask),
-			};
-
-			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
-		}
-
-		[TestMethod]
-		public void AdviseGroupMenuItems_IfFolderIsSelected_CommandForSetAdviseGroupMenuItemReversesSelectedAdviseGroup()
-		{
-			// Arrange
-
-			var adviseGroups = new[]
-			{
-				new AdviseGroupModel { Id = new ItemId("1"), Name = "Advise Group 1" },
-				new AdviseGroupModel { Id = new ItemId("2"), Name = "Advise Group 2" },
-				new AdviseGroupModel { Id = new ItemId("3"), Name = "Advise Group 3" },
-			};
-
-			var itemListViewModelStub = new Mock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelStub.Setup(x => x.SelectedFolder).Returns(new ShallowFolderModel());
-
-			var adviseGroupHelperMock = new Mock<IAdviseGroupHelper>();
-			adviseGroupHelperMock.Setup(x => x.AdviseGroups).Returns(adviseGroups);
-
-			var mocker = new AutoMocker();
-			mocker.Use(itemListViewModelStub);
-			mocker.Use(adviseGroupHelperMock);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			var menuItems = target.AdviseGroupMenuItems;
-
-			// Assert
-
-			var menuItem = menuItems.OfType<SetAdviseGroupMenuItem>().ToList()[1];
-			menuItem.Command.Execute(null);
-
-			adviseGroupHelperMock.Verify(x => x.ReverseAdviseGroup(It.IsAny<FolderAdviseGroupHolder>(), adviseGroups[1], It.IsAny<CancellationToken>()), Times.Once);
-		}
-
-		[TestMethod]
-		public void AdviseGroupMenuItems_IfAdviseGroupsExistAndDiscWithoutAdviseGroupIsSelected_ReturnsCorrectMenuItems()
-		{
-			// Arrange
-
-			var adviseGroups = new[]
-			{
-				new AdviseGroupModel { Id = new ItemId("1"), Name = "Advise Group 1" },
-				new AdviseGroupModel { Id = new ItemId("2"), Name = "Advise Group 2" },
-			};
-
-			var itemListViewModelStub = new Mock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelStub.Setup(x => x.SelectedDisc).Returns(new DiscModel());
-
-			var adviseGroupHelperStub = new Mock<IAdviseGroupHelper>();
-			adviseGroupHelperStub.Setup(x => x.AdviseGroups).Returns(adviseGroups);
-
-			var mocker = new AutoMocker();
-			mocker.Use(itemListViewModelStub);
-			mocker.Use(adviseGroupHelperStub);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			var menuItems = target.AdviseGroupMenuItems;
-
-			// Assert
-
-			var expectedMenuItems = new BasicMenuItem[]
-			{
-				new NewAdviseGroupMenuItem(_ => Task.CompletedTask),
-				new SeparatorMenuItem(),
-				new SetAdviseGroupMenuItem(adviseGroups[0], false, _ => Task.CompletedTask),
-				new SetAdviseGroupMenuItem(adviseGroups[1], false, _ => Task.CompletedTask),
-			};
-
-			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
-		}
-
-		[TestMethod]
-		public void AdviseGroupMenuItems_IfAdviseGroupsExistAndDiscWithAdviseGroupIsSelected_ReturnsCorrectMenuItems()
-		{
-			// Arrange
-
-			var adviseGroups = new[]
-			{
-				new AdviseGroupModel { Id = new ItemId("1"), Name = "Advise Group 1" },
-				new AdviseGroupModel { Id = new ItemId("2"), Name = "Advise Group 2" },
-				new AdviseGroupModel { Id = new ItemId("3"), Name = "Advise Group 3" },
-			};
-
-			var selectedDisc = new DiscModel
-			{
-				AdviseGroup = adviseGroups[1],
-			};
-
-			var itemListViewModelStub = new Mock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelStub.Setup(x => x.SelectedDisc).Returns(selectedDisc);
-
-			var adviseGroupHelperStub = new Mock<IAdviseGroupHelper>();
-			adviseGroupHelperStub.Setup(x => x.AdviseGroups).Returns(adviseGroups);
-
-			var mocker = new AutoMocker();
-			mocker.Use(itemListViewModelStub);
-			mocker.Use(adviseGroupHelperStub);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			var menuItems = target.AdviseGroupMenuItems;
-
-			// Assert
-
-			var expectedMenuItems = new BasicMenuItem[]
-			{
-				new NewAdviseGroupMenuItem(_ => Task.CompletedTask),
-				new ReverseFavoriteStatusForAdviseGroupMenuItem(adviseGroups[1], (_, _) => Task.CompletedTask),
-				new SeparatorMenuItem(),
-				new SetAdviseGroupMenuItem(adviseGroups[0], false, _ => Task.CompletedTask),
-				new SetAdviseGroupMenuItem(adviseGroups[1], true, _ => Task.CompletedTask),
-				new SetAdviseGroupMenuItem(adviseGroups[2], false, _ => Task.CompletedTask),
-			};
-
-			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
-		}
-
-		[TestMethod]
-		public void AdviseGroupMenuItems_IfDiscIsSelected_CommandForSetAdviseGroupMenuItemReversesSelectedAdviseGroup()
-		{
-			// Arrange
-
-			var adviseGroups = new[]
-			{
-				new AdviseGroupModel { Id = new ItemId("1"), Name = "Advise Group 1" },
-				new AdviseGroupModel { Id = new ItemId("2"), Name = "Advise Group 2" },
-				new AdviseGroupModel { Id = new ItemId("3"), Name = "Advise Group 3" },
-			};
-
-			var itemListViewModelStub = new Mock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelStub.Setup(x => x.SelectedDisc).Returns(new DiscModel());
-
-			var adviseGroupHelperMock = new Mock<IAdviseGroupHelper>();
-			adviseGroupHelperMock.Setup(x => x.AdviseGroups).Returns(adviseGroups);
-
-			var mocker = new AutoMocker();
-			mocker.Use(itemListViewModelStub);
-			mocker.Use(adviseGroupHelperMock);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			var menuItems = target.AdviseGroupMenuItems;
-
-			// Assert
-
-			var menuItem = menuItems.OfType<SetAdviseGroupMenuItem>().ToList()[1];
-			menuItem.Command.Execute(null);
-
-			adviseGroupHelperMock.Verify(x => x.ReverseAdviseGroup(It.IsAny<DiscAdviseGroupHolder>(), adviseGroups[1], It.IsAny<CancellationToken>()), Times.Once);
-		}
-
-		[TestMethod]
-		public void AdviseGroupMenuItems_IfNewAdviseGroupMenuItemIsExecuted_ShowsShowCreateAdviseGroupViewCorrectly()
-		{
-			// Arrange
-
-			var adviseGroups = new[]
-			{
-				new AdviseGroupModel { Id = new ItemId("1"), Name = "Advise Group 1" },
-				new AdviseGroupModel { Id = new ItemId("2"), Name = "Advise Group 2" },
-			};
-
-			var itemListViewModelStub = new Mock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelStub.Setup(x => x.SelectedFolder).Returns(new ShallowFolderModel { Name = "Folder Name" });
-
-			var adviseGroupHelperStub = new Mock<IAdviseGroupHelper>();
-			adviseGroupHelperStub.Setup(x => x.AdviseGroups).Returns(adviseGroups);
-
-			var mocker = new AutoMocker();
-			mocker.Use(itemListViewModelStub);
-			mocker.Use(adviseGroupHelperStub);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			var menuItems = target.AdviseGroupMenuItems;
-
-			// Assert
-
-			var menuItem = menuItems.OfType<NewAdviseGroupMenuItem>().Single();
-			menuItem.Command.Execute(null);
-
-			var viewNavigatorMock = mocker.GetMock<IViewNavigator>();
-			viewNavigatorMock.Verify(x => x.ShowCreateAdviseGroupView("Folder Name", new[] { "Advise Group 1", "Advise Group 2" }), Times.Once);
-		}
-
-		[TestMethod]
-		public void AdviseGroupMenuItems_IfShowCreateAdviseGroupViewReturnsNull_DoesNotCreateAdviseGroup()
-		{
-			// Arrange
-
-			var itemListViewModelStub = new Mock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelStub.Setup(x => x.SelectedFolder).Returns(new ShallowFolderModel());
-
-			var adviseGroupHelperMock = new Mock<IAdviseGroupHelper>();
-			adviseGroupHelperMock.Setup(x => x.AdviseGroups).Returns(Array.Empty<AdviseGroupModel>());
-
-			var viewNavigatorStub = new Mock<IViewNavigator>();
-			viewNavigatorStub.Setup(x => x.ShowCreateAdviseGroupView(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns<string>(null);
-
-			var mocker = new AutoMocker();
-			mocker.Use(itemListViewModelStub);
-			mocker.Use(adviseGroupHelperMock);
-			mocker.Use(viewNavigatorStub);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			var menuItems = target.AdviseGroupMenuItems;
-
-			// Assert
-
-			var menuItem = menuItems.OfType<NewAdviseGroupMenuItem>().Single();
-			menuItem.Command.Execute(null);
-
-			adviseGroupHelperMock.Verify(x => x.CreateAdviseGroup(It.IsAny<BasicAdviseGroupHolder>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
-		}
-
-		[TestMethod]
-		public void AdviseGroupMenuItems_IfShowCreateAdviseGroupViewReturnsNotNull_CreatesAdviseGroup()
-		{
-			// Arrange
-
-			var itemListViewModelStub = new Mock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelStub.Setup(x => x.SelectedFolder).Returns(new ShallowFolderModel());
-
-			var adviseGroupHelperMock = new Mock<IAdviseGroupHelper>();
-			adviseGroupHelperMock.Setup(x => x.AdviseGroups).Returns(Array.Empty<AdviseGroupModel>());
-
-			var viewNavigatorStub = new Mock<IViewNavigator>();
-			viewNavigatorStub.Setup(x => x.ShowCreateAdviseGroupView(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns("Some New Group");
-
-			var mocker = new AutoMocker();
-			mocker.Use(itemListViewModelStub);
-			mocker.Use(adviseGroupHelperMock);
-			mocker.Use(viewNavigatorStub);
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			var menuItems = target.AdviseGroupMenuItems;
-
-			// Assert
-
-			var menuItem = menuItems.OfType<NewAdviseGroupMenuItem>().Single();
-			menuItem.Command.Execute(null);
-
-			adviseGroupHelperMock.Verify(x => x.CreateAdviseGroup(It.IsAny<FolderAdviseGroupHolder>(), "Some New Group", It.IsAny<CancellationToken>()), Times.Once);
 		}
 	}
 }

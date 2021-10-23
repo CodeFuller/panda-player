@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
-using System.Windows.Input;
+using System.Threading.Tasks;
 using FluentAssertions;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,6 +15,7 @@ using PandaPlayer.Events.SongEvents;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.ViewModels;
+using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.UnitTests.ViewModels
 {
@@ -25,13 +26,16 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			public override bool DisplayTrackNumbers => false;
 
-			public override ICommand PlaySongsNextCommand => null;
-
-			public override ICommand PlaySongsLastCommand => null;
+			public override IEnumerable<BasicMenuItem> ContextMenuItems => Enumerable.Empty<BasicMenuItem>();
 
 			public TestSongListViewModel(ISongsService songsService, IViewNavigator viewNavigator)
 				: base(songsService, viewNavigator)
 			{
+			}
+
+			public Task InvokeEditSongsProperties(IEnumerable<SongModel> songs, CancellationToken cancellationToken)
+			{
+				return EditSongsProperties(songs, cancellationToken);
 			}
 		}
 
@@ -60,12 +64,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			hasSongs.Should().BeFalse();
 			songsNumber.Should().Be(0);
-			totalSongsFileSize.Should().Be(0);
+			totalSongsFileSize.Should().Be("N/A");
 			totalSongsDuration.Should().Be(TimeSpan.Zero);
 		}
 
 		[TestMethod]
-		public void HasSongsGetter_ForNonEmptySongList_ReturnsTrue()
+		public void ListInfoProperties_ForNonEmptySongList_ReturnCorrectValues()
 		{
 			// Arrange
 
@@ -102,78 +106,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			hasSongs.Should().BeTrue();
 			songsNumber.Should().Be(2);
-			totalSongsFileSize.Should().Be(12468);
+			totalSongsFileSize.Should().Be("12.2 KB");
 			totalSongsDuration.Should().Be(new TimeSpan(0, 7, 39));
-		}
-
-		[TestMethod]
-		public void SetRatingMenuItemsGetter_ReturnsItemsForAllSupportedRatings()
-		{
-			// Arrange
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<TestSongListViewModel>();
-
-			// Act
-
-			var ratingItems = target.SetRatingMenuItems;
-
-			// Assert
-
-			var expectedRatings = new[]
-			{
-				RatingModel.R10,
-				RatingModel.R9,
-				RatingModel.R8,
-				RatingModel.R7,
-				RatingModel.R6,
-				RatingModel.R5,
-				RatingModel.R4,
-				RatingModel.R3,
-				RatingModel.R2,
-				RatingModel.R1,
-			};
-
-			ratingItems.Select(x => x.Rating).Should().BeEquivalentTo(expectedRatings, x => x.WithStrictOrdering());
-		}
-
-		[TestMethod]
-		public void SetRatingMenuItems_WhenCommandIsExecuted_UpdatesRatingForEachSelectedSong()
-		{
-			// Arrange
-
-			var songs = new[]
-			{
-				new SongModel { Id = new ItemId("0"), Rating = RatingModel.R4 },
-				new SongModel { Id = new ItemId("1"), Rating = RatingModel.R4 },
-				new SongModel { Id = new ItemId("2"), Rating = RatingModel.R4 },
-			};
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<TestSongListViewModel>();
-
-			target.SetSongs(songs);
-			target.SelectedSongItems = new List<SongListItem>
-			{
-				target.SongItems[0],
-				target.SongItems[2],
-			};
-
-			var menuItemForRating7 = target.SetRatingMenuItems.ToList()[3];
-			menuItemForRating7.Rating.Should().Be(RatingModel.R7);
-
-			// Act
-
-			menuItemForRating7.Command.Execute(null);
-
-			// Assert
-
-			var songServiceMock = mocker.GetMock<ISongsService>();
-			songServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
-			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(song => ReferenceEquals(song, songs[0]) && song.Rating == RatingModel.R7), It.IsAny<CancellationToken>()), Times.Once);
-			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(song => ReferenceEquals(song, songs[2]) && song.Rating == RatingModel.R7), It.IsAny<CancellationToken>()), Times.Once);
-
-			songs[1].Rating.Should().Be(RatingModel.R4);
 		}
 
 		[TestMethod]
@@ -243,7 +177,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void EditSongsPropertiesCommand_SomeSongsAreSelected_ShowsSongPropertiesViewWithSelectedSongs()
+		public async Task EditSongsProperties_ShowsSongPropertiesView()
 		{
 			// Arrange
 
@@ -251,58 +185,18 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				new SongModel { Id = new ItemId("0") },
 				new SongModel { Id = new ItemId("1") },
-				new SongModel { Id = new ItemId("2") },
 			};
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<TestSongListViewModel>();
 
-			target.SetSongs(songs);
-			target.SelectedSongItems = new List<SongListItem>
-			{
-				target.SongItems[0],
-				target.SongItems[2],
-			};
-
 			// Act
 
-			target.EditSongsPropertiesCommand.Execute(null);
+			await target.InvokeEditSongsProperties(songs, CancellationToken.None);
 
 			// Assert
 
-			var expectedSongs = new[]
-			{
-				songs[0],
-				songs[2],
-			};
-
-			mocker.GetMock<IViewNavigator>().Verify(x => x.ShowSongPropertiesView(expectedSongs, It.IsAny<CancellationToken>()), Times.Once);
-		}
-
-		[TestMethod]
-		public void EditSongsPropertiesCommand_NoSongsAreSelected_DoesNotShowSongPropertiesView()
-		{
-			// Arrange
-
-			var songs = new[]
-			{
-				new SongModel { Id = new ItemId("0") },
-				new SongModel { Id = new ItemId("1") },
-				new SongModel { Id = new ItemId("2") },
-			};
-
-			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<TestSongListViewModel>();
-
-			target.SetSongs(songs);
-
-			// Act
-
-			target.EditSongsPropertiesCommand.Execute(null);
-
-			// Assert
-
-			mocker.GetMock<IViewNavigator>().Verify(x => x.ShowSongPropertiesView(It.IsAny<IEnumerable<SongModel>>(), It.IsAny<CancellationToken>()), Times.Never);
+			mocker.GetMock<IViewNavigator>().Verify(x => x.ShowSongPropertiesView(songs, It.IsAny<CancellationToken>()), Times.Once);
 		}
 
 		[TestMethod]
