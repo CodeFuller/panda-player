@@ -47,11 +47,13 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 
 		public override IEnumerable<BasicMenuItem> GetContextMenuItems(ILibraryExplorerViewModel libraryExplorerViewModel, IAdviseGroupHelper adviseGroupHelper)
 		{
-			if (Disc.IsDeleted)
-			{
-				yield break;
-			}
+			return Disc.IsDeleted
+				? GetContextMenuItemsForDeletedDisc(libraryExplorerViewModel)
+				: GetContextMenuItemsForActiveDisc(libraryExplorerViewModel, adviseGroupHelper);
+		}
 
+		private IEnumerable<BasicMenuItem> GetContextMenuItemsForActiveDisc(ILibraryExplorerViewModel libraryExplorerViewModel, IAdviseGroupHelper adviseGroupHelper)
+		{
 			yield return new ExpandableMenuItem
 			{
 				Header = "Set Advise Group",
@@ -80,6 +82,16 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 				Command = new AsyncRelayCommand(() => libraryExplorerViewModel.DeleteDisc(Disc, CancellationToken.None)),
 			};
 
+			yield return new CommandMenuItem
+			{
+				Header = "Properties",
+				IconKind = PackIconKind.Pencil,
+				Command = new RelayCommand(() => libraryExplorerViewModel.EditDiscProperties(Disc), keepTargetAlive: true),
+			};
+		}
+
+		private IEnumerable<BasicMenuItem> GetContextMenuItemsForDeletedDisc(ILibraryExplorerViewModel libraryExplorerViewModel)
+		{
 			yield return new CommandMenuItem
 			{
 				Header = "Properties",

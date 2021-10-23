@@ -6,6 +6,8 @@ namespace PandaPlayer.ViewModels.Interfaces
 {
 	public interface IEditDiscPropertiesViewModel
 	{
+		bool IsDeleted { get; }
+
 		string Title { get; set; }
 
 		string TreeTitle { get; set; }
@@ -13,6 +15,8 @@ namespace PandaPlayer.ViewModels.Interfaces
 		string AlbumTitle { get; set; }
 
 		int? Year { get; set; }
+
+		string DeleteComment { get; set; }
 
 		void Load(DiscModel disc);
 

@@ -31,7 +31,7 @@
         </Grid>
 
         <Label Padding="0,20,0,5" Content="Delete comment:" />
-        <TextBox Height="100" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding DeleteComment}" />
+        <TextBox Height="80" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding DeleteComment}" />
 
         <UniformGrid Margin="0,15,0,5" Rows="1" Columns="2" HorizontalAlignment="Center">
             <Button Margin="0,0,10,0" Content="Delete" IsDefault="True" Click="DeleteButton_Click" />

@@ -6,6 +6,7 @@
         xmlns:system="clr-namespace:System;assembly=System.Runtime"
         xmlns:validationRules="clr-namespace:PandaPlayer.Views.ValidationRules"
         xmlns:interfaces="clr-namespace:PandaPlayer.ViewModels.Interfaces"
+        xmlns:valueConverters="clr-namespace:CodeFuller.Library.Wpf.ValueConverters;assembly=CodeFuller.Library.Wpf"
         mc:Ignorable="d"
         Title="Edit Disc Properties"
         SizeToContent="Height" Width="600" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
@@ -15,11 +16,16 @@
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource AppWindowStyle}" />
     </Window.Style>
 
+    <Window.Resources>
+        <valueConverters:VisibilityCollapsedValueConverter x:Key="VisibilityCollapsedValueConverter" />
+    </Window.Resources>
+
     <StackPanel Margin="10" Orientation="Vertical">
 
         <Grid>
 
             <Grid.RowDefinitions>
+                <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
@@ -59,6 +65,9 @@
 
             <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left" Content="Year:" />
             <TextBox Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch" Text="{Binding Year, TargetNullValue={x:Static system:String.Empty}}" />
+
+            <Label Grid.Row="4" Grid.Column="0" Content="Delete comment:" Visibility="{Binding IsDeleted, Converter={StaticResource VisibilityCollapsedValueConverter}}" />
+            <TextBox Grid.Row="4" Grid.Column="2" Height="80" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding DeleteComment}" Visibility="{Binding IsDeleted, Converter={StaticResource VisibilityCollapsedValueConverter}}" />
 
         </Grid>
 

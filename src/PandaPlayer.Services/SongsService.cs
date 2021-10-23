@@ -60,17 +60,20 @@ namespace PandaPlayer.Services
 			// 2. Avoid overwriting of changes made by another clients.
 			var currentSong = await songsRepository.GetSong(song.Id, cancellationToken);
 
-			if (song.TreeTitle != currentSong.TreeTitle)
+			if (!song.IsDeleted)
 			{
-				await storageRepository.UpdateSongTreeTitle(currentSong, song, cancellationToken);
-			}
+				if (song.TreeTitle != currentSong.TreeTitle)
+				{
+					await storageRepository.UpdateSongTreeTitle(currentSong, song, cancellationToken);
+				}
 
-			// Checking if storage data (tags) must be updated.
-			if (song.Disc.AlbumTitle != currentSong.Disc.AlbumTitle || song.Disc.Year != currentSong.Disc.Year ||
-				song.TrackNumber != currentSong.TrackNumber || song.Title != currentSong.Title ||
-			    !artistsComparer.Equals(song.Artist, currentSong.Artist) || !genresComparer.Equals(song.Genre, currentSong.Genre))
-			{
-				await storageRepository.UpdateSong(song, cancellationToken);
+				// Checking if storage data (tags) must be updated.
+				if (song.Disc.AlbumTitle != currentSong.Disc.AlbumTitle || song.Disc.Year != currentSong.Disc.Year ||
+					song.TrackNumber != currentSong.TrackNumber || song.Title != currentSong.Title ||
+					!artistsComparer.Equals(song.Artist, currentSong.Artist) || !genresComparer.Equals(song.Genre, currentSong.Genre))
+				{
+					await storageRepository.UpdateSong(song, cancellationToken);
+				}
 			}
 
 			// Update in repository should be performed after update in the storage, because later updates song checksum.

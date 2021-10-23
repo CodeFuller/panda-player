@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
@@ -10,11 +11,17 @@ namespace PandaPlayer.ViewModels
 {
 	public class EditDiscPropertiesViewModel : ViewModelBase, IEditDiscPropertiesViewModel
 	{
+		private const string SyntheticDeleteComment = "<Songs have varying delete comment>";
+
 		private readonly IDiscsService discsService;
+
+		private readonly ISongsService songsService;
 
 		private DiscModel Disc { get; set; }
 
 		private string title;
+
+		public bool IsDeleted => Disc.IsDeleted;
 
 		public string Title
 		{
@@ -53,7 +60,7 @@ namespace PandaPlayer.ViewModels
 			get => albumTitle;
 			set
 			{
-				if (value?.Length == 0)
+				if (String.IsNullOrWhiteSpace(value))
 				{
 					value = null;
 				}
@@ -70,9 +77,26 @@ namespace PandaPlayer.ViewModels
 			set => Set(ref year, value);
 		}
 
-		public EditDiscPropertiesViewModel(IDiscsService discsService)
+		private string deleteComment;
+
+		public string DeleteComment
+		{
+			get => deleteComment;
+			set
+			{
+				if (String.IsNullOrWhiteSpace(value))
+				{
+					value = null;
+				}
+
+				Set(ref deleteComment, value);
+			}
+		}
+
+		public EditDiscPropertiesViewModel(IDiscsService discsService, ISongsService songsService)
 		{
 			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
+			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
 		}
 
 		public void Load(DiscModel disc)
@@ -82,6 +106,23 @@ namespace PandaPlayer.ViewModels
 			TreeTitle = disc.TreeTitle;
 			AlbumTitle = disc.AlbumTitle;
 			Year = disc.Year;
+			DeleteComment = disc.IsDeleted ? GetDiscDeleteComment(disc) : null;
+		}
+
+		private static string GetDiscDeleteComment(DiscModel disc)
+		{
+			var deleteComments = disc.AllSongs.Select(x => x.DeleteComment).Distinct().ToList();
+			if (deleteComments.Count == 0)
+			{
+				return null;
+			}
+
+			if (deleteComments.Count == 1)
+			{
+				return deleteComments.Single();
+			}
+
+			return SyntheticDeleteComment;
 		}
 
 		public async Task Save(CancellationToken cancellationToken)
@@ -90,6 +131,15 @@ namespace PandaPlayer.ViewModels
 			Disc.Title = Title;
 			Disc.AlbumTitle = AlbumTitle;
 			Disc.Year = Year;
+
+			if (Disc.IsDeleted && DeleteComment != SyntheticDeleteComment)
+			{
+				foreach (var song in Disc.AllSongs)
+				{
+					song.DeleteComment = DeleteComment;
+					await songsService.UpdateSong(song, cancellationToken);
+				}
+			}
 
 			await discsService.UpdateDisc(Disc, cancellationToken);
 		}
