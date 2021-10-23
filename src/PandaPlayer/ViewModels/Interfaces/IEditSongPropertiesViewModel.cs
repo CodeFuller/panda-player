@@ -21,6 +21,10 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		public short? TrackNumber { get; set; }
 
+		public bool SongsAreDeleted { get; }
+
+		public string DeleteComment { get; set; }
+
 		IReadOnlyCollection<EditedSongProperty<ArtistModel>> AvailableArtists { get; }
 
 		IReadOnlyCollection<EditedSongProperty<GenreModel>> AvailableGenres { get; }

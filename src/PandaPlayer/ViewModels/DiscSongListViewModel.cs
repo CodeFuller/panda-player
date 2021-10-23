@@ -25,43 +25,20 @@ namespace PandaPlayer.ViewModels
 				var selectedSongs = SelectedSongs.ToList();
 				if (!selectedSongs.Any())
 				{
-					yield break;
+					return Enumerable.Empty<BasicMenuItem>();
 				}
 
-				if (selectedSongs.Any(x => x.IsDeleted))
+				if (selectedSongs.All(x => !x.IsDeleted))
 				{
-					yield break;
+					return GetContextMenuItemsForActiveSongs(selectedSongs);
 				}
 
-				yield return new CommandMenuItem
+				if (selectedSongs.All(x => x.IsDeleted))
 				{
-					Header = "Play Next",
-					IconKind = PackIconKind.PlaylistAdd,
-					Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(selectedSongs)), keepTargetAlive: true),
-				};
+					return GetContextMenuItemsForDeletedSongs(selectedSongs);
+				}
 
-				yield return new CommandMenuItem
-				{
-					Header = "Play Last",
-					IconKind = PackIconKind.PlaylistAdd,
-					Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(selectedSongs)), keepTargetAlive: true),
-				};
-
-				yield return GetSetRatingContextMenuItem(selectedSongs);
-
-				yield return new CommandMenuItem
-				{
-					Header = "Delete From Disc",
-					IconKind = PackIconKind.DeleteForever,
-					Command = new RelayCommand(() => DeleteSongsFromDisc(selectedSongs), keepTargetAlive: true),
-				};
-
-				yield return new CommandMenuItem
-				{
-					Header = "Properties",
-					IconKind = PackIconKind.Pencil,
-					Command = new AsyncRelayCommand(() => EditSongsProperties(selectedSongs, CancellationToken.None)),
-				};
+				return Enumerable.Empty<BasicMenuItem>();
 			}
 		}
 
@@ -96,6 +73,49 @@ namespace PandaPlayer.ViewModels
 			}
 
 			SetSongs(songs);
+		}
+
+		private IEnumerable<BasicMenuItem> GetContextMenuItemsForActiveSongs(IReadOnlyCollection<SongModel> songs)
+		{
+			yield return new CommandMenuItem
+			{
+				Header = "Play Next",
+				IconKind = PackIconKind.PlaylistAdd,
+				Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(songs)), keepTargetAlive: true),
+			};
+
+			yield return new CommandMenuItem
+			{
+				Header = "Play Last",
+				IconKind = PackIconKind.PlaylistAdd,
+				Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(songs)), keepTargetAlive: true),
+			};
+
+			yield return GetSetRatingContextMenuItem(songs);
+
+			yield return new CommandMenuItem
+			{
+				Header = "Delete From Disc",
+				IconKind = PackIconKind.DeleteForever,
+				Command = new RelayCommand(() => DeleteSongsFromDisc(songs), keepTargetAlive: true),
+			};
+
+			yield return new CommandMenuItem
+			{
+				Header = "Properties",
+				IconKind = PackIconKind.Pencil,
+				Command = new AsyncRelayCommand(() => EditSongsProperties(songs, CancellationToken.None)),
+			};
+		}
+
+		private IEnumerable<BasicMenuItem> GetContextMenuItemsForDeletedSongs(IReadOnlyCollection<SongModel> songs)
+		{
+			yield return new CommandMenuItem
+			{
+				Header = "Properties",
+				IconKind = PackIconKind.Pencil,
+				Command = new AsyncRelayCommand(() => EditSongsProperties(songs, CancellationToken.None)),
+			};
 		}
 	}
 }

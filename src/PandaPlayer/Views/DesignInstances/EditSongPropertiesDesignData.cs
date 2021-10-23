@@ -25,6 +25,10 @@ namespace PandaPlayer.Views.DesignInstances
 
 		public short? TrackNumber { get; set; } = 7;
 
+		public bool SongsAreDeleted => true;
+
+		public string DeleteComment { get; set; } = "Some delete comment goes here";
+
 		public IReadOnlyCollection<EditedSongProperty<ArtistModel>> AvailableArtists { get; }
 
 		public IReadOnlyCollection<EditedSongProperty<GenreModel>> AvailableGenres { get; }

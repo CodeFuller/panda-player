@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using PandaPlayer.Core.Models;
-using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.ViewModels.Interfaces
 {

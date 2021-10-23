@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using PandaPlayer.Core.Models;
+using PandaPlayer.Extensions;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.ViewModels.Interfaces;
 
@@ -11,7 +11,7 @@ namespace PandaPlayer.ViewModels
 {
 	public class EditDiscPropertiesViewModel : ViewModelBase, IEditDiscPropertiesViewModel
 	{
-		private const string SyntheticDeleteComment = "<Songs have varying delete comment>";
+		private const string ValueForVariousDeleteComments = "<Songs have various delete comments>";
 
 		private readonly IDiscsService discsService;
 
@@ -106,23 +106,7 @@ namespace PandaPlayer.ViewModels
 			TreeTitle = disc.TreeTitle;
 			AlbumTitle = disc.AlbumTitle;
 			Year = disc.Year;
-			DeleteComment = disc.IsDeleted ? GetDiscDeleteComment(disc) : null;
-		}
-
-		private static string GetDiscDeleteComment(DiscModel disc)
-		{
-			var deleteComments = disc.AllSongs.Select(x => x.DeleteComment).Distinct().ToList();
-			if (deleteComments.Count == 0)
-			{
-				return null;
-			}
-
-			if (deleteComments.Count == 1)
-			{
-				return deleteComments.Single();
-			}
-
-			return SyntheticDeleteComment;
+			DeleteComment = disc.IsDeleted ? disc.AllSongs.GetDeleteComment(ValueForVariousDeleteComments) : null;
 		}
 
 		public async Task Save(CancellationToken cancellationToken)
@@ -132,7 +116,7 @@ namespace PandaPlayer.ViewModels
 			Disc.AlbumTitle = AlbumTitle;
 			Disc.Year = Year;
 
-			if (Disc.IsDeleted && DeleteComment != SyntheticDeleteComment)
+			if (Disc.IsDeleted && DeleteComment != ValueForVariousDeleteComments)
 			{
 				foreach (var song in Disc.AllSongs)
 				{

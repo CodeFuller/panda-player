@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using PandaPlayer.Core.Comparers;
 using PandaPlayer.Core.Models;
+using PandaPlayer.Extensions;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.ViewModels.Interfaces;
 
@@ -13,13 +14,15 @@ namespace PandaPlayer.ViewModels
 {
 	public class EditSongPropertiesViewModel : ViewModelBase, IEditSongPropertiesViewModel
 	{
+		private const string ValueForVariousDeleteComments = "<Songs have various delete comments>";
+
 		private readonly ISongsService songsService;
 		private readonly IGenresService genresService;
 		private readonly IArtistsService artistsService;
 
-		private List<SongModel> editedSongs;
+		private List<SongModel> EditedSongs { get; set; }
 
-		public bool SingleSongMode => editedSongs.Count == 1;
+		public bool SingleSongMode => EditedSongs.Count == 1;
 
 		private SongModel SingleSong
 		{
@@ -30,7 +33,7 @@ namespace PandaPlayer.ViewModels
 					throw new InvalidOperationException("Not in a single song mode");
 				}
 
-				return editedSongs.Single();
+				return EditedSongs.Single();
 			}
 		}
 
@@ -92,6 +95,10 @@ namespace PandaPlayer.ViewModels
 			}
 		}
 
+		public bool SongsAreDeleted => EditedSongs.All(x => x.IsDeleted);
+
+		public string DeleteComment { get; set; }
+
 		public EditedSongProperty<ArtistModel> Artist { get; set; }
 
 		public string NewArtistName { get; set; }
@@ -111,8 +118,8 @@ namespace PandaPlayer.ViewModels
 
 		public async Task Load(IEnumerable<SongModel> songs, CancellationToken cancellationToken)
 		{
-			editedSongs = songs.ToList();
-			if (editedSongs.Count == 0)
+			EditedSongs = songs.ToList();
+			if (EditedSongs.Count == 0)
 			{
 				throw new InvalidOperationException("Songs list is empty");
 			}
@@ -123,25 +130,27 @@ namespace PandaPlayer.ViewModels
 			treeTitle = SingleSongMode ? SingleSong.TreeTitle : null;
 			title = SingleSongMode ? SingleSong.Title : null;
 			trackNumber = SingleSongMode ? SingleSong.TrackNumber : null;
+
+			DeleteComment = SongsAreDeleted ? EditedSongs.GetDeleteComment(ValueForVariousDeleteComments) : null;
 		}
 
 		private async Task LoadArtists(CancellationToken cancellationToken)
 		{
 			var allArtists = await artistsService.GetAllArtists(cancellationToken);
-			Artist = BuildProperty(editedSongs, s => s.Artist, new ArtistEqualityComparer());
+			Artist = BuildProperty(EditedSongs, s => s.Artist, new ArtistEqualityComparer());
 			AvailableArtists = GetAvailableListItems(allArtists, Artist, new ArtistEqualityComparer());
 		}
 
 		private async Task LoadGenres(CancellationToken cancellationToken)
 		{
 			var allGenres = await genresService.GetAllGenres(cancellationToken);
-			Genre = BuildProperty(editedSongs, s => s.Genre, new GenreEqualityComparer());
+			Genre = BuildProperty(EditedSongs, s => s.Genre, new GenreEqualityComparer());
 			AvailableGenres = GetAvailableListItems(allGenres, Genre, new GenreEqualityComparer());
 		}
 
 		public async Task Save(CancellationToken cancellationToken)
 		{
-			var songs = editedSongs;
+			var songs = EditedSongs;
 			await UpdateSongModels(songs, cancellationToken);
 
 			foreach (var song in songs)
@@ -216,6 +225,11 @@ namespace PandaPlayer.ViewModels
 				if (Genre.HasValue)
 				{
 					song.Genre = Genre.Value;
+				}
+
+				if (song.IsDeleted && DeleteComment != ValueForVariousDeleteComments)
+				{
+					song.DeleteComment = DeleteComment;
 				}
 			}
 		}
