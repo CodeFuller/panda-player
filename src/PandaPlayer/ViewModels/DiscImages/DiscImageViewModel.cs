@@ -1,9 +1,9 @@
 ﻿using System;
-using System.IO;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using PandaPlayer.Core.Facades;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.ViewModels.Interfaces;
@@ -14,6 +14,8 @@ namespace PandaPlayer.ViewModels.DiscImages
 	{
 		private readonly IViewNavigator viewNavigator;
 
+		private readonly IFileSystemFacade fileSystemFacade;
+
 		private DiscModel currentDisc;
 
 		private DiscModel CurrentDisc
@@ -22,11 +24,11 @@ namespace PandaPlayer.ViewModels.DiscImages
 			set
 			{
 				Set(ref currentDisc, value);
-				RaisePropertyChanged(nameof(CurrentImageUri));
+				RaisePropertyChanged(nameof(CoverImageSource));
 			}
 		}
 
-		public Uri CurrentImageUri
+		public DiscImageSource CoverImageSource
 		{
 			get
 			{
@@ -37,7 +39,7 @@ namespace PandaPlayer.ViewModels.DiscImages
 
 				if (currentDisc.IsDeleted)
 				{
-					return new Uri("pack://application:,,,/PandaPlayer;component/Views/Icons/Deleted.png", UriKind.Absolute);
+					return DiscImageSource.ForDeletedDisc;
 				}
 
 				if (currentDisc.CoverImage == null)
@@ -46,20 +48,21 @@ namespace PandaPlayer.ViewModels.DiscImages
 				}
 
 				var imageContentUri = currentDisc.CoverImage.ContentUri;
-				if (!File.Exists(imageContentUri.OriginalString))
+				if (!fileSystemFacade.FileExists(imageContentUri.OriginalString))
 				{
-					return new Uri("pack://application:,,,/PandaPlayer;component/Views/Icons/Image-Not-Found.png", UriKind.Absolute);
+					return DiscImageSource.ForMissingImage;
 				}
 
-				return imageContentUri;
+				return DiscImageSource.ForImage(imageContentUri);
 			}
 		}
 
 		public ICommand EditDiscImageCommand { get; }
 
-		public DiscImageViewModel(IViewNavigator viewNavigator)
+		public DiscImageViewModel(IViewNavigator viewNavigator, IFileSystemFacade fileSystemFacade)
 		{
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
+			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
 
 			EditDiscImageCommand = new RelayCommand(EditDiscImage);
 
@@ -82,7 +85,7 @@ namespace PandaPlayer.ViewModels.DiscImages
 		{
 			if (disc.Id == CurrentDisc?.Id)
 			{
-				RaisePropertyChanged(nameof(CurrentImageUri));
+				RaisePropertyChanged(nameof(CoverImageSource));
 			}
 		}
 	}

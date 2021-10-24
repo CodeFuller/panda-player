@@ -10,7 +10,7 @@
              d:DesignWidth="400" d:DesignHeight="400">
 
     <UserControl.Resources>
-        <valueConverters:ImageSourceValueConverter x:Key="ImageSourceValueConverter" />
+        <valueConverters:DiscImageSourceValueConverter x:Key="DiscImageSourceValueConverter" />
     </UserControl.Resources>
     
     <Grid>
@@ -19,7 +19,7 @@
             <Border.InputBindings>
                 <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding EditDiscImageCommand}"/>
             </Border.InputBindings>
-            <Image Source="{Binding CurrentImageUri, Converter={StaticResource ImageSourceValueConverter}}" />
+            <Image Source="{Binding CoverImageSource, Converter={StaticResource DiscImageSourceValueConverter}}" />
         </Border>
     </Grid>
 </UserControl>

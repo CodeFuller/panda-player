@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Globalization;
-using System.IO;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using PandaPlayer.Views.Helpers;
 
 namespace PandaPlayer.Views.ValueConverters
 {
@@ -14,49 +13,17 @@ namespace PandaPlayer.Views.ValueConverters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (targetType != typeof(ImageSource))
+			if (value is not String imagePath || targetType != typeof(ImageSource))
 			{
 				return DependencyProperty.UnsetValue;
 			}
 
-			return value switch
-			{
-				Uri imageUri => LoadImage(imageUri),
-				string imagePath => LoadImageFromFile(imagePath),
-				_ => DependencyProperty.UnsetValue,
-			};
-		}
-
-		private static BitmapImage LoadImage(Uri imageUri)
-		{
-			if (imageUri.Scheme == "pack")
-			{
-				return new BitmapImage(imageUri);
-			}
-
-			if (imageUri.IsFile)
-			{
-				return LoadImageFromFile(imageUri.OriginalString);
-			}
-
-			throw new NotSupportedException($"Image URL is not supported: '{imageUri}'");
-		}
-
-		private static BitmapImage LoadImageFromFile(string imagePath)
-		{
-			var image = new BitmapImage();
-			using var fs = new FileStream(imagePath, FileMode.Open, FileAccess.Read);
-			image.BeginInit();
-			image.CacheOption = BitmapCacheOption.OnLoad;
-			image.StreamSource = fs;
-			image.EndInit();
-
-			return image;
+			return BitmapImageLoader.LoadImageFromFile(imagePath);
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			return Binding.DoNothing;
+			return DependencyProperty.UnsetValue;
 		}
 	}
 }
