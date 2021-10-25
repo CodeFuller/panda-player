@@ -127,18 +127,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var expectedMenuItems = new BasicMenuItem[]
 			{
-				new CommandMenuItem(() => { }, false)
-				{
-					Header = "Play Next",
-					IconKind = PackIconKind.PlaylistAdd,
-				},
-
-				new CommandMenuItem(() => { }, false)
-				{
-					Header = "Play Last",
-					IconKind = PackIconKind.PlaylistAdd,
-				},
-
+				new CommandMenuItem(() => { }, false) { Header = "Play Next", IconKind = PackIconKind.PlaylistAdd },
+				new CommandMenuItem(() => { }, false) { Header = "Play Last", IconKind = PackIconKind.PlaylistAdd },
 				new ExpandableMenuItem
 				{
 					Header = "Set Rating",
@@ -157,18 +147,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 						new SetRatingMenuItem(RatingModel.R1, () => Task.CompletedTask),
 					},
 				},
-
-				new CommandMenuItem(() => { }, false)
-				{
-					Header = "Delete From Disc",
-					IconKind = PackIconKind.DeleteForever,
-				},
-
-				new CommandMenuItem(() => { }, false)
-				{
-					Header = "Properties",
-					IconKind = PackIconKind.Pencil,
-				},
+				new CommandMenuItem(() => { }, false) { Header = "Delete From Disc", IconKind = PackIconKind.DeleteForever },
+				new CommandMenuItem(() => { }, false) { Header = "Properties", IconKind = PackIconKind.Pencil },
 			};
 
 			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
@@ -204,11 +184,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var expectedMenuItems = new[]
 			{
-				new CommandMenuItem(() => { }, false)
-				{
-					Header = "Properties",
-					IconKind = PackIconKind.Pencil,
-				},
+				new CommandMenuItem(() => { }, false) { Header = "Properties", IconKind = PackIconKind.Pencil },
 			};
 
 			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering());

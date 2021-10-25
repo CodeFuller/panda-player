@@ -257,29 +257,10 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 
 			var expectedMenuItems = new[]
 			{
-				new CommandMenuItem(() => { }, false)
-				{
-					Header = "Play Disc",
-					IconKind = PackIconKind.Play,
-				},
-
-				new CommandMenuItem(() => { }, false)
-				{
-					Header = "Add To Playlist",
-					IconKind = PackIconKind.PlaylistPlus,
-				},
-
-				new CommandMenuItem(() => { }, false)
-				{
-					Header = "Delete Disc",
-					IconKind = PackIconKind.DeleteForever,
-				},
-
-				new CommandMenuItem(() => { }, false)
-				{
-					Header = "Properties",
-					IconKind = PackIconKind.Pencil,
-				},
+				new CommandMenuItem(() => { }, false) { Header = "Play Disc", IconKind = PackIconKind.Play },
+				new CommandMenuItem(() => { }, false) { Header = "Add To Playlist", IconKind = PackIconKind.PlaylistPlus },
+				new CommandMenuItem(() => { }, false) { Header = "Delete Disc", IconKind = PackIconKind.DeleteForever },
+				new CommandMenuItem(() => { }, false) { Header = "Properties", IconKind = PackIconKind.Pencil },
 			};
 
 			// Nested items for advise group are covered by UT for BasicExplorerItem.
@@ -304,11 +285,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 
 			var expectedMenuItems = new[]
 			{
-				new CommandMenuItem(() => { }, false)
-				{
-					Header = "Properties",
-					IconKind = PackIconKind.Pencil,
-				},
+				new CommandMenuItem(() => { }, false) { Header = "Properties", IconKind = PackIconKind.Pencil },
 			};
 
 			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering());

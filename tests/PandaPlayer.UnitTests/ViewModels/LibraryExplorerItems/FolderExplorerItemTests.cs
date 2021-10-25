@@ -209,11 +209,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 
 			var expectedMenuItems = new[]
 			{
-				new CommandMenuItem(() => { }, false)
-				{
-					Header = "Delete Folder",
-					IconKind = PackIconKind.DeleteForever,
-				},
+				new CommandMenuItem(() => { }, false) { Header = "Delete Folder", IconKind = PackIconKind.DeleteForever },
 			};
 
 			// Nested items for advise group are covered by UT for BasicExplorerItem.

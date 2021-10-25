@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using GalaSoft.MvvmLight.Messaging;
+using MaterialDesignThemes.Wpf;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
@@ -13,6 +14,7 @@ using PandaPlayer.Events.SongEvents;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.ViewModels;
+using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.UnitTests.ViewModels
 {
@@ -174,6 +176,117 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Assert
 
 			currentDisc.Should().BeNull();
+		}
+
+		[TestMethod]
+		public void ContextMenuItems_ForEmptyPlaylist_ReturnsEmptyCollection()
+		{
+			// Arrange
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
+
+			// Act
+
+			var menuItems = target.ContextMenuItems;
+
+			// Assert
+
+			menuItems.Should().BeEmpty();
+		}
+
+		[TestMethod]
+		public async Task ContextMenuItems_IfNoSongsSelected_ReturnsCorrectMenuItems()
+		{
+			// Arrange
+
+			var songs = new[]
+			{
+				new SongModel { Id = new ItemId("0") },
+				new SongModel { Id = new ItemId("1") },
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
+
+			await target.SetPlaylistSongs(songs, CancellationToken.None);
+
+			// Act
+
+			var menuItems = target.ContextMenuItems;
+
+			// Assert
+
+			var expectedMenuItems = new[]
+			{
+				new CommandMenuItem(() => { }, false) { Header = "Clear Playlist", IconKind = PackIconKind.PlaylistRemove },
+			};
+
+			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering());
+		}
+
+		[TestMethod]
+		public async Task ContextMenuItems_IfSomeSongsSelected_ReturnsCorrectMenuItems()
+		{
+			// Arrange
+
+			var songs = new[]
+			{
+				new SongModel { Id = new ItemId("0") },
+				new SongModel { Id = new ItemId("1") },
+				new SongModel { Id = new ItemId("2") },
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<PlaylistViewModel>();
+
+			await target.SetPlaylistSongs(songs, CancellationToken.None);
+
+			var selectedSongItems = new List<SongListItem>
+			{
+				target.SongItems[0],
+				target.SongItems[2],
+			};
+
+			target.SelectedSongItems = selectedSongItems;
+			target.SelectedSongItem = selectedSongItems[0];
+
+			// Act
+
+			var menuItems = target.ContextMenuItems;
+
+			// Assert
+
+			var expectedMenuItems = new BasicMenuItem[]
+			{
+				new CommandMenuItem(() => { }, false) { Header = "Play From This Song", IconKind = PackIconKind.Play },
+				new CommandMenuItem(() => { }, false) { Header = "Play Next", IconKind = PackIconKind.PlaylistAdd },
+				new CommandMenuItem(() => { }, false) { Header = "Play Last", IconKind = PackIconKind.PlaylistAdd },
+				new CommandMenuItem(() => { }, false) { Header = "Remove From Playlist", IconKind = PackIconKind.PlaylistMinus },
+				new CommandMenuItem(() => { }, false) { Header = "Clear Playlist", IconKind = PackIconKind.PlaylistRemove },
+				new CommandMenuItem(() => { }, false) { Header = "Go To Disc", IconKind = PackIconKind.Album },
+				new ExpandableMenuItem
+				{
+					Header = "Set Rating",
+					IconKind = PackIconKind.Star,
+					Items = new[]
+					{
+						new SetRatingMenuItem(RatingModel.R10, () => Task.CompletedTask),
+						new SetRatingMenuItem(RatingModel.R9, () => Task.CompletedTask),
+						new SetRatingMenuItem(RatingModel.R8, () => Task.CompletedTask),
+						new SetRatingMenuItem(RatingModel.R7, () => Task.CompletedTask),
+						new SetRatingMenuItem(RatingModel.R6, () => Task.CompletedTask),
+						new SetRatingMenuItem(RatingModel.R5, () => Task.CompletedTask),
+						new SetRatingMenuItem(RatingModel.R4, () => Task.CompletedTask),
+						new SetRatingMenuItem(RatingModel.R3, () => Task.CompletedTask),
+						new SetRatingMenuItem(RatingModel.R2, () => Task.CompletedTask),
+						new SetRatingMenuItem(RatingModel.R1, () => Task.CompletedTask),
+					},
+				},
+				new CommandMenuItem(() => { }, false) { Header = "Properties", IconKind = PackIconKind.Pencil },
+			};
+
+			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
 		}
 
 		[TestMethod]
