@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using CodeFuller.Library.Wpf;
 using GalaSoft.MvvmLight;
 using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Models;
@@ -25,21 +24,19 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 		{
 			var menuItems = new List<BasicMenuItem>
 			{
-				new CommandMenuItem
+				new CommandMenuItem(() => libraryExplorerViewModel.CreateAdviseGroup(adviseGroupHolder, CancellationToken.None))
 				{
 					Header = "New Advise Group ...",
 					IconKind = PackIconKind.FolderPlus,
-					Command = new AsyncRelayCommand(() => libraryExplorerViewModel.CreateAdviseGroup(adviseGroupHolder, CancellationToken.None)),
 				},
 			};
 
 			var currentAdviseGroup = adviseGroupHolder.CurrentAdviseGroup;
 			if (currentAdviseGroup != null)
 			{
-				var reverseFavoriteMenuItem = new CommandMenuItem
+				var reverseFavoriteMenuItem = new CommandMenuItem(() => adviseGroupHelper.ReverseFavoriteStatus(currentAdviseGroup, CancellationToken.None))
 				{
 					Header = $"{(currentAdviseGroup.IsFavorite ? "Unmark" : "Mark")} '{currentAdviseGroup.Name}' as favorite",
-					Command = new AsyncRelayCommand(() => adviseGroupHelper.ReverseFavoriteStatus(currentAdviseGroup, CancellationToken.None)),
 					IconKind = currentAdviseGroup.IsFavorite ? PackIconKind.HeartBroken : PackIconKind.Heart,
 				};
 
@@ -72,11 +69,10 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 				iconKind = PackIconKind.Heart;
 			}
 
-			return new CommandMenuItem
+			return new CommandMenuItem(() => adviseGroupHelper.ReverseAdviseGroup(adviseGroupHolder, adviseGroup, CancellationToken.None))
 			{
 				Header = adviseGroup.Name,
 				IconKind = iconKind,
-				Command = new AsyncRelayCommand(() => adviseGroupHelper.ReverseAdviseGroup(adviseGroupHolder, adviseGroup, CancellationToken.None)),
 			};
 		}
 	}

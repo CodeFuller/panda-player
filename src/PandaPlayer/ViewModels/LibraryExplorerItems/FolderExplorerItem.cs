@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using CodeFuller.Library.Wpf;
 using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Models;
 using PandaPlayer.ViewModels.AdviseGroups;
@@ -60,11 +59,10 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 				Items = GetAdviseGroupMenuItems(new FolderAdviseGroupHolder(Folder), libraryExplorerViewModel, adviseGroupHelper),
 			};
 
-			yield return new CommandMenuItem
+			yield return new CommandMenuItem(() => libraryExplorerViewModel.DeleteFolder(FolderId, CancellationToken.None))
 			{
 				Header = "Delete Folder",
 				IconKind = PackIconKind.DeleteForever,
-				Command = new AsyncRelayCommand(() => libraryExplorerViewModel.DeleteFolder(FolderId, CancellationToken.None)),
 			};
 		}
 	}

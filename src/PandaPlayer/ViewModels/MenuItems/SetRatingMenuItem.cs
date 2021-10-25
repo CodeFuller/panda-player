@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -11,7 +12,8 @@ namespace PandaPlayer.ViewModels.MenuItems
 	{
 		private readonly RatingModel rating;
 
-		public SetRatingMenuItem(RatingModel rating)
+		public SetRatingMenuItem(RatingModel rating, Func<Task> commandAction)
+			: base(commandAction)
 		{
 			this.rating = rating;
 		}

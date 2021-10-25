@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CodeFuller.Library.Wpf;
-using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Comparers;
@@ -69,55 +67,49 @@ namespace PandaPlayer.ViewModels
 
 				if (selectedSongItem != null)
 				{
-					yield return new CommandMenuItem
+					yield return new CommandMenuItem(() => PlayFromSong(selectedSongItem, CancellationToken.None))
 					{
 						Header = "Play From This Song",
 						IconKind = PackIconKind.Play,
-						Command = new AsyncRelayCommand(() => PlayFromSong(selectedSongItem, CancellationToken.None)),
 					};
 				}
 
 				if (selectedSongItems.Any())
 				{
-					yield return new CommandMenuItem
+					yield return new CommandMenuItem(() => AddSongsNext(SelectedSongs.ToList(), CancellationToken.None))
 					{
 						Header = "Play Next",
 						IconKind = PackIconKind.PlaylistAdd,
-						Command = new AsyncRelayCommand(() => AddSongsNext(SelectedSongs.ToList(), CancellationToken.None)),
 					};
 
-					yield return new CommandMenuItem
+					yield return new CommandMenuItem(() => AddSongsLast(SelectedSongs.ToList(), CancellationToken.None))
 					{
 						Header = "Play Last",
 						IconKind = PackIconKind.PlaylistAdd,
-						Command = new AsyncRelayCommand(() => AddSongsLast(SelectedSongs.ToList(), CancellationToken.None)),
 					};
 
-					yield return new CommandMenuItem
+					yield return new CommandMenuItem(() => RemoveSongsFromPlaylist(selectedSongItems, CancellationToken.None))
 					{
 						Header = "Remove From Playlist",
 						IconKind = PackIconKind.PlaylistMinus,
-						Command = new AsyncRelayCommand(() => RemoveSongsFromPlaylist(selectedSongItems, CancellationToken.None)),
 					};
 				}
 
 				if (SongItems.Any())
 				{
-					yield return new CommandMenuItem
+					yield return new CommandMenuItem(() => ClearPlaylist(CancellationToken.None))
 					{
 						Header = "Clear Playlist",
 						IconKind = PackIconKind.PlaylistRemove,
-						Command = new AsyncRelayCommand(() => ClearPlaylist(CancellationToken.None)),
 					};
 				}
 
 				if (selectedSong != null)
 				{
-					yield return new CommandMenuItem
+					yield return new CommandMenuItem(() => Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(selectedSong.Disc)), keepTargetAlive: true)
 					{
 						Header = "Go To Disc",
 						IconKind = PackIconKind.Album,
-						Command = new RelayCommand(() => Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(selectedSong.Disc)), keepTargetAlive: true),
 					};
 				}
 
@@ -125,11 +117,10 @@ namespace PandaPlayer.ViewModels
 				{
 					yield return GetSetRatingContextMenuItem(selectedSongs);
 
-					yield return new CommandMenuItem
+					yield return new CommandMenuItem(() => EditSongsProperties(selectedSongs, CancellationToken.None))
 					{
 						Header = "Properties",
 						IconKind = PackIconKind.Pencil,
-						Command = new AsyncRelayCommand(() => EditSongsProperties(selectedSongs, CancellationToken.None)),
 					};
 				}
 			}

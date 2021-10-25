@@ -1,12 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using FluentAssertions;
 using GalaSoft.MvvmLight.Messaging;
 using MaterialDesignThemes.Wpf;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using PandaPlayer.Core.Models;
+using PandaPlayer.ViewModels.AdviseGroups;
+using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.ViewModels.LibraryExplorerItems;
+using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 {
@@ -114,6 +119,42 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		}
 
 		[TestMethod]
+		public void IsDeleted_ForActiveFolder_ReturnsFalse()
+		{
+			// Arrange
+
+			var folder = new FolderModel { DeleteDate = null };
+
+			var target = new FolderExplorerItem(folder);
+
+			// Act
+
+			var isDeleted = target.IsDeleted;
+
+			// Assert
+
+			isDeleted.Should().BeFalse();
+		}
+
+		[TestMethod]
+		public void IsDeleted_ForDeletedFolder_ReturnsTrue()
+		{
+			// Arrange
+
+			var folder = new FolderModel { DeleteDate = new DateTime(2021, 10, 25) };
+
+			var target = new FolderExplorerItem(folder);
+
+			// Act
+
+			var isDeleted = target.IsDeleted;
+
+			// Assert
+
+			isDeleted.Should().BeTrue();
+		}
+
+		[TestMethod]
 		public void FolderExplorerItem_WhenFolderAdviseGroupIsChanged_SendsPropertyChangedEventForIconKind()
 		{
 			// Arrange
@@ -140,6 +181,62 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 			};
 
 			propertyChangedEvents.Select(e => e.PropertyName).Should().BeEquivalentTo(expectedProperties);
+		}
+
+		[TestMethod]
+		public void GetContextMenuItems_ForActiveFolder_ReturnsCorrectMenuItems()
+		{
+			// Arrange
+
+			var folder = new FolderModel { DeleteDate = null };
+
+			var adviseGroupHelperStub = new Mock<IAdviseGroupHelper>();
+			adviseGroupHelperStub.Setup(x => x.AdviseGroups).Returns(Array.Empty<AdviseGroupModel>());
+
+			var target = new FolderExplorerItem(folder);
+
+			// Act
+
+			var menuItems = target.GetContextMenuItems(Mock.Of<ILibraryExplorerViewModel>(), adviseGroupHelperStub.Object).ToArray();
+
+			// Assert
+
+			var expectedSetAdviseGroupItem = new ExpandableMenuItem
+			{
+				Header = "Set Advise Group",
+				IconKind = PackIconKind.FolderStar,
+			};
+
+			var expectedMenuItems = new[]
+			{
+				new CommandMenuItem(() => { }, false)
+				{
+					Header = "Delete Folder",
+					IconKind = PackIconKind.DeleteForever,
+				},
+			};
+
+			// Nested items for advise group are covered by UT for BasicExplorerItem.
+			menuItems[0].Should().BeEquivalentTo(expectedSetAdviseGroupItem, x => x.Excluding(y => y.Items));
+			menuItems[1..].Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering());
+		}
+
+		[TestMethod]
+		public void GetContextMenuItems_ForDeletedFolder_ReturnsEmptyCollection()
+		{
+			// Arrange
+
+			var folder = new FolderModel { DeleteDate = new DateTime(2021, 10, 25) };
+
+			var target = new FolderExplorerItem(folder);
+
+			// Act
+
+			var menuItems = target.GetContextMenuItems(Mock.Of<ILibraryExplorerViewModel>(), Mock.Of<IAdviseGroupHelper>());
+
+			// Assert
+
+			menuItems.Should().BeEmpty();
 		}
 	}
 }

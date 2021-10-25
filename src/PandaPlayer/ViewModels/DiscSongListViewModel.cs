@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using CodeFuller.Library.Wpf;
-using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Models;
@@ -77,44 +75,39 @@ namespace PandaPlayer.ViewModels
 
 		private IEnumerable<BasicMenuItem> GetContextMenuItemsForActiveSongs(IReadOnlyCollection<SongModel> songs)
 		{
-			yield return new CommandMenuItem
+			yield return new CommandMenuItem(() => Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(songs)), keepTargetAlive: true)
 			{
 				Header = "Play Next",
 				IconKind = PackIconKind.PlaylistAdd,
-				Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(songs)), keepTargetAlive: true),
 			};
 
-			yield return new CommandMenuItem
+			yield return new CommandMenuItem(() => Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(songs)), keepTargetAlive: true)
 			{
 				Header = "Play Last",
 				IconKind = PackIconKind.PlaylistAdd,
-				Command = new RelayCommand(() => Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(songs)), keepTargetAlive: true),
 			};
 
 			yield return GetSetRatingContextMenuItem(songs);
 
-			yield return new CommandMenuItem
+			yield return new CommandMenuItem(() => DeleteSongsFromDisc(songs), keepTargetAlive: true)
 			{
 				Header = "Delete From Disc",
 				IconKind = PackIconKind.DeleteForever,
-				Command = new RelayCommand(() => DeleteSongsFromDisc(songs), keepTargetAlive: true),
 			};
 
-			yield return new CommandMenuItem
+			yield return new CommandMenuItem(() => EditSongsProperties(songs, CancellationToken.None))
 			{
 				Header = "Properties",
 				IconKind = PackIconKind.Pencil,
-				Command = new AsyncRelayCommand(() => EditSongsProperties(songs, CancellationToken.None)),
 			};
 		}
 
 		private IEnumerable<BasicMenuItem> GetContextMenuItemsForDeletedSongs(IReadOnlyCollection<SongModel> songs)
 		{
-			yield return new CommandMenuItem
+			yield return new CommandMenuItem(() => EditSongsProperties(songs, CancellationToken.None))
 			{
 				Header = "Properties",
 				IconKind = PackIconKind.Pencil,
-				Command = new AsyncRelayCommand(() => EditSongsProperties(songs, CancellationToken.None)),
 			};
 		}
 	}

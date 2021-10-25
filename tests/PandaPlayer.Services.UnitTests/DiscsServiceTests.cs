@@ -31,6 +31,10 @@ namespace PandaPlayer.Services.UnitTests
 					},
 					Title = "Old Disc Title",
 					TreeTitle = "2021 - Some Disc (CD 1)",
+					AllSongs = new[]
+					{
+						new SongModel(),
+					},
 				};
 			}
 

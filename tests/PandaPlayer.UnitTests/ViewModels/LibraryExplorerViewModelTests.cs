@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,6 +31,60 @@ namespace PandaPlayer.UnitTests.ViewModels
 		public void Initialize()
 		{
 			Messenger.Reset();
+		}
+
+		[TestMethod]
+		public async Task CreateAdviseGroup_IfShowCreateAdviseGroupViewReturnsNull_DoesNotCreateAdviseGroup()
+		{
+			// Arrange
+
+			var adviseGroupHelperMock = new Mock<IAdviseGroupHelper>();
+			adviseGroupHelperMock.Setup(x => x.AdviseGroups).Returns(Array.Empty<AdviseGroupModel>());
+
+			var viewNavigatorStub = new Mock<IViewNavigator>();
+			viewNavigatorStub.Setup(x => x.ShowCreateAdviseGroupView(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns<string>(null);
+
+			var mocker = new AutoMocker();
+			mocker.Use(adviseGroupHelperMock);
+			mocker.Use(viewNavigatorStub);
+
+			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
+
+			// Act
+
+			await target.CreateAdviseGroup(Mock.Of<BasicAdviseGroupHolder>(), CancellationToken.None);
+
+			// Assert
+
+			adviseGroupHelperMock.Verify(x => x.CreateAdviseGroup(It.IsAny<BasicAdviseGroupHolder>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+		}
+
+		[TestMethod]
+		public async Task CreateAdviseGroup_IfShowCreateAdviseGroupViewReturnsNotNull_CreatesAdviseGroup()
+		{
+			// Arrange
+
+			var adviseGroupHelperMock = new Mock<IAdviseGroupHelper>();
+			adviseGroupHelperMock.Setup(x => x.AdviseGroups).Returns(Array.Empty<AdviseGroupModel>());
+
+			var viewNavigatorStub = new Mock<IViewNavigator>();
+			viewNavigatorStub.Setup(x => x.ShowCreateAdviseGroupView(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns("Some New Group");
+
+			var mocker = new AutoMocker();
+			mocker.Use(adviseGroupHelperMock);
+			mocker.Use(viewNavigatorStub);
+
+			var adviseGroupHolder = Mock.Of<BasicAdviseGroupHolder>();
+
+			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
+
+			// Act
+
+			await target.CreateAdviseGroup(adviseGroupHolder, CancellationToken.None);
+
+			// Assert
+
+			adviseGroupHelperMock.Verify(x => x.CreateAdviseGroup(adviseGroupHolder, "Some New Group", It.IsAny<CancellationToken>()), Times.Once);
 		}
 
 		[TestMethod]

@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CodeFuller.Library.Wpf;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using MaterialDesignThemes.Wpf;
@@ -92,10 +91,7 @@ namespace PandaPlayer.ViewModels
 				IconKind = PackIconKind.Star,
 				Items = RatingHelpers.AllRatingValues
 					.OrderByDescending(r => r)
-					.Select(rating => new SetRatingMenuItem(rating)
-					{
-						Command = new AsyncRelayCommand(() => SetRatingForSongs(songs, rating, CancellationToken.None)),
-					}),
+					.Select(rating => new SetRatingMenuItem(rating, () => SetRatingForSongs(songs, rating, CancellationToken.None))),
 			};
 		}
 

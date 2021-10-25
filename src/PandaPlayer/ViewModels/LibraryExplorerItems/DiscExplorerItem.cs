@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using CodeFuller.Library.Wpf;
-using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Models;
@@ -61,42 +59,37 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 				Items = GetAdviseGroupMenuItems(new DiscAdviseGroupHolder(Disc), libraryExplorerViewModel, adviseGroupHelper),
 			};
 
-			yield return new CommandMenuItem
+			yield return new CommandMenuItem(() => libraryExplorerViewModel.PlayDisc(Disc), keepTargetAlive: true)
 			{
 				Header = "Play Disc",
 				IconKind = PackIconKind.Play,
-				Command = new RelayCommand(() => libraryExplorerViewModel.PlayDisc(Disc), keepTargetAlive: true),
 			};
 
-			yield return new CommandMenuItem
+			yield return new CommandMenuItem(() => libraryExplorerViewModel.AddDiscToPlaylist(Disc), keepTargetAlive: true)
 			{
 				Header = "Add To Playlist",
 				IconKind = PackIconKind.PlaylistPlus,
-				Command = new RelayCommand(() => libraryExplorerViewModel.AddDiscToPlaylist(Disc), keepTargetAlive: true),
 			};
 
-			yield return new CommandMenuItem
+			yield return new CommandMenuItem(() => libraryExplorerViewModel.DeleteDisc(Disc, CancellationToken.None))
 			{
 				Header = "Delete Disc",
 				IconKind = PackIconKind.DeleteForever,
-				Command = new AsyncRelayCommand(() => libraryExplorerViewModel.DeleteDisc(Disc, CancellationToken.None)),
 			};
 
-			yield return new CommandMenuItem
+			yield return new CommandMenuItem(() => libraryExplorerViewModel.EditDiscProperties(Disc), keepTargetAlive: true)
 			{
 				Header = "Properties",
 				IconKind = PackIconKind.Pencil,
-				Command = new RelayCommand(() => libraryExplorerViewModel.EditDiscProperties(Disc), keepTargetAlive: true),
 			};
 		}
 
 		private IEnumerable<BasicMenuItem> GetContextMenuItemsForDeletedDisc(ILibraryExplorerViewModel libraryExplorerViewModel)
 		{
-			yield return new CommandMenuItem
+			yield return new CommandMenuItem(() => libraryExplorerViewModel.EditDiscProperties(Disc), keepTargetAlive: true)
 			{
 				Header = "Properties",
 				IconKind = PackIconKind.Pencil,
-				Command = new RelayCommand(() => libraryExplorerViewModel.EditDiscProperties(Disc), keepTargetAlive: true),
 			};
 		}
 	}
