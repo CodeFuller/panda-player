@@ -77,6 +77,8 @@ namespace PandaPlayer.ViewModels
 			set => Set(ref year, value);
 		}
 
+		private string OriginalDeleteComment { get; set; }
+
 		private string deleteComment;
 
 		public string DeleteComment
@@ -107,16 +109,17 @@ namespace PandaPlayer.ViewModels
 			AlbumTitle = disc.AlbumTitle;
 			Year = disc.Year;
 			DeleteComment = disc.IsDeleted ? disc.AllSongs.GetDeleteComment(ValueForVariousDeleteComments) : null;
+			OriginalDeleteComment = DeleteComment;
 		}
 
 		public async Task Save(CancellationToken cancellationToken)
 		{
-			Disc.TreeTitle = TreeTitle;
 			Disc.Title = Title;
+			Disc.TreeTitle = TreeTitle;
 			Disc.AlbumTitle = AlbumTitle;
 			Disc.Year = Year;
 
-			if (Disc.IsDeleted && DeleteComment != ValueForVariousDeleteComments)
+			if (Disc.IsDeleted && DeleteComment != OriginalDeleteComment)
 			{
 				foreach (var song in Disc.AllSongs)
 				{
