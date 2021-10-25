@@ -111,6 +111,50 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
+		public void ListInfoProperties_WhenAllSongsAreDeleted_ReturnCorrectValues()
+		{
+			// Arrange
+
+			var songs = new[]
+			{
+				new SongModel
+				{
+					Id = new ItemId("0"),
+					Size = null,
+					Duration = new TimeSpan(0, 3, 28),
+					DeleteDate = new DateTime(2021, 10, 25),
+				},
+
+				new SongModel
+				{
+					Id = new ItemId("1"),
+					Size = null,
+					Duration = new TimeSpan(0, 4, 11),
+					DeleteDate = new DateTime(2021, 10, 25),
+				},
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<TestSongListViewModel>();
+
+			target.SetSongs(songs);
+
+			// Act
+
+			var hasSongs = target.HasSongs;
+			var songsNumber = target.SongsNumber;
+			var totalSongsFileSize = target.TotalSongsFileSize;
+			var totalSongsDuration = target.TotalSongsDuration;
+
+			// Assert
+
+			hasSongs.Should().BeTrue();
+			songsNumber.Should().Be(2);
+			totalSongsFileSize.Should().Be("N/A");
+			totalSongsDuration.Should().Be(new TimeSpan(0, 7, 39));
+		}
+
+		[TestMethod]
 		public void SetSongs_ForEmptySongList_FillsListWithSongsCorrectly()
 		{
 			// Arrange
