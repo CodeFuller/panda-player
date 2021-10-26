@@ -25,6 +25,21 @@ namespace PandaPlayer.ViewModels
 			set => Set(ref isCurrentlyPlayed, value);
 		}
 
+		public string ToolTip
+		{
+			get
+			{
+				if (!Song.IsDeleted)
+				{
+					return null;
+				}
+
+				return String.IsNullOrWhiteSpace(Song.DeleteComment)
+					? $"The song was deleted on {Song.DeleteDate:yyyy.MM.dd} without comment"
+					: $"The song was deleted on {Song.DeleteDate:yyyy.MM.dd} with the comment '{Song.DeleteComment}'";
+			}
+		}
+
 		public SongListItem(SongModel song)
 		{
 			Song = song ?? throw new ArgumentNullException(nameof(song));

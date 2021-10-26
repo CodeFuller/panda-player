@@ -94,5 +94,67 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			bitRate.Should().Be("N/A");
 		}
+
+		[TestMethod]
+		public void ToolTipGetter_ForActiveSong_ReturnsNull()
+		{
+			// Arrange
+
+			var song = new SongModel();
+
+			var target = new SongListItem(song);
+
+			// Act
+
+			var toolTip = target.ToolTip;
+
+			// Assert
+
+			toolTip.Should().BeNull();
+		}
+
+		[TestMethod]
+		public void ToolTipGetter_ForDeletedSongWithDeleteComment_ReturnsCorrectValue()
+		{
+			// Arrange
+
+			var song = new SongModel
+			{
+				DeleteDate = new DateTime(2021, 10, 26),
+				DeleteComment = "Boring",
+			};
+
+			var target = new SongListItem(song);
+
+			// Act
+
+			var toolTip = target.ToolTip;
+
+			// Assert
+
+			toolTip.Should().Be("The song was deleted on 2021.10.26 with the comment 'Boring'");
+		}
+
+		[TestMethod]
+		public void ToolTipGetter_ForDeletedSongWithoutDeleteComment_ReturnsCorrectValue()
+		{
+			// Arrange
+
+			var song = new SongModel
+			{
+				DeleteDate = new DateTime(2021, 10, 26),
+				DeleteComment = null,
+			};
+
+			var target = new SongListItem(song);
+
+			// Act
+
+			var toolTip = target.ToolTip;
+
+			// Assert
+
+			toolTip.Should().Be("The song was deleted on 2021.10.26 without comment");
+		}
 	}
 }
