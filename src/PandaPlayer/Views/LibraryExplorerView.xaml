@@ -31,6 +31,8 @@
             </DataGrid.InputBindings>
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                    <Setter Property="ToolTip" Value="{Binding ToolTip}" />
+                    <Setter Property="ToolTipService.ShowDuration" Value="60000" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsDeleted}" Value="True">
                             <Setter Property="Opacity" Value=".50"/>

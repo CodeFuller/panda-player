@@ -119,7 +119,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		}
 
 		[TestMethod]
-		public void IsDeleted_ForActiveFolder_ReturnsFalse()
+		public void IsDeletedGetter_ForActiveFolder_ReturnsFalse()
 		{
 			// Arrange
 
@@ -137,7 +137,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		}
 
 		[TestMethod]
-		public void IsDeleted_ForDeletedFolder_ReturnsTrue()
+		public void IsDeletedGetter_ForDeletedFolder_ReturnsTrue()
 		{
 			// Arrange
 

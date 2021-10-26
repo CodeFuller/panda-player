@@ -5,6 +5,11 @@ namespace PandaPlayer.Core.Extensions
 {
 	public static class EnumerableExtensions
 	{
+		public static TSource UniqueOrDefault<TSource>(this IEnumerable<TSource> source)
+		{
+			return source.UniqueOrDefault(EqualityComparer<TSource>.Default);
+		}
+
 		public static TSource UniqueOrDefault<TSource>(this IEnumerable<TSource> source, IEqualityComparer<TSource> comparer)
 		{
 			var sourceList = source.ToList();

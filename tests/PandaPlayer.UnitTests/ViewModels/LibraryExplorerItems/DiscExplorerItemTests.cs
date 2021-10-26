@@ -112,7 +112,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		}
 
 		[TestMethod]
-		public void IsDeleted_ForActiveDisc_ReturnsFalse()
+		public void IsDeletedGetter_ForActiveDisc_ReturnsFalse()
 		{
 			// Arrange
 
@@ -130,7 +130,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		}
 
 		[TestMethod]
-		public void IsDeleted_ForDeletedDisc_ReturnsTrue()
+		public void IsDeletedGetter_ForDeletedDisc_ReturnsTrue()
 		{
 			// Arrange
 
@@ -145,6 +145,174 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 			// Assert
 
 			isDeleted.Should().BeTrue();
+		}
+
+		[TestMethod]
+		public void ToolTipGetter_ForActiveDisc_ReturnsNull()
+		{
+			// Arrange
+
+			var disc = new DiscModel { AllSongs = new[] { new SongModel() } };
+
+			var target = new DiscExplorerItem(disc);
+
+			// Act
+
+			var toolTip = target.ToolTip;
+
+			// Assert
+
+			toolTip.Should().BeNull();
+		}
+
+		[TestMethod]
+		public void ToolTipGetter_ForDeletedDiscWithSameDeleteDateAndComment_ReturnsCorrectValue()
+		{
+			// Arrange
+
+			var disc = new DiscModel
+			{
+				AllSongs = new[]
+				{
+					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring" },
+					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring" },
+				},
+			};
+
+			var target = new DiscExplorerItem(disc);
+
+			// Act
+
+			var toolTip = target.ToolTip;
+
+			// Assert
+
+			toolTip.Should().Be("The disc was deleted on 2021.10.26 with the comment 'Boring'");
+		}
+
+		[TestMethod]
+		public void ToolTipGetter_ForDeletedDiscWithSameDeleteDateAndWithoutComment_ReturnsCorrectValue()
+		{
+			// Arrange
+
+			var disc = new DiscModel
+			{
+				AllSongs = new[]
+				{
+					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = null },
+					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = null },
+				},
+			};
+
+			var target = new DiscExplorerItem(disc);
+
+			// Act
+
+			var toolTip = target.ToolTip;
+
+			// Assert
+
+			toolTip.Should().Be("The disc was deleted on 2021.10.26 without comment");
+		}
+
+		[TestMethod]
+		public void ToolTipGetter_ForDeletedDiscWithSameDeleteDateAndVariousComments_ReturnsCorrectValue()
+		{
+			// Arrange
+
+			var disc = new DiscModel
+			{
+				AllSongs = new[]
+				{
+					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring 1" },
+					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring 2" },
+				},
+			};
+
+			var target = new DiscExplorerItem(disc);
+
+			// Act
+
+			var toolTip = target.ToolTip;
+
+			// Assert
+
+			toolTip.Should().Be("The disc was deleted on 2021.10.26 with various comments");
+		}
+
+		[TestMethod]
+		public void ToolTipGetter_ForDeletedDiscWithVariousDeleteDateAndSameComment_ReturnsCorrectValue()
+		{
+			// Arrange
+
+			var disc = new DiscModel
+			{
+				AllSongs = new[]
+				{
+					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring" },
+					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring" },
+				},
+			};
+
+			var target = new DiscExplorerItem(disc);
+
+			// Act
+
+			var toolTip = target.ToolTip;
+
+			// Assert
+
+			toolTip.Should().Be("The disc was deleted with the comment 'Boring'");
+		}
+
+		[TestMethod]
+		public void ToolTipGetter_ForDeletedDiscWithVariousDeleteDateAndWithoutComment_ReturnsCorrectValue()
+		{
+			// Arrange
+
+			var disc = new DiscModel
+			{
+				AllSongs = new[]
+				{
+					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = null },
+					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = null },
+				},
+			};
+
+			var target = new DiscExplorerItem(disc);
+
+			// Act
+
+			var toolTip = target.ToolTip;
+
+			// Assert
+
+			toolTip.Should().Be("The disc was deleted without comment");
+		}
+
+		[TestMethod]
+		public void ToolTipGetter_ForDeletedDiscWithVariousDeleteDateAndComments_ReturnsCorrectValue()
+		{
+			// Arrange
+
+			var disc = new DiscModel
+			{
+				AllSongs = new[]
+				{
+					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring 1" },
+					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring 2" },
+				},
+			};
+
+			var target = new DiscExplorerItem(disc);
+
+			// Act
+
+			var toolTip = target.ToolTip;
+
+			// Assert
+
+			toolTip.Should().Be("The disc was deleted with various comments");
 		}
 
 		[TestMethod]

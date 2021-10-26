@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using GalaSoft.MvvmLight.Messaging;
 using MaterialDesignThemes.Wpf;
+using PandaPlayer.Core.Extensions;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.ViewModels.AdviseGroups;
@@ -22,6 +24,44 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 		public override PackIconKind IconKind => Disc.AdviseGroup != null || Disc.AdviseSetInfo != null ? PackIconKind.DiscAlert : PackIconKind.Album;
 
 		public override bool IsDeleted => Disc.IsDeleted;
+
+		public override string ToolTip
+		{
+			get
+			{
+				if (!IsDeleted)
+				{
+					return null;
+				}
+
+				var deleteDate = Disc.AllSongs
+					.Select(x => x.DeleteDate?.Date)
+					.UniqueOrDefault();
+
+				var deleteComments = Disc.AllSongs
+					.Select(x => x.DeleteComment)
+					.Where(x => !String.IsNullOrWhiteSpace(x))
+					.Distinct()
+					.ToList();
+
+				if (deleteDate != null)
+				{
+					return deleteComments.Count switch
+					{
+						0 => $"The disc was deleted on {deleteDate:yyyy.MM.dd} without comment",
+						1 => $"The disc was deleted on {deleteDate:yyyy.MM.dd} with the comment '{deleteComments.Single()}'",
+						_ => $"The disc was deleted on {deleteDate:yyyy.MM.dd} with various comments",
+					};
+				}
+
+				return deleteComments.Count switch
+				{
+					0 => "The disc was deleted without comment",
+					1 => $"The disc was deleted with the comment '{deleteComments.Single()}'",
+					_ => "The disc was deleted with various comments",
+				};
+			}
+		}
 
 		public DiscExplorerItem(DiscModel disc)
 		{

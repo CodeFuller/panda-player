@@ -18,6 +18,8 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 
 		public abstract bool IsDeleted { get; }
 
+		public virtual string ToolTip => null;
+
 		public abstract IEnumerable<BasicMenuItem> GetContextMenuItems(ILibraryExplorerViewModel libraryExplorerViewModel, IAdviseGroupHelper adviseGroupHelper);
 
 		protected static IReadOnlyCollection<BasicMenuItem> GetAdviseGroupMenuItems(BasicAdviseGroupHolder adviseGroupHolder, ILibraryExplorerViewModel libraryExplorerViewModel, IAdviseGroupHelper adviseGroupHelper)
