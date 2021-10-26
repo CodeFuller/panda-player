@@ -73,7 +73,7 @@ namespace PandaPlayer.ViewModels.DiscImages
 		private void EditDiscImage()
 		{
 			var activeDisc = CurrentDisc;
-			if (activeDisc == null)
+			if (activeDisc == null || activeDisc.IsDeleted)
 			{
 				return;
 			}
