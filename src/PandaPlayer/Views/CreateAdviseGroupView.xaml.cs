@@ -1,14 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.Views.Extensions;
 
 namespace PandaPlayer.Views
 {
 	public partial class CreateAdviseGroupView : Window
 	{
-		private ICreateAdviseGroupViewModel ViewModel => DataContext.GetViewModel<ICreateAdviseGroupViewModel>();
-
 		public CreateAdviseGroupView()
 		{
 			InitializeComponent();

@@ -139,7 +139,7 @@ namespace PandaPlayer.ViewModels
 			await OnContentDeleted(GetDiscItem(discId), folderLoader);
 		}
 
-		public async Task OnContentDeleted(BasicExplorerItem item, Func<ItemId, Task<FolderModel>> folderLoader)
+		private async Task OnContentDeleted(BasicExplorerItem item, Func<ItemId, Task<FolderModel>> folderLoader)
 		{
 			if (item == null)
 			{

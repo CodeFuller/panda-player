@@ -317,6 +317,109 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
+		public void ShowDeletedContentSetter_IfFolderWasSelectedBefore_SelectsSameFolder()
+		{
+			// Arrange
+
+			var subfolder1 = new ShallowFolderModel { Id = new ItemId("1"), Name = "Subfolder 1" };
+			var subfolder2 = new ShallowFolderModel { Id = new ItemId("2"), Name = "Subfolder 2" };
+			var subfolder3 = new ShallowFolderModel { Id = new ItemId("3"), Name = "Subfolder 3" };
+
+			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
+			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AllSongs = new[] { new SongModel() } };
+			var disc3 = new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3", AllSongs = new[] { new SongModel() } };
+
+			var folder = new FolderModel
+			{
+				Subfolders = new[] { subfolder1, subfolder2, subfolder3 },
+				Discs = new[] { disc1, disc2, disc3 },
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
+
+			target.LoadFolderItems(folder);
+			target.SelectFolder(new ItemId("2"));
+
+			// Act
+
+			target.ShowDeletedContent = true;
+
+			// Assert
+
+			target.SelectedFolder.Should().Be(subfolder2);
+		}
+
+		[TestMethod]
+		public void ShowDeletedContentSetter_IfDiscWasSelectedBefore_SelectsSameDisc()
+		{
+			// Arrange
+
+			var subfolder1 = new ShallowFolderModel { Id = new ItemId("1"), Name = "Subfolder 1" };
+			var subfolder2 = new ShallowFolderModel { Id = new ItemId("2"), Name = "Subfolder 2" };
+			var subfolder3 = new ShallowFolderModel { Id = new ItemId("3"), Name = "Subfolder 3" };
+
+			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
+			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AllSongs = new[] { new SongModel() } };
+			var disc3 = new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3", AllSongs = new[] { new SongModel() } };
+
+			var folder = new FolderModel
+			{
+				Subfolders = new[] { subfolder1, subfolder2, subfolder3 },
+				Discs = new[] { disc1, disc2, disc3 },
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
+
+			target.LoadFolderItems(folder);
+			target.SelectDisc(new ItemId("2"));
+
+			// Act
+
+			target.ShowDeletedContent = true;
+
+			// Assert
+
+			target.SelectedDisc.Should().Be(disc2);
+		}
+
+		[TestMethod]
+		public void ShowDeletedContentSetter_IfPreviouslySelectedItemIsMissing_SelectsFirstItem()
+		{
+			// Arrange
+
+			var subfolder1 = new ShallowFolderModel { Id = new ItemId("1"), Name = "Subfolder 1" };
+			var subfolder2 = new ShallowFolderModel { Id = new ItemId("2"), Name = "Subfolder 2", DeleteDate = new DateTime(2021, 07, 25) };
+			var subfolder3 = new ShallowFolderModel { Id = new ItemId("3"), Name = "Subfolder 3" };
+
+			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
+			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 07, 25) } } };
+			var disc3 = new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3", AllSongs = new[] { new SongModel() } };
+
+			var folder = new FolderModel
+			{
+				Subfolders = new[] { subfolder1, subfolder2, subfolder3 },
+				Discs = new[] { disc1, disc2, disc3 },
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
+
+			target.LoadFolderItems(folder);
+			target.ShowDeletedContent = true;
+			target.SelectDisc(new ItemId("2"));
+
+			// Act
+
+			target.ShowDeletedContent = false;
+
+			// Assert
+
+			target.SelectedFolder.Should().Be(subfolder1);
+		}
+
+		[TestMethod]
 		public void LoadFolderItems_ForNonRootFolder_AddsParentFolderExplorerItem()
 		{
 			// Arrange
@@ -556,26 +659,27 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void LoadFolderItems_SomeSubfoldersAreDeleted_DoesNotLoadDeletedSubfolders()
+		public void LoadFolderItems_ShowDeletedContentIsFalse_DoesNotLoadDeletedContent()
 		{
 			// Arrange
 
-			var activeSubfolder1 = new ShallowFolderModel { Name = "Subfolder 1" };
-			var activeSubfolder2 = new ShallowFolderModel { Name = "Subfolder 2" };
-			var deletedSubfolder = new ShallowFolderModel
-			{
-				Name = "Deleted Subfolder",
-				DeleteDate = new DateTime(2021, 07, 25),
-			};
+			var subfolder1 = new ShallowFolderModel { Name = "Subfolder 1" };
+			var subfolder2 = new ShallowFolderModel { Name = "Subfolder 2", DeleteDate = new DateTime(2021, 07, 25) };
+			var subfolder3 = new ShallowFolderModel { Name = "Subfolder 3" };
+
+			var disc1 = new DiscModel { TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
+			var disc2 = new DiscModel { TreeTitle = "Disc 2", AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 07, 25) } } };
+			var disc3 = new DiscModel { TreeTitle = "Disc 3", AllSongs = new[] { new SongModel() } };
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[] { activeSubfolder1, deletedSubfolder, activeSubfolder2 },
-				Discs = Array.Empty<DiscModel>(),
+				Subfolders = new[] { subfolder1, subfolder2, subfolder3 },
+				Discs = new[] { disc1, disc2, disc3 },
 			};
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
+			target.ShowDeletedContent = false;
 
 			// Act
 
@@ -583,42 +687,34 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			var expectedItems = new[]
+			var expectedItems = new BasicExplorerItem[]
 			{
-				new FolderExplorerItem(activeSubfolder1),
-				new FolderExplorerItem(activeSubfolder2),
+				new FolderExplorerItem(subfolder1),
+				new FolderExplorerItem(subfolder3),
+				new DiscExplorerItem(disc1),
+				new DiscExplorerItem(disc3),
 			};
 
-			target.Items.Should().BeEquivalentTo(expectedItems, x => x.WithStrictOrdering());
+			target.Items.Should().BeEquivalentTo(expectedItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
 		}
 
 		[TestMethod]
-		public void LoadFolderItems_SomeDiscsAreDeleted_DoesNotLoadDeletedDiscs()
+		public void LoadFolderItems_ShowDeletedContentIsTrue_LoadsDeletedContent()
 		{
 			// Arrange
 
-			var activeDisc1 = new DiscModel
-			{
-				TreeTitle = "11 - Disc 1",
-				AllSongs = new[] { new SongModel() },
-			};
+			var subfolder1 = new ShallowFolderModel { Name = "Subfolder 1" };
+			var subfolder2 = new ShallowFolderModel { Name = "Subfolder 2", DeleteDate = new DateTime(2021, 07, 25) };
+			var subfolder3 = new ShallowFolderModel { Name = "Subfolder 3" };
 
-			var activeDisc2 = new DiscModel
-			{
-				TreeTitle = "12 - Disc 2",
-				AllSongs = new[] { new SongModel() },
-			};
-
-			var deletedDisc = new DiscModel
-			{
-				TreeTitle = "Deleted Disc",
-				AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 07, 25) } },
-			};
+			var disc1 = new DiscModel { TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
+			var disc2 = new DiscModel { TreeTitle = "Disc 2", AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 07, 25) } } };
+			var disc3 = new DiscModel { TreeTitle = "Disc 3", AllSongs = new[] { new SongModel() } };
 
 			var folder = new FolderModel
 			{
-				Subfolders = Array.Empty<ShallowFolderModel>(),
-				Discs = new[] { activeDisc1, deletedDisc, activeDisc2 },
+				Subfolders = new[] { subfolder1, subfolder2, subfolder3 },
+				Discs = new[] { disc1, disc2, disc3 },
 			};
 
 			var mocker = new AutoMocker();
@@ -627,16 +723,21 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Act
 
 			target.LoadFolderItems(folder);
+			target.ShowDeletedContent = true;
 
 			// Assert
 
-			var expectedItems = new[]
+			var expectedItems = new BasicExplorerItem[]
 			{
-				new DiscExplorerItem(activeDisc1),
-				new DiscExplorerItem(activeDisc2),
+				new FolderExplorerItem(subfolder1),
+				new FolderExplorerItem(subfolder2),
+				new FolderExplorerItem(subfolder3),
+				new DiscExplorerItem(disc1),
+				new DiscExplorerItem(disc2),
+				new DiscExplorerItem(disc3),
 			};
 
-			target.Items.Should().BeEquivalentTo(expectedItems, x => x.WithStrictOrdering());
+			target.Items.Should().BeEquivalentTo(expectedItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
 		}
 
 		[TestMethod]
@@ -873,35 +974,16 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public async Task OnFolderDeleted_IfFolderPresentsInList_RemovesThisFolder()
+		public async Task OnFolderDeleted_IfDeletedContentIsHiddenAndFolderPresentsInList_RemovesThisFolder()
 		{
 			// Arrange
 
-			var folder1 = new ShallowFolderModel
-			{
-				Id = new ItemId("1"),
-				Name = "Folder 1",
-			};
+			var folder1 = new ShallowFolderModel { Id = new ItemId("1"), Name = "Folder 1" };
+			var folder2 = new ShallowFolderModel { Id = new ItemId("2"), Name = "Folder 2" };
+			var folder3 = new ShallowFolderModel { Id = new ItemId("3"), Name = "Folder 3" };
 
-			var folder2 = new ShallowFolderModel
-			{
-				Id = new ItemId("2"),
-				Name = "Folder 2",
-			};
-
-			var folder3 = new ShallowFolderModel
-			{
-				Id = new ItemId("3"),
-				Name = "Folder 3",
-			};
-
-			var disc = new DiscModel
-			{
-				// Using the same id as for requested folder, just in case.
-				Id = new ItemId("2"),
-				TreeTitle = "Some Disc",
-				AllSongs = new[] { new SongModel() },
-			};
+			// Using the same id as for requested folder, just in case.
+			var disc = new DiscModel { Id = new ItemId("2"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
 
 			var folder = new FolderModel
 			{
@@ -913,6 +995,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
 
 			target.LoadFolderItems(folder);
+			target.ShowDeletedContent = false;
 
 			// Act
 
@@ -931,23 +1014,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public async Task OnFolderDeleted_IfFolderDoesNotPresentInList_DoesNothing()
+		public async Task OnFolderDeleted_IfDeletedContentIsHiddenAndFolderDoesNotPresentInList_DoesNothing()
 		{
 			// Arrange
 
-			var subfolder = new ShallowFolderModel
-			{
-				Id = new ItemId("Subfolder Id"),
-				Name = "Some Subfolder",
-			};
-
-			var disc = new DiscModel
-			{
-				// Using the same id as for requested folder, just in case.
-				Id = new ItemId("1"),
-				TreeTitle = "Some Disc",
-				AllSongs = new[] { new SongModel() },
-			};
+			var subfolder = new ShallowFolderModel { Id = new ItemId("Subfolder Id"), Name = "Some Subfolder" };
+			var disc = new DiscModel { Id = new ItemId("1"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
 
 			var folder = new FolderModel
 			{
@@ -959,6 +1031,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
 
 			target.LoadFolderItems(folder);
+			target.ShowDeletedContent = false;
 
 			// Act
 
@@ -976,37 +1049,60 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public async Task OnDiscDeleted_IfDiscPresentsInList_RemovesThisDisc()
+		public async Task OnFolderDeleted_IfDeletedContentIsShown_ReloadsCurrentFolder()
 		{
 			// Arrange
 
-			var subfolder = new ShallowFolderModel
+			var oldFolder = new FolderModel
 			{
-				// Using the same id as for requested disc, just in case.
-				Id = new ItemId("2"),
-				Name = "Some Subfolder",
+				Subfolders = new[]
+				{
+					new ShallowFolderModel { Id = new ItemId("Old Subfolder Id"), Name = "Old Subfolder" },
+				},
+				Discs = Array.Empty<DiscModel>(),
 			};
 
-			var disc1 = new DiscModel
+			var newSubfolder = new ShallowFolderModel { Id = new ItemId("New Subfolder Id"), Name = "New Subfolder" };
+			var newDisc = new DiscModel { Id = new ItemId("New Disc Id"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
+
+			var newFolder = new FolderModel
 			{
-				Id = new ItemId("1"),
-				TreeTitle = "Disc 1",
-				AllSongs = new[] { new SongModel() },
+				Subfolders = new[] { newSubfolder },
+				Discs = new[] { newDisc },
 			};
 
-			var disc2 = new DiscModel
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
+
+			target.LoadFolderItems(oldFolder);
+			target.ShowDeletedContent = true;
+
+			// Act
+
+			await target.OnFolderDeleted(new ItemId("Old Subfolder Id"), _ => Task.FromResult(newFolder));
+
+			// Assert
+
+			var expectedItems = new BasicExplorerItem[]
 			{
-				Id = new ItemId("2"),
-				TreeTitle = "Disc 2",
-				AllSongs = new[] { new SongModel() },
+				new FolderExplorerItem(newSubfolder),
+				new DiscExplorerItem(newDisc),
 			};
 
-			var disc3 = new DiscModel
-			{
-				Id = new ItemId("3"),
-				TreeTitle = "Disc 3",
-				AllSongs = new[] { new SongModel() },
-			};
+			target.Items.Should().BeEquivalentTo(expectedItems, x => x.WithStrictOrdering());
+		}
+
+		[TestMethod]
+		public async Task OnDiscDeleted_IfDeletedContentIsHiddenAndDiscPresentsInList_RemovesThisDisc()
+		{
+			// Arrange
+
+			// Using the same id as for requested disc, just in case.
+			var subfolder = new ShallowFolderModel { Id = new ItemId("2"), Name = "Some Subfolder" };
+
+			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
+			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AllSongs = new[] { new SongModel() } };
+			var disc3 = new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3", AllSongs = new[] { new SongModel() } };
 
 			var folder = new FolderModel
 			{
@@ -1018,6 +1114,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
 
 			target.LoadFolderItems(folder);
+			target.ShowDeletedContent = false;
 
 			// Act
 
@@ -1036,34 +1133,21 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public async Task OnDiscDeleted_IfDiscDoesNotPresentInList_DoesNothing()
+		public async Task OnDiscDeleted_IfDeletedContentIsHiddenAndDiscDoesNotPresentInList_DoesNothing()
 		{
 			// Arrange
 
-			var subfolder = new ShallowFolderModel
-			{
-				// Using the same id as for requested disc, just in case.
-				Id = new ItemId("1"),
-				Name = "Some Subfolder",
-			};
+			// Using the same id as for requested disc, just in case.
+			var subfolder = new ShallowFolderModel { Id = new ItemId("1"), Name = "Some Subfolder" };
+			var disc = new DiscModel { Id = new ItemId("Disc Id"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
 
-			var disc = new DiscModel
-			{
-				Id = new ItemId("Disc Id"),
-				TreeTitle = "Some Disc",
-				AllSongs = new[] { new SongModel() },
-			};
-
-			var folder = new FolderModel
-			{
-				Subfolders = new[] { subfolder },
-				Discs = new[] { disc },
-			};
+			var folder = new FolderModel { Subfolders = new[] { subfolder }, Discs = new[] { disc } };
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
 
 			target.LoadFolderItems(folder);
+			target.ShowDeletedContent = false;
 
 			// Act
 
@@ -1075,6 +1159,53 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				new FolderExplorerItem(subfolder),
 				new DiscExplorerItem(disc),
+			};
+
+			target.Items.Should().BeEquivalentTo(expectedItems, x => x.WithStrictOrdering());
+		}
+
+		[TestMethod]
+		public async Task OnDiscDeleted_IfDeletedContentIsShown_ReloadsCurrentFolder()
+		{
+			// Arrange
+
+			var oldFolder = new FolderModel
+			{
+				Subfolders = new[]
+				{
+					new ShallowFolderModel { Id = new ItemId("Old Subfolder Id"), Name = "Old Subfolder" },
+				},
+				Discs = new[]
+				{
+					new DiscModel { Id = new ItemId("Old Disc Id"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } },
+				},
+			};
+
+			var newSubfolder = new ShallowFolderModel { Id = new ItemId("New Subfolder Id"), Name = "New Subfolder" };
+			var newDisc = new DiscModel { Id = new ItemId("New Disc Id"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
+
+			var newFolder = new FolderModel
+			{
+				Subfolders = new[] { newSubfolder },
+				Discs = new[] { newDisc },
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
+
+			target.LoadFolderItems(oldFolder);
+			target.ShowDeletedContent = true;
+
+			// Act
+
+			await target.OnDiscDeleted(new ItemId("Old Disc Id"), _ => Task.FromResult(newFolder));
+
+			// Assert
+
+			var expectedItems = new BasicExplorerItem[]
+			{
+				new FolderExplorerItem(newSubfolder),
+				new DiscExplorerItem(newDisc),
 			};
 
 			target.Items.Should().BeEquivalentTo(expectedItems, x => x.WithStrictOrdering());

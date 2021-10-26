@@ -33,8 +33,6 @@ namespace PandaPlayer.ViewModels
 
 		public ILibraryExplorerItemListViewModel ItemListViewModel { get; }
 
-		public ShallowFolderModel SelectedFolder => ItemListViewModel.SelectedFolder;
-
 		public DiscModel SelectedDisc => ItemListViewModel.SelectedDisc;
 
 		public IEnumerable<BasicMenuItem> ContextMenuItemsForSelectedItem => ItemListViewModel.SelectedItem?.GetContextMenuItems(this, adviseGroupHelper) ?? Enumerable.Empty<BasicMenuItem>();
