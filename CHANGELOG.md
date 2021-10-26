@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.18.0 - 2021-10-26
+- Added display of deleted content.
+- Added ability to edit comment for previously deleted discs and songs.
+- Improved context menu so that only applicable commands are shown.
+- Updated "Image Not Found" stub picture.
+- Fixed first open of context menu.
+
 ## 3.17.1 - 2021-10-16
 - Added icons for context menu items.
 
