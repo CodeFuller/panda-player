@@ -17,7 +17,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 	public class EditSongPropertiesViewModelTests
 	{
 		[TestMethod]
-		public async Task Load_ForSingleSong_LoadsScalarPropertiesCorrectly()
+		public async Task Load_ForSingleActiveSong_LoadsScalarPropertiesCorrectly()
 		{
 			// Arrange
 
@@ -40,10 +40,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 			target.Title.Should().Be("Some Title");
 			target.TreeTitle.Should().Be("Some Tree Title");
 			target.TrackNumber.Should().Be(7);
+			target.SongsAreDeleted.Should().BeFalse();
+			target.DeleteComment.Should().BeNull();
 		}
 
 		[TestMethod]
-		public async Task Load_ForMultipleSongs_LoadsScalarPropertiesCorrectly()
+		public async Task Load_ForMultipleActiveSongs_LoadsScalarPropertiesCorrectly()
 		{
 			// Arrange
 
@@ -73,6 +75,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 			target.Title.Should().BeNull();
 			target.TreeTitle.Should().BeNull();
 			target.TrackNumber.Should().BeNull();
+			target.SongsAreDeleted.Should().BeFalse();
+			target.DeleteComment.Should().BeNull();
 		}
 
 		[TestMethod]
@@ -384,6 +388,54 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
+		public async Task Load_ForDeletedSongsWithSameDeleteComment_LoadsDeleteCommentCorrectly()
+		{
+			// Arrange
+
+			var songs = new[]
+			{
+				new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Some Delete Comment" },
+				new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Some Delete Comment" },
+			};
+
+			var mocker = CreateMocker();
+			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
+
+			// Act
+
+			await target.Load(songs, CancellationToken.None);
+
+			// Assert
+
+			target.DeleteComment.Should().Be("Some Delete Comment");
+			target.SongsAreDeleted.Should().BeTrue();
+		}
+
+		[TestMethod]
+		public async Task Load_ForDeletedSongsWithVariousDeleteComment_LoadsDeleteCommentCorrectly()
+		{
+			// Arrange
+
+			var songs = new[]
+			{
+				new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Some Delete Comment 1" },
+				new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Some Delete Comment 2" },
+			};
+
+			var mocker = CreateMocker();
+			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
+
+			// Act
+
+			await target.Load(songs, CancellationToken.None);
+
+			// Assert
+
+			target.DeleteComment.Should().Be("<Songs have various delete comments>");
+			target.SongsAreDeleted.Should().BeTrue();
+		}
+
+		[TestMethod]
 		public async Task Load_ForEmptySongList_ThrowsInvalidOperationException()
 		{
 			// Arrange
@@ -546,6 +598,49 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
+		public async Task Save_ForSingleSongWhenPropertiesAreCleared_UpdatesSongCorrectly()
+		{
+			// Arrange
+
+			var oldArtist = new ArtistModel { Id = new ItemId("1"), Name = "Old Artist" };
+			var newArtist = new ArtistModel { Id = new ItemId("2"), Name = "New Artist" };
+
+			var oldGenre = new GenreModel { Id = new ItemId("1"), Name = "Old Genre" };
+			var newGenre = new GenreModel { Id = new ItemId("2"), Name = "New Genre" };
+
+			var mocker = CreateMocker(artists: new[] { oldArtist, newArtist }, genres: new[] { oldGenre, newGenre, });
+			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
+
+			var song = new SongModel
+			{
+				Title = "Some Title",
+				TreeTitle = "Some Tree Title",
+				Artist = oldArtist,
+				Genre = oldGenre,
+				TrackNumber = 1,
+			};
+
+			await target.Load(new[] { song }, CancellationToken.None);
+
+			// Act
+
+			target.Artist = target.AvailableArtists.Single(x => x.HasBlankValue);
+			target.NewArtistName = target.Artist.ToString();
+			target.Genre = target.AvailableGenres.Single(x => x.HasBlankValue);
+			target.TrackNumber = null;
+
+			await target.Save(CancellationToken.None);
+
+			// Assert
+
+			var songServiceMock = mocker.GetMock<ISongsService>();
+
+			Func<SongModel, bool> checkSong = x => x.Title == "Some Title" && x.TreeTitle == "Some Tree Title" &&
+			                                       x.TrackNumber == null && x.Artist == null && x.Genre == null;
+			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(y => checkSong(y)), It.IsAny<CancellationToken>()), Times.Once);
+		}
+
+		[TestMethod]
 		public async Task Save_ForSingleSongWhenNewArtistIsCreated_UpdatesSongCorrectly()
 		{
 			// Arrange
@@ -648,49 +743,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var songServiceMock = mocker.GetMock<ISongsService>();
 			Func<SongModel, bool> checkSong = x => x.Artist.Name == "Metallica";
-			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(y => checkSong(y)), It.IsAny<CancellationToken>()), Times.Once);
-		}
-
-		[TestMethod]
-		public async Task Save_ForSingleSongWhenPropertiesAreCleared_UpdatesSongCorrectly()
-		{
-			// Arrange
-
-			var oldArtist = new ArtistModel { Id = new ItemId("1"), Name = "Old Artist" };
-			var newArtist = new ArtistModel { Id = new ItemId("2"), Name = "New Artist" };
-
-			var oldGenre = new GenreModel { Id = new ItemId("1"), Name = "Old Genre" };
-			var newGenre = new GenreModel { Id = new ItemId("2"), Name = "New Genre" };
-
-			var mocker = CreateMocker(artists: new[] { oldArtist, newArtist }, genres: new[] { oldGenre, newGenre, });
-			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
-
-			var song = new SongModel
-			{
-				Title = "Some Title",
-				TreeTitle = "Some Tree Title",
-				Artist = oldArtist,
-				Genre = oldGenre,
-				TrackNumber = 1,
-			};
-
-			await target.Load(new[] { song }, CancellationToken.None);
-
-			// Act
-
-			target.Artist = target.AvailableArtists.Single(x => x.HasBlankValue);
-			target.NewArtistName = target.Artist.ToString();
-			target.Genre = target.AvailableGenres.Single(x => x.HasBlankValue);
-			target.TrackNumber = null;
-
-			await target.Save(CancellationToken.None);
-
-			// Assert
-
-			var songServiceMock = mocker.GetMock<ISongsService>();
-
-			Func<SongModel, bool> checkSong = x => x.Title == "Some Title" && x.TreeTitle == "Some Tree Title" &&
-			                                       x.TrackNumber == null && x.Artist == null && x.Genre == null;
 			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(y => checkSong(y)), It.IsAny<CancellationToken>()), Times.Once);
 		}
 
@@ -843,6 +895,56 @@ namespace PandaPlayer.UnitTests.ViewModels
 			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(y => checkSong2(y)), It.IsAny<CancellationToken>()), Times.Once);
 
 			songServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+		}
+
+		[TestMethod]
+		public async Task Save_ForSingleDeletedSongWhenDeleteCommentIsUpdated_UpdatesSongCorrectly()
+		{
+			// Arrange
+
+			var oldArtist = new ArtistModel { Id = new ItemId("1"), Name = "Old Artist" };
+			var newArtist = new ArtistModel { Id = new ItemId("2"), Name = "New Artist" };
+
+			var oldGenre = new GenreModel { Id = new ItemId("1"), Name = "Old Genre" };
+			var newGenre = new GenreModel { Id = new ItemId("2"), Name = "New Genre" };
+
+			var mocker = CreateMocker(artists: new[] { oldArtist, newArtist }, genres: new[] { oldGenre, newGenre, });
+			var target = mocker.CreateInstance<EditSongPropertiesViewModel>();
+
+			var song = new SongModel
+			{
+				Title = "Old Title",
+				TreeTitle = "Old Tree Title",
+				Artist = oldArtist,
+				Genre = oldGenre,
+				TrackNumber = 1,
+				DeleteDate = new DateTime(2021, 10, 26),
+				DeleteComment = "Old Delete Comment",
+			};
+
+			await target.Load(new[] { song }, CancellationToken.None);
+
+			// Act
+
+			target.Title = "New Title";
+			target.TreeTitle = "New Tree Title";
+			target.Artist = target.AvailableArtists.Last();
+			target.Genre = target.AvailableGenres.Last();
+			target.TrackNumber = 2;
+			target.DeleteComment = "New Delete Comment";
+
+			await target.Save(CancellationToken.None);
+
+			// Assert
+
+			var songServiceMock = mocker.GetMock<ISongsService>();
+
+			Func<SongModel, bool> checkSong = x => x.Title == "New Title" && x.TreeTitle == "New Tree Title" && x.TrackNumber == 2 &&
+													Object.ReferenceEquals(x.Artist, newArtist) && Object.ReferenceEquals(x.Genre, newGenre) &&
+													x.DeleteComment == "New Delete Comment";
+
+			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(y => checkSong(y)), It.IsAny<CancellationToken>()), Times.Once);
+			song.Should().Match<SongModel>(x => checkSong(x));
 		}
 
 		private static AutoMocker CreateMocker(IReadOnlyCollection<ArtistModel> artists = null, IReadOnlyCollection<GenreModel> genres = null)
