@@ -142,6 +142,15 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			return Task.CompletedTask;
 		}
 
+		public Task RenameFolder(ShallowFolderModel oldFolder, ShallowFolderModel newFolder, CancellationToken cancellationToken)
+		{
+			var oldFolderPath = storageOrganizer.GetFolderPath(oldFolder);
+			var newFolderPath = storageOrganizer.GetFolderPath(newFolder);
+			fileStorage.MoveFolder(oldFolderPath, newFolderPath);
+
+			return Task.CompletedTask;
+		}
+
 		public Task DeleteFolder(ShallowFolderModel folder, CancellationToken cancellationToken)
 		{
 			var folderPath = storageOrganizer.GetFolderPath(folder);

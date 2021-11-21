@@ -10,7 +10,13 @@ namespace PandaPlayer.Core.Models
 
 		public ItemId ParentFolderId { get; set; }
 
-		public string Name { get; set; }
+		private string name;
+
+		public string Name
+		{
+			get => name;
+			set => this.SetField(PropertyChanged, ref name, value);
+		}
 
 		private AdviseGroupModel adviseGroup;
 

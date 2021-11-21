@@ -10,7 +10,7 @@ namespace PandaPlayer.Dal.LocalDb.Internal
 {
 	internal class FolderCache : IFolderCache, IFolderProvider
 	{
-		private readonly ConcurrentDictionary<ItemId, ShallowFolderModel> folders = new ConcurrentDictionary<ItemId, ShallowFolderModel>();
+		private readonly ConcurrentDictionary<ItemId, ShallowFolderModel> folders = new();
 
 		private readonly IDbContextFactory<MusicDbContext> contextFactory;
 
@@ -22,6 +22,11 @@ namespace PandaPlayer.Dal.LocalDb.Internal
 		public void StoreFolder(ShallowFolderModel folder)
 		{
 			folders.AddOrUpdate(folder.Id, folder, (k, v) => folder);
+		}
+
+		public void Clear()
+		{
+			folders.Clear();
 		}
 
 		public ShallowFolderModel GetFolder(ItemId folderId)

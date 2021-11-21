@@ -74,6 +74,7 @@ namespace PandaPlayer
 			services.AddSingleton<IDiscSongListViewModel, DiscSongListViewModel>();
 			services.AddSingleton<IPlaylistViewModel, PersistentPlaylistViewModel>();
 			services.AddSingleton<ICreateAdviseGroupViewModel, CreateAdviseGroupViewModel>();
+			services.AddSingleton<IRenameFolderViewModel, RenameFolderViewModel>();
 			services.AddSingleton<IEditDiscPropertiesViewModel, EditDiscPropertiesViewModel>();
 			services.AddSingleton<IEditSongPropertiesViewModel, EditSongPropertiesViewModel>();
 			services.AddSingleton<IPlaylistPlayerViewModel, PlaylistPlayerViewModel>();

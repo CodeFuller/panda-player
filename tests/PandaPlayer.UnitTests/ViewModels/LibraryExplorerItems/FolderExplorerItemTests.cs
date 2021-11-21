@@ -155,6 +155,35 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		}
 
 		[TestMethod]
+		public void FolderExplorerItem_WhenFolderNameIsChanged_SendsPropertyChangedEventForTitle()
+		{
+			// Arrange
+
+			var folder = new ShallowFolderModel
+			{
+				Name = "Old Name",
+			};
+
+			var target = new FolderExplorerItem(folder);
+
+			var propertyChangedEvents = new List<PropertyChangedEventArgs>();
+			target.PropertyChanged += (_, e) => propertyChangedEvents.Add(e);
+
+			// Act
+
+			folder.Name = "New Name";
+
+			// Assert
+
+			var expectedProperties = new[]
+			{
+				nameof(FolderExplorerItem.Title),
+			};
+
+			propertyChangedEvents.Select(e => e.PropertyName).Should().BeEquivalentTo(expectedProperties);
+		}
+
+		[TestMethod]
 		public void FolderExplorerItem_WhenFolderAdviseGroupIsChanged_SendsPropertyChangedEventForIconKind()
 		{
 			// Arrange
@@ -209,6 +238,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 
 			var expectedMenuItems = new[]
 			{
+				new CommandMenuItem(() => { }, false) { Header = "Rename Folder", IconKind = PackIconKind.Pencil },
 				new CommandMenuItem(() => { }, false) { Header = "Delete Folder", IconKind = PackIconKind.DeleteForever },
 			};
 

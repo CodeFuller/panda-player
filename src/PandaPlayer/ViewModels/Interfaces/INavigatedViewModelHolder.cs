@@ -6,6 +6,8 @@ namespace PandaPlayer.ViewModels.Interfaces
 	{
 		ICreateAdviseGroupViewModel CreateAdviseGroupViewModel { get; }
 
+		IRenameFolderViewModel RenameFolderViewModel { get; }
+
 		IEditDiscPropertiesViewModel EditDiscPropertiesViewModel { get; }
 
 		IEditSongPropertiesViewModel EditSongPropertiesViewModel { get; }

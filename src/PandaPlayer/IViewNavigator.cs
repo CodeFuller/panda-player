@@ -11,6 +11,8 @@ namespace PandaPlayer
 
 		string ShowCreateAdviseGroupView(string initialAdviseGroupName, IEnumerable<string> existingAdviseGroupNames);
 
+		void ShowRenameFolderView(ShallowFolderModel folder);
+
 		void ShowDiscPropertiesView(DiscModel disc);
 
 		Task ShowSongPropertiesView(IEnumerable<SongModel> songs, CancellationToken cancellationToken);

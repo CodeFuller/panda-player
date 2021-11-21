@@ -8,6 +8,8 @@ namespace PandaPlayer.ViewModels
 	{
 		public ICreateAdviseGroupViewModel CreateAdviseGroupViewModel { get; }
 
+		public IRenameFolderViewModel RenameFolderViewModel { get; }
+
 		public IEditDiscPropertiesViewModel EditDiscPropertiesViewModel { get; }
 
 		public IEditSongPropertiesViewModel EditSongPropertiesViewModel { get; }
@@ -26,12 +28,15 @@ namespace PandaPlayer.ViewModels
 
 		public IDeleteContentViewModel DeleteContentViewModel { get; }
 
-		public NavigatedViewModelHolder(ICreateAdviseGroupViewModel createAdviseGroupViewModel, IEditDiscPropertiesViewModel editDiscPropertiesViewModel,
-			IEditSongPropertiesViewModel editSongPropertiesViewModel, IRateSongsViewModel rateSongsViewModel, IEditDiscImageViewModel editDiscImageViewModel,
-			IAdviseSetsEditorViewModel adviseSetsEditorViewModel, IDiscAdderViewModel discAdderViewModel, ILibraryCheckerViewModel libraryCheckerViewModel,
-			ILibraryStatisticsViewModel libraryStatisticsViewModel, IDeleteContentViewModel deleteContentViewModel)
+		public NavigatedViewModelHolder(ICreateAdviseGroupViewModel createAdviseGroupViewModel, IRenameFolderViewModel renameFolderViewModel,
+			IEditDiscPropertiesViewModel editDiscPropertiesViewModel, IEditSongPropertiesViewModel editSongPropertiesViewModel,
+			IRateSongsViewModel rateSongsViewModel, IEditDiscImageViewModel editDiscImageViewModel,
+			IAdviseSetsEditorViewModel adviseSetsEditorViewModel, IDiscAdderViewModel discAdderViewModel,
+			ILibraryCheckerViewModel libraryCheckerViewModel, ILibraryStatisticsViewModel libraryStatisticsViewModel,
+			IDeleteContentViewModel deleteContentViewModel)
 		{
 			CreateAdviseGroupViewModel = createAdviseGroupViewModel ?? throw new ArgumentNullException(nameof(createAdviseGroupViewModel));
+			RenameFolderViewModel = renameFolderViewModel ?? throw new ArgumentNullException(nameof(renameFolderViewModel));
 			EditDiscPropertiesViewModel = editDiscPropertiesViewModel ?? throw new ArgumentNullException(nameof(editDiscImageViewModel));
 			EditSongPropertiesViewModel = editSongPropertiesViewModel ?? throw new ArgumentNullException(nameof(editSongPropertiesViewModel));
 			RateSongsViewModel = rateSongsViewModel ?? throw new ArgumentNullException(nameof(rateSongsViewModel));

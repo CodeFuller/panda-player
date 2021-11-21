@@ -54,6 +54,18 @@ namespace PandaPlayer.Services
 			return foldersRepository.GetFolder(folderId, cancellationToken);
 		}
 
+		public async Task UpdateFolder(ShallowFolderModel folder, CancellationToken cancellationToken)
+		{
+			var currentFolder = await foldersRepository.GetFolder(folder.Id, cancellationToken);
+
+			if (!folder.IsDeleted && folder.Name != currentFolder.Name)
+			{
+				await storageRepository.RenameFolder(currentFolder, folder, cancellationToken);
+			}
+
+			await foldersRepository.UpdateFolder(folder, cancellationToken);
+		}
+
 		public async Task DeleteFolder(ItemId folderId, CancellationToken cancellationToken)
 		{
 			var folder = await foldersRepository.GetFolder(folderId, cancellationToken);

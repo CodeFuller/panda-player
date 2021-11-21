@@ -89,6 +89,11 @@ namespace PandaPlayer.ViewModels
 			viewNavigator.ShowDiscPropertiesView(disc);
 		}
 
+		public void RenameFolder(ShallowFolderModel folder)
+		{
+			viewNavigator.ShowRenameFolderView(folder);
+		}
+
 		public async Task DeleteFolder(ItemId folderId, CancellationToken cancellationToken)
 		{
 			var folder = await foldersService.GetFolder(folderId, cancellationToken);

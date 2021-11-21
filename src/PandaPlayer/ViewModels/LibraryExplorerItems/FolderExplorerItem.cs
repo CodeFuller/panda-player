@@ -38,7 +38,12 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 
 			Folder.PropertyChanged += (_, args) =>
 			{
-				if (args.PropertyName == nameof(ShallowFolderModel.AdviseGroup))
+				if (args.PropertyName == nameof(Folder.Name))
+				{
+					RaisePropertyChanged(nameof(Title));
+				}
+
+				if (args.PropertyName == nameof(Folder.AdviseGroup))
 				{
 					RaisePropertyChanged(nameof(IconKind));
 				}
@@ -57,6 +62,12 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 				Header = "Set Advise Group",
 				IconKind = PackIconKind.FolderStar,
 				Items = GetAdviseGroupMenuItems(new FolderAdviseGroupHolder(Folder), libraryExplorerViewModel, adviseGroupHelper),
+			};
+
+			yield return new CommandMenuItem(() => libraryExplorerViewModel.RenameFolder(Folder), keepTargetAlive: true)
+			{
+				Header = "Rename Folder",
+				IconKind = PackIconKind.Pencil,
 			};
 
 			yield return new CommandMenuItem(() => libraryExplorerViewModel.DeleteFolder(FolderId, CancellationToken.None))

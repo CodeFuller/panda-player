@@ -355,6 +355,40 @@ namespace PandaPlayer.Services.IntegrationTests
 		}
 
 		[TestMethod]
+		public async Task UpdateFolder_IfNonEmptyFolderIsRenamed_RenamesFolderCorrectly()
+		{
+			// Arrange
+
+			var target = CreateTestTarget();
+
+			var folder = await target.GetFolder(ReferenceData.ArtistFolderId, CancellationToken.None);
+
+			// Act
+
+			folder.Name = "New Folder Name";
+			await target.UpdateFolder(folder, CancellationToken.None);
+
+			// Assert
+
+			var referenceData = GetReferenceData();
+			var expectedFolder = referenceData.ArtistFolder;
+			expectedFolder.Name = "New Folder Name";
+
+			folder.Should().BeEquivalentTo(expectedFolder);
+
+			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
+
+			var oldDirectoryPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel");
+			Directory.Exists(oldDirectoryPath).Should().BeFalse();
+
+			var newDirectoryPath = Path.Combine(LibraryStorageRoot, "Belarusian", "New Folder Name");
+			Directory.Exists(newDirectoryPath).Should().BeTrue();
+
+			await CheckLibraryConsistency();
+		}
+
+		[TestMethod]
 		public async Task DeleteFolder_ForEmptyFolder_DeletesFolderSuccessfully()
 		{
 			// Arrange

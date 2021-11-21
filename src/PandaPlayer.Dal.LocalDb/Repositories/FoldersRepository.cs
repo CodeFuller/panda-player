@@ -78,6 +78,8 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			var updatedEntity = folder.ToEntity();
 			context.Entry(folderEntity).CurrentValues.SetValues(updatedEntity);
 			await context.SaveChangesAsync(cancellationToken);
+
+			folderCache.Clear();
 		}
 
 		private static async Task<FolderEntity> FindShallowFolder(MusicDbContext context, ItemId id, CancellationToken cancellationToken)

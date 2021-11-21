@@ -29,6 +29,8 @@ namespace PandaPlayer.Services.Interfaces.Dal
 
 		Task CreateFolder(ShallowFolderModel folder, CancellationToken cancellationToken);
 
+		Task RenameFolder(ShallowFolderModel oldFolder, ShallowFolderModel newFolder, CancellationToken cancellationToken);
+
 		Task DeleteFolder(ShallowFolderModel folder, CancellationToken cancellationToken);
 
 		Task CheckStorage(LibraryCheckFlags checkFlags, IEnumerable<ShallowFolderModel> folders, IEnumerable<DiscModel> discs, IOperationProgress progress, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken);

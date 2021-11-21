@@ -15,6 +15,8 @@ namespace PandaPlayer.Services.Interfaces
 
 		Task<FolderModel> GetFolder(ItemId folderId, CancellationToken cancellationToken);
 
+		Task UpdateFolder(ShallowFolderModel folder, CancellationToken cancellationToken);
+
 		Task DeleteFolder(ItemId folderId, CancellationToken cancellationToken);
 	}
 }
