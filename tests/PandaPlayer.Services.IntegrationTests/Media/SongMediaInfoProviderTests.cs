@@ -20,7 +20,7 @@ namespace PandaPlayer.Services.IntegrationTests.Media
 
 			// Act
 
-			var mediaInfo = await target.GetSongMediaInfo("Content/Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/01 - Про женщин.mp3");
+			var mediaInfo = await target.GetSongMediaInfo("Content/Belarusian/Neuro Dubel/2010 - РђС„С‚Р°СЂС‹ РїСЂР°РІРґС‹ (CD 1)/01 - РџСЂРѕ Р¶РµРЅС‰РёРЅ.mp3");
 
 			// Assert
 
