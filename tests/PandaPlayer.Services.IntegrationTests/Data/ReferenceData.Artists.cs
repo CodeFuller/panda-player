@@ -8,7 +8,9 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 
 		public static ItemId Artist2Id => new("2");
 
-		public static ItemId NextArtistId => new("3");
+		public static ItemId Artist3Id => new("3");
+
+		public static ItemId NextArtistId => new("4");
 
 		public ArtistModel Artist1 { get; } = new()
 		{
@@ -20,6 +22,12 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 		{
 			Id = Artist2Id,
 			Name = "Neuro Dubel",
+		};
+
+		public ArtistModel Artist3 { get; } = new()
+		{
+			Id = Artist3Id,
+			Name = "Empty Artist",
 		};
 	}
 }

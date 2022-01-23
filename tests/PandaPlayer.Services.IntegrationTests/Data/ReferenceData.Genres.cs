@@ -8,6 +8,8 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 
 		public static ItemId Genre2Id => new("2");
 
+		public static ItemId Genre3Id => new("3");
+
 		public GenreModel Genre1 { get; } = new()
 		{
 			Id = Genre1Id,
@@ -18,6 +20,12 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 		{
 			Id = Genre2Id,
 			Name = "Alternative Rock",
+		};
+
+		public GenreModel Genre3 { get; } = new()
+		{
+			Id = Genre3Id,
+			Name = "Empty Genre",
 		};
 	}
 }

@@ -44,6 +44,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			{
 				referenceData.Artist1,
 				referenceData.Artist2,
+				referenceData.Artist3,
 				expectedArtist,
 			};
 
@@ -78,6 +79,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			{
 				referenceData.Artist1,
 				referenceData.Artist2,
+				referenceData.Artist3,
 			};
 
 			var allArtists = await target.GetAllArtists(CancellationToken.None);
@@ -104,6 +106,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			{
 				referenceData.Artist1,
 				referenceData.Artist2,
+				referenceData.Artist3,
 			};
 
 			artists.Should().BeEquivalentTo(expectedArtists);

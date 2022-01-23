@@ -19,7 +19,7 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 		public AdviseSetModel AdviseSet2 { get; } = new()
 		{
 			Id = AdviseSet2Id,
-			Name = "Another Advise Set",
+			Name = "Empty Advise Set",
 		};
 	}
 }

@@ -6,7 +6,7 @@ INSERT INTO [AdviseGroups] ([Id], [Name], [IsFavorite]) VALUES
 
 INSERT INTO [AdviseSets] ([Id], [Name]) VALUES
 (1, 'Some Advise Set'),
-(2, 'Another Advise Set');
+(2, 'Empty Advise Set');
 
 INSERT INTO [Folders] ([Id], [ParentFolder_Id], [AdviseGroup_Id], [Name], [DeleteDate]) VALUES
 (2, 1, NULL, 'Belarusian', NULL),
@@ -21,11 +21,13 @@ INSERT INTO [Discs] ([Id], [Folder_Id], [AdviseGroup_Id], [AdviseSet_Id], [Advis
 
 INSERT INTO [Artists] ([Id], [Name]) VALUES
 (1, 'Guano Apes'),
-(2, 'Neuro Dubel');
+(2, 'Neuro Dubel'),
+(3, 'Empty Artist');
 
 INSERT INTO [Genres] ([Id], [Name]) VALUES
 (1, 'Punk Rock'),
-(2, 'Alternative Rock');
+(2, 'Alternative Rock'),
+(3, 'Empty Genre');
 
 INSERT INTO [Songs] ([Id], [Artist_Id], [Disc_Id], [Genre_Id], [TrackNumber], [Title], [TreeTitle], [Duration],
 			[Rating], [FileSize], [Checksum], [Bitrate], [LastPlaybackTime], [PlaybacksCount], [DeleteDate], [DeleteComment]) VALUES

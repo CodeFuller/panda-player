@@ -27,6 +27,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			{
 				referenceData.Genre1,
 				referenceData.Genre2,
+				referenceData.Genre3,
 			};
 
 			genres.Should().BeEquivalentTo(expectedGenres);

@@ -23,3 +23,5 @@ Instructions for update of test database (TestDatabase.db):
 1. Class `ReferenceData` contains reference data, which matches the data in TestDatabase.db. Some tests modify reference data for check of update operations. That is why `ReferenceData` is not static and is created anew for each test.
 
 1. Each test for update operation (create, update, delete) should contain a call to `CheckLibraryConsistency()` method. This method verifies consistency of the database.
+
+1. Some entities could be not linked to any other entities (e.g. Genre, Artist). Reference data should contain such empty entities.
