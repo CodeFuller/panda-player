@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using CodeFuller.Library.Bootstrap;
 using CodeFuller.Library.Wpf;
 using Microsoft.Extensions.Configuration;
@@ -95,6 +96,14 @@ namespace PandaPlayer
 				sp => ActivatorUtilities.CreateInstance<InstanceLoggerProvider>(sp, sp.GetRequiredService<LoggerViewModel>()));
 
 			services.AddSingleton<ApplicationViewModel>();
+		}
+
+		protected override void BootstrapConfiguration(IConfigurationBuilder configurationBuilder, string[] commandLineArgs)
+		{
+			base.BootstrapConfiguration(configurationBuilder, commandLineArgs);
+
+			// Overriding values from environment variables.
+			configurationBuilder.AddJsonFile(Path.Combine("conf", "90-DebugSettings.json"));
 		}
 
 		protected override ILoggerFactory BootstrapLogging(IServiceProvider serviceProvider, IConfiguration configuration)

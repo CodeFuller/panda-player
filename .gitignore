@@ -251,5 +251,5 @@ paket-files/
 .idea/
 *.sln.iml
 
-# Specific local settings used during development
-**/90-LocalSettings.json
+# Specific debug settings used during development
+**/90-DebugSettings.json
