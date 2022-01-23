@@ -103,7 +103,7 @@ namespace PandaPlayer
 			base.BootstrapConfiguration(configurationBuilder, commandLineArgs);
 
 			// Overriding values from environment variables.
-			configurationBuilder.AddJsonFile(Path.Combine("conf", "90-DebugSettings.json"));
+			configurationBuilder.AddJsonFile(Path.Combine("conf", "90-DebugSettings.json"), optional: true);
 		}
 
 		protected override ILoggerFactory BootstrapLogging(IServiceProvider serviceProvider, IConfiguration configuration)
