@@ -37,19 +37,19 @@ namespace PandaPlayer.Services.IntegrationTests
 				Name = "Nautilus Pompilius",
 			};
 
-			newArtist.Should().BeEquivalentTo(expectedArtist);
+			newArtist.Should().BeEquivalentTo(expectedArtist, x => x.WithStrictOrdering());
 
 			var referenceData = GetReferenceData();
 			var expectedArtists = new[]
 			{
-				referenceData.Artist1,
-				referenceData.Artist2,
 				referenceData.Artist3,
+				referenceData.Artist1,
 				expectedArtist,
+				referenceData.Artist2,
 			};
 
 			var allArtists = await target.GetAllArtists(CancellationToken.None);
-			allArtists.Should().BeEquivalentTo(expectedArtists);
+			allArtists.Should().BeEquivalentTo(expectedArtists, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency();
 		}
@@ -77,13 +77,13 @@ namespace PandaPlayer.Services.IntegrationTests
 			var referenceData = GetReferenceData();
 			var expectedArtists = new[]
 			{
+				referenceData.Artist3,
 				referenceData.Artist1,
 				referenceData.Artist2,
-				referenceData.Artist3,
 			};
 
 			var allArtists = await target.GetAllArtists(CancellationToken.None);
-			allArtists.Should().BeEquivalentTo(expectedArtists);
+			allArtists.Should().BeEquivalentTo(expectedArtists, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency();
 		}
@@ -104,12 +104,12 @@ namespace PandaPlayer.Services.IntegrationTests
 			var referenceData = GetReferenceData();
 			var expectedArtists = new[]
 			{
+				referenceData.Artist3,
 				referenceData.Artist1,
 				referenceData.Artist2,
-				referenceData.Artist3,
 			};
 
-			artists.Should().BeEquivalentTo(expectedArtists);
+			artists.Should().BeEquivalentTo(expectedArtists, x => x.WithStrictOrdering());
 		}
 	}
 }

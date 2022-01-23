@@ -41,7 +41,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				Name = "Ляпис Трубецкой",
 			};
 
-			newFolder.Should().BeEquivalentTo(expectedShallowFolder);
+			newFolder.Should().BeEquivalentTo(expectedShallowFolder, x => x.WithStrictOrdering());
 
 			var referenceData = GetReferenceData();
 			var expectedFolders = new[]
@@ -55,7 +55,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
+			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedFolder = new FolderModel
 			{
@@ -68,7 +68,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			};
 
 			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Ляпис Трубецкой");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
@@ -116,7 +116,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
+			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedFolder = new FolderModel
 			{
@@ -129,7 +129,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			};
 
 			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "Ляпис Трубецкой");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
@@ -177,7 +177,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
+			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedFolder = new FolderModel
 			{
@@ -190,7 +190,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			};
 
 			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "Belarusian");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
@@ -230,7 +230,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
+			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			await CheckLibraryConsistency();
 		}
@@ -258,7 +258,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				referenceData.DeletedFolder,
 			};
 
-			folders.Should().BeEquivalentTo(expectedFolders);
+			folders.Should().BeEquivalentTo(expectedFolders, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -286,7 +286,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				Discs = new List<DiscModel>(),
 			};
 
-			folder.Should().BeEquivalentTo(expectedFolder);
+			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -314,7 +314,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				Discs = new List<DiscModel>(),
 			};
 
-			folder.Should().BeEquivalentTo(expectedFolder);
+			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -351,7 +351,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				},
 			};
 
-			folder.Should().BeEquivalentTo(expectedFolder, x => x.IgnoringCyclicReferences());
+			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 		}
 
 		[TestMethod]
@@ -374,10 +374,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedFolder = referenceData.ArtistFolder;
 			expectedFolder.Name = "New Folder Name";
 
-			folder.Should().BeEquivalentTo(expectedFolder);
+			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
 			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
 			var oldDirectoryPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel");
 			Directory.Exists(oldDirectoryPath).Should().BeFalse();
@@ -421,7 +421,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.Should().BeEquivalentTo(expectedFolders);
+			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.WithStrictOrdering());
 
 			Directory.Exists(directoryPath).Should().BeFalse();
 
@@ -527,7 +527,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			};
 
 			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.IgnoringCyclicReferences());
+			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			await CheckLibraryConsistency();
 		}

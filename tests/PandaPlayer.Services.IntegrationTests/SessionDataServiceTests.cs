@@ -35,11 +35,11 @@ namespace PandaPlayer.Services.IntegrationTests
 			// Assert
 
 			var dataFromRepository = await target.GetData<TestSessionData>(ReferenceData.NonExistingSessionDataKey, CancellationToken.None);
-			dataFromRepository.Should().BeEquivalentTo(data);
+			dataFromRepository.Should().BeEquivalentTo(data, x => x.WithStrictOrdering());
 
 			var referenceData = GetReferenceData();
 			var existingData = await target.GetData<TestSessionData>(ReferenceData.ExistingSessionDataKey, CancellationToken.None);
-			existingData.Should().BeEquivalentTo(referenceData.ExistingSessionData);
+			existingData.Should().BeEquivalentTo(referenceData.ExistingSessionData, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -67,7 +67,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			// Assert
 
 			var loadedData = await target.GetData<TestSessionData>(ReferenceData.ExistingSessionDataKey, CancellationToken.None);
-			loadedData.Should().BeEquivalentTo(data);
+			loadedData.Should().BeEquivalentTo(data, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -100,7 +100,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			// Assert
 
 			var referenceData = GetReferenceData();
-			data.Should().BeEquivalentTo(referenceData.ExistingSessionData);
+			data.Should().BeEquivalentTo(referenceData.ExistingSessionData, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -118,7 +118,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var referenceData = GetReferenceData();
 			var existingData = await target.GetData<TestSessionData>(ReferenceData.ExistingSessionDataKey, CancellationToken.None);
-			existingData.Should().BeEquivalentTo(referenceData.ExistingSessionData);
+			existingData.Should().BeEquivalentTo(referenceData.ExistingSessionData, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]

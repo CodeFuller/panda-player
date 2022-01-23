@@ -142,7 +142,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			var referenceData = GetReferenceData();
 			var expectedDisc = await discDataFactory(true, true);
 
-			newDisc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			newDisc.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedDiscs = new[]
 			{
@@ -153,7 +153,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			};
 
 			var allDiscs = await target.GetAllDiscs(CancellationToken.None);
-			allDiscs.Should().BeEquivalentTo(expectedDiscs, x => x.IgnoringCyclicReferences());
+			allDiscs.Should().BeEquivalentTo(expectedDiscs, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var discDirectoryPath = Path.Combine(LibraryStorageRoot, relativeDiscDirectoryPath);
 			Directory.Exists(discDirectoryPath).Should().BeTrue();
@@ -184,7 +184,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				referenceData.DeletedDisc,
 			};
 
-			discs.Should().BeEquivalentTo(expectedDiscs, x => x.IgnoringCyclicReferences());
+			discs.Should().BeEquivalentTo(expectedDiscs, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 		}
 
 		[TestMethod]
@@ -215,10 +215,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			activeSongs[1].ContentUri = "Belarusian/Neuro Dubel/1998 - Охотник и сайгак/02 - Про жизнь дяди Саши.mp3".ToContentUri(LibraryStorageRoot);
 			expectedDisc.Images.Single().ContentUri = "Belarusian/Neuro Dubel/1998 - Охотник и сайгак/cover.jpg".ToContentUri(LibraryStorageRoot);
 
-			disc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			disc.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
-			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			Directory.Exists(oldDiscDirectoryPath).Should().BeFalse();
 
@@ -256,10 +256,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			activeSongs[1].Size = 404561;
 			activeSongs[1].Checksum = 3202969334;
 
-			disc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			disc.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
-			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var songTagger = GetService<ISongTagger>();
 
@@ -301,10 +301,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			expectedDisc.AlbumTitle = "Охотник и сайгак";
 			expectedDisc.Year = 1998;
 
-			disc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			disc.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var discFromRepository = await GetDisc(ReferenceData.DeletedDiscId);
-			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			await CheckLibraryConsistency(typeof(SuspiciousAlbumTitleInconsistency));
 		}
@@ -347,10 +347,10 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			referenceData.DiscWithMissingFields.Images = new[] { expectedDiscCoverImage };
 
-			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
+			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var discFromRepository = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
-			discFromRepository.CoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
+			discFromRepository.CoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var fileInfo = new FileInfo(imageFilePath);
 			fileInfo.Exists.Should().BeTrue();
@@ -397,10 +397,10 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			referenceData.NormalDisc.Images = new[] { expectedDiscCoverImage };
 
-			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
+			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
-			discFromRepository.CoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
+			discFromRepository.CoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var fileInfo = new FileInfo(imageFilePath);
 			fileInfo.Exists.Should().BeTrue();
@@ -447,10 +447,10 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			referenceData.NormalDisc.Images = new[] { expectedDiscCoverImage };
 
-			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
+			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
-			discFromRepository.CoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.IgnoringCyclicReferences());
+			discFromRepository.CoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var imageFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "cover.png");
 			var fileInfo = new FileInfo(imageFilePath);
@@ -496,7 +496,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			expectedDisc.AdviseSetInfo = null;
 
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
-			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			Directory.Exists(discDirectoryPath).Should().BeFalse();
 

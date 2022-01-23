@@ -38,7 +38,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				Name = "Вершки и корешки",
 			};
 
-			newAdviseSet.Should().BeEquivalentTo(expectedAdviseSet);
+			newAdviseSet.Should().BeEquivalentTo(expectedAdviseSet, x => x.WithStrictOrdering());
 
 			var referenceData = GetReferenceData();
 			var expectedAdviseSets = new[]
@@ -129,7 +129,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Assert
 
-			discForAdding.AdviseSetInfo.Should().BeEquivalentTo(new AdviseSetInfo(adviseSet, 1));
+			discForAdding.AdviseSetInfo.Should().BeEquivalentTo(new AdviseSetInfo(adviseSet, 1), x => x.WithStrictOrdering());
 
 			var referenceData = GetReferenceData();
 			referenceData.DiscWithMissingFields.AdviseSetInfo = new AdviseSetInfo(referenceData.AdviseSet2, 1);
@@ -165,7 +165,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Assert
 
-			discForAdding.AdviseSetInfo.Should().BeEquivalentTo(new AdviseSetInfo(adviseSet, 2));
+			discForAdding.AdviseSetInfo.Should().BeEquivalentTo(new AdviseSetInfo(adviseSet, 2), x => x.WithStrictOrdering());
 
 			var referenceData = GetReferenceData();
 			referenceData.DiscWithMissingFields.AdviseSetInfo = new AdviseSetInfo(referenceData.AdviseSet1, 2);
@@ -203,8 +203,8 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Assert
 
-			disc1.AdviseSetInfo.Should().BeEquivalentTo(new AdviseSetInfo(adviseSet, 2));
-			disc2.AdviseSetInfo.Should().BeEquivalentTo(new AdviseSetInfo(adviseSet, 1));
+			disc1.AdviseSetInfo.Should().BeEquivalentTo(new AdviseSetInfo(adviseSet, 2), x => x.WithStrictOrdering());
+			disc2.AdviseSetInfo.Should().BeEquivalentTo(new AdviseSetInfo(adviseSet, 1), x => x.WithStrictOrdering());
 
 			var referenceData = GetReferenceData();
 			referenceData.DiscWithMissingFields.AdviseSetInfo = new AdviseSetInfo(referenceData.AdviseSet1, 1);

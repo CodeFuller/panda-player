@@ -69,7 +69,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			expectedDisc.AllSongs = expectedDisc.AllSongs.Concat(new[] { expectedSong }).ToList();
 
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
-			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var songFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "03 - Дети Галактики.mp3");
 			var fileInfo = new FileInfo(songFilePath);
@@ -88,7 +88,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var songTagger = GetService<ISongTagger>();
 			var tagData = songTagger.GetTagData(songFilePath);
-			tagData.Should().BeEquivalentTo(expectedTagData);
+			tagData.Should().BeEquivalentTo(expectedTagData, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency();
 		}
@@ -136,7 +136,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			expectedDisc.AllSongs = expectedDisc.AllSongs.Concat(new[] { expectedSong }).ToList();
 
 			var discFromRepository = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
-			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var songFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "Disc With Missing Fields (CD 1)", "03 - Дети Галактики.mp3");
 			var fileInfo = new FileInfo(songFilePath);
@@ -150,7 +150,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var songTagger = GetService<ISongTagger>();
 			var tagData = songTagger.GetTagData(songFilePath);
-			tagData.Should().BeEquivalentTo(expectedTagData);
+			tagData.Should().BeEquivalentTo(expectedTagData, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency();
 		}
@@ -187,7 +187,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var songTagger = GetService<ISongTagger>();
 			var tagData = songTagger.GetTagData(songFilePath);
-			tagData.Should().BeEquivalentTo(expectedTagData);
+			tagData.Should().BeEquivalentTo(expectedTagData, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency();
 		}
@@ -218,7 +218,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				referenceData.SongWithOptionalPropertiesMissing,
 			};
 
-			songs.Should().BeEquivalentTo(expectedSongs, x => x.IgnoringCyclicReferences());
+			songs.Should().BeEquivalentTo(expectedSongs, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 		}
 
 		[TestMethod]
@@ -247,7 +247,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				referenceData.DeletedSong,
 			};
 
-			songs.Should().BeEquivalentTo(expectedSongs, x => x.IgnoringCyclicReferences());
+			songs.Should().BeEquivalentTo(expectedSongs, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 		}
 
 		[TestMethod]
@@ -277,7 +277,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				referenceData.SongWithOptionalPropertiesMissing,
 			};
 
-			songs.Should().BeEquivalentTo(expectedSongs, x => x.IgnoringCyclicReferences());
+			songs.Should().BeEquivalentTo(expectedSongs, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 		}
 
 		[TestMethod]
@@ -305,10 +305,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			expectedSong.TreeTitle = "11 - Дети Галактики.mp3";
 			expectedSong.ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/11 - Дети Галактики.mp3".ToContentUri(LibraryStorageRoot);
 
-			updatedSong.Should().BeEquivalentTo(expectedSong, x => x.IgnoringCyclicReferences());
+			updatedSong.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var songFromRepository = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId1);
-			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.IgnoringCyclicReferences());
+			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			File.Exists(oldSongFilePath).Should().BeFalse();
 
@@ -347,10 +347,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			expectedSong.Size = 405604;
 			expectedSong.Checksum = 3102138277;
 
-			updatedSong.Should().BeEquivalentTo(expectedSong, x => x.IgnoringCyclicReferences());
+			updatedSong.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var songFromRepository = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId1);
-			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.IgnoringCyclicReferences());
+			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var songFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "01 - Про женщин.mp3");
 			var fileInfo = new FileInfo(songFilePath);
@@ -368,7 +368,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var songTagger = GetService<ISongTagger>();
 			var tagData = songTagger.GetTagData(songFilePath);
-			tagData.Should().BeEquivalentTo(expectedTagData);
+			tagData.Should().BeEquivalentTo(expectedTagData, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency(typeof(BadTrackNumbersInconsistency), typeof(MultipleDiscGenresInconsistency));
 		}
@@ -404,10 +404,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			expectedSong.Genre = referenceData.Genre2;
 			expectedSong.DeleteComment = "New Delete Comment";
 
-			updatedSong.Should().BeEquivalentTo(expectedSong, x => x.IgnoringCyclicReferences());
+			updatedSong.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var songFromRepository = await GetSong(ReferenceData.DeletedSongId);
-			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.IgnoringCyclicReferences());
+			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			await CheckLibraryConsistency(typeof(BadTrackNumbersInconsistency), typeof(MultipleDiscGenresInconsistency));
 		}
@@ -442,10 +442,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			};
 
 			// SongModel.AddPlayback() does not update Playbacks collection, that is why we exclude it for this check.
-			song.Should().BeEquivalentTo(expectedSong, x => x.Excluding(y => y.Playbacks).IgnoringCyclicReferences());
+			song.Should().BeEquivalentTo(expectedSong, x => x.Excluding(y => y.Playbacks).WithStrictOrdering().IgnoringCyclicReferences());
 
 			var songFromRepository = await GetSongWithPlaybacks(ReferenceData.SongWithOptionalPropertiesMissingId);
-			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.IgnoringCyclicReferences());
+			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			await CheckLibraryConsistency();
 		}
@@ -480,10 +480,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			}).ToList();
 
 			// SongModel.AddPlayback() does not update Playbacks collection, that is why we exclude it for this check.
-			song.Should().BeEquivalentTo(expectedSong, x => x.Excluding(y => y.Playbacks).IgnoringCyclicReferences());
+			song.Should().BeEquivalentTo(expectedSong, x => x.Excluding(y => y.Playbacks).WithStrictOrdering().IgnoringCyclicReferences());
 
 			var songFromRepository = await GetSongWithPlaybacks(ReferenceData.SongWithOptionalPropertiesFilledId1);
-			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.IgnoringCyclicReferences());
+			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			await CheckLibraryConsistency();
 		}
@@ -515,7 +515,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			expectedSongWithoutPlaybacks.Checksum = null;
 			expectedSongWithoutPlaybacks.ContentUri = null;
 
-			song.Should().BeEquivalentTo(expectedSongWithoutPlaybacks, x => x.IgnoringCyclicReferences());
+			song.Should().BeEquivalentTo(expectedSongWithoutPlaybacks, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedSongWithPlaybacks = GetReferenceData(fillSongPlaybacks: true).SongWithOptionalPropertiesFilled2;
 			expectedSongWithPlaybacks.DeleteDate = deleteDate;
@@ -526,7 +526,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			expectedSongWithPlaybacks.ContentUri = null;
 
 			var songFromRepository = await GetSongWithPlaybacks(ReferenceData.SongWithOptionalPropertiesFilledId2);
-			songFromRepository.Should().BeEquivalentTo(expectedSongWithPlaybacks, x => x.IgnoringCyclicReferences());
+			songFromRepository.Should().BeEquivalentTo(expectedSongWithPlaybacks, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			File.Exists(songFilePath).Should().BeFalse();
 

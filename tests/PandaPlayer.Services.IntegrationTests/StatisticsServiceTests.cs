@@ -39,7 +39,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				NumberOfDiscsWithoutCoverImage = 1,
 			};
 
-			statistics.Should().BeEquivalentTo(expectedStatistics);
+			statistics.Should().BeEquivalentTo(expectedStatistics, x => x.WithStrictOrdering());
 		}
 	}
 }

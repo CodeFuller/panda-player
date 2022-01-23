@@ -25,12 +25,12 @@ namespace PandaPlayer.Services.IntegrationTests
 			var referenceData = GetReferenceData();
 			var expectedGenres = new[]
 			{
-				referenceData.Genre1,
 				referenceData.Genre2,
 				referenceData.Genre3,
+				referenceData.Genre1,
 			};
 
-			genres.Should().BeEquivalentTo(expectedGenres);
+			genres.Should().BeEquivalentTo(expectedGenres, x => x.WithStrictOrdering());
 		}
 	}
 }

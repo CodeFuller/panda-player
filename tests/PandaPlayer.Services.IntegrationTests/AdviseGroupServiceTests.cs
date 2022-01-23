@@ -37,7 +37,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				Name = "Зоопарк",
 			};
 
-			newAdviseGroup.Should().BeEquivalentTo(expectedAdviseGroup);
+			newAdviseGroup.Should().BeEquivalentTo(expectedAdviseGroup, x => x.WithStrictOrdering());
 
 			var referenceData = GetReferenceData();
 			var expectedAdviseGroups = new[]
@@ -164,10 +164,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedFolder = referenceData.SubFolder;
 			expectedFolder.AdviseGroup = referenceData.FolderAdviseGroup;
 
-			folder.Should().BeEquivalentTo(expectedFolder);
+			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
 			var folderFromRepository = await GetFolder(ReferenceData.SubFolderId);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency();
 		}
@@ -194,10 +194,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedFolder = referenceData.ArtistFolder;
 			expectedFolder.AdviseGroup = referenceData.DiscAdviseGroup;
 
-			folder.Should().BeEquivalentTo(expectedFolder);
+			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
 			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
 			var expectedAdviseGroups = new[]
 			{
@@ -235,10 +235,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedFolder = referenceData.ArtistFolder;
 			expectedFolder.AdviseGroup = referenceData.DiscAdviseGroup;
 
-			assignedFolder.Should().BeEquivalentTo(expectedFolder);
+			assignedFolder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
 			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
 			var expectedAdviseGroups = new[]
 			{
@@ -274,10 +274,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedDisc = referenceData.DiscWithMissingFields;
 			expectedDisc.AdviseGroup = referenceData.DiscAdviseGroup;
 
-			disc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			disc.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var discFromRepository = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
-			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			await CheckLibraryConsistency();
 		}
@@ -304,10 +304,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedDisc = referenceData.NormalDisc;
 			expectedDisc.AdviseGroup = referenceData.FolderAdviseGroup;
 
-			disc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			disc.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
-			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedAdviseGroups = new[]
 			{
@@ -345,10 +345,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedDisc = referenceData.NormalDisc;
 			expectedDisc.AdviseGroup = referenceData.FolderAdviseGroup;
 
-			assignedDisc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			assignedDisc.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
-			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedAdviseGroups = new[]
 			{
@@ -382,10 +382,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedFolder = referenceData.ArtistFolder;
 			expectedFolder.AdviseGroup = null;
 
-			folder.Should().BeEquivalentTo(expectedFolder);
+			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
 			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
 			var expectedAdviseGroups = new[]
 			{
@@ -422,10 +422,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedFolder = referenceData.ArtistFolder;
 			expectedFolder.AdviseGroup = null;
 
-			folder.Should().BeEquivalentTo(expectedFolder);
+			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
 			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
 			var expectedAdviseGroups = new[]
 			{
@@ -459,10 +459,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedDisc = referenceData.NormalDisc;
 			expectedDisc.AdviseGroup = null;
 
-			disc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			disc.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
-			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedAdviseGroups = new[]
 			{
@@ -484,7 +484,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			await AssignAdviseGroupToDisc(ReferenceData.DiscWithMissingFieldsId, ReferenceData.DiscAdviseGroupId);
 
 			var disc = await GetDisc(ReferenceData.NormalDiscId);
-			disc.AdviseGroup.Id.Should().BeEquivalentTo(ReferenceData.DiscAdviseGroupId);
+			disc.AdviseGroup.Id.Should().BeEquivalentTo(ReferenceData.DiscAdviseGroupId, x => x.WithStrictOrdering());
 
 			var target = CreateTestTarget();
 
@@ -499,10 +499,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedDisc = referenceData.NormalDisc;
 			expectedDisc.AdviseGroup = null;
 
-			disc.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			disc.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
-			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.IgnoringCyclicReferences());
+			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedAdviseGroups = new[]
 			{

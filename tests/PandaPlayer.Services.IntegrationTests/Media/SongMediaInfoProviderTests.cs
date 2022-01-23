@@ -31,7 +31,7 @@ namespace PandaPlayer.Services.IntegrationTests.Media
 				Duration = new TimeSpan(106268000),
 			};
 
-			mediaInfo.Should().BeEquivalentTo(expectedMediaInfo);
+			mediaInfo.Should().BeEquivalentTo(expectedMediaInfo, x => x.WithStrictOrdering());
 		}
 	}
 }
