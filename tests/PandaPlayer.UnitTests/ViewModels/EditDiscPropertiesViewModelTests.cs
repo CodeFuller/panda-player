@@ -147,17 +147,17 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			// We perform 2 checks:
-			//   1. UpdateDisc method was called with correctly updated disc.
-			//   2. Original Disc model is updated.
-			Func<DiscModel, bool> verifyUpdatedDisc = x => x.Title == "New Title" && x.TreeTitle == "New Tree Title" && x.AlbumTitle == "New Album Title" && x.Year == 2021;
+			Func<Action<DiscModel>, bool> verifyDiscUpdate = updateAction =>
+			{
+				updateAction(disc);
+				return disc.Title == "New Title" && disc.TreeTitle == "New Tree Title" && disc.AlbumTitle == "New Album Title" && disc.Year == 2021;
+			};
 
 			var discServiceMock = mocker.GetMock<IDiscsService>();
-			discServiceMock.Verify(x => x.UpdateDisc(It.Is<DiscModel>(d => verifyUpdatedDisc(d)), It.IsAny<CancellationToken>()), Times.Once);
-			disc.Should().Match<DiscModel>(x => verifyUpdatedDisc(x));
+			discServiceMock.Verify(x => x.UpdateDisc(disc, It.Is<Action<DiscModel>>(y => verifyDiscUpdate(y)), It.IsAny<CancellationToken>()), Times.Once);
 
 			var songServiceMock = mocker.GetMock<ISongsService>();
-			songServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Never);
+			songServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<Action<SongModel>>(), It.IsAny<CancellationToken>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -194,17 +194,17 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			// We perform 2 checks:
-			//   1. UpdateDisc method was called with correctly updated disc.
-			//   2. Original Disc model is updated.
-			Func<DiscModel, bool> verifyUpdatedDisc = x => x.Title == "New Title" && x.TreeTitle == "New Tree Title" && x.AlbumTitle == "New Album Title" && x.Year == 2021;
+			Func<Action<DiscModel>, bool> verifyDiscUpdate = updateAction =>
+			{
+				updateAction(disc);
+				return disc.Title == "New Title" && disc.TreeTitle == "New Tree Title" && disc.AlbumTitle == "New Album Title" && disc.Year == 2021;
+			};
 
 			var discServiceMock = mocker.GetMock<IDiscsService>();
-			discServiceMock.Verify(x => x.UpdateDisc(It.Is<DiscModel>(d => verifyUpdatedDisc(d)), It.IsAny<CancellationToken>()), Times.Once);
-			disc.Should().Match<DiscModel>(x => verifyUpdatedDisc(x));
+			discServiceMock.Verify(x => x.UpdateDisc(disc, It.Is<Action<DiscModel>>(y => verifyDiscUpdate(y)), It.IsAny<CancellationToken>()), Times.Once);
 
 			var songServiceMock = mocker.GetMock<ISongsService>();
-			songServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Never);
+			songServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<Action<SongModel>>(), It.IsAny<CancellationToken>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -244,19 +244,25 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			// We perform 2 checks:
-			//   1. UpdateDisc method was called with correctly updated disc.
-			//   2. Original Disc model is updated.
-			Func<DiscModel, bool> verifyUpdatedDisc = x => x.Title == "New Title" && x.TreeTitle == "New Tree Title" && x.AlbumTitle == "New Album Title" && x.Year == 2021;
+			Func<Action<DiscModel>, bool> verifyDiscUpdate = updateAction =>
+			{
+				updateAction(disc);
+				return disc.Title == "New Title" && disc.TreeTitle == "New Tree Title" && disc.AlbumTitle == "New Album Title" && disc.Year == 2021;
+			};
 
 			var discServiceMock = mocker.GetMock<IDiscsService>();
-			discServiceMock.Verify(x => x.UpdateDisc(It.Is<DiscModel>(d => verifyUpdatedDisc(d)), It.IsAny<CancellationToken>()), Times.Once);
-			disc.Should().Match<DiscModel>(x => verifyUpdatedDisc(x));
+			discServiceMock.Verify(x => x.UpdateDisc(disc, It.Is<Action<DiscModel>>(y => verifyDiscUpdate(y)), It.IsAny<CancellationToken>()), Times.Once);
+
+			Func<SongModel, Action<SongModel>, bool> verifySongUpdate = (song, updateAction) =>
+			{
+				updateAction(song);
+				return song.DeleteComment == "New Delete Comment";
+			};
 
 			var songServiceMock = mocker.GetMock<ISongsService>();
-			songServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
-			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(s => Object.ReferenceEquals(s, songs[0]) && s.DeleteComment == "New Delete Comment"), It.IsAny<CancellationToken>()), Times.Once);
-			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(s => Object.ReferenceEquals(s, songs[1]) && s.DeleteComment == "New Delete Comment"), It.IsAny<CancellationToken>()), Times.Once);
+			songServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<Action<SongModel>>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+			songServiceMock.Verify(x => x.UpdateSong(songs[0], It.Is<Action<SongModel>>(y => verifySongUpdate(songs[0], y)), It.IsAny<CancellationToken>()), Times.Once);
+			songServiceMock.Verify(x => x.UpdateSong(songs[1], It.Is<Action<SongModel>>(y => verifySongUpdate(songs[1], y)), It.IsAny<CancellationToken>()), Times.Once);
 		}
 
 		[TestMethod]
@@ -293,17 +299,17 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			// We perform 2 checks:
-			//   1. UpdateDisc method was called with correctly updated disc.
-			//   2. Original Disc model is updated.
-			Func<DiscModel, bool> verifyUpdatedDisc = x => x.Title == "New Title" && x.TreeTitle == "New Tree Title" && x.AlbumTitle == "New Album Title" && x.Year == 2021;
+			Func<Action<DiscModel>, bool> verifyDiscUpdate = updateAction =>
+			{
+				updateAction(disc);
+				return disc.Title == "New Title" && disc.TreeTitle == "New Tree Title" && disc.AlbumTitle == "New Album Title" && disc.Year == 2021;
+			};
 
 			var discServiceMock = mocker.GetMock<IDiscsService>();
-			discServiceMock.Verify(x => x.UpdateDisc(It.Is<DiscModel>(d => verifyUpdatedDisc(d)), It.IsAny<CancellationToken>()), Times.Once);
-			disc.Should().Match<DiscModel>(x => verifyUpdatedDisc(x));
+			discServiceMock.Verify(x => x.UpdateDisc(disc, It.Is<Action<DiscModel>>(y => verifyDiscUpdate(y)), It.IsAny<CancellationToken>()), Times.Once);
 
 			var songServiceMock = mocker.GetMock<ISongsService>();
-			songServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Never);
+			songServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<Action<SongModel>>(), It.IsAny<CancellationToken>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -343,19 +349,25 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			// We perform 2 checks:
-			//   1. UpdateDisc method was called with correctly updated disc.
-			//   2. Original Disc model is updated.
-			Func<DiscModel, bool> verifyUpdatedDisc = x => x.Title == "New Title" && x.TreeTitle == "New Tree Title" && x.AlbumTitle == "New Album Title" && x.Year == 2021;
+			Func<Action<DiscModel>, bool> verifyDiscUpdate = updateAction =>
+			{
+				updateAction(disc);
+				return disc.Title == "New Title" && disc.TreeTitle == "New Tree Title" && disc.AlbumTitle == "New Album Title" && disc.Year == 2021;
+			};
 
 			var discServiceMock = mocker.GetMock<IDiscsService>();
-			discServiceMock.Verify(x => x.UpdateDisc(It.Is<DiscModel>(d => verifyUpdatedDisc(d)), It.IsAny<CancellationToken>()), Times.Once);
-			disc.Should().Match<DiscModel>(x => verifyUpdatedDisc(x));
+			discServiceMock.Verify(x => x.UpdateDisc(disc, It.Is<Action<DiscModel>>(y => verifyDiscUpdate(y)), It.IsAny<CancellationToken>()), Times.Once);
+
+			Func<SongModel, Action<SongModel>, bool> verifySongUpdate = (song, updateAction) =>
+			{
+				updateAction(song);
+				return song.DeleteComment == "New Delete Comment";
+			};
 
 			var songServiceMock = mocker.GetMock<ISongsService>();
-			songServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
-			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(s => Object.ReferenceEquals(s, songs[0]) && s.DeleteComment == "New Delete Comment"), It.IsAny<CancellationToken>()), Times.Once);
-			songServiceMock.Verify(x => x.UpdateSong(It.Is<SongModel>(s => Object.ReferenceEquals(s, songs[1]) && s.DeleteComment == "New Delete Comment"), It.IsAny<CancellationToken>()), Times.Once);
+			songServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<Action<SongModel>>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+			songServiceMock.Verify(x => x.UpdateSong(songs[0], It.Is<Action<SongModel>>(y => verifySongUpdate(songs[0], y)), It.IsAny<CancellationToken>()), Times.Once);
+			songServiceMock.Verify(x => x.UpdateSong(songs[1], It.Is<Action<SongModel>>(y => verifySongUpdate(songs[1], y)), It.IsAny<CancellationToken>()), Times.Once);
 		}
 	}
 }

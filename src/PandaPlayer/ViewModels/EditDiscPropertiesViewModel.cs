@@ -129,6 +129,7 @@ namespace PandaPlayer.ViewModels
 					song.DeleteComment = DeleteComment;
 				}
 
+				// TODO: Move this logic to DiscsService.UpdateDisc() as it's already has similar logic for songs update.
 				foreach (var song in Disc.AllSongs)
 				{
 					await songsService.UpdateSong(song, UpdateSong, cancellationToken);

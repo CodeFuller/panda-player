@@ -10,6 +10,7 @@ using Moq.AutoMock;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events;
 using PandaPlayer.Events.SongListEvents;
+using PandaPlayer.Services.Interfaces;
 using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.ViewModels;
 using PandaPlayer.ViewModels.Interfaces;
@@ -31,6 +32,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var mocker = new AutoMocker();
+			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			ApplicationLoadedEventArgs applicationLoadedEvent = null;
@@ -51,6 +53,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var mocker = new AutoMocker();
+			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act
@@ -68,6 +71,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var mocker = new AutoMocker();
+			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act
@@ -85,6 +89,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var mocker = new AutoMocker();
+			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act
@@ -102,6 +107,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var mocker = new AutoMocker();
+			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act
@@ -134,6 +140,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var playlistLoadedEvent = new PlaylistChangedEventArgs(new[] { song }, song, 0);
 
 			var mocker = new AutoMocker();
+			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act
@@ -154,6 +161,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var playlistChangedEvent = new PlaylistChangedEventArgs(new[] { song }, song, 0);
 
 			var mocker = new AutoMocker();
+			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			var propertyChangedEvents = new List<PropertyChangedEventArgs>();
@@ -183,6 +191,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var playlistChangedEventWithNoCurrentSong = new PlaylistChangedEventArgs(new[] { song }, null, null);
 
 			var mocker = new AutoMocker();
+			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			Messenger.Default.Send(playlistChangedEventWithCurrentSong);
@@ -206,6 +215,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var playlistChangedEvent = new PlaylistChangedEventArgs(new[] { song }, song, 0);
 
 			var mocker = new AutoMocker();
+			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act
@@ -234,6 +244,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var playlistChangedEvent = new PlaylistChangedEventArgs(new[] { song }, song, 0);
 
 			var mocker = new AutoMocker();
+			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act
@@ -260,6 +271,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var playlistChangedEvent = new PlaylistChangedEventArgs(songs, songs[1], 1);
 
 			var mocker = new AutoMocker();
+			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act
@@ -286,6 +298,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var playlistFinishedEvent = new PlaylistFinishedEventArgs(songs);
 
 			var mocker = new AutoMocker();
+			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act
@@ -311,6 +324,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var playlistFinishedEvent = new PlaylistFinishedEventArgs(songs);
 
 			var mocker = new AutoMocker();
+			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act

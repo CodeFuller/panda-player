@@ -6,7 +6,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
-using PandaPlayer.Services.Interfaces;
 using PandaPlayer.Services.Interfaces.Dal;
 
 namespace PandaPlayer.Services.UnitTests
@@ -19,39 +18,33 @@ namespace PandaPlayer.Services.UnitTests
 		{
 			// Arrange
 
-			static DiscModel CreateDiscData()
+			var disc = new DiscModel
 			{
-				return new()
+				Id = new ItemId("Disc Id"),
+				Folder = new ShallowFolderModel
 				{
-					Id = new ItemId("Disc Id"),
-					Folder = new ShallowFolderModel
-					{
-						Id = new ItemId("Folder Id"),
-						Name = "Test Folder",
-					},
-					Title = "Old Disc Title",
-					TreeTitle = "2021 - Some Disc (CD 1)",
-					AllSongs = new[]
-					{
-						new SongModel(),
-					},
-				};
-			}
-
-			var existingDisc = CreateDiscData();
-			var updatedDisc = CreateDiscData();
-			updatedDisc.Title = "New Disc Title";
+					Id = new ItemId("Folder Id"),
+					Name = "Test Folder",
+				},
+				Title = "Old Disc Title",
+				TreeTitle = "2021 - Some Disc (CD 1)",
+				AllSongs = new[]
+				{
+					new SongModel(),
+				},
+			};
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<IDiscsRepository>()
-				.Setup(x => x.GetDisc(new ItemId("Disc Id"), CancellationToken.None))
-				.ReturnsAsync(existingDisc);
-
 			var target = mocker.CreateInstance<DiscsService>();
 
 			// Act
 
-			await target.UpdateDisc(updatedDisc, CancellationToken.None);
+			static void UpdateDisc(DiscModel updatedDisc)
+			{
+				updatedDisc.Title = "New Disc Title";
+			}
+
+			await target.UpdateDisc(disc, UpdateDisc, CancellationToken.None);
 
 			// Assert
 
@@ -64,56 +57,55 @@ namespace PandaPlayer.Services.UnitTests
 		{
 			// Arrange
 
-			static DiscModel CreateDiscData()
+			var disc = new DiscModel
 			{
-				return new()
+				Id = new ItemId("Disc Id"),
+				Folder = new ShallowFolderModel
 				{
-					Id = new ItemId("Disc Id"),
-					Folder = new ShallowFolderModel
+					Id = new ItemId("Folder Id"),
+					Name = "Test Folder",
+				},
+				Year = 2021,
+				Title = "Some Disc (CD 1)",
+				TreeTitle = "2021 - Some Disc (CD 1)",
+				AlbumTitle = "Some Disc",
+				AllSongs = new SongModel[]
+				{
+					new() { Id = new ItemId("1") },
+					new() { Id = new ItemId("2") },
+					new()
 					{
-						Id = new ItemId("Folder Id"),
-						Name = "Test Folder",
+						Id = new ItemId("3"),
+						DeleteDate = new DateTime(2021, 07, 03),
 					},
-					Year = 2021,
-					Title = "Some Disc (CD 1)",
-					TreeTitle = "2021 - Some Disc (CD 1)",
-					AlbumTitle = "Some Disc",
-					AllSongs = new SongModel[]
-					{
-						new() { Id = new ItemId("1") },
-						new() { Id = new ItemId("2") },
-						new()
-						{
-							Id = new ItemId("3"),
-							DeleteDate = new DateTime(2021, 07, 03),
-						},
-					},
-				};
-			}
-
-			var existingDisc = CreateDiscData();
-			var updatedDisc = CreateDiscData();
-			updatedDisc.AlbumTitle = "New Album Title";
+				},
+			};
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<IDiscsRepository>()
-				.Setup(x => x.GetDisc(new ItemId("Disc Id"), CancellationToken.None))
-				.ReturnsAsync(existingDisc);
-
 			var target = mocker.CreateInstance<DiscsService>();
 
 			// Act
 
-			await target.UpdateDisc(updatedDisc, CancellationToken.None);
+			static void UpdateDisc(DiscModel updatedDisc)
+			{
+				updatedDisc.AlbumTitle = "New Album Title";
+			}
+
+			await target.UpdateDisc(disc, UpdateDisc, CancellationToken.None);
 
 			// Assert
 
-			var activeSongs = updatedDisc.ActiveSongs.ToList();
+			var activeSongs = disc.ActiveSongs.ToList();
 
-			var songsServiceMock = mocker.GetMock<ISongsService>();
-			songsServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
-			songsServiceMock.Verify(x => x.UpdateSong(activeSongs[0], It.IsAny<CancellationToken>()), Times.Once);
-			songsServiceMock.Verify(x => x.UpdateSong(activeSongs[1], It.IsAny<CancellationToken>()), Times.Once);
+			var songsRepositoryMock = mocker.GetMock<ISongsRepository>();
+			songsRepositoryMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+			songsRepositoryMock.Verify(x => x.UpdateSong(activeSongs[0], It.IsAny<CancellationToken>()), Times.Once);
+			songsRepositoryMock.Verify(x => x.UpdateSong(activeSongs[1], It.IsAny<CancellationToken>()), Times.Once);
+
+			var storageRepositoryMock = mocker.GetMock<IStorageRepository>();
+			storageRepositoryMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+			storageRepositoryMock.Verify(x => x.UpdateSong(activeSongs[0], It.IsAny<CancellationToken>()), Times.Once);
+			storageRepositoryMock.Verify(x => x.UpdateSong(activeSongs[1], It.IsAny<CancellationToken>()), Times.Once);
 		}
 
 		[TestMethod]
@@ -121,55 +113,54 @@ namespace PandaPlayer.Services.UnitTests
 		{
 			// Arrange
 
-			static DiscModel CreateDiscData()
+			var disc = new DiscModel
 			{
-				return new()
+				Id = new ItemId("Disc Id"),
+				Folder = new ShallowFolderModel
 				{
-					Id = new ItemId("Disc Id"),
-					Folder = new ShallowFolderModel
+					Id = new ItemId("Folder Id"),
+					Name = "Test Folder",
+				},
+				Title = "Some Disc (CD 1)",
+				TreeTitle = "2021 - Some Disc (CD 1)",
+				AlbumTitle = "Some Disc",
+				AllSongs = new SongModel[]
+				{
+					new() { Id = new ItemId("1") },
+					new() { Id = new ItemId("2") },
+					new()
 					{
-						Id = new ItemId("Folder Id"),
-						Name = "Test Folder",
+						Id = new ItemId("3"),
+						DeleteDate = new DateTime(2021, 07, 03),
 					},
-					Title = "Some Disc (CD 1)",
-					TreeTitle = "2021 - Some Disc (CD 1)",
-					AlbumTitle = "Some Disc",
-					AllSongs = new SongModel[]
-					{
-						new() { Id = new ItemId("1") },
-						new() { Id = new ItemId("2") },
-						new()
-						{
-							Id = new ItemId("3"),
-							DeleteDate = new DateTime(2021, 07, 03),
-						},
-					},
-				};
-			}
-
-			var existingDisc = CreateDiscData();
-			var updatedDisc = CreateDiscData();
-			updatedDisc.Year = 1988;
+				},
+			};
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<IDiscsRepository>()
-				.Setup(x => x.GetDisc(new ItemId("Disc Id"), CancellationToken.None))
-				.ReturnsAsync(existingDisc);
-
 			var target = mocker.CreateInstance<DiscsService>();
 
 			// Act
 
-			await target.UpdateDisc(updatedDisc, CancellationToken.None);
+			static void UpdateDisc(DiscModel updatedDisc)
+			{
+				updatedDisc.Year = 1988;
+			}
+
+			await target.UpdateDisc(disc, UpdateDisc, CancellationToken.None);
 
 			// Assert
 
-			var activeSongs = updatedDisc.ActiveSongs.ToList();
+			var activeSongs = disc.ActiveSongs.ToList();
 
-			var songsServiceMock = mocker.GetMock<ISongsService>();
-			songsServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
-			songsServiceMock.Verify(x => x.UpdateSong(activeSongs[0], It.IsAny<CancellationToken>()), Times.Once);
-			songsServiceMock.Verify(x => x.UpdateSong(activeSongs[1], It.IsAny<CancellationToken>()), Times.Once);
+			var songsRepositoryMock = mocker.GetMock<ISongsRepository>();
+			songsRepositoryMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+			songsRepositoryMock.Verify(x => x.UpdateSong(activeSongs[0], It.IsAny<CancellationToken>()), Times.Once);
+			songsRepositoryMock.Verify(x => x.UpdateSong(activeSongs[1], It.IsAny<CancellationToken>()), Times.Once);
+
+			var storageRepositoryMock = mocker.GetMock<IStorageRepository>();
+			storageRepositoryMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+			storageRepositoryMock.Verify(x => x.UpdateSong(activeSongs[0], It.IsAny<CancellationToken>()), Times.Once);
+			storageRepositoryMock.Verify(x => x.UpdateSong(activeSongs[1], It.IsAny<CancellationToken>()), Times.Once);
 		}
 
 		[TestMethod]
@@ -177,46 +168,43 @@ namespace PandaPlayer.Services.UnitTests
 		{
 			// Arrange
 
-			static DiscModel CreateDiscData()
+			var disc = new DiscModel
 			{
-				return new()
+				Id = new ItemId("Disc Id"),
+				Folder = new ShallowFolderModel
 				{
-					Id = new ItemId("Disc Id"),
-					Folder = new ShallowFolderModel
-					{
-						Id = new ItemId("Folder Id"),
-						Name = "Test Folder",
-					},
-					Title = "Some Disc (CD 1)",
-					TreeTitle = "2021 - Some Disc (CD 1)",
-					AlbumTitle = "Some Disc",
-					AllSongs = new SongModel[]
-					{
-						new() { Id = new ItemId("1") },
-					},
-				};
-			}
-
-			var existingDisc = CreateDiscData();
-			var updatedDisc = CreateDiscData();
-			updatedDisc.Title = "New Title";
-			updatedDisc.Title = "New Tree Title";
+					Id = new ItemId("Folder Id"),
+					Name = "Test Folder",
+				},
+				Title = "Some Disc (CD 1)",
+				TreeTitle = "2021 - Some Disc (CD 1)",
+				AlbumTitle = "Some Disc",
+				AllSongs = new SongModel[]
+				{
+					new() { Id = new ItemId("1") },
+				},
+			};
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<IDiscsRepository>()
-				.Setup(x => x.GetDisc(new ItemId("Disc Id"), CancellationToken.None))
-				.ReturnsAsync(existingDisc);
-
 			var target = mocker.CreateInstance<DiscsService>();
 
 			// Act
 
-			await target.UpdateDisc(updatedDisc, CancellationToken.None);
+			static void UpdateDisc(DiscModel updatedDisc)
+			{
+				updatedDisc.Title = "New Title";
+				updatedDisc.Title = "New Tree Title";
+			}
+
+			await target.UpdateDisc(disc, UpdateDisc, CancellationToken.None);
 
 			// Assert
 
-			var songsServiceMock = mocker.GetMock<ISongsService>();
-			songsServiceMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Never);
+			var songsRepositoryMock = mocker.GetMock<ISongsRepository>();
+			songsRepositoryMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Never);
+
+			var storageRepositoryMock = mocker.GetMock<IStorageRepository>();
+			storageRepositoryMock.Verify(x => x.UpdateSong(It.IsAny<SongModel>(), It.IsAny<CancellationToken>()), Times.Never);
 		}
 	}
 }
