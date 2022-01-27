@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CodeFuller.Library.Wpf;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events;
 using PandaPlayer.Events.SongListEvents;
+using PandaPlayer.Services.Interfaces;
 using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels
@@ -19,6 +20,8 @@ namespace PandaPlayer.ViewModels
 		private const string DefaultTitle = "Panda Player";
 
 		private readonly IViewNavigator viewNavigator;
+
+		private readonly IReadOnlyCollection<IApplicationInitializer> applicationInitializers;
 
 		private string title = DefaultTitle;
 
@@ -52,8 +55,9 @@ namespace PandaPlayer.ViewModels
 
 		public ICommand ShowLibraryStatisticsCommand { get; }
 
-		public ApplicationViewModel(ILibraryExplorerViewModel libraryExplorerViewModel, ISongListTabViewModel songListTabViewModel, IPlaylistAdviserViewModel playlistAdviserViewModel,
-			IDiscImageViewModel discImageViewModel, IPlaylistPlayerViewModel playlistPlayerViewModel, IViewNavigator viewNavigator, ILoggerViewModel loggerViewModel)
+		public ApplicationViewModel(ILibraryExplorerViewModel libraryExplorerViewModel, ISongListTabViewModel songListTabViewModel,
+			IPlaylistAdviserViewModel playlistAdviserViewModel, IDiscImageViewModel discImageViewModel, IPlaylistPlayerViewModel playlistPlayerViewModel,
+			IViewNavigator viewNavigator, IEnumerable<IApplicationInitializer> applicationInitializers, ILoggerViewModel loggerViewModel)
 		{
 			LibraryExplorerViewModel = libraryExplorerViewModel ?? throw new ArgumentNullException(nameof(libraryExplorerViewModel));
 			SongListTabViewModel = songListTabViewModel ?? throw new ArgumentNullException(nameof(songListTabViewModel));
@@ -61,9 +65,10 @@ namespace PandaPlayer.ViewModels
 			DiscImageViewModel = discImageViewModel ?? throw new ArgumentNullException(nameof(discImageViewModel));
 			PlaylistPlayerViewModel = playlistPlayerViewModel ?? throw new ArgumentNullException(nameof(playlistPlayerViewModel));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
+			this.applicationInitializers = applicationInitializers?.ToList() ?? throw new ArgumentNullException(nameof(applicationInitializers));
 			LoggerViewModel = loggerViewModel ?? throw new ArgumentNullException(nameof(loggerViewModel));
 
-			LoadCommand = new RelayCommand(Load);
+			LoadCommand = new AsyncRelayCommand(() => Load(CancellationToken.None));
 			ReversePlayingCommand = new AsyncRelayCommand(() => ReversePlaying(CancellationToken.None));
 			ShowAdviseSetsEditorCommand = new AsyncRelayCommand(() => ShowAdviseSetsEditor(CancellationToken.None));
 			ShowDiscAdderCommand = new AsyncRelayCommand(() => ShowDiscAdder(CancellationToken.None));
@@ -75,8 +80,13 @@ namespace PandaPlayer.ViewModels
 			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, OnPlaylistFinished);
 		}
 
-		private static void Load()
+		private async Task Load(CancellationToken cancellationToken)
 		{
+			foreach (var applicationInitializer in applicationInitializers)
+			{
+				await applicationInitializer.Initialize(cancellationToken);
+			}
+
 			Messenger.Default.Send(new ApplicationLoadedEventArgs());
 		}
 

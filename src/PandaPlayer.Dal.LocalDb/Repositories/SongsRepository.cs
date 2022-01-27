@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,19 +35,6 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			song.Id = songEntity.Id.ToItemId();
 		}
 
-		public async Task<SongModel> GetSong(ItemId songId, CancellationToken cancellationToken)
-		{
-			await using var context = contextFactory.CreateDbContext();
-
-			var id = songId.ToInt32();
-			var songEntity = await GetSongsQueryable(context)
-				.Where(song => song.Id == id)
-				.SingleAsync(cancellationToken);
-
-			var discModel = songEntity.Disc.ToModel(contentUriProvider);
-			return discModel.AllSongs.Single(song => song.Id == songId);
-		}
-
 		public async Task<SongModel> GetSongWithPlaybacks(ItemId songId, CancellationToken cancellationToken)
 		{
 			// Currently this method is used only for IT purposes.
@@ -71,39 +57,6 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 			var discModel = songDisc.ToModel(contentUriProvider);
 			return discModel.AllSongs.Single(song => song.Id == songId);
-		}
-
-		public async Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken)
-		{
-			var songIdsList = songIds.ToList();
-			var ids = songIdsList.Select(id => id.ToInt32()).ToList();
-
-			await using var context = contextFactory.CreateDbContext();
-
-			var songs = await GetSongsQueryable(context)
-				.Where(song => ids.Contains(song.Id))
-				.ToListAsync(cancellationToken);
-
-			var discEntities = songs
-				.Select(song => song.Disc)
-				.Distinct()
-				.ToList();
-
-			var folderModels = discEntities
-				.Select(disc => disc.Folder)
-				.Distinct()
-				.Select(folder => folder.ToShallowModel())
-				.ToDictionary(folder => folder.Id, folder => folder);
-
-			var songModels = discEntities
-				.Select(disc => disc.ToModel(folderModels[disc.Folder.Id.ToItemId()], contentUriProvider))
-				.SelectMany(disc => disc.AllSongs)
-				.ToDictionary(song => song.Id, song => song);
-
-			return songIdsList
-				.Where(id => songModels.ContainsKey(id))
-				.Select(id => songModels[id])
-				.ToList();
 		}
 
 		public async Task UpdateSong(SongModel song, CancellationToken cancellationToken)
@@ -160,18 +113,6 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			var entityId = id.ToInt32();
 			return await queryable
 				.SingleAsync(s => s.Id == entityId, cancellationToken);
-		}
-
-		private static IQueryable<SongEntity> GetSongsQueryable(MusicDbContext context)
-		{
-			return context.Songs
-				.Include(song => song.Disc).ThenInclude(disc => disc.Songs)
-				.Include(song => song.Disc).ThenInclude(disc => disc.Images)
-				.Include(song => song.Disc).ThenInclude(disc => disc.Folder).ThenInclude(folder => folder.AdviseGroup)
-				.Include(song => song.Disc).ThenInclude(disc => disc.AdviseGroup)
-				.Include(song => song.Disc).ThenInclude(disc => disc.AdviseSet)
-				.Include(song => song.Artist)
-				.Include(song => song.Genre);
 		}
 	}
 }

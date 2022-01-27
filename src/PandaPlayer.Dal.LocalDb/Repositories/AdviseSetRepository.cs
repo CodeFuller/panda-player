@@ -32,17 +32,16 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			adviseSet.Id = adviseSetEntity.Id.ToItemId();
 		}
 
-		public async Task<IReadOnlyCollection<AdviseSetModel>> GetAllAdviseSets(CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<AdviseSetModel>> GetEmptyAdviseSets(CancellationToken cancellationToken)
 		{
 			await using var context = contextFactory.CreateDbContext();
 
-			var entities = await context.AdviseSets
+			var adviseSets = await context.AdviseSets
 				.Include(x => x.Discs)
+				.Where(x => !x.Discs.Any())
 				.ToListAsync(cancellationToken);
 
-			return entities
-				.Select(x => x.ToModel())
-				.ToList();
+			return adviseSets.Select(x => x.ToModel()).ToList();
 		}
 
 		public async Task UpdateAdviseSet(AdviseSetModel adviseSet, CancellationToken cancellationToken)

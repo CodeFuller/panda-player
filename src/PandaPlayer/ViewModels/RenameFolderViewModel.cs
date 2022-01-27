@@ -28,9 +28,12 @@ namespace PandaPlayer.ViewModels
 
 		public Task Rename(CancellationToken cancellationToken)
 		{
-			Folder.Name = FolderName;
+			void UpdateFolder(ShallowFolderModel folder)
+			{
+				folder.Name = FolderName;
+			}
 
-			return foldersService.UpdateFolder(Folder, cancellationToken);
+			return foldersService.UpdateFolder(Folder, UpdateFolder, cancellationToken);
 		}
 	}
 }

@@ -31,13 +31,16 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			artist.Id = artistEntity.Id.ToItemId();
 		}
 
-		public async Task<IReadOnlyCollection<ArtistModel>> GetAllArtists(CancellationToken cancellationToken)
+		public async Task<IEnumerable<ArtistModel>> GetEmptyArtists(CancellationToken cancellationToken)
 		{
 			await using var context = contextFactory.CreateDbContext();
 
-			return (await context.Artists.ToListAsync(cancellationToken))
-				.Select(a => a.ToModel())
-				.ToList();
+			var artists = await context.Artists
+				.Include(x => x.Songs)
+				.Where(x => !x.Songs.Any())
+				.ToListAsync(cancellationToken);
+
+			return artists.Select(x => x.ToModel()).ToList();
 		}
 	}
 }

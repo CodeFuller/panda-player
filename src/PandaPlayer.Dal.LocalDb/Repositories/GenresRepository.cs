@@ -20,13 +20,16 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
 		}
 
-		public async Task<IReadOnlyCollection<GenreModel>> GetAllGenres(CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<GenreModel>> GetEmptyGenres(CancellationToken cancellationToken)
 		{
 			await using var context = contextFactory.CreateDbContext();
 
-			return (await context.Genres.ToListAsync(cancellationToken))
-				.Select(g => g.ToModel())
-				.ToList();
+			var genres = await context.Genres
+				.Include(x => x.Songs)
+				.Where(x => !x.Songs.Any())
+				.ToListAsync(cancellationToken);
+
+			return genres.Select(x => x.ToModel()).ToList();
 		}
 	}
 }

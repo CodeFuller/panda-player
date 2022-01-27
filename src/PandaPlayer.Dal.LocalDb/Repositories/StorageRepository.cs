@@ -43,15 +43,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			var newDiscPath = storageOrganizer.GetDiscFolderPath(newDisc);
 			fileStorage.MoveFolder(oldDiscPath, newDiscPath);
 
-			foreach (var song in newDisc.ActiveSongs)
-			{
-				song.ContentUri = GetSongContentUri(song);
-			}
-
-			foreach (var image in newDisc.Images)
-			{
-				image.ContentUri = GetDiscImageUri(image);
-			}
+			UpdateContentUris(newDisc);
 
 			return Task.CompletedTask;
 		}
@@ -62,6 +54,8 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			fileStorage.SaveFile(songPath, songContent);
 
 			UpdateSongTags(song);
+
+			song.ContentUri = GetSongContentUri(song);
 
 			return Task.CompletedTask;
 		}
@@ -148,7 +142,39 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			var newFolderPath = storageOrganizer.GetFolderPath(newFolder);
 			fileStorage.MoveFolder(oldFolderPath, newFolderPath);
 
+			// TODO: Calculate ContentUri for all models dynamically?
+			UpdateContentUris(newFolder);
+
 			return Task.CompletedTask;
+		}
+
+		private void UpdateContentUris(ShallowFolderModel shallowFolder)
+		{
+			// TODO: Abandon ShallowFolderModel and remove this type cast.
+			var folder = (FolderModel)shallowFolder;
+
+			foreach (var subfolder in folder.Subfolders)
+			{
+				UpdateContentUris(subfolder);
+			}
+
+			foreach (var disc in folder.Discs)
+			{
+				UpdateContentUris(disc);
+			}
+		}
+
+		private void UpdateContentUris(DiscModel disc)
+		{
+			foreach (var song in disc.ActiveSongs)
+			{
+				song.ContentUri = GetSongContentUri(song);
+			}
+
+			foreach (var image in disc.Images)
+			{
+				image.ContentUri = GetDiscImageUri(image);
+			}
 		}
 
 		public Task DeleteFolder(ShallowFolderModel folder, CancellationToken cancellationToken)

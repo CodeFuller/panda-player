@@ -22,114 +22,59 @@ namespace PandaPlayer.Services.IntegrationTests
 		[TestMethod]
 		public async Task CreateDisc_ForDiscWithAllOptionalPropertiesFilled_CreatesDiscSuccessfully()
 		{
-			async Task<DiscModel> CreateDiscData(bool fillId, bool addSong)
+			var folder = await GetFolder(ReferenceData.ArtistFolderId);
+
+			var newDisc = new DiscModel
 			{
-				var disc = new DiscModel
-				{
-					Id = fillId ? ReferenceData.NextDiscId : null,
-					Folder = await GetFolder(ReferenceData.ArtistFolderId),
-					Year = 1994,
-					Title = "Титаник Live (CD 1)",
-					TreeTitle = "1994 - Титаник Live (CD 1)",
-					AlbumTitle = "Титаник",
-				};
+				Year = 1994,
+				Title = "Титаник Live (CD 1)",
+				TreeTitle = "1994 - Титаник Live (CD 1)",
+				AlbumTitle = "Титаник",
+				AllSongs = new List<SongModel>(),
+			};
 
-				if (addSong)
-				{
-					// Songs are not added by CreateDisc method.
-					// However we fill songs list so that CreateDisc is tested in more real-life conditions.
-					disc.AllSongs = new[]
-					{
-						new SongModel
-						{
-							Id = ReferenceData.NextSongId,
-							Disc = disc,
-							Title = "Интродукция",
-							TreeTitle = "01 - Интродукция.mp3",
-							Duration = new TimeSpan(0, 3, 12),
-							BitRate = 12345,
-							Size = 67890,
-							Checksum = 54321,
-						},
-					};
-				}
-				else
-				{
-					disc.AllSongs = new List<SongModel>();
-				}
+			folder.AddDisc(newDisc);
 
-				return disc;
-			}
-
-			await TestCaseForCreateDisc(CreateDiscData, Path.Combine("Belarusian", "Neuro Dubel", "1994 - Титаник Live (CD 1)"));
+			await TestCaseForCreateDisc(newDisc, Path.Combine("Belarusian", "Neuro Dubel", "1994 - Титаник Live (CD 1)"));
 		}
 
 		[TestMethod]
 		public async Task CreateDisc_ForDiscWithAllOptionalPropertiesNotFilled_CreatesDiscSuccessfully()
 		{
-			async Task<DiscModel> CreateDiscData(bool fillId, bool addSong)
+			var folder = await GetFolder(ReferenceData.ArtistFolderId);
+
+			var newDisc = new DiscModel
 			{
-				var disc = new DiscModel
-				{
-					Id = fillId ? ReferenceData.NextDiscId : null,
-					Folder = await GetFolder(ReferenceData.ArtistFolderId),
-					Title = "Титаник Live (CD 1)",
-					TreeTitle = "1994 - Титаник Live (CD 1)",
-				};
+				Title = "Титаник Live (CD 1)",
+				TreeTitle = "1994 - Титаник Live (CD 1)",
+				AllSongs = new List<SongModel>(),
+			};
 
-				if (addSong)
-				{
-					// Songs are not added by CreateDisc method.
-					// However we fill songs list so that CreateDisc is tested in more real-life conditions.
-					disc.AllSongs = new[]
-					{
-						new SongModel
-						{
-							Id = ReferenceData.NextSongId,
-							Title = "Интродукция",
-							TreeTitle = "01 - Интродукция.mp3",
-							Duration = new TimeSpan(0, 3, 12),
-							BitRate = 12345,
-							Size = 67890,
-							Checksum = 54321,
-						},
-					};
-				}
-				else
-				{
-					disc.AllSongs = new List<SongModel>();
-				}
+			folder.AddDisc(newDisc);
 
-				return disc;
-			}
-
-			await TestCaseForCreateDisc(CreateDiscData, Path.Combine("Belarusian", "Neuro Dubel", "1994 - Титаник Live (CD 1)"));
+			await TestCaseForCreateDisc(newDisc, Path.Combine("Belarusian", "Neuro Dubel", "1994 - Титаник Live (CD 1)"));
 		}
 
 		[TestMethod]
 		public async Task CreateDisc_ForFirstDiscInFolder_CreatesDiscSuccessfully()
 		{
-			async Task<DiscModel> CreateDiscData(bool fillId, bool addSong)
-			{
-				return new()
-				{
-					Id = fillId ? ReferenceData.NextDiscId : null,
-					Folder = await GetFolder(ReferenceData.EmptyFolderId),
-					Title = "Титаник Live (CD 1)",
-					TreeTitle = "1994 - Титаник Live (CD 1)",
-					AllSongs = new List<SongModel>(),
-				};
-			}
+			var folder = await GetFolder(ReferenceData.EmptyFolderId);
 
-			await TestCaseForCreateDisc(CreateDiscData, Path.Combine("Belarusian", "Neuro Dubel", "Empty Folder", "1994 - Титаник Live (CD 1)"));
+			var newDisc = new DiscModel
+			{
+				Title = "Титаник Live (CD 1)",
+				TreeTitle = "1994 - Титаник Live (CD 1)",
+				AllSongs = new List<SongModel>(),
+			};
+
+			folder.AddDisc(newDisc);
+
+			await TestCaseForCreateDisc(newDisc, Path.Combine("Belarusian", "Neuro Dubel", "Empty Folder", "1994 - Титаник Live (CD 1)"));
 		}
 
-		// discDataFactory(bool fillId, bool addSong)
-		private async Task TestCaseForCreateDisc(Func<bool, bool, Task<DiscModel>> discDataFactory, string relativeDiscDirectoryPath)
+		private async Task TestCaseForCreateDisc(DiscModel newDisc, string relativeDiscDirectoryPath)
 		{
 			// Arrange
-
-			var newDisc = await discDataFactory(false, true);
 
 			var target = CreateTestTarget();
 
@@ -139,17 +84,16 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Assert
 
-			var referenceData = GetReferenceData();
-			var expectedDisc = await discDataFactory(true, true);
+			newDisc.Id.Should().Be(ReferenceData.NextDiscId);
 
-			newDisc.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
+			var referenceData = GetReferenceData();
 
 			var expectedDiscs = new[]
 			{
 				referenceData.NormalDisc,
 				referenceData.DiscWithMissingFields,
 				referenceData.DeletedDisc,
-				await discDataFactory(true, false),
+				newDisc,
 			};
 
 			var allDiscs = await target.GetAllDiscs(CancellationToken.None);
@@ -201,9 +145,12 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Act
 
-			disc.TreeTitle = "1998 - Охотник и сайгак";
+			void UpdateDisc(DiscModel disc)
+			{
+				disc.TreeTitle = "1998 - Охотник и сайгак";
+			}
 
-			await target.UpdateDisc(disc, CancellationToken.None);
+			await target.UpdateDisc(disc, UpdateDisc, CancellationToken.None);
 
 			// Assert
 
@@ -239,10 +186,13 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Act
 
-			disc.Year = 1998;
-			disc.AlbumTitle = "Охотник и сайгак";
+			void UpdateDisc(DiscModel disc)
+			{
+				disc.Year = 1998;
+				disc.AlbumTitle = "Охотник и сайгак";
+			}
 
-			await target.UpdateDisc(disc, CancellationToken.None);
+			await target.UpdateDisc(disc, UpdateDisc, CancellationToken.None);
 
 			// Assert
 
@@ -285,12 +235,15 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Act
 
-			disc.TreeTitle = "1998 - Охотник и сайгак";
-			disc.Title = "Охотник и сайгак";
-			disc.AlbumTitle = "Охотник и сайгак";
-			disc.Year = 1998;
+			void UpdateDisc(DiscModel disc)
+			{
+				disc.TreeTitle = "1998 - Охотник и сайгак";
+				disc.Title = "Охотник и сайгак";
+				disc.AlbumTitle = "Охотник и сайгак";
+				disc.Year = 1998;
+			}
 
-			await target.UpdateDisc(disc, CancellationToken.None);
+			await target.UpdateDisc(disc, UpdateDisc, CancellationToken.None);
 
 			// Assert
 

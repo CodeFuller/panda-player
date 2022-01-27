@@ -40,10 +40,14 @@ namespace PandaPlayer.ViewModels
 
 		public async Task Save(CancellationToken cancellationToken)
 		{
-			foreach (var song in Songs)
+			void UpdateSong(SongModel song)
 			{
 				song.Rating = SelectedRating;
-				await songsService.UpdateSong(song, cancellationToken);
+			}
+
+			foreach (var song in Songs)
+			{
+				await songsService.UpdateSong(song, UpdateSong, cancellationToken);
 			}
 		}
 	}

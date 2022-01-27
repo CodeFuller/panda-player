@@ -16,6 +16,7 @@ using PandaPlayer.Services.Diagnostic.Inconsistencies;
 using PandaPlayer.Services.Extensions;
 using PandaPlayer.Services.IntegrationTests.Data;
 using PandaPlayer.Services.Interfaces;
+using PandaPlayer.Services.Internal;
 
 namespace PandaPlayer.Services.IntegrationTests
 {
@@ -64,7 +65,20 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			setupServices?.Invoke(services);
 
-			return services.BuildServiceProvider();
+			var serviceProvider = services.BuildServiceProvider();
+
+			InvokeDiscLibraryInitializer(serviceProvider).Wait();
+
+			return serviceProvider;
+		}
+
+		private static async Task InvokeDiscLibraryInitializer(IServiceProvider serviceProvider)
+		{
+			var discLibraryInitializer = serviceProvider.GetRequiredService<IEnumerable<IApplicationInitializer>>()
+				.OfType<DiscLibraryInitializer>()
+				.Single();
+
+			await discLibraryInitializer.Initialize(CancellationToken.None);
 		}
 
 		protected Action<IServiceCollection> StubClock(DateTimeOffset now)
@@ -152,6 +166,13 @@ namespace PandaPlayer.Services.IntegrationTests
 
 		protected async Task CheckLibraryConsistency(params Type[] allowedInconsistencies)
 		{
+			await CheckLibraryInconsistencies(allowedInconsistencies);
+
+			await CheckInMemoryDiscModel();
+		}
+
+		private async Task CheckLibraryInconsistencies(params Type[] allowedInconsistencies)
+		{
 			var inconsistencies = new List<LibraryInconsistency>();
 			void InconsistenciesHandler(LibraryInconsistency inconsistency) => inconsistencies.Add(inconsistency);
 
@@ -161,6 +182,18 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var unexpectedInconsistencies = inconsistencies.Where(x => !allowedInconsistencies.Contains(x.GetType()));
 			unexpectedInconsistencies.Should().BeEmpty();
+		}
+
+		private async Task CheckInMemoryDiscModel()
+		{
+			var inMemoryLibrary = DiscLibraryHolder.DiscLibrary;
+
+			await InvokeDiscLibraryInitializer(ServiceProvider);
+
+			var databaseLibrary = DiscLibraryHolder.DiscLibrary;
+
+			inMemoryLibrary.Should().NotBeSameAs(databaseLibrary);
+			inMemoryLibrary.Should().BeEquivalentTo(databaseLibrary, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 		}
 
 		private void DisposeServices()
@@ -174,7 +207,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			ServiceProvider = null;
 		}
 
-		protected async Task<ShallowFolderModel> GetFolder(ItemId folderId)
+		protected async Task<FolderModel> GetFolder(ItemId folderId)
 		{
 			var folderService = GetService<IFoldersService>();
 			return await folderService.GetFolder(folderId, CancellationToken.None);

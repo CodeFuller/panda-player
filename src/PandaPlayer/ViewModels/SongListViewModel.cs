@@ -115,10 +115,14 @@ namespace PandaPlayer.ViewModels
 
 		private async Task SetRatingForSongs(IEnumerable<SongModel> songs, RatingModel rating, CancellationToken cancellationToken)
 		{
-			foreach (var song in songs)
+			void UpdateSong(SongModel song)
 			{
 				song.Rating = rating;
-				await songsService.UpdateSong(song, cancellationToken);
+			}
+
+			foreach (var song in songs)
+			{
+				await songsService.UpdateSong(song, UpdateSong, cancellationToken);
 			}
 		}
 

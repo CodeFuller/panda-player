@@ -365,8 +365,12 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Act
 
-			folder.Name = "New Folder Name";
-			await target.UpdateFolder(folder, CancellationToken.None);
+			void UpdateFolder(ShallowFolderModel folder)
+			{
+				folder.Name = "New Folder Name";
+			}
+
+			await target.UpdateFolder(folder, UpdateFolder, CancellationToken.None);
 
 			// Assert
 

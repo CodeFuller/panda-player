@@ -33,5 +33,17 @@ namespace PandaPlayer.Core.Models
 		public bool IsRoot => ParentFolderId == null;
 
 		public event PropertyChangedEventHandler PropertyChanged;
+
+		public ShallowFolderModel CloneShallow()
+		{
+			return new()
+			{
+				Id = Id,
+				ParentFolderId = ParentFolderId,
+				Name = Name,
+				AdviseGroup = AdviseGroup,
+				DeleteDate = DeleteDate,
+			};
+		}
 	}
 }

@@ -7,6 +7,6 @@ namespace PandaPlayer.Services.Interfaces.Dal
 {
 	public interface IGenresRepository
 	{
-		Task<IReadOnlyCollection<GenreModel>> GetAllGenres(CancellationToken cancellationToken);
+		Task<IReadOnlyCollection<GenreModel>> GetEmptyGenres(CancellationToken cancellationToken);
 	}
 }

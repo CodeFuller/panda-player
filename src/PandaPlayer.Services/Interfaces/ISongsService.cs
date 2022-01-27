@@ -15,7 +15,7 @@ namespace PandaPlayer.Services.Interfaces
 
 		internal Task<SongModel> GetSongWithPlaybacks(ItemId songId, CancellationToken cancellationToken);
 
-		Task UpdateSong(SongModel song, CancellationToken cancellationToken);
+		Task UpdateSong(SongModel song, Action<SongModel> updateAction, CancellationToken cancellationToken);
 
 		Task AddSongPlayback(SongModel song, DateTimeOffset playbackTime, CancellationToken cancellationToken);
 

@@ -7,6 +7,7 @@ using PandaPlayer.Core.Comparers;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.Services.Interfaces.Dal;
+using PandaPlayer.Services.Internal;
 
 namespace PandaPlayer.Services
 {
@@ -16,29 +17,29 @@ namespace PandaPlayer.Services
 
 		private readonly IDiscsRepository discsRepository;
 
+		private static IDiscLibrary DiscLibrary => DiscLibraryHolder.DiscLibrary;
+
 		public AdviseSetService(IAdviseSetRepository adviseSetRepository, IDiscsRepository discsRepository)
 		{
 			this.adviseSetRepository = adviseSetRepository ?? throw new ArgumentNullException(nameof(adviseSetRepository));
 			this.discsRepository = discsRepository ?? throw new ArgumentNullException(nameof(discsRepository));
 		}
 
-		public Task CreateAdviseSet(AdviseSetModel adviseSet, CancellationToken cancellationToken)
+		public async Task CreateAdviseSet(AdviseSetModel adviseSet, CancellationToken cancellationToken)
 		{
-			return adviseSetRepository.CreateAdviseSet(adviseSet, cancellationToken);
+			await adviseSetRepository.CreateAdviseSet(adviseSet, cancellationToken);
+
+			DiscLibrary.AddAdviseSet(adviseSet);
 		}
 
-		public async Task<IReadOnlyCollection<AdviseSetModel>> GetAllAdviseSets(CancellationToken cancellationToken)
+		public Task<IReadOnlyCollection<AdviseSetModel>> GetAllAdviseSets(CancellationToken cancellationToken)
 		{
-			return (await adviseSetRepository.GetAllAdviseSets(cancellationToken))
-				.OrderBy(ag => ag.Name)
-				.ToList();
+			return Task.FromResult(DiscLibrary.AdviseSets);
 		}
 
 		public async Task AddDiscs(AdviseSetModel adviseSet, IEnumerable<DiscModel> addedDiscs, CancellationToken cancellationToken)
 		{
-			var currentDiscs = await discsRepository.GetAdviseSetDiscs(adviseSet.Id, cancellationToken);
-
-			var lastAdviseSetInfo = currentDiscs.LastOrDefault()?.AdviseSetInfo;
+			var lastAdviseSetInfo = GetAdviseSetDiscs(adviseSet).LastOrDefault()?.AdviseSetInfo;
 			var nextOrder = (lastAdviseSetInfo?.Order ?? 0) + 1;
 			foreach (var addedDisc in addedDiscs)
 			{
@@ -51,10 +52,8 @@ namespace PandaPlayer.Services
 		{
 			var removedDiscsMap = removedDiscs.ToDictionary(x => x.Id, x => x);
 
-			var currentDiscs = await discsRepository.GetAdviseSetDiscs(adviseSet.Id, cancellationToken);
-
 			var nextOrder = 1;
-			foreach (var disc in currentDiscs)
+			foreach (var disc in GetAdviseSetDiscs(adviseSet))
 			{
 				if (removedDiscsMap.TryGetValue(disc.Id, out var removedDisc))
 				{
@@ -78,9 +77,13 @@ namespace PandaPlayer.Services
 
 		public async Task ReorderDiscs(AdviseSetModel adviseSet, IEnumerable<DiscModel> newDiscsOrder, CancellationToken cancellationToken)
 		{
+			var currentDiscs = GetAdviseSetDiscs(adviseSet).ToList();
 			var newDiscsOrderList = newDiscsOrder.ToList();
 
-			var currentDiscs = await discsRepository.GetAdviseSetDiscs(adviseSet.Id, cancellationToken);
+			var oldOrders = currentDiscs.ToDictionary(x => x.Id, x => x.AdviseSetInfo.Order);
+			var newOrders = newDiscsOrderList
+				.Select((x, i) => (Disc: x, Order: i + 1))
+				.ToDictionary(x => x.Disc.Id, x => x.Order);
 
 			var discsChanged = currentDiscs.Except(newDiscsOrderList, new DiscEqualityComparer()).Any() ||
 			                   newDiscsOrderList.Except(currentDiscs, new DiscEqualityComparer()).Any();
@@ -89,20 +92,10 @@ namespace PandaPlayer.Services
 				throw new InvalidOperationException("Can not reorder advise set discs because advise set was modified");
 			}
 
-			var newOrders = new Dictionary<ItemId, int>();
-
-			// Updating input models.
-			foreach (var (disc, order) in newDiscsOrderList.Select((disc, i) => (Disc: disc, Order: i + 1)))
-			{
-				disc.AdviseSetInfo = new AdviseSetInfo(adviseSet, order);
-				newOrders.Add(disc.Id, order);
-			}
-
 			// For satisfying unique order constraint, for discs with changed order we have to clear existing order at first.
-			foreach (var disc in currentDiscs)
+			foreach (var disc in newDiscsOrderList)
 			{
-				var newOrder = newOrders[disc.Id];
-				if (disc.AdviseSetInfo.Order != newOrder)
+				if (newOrders[disc.Id] != oldOrders[disc.Id])
 				{
 					disc.AdviseSetInfo = null;
 					await discsRepository.UpdateDisc(disc, cancellationToken);
@@ -110,12 +103,11 @@ namespace PandaPlayer.Services
 			}
 
 			// Finally saving new order.
-			foreach (var disc in currentDiscs)
+			foreach (var disc in newDiscsOrderList)
 			{
-				var newOrder = newOrders[disc.Id];
 				if (disc.AdviseSetInfo == null)
 				{
-					disc.AdviseSetInfo = new AdviseSetInfo(adviseSet, newOrder);
+					disc.AdviseSetInfo = new AdviseSetInfo(adviseSet, newOrders[disc.Id]);
 					await discsRepository.UpdateDisc(disc, cancellationToken);
 				}
 			}
@@ -128,7 +120,7 @@ namespace PandaPlayer.Services
 
 		public async Task DeleteAdviseSet(AdviseSetModel adviseSet, CancellationToken cancellationToken)
 		{
-			var currentDiscs = await discsRepository.GetAdviseSetDiscs(adviseSet.Id, cancellationToken);
+			var currentDiscs = GetAdviseSetDiscs(adviseSet);
 
 			foreach (var disc in currentDiscs)
 			{
@@ -137,6 +129,16 @@ namespace PandaPlayer.Services
 			}
 
 			await adviseSetRepository.DeleteAdviseSet(adviseSet, cancellationToken);
+
+			DiscLibrary.DeleteAdviseSet(adviseSet);
+		}
+
+		private static IReadOnlyCollection<DiscModel> GetAdviseSetDiscs(AdviseSetModel adviseSet)
+		{
+			return DiscLibrary.Discs
+				.Where(x => x.AdviseSetInfo?.AdviseSet.Id == adviseSet.Id)
+				.OrderBy(x => x.AdviseSetInfo.Order)
+				.ToList();
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,7 @@ using PandaPlayer.Core.Facades;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.Services.Interfaces.Dal;
+using PandaPlayer.Services.Internal;
 
 namespace PandaPlayer.Services
 {
@@ -16,18 +18,20 @@ namespace PandaPlayer.Services
 
 		private readonly IStorageRepository storageRepository;
 
-		private readonly IAdviseGroupRepository adviseGroupRepository;
+		private readonly IAdviseGroupService adviseGroupService;
 
 		private readonly IClock clock;
 
 		private readonly ILogger<FoldersService> logger;
 
+		private static IDiscLibrary DiscLibrary => DiscLibraryHolder.DiscLibrary;
+
 		public FoldersService(IFoldersRepository foldersRepository, IStorageRepository storageRepository,
-			IAdviseGroupRepository adviseGroupRepository, IClock clock, ILogger<FoldersService> logger)
+			IAdviseGroupService adviseGroupService, IClock clock, ILogger<FoldersService> logger)
 		{
 			this.foldersRepository = foldersRepository ?? throw new ArgumentNullException(nameof(foldersRepository));
 			this.storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
-			this.adviseGroupRepository = adviseGroupRepository ?? throw new ArgumentNullException(nameof(adviseGroupRepository));
+			this.adviseGroupService = adviseGroupService ?? throw new ArgumentNullException(nameof(adviseGroupService));
 			this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
@@ -37,26 +41,31 @@ namespace PandaPlayer.Services
 			await storageRepository.CreateFolder(folder, cancellationToken);
 
 			await foldersRepository.CreateFolder(folder, cancellationToken);
+
+			DiscLibrary.AddEmptyFolder(folder);
 		}
 
 		public Task<IReadOnlyCollection<ShallowFolderModel>> GetAllFolders(CancellationToken cancellationToken)
 		{
-			return foldersRepository.GetAllFolders(cancellationToken);
+			return Task.FromResult<IReadOnlyCollection<ShallowFolderModel>>(DiscLibrary.Folders);
 		}
 
 		public Task<FolderModel> GetRootFolder(CancellationToken cancellationToken)
 		{
-			return foldersRepository.GetRootFolder(cancellationToken);
+			var rootFolder = DiscLibrary.Folders.Single(x => x.IsRoot);
+			return Task.FromResult(rootFolder);
 		}
 
 		public Task<FolderModel> GetFolder(ItemId folderId, CancellationToken cancellationToken)
 		{
-			return foldersRepository.GetFolder(folderId, cancellationToken);
+			return Task.FromResult(DiscLibrary.GetFolder(folderId));
 		}
 
-		public async Task UpdateFolder(ShallowFolderModel folder, CancellationToken cancellationToken)
+		public async Task UpdateFolder(ShallowFolderModel folder, Action<ShallowFolderModel> updateAction, CancellationToken cancellationToken)
 		{
-			var currentFolder = await foldersRepository.GetFolder(folder.Id, cancellationToken);
+			var currentFolder = folder.CloneShallow();
+
+			updateAction(folder);
 
 			if (!folder.IsDeleted && folder.Name != currentFolder.Name)
 			{
@@ -68,10 +77,10 @@ namespace PandaPlayer.Services
 
 		public async Task DeleteFolder(ItemId folderId, CancellationToken cancellationToken)
 		{
-			var folder = await foldersRepository.GetFolder(folderId, cancellationToken);
+			var folder = await GetFolder(folderId, cancellationToken);
 			if (folder.HasContent)
 			{
-				throw new InvalidOperationException($"Can not delete non-empty directory '{folder.Name}'");
+				throw new InvalidOperationException($"Can not delete non-empty folder '{folder.Name}'");
 			}
 
 			logger.LogInformation($"Deleting folder '{folder.Name}' ...");
@@ -90,7 +99,7 @@ namespace PandaPlayer.Services
 
 			if (hasAdviseGroup)
 			{
-				await adviseGroupRepository.DeleteOrphanAdviseGroups(cancellationToken);
+				await adviseGroupService.DeleteOrphanAdviseGroups(cancellationToken);
 			}
 
 			logger.LogInformation($"The folder '{folder.Name}' was deleted successfully");

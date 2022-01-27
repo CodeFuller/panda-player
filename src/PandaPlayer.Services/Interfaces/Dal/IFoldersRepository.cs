@@ -9,11 +9,7 @@ namespace PandaPlayer.Services.Interfaces.Dal
 	{
 		Task CreateFolder(ShallowFolderModel folder, CancellationToken cancellationToken);
 
-		Task<IReadOnlyCollection<ShallowFolderModel>> GetAllFolders(CancellationToken cancellationToken);
-
-		Task<FolderModel> GetRootFolder(CancellationToken cancellationToken);
-
-		Task<FolderModel> GetFolder(ItemId folderId, CancellationToken cancellationToken);
+		Task<IReadOnlyCollection<ShallowFolderModel>> GetFoldersWithoutDiscs(CancellationToken cancellationToken);
 
 		Task UpdateFolder(ShallowFolderModel folder, CancellationToken cancellationToken);
 	}

@@ -166,6 +166,11 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 
+			// TODO: After switching to in-memory DiscLibrary, folderFromRepository (and similar variables in other IT) are not applicable anymore.
+			// It will reference the same object as folder and below check is equivalent to the one performed above.
+			// So we need either to read new instance directly from the repository or remove this additional check at all.
+			// The later could be done safely, because in-memory data is compared with database data in CheckLibraryConsistency().
+			// The only argument against such removing is potential redesign in the future when in-memory models holder is abandoned.
 			var folderFromRepository = await GetFolder(ReferenceData.SubFolderId);
 			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
 

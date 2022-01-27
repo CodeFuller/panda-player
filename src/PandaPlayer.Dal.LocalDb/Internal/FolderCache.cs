@@ -8,6 +8,7 @@ using PandaPlayer.Dal.LocalDb.Interfaces;
 
 namespace PandaPlayer.Dal.LocalDb.Internal
 {
+	// TODO: We can remove it after we abandon ShallowFolderModel.
 	internal class FolderCache : IFolderCache, IFolderProvider
 	{
 		private readonly ConcurrentDictionary<ItemId, ShallowFolderModel> folders = new();

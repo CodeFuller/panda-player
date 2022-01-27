@@ -20,5 +20,7 @@ namespace PandaPlayer.Services.Interfaces
 		Task RemoveAdviseGroup(ShallowFolderModel folder, CancellationToken cancellationToken);
 
 		Task RemoveAdviseGroup(DiscModel disc, CancellationToken cancellationToken);
+
+		Task DeleteOrphanAdviseGroups(CancellationToken cancellationToken);
 	}
 }

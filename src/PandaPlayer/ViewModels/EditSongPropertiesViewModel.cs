@@ -151,11 +151,13 @@ namespace PandaPlayer.ViewModels
 		public async Task Save(CancellationToken cancellationToken)
 		{
 			var songs = EditedSongs;
-			await UpdateSongModels(songs, cancellationToken);
+
+			var newArtist = await CreateNewArtistIfNecessary(cancellationToken);
+			var updateSongAction = GetUpdateSongAction(newArtist);
 
 			foreach (var song in songs)
 			{
-				await songsService.UpdateSong(song, cancellationToken);
+				await songsService.UpdateSong(song, updateSongAction, cancellationToken);
 			}
 		}
 
@@ -183,7 +185,7 @@ namespace PandaPlayer.ViewModels
 			return availableItems;
 		}
 
-		private async Task UpdateSongModels(IEnumerable<SongModel> songs, CancellationToken cancellationToken)
+		private async Task<ArtistModel> CreateNewArtistIfNecessary(CancellationToken cancellationToken)
 		{
 			// Possible cases:
 			//   1. Artist == null: User has typed new artist name.
@@ -204,7 +206,12 @@ namespace PandaPlayer.ViewModels
 				await artistsService.CreateArtist(newArtist, cancellationToken);
 			}
 
-			foreach (var song in songs)
+			return newArtist;
+		}
+
+		private Action<SongModel> GetUpdateSongAction(ArtistModel newArtist)
+		{
+			return song =>
 			{
 				if (SingleSongMode)
 				{
@@ -231,7 +238,7 @@ namespace PandaPlayer.ViewModels
 				{
 					song.DeleteComment = DeleteComment;
 				}
-			}
+			};
 		}
 
 		private static EditedSongProperty<T> BuildProperty<T>(IEnumerable<SongModel> songs, Func<SongModel, T> propertySelector, IEqualityComparer<T> comparer)

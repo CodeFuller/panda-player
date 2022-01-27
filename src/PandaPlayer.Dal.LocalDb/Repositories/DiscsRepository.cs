@@ -46,27 +46,6 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			return ConvertDiscEntities(discEntities);
 		}
 
-		public async Task<DiscModel> GetDisc(ItemId discId, CancellationToken cancellationToken)
-		{
-			await using var context = contextFactory.CreateDbContext();
-
-			var disc = await FindDisc(context, discId, cancellationToken);
-			return disc.ToModel(contentUriProvider);
-		}
-
-		public async Task<IReadOnlyCollection<DiscModel>> GetAdviseSetDiscs(ItemId adviseSetId, CancellationToken cancellationToken)
-		{
-			await using var context = contextFactory.CreateDbContext();
-
-			var adviseSetEntityId = adviseSetId.ToInt32();
-
-			var discEntities = await GetDiscsQueryable(context)
-				.Where(x => x.AdviseSetId == adviseSetEntityId)
-				.ToListAsync(cancellationToken);
-
-			return ConvertDiscEntities(discEntities);
-		}
-
 		private static IQueryable<DiscEntity> GetDiscsQueryable(MusicDbContext context)
 		{
 			return context.Discs

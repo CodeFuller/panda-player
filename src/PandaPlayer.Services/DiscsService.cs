@@ -8,6 +8,7 @@ using PandaPlayer.Core.Facades;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.Services.Interfaces.Dal;
+using PandaPlayer.Services.Internal;
 
 namespace PandaPlayer.Services
 {
@@ -17,21 +18,26 @@ namespace PandaPlayer.Services
 
 		private readonly ISongsService songsService;
 
+		private readonly ISongsRepository songsRepository;
+
 		private readonly IStorageRepository storageRepository;
 
-		private readonly IAdviseGroupRepository adviseGroupRepository;
+		private readonly IAdviseGroupService adviseGroupService;
 
 		private readonly IClock clock;
 
 		private readonly ILogger<DiscsService> logger;
 
-		public DiscsService(IDiscsRepository discsRepository, ISongsService songsService, IStorageRepository storageRepository,
-			IAdviseGroupRepository adviseGroupRepository, IClock clock, ILogger<DiscsService> logger)
+		private static IDiscLibrary DiscLibrary => DiscLibraryHolder.DiscLibrary;
+
+		public DiscsService(IDiscsRepository discsRepository, ISongsService songsService, ISongsRepository songsRepository,
+			IStorageRepository storageRepository, IAdviseGroupService adviseGroupService, IClock clock, ILogger<DiscsService> logger)
 		{
 			this.discsRepository = discsRepository ?? throw new ArgumentNullException(nameof(discsRepository));
 			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
+			this.songsRepository = songsRepository ?? throw new ArgumentNullException(nameof(songsRepository));
 			this.storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
-			this.adviseGroupRepository = adviseGroupRepository ?? throw new ArgumentNullException(nameof(adviseGroupRepository));
+			this.adviseGroupService = adviseGroupService ?? throw new ArgumentNullException(nameof(adviseGroupService));
 			this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
@@ -41,32 +47,34 @@ namespace PandaPlayer.Services
 			await storageRepository.CreateDisc(disc, cancellationToken);
 
 			await discsRepository.CreateDisc(disc, cancellationToken);
+
+			DiscLibrary.AddDisc(disc);
 		}
 
 		public Task<IReadOnlyCollection<DiscModel>> GetAllDiscs(CancellationToken cancellationToken)
 		{
-			return discsRepository.GetAllDiscs(cancellationToken);
+			return Task.FromResult(DiscLibrary.Discs);
 		}
 
-		public async Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken)
+		public async Task UpdateDisc(DiscModel disc, Action<DiscModel> updateAction, CancellationToken cancellationToken)
 		{
-			// Reading current disc properties for several reasons:
-			// 1. We need to understand which properties were actually changed.
-			//    It defines whether song content will be updated (for correct tag values) and whether disc folder in the storage must be renamed.
-			// 2. Avoid overwriting of changes made by another clients.
-			var currentDisc = await discsRepository.GetDisc(disc.Id, cancellationToken);
+			var currentDisc = disc.CloneShallow();
+
+			updateAction(disc);
 
 			if (!disc.IsDeleted && disc.TreeTitle != currentDisc.TreeTitle)
 			{
 				await storageRepository.UpdateDiscTreeTitle(currentDisc, disc, cancellationToken);
 			}
 
-			// Checking if we should update storage data (tags) for disc songs.
 			if (disc.AlbumTitle != currentDisc.AlbumTitle || disc.Year != currentDisc.Year)
 			{
 				foreach (var song in disc.ActiveSongs)
 				{
-					await songsService.UpdateSong(song, cancellationToken);
+					await storageRepository.UpdateSong(song, cancellationToken);
+
+					// Update in repository should be performed after update in the storage, because later updates song checksum.
+					await songsRepository.UpdateSong(song, cancellationToken);
 				}
 			}
 
@@ -76,35 +84,41 @@ namespace PandaPlayer.Services
 		public async Task SetDiscCoverImage(DiscImageModel coverImage, Stream imageContent, CancellationToken cancellationToken)
 		{
 			var disc = coverImage.Disc;
-			var currentDisc = await discsRepository.GetDisc(disc.Id, cancellationToken);
 
-			if (currentDisc.CoverImage != null)
+			if (disc.CoverImage != null)
 			{
-				await DeleteDiscCoverImage(currentDisc, cancellationToken);
-				disc.DeleteImage(disc.CoverImage);
+				await DeleteDiscCoverImage(disc.CoverImage, cancellationToken);
 			}
 
 			disc.AddImage(coverImage);
 			await AddDiscCoverImage(coverImage, imageContent, cancellationToken);
 		}
 
-		private async Task DeleteDiscCoverImage(DiscModel disc, CancellationToken cancellationToken)
+		private async Task DeleteDiscCoverImage(DiscImageModel coverImage, CancellationToken cancellationToken)
 		{
-			await storageRepository.DeleteDiscImage(disc.CoverImage, cancellationToken);
-			await discsRepository.DeleteDiscImage(disc.CoverImage, cancellationToken);
+			await storageRepository.DeleteDiscImage(coverImage, cancellationToken);
+			await discsRepository.DeleteDiscImage(coverImage, cancellationToken);
+
+			DiscLibrary.DeleteDiscImage(coverImage);
+
+			var disc = coverImage.Disc;
+			disc.DeleteImage(coverImage);
 		}
 
 		private async Task AddDiscCoverImage(DiscImageModel coverImage, Stream imageContent, CancellationToken cancellationToken)
 		{
 			await storageRepository.AddDiscImage(coverImage, imageContent, cancellationToken);
 			await discsRepository.AddDiscImage(coverImage, cancellationToken);
+
+			DiscLibrary.AddDiscImage(coverImage);
 		}
 
 		public async Task DeleteDisc(ItemId discId, string deleteComment, CancellationToken cancellationToken)
 		{
 			var deleteTime = clock.Now;
 
-			var disc = await discsRepository.GetDisc(discId, cancellationToken);
+			var disc = DiscLibrary.GetDisc(discId);
+
 			logger.LogInformation($"Deleting the disc '{disc.TreeTitle}' ...");
 
 			foreach (var song in disc.ActiveSongs)
@@ -115,7 +129,7 @@ namespace PandaPlayer.Services
 			if (disc.CoverImage != null)
 			{
 				logger.LogInformation($"Deleting disc cover image '{disc.CoverImage.TreeTitle}' ...");
-				await DeleteDiscCoverImage(disc, cancellationToken);
+				await DeleteDiscCoverImage(disc.CoverImage, cancellationToken);
 			}
 
 			var updateDisc = false;
@@ -146,7 +160,7 @@ namespace PandaPlayer.Services
 
 			if (deleteOrphanAdviseGroups)
 			{
-				await adviseGroupRepository.DeleteOrphanAdviseGroups(cancellationToken);
+				await adviseGroupService.DeleteOrphanAdviseGroups(cancellationToken);
 			}
 
 			logger.LogInformation($"The Disc '{disc.TreeTitle}' was deleted successfully");

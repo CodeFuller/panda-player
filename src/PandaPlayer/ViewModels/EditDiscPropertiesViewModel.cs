@@ -114,21 +114,28 @@ namespace PandaPlayer.ViewModels
 
 		public async Task Save(CancellationToken cancellationToken)
 		{
-			Disc.Title = Title;
-			Disc.TreeTitle = TreeTitle;
-			Disc.AlbumTitle = AlbumTitle;
-			Disc.Year = Year;
+			void UpdateDisc(DiscModel disc)
+			{
+				disc.Title = Title;
+				disc.TreeTitle = TreeTitle;
+				disc.AlbumTitle = AlbumTitle;
+				disc.Year = Year;
+			}
 
 			if (Disc.IsDeleted && DeleteComment != OriginalDeleteComment)
 			{
-				foreach (var song in Disc.AllSongs)
+				void UpdateSong(SongModel song)
 				{
 					song.DeleteComment = DeleteComment;
-					await songsService.UpdateSong(song, cancellationToken);
+				}
+
+				foreach (var song in Disc.AllSongs)
+				{
+					await songsService.UpdateSong(song, UpdateSong, cancellationToken);
 				}
 			}
 
-			await discsService.UpdateDisc(Disc, cancellationToken);
+			await discsService.UpdateDisc(Disc, UpdateDisc, cancellationToken);
 		}
 	}
 }

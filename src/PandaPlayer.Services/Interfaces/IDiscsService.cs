@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace PandaPlayer.Services.Interfaces
 
 		Task<IReadOnlyCollection<DiscModel>> GetAllDiscs(CancellationToken cancellationToken);
 
-		Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken);
+		Task UpdateDisc(DiscModel disc, Action<DiscModel> updateAction, CancellationToken cancellationToken);
 
 		Task SetDiscCoverImage(DiscImageModel coverImage, Stream imageContent, CancellationToken cancellationToken);
 

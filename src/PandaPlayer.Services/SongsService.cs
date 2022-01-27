@@ -9,6 +9,7 @@ using PandaPlayer.Core.Facades;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.Services.Interfaces.Dal;
+using PandaPlayer.Services.Internal;
 
 namespace PandaPlayer.Services
 {
@@ -26,6 +27,8 @@ namespace PandaPlayer.Services
 
 		private readonly IEqualityComparer<GenreModel> genresComparer = new GenreEqualityComparer();
 
+		private static IDiscLibrary DiscLibrary => DiscLibraryHolder.DiscLibrary;
+
 		public SongsService(ISongsRepository songsRepository, IStorageRepository storageRepository, IClock clock, ILogger<SongsService> logger)
 		{
 			this.songsRepository = songsRepository ?? throw new ArgumentNullException(nameof(songsRepository));
@@ -40,25 +43,27 @@ namespace PandaPlayer.Services
 
 			// Adding to repository should be performed after adding to the storage, because later updates song checksum and size.
 			await songsRepository.CreateSong(song, cancellationToken);
+
+			DiscLibrary.AddSong(song);
 		}
 
 		public Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken)
 		{
-			return songsRepository.GetSongs(songIds, cancellationToken);
+			return Task.FromResult(DiscLibrary.TryGetSongs(songIds));
 		}
 
+		// Currently this method is used only by IT.
+		// If this is changed and the method is called from production code, then the data should be returned from DiscLibrary.
 		Task<SongModel> ISongsService.GetSongWithPlaybacks(ItemId songId, CancellationToken cancellationToken)
 		{
 			return songsRepository.GetSongWithPlaybacks(songId, cancellationToken);
 		}
 
-		public async Task UpdateSong(SongModel song, CancellationToken cancellationToken)
+		public async Task UpdateSong(SongModel song, Action<SongModel> updateAction, CancellationToken cancellationToken)
 		{
-			// Reading current song properties for several reasons:
-			// 1. We need to understand which properties were actually changed.
-			//    It defines whether song content will be updated (for correct tag values) and whether file in the storage must be renamed.
-			// 2. Avoid overwriting of changes made by another clients.
-			var currentSong = await songsRepository.GetSong(song.Id, cancellationToken);
+			var currentSong = song.CloneShallow();
+
+			updateAction(song);
 
 			if (!song.IsDeleted)
 			{
@@ -68,9 +73,8 @@ namespace PandaPlayer.Services
 				}
 
 				// Checking if storage data (tags) must be updated.
-				if (song.Disc.AlbumTitle != currentSong.Disc.AlbumTitle || song.Disc.Year != currentSong.Disc.Year ||
-					song.TrackNumber != currentSong.TrackNumber || song.Title != currentSong.Title ||
-					!artistsComparer.Equals(song.Artist, currentSong.Artist) || !genresComparer.Equals(song.Genre, currentSong.Genre))
+				if (song.TrackNumber != currentSong.TrackNumber || song.Title != currentSong.Title ||
+				    !artistsComparer.Equals(song.Artist, currentSong.Artist) || !genresComparer.Equals(song.Genre, currentSong.Genre))
 				{
 					await storageRepository.UpdateSong(song, cancellationToken);
 				}

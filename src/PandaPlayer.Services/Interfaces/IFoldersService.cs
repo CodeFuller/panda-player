@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using PandaPlayer.Core.Models;
@@ -15,7 +16,7 @@ namespace PandaPlayer.Services.Interfaces
 
 		Task<FolderModel> GetFolder(ItemId folderId, CancellationToken cancellationToken);
 
-		Task UpdateFolder(ShallowFolderModel folder, CancellationToken cancellationToken);
+		Task UpdateFolder(ShallowFolderModel folder, Action<ShallowFolderModel> updateAction, CancellationToken cancellationToken);
 
 		Task DeleteFolder(ItemId folderId, CancellationToken cancellationToken);
 	}

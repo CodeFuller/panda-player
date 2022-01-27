@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -25,7 +25,6 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var newSong = new SongModel
 			{
-				Disc = await GetDisc(ReferenceData.NormalDiscId),
 				Title = "Дети Галактики",
 				TreeTitle = "03 - Дети Галактики.mp3",
 				TrackNumber = 3,
@@ -35,6 +34,9 @@ namespace PandaPlayer.Services.IntegrationTests
 				Rating = RatingModel.R7,
 				BitRate = 54321,
 			};
+
+			var disc = await GetDisc(ReferenceData.NormalDiscId);
+			disc.AddSong(newSong);
 
 			var target = CreateTestTarget();
 
@@ -100,12 +102,14 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var newSong = new SongModel
 			{
-				Disc = await GetDisc(ReferenceData.DiscWithMissingFieldsId),
 				Title = "Дети Галактики",
 				TreeTitle = "03 - Дети Галактики.mp3",
 				Duration = TimeSpan.FromMilliseconds(12345),
 				BitRate = 54321,
 			};
+
+			var disc = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
+			disc.AddSong(newSong);
 
 			var target = CreateTestTarget();
 
@@ -162,12 +166,14 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var newSong = new SongModel
 			{
-				Disc = await GetDisc(ReferenceData.DiscWithMissingFieldsId),
 				Title = "Дети Галактики",
 				TreeTitle = "03 - Дети Галактики.mp3",
 				Duration = TimeSpan.FromMilliseconds(12345),
 				BitRate = 54321,
 			};
+
+			var disc = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
+			disc.AddSong(newSong);
 
 			var target = CreateTestTarget();
 
@@ -294,9 +300,12 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Act
 
-			updatedSong.TreeTitle = "11 - Дети Галактики.mp3";
+			void UpdateSong(SongModel song)
+			{
+				updatedSong.TreeTitle = "11 - Дети Галактики.mp3";
+			}
 
-			await target.UpdateSong(updatedSong, CancellationToken.None);
+			await target.UpdateSong(updatedSong, UpdateSong, CancellationToken.None);
 
 			// Assert
 
@@ -329,12 +338,18 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Act
 
-			updatedSong.TrackNumber = 17;
-			updatedSong.Title = "Дети Галактики";
-			updatedSong.Artist = await GetArtist(ReferenceData.Artist1Id);
-			updatedSong.Genre = await GetGenre(ReferenceData.Genre2Id);
+			var newArtist = await GetArtist(ReferenceData.Artist1Id);
+			var newGenre = await GetGenre(ReferenceData.Genre2Id);
 
-			await target.UpdateSong(updatedSong, CancellationToken.None);
+			void UpdateSong(SongModel song)
+			{
+				updatedSong.TrackNumber = 17;
+				updatedSong.Title = "Дети Галактики";
+				updatedSong.Artist = newArtist;
+				updatedSong.Genre = newGenre;
+			}
+
+			await target.UpdateSong(updatedSong, UpdateSong, CancellationToken.None);
 
 			// Assert
 
@@ -384,14 +399,20 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Act
 
-			updatedSong.TrackNumber = 17;
-			updatedSong.TreeTitle = "11 - Дети Галактики.mp3";
-			updatedSong.Title = "Дети Галактики";
-			updatedSong.Artist = await GetArtist(ReferenceData.Artist1Id);
-			updatedSong.Genre = await GetGenre(ReferenceData.Genre2Id);
-			updatedSong.DeleteComment = "New Delete Comment";
+			var newArtist = await GetArtist(ReferenceData.Artist1Id);
+			var newGenre = await GetGenre(ReferenceData.Genre2Id);
 
-			await target.UpdateSong(updatedSong, CancellationToken.None);
+			void UpdateSong(SongModel song)
+			{
+				updatedSong.TrackNumber = 17;
+				updatedSong.TreeTitle = "11 - Дети Галактики.mp3";
+				updatedSong.Title = "Дети Галактики";
+				updatedSong.Artist = newArtist;
+				updatedSong.Genre = newGenre;
+				updatedSong.DeleteComment = "New Delete Comment";
+			}
+
+			await target.UpdateSong(updatedSong, UpdateSong, CancellationToken.None);
 
 			// Assert
 
@@ -417,7 +438,7 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var song = await GetSongWithPlaybacks(ReferenceData.SongWithOptionalPropertiesMissingId);
+			var song = await GetSong(ReferenceData.SongWithOptionalPropertiesMissingId);
 			song.PlaybacksCount.Should().Be(0);
 
 			var target = CreateTestTarget();
@@ -428,24 +449,20 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Assert
 
-			var referenceData = GetReferenceData(fillSongPlaybacks: true);
+			var referenceData = GetReferenceData();
 			var expectedSong = referenceData.SongWithOptionalPropertiesMissing;
 			expectedSong.PlaybacksCount = 1;
 			expectedSong.LastPlaybackTime = new DateTimeOffset(2021, 07, 04, 09, 27, 12, TimeSpan.FromHours(3));
-			expectedSong.Playbacks = new List<PlaybackModel>
+
+			song.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
+
+			var expectedPlaybacks = new[]
 			{
-				new()
-				{
-					Id = ReferenceData.NextPlaybackId,
-					PlaybackTime = new DateTimeOffset(2021, 07, 04, 09, 27, 12, TimeSpan.FromHours(3)),
-				},
+				new PlaybackModel { Id = ReferenceData.NextPlaybackId, PlaybackTime = new DateTimeOffset(2021, 07, 04, 09, 27, 12, TimeSpan.FromHours(3)) },
 			};
 
-			// SongModel.AddPlayback() does not update Playbacks collection, that is why we exclude it for this check.
-			song.Should().BeEquivalentTo(expectedSong, x => x.Excluding(y => y.Playbacks).WithStrictOrdering().IgnoringCyclicReferences());
-
 			var songFromRepository = await GetSongWithPlaybacks(ReferenceData.SongWithOptionalPropertiesMissingId);
-			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
+			songFromRepository.Playbacks.Should().BeEquivalentTo(expectedPlaybacks, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency();
 		}
@@ -455,7 +472,7 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var song = await GetSongWithPlaybacks(ReferenceData.SongWithOptionalPropertiesFilledId1);
+			var song = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId1);
 			song.PlaybacksCount.Should().Be(2);
 
 			var target = CreateTestTarget();
@@ -466,24 +483,22 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			// Assert
 
-			var referenceData = GetReferenceData(fillSongPlaybacks: true);
+			var referenceData = GetReferenceData();
 			var expectedSong = referenceData.SongWithOptionalPropertiesFilled1;
 			expectedSong.PlaybacksCount = 3;
 			expectedSong.LastPlaybackTime = new DateTimeOffset(2021, 07, 04, 09, 27, 12, TimeSpan.FromHours(3));
-			expectedSong.Playbacks = expectedSong.Playbacks.Concat(new PlaybackModel[]
-			{
-				new()
-				{
-					Id = ReferenceData.NextPlaybackId,
-					PlaybackTime = new DateTimeOffset(2021, 07, 04, 09, 27, 12, TimeSpan.FromHours(3)),
-				},
-			}).ToList();
 
-			// SongModel.AddPlayback() does not update Playbacks collection, that is why we exclude it for this check.
-			song.Should().BeEquivalentTo(expectedSong, x => x.Excluding(y => y.Playbacks).WithStrictOrdering().IgnoringCyclicReferences());
+			song.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
+
+			var expectedPlaybacks = new[]
+			{
+				new PlaybackModel { Id = new ItemId("1"), PlaybackTime = DateTimeOffset.Parse("2021-03-19 13:35:02.2626013+03:00", CultureInfo.InvariantCulture) },
+				new PlaybackModel { Id = new ItemId("4"), PlaybackTime = DateTimeOffset.Parse("2021-04-03 10:33:53.3517221+03:00", CultureInfo.InvariantCulture) },
+				new PlaybackModel { Id = ReferenceData.NextPlaybackId, PlaybackTime = new DateTimeOffset(2021, 07, 04, 09, 27, 12, TimeSpan.FromHours(3)) },
+			};
 
 			var songFromRepository = await GetSongWithPlaybacks(ReferenceData.SongWithOptionalPropertiesFilledId1);
-			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
+			songFromRepository.Playbacks.Should().BeEquivalentTo(expectedPlaybacks, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency();
 		}

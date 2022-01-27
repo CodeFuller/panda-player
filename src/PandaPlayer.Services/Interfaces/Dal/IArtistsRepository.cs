@@ -9,6 +9,6 @@ namespace PandaPlayer.Services.Interfaces.Dal
 	{
 		Task CreateArtist(ArtistModel artist, CancellationToken cancellationToken);
 
-		Task<IReadOnlyCollection<ArtistModel>> GetAllArtists(CancellationToken cancellationToken);
+		Task<IEnumerable<ArtistModel>> GetEmptyArtists(CancellationToken cancellationToken);
 	}
 }

@@ -103,5 +103,30 @@ namespace PandaPlayer.Core.Models
 			++PlaybacksCount;
 			LastPlaybackTime = playbackTime;
 		}
+
+		public SongModel CloneShallow()
+		{
+			return new()
+			{
+				Id = Id,
+				Title = Title,
+				TreeTitle = TreeTitle,
+				TrackNumber = TrackNumber,
+				Duration = Duration,
+				Disc = Disc,
+				Artist = Artist,
+				Genre = Genre,
+				Rating = Rating,
+				BitRate = BitRate,
+				Size = Size,
+				Checksum = Checksum,
+				LastPlaybackTime = LastPlaybackTime,
+				PlaybacksCount = PlaybacksCount,
+				Playbacks = Playbacks,
+				ContentUri = ContentUri,
+				DeleteDate = DeleteDate,
+				DeleteComment = DeleteComment,
+			};
+		}
 	}
 }

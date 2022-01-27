@@ -11,10 +11,6 @@ namespace PandaPlayer.Services.Interfaces.Dal
 
 		Task<IReadOnlyCollection<DiscModel>> GetAllDiscs(CancellationToken cancellationToken);
 
-		Task<DiscModel> GetDisc(ItemId discId, CancellationToken cancellationToken);
-
-		Task<IReadOnlyCollection<DiscModel>> GetAdviseSetDiscs(ItemId adviseSetId, CancellationToken cancellationToken);
-
 		Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken);
 
 		Task AddDiscImage(DiscImageModel image, CancellationToken cancellationToken);

@@ -29,6 +29,8 @@ namespace PandaPlayer.Services.Extensions
 
 			services.AddSingleton<IClock, SystemClock>();
 
+			services.AddSingleton<IApplicationInitializer, DiscLibraryInitializer>();
+
 			return services;
 		}
 

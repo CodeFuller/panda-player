@@ -9,7 +9,7 @@ namespace PandaPlayer.Services.Interfaces.Dal
 	{
 		Task CreateAdviseSet(AdviseSetModel adviseSet, CancellationToken cancellationToken);
 
-		Task<IReadOnlyCollection<AdviseSetModel>> GetAllAdviseSets(CancellationToken cancellationToken);
+		Task<IReadOnlyCollection<AdviseSetModel>> GetEmptyAdviseSets(CancellationToken cancellationToken);
 
 		Task UpdateAdviseSet(AdviseSetModel adviseSet, CancellationToken cancellationToken);
 

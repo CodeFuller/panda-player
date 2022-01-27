@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Dal.LocalDb.Extensions;
 using PandaPlayer.Dal.LocalDb.Internal;
@@ -16,12 +15,9 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 	{
 		private readonly IDbContextFactory<MusicDbContext> contextFactory;
 
-		private readonly ILogger<AdviseGroupRepository> logger;
-
-		public AdviseGroupRepository(IDbContextFactory<MusicDbContext> contextFactory, ILogger<AdviseGroupRepository> logger)
+		public AdviseGroupRepository(IDbContextFactory<MusicDbContext> contextFactory)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
-			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		public async Task CreateAdviseGroup(AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
@@ -35,13 +31,17 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			adviseGroup.Id = adviseGroupEntity.Id.ToItemId();
 		}
 
-		public async Task<IReadOnlyCollection<AdviseGroupModel>> GetAllAdviseGroups(CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<AdviseGroupModel>> GetEmptyAdviseGroups(CancellationToken cancellationToken)
 		{
 			await using var context = contextFactory.CreateDbContext();
 
-			return (await context.AdviseGroups.ToListAsync(cancellationToken))
-				.Select(a => a.ToModel())
-				.ToList();
+			var adviseGroups = await context.AdviseGroups
+				.Include(x => x.Folders)
+				.Include(x => x.Discs)
+				.Where(x => !x.Folders.Any() && !x.Discs.Any())
+				.ToListAsync(cancellationToken);
+
+			return adviseGroups.Select(x => x.ToModel()).ToList();
 		}
 
 		public async Task UpdateAdviseGroup(AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
@@ -57,23 +57,14 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			await context.SaveChangesAsync(cancellationToken);
 		}
 
-		public async Task DeleteOrphanAdviseGroups(CancellationToken cancellationToken)
+		public async Task DeleteAdviseGroup(AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
 		{
 			await using var context = contextFactory.CreateDbContext();
 
-			var orphanAdviseGroups = await context.AdviseGroups.Where(x => !x.Folders.Any() && !x.Discs.Any()).ToListAsync(cancellationToken);
+			var currentEntity = await context.AdviseGroups
+				.SingleAsync(x => x.Id == adviseGroup.Id.ToInt32(), cancellationToken);
 
-			if (!orphanAdviseGroups.Any())
-			{
-				return;
-			}
-
-			foreach (var orphanAdviseGroup in orphanAdviseGroups)
-			{
-				logger.LogInformation($"Deleting advise group '{orphanAdviseGroup.Name}' ...");
-			}
-
-			context.AdviseGroups.RemoveRange(orphanAdviseGroups);
+			context.AdviseGroups.Remove(currentEntity);
 			await context.SaveChangesAsync(cancellationToken);
 		}
 	}

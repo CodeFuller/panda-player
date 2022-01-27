@@ -57,7 +57,13 @@ namespace PandaPlayer.Core.Models
 			}
 		}
 
-		public IReadOnlyCollection<SongModel> AllSongs { get; set; }
+		private List<SongModel> allSongs = new();
+
+		public IReadOnlyCollection<SongModel> AllSongs
+		{
+			get => allSongs;
+			set => allSongs = new List<SongModel>(value);
+		}
 
 		public IEnumerable<SongModel> AllSongsSorted => AllSongs
 			.OrderBy(s => s.TrackNumber == null)
@@ -83,6 +89,12 @@ namespace PandaPlayer.Core.Models
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
+		public void AddSong(SongModel newSong)
+		{
+			allSongs.Add(newSong);
+			newSong.Disc = this;
+		}
+
 		public void AddImage(DiscImageModel image)
 		{
 			if (image.ImageType == DiscImageType.Cover && CoverImage != null)
@@ -101,6 +113,23 @@ namespace PandaPlayer.Core.Models
 			{
 				throw new InvalidOperationException($"Can not delete an image from disc (Matched: {removed})");
 			}
+		}
+
+		public DiscModel CloneShallow()
+		{
+			return new()
+			{
+				Id = Id,
+				Folder = Folder,
+				AdviseGroup = AdviseGroup,
+				AdviseSetInfo = AdviseSetInfo,
+				Year = Year,
+				Title = Title,
+				TreeTitle = TreeTitle,
+				AlbumTitle = AlbumTitle,
+				AllSongs = AllSongs,
+				Images = Images,
+			};
 		}
 	}
 }

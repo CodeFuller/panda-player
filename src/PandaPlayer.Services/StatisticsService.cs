@@ -6,22 +6,17 @@ using PandaPlayer.Core.Comparers;
 using PandaPlayer.Core.Extensions;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
-using PandaPlayer.Services.Interfaces.Dal;
+using PandaPlayer.Services.Internal;
 
 namespace PandaPlayer.Services
 {
 	internal class StatisticsService : IStatisticsService
 	{
-		private readonly IDiscsRepository discsRepository;
+		private static IDiscLibrary DiscLibrary => DiscLibraryHolder.DiscLibrary;
 
-		public StatisticsService(IDiscsRepository discsRepository)
+		public Task<StatisticsModel> GetLibraryStatistics(CancellationToken cancellationToken)
 		{
-			this.discsRepository = discsRepository ?? throw new ArgumentNullException(nameof(discsRepository));
-		}
-
-		public async Task<StatisticsModel> GetLibraryStatistics(CancellationToken cancellationToken)
-		{
-			var allDiscs = await discsRepository.GetAllDiscs(cancellationToken);
+			var allDiscs = DiscLibrary.Discs;
 
 			var activeDiscs = allDiscs
 				.Where(disc => !disc.IsDeleted)
@@ -35,7 +30,7 @@ namespace PandaPlayer.Services
 				.SelectMany(disc => disc.ActiveSongs)
 				.ToList();
 
-			return new StatisticsModel
+			var statistics = new StatisticsModel
 			{
 				ArtistsNumber = activeSongs
 					.Where(song => song.Artist != null)
@@ -59,6 +54,8 @@ namespace PandaPlayer.Services
 				UnratedSongsNumber = activeSongs.Count(s => s.Rating == null),
 				NumberOfDiscsWithoutCoverImage = activeDiscs.Count(disc => disc.CoverImage == null),
 			};
+
+			return Task.FromResult(statistics);
 		}
 
 		private static ArtistModel GetDiscArtist(DiscModel disc)
