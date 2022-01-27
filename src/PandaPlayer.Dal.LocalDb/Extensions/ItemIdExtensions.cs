@@ -4,7 +4,7 @@ using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.Dal.LocalDb.Extensions
 {
-	public static class ItemIdExtensions
+	internal static class ItemIdExtensions
 	{
 		public static int ToInt32(this ItemId id)
 		{
