@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CodeFuller.Library.Wpf;
@@ -14,7 +13,6 @@ using PandaPlayer.Core.Models;
 using PandaPlayer.Events;
 using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.Events.LibraryExplorerEvents;
-using PandaPlayer.Events.SongEvents;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.UnitTests.Extensions;
@@ -727,165 +725,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			itemListViewModelMock.Verify(x => x.LoadFolderItems(discFolder), Times.Once);
 			itemListViewModelMock.Verify(x => x.SelectDisc(new ItemId("Some Disc")), Times.Once);
-		}
-
-		[TestMethod]
-		public void SongChangedEventHandler_SongBelongsToSomeDisc_UpdatesSongInstance()
-		{
-			// Arrange
-
-			var disc1 = new DiscModel
-			{
-				Id = new ItemId("Disc 1"),
-				AllSongs = new[]
-				{
-					new SongModel
-					{
-						Id = new ItemId("Song 1"),
-						Title = "Old Title 1",
-					},
-				},
-			};
-
-			var disc2 = new DiscModel
-			{
-				Id = new ItemId("Disc 2"),
-				AllSongs = new[]
-				{
-					new SongModel
-					{
-						Id = new ItemId("Song 2"),
-						Title = "Old Title 2",
-					},
-					new SongModel
-					{
-						Id = new ItemId("Song 3"),
-						Title = "Old Title 3",
-					},
-				},
-			};
-
-			var changedSong = new SongModel
-			{
-				Id = new ItemId("Song 2"),
-				Title = "New Title 2",
-				Disc = new DiscModel { Id = new ItemId("Disc 2") },
-			};
-
-			var mocker = new AutoMocker();
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.Discs).Returns(new[] { disc1, disc2 });
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			Messenger.Default.Send(new SongChangedEventArgs(changedSong, nameof(SongModel.Title)));
-
-			// Assert
-
-			var songs1 = disc1.AllSongs.ToList();
-			songs1[0].Title.Should().Be("Old Title 1");
-
-			var songs2 = disc2.AllSongs.ToList();
-			songs2[0].Title.Should().Be("New Title 2");
-			songs2[1].Title.Should().Be("Old Title 3");
-		}
-
-		[TestMethod]
-		public void DiscChangedEventHandler_DiscPresentsInList_UpdatesDiscInstance()
-		{
-			// Arrange
-
-			var disc1 = new DiscModel
-			{
-				Id = new ItemId("Disc 1"),
-				Title = "Old Title 1",
-			};
-
-			var disc2 = new DiscModel
-			{
-				Id = new ItemId("Disc 2"),
-				Title = "Old Title 2",
-			};
-
-			var disc3 = new DiscModel
-			{
-				Id = new ItemId("Disc 3"),
-				Title = "Old Title 3",
-			};
-
-			var changedDisc = new DiscModel
-			{
-				Id = new ItemId("Disc 2"),
-				Title = "New Title 2",
-			};
-
-			var mocker = new AutoMocker();
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.Discs).Returns(new[] { disc1, disc2, disc3 });
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			Messenger.Default.Send(new DiscChangedEventArgs(changedDisc, nameof(DiscModel.Title)));
-
-			// Assert
-
-			disc1.Title.Should().Be("Old Title 1");
-			disc2.Title.Should().Be("New Title 2");
-			disc3.Title.Should().Be("Old Title 3");
-		}
-
-		[TestMethod]
-		public void DiscImageChangedEventHandler_DiscPresentsInList_UpdatesDiscImage()
-		{
-			// Arrange
-
-			var oldDiscImages1 = new[] { new DiscImageModel { Id = new ItemId("Old Image 1") } };
-			var disc1 = new DiscModel
-			{
-				Id = new ItemId("Disc 1"),
-				Images = oldDiscImages1,
-			};
-
-			var oldDiscImages2 = new[] { new DiscImageModel { Id = new ItemId("Old Image 2") } };
-			var disc2 = new DiscModel
-			{
-				Id = new ItemId("Disc 2"),
-				Images = oldDiscImages2,
-			};
-
-			var oldDiscImages3 = new[] { new DiscImageModel { Id = new ItemId("Old Image 3") } };
-			var disc3 = new DiscModel
-			{
-				Id = new ItemId("Disc 3"),
-				Images = oldDiscImages3,
-			};
-
-			var newDiscImages = new[] { new DiscImageModel { Id = new ItemId("New Image") } };
-			var changedDisc = new DiscModel
-			{
-				Id = new ItemId("Disc 2"),
-				Images = newDiscImages,
-			};
-
-			var mocker = new AutoMocker();
-			mocker.GetMock<ILibraryExplorerItemListViewModel>()
-				.Setup(x => x.Discs).Returns(new[] { disc1, disc2, disc3 });
-
-			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
-
-			// Act
-
-			Messenger.Default.Send(new DiscImageChangedEventArgs(changedDisc));
-
-			// Assert
-
-			disc1.Images.Should().BeEquivalentTo(oldDiscImages1, x => x.WithStrictOrdering());
-			disc2.Images.Should().BeEquivalentTo(newDiscImages, x => x.WithStrictOrdering());
-			disc3.Images.Should().BeEquivalentTo(oldDiscImages3, x => x.WithStrictOrdering());
 		}
 	}
 }

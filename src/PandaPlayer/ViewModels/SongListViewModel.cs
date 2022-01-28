@@ -6,12 +6,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
 using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Models;
-using PandaPlayer.Events.DiscEvents;
-using PandaPlayer.Events.SongEvents;
-using PandaPlayer.Internal;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.Shared;
 using PandaPlayer.Shared.Extensions;
@@ -72,10 +68,6 @@ namespace PandaPlayer.ViewModels
 
 			songItems = new ObservableCollection<SongListItem>();
 			SongItems = new ReadOnlyObservableCollection<SongListItem>(songItems);
-
-			Messenger.Default.Register<SongChangedEventArgs>(this, e => OnSongChanged(e.Song, e.PropertyName));
-			Messenger.Default.Register<DiscChangedEventArgs>(this, e => OnDiscChanged(e.Disc, e.PropertyName));
-			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
 		}
 
 		protected Task EditSongsProperties(IEnumerable<SongModel> songs, CancellationToken cancellationToken)
@@ -126,41 +118,6 @@ namespace PandaPlayer.ViewModels
 			}
 		}
 
-		private void OnSongChanged(SongModel changedSong, string propertyName)
-		{
-			// ToList() call is required to prevent exception "Collection was modified; enumeration operation may not execute."
-			foreach (var song in GetSongsForUpdate(changedSong).ToList())
-			{
-				SongUpdater.UpdateSong(changedSong, song, propertyName);
-			}
-
-			if (!(propertyName == nameof(SongModel.DeleteDate) && changedSong.IsDeleted))
-			{
-				return;
-			}
-
-			var songItemsChanged = false;
-
-			// The same song could appear several times in the list, so we check the whole list and remove all instances.
-			for (var i = 0; i < songItems.Count;)
-			{
-				var song = songItems[i].Song;
-				if (song.Id != changedSong.Id)
-				{
-					++i;
-					continue;
-				}
-
-				songItems.RemoveAt(i);
-				songItemsChanged = true;
-			}
-
-			if (songItemsChanged)
-			{
-				OnSongItemsChanged();
-			}
-		}
-
 		protected void RemoveSongItems(IEnumerable<SongListItem> songItemsToRemove)
 		{
 			foreach (var songItem in songItemsToRemove)
@@ -177,38 +134,6 @@ namespace PandaPlayer.ViewModels
 			RaisePropertyChanged(nameof(SongsNumber));
 			RaisePropertyChanged(nameof(TotalSongsFileSize));
 			RaisePropertyChanged(nameof(TotalSongsDuration));
-		}
-
-		private void OnDiscChanged(DiscModel changedDisc, string propertyName)
-		{
-			foreach (var disc in GetDiscsForUpdate(changedDisc))
-			{
-				DiscUpdater.UpdateDisc(changedDisc, disc, propertyName);
-			}
-		}
-
-		private void OnDiscImageChanged(DiscModel changedDisc)
-		{
-			foreach (var disc in GetDiscsForUpdate(changedDisc))
-			{
-				disc.Images = changedDisc.Images;
-			}
-		}
-
-		private IEnumerable<SongModel> GetSongsForUpdate(SongModel changedSong)
-		{
-			return Songs
-				.Where(s => s.Id == changedSong.Id)
-				.Where(s => !Object.ReferenceEquals(s, changedSong));
-		}
-
-		private IEnumerable<DiscModel> GetDiscsForUpdate(DiscModel changedDisc)
-		{
-			return Songs
-				.Select(s => s.Disc)
-				.Where(d => d.Id == changedDisc.Id)
-				.Where(d => !Object.ReferenceEquals(d, changedDisc))
-				.Distinct();
 		}
 	}
 }

@@ -217,7 +217,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		}
 
 		[TestMethod]
-		public void DeleteSongsFromDisc_WhenSongsAreDeleted_SongItemsAreRemovedFromList()
+		public void DeleteSongsFromDisc_IfSongsAreDeleted_SongItemsAreRemovedFromList()
 		{
 			// Arrange
 
@@ -227,6 +227,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 				new SongModel { Id = new ItemId("1") },
 				new SongModel { Id = new ItemId("2") },
 				new SongModel { Id = new ItemId("3") },
+			};
+
+			var disc = new DiscModel
+			{
+				AllSongs = songs,
 			};
 
 			var mocker = new AutoMocker();
@@ -239,9 +244,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 					{
 						song.DeleteDate = new DateTime(2021, 07, 11);
 					}
-				});
+				})
+				.Returns(true);
 
-			target.SetSongs(songs);
+			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(disc, deletedContentIsShown: false));
 
 			// Act
 
@@ -256,6 +262,50 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			target.Songs.Should().BeEquivalentTo(expectedSongs, x => x.WithStrictOrdering());
+		}
+
+		[TestMethod]
+		public void DeleteSongsFromDisc_IfSongsAreNotDeleted_DoesNotReloadSongList()
+		{
+			// Arrange
+
+			var songs = new[]
+			{
+				new SongModel { Id = new ItemId("0") },
+				new SongModel { Id = new ItemId("1") },
+				new SongModel { Id = new ItemId("2") },
+				new SongModel { Id = new ItemId("3") },
+			};
+
+			var disc = new DiscModel
+			{
+				AllSongs = songs,
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<DiscSongListViewModel>();
+
+			mocker.GetMock<IViewNavigator>().Setup(x => x.ShowDeleteDiscSongsView(It.IsAny<IReadOnlyCollection<SongModel>>()))
+				.Callback<IReadOnlyCollection<SongModel>>(deletedSongs =>
+				{
+					foreach (var song in deletedSongs)
+					{
+						// In real life when ShowDeleteDiscSongsView returns false, the songs are not actually deleted.
+						// This is just a convenient way to check that song list is not reloaded.
+						song.DeleteDate = new DateTime(2021, 07, 11);
+					}
+				})
+				.Returns(false);
+
+			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(disc, deletedContentIsShown: false));
+
+			// Act
+
+			target.DeleteSongsFromDisc(new[] { songs[0], songs[2] });
+
+			// Assert
+
+			target.Songs.Should().BeEquivalentTo(songs, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]

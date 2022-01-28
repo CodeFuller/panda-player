@@ -11,9 +11,7 @@ using PandaPlayer.Core.Models;
 using PandaPlayer.Events;
 using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.Events.LibraryExplorerEvents;
-using PandaPlayer.Events.SongEvents;
 using PandaPlayer.Events.SongListEvents;
-using PandaPlayer.Internal;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.ViewModels.AdviseGroups;
 using PandaPlayer.ViewModels.Interfaces;
@@ -53,9 +51,6 @@ namespace PandaPlayer.ViewModels
 			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistLoaded(e, CancellationToken.None));
 			Messenger.Default.Register<NoPlaylistLoadedEventArgs>(this, _ => OnNoPlaylistLoaded(CancellationToken.None));
 			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => OnSwitchToDisc(e.Disc, CancellationToken.None));
-			Messenger.Default.Register<SongChangedEventArgs>(this, e => OnSongChanged(e.Song, e.PropertyName));
-			Messenger.Default.Register<DiscChangedEventArgs>(this, e => OnDiscChanged(e.Disc, e.PropertyName));
-			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
 		}
 
 		private async void OnApplicationLoaded(CancellationToken cancellationToken)
@@ -187,44 +182,6 @@ namespace PandaPlayer.ViewModels
 		{
 			var rootFolderData = await foldersService.GetRootFolder(cancellationToken);
 			LoadFolder(rootFolderData);
-		}
-
-		private void OnSongChanged(SongModel changedSong, string propertyName)
-		{
-			foreach (var disc in GetDiscsForUpdate(changedSong.Disc))
-			{
-				var songsForUpdate = disc.AllSongs
-					.Where(s => s.Id == changedSong.Id)
-					.Where(s => !Object.ReferenceEquals(s, changedSong));
-
-				foreach (var song in songsForUpdate)
-				{
-					SongUpdater.UpdateSong(changedSong, song, propertyName);
-				}
-			}
-		}
-
-		private void OnDiscChanged(DiscModel changedDisc, string propertyName)
-		{
-			foreach (var disc in GetDiscsForUpdate(changedDisc))
-			{
-				DiscUpdater.UpdateDisc(changedDisc, disc, propertyName);
-			}
-		}
-
-		private void OnDiscImageChanged(DiscModel changedDisc)
-		{
-			foreach (var disc in GetDiscsForUpdate(changedDisc))
-			{
-				disc.Images = changedDisc.Images;
-			}
-		}
-
-		private IEnumerable<DiscModel> GetDiscsForUpdate(DiscModel changedDisc)
-		{
-			return ItemListViewModel.Discs
-				.Where(d => d.Id == changedDisc.Id)
-				.Where(d => !Object.ReferenceEquals(d, changedDisc));
 		}
 
 		private async void OnSwitchToDisc(DiscModel disc, CancellationToken cancellationToken)

@@ -1,8 +1,6 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
 using PandaPlayer.Core.Models;
-using PandaPlayer.Events.SongEvents;
 using PandaPlayer.Shared;
 
 namespace PandaPlayer.ViewModels
@@ -43,11 +41,6 @@ namespace PandaPlayer.ViewModels
 		public SongListItem(SongModel song)
 		{
 			Song = song ?? throw new ArgumentNullException(nameof(song));
-
-			Song.PropertyChanged += (_, args) =>
-			{
-				Messenger.Default.Send(new SongChangedEventArgs(Song, args.PropertyName));
-			};
 		}
 	}
 }

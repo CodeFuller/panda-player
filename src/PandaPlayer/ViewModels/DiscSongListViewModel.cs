@@ -14,6 +14,10 @@ namespace PandaPlayer.ViewModels
 {
 	public class DiscSongListViewModel : SongListViewModel, IDiscSongListViewModel
 	{
+		private DiscModel CurrentDisc { get; set; }
+
+		private bool DeletedContentIsShown { get; set; }
+
 		public override bool DisplayTrackNumbers => true;
 
 		public override IEnumerable<BasicMenuItem> ContextMenuItems
@@ -48,26 +52,34 @@ namespace PandaPlayer.ViewModels
 
 		internal void DeleteSongsFromDisc(IReadOnlyCollection<SongModel> songs)
 		{
-			ViewNavigator.ShowDeleteDiscSongsView(songs);
-
-			// If songs are deleted, call to songsService.DeleteSong() updates song.DeleteDate.
-			// As result OnSongChanged() is called, which deletes song(s) from the list.
+			if (ViewNavigator.ShowDeleteDiscSongsView(songs))
+			{
+				LoadSongs();
+			}
 		}
 
 		private void OnExplorerDiscChanged(DiscModel newDisc, bool deletedContentIsShown)
 		{
+			CurrentDisc = newDisc;
+			DeletedContentIsShown = deletedContentIsShown;
+
+			LoadSongs();
+		}
+
+		private void LoadSongs()
+		{
 			IEnumerable<SongModel> songs;
-			if (newDisc == null)
+			if (CurrentDisc == null)
 			{
 				songs = Enumerable.Empty<SongModel>();
 			}
-			else if (deletedContentIsShown)
+			else if (DeletedContentIsShown)
 			{
-				songs = newDisc.AllSongsSorted;
+				songs = CurrentDisc.AllSongsSorted;
 			}
 			else
 			{
-				songs = newDisc.ActiveSongs;
+				songs = CurrentDisc.ActiveSongs;
 			}
 
 			SetSongs(songs);

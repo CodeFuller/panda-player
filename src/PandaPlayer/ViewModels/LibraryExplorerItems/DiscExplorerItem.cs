@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using GalaSoft.MvvmLight.Messaging;
 using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Extensions;
 using PandaPlayer.Core.Models;
-using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.ViewModels.AdviseGroups;
 using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.ViewModels.MenuItems;
@@ -69,8 +67,6 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 
 			Disc.PropertyChanged += (_, args) =>
 			{
-				Messenger.Default.Send(new DiscChangedEventArgs(Disc, args.PropertyName));
-
 				if (args.PropertyName == nameof(Disc.TreeTitle))
 				{
 					RaisePropertyChanged(nameof(Title));

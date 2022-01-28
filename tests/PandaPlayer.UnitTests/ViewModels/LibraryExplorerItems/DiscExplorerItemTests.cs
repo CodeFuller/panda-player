@@ -8,8 +8,6 @@ using MaterialDesignThemes.Wpf;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using PandaPlayer.Core.Models;
-using PandaPlayer.Events.DiscEvents;
-using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.ViewModels.AdviseGroups;
 using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.ViewModels.LibraryExplorerItems;
@@ -313,32 +311,6 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 			// Assert
 
 			toolTip.Should().Be("The disc was deleted with various comments");
-		}
-
-		[TestMethod]
-		public void DiscExplorerItem_WhenDiscPropertyIsChanged_SendsDiscChangedEventForThisProperty()
-		{
-			// Arrange
-
-			var disc = new DiscModel
-			{
-				AlbumTitle = "Old Album Title",
-			};
-
-			var target = new DiscExplorerItem(disc);
-
-			DiscChangedEventArgs discChangedEventArgs = null;
-			Messenger.Default.Register<DiscChangedEventArgs>(this, e => e.RegisterEvent(ref discChangedEventArgs));
-
-			// Act
-
-			disc.AlbumTitle = "New Album Title";
-
-			// Assert
-
-			discChangedEventArgs.Should().NotBeNull();
-			discChangedEventArgs.Disc.Should().Be(disc);
-			discChangedEventArgs.PropertyName.Should().Be(nameof(DiscModel.AlbumTitle));
 		}
 
 		[TestMethod]
