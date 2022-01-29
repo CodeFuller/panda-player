@@ -8,7 +8,6 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using PandaPlayer.Core.Facades;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Dal.LocalDb.Extensions;
 using PandaPlayer.Services.Diagnostic;

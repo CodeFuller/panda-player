@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PandaPlayer.Core.Facades
+namespace PandaPlayer.Services.Interfaces
 {
 	public interface IClock
 	{

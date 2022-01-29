@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PandaPlayer.Adviser.Extensions;
-using PandaPlayer.Core.Facades;
 using PandaPlayer.Dal.LocalDb.Extensions;
 using PandaPlayer.DiscAdder.Extensions;
 using PandaPlayer.Facades;
@@ -48,7 +47,6 @@ namespace PandaPlayer
 			services.AddTransient<IAudioPlayer, AudioPlayer>();
 			services.AddTransient<IMediaPlayerFacade, MediaPlayerFacade>();
 			services.AddTransient<ISongPlaybacksRegistrar, SongPlaybacksRegistrar>();
-			services.AddTransient<IClock, SystemClock>();
 			services.AddTransient<IDocumentDownloader, HttpDocumentDownloader>();
 			services.AddTransient<IWebBrowser, SystemDefaultWebBrowser>();
 

@@ -15,8 +15,8 @@ using PandaPlayer.Adviser.Interfaces;
 using PandaPlayer.Adviser.Internal;
 using PandaPlayer.Adviser.PlaylistAdvisers;
 using PandaPlayer.Adviser.Settings;
-using PandaPlayer.Core.Facades;
 using PandaPlayer.Core.Models;
+using PandaPlayer.Services.Interfaces;
 using PandaPlayer.UnitTests.Extensions;
 
 namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers

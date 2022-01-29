@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using PandaPlayer.Core.Facades;
 using PandaPlayer.Services.Diagnostic.Checkers;
 using PandaPlayer.Services.Diagnostic.Interfaces;
 using PandaPlayer.Services.Interfaces;

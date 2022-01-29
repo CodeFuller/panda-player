@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using PandaPlayer.Core.Facades;
 using PandaPlayer.Core.Models;
 using PandaPlayer.LastFM.Interfaces;
 using PandaPlayer.LastFM.Objects;

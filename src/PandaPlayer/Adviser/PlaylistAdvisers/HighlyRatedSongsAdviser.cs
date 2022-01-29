@@ -9,8 +9,8 @@ using PandaPlayer.Adviser.Grouping;
 using PandaPlayer.Adviser.Interfaces;
 using PandaPlayer.Adviser.Internal;
 using PandaPlayer.Adviser.Settings;
-using PandaPlayer.Core.Facades;
 using PandaPlayer.Core.Models;
+using PandaPlayer.Services.Interfaces;
 
 namespace PandaPlayer.Adviser.PlaylistAdvisers
 {
