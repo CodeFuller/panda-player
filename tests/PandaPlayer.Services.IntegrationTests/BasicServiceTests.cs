@@ -108,9 +108,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			File.Delete(TestDatabaseFileName);
 		}
 
-#pragma warning disable CA1024 // Use properties where appropriate
 		protected ReferenceData GetReferenceData(bool fillSongPlaybacks = false)
-#pragma warning restore CA1024 // Use properties where appropriate
 		{
 			return new(LibraryStorageRoot, fillSongPlaybacks);
 		}
@@ -206,10 +204,30 @@ namespace PandaPlayer.Services.IntegrationTests
 			ServiceProvider = null;
 		}
 
-		protected async Task<FolderModel> GetFolder(ItemId folderId)
+		protected async Task<IReadOnlyCollection<FolderModel>> GetAllFolders()
 		{
 			var folderService = GetService<IFoldersService>();
-			return await folderService.GetFolder(folderId, CancellationToken.None);
+			var rootFolder = await folderService.GetRootFolder(CancellationToken.None);
+
+			static void GetFolders(FolderModel folder, ICollection<FolderModel> folders)
+			{
+				folders.Add(folder);
+				foreach (var subfolder in folder.Subfolders)
+				{
+					GetFolders(subfolder, folders);
+				}
+			}
+
+			var allFolders = new List<FolderModel>();
+			GetFolders(rootFolder, allFolders);
+
+			return allFolders.OrderBy(x => x.Id.Value).ToList();
+		}
+
+		protected async Task<FolderModel> GetFolder(ItemId folderId)
+		{
+			var allFolders = await GetAllFolders();
+			return allFolders.Single(x => x.Id == folderId);
 		}
 
 		protected async Task<IReadOnlyCollection<DiscModel>> GetAllDiscs()

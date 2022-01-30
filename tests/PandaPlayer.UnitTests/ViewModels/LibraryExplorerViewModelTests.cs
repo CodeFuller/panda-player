@@ -200,14 +200,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder = new FolderModel
 			{
 				Id = new ItemId("Some Folder"),
-				Subfolders = Array.Empty<ShallowFolderModel>(),
+				Subfolders = Array.Empty<FolderModel>(),
 				Discs = Array.Empty<DiscModel>(),
 			};
 
 			var mocker = new AutoMocker();
-
-			mocker.GetMock<IFoldersService>()
-				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(folder);
 
 			mocker.GetMock<IWindowService>()
 				.Setup(x => x.ShowMessageBox(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ShowMessageBoxButton>(), It.IsAny<ShowMessageBoxIcon>())).Returns(ShowMessageBoxResult.No);
@@ -216,15 +213,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			await target.DeleteFolder(new ItemId("Some Folder"), CancellationToken.None);
+			await target.DeleteFolder(folder, CancellationToken.None);
 
 			// Assert
 
 			var folderServiceMock = mocker.GetMock<IFoldersService>();
-			folderServiceMock.Verify(x => x.DeleteFolder(It.IsAny<ItemId>(), It.IsAny<CancellationToken>()), Times.Never);
+			folderServiceMock.Verify(x => x.DeleteEmptyFolder(It.IsAny<FolderModel>(), It.IsAny<CancellationToken>()), Times.Never);
 
 			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelMock.Verify(x => x.OnFolderDeleted(It.IsAny<ItemId>(), It.IsAny<Func<ItemId, Task<FolderModel>>>()), Times.Never);
+			itemListViewModelMock.Verify(x => x.OnFolderDeleted(It.IsAny<ItemId>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -235,7 +232,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder = new FolderModel
 			{
 				Id = new ItemId("Some Folder"),
-				Subfolders = Array.Empty<ShallowFolderModel>(),
+				Subfolders = Array.Empty<FolderModel>(),
 				Discs = new[]
 				{
 					new DiscModel
@@ -251,9 +248,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var mocker = new AutoMocker();
 
-			mocker.GetMock<IFoldersService>()
-				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(folder);
-
 			// We stub ShowMessageBoxResult.Yes just in case, to check that folder is not deleted due to content existence and not due to message result.
 			var windowServiceMock = mocker.GetMock<IWindowService>();
 			windowServiceMock
@@ -263,17 +257,17 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			await target.DeleteFolder(new ItemId("Some Folder"), CancellationToken.None);
+			await target.DeleteFolder(folder, CancellationToken.None);
 
 			// Assert
 
 			windowServiceMock.Verify(x => x.ShowMessageBox("You can not delete non-empty folder", "Warning", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation), Times.Once);
 
 			var folderServiceMock = mocker.GetMock<IFoldersService>();
-			folderServiceMock.Verify(x => x.DeleteFolder(It.IsAny<ItemId>(), It.IsAny<CancellationToken>()), Times.Never);
+			folderServiceMock.Verify(x => x.DeleteEmptyFolder(It.IsAny<FolderModel>(), It.IsAny<CancellationToken>()), Times.Never);
 
 			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelMock.Verify(x => x.OnFolderDeleted(It.IsAny<ItemId>(), It.IsAny<Func<ItemId, Task<FolderModel>>>()), Times.Never);
+			itemListViewModelMock.Verify(x => x.OnFolderDeleted(It.IsAny<ItemId>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -284,14 +278,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder = new FolderModel
 			{
 				Id = new ItemId("Some Folder"),
-				Subfolders = Array.Empty<ShallowFolderModel>(),
+				Subfolders = Array.Empty<FolderModel>(),
 				Discs = Array.Empty<DiscModel>(),
 			};
 
 			var mocker = new AutoMocker();
-
-			mocker.GetMock<IFoldersService>()
-				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(folder);
 
 			mocker.GetMock<IWindowService>()
 				.Setup(x => x.ShowMessageBox(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ShowMessageBoxButton>(), It.IsAny<ShowMessageBoxIcon>())).Returns(ShowMessageBoxResult.No);
@@ -300,15 +291,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			await target.DeleteFolder(new ItemId("Some Folder"), CancellationToken.None);
+			await target.DeleteFolder(folder, CancellationToken.None);
 
 			// Assert
 
 			var folderServiceMock = mocker.GetMock<IFoldersService>();
-			folderServiceMock.Verify(x => x.DeleteFolder(It.IsAny<ItemId>(), It.IsAny<CancellationToken>()), Times.Never);
+			folderServiceMock.Verify(x => x.DeleteEmptyFolder(It.IsAny<FolderModel>(), It.IsAny<CancellationToken>()), Times.Never);
 
 			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelMock.Verify(x => x.OnFolderDeleted(It.IsAny<ItemId>(), It.IsAny<Func<ItemId, Task<FolderModel>>>()), Times.Never);
+			itemListViewModelMock.Verify(x => x.OnFolderDeleted(It.IsAny<ItemId>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -319,14 +310,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder = new FolderModel
 			{
 				Id = new ItemId("Some Folder"),
-				Subfolders = Array.Empty<ShallowFolderModel>(),
+				Subfolders = Array.Empty<FolderModel>(),
 				Discs = Array.Empty<DiscModel>(),
 			};
 
 			var mocker = new AutoMocker();
-
-			mocker.GetMock<IFoldersService>()
-				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(folder);
 
 			mocker.GetMock<IWindowService>()
 				.Setup(x => x.ShowMessageBox(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ShowMessageBoxButton>(), It.IsAny<ShowMessageBoxIcon>())).Returns(ShowMessageBoxResult.Yes);
@@ -335,15 +323,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			await target.DeleteFolder(new ItemId("Some Folder"), CancellationToken.None);
+			await target.DeleteFolder(folder, CancellationToken.None);
 
 			// Assert
 
 			var folderServiceMock = mocker.GetMock<IFoldersService>();
-			folderServiceMock.Verify(x => x.DeleteFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>()), Times.Once);
+			folderServiceMock.Verify(x => x.DeleteEmptyFolder(folder, It.IsAny<CancellationToken>()), Times.Once);
 
 			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelMock.Verify(x => x.OnFolderDeleted(It.IsAny<ItemId>(), It.IsAny<Func<ItemId, Task<FolderModel>>>()), Times.Once);
+			itemListViewModelMock.Verify(x => x.OnFolderDeleted(new ItemId("Some Folder")), Times.Once);
 		}
 
 		[TestMethod]
@@ -387,7 +375,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Assert
 
 			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelMock.Verify(x => x.OnDiscDeleted(new ItemId("Some Disc"), It.IsAny<Func<ItemId, Task<FolderModel>>>()), Times.Once);
+			itemListViewModelMock.Verify(x => x.OnDiscDeleted(new ItemId("Some Disc")), Times.Once);
 		}
 
 		[TestMethod]
@@ -411,7 +399,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Assert
 
 			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
-			itemListViewModelMock.Verify(x => x.OnDiscDeleted(It.IsAny<ItemId>(), It.IsAny<Func<ItemId, Task<FolderModel>>>()), Times.Never);
+			itemListViewModelMock.Verify(x => x.OnDiscDeleted(It.IsAny<ItemId>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -437,14 +425,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var parentFolder = new FolderModel();
-
-			var loadParentFolderEvent = new LoadParentFolderEventArgs(new ItemId("Parent Folder Id"), new ItemId("Child Folder Id"));
+			var parentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") };
+			var loadParentFolderEvent = new LoadParentFolderEventArgs(parentFolder, new ItemId("Child Folder Id"));
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<IFoldersService>()
-				.Setup(x => x.GetFolder(new ItemId("Parent Folder Id"), It.IsAny<CancellationToken>())).ReturnsAsync(parentFolder);
-
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
@@ -464,14 +448,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var folder = new FolderModel();
-
-			var loadFolderEvent = new LoadFolderEventArgs(new ItemId("Some Folder Id"));
+			var folder = new FolderModel { Id = new ItemId("Some Folder Id") };
+			var loadFolderEvent = new LoadFolderEventArgs(folder);
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<IFoldersService>()
-				.Setup(x => x.GetFolder(new ItemId("Some Folder Id"), It.IsAny<CancellationToken>())).ReturnsAsync(folder);
-
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
@@ -492,15 +472,13 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
-			var disc = new DiscModel { Id = new ItemId("Some Disc"), Folder = new ShallowFolderModel { Id = new ItemId("Some Folder") } };
+			var disc = new DiscModel { Id = new ItemId("Some Disc") };
+			discFolder.AddDisc(disc);
 
 			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc };
 			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc };
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<IFoldersService>()
-				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(discFolder);
-
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
@@ -522,16 +500,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("Some Advise Set") };
 			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
-			var disc1 = new DiscModel { Id = new ItemId("Some Disc 1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1), Folder = new ShallowFolderModel { Id = new ItemId("Some Folder") } };
-			var disc2 = new DiscModel { Id = new ItemId("Some Disc 2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2), Folder = new ShallowFolderModel { Id = new ItemId("Some Folder") } };
+			var disc1 = new DiscModel { Id = new ItemId("Some Disc 1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) };
+			var disc2 = new DiscModel { Id = new ItemId("Some Disc 2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) };
+			discFolder.AddDisc(disc1);
+			discFolder.AddDisc(disc2);
 
 			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc1 };
 			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc2 };
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<IFoldersService>()
-				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(discFolder);
-
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
@@ -573,9 +550,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Assert
 
-			var folderServiceMock = mocker.GetMock<IFoldersService>();
-			folderServiceMock.Verify(x => x.GetFolder(It.IsAny<ItemId>(), It.IsAny<CancellationToken>()), Times.Never);
-
 			var itemListViewModelMock = mocker.GetMock<ILibraryExplorerItemListViewModel>();
 
 			itemListViewModelMock.Verify(x => x.LoadFolderItems(It.IsAny<FolderModel>()), Times.Never);
@@ -588,15 +562,13 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
-			var disc = new DiscModel { Id = new ItemId("Some Disc"), Folder = new ShallowFolderModel { Id = new ItemId("Some Folder") } };
+			var disc = new DiscModel { Id = new ItemId("Some Disc") };
+			discFolder.AddDisc(disc);
 
 			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc };
 			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc };
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<IFoldersService>()
-				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(discFolder);
-
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
@@ -618,16 +590,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("Some Advise Set") };
 			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
-			var disc1 = new DiscModel { Id = new ItemId("Some Disc 1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1), Folder = new ShallowFolderModel { Id = new ItemId("Some Folder") } };
-			var disc2 = new DiscModel { Id = new ItemId("Some Disc 2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2), Folder = new ShallowFolderModel { Id = new ItemId("Some Folder") } };
+			var disc1 = new DiscModel { Id = new ItemId("Some Disc 1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) };
+			var disc2 = new DiscModel { Id = new ItemId("Some Disc 2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) };
+			discFolder.AddDisc(disc1);
+			discFolder.AddDisc(disc2);
 
 			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc1 };
 			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc2 };
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<IFoldersService>()
-				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(discFolder);
-
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
@@ -698,21 +669,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var discFolder = new FolderModel
-			{
-				Id = new ItemId("Some Folder"),
-			};
-
-			var disc = new DiscModel
-			{
-				Id = new ItemId("Some Disc"),
-				Folder = new ShallowFolderModel { Id = new ItemId("Some Folder") },
-			};
+			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
+			var disc = new DiscModel { Id = new ItemId("Some Disc") };
+			discFolder.AddDisc(disc);
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<IFoldersService>()
-				.Setup(x => x.GetFolder(new ItemId("Some Folder"), It.IsAny<CancellationToken>())).ReturnsAsync(discFolder);
-
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act

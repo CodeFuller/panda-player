@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PandaPlayer.Core.Models;
-using PandaPlayer.Dal.LocalDb.Entities;
 using PandaPlayer.Dal.LocalDb.Extensions;
-using PandaPlayer.Dal.LocalDb.Interfaces;
 using PandaPlayer.Dal.LocalDb.Internal;
 using PandaPlayer.Services.Interfaces.Dal;
 
@@ -17,12 +13,9 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 	{
 		private readonly IDbContextFactory<MusicDbContext> contextFactory;
 
-		private readonly IContentUriProvider contentUriProvider;
-
-		public DiscsRepository(IDbContextFactory<MusicDbContext> contextFactory, IContentUriProvider contentUriProvider)
+		public DiscsRepository(IDbContextFactory<MusicDbContext> contextFactory)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
-			this.contentUriProvider = contentUriProvider ?? throw new ArgumentNullException(nameof(contentUriProvider));
 		}
 
 		public async Task CreateDisc(DiscModel disc, CancellationToken cancellationToken)
@@ -36,44 +29,12 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			disc.Id = discEntity.Id.ToItemId();
 		}
 
-		public async Task<IReadOnlyCollection<DiscModel>> GetAllDiscs(CancellationToken cancellationToken)
-		{
-			await using var context = contextFactory.CreateDbContext();
-
-			var discEntities = await GetDiscsQueryable(context)
-				.ToListAsync(cancellationToken);
-
-			return ConvertDiscEntities(discEntities);
-		}
-
-		private static IQueryable<DiscEntity> GetDiscsQueryable(MusicDbContext context)
-		{
-			return context.Discs
-				.Include(disc => disc.Folder).ThenInclude(folder => folder.AdviseGroup)
-				.Include(disc => disc.AdviseGroup)
-				.Include(disc => disc.AdviseSet)
-				.Include(disc => disc.Songs).ThenInclude(song => song.Artist)
-				.Include(disc => disc.Songs).ThenInclude(song => song.Genre)
-				.Include(disc => disc.Images);
-		}
-
-		private IReadOnlyCollection<DiscModel> ConvertDiscEntities(IReadOnlyCollection<DiscEntity> discEntities)
-		{
-			var folderModels = discEntities
-				.Select(disc => disc.Folder)
-				.Distinct()
-				.Select(folder => folder.ToShallowModel())
-				.ToDictionary(folder => folder.Id, folder => folder);
-
-			return discEntities
-				.Select(disc => disc.ToModel(folderModels[disc.Folder.Id.ToItemId()], contentUriProvider))
-				.ToList();
-		}
-
 		public async Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken)
 		{
 			await using var context = contextFactory.CreateDbContext();
-			var discEntity = await FindDisc(context, disc.Id, cancellationToken);
+
+			var discEntity = await context.Discs
+				.SingleAsync(d => d.Id == disc.Id.ToInt32(), cancellationToken);
 
 			var updatedEntity = disc.ToEntity();
 			context.Entry(discEntity).CurrentValues.SetValues(updatedEntity);
@@ -83,7 +44,10 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 		public async Task AddDiscImage(DiscImageModel image, CancellationToken cancellationToken)
 		{
 			await using var context = contextFactory.CreateDbContext();
-			var discEntity = await FindDisc(context, image.Disc.Id, cancellationToken);
+
+			var discEntity = await context.Discs
+				.Include(x => x.Images)
+				.SingleAsync(d => d.Id == image.Disc.Id.ToInt32(), cancellationToken);
 
 			var imageEntity = image.ToEntity();
 			discEntity.Images.Add(imageEntity);
@@ -101,13 +65,6 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			context.DiscImages.Remove(imageEntity);
 
 			await context.SaveChangesAsync(cancellationToken);
-		}
-
-		private static async Task<DiscEntity> FindDisc(MusicDbContext context, ItemId id, CancellationToken cancellationToken)
-		{
-			var entityId = id.ToInt32();
-			return await GetDiscsQueryable(context)
-				.SingleAsync(d => d.Id == entityId, cancellationToken);
 		}
 	}
 }

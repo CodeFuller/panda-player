@@ -1,42 +1,29 @@
 ﻿using System;
-using System.Linq;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Dal.LocalDb.Entities;
-using PandaPlayer.Dal.LocalDb.Interfaces;
 
 namespace PandaPlayer.Dal.LocalDb.Extensions
 {
 	internal static class SongEntityExtensions
 	{
-		public static SongModel ToModel(this SongEntity song, DiscModel discModel, IContentUriProvider contentUriProvider)
+		public static SongModel ToModel(this SongEntity song)
 		{
-			var model = new SongModel
+			return new()
 			{
 				Id = song.Id.ToItemId(),
 				Title = song.Title,
 				TreeTitle = song.TreeTitle,
 				TrackNumber = song.TrackNumber,
 				Duration = TimeSpan.FromMilliseconds(song.DurationInMilliseconds),
-				Disc = discModel,
-				Artist = song.Artist?.ToModel(),
-				Genre = song.Genre?.ToModel(),
-				Rating = song.Rating != null ? ConvertRating(song.Rating.Value) : (RatingModel?)null,
+				Rating = song.Rating != null ? ConvertRating(song.Rating.Value) : null,
 				BitRate = song.BitRate,
 				Size = song.FileSize,
 				Checksum = (uint?)song.Checksum,
 				LastPlaybackTime = song.LastPlaybackTime,
 				PlaybacksCount = song.PlaybacksCount,
-				Playbacks = song.Playbacks?.Select(p => p.ToModel()).ToList(),
 				DeleteDate = song.DeleteDate,
 				DeleteComment = song.DeleteComment,
 			};
-
-			if (!model.IsDeleted)
-			{
-				model.ContentUri = contentUriProvider.GetSongContentUri(model);
-			}
-
-			return model;
 		}
 
 		public static SongEntity ToEntity(this SongModel song)

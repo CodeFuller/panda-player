@@ -4,11 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Moq.AutoMock;
 using PandaPlayer.Adviser.Grouping;
 using PandaPlayer.Core.Models;
-using PandaPlayer.Services.Interfaces;
 
 namespace PandaPlayer.UnitTests.Adviser.Grouping
 {
@@ -24,24 +22,19 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			var discAdviseGroup1 = new AdviseGroupModel { Id = new ItemId("Disc Advise Group 1") };
 			var discAdviseGroup2 = new AdviseGroupModel { Id = new ItemId("Disc Advise Group 2"), IsFavorite = true };
 
-			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolderId = null };
+			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolder = null };
 
-			var folder1 = new FolderModel { Id = new ItemId("Folder 1"), ParentFolderId = rootFolder.Id };
-			var folder2 = new FolderModel { Id = new ItemId("Folder 2"), ParentFolderId = rootFolder.Id };
+			var folder1 = new FolderModel { Id = new ItemId("Folder 1"), ParentFolder = rootFolder };
+			var folder2 = new FolderModel { Id = new ItemId("Folder 2"), ParentFolder = rootFolder };
 
-			var folder11 = new FolderModel { Id = new ItemId("Folder 11"), ParentFolderId = folder1.Id, AdviseGroup = folderAdviseGroup };
-			var folder21 = new FolderModel { Id = new ItemId("Folder 21"), ParentFolderId = folder2.Id, AdviseGroup = folderAdviseGroup };
+			var folder11 = new FolderModel { Id = new ItemId("Folder 11"), ParentFolder = folder1, AdviseGroup = folderAdviseGroup };
+			var folder21 = new FolderModel { Id = new ItemId("Folder 21"), ParentFolder = folder2, AdviseGroup = folderAdviseGroup };
 
 			var disc11 = new DiscModel { Folder = folder11, AdviseGroup = discAdviseGroup1, AllSongs = Array.Empty<SongModel>() };
 			var disc12 = new DiscModel { Folder = folder11, AdviseGroup = discAdviseGroup1, AllSongs = Array.Empty<SongModel>() };
 			var disc21 = new DiscModel { Folder = folder21, AdviseGroup = discAdviseGroup2, AllSongs = Array.Empty<SongModel>() };
 
-			var folderServiceStub = new Mock<IFoldersService>();
-			folderServiceStub.Setup(x => x.GetAllFolders(It.IsAny<CancellationToken>())).ReturnsAsync(new[] { rootFolder, folder1, folder2, folder11, folder21 });
-
 			var mocker = new AutoMocker();
-			mocker.Use(folderServiceStub);
-
 			var target = mocker.CreateInstance<DiscGrouper>();
 
 			// Act
@@ -77,24 +70,19 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			var adviseGroup11 = new AdviseGroupModel { Id = new ItemId("Advise Group 11") };
 			var adviseGroup21 = new AdviseGroupModel { Id = new ItemId("Advise Group 21"), IsFavorite = true };
 
-			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolderId = null, AdviseGroup = rootAdviseGroup };
+			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolder = null, AdviseGroup = rootAdviseGroup };
 
-			var folder1 = new FolderModel { Id = new ItemId("Folder 1"), ParentFolderId = rootFolder.Id, AdviseGroup = adviseGroup1 };
-			var folder2 = new FolderModel { Id = new ItemId("Folder 2"), ParentFolderId = rootFolder.Id, AdviseGroup = adviseGroup2 };
+			var folder1 = new FolderModel { Id = new ItemId("Folder 1"), ParentFolder = rootFolder, AdviseGroup = adviseGroup1 };
+			var folder2 = new FolderModel { Id = new ItemId("Folder 2"), ParentFolder = rootFolder, AdviseGroup = adviseGroup2 };
 
-			var folder11 = new FolderModel { Id = new ItemId("Folder 11"), ParentFolderId = folder1.Id, AdviseGroup = adviseGroup11 };
-			var folder21 = new FolderModel { Id = new ItemId("Folder 21"), ParentFolderId = folder2.Id, AdviseGroup = adviseGroup21 };
+			var folder11 = new FolderModel { Id = new ItemId("Folder 11"), ParentFolder = folder1, AdviseGroup = adviseGroup11 };
+			var folder21 = new FolderModel { Id = new ItemId("Folder 21"), ParentFolder = folder2, AdviseGroup = adviseGroup21 };
 
 			var disc11 = new DiscModel { Folder = folder11, AllSongs = Array.Empty<SongModel>() };
 			var disc12 = new DiscModel { Folder = folder11, AllSongs = Array.Empty<SongModel>() };
 			var disc21 = new DiscModel { Folder = folder21, AllSongs = Array.Empty<SongModel>() };
 
-			var folderServiceStub = new Mock<IFoldersService>();
-			folderServiceStub.Setup(x => x.GetAllFolders(It.IsAny<CancellationToken>())).ReturnsAsync(new[] { rootFolder, folder1, folder2, folder11, folder21 });
-
 			var mocker = new AutoMocker();
-			mocker.Use(folderServiceStub);
-
 			var target = mocker.CreateInstance<DiscGrouper>();
 
 			// Act
@@ -128,24 +116,19 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			var adviseGroup1 = new AdviseGroupModel { Id = new ItemId("Advise Group 1") };
 			var adviseGroup2 = new AdviseGroupModel { Id = new ItemId("Advise Group 2"), IsFavorite = true };
 
-			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolderId = null, AdviseGroup = rootAdviseGroup };
+			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolder = null, AdviseGroup = rootAdviseGroup };
 
-			var folder1 = new FolderModel { Id = new ItemId("Folder 1"), ParentFolderId = rootFolder.Id, AdviseGroup = adviseGroup1 };
-			var folder2 = new FolderModel { Id = new ItemId("Folder 2"), ParentFolderId = rootFolder.Id, AdviseGroup = adviseGroup2 };
+			var folder1 = new FolderModel { Id = new ItemId("Folder 1"), ParentFolder = rootFolder, AdviseGroup = adviseGroup1 };
+			var folder2 = new FolderModel { Id = new ItemId("Folder 2"), ParentFolder = rootFolder, AdviseGroup = adviseGroup2 };
 
-			var folder11 = new FolderModel { Id = new ItemId("Folder 11"), ParentFolderId = folder1.Id };
-			var folder21 = new FolderModel { Id = new ItemId("Folder 21"), ParentFolderId = folder2.Id };
+			var folder11 = new FolderModel { Id = new ItemId("Folder 11"), ParentFolder = folder1 };
+			var folder21 = new FolderModel { Id = new ItemId("Folder 21"), ParentFolder = folder2 };
 
 			var disc11 = new DiscModel { Folder = folder11, AllSongs = Array.Empty<SongModel>() };
 			var disc12 = new DiscModel { Folder = folder11, AllSongs = Array.Empty<SongModel>() };
 			var disc21 = new DiscModel { Folder = folder21, AllSongs = Array.Empty<SongModel>() };
 
-			var folderServiceStub = new Mock<IFoldersService>();
-			folderServiceStub.Setup(x => x.GetAllFolders(It.IsAny<CancellationToken>())).ReturnsAsync(new[] { rootFolder, folder1, folder2, folder11, folder21 });
-
 			var mocker = new AutoMocker();
-			mocker.Use(folderServiceStub);
-
 			var target = mocker.CreateInstance<DiscGrouper>();
 
 			// Act
@@ -175,24 +158,19 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 		{
 			// Arrange
 
-			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolderId = null };
+			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolder = null };
 
-			var folder1 = new FolderModel { Id = new ItemId("Folder 1"), ParentFolderId = rootFolder.Id };
-			var folder2 = new FolderModel { Id = new ItemId("Folder 2"), ParentFolderId = rootFolder.Id };
+			var folder1 = new FolderModel { Id = new ItemId("Folder 1"), ParentFolder = rootFolder };
+			var folder2 = new FolderModel { Id = new ItemId("Folder 2"), ParentFolder = rootFolder };
 
-			var folder11 = new FolderModel { Id = new ItemId("Folder 11"), ParentFolderId = folder1.Id };
-			var folder21 = new FolderModel { Id = new ItemId("Folder 21"), ParentFolderId = folder2.Id };
+			var folder11 = new FolderModel { Id = new ItemId("Folder 11"), ParentFolder = folder1 };
+			var folder21 = new FolderModel { Id = new ItemId("Folder 21"), ParentFolder = folder2 };
 
 			var disc11 = new DiscModel { Folder = folder11, AllSongs = Array.Empty<SongModel>() };
 			var disc12 = new DiscModel { Folder = folder11, AllSongs = Array.Empty<SongModel>() };
 			var disc21 = new DiscModel { Folder = folder21, AllSongs = Array.Empty<SongModel>() };
 
-			var folderServiceStub = new Mock<IFoldersService>();
-			folderServiceStub.Setup(x => x.GetAllFolders(It.IsAny<CancellationToken>())).ReturnsAsync(new[] { rootFolder, folder1, folder2, folder11, folder21 });
-
 			var mocker = new AutoMocker();
-			mocker.Use(folderServiceStub);
-
 			var target = mocker.CreateInstance<DiscGrouper>();
 
 			// Act
@@ -222,7 +200,7 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 		{
 			// Arrange
 
-			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolderId = null };
+			var rootFolder = new FolderModel { Id = new ItemId("Root Folder"), ParentFolder = null };
 
 			var adviseSet1 = new AdviseSetModel { Id = new ItemId("Advise Set 1") };
 			var adviseSet2 = new AdviseSetModel { Id = new ItemId("Advise Set 2") };
@@ -231,12 +209,7 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			var disc12 = new DiscModel { Folder = rootFolder, AdviseSetInfo = new AdviseSetInfo(adviseSet1, 2), AllSongs = Array.Empty<SongModel>() };
 			var disc21 = new DiscModel { Folder = rootFolder, AdviseSetInfo = new AdviseSetInfo(adviseSet2, 1), AllSongs = Array.Empty<SongModel>() };
 
-			var folderServiceStub = new Mock<IFoldersService>();
-			folderServiceStub.Setup(x => x.GetAllFolders(It.IsAny<CancellationToken>())).ReturnsAsync(new[] { rootFolder });
-
 			var mocker = new AutoMocker();
-			mocker.Use(folderServiceStub);
-
 			var target = mocker.CreateInstance<DiscGrouper>();
 
 			// Act

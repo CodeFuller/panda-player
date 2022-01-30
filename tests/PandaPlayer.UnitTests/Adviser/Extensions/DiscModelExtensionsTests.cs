@@ -98,7 +98,7 @@ namespace PandaPlayer.UnitTests.Adviser.Extensions
 			return new()
 			{
 				Id = new ItemId(id.ToString(CultureInfo.InvariantCulture)),
-				Folder = new ShallowFolderModel(),
+				Folder = new FolderModel(),
 				AllSongs = songs.ToList(),
 			};
 		}

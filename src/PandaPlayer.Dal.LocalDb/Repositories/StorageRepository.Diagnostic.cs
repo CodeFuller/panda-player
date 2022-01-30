@@ -18,7 +18,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 {
 	internal partial class StorageRepository : IStorageRepository, IContentUriProvider
 	{
-		public Task CheckStorage(LibraryCheckFlags checkFlags, IEnumerable<ShallowFolderModel> folders, IEnumerable<DiscModel> discs,
+		public Task CheckStorage(LibraryCheckFlags checkFlags, IEnumerable<FolderModel> folders, IEnumerable<DiscModel> discs,
 			IOperationProgress progress, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken)
 		{
 			var knownFolders = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -34,7 +34,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			return Task.CompletedTask;
 		}
 
-		private void CheckFolders(IEnumerable<ShallowFolderModel> folders, HashSet<string> visitedFolders, Action<LibraryInconsistency> inconsistenciesHandler)
+		private void CheckFolders(IEnumerable<FolderModel> folders, HashSet<string> visitedFolders, Action<LibraryInconsistency> inconsistenciesHandler)
 		{
 			foreach (var folder in folders)
 			{

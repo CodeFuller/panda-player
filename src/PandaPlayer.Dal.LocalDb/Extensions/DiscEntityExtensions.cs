@@ -1,43 +1,20 @@
-﻿using System;
-using System.Linq;
-using PandaPlayer.Core.Models;
+﻿using PandaPlayer.Core.Models;
 using PandaPlayer.Dal.LocalDb.Entities;
-using PandaPlayer.Dal.LocalDb.Interfaces;
 
 namespace PandaPlayer.Dal.LocalDb.Extensions
 {
 	internal static class DiscEntityExtensions
 	{
-		public static DiscModel ToModel(this DiscEntity disc, ShallowFolderModel folderModel, IContentUriProvider contentUriProvider)
+		public static DiscModel ToModel(this DiscEntity disc)
 		{
-			var discModel = new DiscModel
+			return new()
 			{
 				Id = disc.Id.ToItemId(),
-				Folder = folderModel,
-				AdviseGroup = disc.AdviseGroup?.ToModel(),
 				Year = disc.Year,
 				Title = disc.Title,
 				TreeTitle = disc.TreeTitle,
 				AlbumTitle = disc.AlbumTitle,
 			};
-
-			if ((disc.AdviseSet == null) ^ (disc.AdviseSetOrder == null))
-			{
-				throw new InvalidOperationException($"Advise set & order are inconsistent for disc '{disc.Title}'");
-			}
-
-			discModel.AdviseSetInfo = disc.AdviseSet != null ? new AdviseSetInfo(disc.AdviseSet.ToModel(), disc.AdviseSetOrder.Value) : null;
-
-			discModel.AllSongs = disc.Songs.Select(s => s.ToModel(discModel, contentUriProvider)).ToList();
-			discModel.Images = disc.Images.Select(im => im.ToModel(discModel, contentUriProvider)).ToList();
-
-			return discModel;
-		}
-
-		public static DiscModel ToModel(this DiscEntity disc, IContentUriProvider contentUriProvider)
-		{
-			var folderModel = disc.Folder.ToShallowModel();
-			return disc.ToModel(folderModel, contentUriProvider);
 		}
 
 		public static DiscEntity ToEntity(this DiscModel disc)

@@ -106,13 +106,12 @@ namespace PandaPlayer.ViewModels.DiscImages
 
 			var coverImage = new DiscImageModel
 			{
-				Disc = Disc,
 				TreeTitle = imageFile.ImageInfo.GetDiscCoverImageTreeTitle(),
 				ImageType = DiscImageType.Cover,
 			};
 
 			await using var imageContent = File.OpenRead(imageFile.ImageFileName);
-			await discsService.SetDiscCoverImage(coverImage, imageContent, cancellationToken);
+			await discsService.SetDiscCoverImage(Disc, coverImage, imageContent, cancellationToken);
 
 			Messenger.Default.Send(new DiscImageChangedEventArgs(Disc));
 		}

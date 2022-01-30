@@ -1,12 +1,11 @@
-﻿using System;
-using PandaPlayer.Core.Models;
+﻿using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.Dal.LocalDb.Interfaces
 {
 	internal interface IContentUriProvider
 	{
-		Uri GetSongContentUri(SongModel song);
+		void SetSongContentUri(SongModel song);
 
-		Uri GetDiscImageUri(DiscImageModel discImage);
+		void SetDiscImageUri(DiscImageModel discImage);
 	}
 }

@@ -13,11 +13,11 @@ namespace PandaPlayer.Services.Interfaces
 
 		Task UpdateAdviseGroup(AdviseGroupModel adviseGroup, CancellationToken cancellationToken);
 
-		Task AssignAdviseGroup(ShallowFolderModel folder, AdviseGroupModel adviseGroup, CancellationToken cancellationToken);
+		Task AssignAdviseGroup(FolderModel folder, AdviseGroupModel adviseGroup, CancellationToken cancellationToken);
 
 		Task AssignAdviseGroup(DiscModel disc, AdviseGroupModel adviseGroup, CancellationToken cancellationToken);
 
-		Task RemoveAdviseGroup(ShallowFolderModel folder, CancellationToken cancellationToken);
+		Task RemoveAdviseGroup(FolderModel folder, CancellationToken cancellationToken);
 
 		Task RemoveAdviseGroup(DiscModel disc, CancellationToken cancellationToken);
 

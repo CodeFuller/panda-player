@@ -21,7 +21,7 @@ namespace PandaPlayer.Services.UnitTests
 			var disc = new DiscModel
 			{
 				Id = new ItemId("Disc Id"),
-				Folder = new ShallowFolderModel
+				Folder = new FolderModel
 				{
 					Id = new ItemId("Folder Id"),
 					Name = "Test Folder",
@@ -60,7 +60,7 @@ namespace PandaPlayer.Services.UnitTests
 			var disc = new DiscModel
 			{
 				Id = new ItemId("Disc Id"),
-				Folder = new ShallowFolderModel
+				Folder = new FolderModel
 				{
 					Id = new ItemId("Folder Id"),
 					Name = "Test Folder",
@@ -116,7 +116,7 @@ namespace PandaPlayer.Services.UnitTests
 			var disc = new DiscModel
 			{
 				Id = new ItemId("Disc Id"),
-				Folder = new ShallowFolderModel
+				Folder = new FolderModel
 				{
 					Id = new ItemId("Folder Id"),
 					Name = "Test Folder",
@@ -171,7 +171,7 @@ namespace PandaPlayer.Services.UnitTests
 			var disc = new DiscModel
 			{
 				Id = new ItemId("Disc Id"),
-				Folder = new ShallowFolderModel
+				Folder = new FolderModel
 				{
 					Id = new ItemId("Folder Id"),
 					Name = "Test Folder",

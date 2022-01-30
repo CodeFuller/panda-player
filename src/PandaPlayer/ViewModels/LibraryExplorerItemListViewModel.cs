@@ -42,7 +42,7 @@ namespace PandaPlayer.ViewModels
 
 		public IEnumerable<DiscModel> Discs => DiscItems.Select(x => x.Disc);
 
-		public ShallowFolderModel SelectedFolder => (SelectedItem as FolderExplorerItem)?.Folder;
+		public FolderModel SelectedFolder => (SelectedItem as FolderExplorerItem)?.Folder;
 
 		public DiscModel SelectedDisc => (SelectedItem as DiscExplorerItem)?.Disc;
 
@@ -129,17 +129,19 @@ namespace PandaPlayer.ViewModels
 			SelectedItem = GetDiscItem(discId);
 		}
 
-		public async Task OnFolderDeleted(ItemId folderId, Func<ItemId, Task<FolderModel>> folderLoader)
+		public Task OnFolderDeleted(ItemId folderId)
 		{
-			await OnContentDeleted(GetFolderItem(folderId), folderLoader);
+			OnContentDeleted(GetFolderItem(folderId));
+			return Task.CompletedTask;
 		}
 
-		public async Task OnDiscDeleted(ItemId discId, Func<ItemId, Task<FolderModel>> folderLoader)
+		public Task OnDiscDeleted(ItemId discId)
 		{
-			await OnContentDeleted(GetDiscItem(discId), folderLoader);
+			OnContentDeleted(GetDiscItem(discId));
+			return Task.CompletedTask;
 		}
 
-		private async Task OnContentDeleted(BasicExplorerItem item, Func<ItemId, Task<FolderModel>> folderLoader)
+		private void OnContentDeleted(BasicExplorerItem item)
 		{
 			if (item == null)
 			{
@@ -148,8 +150,7 @@ namespace PandaPlayer.ViewModels
 
 			if (ShowDeletedContent)
 			{
-				var folder = await folderLoader(LoadedFolder.Id);
-				LoadFolderItems(folder);
+				ReloadCurrentFolder();
 			}
 			else
 			{
@@ -172,11 +173,11 @@ namespace PandaPlayer.ViewModels
 			switch (SelectedItem)
 			{
 				case ParentFolderExplorerItem:
-					Messenger.Default.Send(new LoadParentFolderEventArgs(LoadedFolder.ParentFolderId, LoadedFolder.Id));
+					Messenger.Default.Send(new LoadParentFolderEventArgs(LoadedFolder.ParentFolder, LoadedFolder.Id));
 					break;
 
 				case FolderExplorerItem folderItem:
-					Messenger.Default.Send(new LoadFolderEventArgs(folderItem.FolderId));
+					Messenger.Default.Send(new LoadFolderEventArgs(folderItem.Folder));
 					break;
 			}
 		}

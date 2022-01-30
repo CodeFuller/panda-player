@@ -17,7 +17,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseGroups
 		{
 			// Arrange
 
-			var folder = new ShallowFolderModel
+			var folder = new FolderModel
 			{
 				Name = "Folder Name",
 			};
@@ -44,7 +44,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseGroups
 				Name = "Advise Group Name",
 			};
 
-			var folder = new ShallowFolderModel
+			var folder = new FolderModel
 			{
 				AdviseGroup = adviseGroup,
 			};
@@ -71,7 +71,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseGroups
 				Name = "Advise Group Name",
 			};
 
-			var folder = new ShallowFolderModel();
+			var folder = new FolderModel();
 
 			var adviseGroupServiceMock = new Mock<IAdviseGroupService>();
 
@@ -91,7 +91,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseGroups
 		{
 			// Arrange
 
-			var folder = new ShallowFolderModel();
+			var folder = new FolderModel();
 
 			var adviseGroupServiceMock = new Mock<IAdviseGroupService>();
 

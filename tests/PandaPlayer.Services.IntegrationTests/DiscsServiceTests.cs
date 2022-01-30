@@ -22,8 +22,6 @@ namespace PandaPlayer.Services.IntegrationTests
 		[TestMethod]
 		public async Task CreateDisc_ForDiscWithAllOptionalPropertiesFilled_CreatesDiscSuccessfully()
 		{
-			var folder = await GetFolder(ReferenceData.ArtistFolderId);
-
 			var newDisc = new DiscModel
 			{
 				Year = 1994,
@@ -33,16 +31,12 @@ namespace PandaPlayer.Services.IntegrationTests
 				AllSongs = new List<SongModel>(),
 			};
 
-			folder.AddDisc(newDisc);
-
-			await TestCaseForCreateDisc(newDisc, Path.Combine("Belarusian", "Neuro Dubel", "1994 - Титаник Live (CD 1)"));
+			await TestCaseForCreateDisc(ReferenceData.ArtistFolderId, newDisc, Path.Combine("Belarusian", "Neuro Dubel", "1994 - Титаник Live (CD 1)"));
 		}
 
 		[TestMethod]
 		public async Task CreateDisc_ForDiscWithAllOptionalPropertiesNotFilled_CreatesDiscSuccessfully()
 		{
-			var folder = await GetFolder(ReferenceData.ArtistFolderId);
-
 			var newDisc = new DiscModel
 			{
 				Title = "Титаник Live (CD 1)",
@@ -50,16 +44,12 @@ namespace PandaPlayer.Services.IntegrationTests
 				AllSongs = new List<SongModel>(),
 			};
 
-			folder.AddDisc(newDisc);
-
-			await TestCaseForCreateDisc(newDisc, Path.Combine("Belarusian", "Neuro Dubel", "1994 - Титаник Live (CD 1)"));
+			await TestCaseForCreateDisc(ReferenceData.ArtistFolderId, newDisc, Path.Combine("Belarusian", "Neuro Dubel", "1994 - Титаник Live (CD 1)"));
 		}
 
 		[TestMethod]
 		public async Task CreateDisc_ForFirstDiscInFolder_CreatesDiscSuccessfully()
 		{
-			var folder = await GetFolder(ReferenceData.EmptyFolderId);
-
 			var newDisc = new DiscModel
 			{
 				Title = "Титаник Live (CD 1)",
@@ -67,14 +57,15 @@ namespace PandaPlayer.Services.IntegrationTests
 				AllSongs = new List<SongModel>(),
 			};
 
-			folder.AddDisc(newDisc);
-
-			await TestCaseForCreateDisc(newDisc, Path.Combine("Belarusian", "Neuro Dubel", "Empty Folder", "1994 - Титаник Live (CD 1)"));
+			await TestCaseForCreateDisc(ReferenceData.EmptyFolderId, newDisc, Path.Combine("Belarusian", "Neuro Dubel", "Empty Folder", "1994 - Титаник Live (CD 1)"));
 		}
 
-		private async Task TestCaseForCreateDisc(DiscModel newDisc, string relativeDiscDirectoryPath)
+		private async Task TestCaseForCreateDisc(ItemId folderId, DiscModel newDisc, string relativeDiscDirectoryPath)
 		{
 			// Arrange
+
+			var folder = await GetFolder(folderId);
+			folder.AddDisc(newDisc);
 
 			var target = CreateTestTarget();
 
@@ -87,6 +78,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			newDisc.Id.Should().Be(ReferenceData.NextDiscId);
 
 			var referenceData = GetReferenceData();
+			referenceData.GetFolder(folderId).AddDisc(newDisc);
 
 			var expectedDiscs = new[]
 			{
@@ -272,9 +264,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var imageFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "Disc With Missing Fields (CD 1)", "cover.jpg");
 			File.Exists(imageFilePath).Should().BeFalse();
 
+			var disc = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
+
 			var discCoverImage = new DiscImageModel
 			{
-				Disc = await GetDisc(ReferenceData.DiscWithMissingFieldsId),
 				TreeTitle = "cover.jpg",
 				ImageType = DiscImageType.Cover,
 			};
@@ -282,7 +275,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			// Act
 
 			await using var imageContent = File.OpenRead("ContentForAdding/NewCover.jpg");
-			await target.SetDiscCoverImage(discCoverImage, imageContent, CancellationToken.None);
+			await target.SetDiscCoverImage(disc, discCoverImage, imageContent, CancellationToken.None);
 
 			// Assert
 
@@ -322,9 +315,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var imageFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "cover.jpg");
 			File.Exists(imageFilePath).Should().BeTrue();
 
+			var disc = await GetDisc(ReferenceData.NormalDiscId);
+
 			var discCoverImage = new DiscImageModel
 			{
-				Disc = await GetDisc(ReferenceData.NormalDiscId),
 				TreeTitle = "cover.jpg",
 				ImageType = DiscImageType.Cover,
 			};
@@ -332,7 +326,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			// Act
 
 			await using var imageContent = File.OpenRead("ContentForAdding/NewCover.jpg");
-			await target.SetDiscCoverImage(discCoverImage, imageContent, CancellationToken.None);
+			await target.SetDiscCoverImage(disc, discCoverImage, imageContent, CancellationToken.None);
 
 			// Assert
 
@@ -372,9 +366,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var oldImageFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "cover.jpg");
 			File.Exists(oldImageFilePath).Should().BeTrue();
 
+			var disc = await GetDisc(ReferenceData.NormalDiscId);
+
 			var discCoverImage = new DiscImageModel
 			{
-				Disc = await GetDisc(ReferenceData.NormalDiscId),
 				TreeTitle = "cover.png",
 				ImageType = DiscImageType.Cover,
 			};
@@ -382,7 +377,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			// Act
 
 			await using var imageContent = File.OpenRead("ContentForAdding/NewCover.png");
-			await target.SetDiscCoverImage(discCoverImage, imageContent, CancellationToken.None);
+			await target.SetDiscCoverImage(disc, discCoverImage, imageContent, CancellationToken.None);
 
 			// Assert
 

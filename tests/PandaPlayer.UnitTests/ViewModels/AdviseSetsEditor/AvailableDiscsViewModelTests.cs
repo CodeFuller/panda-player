@@ -4,10 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
-using PandaPlayer.Services.Interfaces;
 using PandaPlayer.ViewModels.AdviseSetsEditor;
 
 namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
@@ -22,21 +20,19 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 
-			var folders = new[]
-			{
-				new ShallowFolderModel { Id = new ItemId("0"), ParentFolderId = null, Name = "<ROOT" },
-				new ShallowFolderModel { Id = new ItemId("1"), ParentFolderId = new ItemId("0"), Name = "Folder 1" },
-				new ShallowFolderModel { Id = new ItemId("2"), ParentFolderId = new ItemId("1"), Name = "Folder 2" },
-			};
+			var folder1 = new FolderModel { Id = new ItemId("0"), ParentFolder = null, Name = "<ROOT" };
+			var folder2 = new FolderModel { Id = new ItemId("1"), ParentFolder = folder1, Name = "Folder 1" };
+			var folder3 = new FolderModel { Id = new ItemId("2"), ParentFolder = folder2, Name = "Folder 2" };
 
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), Folder = folders[1], TreeTitle = "Disc 1" },
-				new DiscModel { Id = new ItemId("2"), Folder = folders[0], TreeTitle = "Disc 2", AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("3"), Folder = folders[2], TreeTitle = "Disc 3" },
+				new DiscModel { Id = new ItemId("1"), Folder = folder2, TreeTitle = "Disc 1" },
+				new DiscModel { Id = new ItemId("2"), Folder = folder1, TreeTitle = "Disc 2", AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
+				new DiscModel { Id = new ItemId("3"), Folder = folder3, TreeTitle = "Disc 3" },
 			};
 
-			var target = CreateTestTarget(folders);
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<AvailableDiscsViewModel>();
 
 			// Act
 
@@ -60,23 +56,21 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 
-			var folders = new[]
-			{
-				new ShallowFolderModel { Id = new ItemId("0"), ParentFolderId = null, Name = "<ROOT" },
-				new ShallowFolderModel { Id = new ItemId("1"), ParentFolderId = new ItemId("0"), Name = "Folder 1" },
-				new ShallowFolderModel { Id = new ItemId("2"), ParentFolderId = new ItemId("1"), Name = "Folder 2" },
-			};
+			var folder1 = new FolderModel { Id = new ItemId("0"), ParentFolder = null, Name = "<ROOT" };
+			var folder2 = new FolderModel { Id = new ItemId("1"), ParentFolder = folder1, Name = "Folder 1" };
+			var folder3 = new FolderModel { Id = new ItemId("2"), ParentFolder = folder2, Name = "Folder 2" };
 
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), Folder = folders[1], TreeTitle = "Disc 1" },
-				new DiscModel { Id = new ItemId("2"), Folder = folders[0], TreeTitle = "Disc 2", AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("3"), Folder = folders[2], TreeTitle = "Disc 3" },
+				new DiscModel { Id = new ItemId("1"), Folder = folder2, TreeTitle = "Disc 1" },
+				new DiscModel { Id = new ItemId("2"), Folder = folder1, TreeTitle = "Disc 2", AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
+				new DiscModel { Id = new ItemId("3"), Folder = folder3, TreeTitle = "Disc 3" },
 			};
 
 			var adviseSetDiscs = Array.Empty<DiscModel>();
 
-			var target = CreateTestTarget(folders);
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<AvailableDiscsViewModel>();
 
 			await target.LoadDiscs(discs, CancellationToken.None);
 
@@ -102,18 +96,15 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 
-			var folders = new[]
-			{
-				new ShallowFolderModel { Id = new ItemId("0"), ParentFolderId = null, Name = "<ROOT" },
-				new ShallowFolderModel { Id = new ItemId("1"), ParentFolderId = new ItemId("0"), Name = "Folder 1" },
-				new ShallowFolderModel { Id = new ItemId("2"), ParentFolderId = new ItemId("1"), Name = "Folder 2" },
-			};
+			var folder1 = new FolderModel { Id = new ItemId("0"), ParentFolder = null, Name = "<ROOT" };
+			var folder2 = new FolderModel { Id = new ItemId("1"), ParentFolder = folder1, Name = "Folder 1" };
+			var folder3 = new FolderModel { Id = new ItemId("2"), ParentFolder = folder2, Name = "Folder 2" };
 
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), Folder = folders[1], TreeTitle = "Disc 1", AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), Folder = folders[2], TreeTitle = "Disc 2" },
-				new DiscModel { Id = new ItemId("3"), Folder = folders[1], TreeTitle = "Disc 3" },
+				new DiscModel { Id = new ItemId("1"), Folder = folder2, TreeTitle = "Disc 1", AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
+				new DiscModel { Id = new ItemId("2"), Folder = folder3, TreeTitle = "Disc 2" },
+				new DiscModel { Id = new ItemId("3"), Folder = folder2, TreeTitle = "Disc 3" },
 			};
 
 			var adviseSetDiscs = new[]
@@ -121,7 +112,8 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 				discs[0],
 			};
 
-			var target = CreateTestTarget(folders);
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<AvailableDiscsViewModel>();
 
 			await target.LoadDiscs(discs, CancellationToken.None);
 
@@ -148,18 +140,15 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseGroup1 = new AdviseGroupModel { Id = new ItemId("1") };
 			var adviseGroup2 = new AdviseGroupModel { Id = new ItemId("2") };
 
-			var folders = new[]
-			{
-				new ShallowFolderModel { Id = new ItemId("0"), ParentFolderId = null, Name = "<ROOT" },
-				new ShallowFolderModel { Id = new ItemId("1"), ParentFolderId = new ItemId("0"), Name = "Folder 1" },
-			};
+			var folder1 = new FolderModel { Id = new ItemId("0"), ParentFolder = null, Name = "<ROOT" };
+			var folder2 = new FolderModel { Id = new ItemId("1"), ParentFolder = folder1, Name = "Folder 1" };
 
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), Folder = folders[1], TreeTitle = "Disc 1", AdviseGroup = adviseGroup1, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), Folder = folders[1], TreeTitle = "Disc 2", AdviseGroup = adviseGroup1 },
-				new DiscModel { Id = new ItemId("3"), Folder = folders[1], TreeTitle = "Disc 3", AdviseGroup = adviseGroup2 },
-				new DiscModel { Id = new ItemId("4"), Folder = folders[1], TreeTitle = "Disc 4" },
+				new DiscModel { Id = new ItemId("1"), Folder = folder2, TreeTitle = "Disc 1", AdviseGroup = adviseGroup1, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
+				new DiscModel { Id = new ItemId("2"), Folder = folder2, TreeTitle = "Disc 2", AdviseGroup = adviseGroup1 },
+				new DiscModel { Id = new ItemId("3"), Folder = folder2, TreeTitle = "Disc 3", AdviseGroup = adviseGroup2 },
+				new DiscModel { Id = new ItemId("4"), Folder = folder2, TreeTitle = "Disc 4" },
 			};
 
 			var adviseSetDiscs = new[]
@@ -167,7 +156,8 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 				discs[0],
 			};
 
-			var target = CreateTestTarget(folders);
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<AvailableDiscsViewModel>();
 
 			await target.LoadDiscs(discs, CancellationToken.None);
 
@@ -192,7 +182,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var folders = new[]
 			{
-				new ShallowFolderModel { Id = new ItemId("0"), ParentFolderId = null, Name = "<ROOT" },
+				new FolderModel { Id = new ItemId("0"), ParentFolder = null, Name = "<ROOT" },
 			};
 
 			var discs = new[]
@@ -200,7 +190,8 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 				new DiscModel { Id = new ItemId("1"), Folder = folders[0], TreeTitle = "Disc 1" },
 			};
 
-			var target = CreateTestTarget(folders);
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<AvailableDiscsViewModel>();
 
 			await target.LoadDiscs(discs, CancellationToken.None);
 			target.SelectedItems = new List<AvailableDiscViewModel>();
@@ -224,7 +215,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var folders = new[]
 			{
-				new ShallowFolderModel { Id = new ItemId("0"), ParentFolderId = null, Name = "<ROOT" },
+				new FolderModel { Id = new ItemId("0"), ParentFolder = null, Name = "<ROOT" },
 			};
 
 			var discs = new[]
@@ -233,7 +224,8 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 				new DiscModel { Id = new ItemId("2"), Folder = folders[0], TreeTitle = "Disc 2", AdviseGroup = adviseGroup2 },
 			};
 
-			var target = CreateTestTarget(folders);
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<AvailableDiscsViewModel>();
 
 			await target.LoadDiscs(discs, CancellationToken.None);
 			target.SelectedItems = target.AvailableDiscs;
@@ -252,19 +244,18 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 		{
 			// Arrange
 
-			var folders = new[]
-			{
-				new ShallowFolderModel { Id = new ItemId("0"), ParentFolderId = null, Name = "<ROOT" },
-				new ShallowFolderModel { Id = new ItemId("1"), ParentFolderId = new ItemId("0"), Name = "Folder 1" },
-			};
+			var folder1 = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
+			var folder2 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
+			folder1.AddSubfolder(folder2);
 
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), Folder = folders[0], TreeTitle = "Disc 1" },
-				new DiscModel { Id = new ItemId("2"), Folder = folders[1], TreeTitle = "Disc 2" },
+				new DiscModel { Id = new ItemId("1"), Folder = folder1, TreeTitle = "Disc 1" },
+				new DiscModel { Id = new ItemId("2"), Folder = folder2, TreeTitle = "Disc 2" },
 			};
 
-			var target = CreateTestTarget(folders);
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<AvailableDiscsViewModel>();
 
 			await target.LoadDiscs(discs, CancellationToken.None);
 			target.SelectedItems = target.AvailableDiscs;
@@ -285,7 +276,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var folders = new[]
 			{
-				new ShallowFolderModel { Id = new ItemId("0"), ParentFolderId = null, Name = "<ROOT" },
+				new FolderModel { Id = new ItemId("0"), ParentFolder = null, Name = "<ROOT" },
 			};
 
 			var discs = new[]
@@ -294,7 +285,8 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 				new DiscModel { Id = new ItemId("2"), Folder = folders[0], TreeTitle = "Disc 2" },
 			};
 
-			var target = CreateTestTarget(folders);
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<AvailableDiscsViewModel>();
 
 			await target.LoadDiscs(discs, CancellationToken.None);
 			target.SelectedItems = target.AvailableDiscs;
@@ -306,17 +298,6 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			// Assert
 
 			result.Should().BeTrue();
-		}
-
-		private static AvailableDiscsViewModel CreateTestTarget(IReadOnlyCollection<ShallowFolderModel> folders)
-		{
-			var folderServiceStub = new Mock<IFoldersService>();
-			folderServiceStub.Setup(x => x.GetAllFolders(It.IsAny<CancellationToken>())).ReturnsAsync(folders);
-
-			var mocker = new AutoMocker();
-			mocker.Use(folderServiceStub);
-
-			return mocker.CreateInstance<AvailableDiscsViewModel>();
 		}
 	}
 }

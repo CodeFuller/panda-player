@@ -8,13 +8,13 @@ namespace PandaPlayer.ViewModels.AdviseGroups
 {
 	internal class FolderAdviseGroupHolder : BasicAdviseGroupHolder
 	{
-		private readonly ShallowFolderModel folder;
+		private readonly FolderModel folder;
 
 		public override string InitialAdviseGroupName => folder.Name;
 
 		public override AdviseGroupModel CurrentAdviseGroup => folder.AdviseGroup;
 
-		public FolderAdviseGroupHolder(ShallowFolderModel folder)
+		public FolderAdviseGroupHolder(FolderModel folder)
 		{
 			this.folder = folder ?? throw new ArgumentNullException(nameof(folder));
 		}

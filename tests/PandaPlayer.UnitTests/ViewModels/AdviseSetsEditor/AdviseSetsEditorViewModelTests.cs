@@ -718,7 +718,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 		{
 			// Arrange
 
-			var parentFolder = new ShallowFolderModel { Id = new ItemId("1"), Name = "Parent Folder" };
+			var parentFolder = new FolderModel { Id = new ItemId("1"), Name = "Parent Folder" };
 
 			var discs = new[]
 			{
@@ -753,7 +753,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 		{
 			// Arrange
 
-			var parentFolder = new ShallowFolderModel { Id = new ItemId("1"), Name = "Parent Folder" };
+			var parentFolder = new FolderModel { Id = new ItemId("1"), Name = "Parent Folder" };
 
 			var discs = new[]
 			{
@@ -794,7 +794,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 				new AdviseSetModel { Id = new ItemId("2"), Name = "Parent Folder / New Advise Set (2)" },
 			};
 
-			var parentFolder = new ShallowFolderModel { Id = new ItemId("1"), Name = "Parent Folder" };
+			var parentFolder = new FolderModel { Id = new ItemId("1"), Name = "Parent Folder" };
 
 			var discs = new[]
 			{

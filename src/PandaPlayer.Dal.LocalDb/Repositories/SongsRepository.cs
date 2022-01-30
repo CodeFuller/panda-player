@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Dal.LocalDb.Entities;
 using PandaPlayer.Dal.LocalDb.Extensions;
-using PandaPlayer.Dal.LocalDb.Interfaces;
 using PandaPlayer.Dal.LocalDb.Internal;
 using PandaPlayer.Services.Interfaces.Dal;
 
@@ -16,12 +15,9 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 	{
 		private readonly IDbContextFactory<MusicDbContext> contextFactory;
 
-		private readonly IContentUriProvider contentUriProvider;
-
-		public SongsRepository(IDbContextFactory<MusicDbContext> contextFactory, IContentUriProvider contentUriProvider)
+		public SongsRepository(IDbContextFactory<MusicDbContext> contextFactory)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
-			this.contentUriProvider = contentUriProvider ?? throw new ArgumentNullException(nameof(contentUriProvider));
 		}
 
 		public async Task CreateSong(SongModel song, CancellationToken cancellationToken)
@@ -33,30 +29,6 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			await context.SaveChangesAsync(cancellationToken);
 
 			song.Id = songEntity.Id.ToItemId();
-		}
-
-		public async Task<SongModel> GetSongWithPlaybacks(ItemId songId, CancellationToken cancellationToken)
-		{
-			// Currently this method is used only for IT purposes.
-			// We load song indirectly via loading disc data,
-			// because we need full graph of objects for comparison.
-			await using var context = contextFactory.CreateDbContext();
-
-			var id = songId.ToInt32();
-
-			var songDisc = await context.Discs
-				.Include(disc => disc.Folder).ThenInclude(folder => folder.AdviseGroup)
-				.Include(disc => disc.AdviseGroup)
-				.Include(disc => disc.AdviseSet)
-				.Include(disc => disc.Songs).ThenInclude(song => song.Artist)
-				.Include(disc => disc.Songs).ThenInclude(song => song.Genre)
-				.Include(disc => disc.Songs).ThenInclude(song => song.Playbacks)
-				.Include(disc => disc.Images)
-				.Where(disc => disc.Songs.Any(song => song.Id == id))
-				.SingleAsync(cancellationToken);
-
-			var discModel = songDisc.ToModel(contentUriProvider);
-			return discModel.AllSongs.Single(song => song.Id == songId);
 		}
 
 		public async Task UpdateSong(SongModel song, CancellationToken cancellationToken)

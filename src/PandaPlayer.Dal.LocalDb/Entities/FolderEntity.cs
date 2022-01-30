@@ -19,8 +19,6 @@ namespace PandaPlayer.Dal.LocalDb.Entities
 
 		public IReadOnlyCollection<FolderEntity> Subfolders { get; set; }
 
-		public IReadOnlyCollection<DiscEntity> Discs { get; set; }
-
 		public DateTimeOffset? DeleteDate { get; set; }
 	}
 }

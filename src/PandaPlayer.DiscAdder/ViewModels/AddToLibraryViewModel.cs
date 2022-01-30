@@ -176,7 +176,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			// That is why we need no additional checks for created objects.
 			// However, for artists there could be different instances of ArtistModel for the same new artist.
 			// That is why we remember artists, which were created.
-			var createdArtists = new Dictionary<string, ItemId>();
+			var createdArtists = new Dictionary<string, ArtistModel>();
 
 			foreach (var addedSong in addedSongs)
 			{
@@ -216,21 +216,20 @@ namespace PandaPlayer.DiscAdder.ViewModels
 				return taskProgressSize;
 			}
 
-			foreach (var image in addedDiscImages)
+			foreach (var addedDiscImage in addedDiscImages)
 			{
 				if (!onlyCountProgressSize)
 				{
-					ProgressMessages += $"Adding disc image '{image.ImageInfo.FileName}'...\n";
+					ProgressMessages += $"Adding disc image '{addedDiscImage.ImageInfo.FileName}'...\n";
 
 					var discImage = new DiscImageModel
 					{
-						Disc = image.Disc,
-						TreeTitle = image.ImageInfo.GetDiscCoverImageTreeTitle(),
+						TreeTitle = addedDiscImage.ImageInfo.GetDiscCoverImageTreeTitle(),
 						ImageType = DiscImageType.Cover,
 					};
 
-					using var imageContent = File.OpenRead(image.ImageInfo.FileName);
-					await discService.SetDiscCoverImage(discImage, imageContent, cancellationToken);
+					await using var imageContent = File.OpenRead(addedDiscImage.ImageInfo.FileName);
+					await discService.SetDiscCoverImage(addedDiscImage.Disc, discImage, imageContent, cancellationToken);
 
 					CurrentProgress += progressIncrement;
 				}
@@ -241,7 +240,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			return taskProgressSize;
 		}
 
-		private async Task ProvideSongArtist(SongModel song, IDictionary<string, ItemId> createdArtists, CancellationToken cancellationToken)
+		private async Task ProvideSongArtist(SongModel song, IDictionary<string, ArtistModel> createdArtists, CancellationToken cancellationToken)
 		{
 			var artist = song.Artist;
 
@@ -250,19 +249,19 @@ namespace PandaPlayer.DiscAdder.ViewModels
 				return;
 			}
 
-			if (createdArtists.TryGetValue(artist.Name, out var artistId))
+			if (createdArtists.TryGetValue(artist.Name, out var createdArtist))
 			{
-				artist.Id = artistId;
+				song.Artist = createdArtist;
 				return;
 			}
 
 			ProgressMessages += $"Creating artist '{artist.Name}' ...\n";
 			await artistService.CreateArtist(artist, cancellationToken);
 
-			createdArtists.Add(artist.Name, artist.Id);
+			createdArtists.Add(artist.Name, artist);
 		}
 
-		private async Task<ShallowFolderModel> CreateFolder(IReadOnlyCollection<string> discFolderPath, CancellationToken cancellationToken)
+		private async Task<FolderModel> CreateFolder(IReadOnlyCollection<string> discFolderPath, CancellationToken cancellationToken)
 		{
 			const char pathSeparator = '/';
 
@@ -279,16 +278,17 @@ namespace PandaPlayer.DiscAdder.ViewModels
 				{
 					ProgressMessages += $"Creating folder '{currentFolderFullPath}' ...\n";
 
-					currentSubfolder = new ShallowFolderModel
+					currentSubfolder = new FolderModel
 					{
-						ParentFolderId = currentFolder.Id,
 						Name = currentSubfolderName,
 					};
 
-					await foldersService.CreateFolder(currentSubfolder, cancellationToken);
+					currentFolder.AddSubfolder(currentSubfolder);
+
+					await foldersService.CreateEmptyFolder(currentSubfolder, cancellationToken);
 				}
 
-				currentFolder = await foldersService.GetFolder(currentSubfolder.Id, cancellationToken);
+				currentFolder = currentSubfolder;
 			}
 
 			return currentFolder;

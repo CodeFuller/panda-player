@@ -186,7 +186,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 		{
 			var parentFolder = adviseSetDiscs
 				.Select(x => x.Folder)
-				.UniqueOrDefault(new ShallowFolderEqualityComparer());
+				.UniqueOrDefault(new FolderEqualityComparer());
 
 			var folderPrefix = parentFolder != null ? $"{parentFolder.Name} / " : String.Empty;
 

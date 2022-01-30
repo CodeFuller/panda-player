@@ -5,11 +5,11 @@ namespace PandaPlayer.Events.LibraryExplorerEvents
 {
 	public class LoadFolderEventArgs : EventArgs
 	{
-		public ItemId FolderId { get; set; }
+		public FolderModel Folder { get; set; }
 
-		public LoadFolderEventArgs(ItemId folderId)
+		public LoadFolderEventArgs(FolderModel folder)
 		{
-			FolderId = folderId ?? throw new ArgumentNullException(nameof(folderId));
+			Folder = folder ?? throw new ArgumentNullException(nameof(folder));
 		}
 	}
 }

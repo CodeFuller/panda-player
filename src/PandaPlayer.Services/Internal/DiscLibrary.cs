@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using PandaPlayer.Core.Comparers;
 using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.Services.Internal
 {
-	internal class DiscLibrary : IDiscLibrary
+	public class DiscLibrary : IDiscLibrary
 	{
 		private readonly Dictionary<ItemId, FolderModel> folders;
 
@@ -22,8 +21,7 @@ namespace PandaPlayer.Services.Internal
 
 		private readonly Dictionary<ItemId, AdviseSetModel> adviseSets;
 
-		// The only reason for sorting folders is strict ordering check in IT.
-		public IReadOnlyCollection<FolderModel> Folders => folders.Values.OrderBy(x => x.Id.Value).ToList();
+		public IReadOnlyCollection<FolderModel> Folders => folders.Values.ToList();
 
 		// The only reason for sorting discs is strict ordering check in IT.
 		public IReadOnlyCollection<DiscModel> Discs => discs.Values.OrderBy(x => x.Id.Value).ToList();
@@ -36,102 +34,21 @@ namespace PandaPlayer.Services.Internal
 
 		public IReadOnlyCollection<AdviseSetModel> AdviseSets => adviseSets.Values.OrderBy(x => x.Name).ToList();
 
-		public DiscLibrary(IReadOnlyCollection<DiscModel> discs, IEnumerable<ShallowFolderModel> foldersWithoutDiscs, IEnumerable<ArtistModel> emptyArtists,
-			IEnumerable<GenreModel> emptyGenres, IEnumerable<AdviseGroupModel> emptyAdviseGroups, IEnumerable<AdviseSetModel> emptyAdviseSets)
+		public DiscLibrary(IEnumerable<FolderModel> folders, IEnumerable<DiscModel> discs, IEnumerable<SongModel> songs,
+			IEnumerable<ArtistModel> artists, IEnumerable<GenreModel> genres, IEnumerable<AdviseGroupModel> adviseGroups, IEnumerable<AdviseSetModel> adviseSets)
 		{
-			this.discs = discs.ToDictionary(x => x.Id, x => x);
-			this.songs = discs.SelectMany(x => x.AllSongs).ToDictionary(x => x.Id, x => x);
-
-			this.folders = CreateFolders(discs, foldersWithoutDiscs);
-
-			this.artists = songs.Values
-				.Select(x => x.Artist)
-				.Where(x => x != null)
-				.Concat(emptyArtists)
-				.Distinct(new ArtistEqualityComparer())
-				.ToDictionary(x => x.Id, x => x);
-
-			this.genres = songs.Values
-				.Select(x => x.Genre)
-				.Where(x => x != null)
-				.Concat(emptyGenres)
-				.Distinct(new GenreEqualityComparer())
-				.ToDictionary(x => x.Id, x => x);
-
-			this.adviseGroups = folders.Values.Select(x => x.AdviseGroup)
-				.Concat(discs.Select(x => x.AdviseGroup))
-				.Where(x => x != null)
-				.Concat(emptyAdviseGroups)
-				.Distinct(new AdviseGroupEqualityComparer())
-				.ToDictionary(x => x.Id, x => x);
-
-			this.adviseSets = discs.Select(x => x.AdviseSetInfo?.AdviseSet)
-				.Where(x => x != null)
-				.Concat(emptyAdviseSets)
-				.Distinct(new AdviseSetEqualityComparer())
-				.ToDictionary(x => x.Id, x => x);
+			this.folders = folders?.ToDictionary(x => x.Id, x => x) ?? throw new ArgumentNullException(nameof(folders));
+			this.discs = discs?.ToDictionary(x => x.Id, x => x) ?? throw new ArgumentNullException(nameof(discs));
+			this.songs = songs?.ToDictionary(x => x.Id, x => x) ?? throw new ArgumentNullException(nameof(songs));
+			this.artists = artists?.ToDictionary(x => x.Id, x => x) ?? throw new ArgumentNullException(nameof(artists));
+			this.genres = genres?.ToDictionary(x => x.Id, x => x) ?? throw new ArgumentNullException(nameof(genres));
+			this.adviseGroups = adviseGroups?.ToDictionary(x => x.Id, x => x) ?? throw new ArgumentNullException(nameof(adviseGroups));
+			this.adviseSets = adviseSets?.ToDictionary(x => x.Id, x => x) ?? throw new ArgumentNullException(nameof(adviseSets));
 		}
 
-		private static Dictionary<ItemId, FolderModel> CreateFolders(IReadOnlyCollection<DiscModel> discs, IEnumerable<ShallowFolderModel> foldersWithoutDiscs)
+		public void AddFolder(FolderModel folder)
 		{
-			var discFolders = discs
-				.Select(x => x.Folder)
-				.Distinct(new ShallowFolderEqualityComparer());
-
-			var folders = discFolders.Concat(foldersWithoutDiscs)
-				.ToDictionary(x => x.Id, x => new FolderModel
-				{
-					Id = x.Id,
-					ParentFolderId = x.ParentFolderId,
-					Name = x.Name,
-					AdviseGroup = x.AdviseGroup,
-					DeleteDate = x.DeleteDate,
-				});
-
-			LinkFolders(folders, discs);
-
-			return folders;
-		}
-
-		private static void LinkFolders(Dictionary<ItemId, FolderModel> folders, IReadOnlyCollection<DiscModel> discs)
-		{
-			var childFolders = folders.Values
-				.Where(x => !x.IsRoot)
-				.GroupBy(x => x.ParentFolderId)
-				.ToDictionary(x => x.Key, x => x.ToList());
-
-			var childDiscs = discs
-				.GroupBy(x => x.Folder.Id)
-				.ToDictionary(x => x.Key, x => x.ToList());
-
-			foreach (var folder in folders.Values)
-			{
-				folder.ParentFolder = folder.IsRoot ? null : folders[folder.ParentFolderId];
-				folder.Subfolders = childFolders.TryGetValue(folder.Id, out var subfolders) ? subfolders : new List<FolderModel>();
-				folder.Discs = childDiscs.TryGetValue(folder.Id, out var folderDiscs) ? folderDiscs : new List<DiscModel>();
-			}
-
-			foreach (var disc in discs)
-			{
-				disc.Folder = folders[disc.Folder.Id];
-			}
-		}
-
-		public void AddEmptyFolder(ShallowFolderModel folder)
-		{
-			var newFolder = new FolderModel
-			{
-				Id = folder.Id,
-				Name = folder.Name,
-				ParentFolderId = folder.ParentFolderId,
-				ParentFolder = GetFolder(folder.ParentFolderId),
-				Subfolders = new List<ShallowFolderModel>(),
-				Discs = new List<DiscModel>(),
-			};
-
-			folders.Add(newFolder.Id, newFolder);
-
-			GetFolder(folder.ParentFolderId).AddSubfolder(newFolder);
+			folders.Add(folder.Id, folder);
 		}
 
 		public FolderModel GetFolder(ItemId folderId)

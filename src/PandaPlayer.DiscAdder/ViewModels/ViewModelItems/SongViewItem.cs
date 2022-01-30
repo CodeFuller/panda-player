@@ -20,6 +20,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 			{
 				if (Song.Artist == null)
 				{
+					// TODO: Change property type to ArtistModel so that we don't create new model here?
 					Song.Artist = new ArtistModel
 					{
 						Name = value,

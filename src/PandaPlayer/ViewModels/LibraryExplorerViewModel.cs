@@ -45,12 +45,12 @@ namespace PandaPlayer.ViewModels
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
 
 			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => OnApplicationLoaded(CancellationToken.None));
-			Messenger.Default.Register<LoadParentFolderEventArgs>(this, e => OnLoadParentFolder(e, CancellationToken.None));
-			Messenger.Default.Register<LoadFolderEventArgs>(this, e => OnLoadFolder(e.FolderId, CancellationToken.None));
-			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaySongsList(e, CancellationToken.None));
+			Messenger.Default.Register<LoadParentFolderEventArgs>(this, OnLoadParentFolder);
+			Messenger.Default.Register<LoadFolderEventArgs>(this, e => OnLoadFolder(e.Folder));
+			Messenger.Default.Register<PlaySongsListEventArgs>(this, OnPlaySongsList);
 			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistLoaded(e, CancellationToken.None));
 			Messenger.Default.Register<NoPlaylistLoadedEventArgs>(this, _ => OnNoPlaylistLoaded(CancellationToken.None));
-			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => OnSwitchToDisc(e.Disc, CancellationToken.None));
+			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => OnSwitchToDisc(e.Disc));
 		}
 
 		private async void OnApplicationLoaded(CancellationToken cancellationToken)
@@ -84,15 +84,13 @@ namespace PandaPlayer.ViewModels
 			viewNavigator.ShowDiscPropertiesView(disc);
 		}
 
-		public void RenameFolder(ShallowFolderModel folder)
+		public void RenameFolder(FolderModel folder)
 		{
 			viewNavigator.ShowRenameFolderView(folder);
 		}
 
-		public async Task DeleteFolder(ItemId folderId, CancellationToken cancellationToken)
+		public async Task DeleteFolder(FolderModel folder, CancellationToken cancellationToken)
 		{
-			var folder = await foldersService.GetFolder(folderId, cancellationToken);
-
 			if (folder.HasContent)
 			{
 				windowService.ShowMessageBox("You can not delete non-empty folder", "Warning", ShowMessageBoxButton.Ok, ShowMessageBoxIcon.Exclamation);
@@ -105,9 +103,9 @@ namespace PandaPlayer.ViewModels
 				return;
 			}
 
-			await foldersService.DeleteFolder(folder.Id, cancellationToken);
+			await foldersService.DeleteEmptyFolder(folder, cancellationToken);
 
-			await ItemListViewModel.OnFolderDeleted(folder.Id, id => foldersService.GetFolder(id, cancellationToken));
+			await ItemListViewModel.OnFolderDeleted(folder.Id);
 		}
 
 		public async Task DeleteDisc(DiscModel disc, CancellationToken cancellationToken)
@@ -117,25 +115,18 @@ namespace PandaPlayer.ViewModels
 				return;
 			}
 
-			await ItemListViewModel.OnDiscDeleted(disc.Id, id => foldersService.GetFolder(id, cancellationToken));
+			await ItemListViewModel.OnDiscDeleted(disc.Id);
 		}
 
-		private async void OnLoadParentFolder(LoadParentFolderEventArgs e, CancellationToken cancellationToken)
+		private void OnLoadParentFolder(LoadParentFolderEventArgs e)
 		{
-			await LoadFolder(e.ParentFolderId, cancellationToken);
+			LoadFolder(e.ParentFolder);
 
 			ItemListViewModel.SelectFolder(e.ChildFolderId);
 		}
 
-		private async void OnLoadFolder(ItemId folderId, CancellationToken cancellationToken)
+		private void OnLoadFolder(FolderModel folder)
 		{
-			await LoadFolder(folderId, cancellationToken);
-		}
-
-		private async Task LoadFolder(ItemId folderId, CancellationToken cancellationToken)
-		{
-			var folder = await foldersService.GetFolder(folderId, cancellationToken);
-
 			LoadFolder(folder);
 		}
 
@@ -144,19 +135,19 @@ namespace PandaPlayer.ViewModels
 			ItemListViewModel.LoadFolderItems(folder);
 		}
 
-		private async Task SwitchToDisc(DiscModel disc, CancellationToken cancellationToken)
+		private void SwitchToDisc(DiscModel disc)
 		{
-			await LoadFolder(disc.Folder.Id, cancellationToken);
+			LoadFolder(disc.Folder);
 
 			ItemListViewModel.SelectDisc(disc.Id);
 		}
 
-		private async void OnPlaySongsList(PlaySongsListEventArgs e, CancellationToken cancellationToken)
+		private void OnPlaySongsList(PlaySongsListEventArgs e)
 		{
 			var disc = e.Disc;
 			if (disc != null)
 			{
-				await SwitchToDisc(disc, cancellationToken);
+				SwitchToDisc(disc);
 			}
 		}
 
@@ -165,7 +156,7 @@ namespace PandaPlayer.ViewModels
 			var disc = e.Disc;
 			if (disc != null)
 			{
-				await SwitchToDisc(disc, cancellationToken);
+				SwitchToDisc(disc);
 			}
 			else
 			{
@@ -184,9 +175,9 @@ namespace PandaPlayer.ViewModels
 			LoadFolder(rootFolderData);
 		}
 
-		private async void OnSwitchToDisc(DiscModel disc, CancellationToken cancellationToken)
+		private void OnSwitchToDisc(DiscModel disc)
 		{
-			await SwitchToDisc(disc, cancellationToken);
+			SwitchToDisc(disc);
 		}
 	}
 }

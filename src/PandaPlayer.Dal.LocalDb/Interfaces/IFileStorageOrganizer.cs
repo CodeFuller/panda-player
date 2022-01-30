@@ -11,6 +11,6 @@ namespace PandaPlayer.Dal.LocalDb.Interfaces
 
 		FilePath GetDiscImagePath(DiscImageModel image);
 
-		FilePath GetFolderPath(ShallowFolderModel folder);
+		FilePath GetFolderPath(FolderModel folder);
 	}
 }

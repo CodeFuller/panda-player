@@ -480,7 +480,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			return new()
 			{
 				Id = new ItemId(id),
-				Folder = new ShallowFolderModel(),
+				Folder = new FolderModel(),
 				AllSongs = songs.ToList(),
 			};
 		}

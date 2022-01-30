@@ -11,7 +11,7 @@ namespace PandaPlayer.ViewModels
 	{
 		private readonly IFoldersService foldersService;
 
-		private ShallowFolderModel Folder { get; set; }
+		private FolderModel Folder { get; set; }
 
 		public string FolderName { get; set; }
 
@@ -20,7 +20,7 @@ namespace PandaPlayer.ViewModels
 			this.foldersService = foldersService ?? throw new ArgumentNullException(nameof(foldersService));
 		}
 
-		public void Load(ShallowFolderModel folder)
+		public void Load(FolderModel folder)
 		{
 			Folder = folder;
 			FolderName = folder.Name;
@@ -28,7 +28,7 @@ namespace PandaPlayer.ViewModels
 
 		public Task Rename(CancellationToken cancellationToken)
 		{
-			void UpdateFolder(ShallowFolderModel folder)
+			void UpdateFolder(FolderModel folder)
 			{
 				folder.Name = FolderName;
 			}

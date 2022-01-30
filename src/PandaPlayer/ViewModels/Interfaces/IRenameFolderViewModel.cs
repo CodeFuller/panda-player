@@ -8,7 +8,7 @@ namespace PandaPlayer.ViewModels.Interfaces
 	{
 		string FolderName { get; set; }
 
-		void Load(ShallowFolderModel folder);
+		void Load(FolderModel folder);
 
 		Task Rename(CancellationToken cancellationToken);
 	}

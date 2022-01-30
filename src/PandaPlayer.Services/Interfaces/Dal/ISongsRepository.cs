@@ -8,8 +8,6 @@ namespace PandaPlayer.Services.Interfaces.Dal
 	{
 		Task CreateSong(SongModel song, CancellationToken cancellationToken);
 
-		Task<SongModel> GetSongWithPlaybacks(ItemId songId, CancellationToken cancellationToken);
-
 		Task UpdateSong(SongModel song, CancellationToken cancellationToken);
 
 		Task UpdateSongLastPlayback(SongModel song, CancellationToken cancellationToken);

@@ -55,7 +55,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 			UpdateSongTags(song);
 
-			song.ContentUri = GetSongContentUri(song);
+			SetSongContentUri(song);
 
 			return Task.CompletedTask;
 		}
@@ -66,7 +66,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			var newSongPath = storageOrganizer.GetSongFilePath(newSong);
 			fileStorage.MoveFile(oldSongPath, newSongPath);
 
-			newSong.ContentUri = GetSongContentUri(newSong);
+			SetSongContentUri(newSong);
 
 			return Task.CompletedTask;
 		}
@@ -112,7 +112,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			image.Size = CalculateFileSize(fullPath);
 			image.Checksum = CalculateFileChecksum(fullPath);
 
-			image.ContentUri = GetDiscImageUri(image);
+			SetDiscImageUri(image);
 
 			return Task.CompletedTask;
 		}
@@ -128,7 +128,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			return Task.CompletedTask;
 		}
 
-		public Task CreateFolder(ShallowFolderModel folder, CancellationToken cancellationToken)
+		public Task CreateFolder(FolderModel folder, CancellationToken cancellationToken)
 		{
 			var folderPath = storageOrganizer.GetFolderPath(folder);
 			fileStorage.CreateFolder(folderPath);
@@ -136,7 +136,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			return Task.CompletedTask;
 		}
 
-		public Task RenameFolder(ShallowFolderModel oldFolder, ShallowFolderModel newFolder, CancellationToken cancellationToken)
+		public Task RenameFolder(FolderModel oldFolder, FolderModel newFolder, CancellationToken cancellationToken)
 		{
 			var oldFolderPath = storageOrganizer.GetFolderPath(oldFolder);
 			var newFolderPath = storageOrganizer.GetFolderPath(newFolder);
@@ -148,11 +148,8 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			return Task.CompletedTask;
 		}
 
-		private void UpdateContentUris(ShallowFolderModel shallowFolder)
+		private void UpdateContentUris(FolderModel folder)
 		{
-			// TODO: Abandon ShallowFolderModel and remove this type cast.
-			var folder = (FolderModel)shallowFolder;
-
 			foreach (var subfolder in folder.Subfolders)
 			{
 				UpdateContentUris(subfolder);
@@ -168,16 +165,16 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 		{
 			foreach (var song in disc.ActiveSongs)
 			{
-				song.ContentUri = GetSongContentUri(song);
+				SetSongContentUri(song);
 			}
 
 			foreach (var image in disc.Images)
 			{
-				image.ContentUri = GetDiscImageUri(image);
+				SetDiscImageUri(image);
 			}
 		}
 
-		public Task DeleteFolder(ShallowFolderModel folder, CancellationToken cancellationToken)
+		public Task DeleteFolder(FolderModel folder, CancellationToken cancellationToken)
 		{
 			var folderPath = storageOrganizer.GetFolderPath(folder);
 			fileStorage.DeleteFolder(folderPath);
@@ -185,7 +182,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			return Task.CompletedTask;
 		}
 
-		public Uri GetSongContentUri(SongModel song)
+		public void SetSongContentUri(SongModel song)
 		{
 			if (song.IsDeleted)
 			{
@@ -193,13 +190,13 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			}
 
 			var songPath = storageOrganizer.GetSongFilePath(song);
-			return GetUriForPath(songPath);
+			song.ContentUri = GetUriForPath(songPath);
 		}
 
-		public Uri GetDiscImageUri(DiscImageModel discImage)
+		public void SetDiscImageUri(DiscImageModel discImage)
 		{
 			var imagePath = storageOrganizer.GetDiscImagePath(discImage);
-			return GetUriForPath(imagePath);
+			discImage.ContentUri = GetUriForPath(imagePath);
 		}
 
 		private Uri GetUriForPath(FilePath songPath)

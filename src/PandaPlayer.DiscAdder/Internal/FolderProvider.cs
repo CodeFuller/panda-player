@@ -31,7 +31,7 @@ namespace PandaPlayer.DiscAdder.Internal
 					return null;
 				}
 
-				currentFolder = await foldersService.GetFolder(currentSubfolder.Id, cancellationToken);
+				currentFolder = currentSubfolder;
 			}
 
 			return currentFolder;

@@ -11,6 +11,7 @@ using PandaPlayer.Services.Diagnostic.Inconsistencies.DiscInconsistencies;
 using PandaPlayer.Services.IntegrationTests.Data;
 using PandaPlayer.Services.IntegrationTests.Extensions;
 using PandaPlayer.Services.Interfaces;
+using PandaPlayer.Services.Interfaces.Dal;
 using PandaPlayer.Services.Tagging;
 
 namespace PandaPlayer.Services.IntegrationTests
@@ -573,8 +574,10 @@ namespace PandaPlayer.Services.IntegrationTests
 
 		private async Task<SongModel> GetSongWithPlaybacks(ItemId songId)
 		{
-			var songService = GetService<ISongsService>();
-			return await songService.GetSongWithPlaybacks(songId, CancellationToken.None);
+			var libraryRepository = GetService<IDiscLibraryRepository>();
+			var libraryWithPlaybacks = await libraryRepository.ReadDiscLibraryWithPlaybacks(CancellationToken.None);
+
+			return libraryWithPlaybacks.TryGetSongs(new[] { songId }).Single();
 		}
 	}
 }

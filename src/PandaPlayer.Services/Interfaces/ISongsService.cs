@@ -13,8 +13,6 @@ namespace PandaPlayer.Services.Interfaces
 
 		Task<IReadOnlyCollection<SongModel>> GetSongs(IEnumerable<ItemId> songIds, CancellationToken cancellationToken);
 
-		internal Task<SongModel> GetSongWithPlaybacks(ItemId songId, CancellationToken cancellationToken);
-
 		Task UpdateSong(SongModel song, Action<SongModel> updateAction, CancellationToken cancellationToken);
 
 		Task AddSongPlayback(SongModel song, DateTimeOffset playbackTime, CancellationToken cancellationToken);

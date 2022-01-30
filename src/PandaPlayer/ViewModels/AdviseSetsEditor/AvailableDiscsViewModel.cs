@@ -47,18 +47,18 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			this.folderService = folderService ?? throw new ArgumentNullException(nameof(folderService));
 		}
 
-		public async Task LoadDiscs(IEnumerable<DiscModel> activeLibraryDiscs, CancellationToken cancellationToken)
+		public Task LoadDiscs(IEnumerable<DiscModel> activeLibraryDiscs, CancellationToken cancellationToken)
 		{
-			var folders = await folderService.GetAllFolders(cancellationToken);
-
 			AllAvailableDiscs = activeLibraryDiscs
 				.Where(x => x.AdviseSetInfo == null)
-				.Select(x => new AvailableDiscViewModel(x, GetAvailableDiscTitle(x, folders)))
+				.Select(x => new AvailableDiscViewModel(x, GetAvailableDiscTitle(x)))
 				.OrderBy(x => x.Title, StringComparer.InvariantCultureIgnoreCase)
 				.ToList();
 
 			AvailableDiscs.Clear();
 			AvailableDiscs.AddRange(AllAvailableDiscs);
+
+			return Task.CompletedTask;
 		}
 
 		public void LoadAvailableDiscsForAdviseSet(IReadOnlyCollection<DiscModel> adviseSetDiscs)
@@ -100,7 +100,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 		{
 			var parentFolders = discs
 				.Select(x => x.Folder)
-				.Distinct(new ShallowFolderEqualityComparer());
+				.Distinct(new FolderEqualityComparer());
 
 			if (parentFolders.Count() > 1)
 			{
@@ -114,19 +114,9 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			return adviseGroups.Count() <= 1;
 		}
 
-		private static string GetAvailableDiscTitle(DiscModel disc, IReadOnlyCollection<ShallowFolderModel> folders)
+		private static string GetAvailableDiscTitle(DiscModel disc)
 		{
-			var foldersMap = folders.ToDictionary(x => x.Id, x => x);
-
-			var folderNames = new List<string>();
-			for (var folder = disc.Folder; !folder.IsRoot; folder = foldersMap[folder.ParentFolderId])
-			{
-				folderNames.Add(folder.Name);
-			}
-
-			folderNames.Reverse();
-
-			return $"/{String.Join("/", folderNames)}/{disc.TreeTitle}";
+			return $"/{String.Join("/", disc.Folder.PathNames)}/{disc.TreeTitle}";
 		}
 	}
 }

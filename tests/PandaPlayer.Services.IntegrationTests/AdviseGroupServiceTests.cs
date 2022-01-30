@@ -164,7 +164,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedFolder = referenceData.SubFolder;
 			expectedFolder.AdviseGroup = referenceData.FolderAdviseGroup;
 
-			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
+			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			// TODO: After switching to in-memory DiscLibrary, folderFromRepository (and similar variables in other IT) are not applicable anymore.
 			// It will reference the same object as folder and below check is equivalent to the one performed above.
@@ -172,7 +172,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			// The later could be done safely, because in-memory data is compared with database data in CheckLibraryConsistency().
 			// The only argument against such removing is potential redesign in the future when in-memory models holder is abandoned.
 			var folderFromRepository = await GetFolder(ReferenceData.SubFolderId);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			await CheckLibraryConsistency();
 		}
@@ -199,10 +199,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedFolder = referenceData.ArtistFolder;
 			expectedFolder.AdviseGroup = referenceData.DiscAdviseGroup;
 
-			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
+			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedAdviseGroups = new[]
 			{
@@ -237,13 +237,15 @@ namespace PandaPlayer.Services.IntegrationTests
 			// Assert
 
 			var referenceData = GetReferenceData();
+			referenceData.SubFolder.AdviseGroup = referenceData.FolderAdviseGroup;
+
 			var expectedFolder = referenceData.ArtistFolder;
 			expectedFolder.AdviseGroup = referenceData.DiscAdviseGroup;
 
-			assignedFolder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
+			assignedFolder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedAdviseGroups = new[]
 			{
@@ -347,6 +349,8 @@ namespace PandaPlayer.Services.IntegrationTests
 			// Assert
 
 			var referenceData = GetReferenceData();
+			referenceData.DiscWithMissingFields.AdviseGroup = referenceData.DiscAdviseGroup;
+
 			var expectedDisc = referenceData.NormalDisc;
 			expectedDisc.AdviseGroup = referenceData.FolderAdviseGroup;
 
@@ -387,10 +391,10 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedFolder = referenceData.ArtistFolder;
 			expectedFolder.AdviseGroup = null;
 
-			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
+			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedAdviseGroups = new[]
 			{
@@ -423,14 +427,15 @@ namespace PandaPlayer.Services.IntegrationTests
 			// Assert
 
 			var referenceData = GetReferenceData();
+			referenceData.SubFolder.AdviseGroup = referenceData.FolderAdviseGroup;
 
 			var expectedFolder = referenceData.ArtistFolder;
 			expectedFolder.AdviseGroup = null;
 
-			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
+			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedAdviseGroups = new[]
 			{
@@ -500,6 +505,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			// Assert
 
 			var referenceData = GetReferenceData();
+			referenceData.DiscWithMissingFields.AdviseGroup = referenceData.DiscAdviseGroup;
 
 			var expectedDisc = referenceData.NormalDisc;
 			expectedDisc.AdviseGroup = null;

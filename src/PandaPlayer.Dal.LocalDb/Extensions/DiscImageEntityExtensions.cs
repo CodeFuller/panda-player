@@ -1,28 +1,22 @@
 ﻿using System;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Dal.LocalDb.Entities;
-using PandaPlayer.Dal.LocalDb.Interfaces;
 using DiscImageType = PandaPlayer.Core.Models.DiscImageType;
 
 namespace PandaPlayer.Dal.LocalDb.Extensions
 {
 	internal static class DiscImageEntityExtensions
 	{
-		public static DiscImageModel ToModel(this DiscImageEntity discImage, DiscModel discModel, IContentUriProvider contentUriProvider)
+		public static DiscImageModel ToModel(this DiscImageEntity discImage)
 		{
-			var model = new DiscImageModel
+			return new()
 			{
 				Id = discImage.Id.ToItemId(),
-				Disc = discModel,
 				TreeTitle = discImage.TreeTitle,
 				ImageType = ConvertImageType(discImage.ImageType),
 				Size = discImage.FileSize,
 				Checksum = (uint)discImage.Checksum,
 			};
-
-			model.ContentUri = contentUriProvider.GetDiscImageUri(model);
-
-			return model;
 		}
 
 		public static DiscImageEntity ToEntity(this DiscImageModel image)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using PandaPlayer.Adviser.Interfaces;
@@ -18,12 +17,9 @@ namespace PandaPlayer.Adviser.Grouping
 			this.foldersService = foldersService ?? throw new ArgumentNullException(nameof(foldersService));
 		}
 
-		public async Task<IReadOnlyCollection<AdviseGroupContent>> GroupLibraryDiscs(IEnumerable<DiscModel> discs, CancellationToken cancellationToken)
+		public Task<IReadOnlyCollection<AdviseGroupContent>> GroupLibraryDiscs(IEnumerable<DiscModel> discs, CancellationToken cancellationToken)
 		{
 			var adviseGroups = new Dictionary<string, AdviseGroupContent>();
-
-			var allFolders = (await foldersService.GetAllFolders(cancellationToken))
-				.ToDictionary(x => x.Id, x => x);
 
 			var folderAdviseGroupCache = new Dictionary<ItemId, AdviseGroupModel>();
 
@@ -31,7 +27,7 @@ namespace PandaPlayer.Adviser.Grouping
 			// If there are no assigned advise group up to the root, then own parent folder is used as implicit group.
 			foreach (var disc in discs)
 			{
-				var adviseGroup = disc.AdviseGroup ?? GetFolderAdviseGroup(disc.Folder, folderAdviseGroupCache, allFolders);
+				var adviseGroup = disc.AdviseGroup ?? GetFolderAdviseGroup(disc.Folder, folderAdviseGroupCache);
 
 				var groupId = adviseGroup != null ? $"Advise Group: {adviseGroup.Id}" : $"Folder Group: {disc.Folder.Id}";
 
@@ -44,10 +40,10 @@ namespace PandaPlayer.Adviser.Grouping
 				adviseGroupContent.AddDisc(disc);
 			}
 
-			return adviseGroups.Values;
+			return Task.FromResult<IReadOnlyCollection<AdviseGroupContent>>(adviseGroups.Values);
 		}
 
-		private static AdviseGroupModel GetFolderAdviseGroup(ShallowFolderModel folder, IDictionary<ItemId, AdviseGroupModel> folderAdviseGroupCache, IReadOnlyDictionary<ItemId, ShallowFolderModel> allFolders)
+		private static AdviseGroupModel GetFolderAdviseGroup(FolderModel folder, IDictionary<ItemId, AdviseGroupModel> folderAdviseGroupCache)
 		{
 			if (folder.AdviseGroup != null)
 			{
@@ -64,13 +60,7 @@ namespace PandaPlayer.Adviser.Grouping
 				return cachedAdviseGroup;
 			}
 
-			if (!allFolders.TryGetValue(folder.ParentFolderId, out var parentFolder))
-			{
-				throw new InvalidOperationException($"The parent folder for id {folder.ParentFolderId} is missing");
-			}
-
-			var adviseGroup = GetFolderAdviseGroup(parentFolder, folderAdviseGroupCache, allFolders);
-
+			var adviseGroup = GetFolderAdviseGroup(folder.ParentFolder, folderAdviseGroupCache);
 			folderAdviseGroupCache.Add(folder.Id, adviseGroup);
 
 			return adviseGroup;

@@ -126,7 +126,7 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var disc = new DiscModel()
 			{
 				Id = new ItemId(id),
-				Folder = new ShallowFolderModel(),
+				Folder = new FolderModel(),
 				AllSongs = songs.ToList(),
 			};
 

@@ -24,9 +24,9 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		void EditDiscProperties(DiscModel disc);
 
-		void RenameFolder(ShallowFolderModel folder);
+		void RenameFolder(FolderModel folder);
 
-		Task DeleteFolder(ItemId folderId, CancellationToken cancellationToken);
+		Task DeleteFolder(FolderModel folder, CancellationToken cancellationToken);
 
 		Task DeleteDisc(DiscModel disc, CancellationToken cancellationToken);
 	}

@@ -51,13 +51,6 @@ namespace PandaPlayer.Services
 			return Task.FromResult(DiscLibrary.TryGetSongs(songIds));
 		}
 
-		// Currently this method is used only by IT.
-		// If this is changed and the method is called from production code, then the data should be returned from DiscLibrary.
-		Task<SongModel> ISongsService.GetSongWithPlaybacks(ItemId songId, CancellationToken cancellationToken)
-		{
-			return songsRepository.GetSongWithPlaybacks(songId, cancellationToken);
-		}
-
 		public async Task UpdateSong(SongModel song, Action<SongModel> updateAction, CancellationToken cancellationToken)
 		{
 			var currentSong = song.CloneShallow();

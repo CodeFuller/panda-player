@@ -13,7 +13,7 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 	{
 		public ItemId FolderId => Folder.Id;
 
-		public ShallowFolderModel Folder { get; }
+		public FolderModel Folder { get; }
 
 		public override string Title => Folder.Name;
 
@@ -32,7 +32,7 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 
 		public override bool IsDeleted => Folder.IsDeleted;
 
-		public FolderExplorerItem(ShallowFolderModel folder)
+		public FolderExplorerItem(FolderModel folder)
 		{
 			Folder = folder ?? throw new ArgumentNullException(nameof(folder));
 
@@ -70,7 +70,7 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 				IconKind = PackIconKind.Pencil,
 			};
 
-			yield return new CommandMenuItem(() => libraryExplorerViewModel.DeleteFolder(FolderId, CancellationToken.None))
+			yield return new CommandMenuItem(() => libraryExplorerViewModel.DeleteFolder(Folder, CancellationToken.None))
 			{
 				Header = "Delete Folder",
 				IconKind = PackIconKind.DeleteForever,

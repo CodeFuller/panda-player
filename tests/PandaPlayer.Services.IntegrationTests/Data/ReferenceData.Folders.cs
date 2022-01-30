@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.Services.IntegrationTests.Data
@@ -17,36 +19,45 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 
 		public static ItemId NextFolderId => new("6");
 
-		public ShallowFolderModel RootFolder { get; private set; }
+		public FolderModel RootFolder { get; private set; }
 
-		public ShallowFolderModel SubFolder { get; private set; }
+		public FolderModel SubFolder { get; private set; }
 
-		public ShallowFolderModel ArtistFolder { get; private set; }
+		public FolderModel ArtistFolder { get; private set; }
 
-		public ShallowFolderModel EmptyFolder { get; private set; }
+		public FolderModel EmptyFolder { get; private set; }
 
-		public ShallowFolderModel DeletedFolder { get; private set; }
+		public FolderModel DeletedFolder { get; private set; }
+
+		private IEnumerable<FolderModel> AllFolders
+		{
+			get
+			{
+				yield return RootFolder;
+				yield return SubFolder;
+				yield return ArtistFolder;
+				yield return EmptyFolder;
+				yield return DeletedFolder;
+			}
+		}
 
 		private void FillFolders()
 		{
 			RootFolder = new()
 			{
 				Id = RootFolderId,
-				ParentFolderId = null,
 				Name = "<ROOT>",
 			};
 
 			SubFolder = new()
 			{
 				Id = SubFolderId,
-				ParentFolderId = RootFolderId,
 				Name = "Belarusian",
 			};
 
 			ArtistFolder = new()
 			{
 				Id = ArtistFolderId,
-				ParentFolderId = SubFolderId,
 				Name = "Neuro Dubel",
 				AdviseGroup = FolderAdviseGroup,
 			};
@@ -54,17 +65,25 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 			EmptyFolder = new()
 			{
 				Id = EmptyFolderId,
-				ParentFolderId = ArtistFolderId,
 				Name = "Empty Folder",
 			};
 
 			DeletedFolder = new()
 			{
 				Id = DeletedFolderId,
-				ParentFolderId = ArtistFolderId,
 				Name = "Deleted Folder",
 				DeleteDate = new DateTimeOffset(2021, 06, 30, 18, 08, 10, TimeSpan.FromHours(3)),
 			};
+
+			RootFolder.AddSubfolder(SubFolder);
+			SubFolder.AddSubfolder(ArtistFolder);
+			ArtistFolder.AddSubfolder(EmptyFolder);
+			ArtistFolder.AddSubfolder(DeletedFolder);
+		}
+
+		public FolderModel GetFolder(ItemId folderId)
+		{
+			return AllFolders.Single(x => x.Id == folderId);
 		}
 	}
 }

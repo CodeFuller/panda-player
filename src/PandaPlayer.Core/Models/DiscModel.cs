@@ -15,7 +15,7 @@ namespace PandaPlayer.Core.Models
 
 		public ItemId Id { get; set; }
 
-		public ShallowFolderModel Folder { get; set; }
+		public FolderModel Folder { get; set; }
 
 		private AdviseGroupModel adviseGroup;
 
@@ -103,6 +103,7 @@ namespace PandaPlayer.Core.Models
 			}
 
 			images.Add(image);
+			image.Disc = this;
 		}
 
 		public void DeleteImage(DiscImageModel image)

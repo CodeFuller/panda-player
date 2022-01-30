@@ -17,7 +17,7 @@ namespace PandaPlayer.Services.Internal
 
 		IReadOnlyCollection<AdviseSetModel> AdviseSets { get; }
 
-		void AddEmptyFolder(ShallowFolderModel folder);
+		void AddFolder(FolderModel folder);
 
 		FolderModel GetFolder(ItemId folderId);
 

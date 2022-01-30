@@ -63,7 +63,7 @@ namespace PandaPlayer
 			}
 		}
 
-		public void ShowRenameFolderView(ShallowFolderModel folder)
+		public void ShowRenameFolderView(FolderModel folder)
 		{
 			var viewModel = viewModelHolder.RenameFolderViewModel;
 			viewModel.Load(folder);

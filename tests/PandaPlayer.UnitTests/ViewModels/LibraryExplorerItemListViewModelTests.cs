@@ -52,7 +52,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				Subfolders = new[]
 				{
-					new ShallowFolderModel(),
+					new FolderModel(),
 				},
 
 				Discs = new[]
@@ -92,9 +92,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				Subfolders = new[]
 				{
-					new ShallowFolderModel { Name = "Folder 1" },
-					new ShallowFolderModel { Name = "Folder 2" },
-					new ShallowFolderModel { Name = "Folder 3" },
+					new FolderModel { Name = "Folder 1" },
+					new FolderModel { Name = "Folder 2" },
+					new FolderModel { Name = "Folder 3" },
 				},
 
 				Discs = new[]
@@ -133,7 +133,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				Subfolders = new[]
 				{
-					new ShallowFolderModel { Name = "Some Folder" },
+					new FolderModel { Name = "Some Folder" },
 				},
 
 				Discs = new[]
@@ -172,7 +172,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				Subfolders = new[]
 				{
-					new ShallowFolderModel { Name = "Some Folder" },
+					new FolderModel { Name = "Some Folder" },
 				},
 
 				Discs = Array.Empty<DiscModel>(),
@@ -203,7 +203,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				Subfolders = new[]
 				{
-					new ShallowFolderModel { Name = "Some Folder" },
+					new FolderModel { Name = "Some Folder" },
 				},
 
 				Discs = new[]
@@ -252,7 +252,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				Subfolders = new[]
 				{
-					new ShallowFolderModel { Name = "Some Folder" },
+					new FolderModel { Name = "Some Folder" },
 				},
 
 				Discs = new[]
@@ -289,7 +289,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = Array.Empty<ShallowFolderModel>(),
+				Subfolders = Array.Empty<FolderModel>(),
 				Discs = new[]
 				{
 					new DiscModel
@@ -321,9 +321,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var subfolder1 = new ShallowFolderModel { Id = new ItemId("1"), Name = "Subfolder 1" };
-			var subfolder2 = new ShallowFolderModel { Id = new ItemId("2"), Name = "Subfolder 2" };
-			var subfolder3 = new ShallowFolderModel { Id = new ItemId("3"), Name = "Subfolder 3" };
+			var subfolder1 = new FolderModel { Id = new ItemId("1"), Name = "Subfolder 1" };
+			var subfolder2 = new FolderModel { Id = new ItemId("2"), Name = "Subfolder 2" };
+			var subfolder3 = new FolderModel { Id = new ItemId("3"), Name = "Subfolder 3" };
 
 			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
 			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AllSongs = new[] { new SongModel() } };
@@ -355,9 +355,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var subfolder1 = new ShallowFolderModel { Id = new ItemId("1"), Name = "Subfolder 1" };
-			var subfolder2 = new ShallowFolderModel { Id = new ItemId("2"), Name = "Subfolder 2" };
-			var subfolder3 = new ShallowFolderModel { Id = new ItemId("3"), Name = "Subfolder 3" };
+			var subfolder1 = new FolderModel { Id = new ItemId("1"), Name = "Subfolder 1" };
+			var subfolder2 = new FolderModel { Id = new ItemId("2"), Name = "Subfolder 2" };
+			var subfolder3 = new FolderModel { Id = new ItemId("3"), Name = "Subfolder 3" };
 
 			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
 			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AllSongs = new[] { new SongModel() } };
@@ -389,9 +389,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var subfolder1 = new ShallowFolderModel { Id = new ItemId("1"), Name = "Subfolder 1" };
-			var subfolder2 = new ShallowFolderModel { Id = new ItemId("2"), Name = "Subfolder 2", DeleteDate = new DateTime(2021, 07, 25) };
-			var subfolder3 = new ShallowFolderModel { Id = new ItemId("3"), Name = "Subfolder 3" };
+			var subfolder1 = new FolderModel { Id = new ItemId("1"), Name = "Subfolder 1" };
+			var subfolder2 = new FolderModel { Id = new ItemId("2"), Name = "Subfolder 2", DeleteDate = new DateTime(2021, 07, 25) };
+			var subfolder3 = new FolderModel { Id = new ItemId("3"), Name = "Subfolder 3" };
 
 			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
 			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 07, 25) } } };
@@ -426,9 +426,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				ParentFolderId = new ItemId("Parent Folder"),
-				ParentFolder = new ShallowFolderModel { Id = new ItemId("Parent Folder") },
-				Subfolders = Array.Empty<ShallowFolderModel>(),
+				ParentFolder = new FolderModel { Id = new ItemId("Parent Folder") },
+				Subfolders = Array.Empty<FolderModel>(),
 				Discs = new[]
 				{
 					new DiscModel
@@ -460,9 +459,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				ParentFolderId = null,
 				ParentFolder = null,
-				Subfolders = Array.Empty<ShallowFolderModel>(),
+				Subfolders = Array.Empty<FolderModel>(),
 				Discs = new[]
 				{
 					new DiscModel
@@ -490,9 +488,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var folder1 = new ShallowFolderModel { Name = "21 - Folder 1" };
-			var folder2 = new ShallowFolderModel { Name = "22 - Folder 2" };
-			var folder3 = new ShallowFolderModel { Name = "23 - Folder 3" };
+			var folder1 = new FolderModel { Name = "21 - Folder 1" };
+			var folder2 = new FolderModel { Name = "22 - Folder 2" };
+			var folder3 = new FolderModel { Name = "23 - Folder 3" };
 
 			var disc1 = new DiscModel
 			{
@@ -547,9 +545,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var folder1 = new ShallowFolderModel { Name = "A Folder" };
-			var folder2 = new ShallowFolderModel { Name = "b Folder" };
-			var folder3 = new ShallowFolderModel { Name = "C Folder" };
+			var folder1 = new FolderModel { Name = "A Folder" };
+			var folder2 = new FolderModel { Name = "b Folder" };
+			var folder3 = new FolderModel { Name = "C Folder" };
 
 			var disc1 = new DiscModel
 			{
@@ -606,9 +604,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var folder1 = new ShallowFolderModel { Name = "Елена Никитаева" };
-			var folder2 = new ShallowFolderModel { Name = "Ёлка" };
-			var folder3 = new ShallowFolderModel { Name = "Жанна Агузарова" };
+			var folder1 = new FolderModel { Name = "Елена Никитаева" };
+			var folder2 = new FolderModel { Name = "Ёлка" };
+			var folder3 = new FolderModel { Name = "Жанна Агузарова" };
 
 			var disc1 = new DiscModel
 			{
@@ -663,9 +661,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var subfolder1 = new ShallowFolderModel { Name = "Subfolder 1" };
-			var subfolder2 = new ShallowFolderModel { Name = "Subfolder 2", DeleteDate = new DateTime(2021, 07, 25) };
-			var subfolder3 = new ShallowFolderModel { Name = "Subfolder 3" };
+			var subfolder1 = new FolderModel { Name = "Subfolder 1" };
+			var subfolder2 = new FolderModel { Name = "Subfolder 2", DeleteDate = new DateTime(2021, 07, 25) };
+			var subfolder3 = new FolderModel { Name = "Subfolder 3" };
 
 			var disc1 = new DiscModel { TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
 			var disc2 = new DiscModel { TreeTitle = "Disc 2", AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 07, 25) } } };
@@ -703,9 +701,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var subfolder1 = new ShallowFolderModel { Name = "Subfolder 1" };
-			var subfolder2 = new ShallowFolderModel { Name = "Subfolder 2", DeleteDate = new DateTime(2021, 07, 25) };
-			var subfolder3 = new ShallowFolderModel { Name = "Subfolder 3" };
+			var subfolder1 = new FolderModel { Name = "Subfolder 1" };
+			var subfolder2 = new FolderModel { Name = "Subfolder 2", DeleteDate = new DateTime(2021, 07, 25) };
+			var subfolder3 = new FolderModel { Name = "Subfolder 3" };
 
 			var disc1 = new DiscModel { TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
 			var disc2 = new DiscModel { TreeTitle = "Disc 2", AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 07, 25) } } };
@@ -749,7 +747,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				Subfolders = new[]
 				{
-					new ShallowFolderModel { Id = new ItemId("OldSubfolder"), Name = "Old Folder" },
+					new FolderModel { Id = new ItemId("OldSubfolder"), Name = "Old Folder" },
 				},
 
 				Discs = new[]
@@ -758,7 +756,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 				},
 			};
 
-			var newSubfolder = new ShallowFolderModel { Id = new ItemId("NewSubfolder"), Name = "New Folder" };
+			var newSubfolder = new FolderModel { Id = new ItemId("NewSubfolder"), Name = "New Folder" };
 			var newDisc = new DiscModel { Id = new ItemId("NewSubfolder"), TreeTitle = "New Disc", AllSongs = new[] { new SongModel { Id = new ItemId("2") } } };
 			var newFolder = new FolderModel { Id = new ItemId("NewFolder"), Subfolders = new[] { newSubfolder }, Discs = new[] { newDisc } };
 
@@ -789,19 +787,19 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var folder1 = new ShallowFolderModel
+			var folder1 = new FolderModel
 			{
 				Id = new ItemId("1"),
 				Name = "Folder 1",
 			};
 
-			var folder2 = new ShallowFolderModel
+			var folder2 = new FolderModel
 			{
 				Id = new ItemId("2"),
 				Name = "Folder 2",
 			};
 
-			var folder3 = new ShallowFolderModel
+			var folder3 = new FolderModel
 			{
 				Id = new ItemId("3"),
 				Name = "Folder 3",
@@ -842,7 +840,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var subfolder = new ShallowFolderModel
+			var subfolder = new FolderModel
 			{
 				Id = new ItemId("Subfolder Id"),
 				Name = "Some Subfolder",
@@ -908,7 +906,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				Subfolders = new[]
 				{
-					new ShallowFolderModel
+					new FolderModel
 					{
 						// Using the same id as for requested disc, just in case.
 						Id = new ItemId("2"),
@@ -949,7 +947,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				Subfolders = new[]
 				{
-					new ShallowFolderModel
+					new FolderModel
 					{
 						// Using the same id as for requested disc, just in case.
 						Id = new ItemId("1"),
@@ -978,9 +976,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var folder1 = new ShallowFolderModel { Id = new ItemId("1"), Name = "Folder 1" };
-			var folder2 = new ShallowFolderModel { Id = new ItemId("2"), Name = "Folder 2" };
-			var folder3 = new ShallowFolderModel { Id = new ItemId("3"), Name = "Folder 3" };
+			var folder1 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
+			var folder2 = new FolderModel { Id = new ItemId("2"), Name = "Folder 2" };
+			var folder3 = new FolderModel { Id = new ItemId("3"), Name = "Folder 3" };
 
 			// Using the same id as for requested folder, just in case.
 			var disc = new DiscModel { Id = new ItemId("2"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
@@ -999,7 +997,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			await target.OnFolderDeleted(new ItemId("2"), _ => Task.FromResult<FolderModel>(null));
+			await target.OnFolderDeleted(new ItemId("2"));
 
 			// Assert
 
@@ -1018,7 +1016,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var subfolder = new ShallowFolderModel { Id = new ItemId("Subfolder Id"), Name = "Some Subfolder" };
+			var subfolder = new FolderModel { Id = new ItemId("Subfolder Id"), Name = "Some Subfolder" };
 			var disc = new DiscModel { Id = new ItemId("1"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
 
 			var folder = new FolderModel
@@ -1035,7 +1033,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			await target.OnFolderDeleted(new ItemId("1"), _ => Task.FromResult<FolderModel>(null));
+			await target.OnFolderDeleted(new ItemId("1"));
 
 			// Assert
 
@@ -1053,39 +1051,36 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var oldFolder = new FolderModel
+			var oldSubfolder = new FolderModel { Id = new ItemId("Old Subfolder Id"), Name = "Old Subfolder" };
+
+			var folder = new FolderModel
 			{
-				Subfolders = new[]
-				{
-					new ShallowFolderModel { Id = new ItemId("Old Subfolder Id"), Name = "Old Subfolder" },
-				},
+				Subfolders = new[] { oldSubfolder },
 				Discs = Array.Empty<DiscModel>(),
-			};
-
-			var newSubfolder = new ShallowFolderModel { Id = new ItemId("New Subfolder Id"), Name = "New Subfolder" };
-			var newDisc = new DiscModel { Id = new ItemId("New Disc Id"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
-
-			var newFolder = new FolderModel
-			{
-				Subfolders = new[] { newSubfolder },
-				Discs = new[] { newDisc },
 			};
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
 
-			target.LoadFolderItems(oldFolder);
+			target.LoadFolderItems(folder);
 			target.ShowDeletedContent = true;
+
+			// We add new items to the current folder for checking that LoadFolderItems() was called once again for the current folder.
+			var newSubfolder = new FolderModel { Id = new ItemId("New Subfolder Id"), Name = "New Subfolder" };
+			var newDisc = new DiscModel { Id = new ItemId("New Disc Id"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
+			folder.AddSubfolder(newSubfolder);
+			folder.AddDisc(newDisc);
 
 			// Act
 
-			await target.OnFolderDeleted(new ItemId("Old Subfolder Id"), _ => Task.FromResult(newFolder));
+			await target.OnFolderDeleted(new ItemId("Old Subfolder Id"));
 
 			// Assert
 
 			var expectedItems = new BasicExplorerItem[]
 			{
 				new FolderExplorerItem(newSubfolder),
+				new FolderExplorerItem(oldSubfolder),
 				new DiscExplorerItem(newDisc),
 			};
 
@@ -1098,7 +1093,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			// Using the same id as for requested disc, just in case.
-			var subfolder = new ShallowFolderModel { Id = new ItemId("2"), Name = "Some Subfolder" };
+			var subfolder = new FolderModel { Id = new ItemId("2"), Name = "Some Subfolder" };
 
 			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
 			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AllSongs = new[] { new SongModel() } };
@@ -1118,7 +1113,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			await target.OnDiscDeleted(new ItemId("2"), _ => Task.FromResult<FolderModel>(null));
+			await target.OnDiscDeleted(new ItemId("2"));
 
 			// Assert
 
@@ -1138,7 +1133,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			// Using the same id as for requested disc, just in case.
-			var subfolder = new ShallowFolderModel { Id = new ItemId("1"), Name = "Some Subfolder" };
+			var subfolder = new FolderModel { Id = new ItemId("1"), Name = "Some Subfolder" };
 			var disc = new DiscModel { Id = new ItemId("Disc Id"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
 
 			var folder = new FolderModel { Subfolders = new[] { subfolder }, Discs = new[] { disc } };
@@ -1151,7 +1146,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			await target.OnDiscDeleted(new ItemId("1"), _ => Task.FromResult<FolderModel>(null));
+			await target.OnDiscDeleted(new ItemId("1"));
 
 			// Assert
 
@@ -1169,36 +1164,29 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var oldFolder = new FolderModel
-			{
-				Subfolders = new[]
-				{
-					new ShallowFolderModel { Id = new ItemId("Old Subfolder Id"), Name = "Old Subfolder" },
-				},
-				Discs = new[]
-				{
-					new DiscModel { Id = new ItemId("Old Disc Id"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } },
-				},
-			};
+			var oldDisc = new DiscModel { Id = new ItemId("Old Disc Id"), TreeTitle = "Old Disc", AllSongs = new[] { new SongModel { Id = new ItemId("1") } } };
 
-			var newSubfolder = new ShallowFolderModel { Id = new ItemId("New Subfolder Id"), Name = "New Subfolder" };
-			var newDisc = new DiscModel { Id = new ItemId("New Disc Id"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
-
-			var newFolder = new FolderModel
+			var folder = new FolderModel
 			{
-				Subfolders = new[] { newSubfolder },
-				Discs = new[] { newDisc },
+				Subfolders = Array.Empty<FolderModel>(),
+				Discs = new[] { oldDisc },
 			};
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
 
-			target.LoadFolderItems(oldFolder);
+			target.LoadFolderItems(folder);
 			target.ShowDeletedContent = true;
+
+			// We add new items to the current folder for checking that LoadFolderItems() was called once again for the current folder.
+			var newSubfolder = new FolderModel { Id = new ItemId("New Subfolder Id"), Name = "New Subfolder" };
+			var newDisc = new DiscModel { Id = new ItemId("New Disc Id"), TreeTitle = "New Disc", AllSongs = new[] { new SongModel { Id = new ItemId("2") } } };
+			folder.AddSubfolder(newSubfolder);
+			folder.AddDisc(newDisc);
 
 			// Act
 
-			await target.OnDiscDeleted(new ItemId("Old Disc Id"), _ => Task.FromResult(newFolder));
+			await target.OnDiscDeleted(new ItemId("Old Disc Id"));
 
 			// Assert
 
@@ -1206,6 +1194,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				new FolderExplorerItem(newSubfolder),
 				new DiscExplorerItem(newDisc),
+				new DiscExplorerItem(oldDisc),
 			};
 
 			target.Items.Should().BeEquivalentTo(expectedItems, x => x.WithStrictOrdering());
@@ -1218,10 +1207,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				ParentFolderId = new ItemId("Parent Folder Id"),
-				ParentFolder = new ShallowFolderModel { Id = new ItemId("Parent Folder Id") },
+				ParentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") },
 				Id = new ItemId("Child Folder Id"),
-				Subfolders = Array.Empty<ShallowFolderModel>(),
+				Subfolders = Array.Empty<FolderModel>(),
 				Discs = new[]
 				{
 					new DiscModel
@@ -1248,7 +1236,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Assert
 
 			loadParentFolderEvent.Should().NotBeNull();
-			loadParentFolderEvent.ParentFolderId.Should().Be(new ItemId("Parent Folder Id"));
+			loadParentFolderEvent.ParentFolder.Should().Be(folder.ParentFolder);
 			loadParentFolderEvent.ChildFolderId.Should().Be(new ItemId("Child Folder Id"));
 		}
 
@@ -1257,15 +1245,13 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
+			var subfolder = new FolderModel { Id = new ItemId("Subfolder Id") };
+
 			var folder = new FolderModel
 			{
-				ParentFolderId = new ItemId("Parent Folder Id"),
-				ParentFolder = new ShallowFolderModel { Id = new ItemId("Parent Folder Id") },
+				ParentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") },
 				Id = new ItemId("Child Folder Id"),
-				Subfolders = new[]
-				{
-					new ShallowFolderModel { Id = new ItemId("Subfolder Id") },
-				},
+				Subfolders = new[] { subfolder },
 				Discs = new[]
 				{
 					new DiscModel
@@ -1293,7 +1279,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Assert
 
 			loadFolderEvent.Should().NotBeNull();
-			loadFolderEvent.FolderId.Should().Be(new ItemId("Subfolder Id"));
+			loadFolderEvent.Folder.Should().Be(subfolder);
 		}
 
 		[TestMethod]
@@ -1303,12 +1289,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				ParentFolderId = new ItemId("Parent Folder Id"),
-				ParentFolder = new ShallowFolderModel { Id = new ItemId("Parent Folder Id") },
+				ParentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") },
 				Id = new ItemId("Child Folder Id"),
 				Subfolders = new[]
 				{
-					new ShallowFolderModel { Id = new ItemId("Subfolder Id") },
+					new FolderModel { Id = new ItemId("Subfolder Id") },
 				},
 				Discs = new[]
 				{
@@ -1350,12 +1335,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				ParentFolderId = new ItemId("Parent Folder Id"),
-				ParentFolder = new ShallowFolderModel { Id = new ItemId("Parent Folder Id") },
+				ParentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") },
 				Id = new ItemId("Child Folder Id"),
 				Subfolders = new[]
 				{
-					new ShallowFolderModel { Id = new ItemId("Subfolder Id") },
+					new FolderModel { Id = new ItemId("Subfolder Id") },
 				},
 				Discs = new[]
 				{
@@ -1396,12 +1380,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				ParentFolderId = new ItemId("Parent Folder Id"),
-				ParentFolder = new ShallowFolderModel { Id = new ItemId("Parent Folder Id") },
+				ParentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") },
 				Id = new ItemId("Child Folder Id"),
 				Subfolders = new[]
 				{
-					new ShallowFolderModel { Id = new ItemId("Subfolder Id") },
+					new FolderModel { Id = new ItemId("Subfolder Id") },
 				},
 				Discs = new[]
 				{
@@ -1435,12 +1418,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				ParentFolderId = new ItemId("Parent Folder Id"),
-				ParentFolder = new ShallowFolderModel { Id = new ItemId("Parent Folder Id") },
+				ParentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") },
 				Id = new ItemId("Child Folder Id"),
 				Subfolders = new[]
 				{
-					new ShallowFolderModel { Id = new ItemId("Subfolder Id") },
+					new FolderModel { Id = new ItemId("Subfolder Id") },
 				},
 				Discs = new[]
 				{

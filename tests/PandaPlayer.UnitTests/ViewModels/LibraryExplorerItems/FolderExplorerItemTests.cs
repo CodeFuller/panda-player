@@ -29,7 +29,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var folder = new ShallowFolderModel
+			var folder = new FolderModel
 			{
 				Name = "Folder Name",
 			};
@@ -50,7 +50,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var folder = new ShallowFolderModel
+			var folder = new FolderModel
 			{
 				AdviseGroup = null,
 			};
@@ -71,7 +71,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var folder = new ShallowFolderModel
+			var folder = new FolderModel
 			{
 				AdviseGroup = new AdviseGroupModel
 				{
@@ -97,7 +97,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var folder = new ShallowFolderModel
+			var folder = new FolderModel
 			{
 				AdviseGroup = new AdviseGroupModel
 				{
@@ -159,7 +159,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var folder = new ShallowFolderModel
+			var folder = new FolderModel
 			{
 				Name = "Old Name",
 			};
@@ -188,7 +188,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var folder = new ShallowFolderModel
+			var folder = new FolderModel
 			{
 				AdviseGroup = null,
 			};

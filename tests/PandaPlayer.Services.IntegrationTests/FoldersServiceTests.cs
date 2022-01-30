@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.IntegrationTests.Data;
+using PandaPlayer.Services.IntegrationTests.Extensions;
 using PandaPlayer.Services.Interfaces;
 
 namespace PandaPlayer.Services.IntegrationTests
@@ -16,34 +17,39 @@ namespace PandaPlayer.Services.IntegrationTests
 	public class FoldersServiceTests : BasicServiceTests<IFoldersService>
 	{
 		[TestMethod]
-		public async Task CreateFolder_ForRootParent_CreatesFolderCorrectly()
+		public async Task CreateEmptyFolder_ForRootParent_CreatesFolderCorrectly()
 		{
 			// Arrange
+
+			var newFolder = new FolderModel
+			{
+				Name = "Ляпис Трубецкой",
+			};
+
+			var parentFolder = await GetFolder(ReferenceData.RootFolderId);
+			parentFolder.AddSubfolder(newFolder);
 
 			var target = CreateTestTarget();
 
 			// Act
 
-			var newFolder = new ShallowFolderModel
-			{
-				ParentFolderId = ReferenceData.RootFolderId,
-				Name = "Ляпис Трубецкой",
-			};
-
-			await target.CreateFolder(newFolder, CancellationToken.None);
+			await target.CreateEmptyFolder(newFolder, CancellationToken.None);
 
 			// Assert
 
-			var expectedShallowFolder = new ShallowFolderModel
+			var expectedFolder = new FolderModel
 			{
 				Id = ReferenceData.NextFolderId,
-				ParentFolderId = ReferenceData.RootFolderId,
 				Name = "Ляпис Трубецкой",
+				Subfolders = new List<FolderModel>(),
+				Discs = new List<DiscModel>(),
 			};
 
-			newFolder.Should().BeEquivalentTo(expectedShallowFolder, x => x.WithStrictOrdering());
-
 			var referenceData = GetReferenceData();
+			referenceData.RootFolder.AddSubfolder(expectedFolder);
+
+			newFolder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
+
 			var expectedFolders = new[]
 			{
 				referenceData.RootFolder,
@@ -51,24 +57,14 @@ namespace PandaPlayer.Services.IntegrationTests
 				referenceData.ArtistFolder,
 				referenceData.EmptyFolder,
 				referenceData.DeletedFolder,
-				expectedShallowFolder,
+				expectedFolder,
 			};
 
-			var allFolders = await target.GetAllFolders(CancellationToken.None);
+			var allFolders = await GetAllFolders();
 			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
-			var expectedFolder = new FolderModel
-			{
-				Id = ReferenceData.NextFolderId,
-				ParentFolderId = ReferenceData.RootFolderId,
-				ParentFolder = referenceData.RootFolder,
-				Name = "Ляпис Трубецкой",
-				Subfolders = new List<ShallowFolderModel>(),
-				Discs = new List<DiscModel>(),
-			};
-
-			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
+			var folderFromRepository = await GetFolder(ReferenceData.NextFolderId);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Ляпис Трубецкой");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
@@ -77,34 +73,39 @@ namespace PandaPlayer.Services.IntegrationTests
 		}
 
 		[TestMethod]
-		public async Task CreateFolder_ForNonRootParent_CreatesFolderCorrectly()
+		public async Task CreateEmptyFolder_ForNonRootParent_CreatesFolderCorrectly()
 		{
 			// Arrange
+
+			var newFolder = new FolderModel
+			{
+				Name = "Ляпис Трубецкой",
+			};
+
+			var parentFolder = await GetFolder(ReferenceData.ArtistFolderId);
+			parentFolder.AddSubfolder(newFolder);
 
 			var target = CreateTestTarget();
 
 			// Act
 
-			var newFolder = new ShallowFolderModel
-			{
-				ParentFolderId = ReferenceData.ArtistFolderId,
-				Name = "Ляпис Трубецкой",
-			};
-
-			await target.CreateFolder(newFolder, CancellationToken.None);
+			await target.CreateEmptyFolder(newFolder, CancellationToken.None);
 
 			// Assert
 
-			var expectedShallowFolder = new ShallowFolderModel
+			var expectedFolder = new FolderModel
 			{
 				Id = ReferenceData.NextFolderId,
-				ParentFolderId = ReferenceData.ArtistFolderId,
 				Name = "Ляпис Трубецкой",
+				Subfolders = new List<FolderModel>(),
+				Discs = new List<DiscModel>(),
 			};
 
-			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
-
 			var referenceData = GetReferenceData();
+			referenceData.ArtistFolder.AddSubfolder(expectedFolder);
+
+			newFolder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
+
 			var expectedFolders = new[]
 			{
 				referenceData.RootFolder,
@@ -112,24 +113,14 @@ namespace PandaPlayer.Services.IntegrationTests
 				referenceData.ArtistFolder,
 				referenceData.EmptyFolder,
 				referenceData.DeletedFolder,
-				expectedShallowFolder,
+				expectedFolder,
 			};
 
-			var allFolders = await target.GetAllFolders(CancellationToken.None);
+			var allFolders = await GetAllFolders();
 			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
-			var expectedFolder = new FolderModel
-			{
-				Id = ReferenceData.NextFolderId,
-				ParentFolderId = ReferenceData.ArtistFolderId,
-				ParentFolder = referenceData.ArtistFolder,
-				Name = "Ляпис Трубецкой",
-				Subfolders = new List<ShallowFolderModel>(),
-				Discs = new List<DiscModel>(),
-			};
-
-			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
+			var folderFromRepository = await GetFolder(ReferenceData.NextFolderId);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "Ляпис Трубецкой");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
@@ -138,34 +129,39 @@ namespace PandaPlayer.Services.IntegrationTests
 		}
 
 		[TestMethod]
-		public async Task CreateFolder_IfFolderWithSameNameExistsForOtherParent_CreatesFolderSuccessfully()
+		public async Task CreateEmptyFolder_IfFolderWithSameNameExistsForOtherParent_CreatesFolderSuccessfully()
 		{
 			// Arrange
+
+			var newFolder = new FolderModel
+			{
+				Name = "Belarusian",
+			};
+
+			var parentFolder = await GetFolder(ReferenceData.ArtistFolderId);
+			parentFolder.AddSubfolder(newFolder);
 
 			var target = CreateTestTarget();
 
 			// Act
 
-			var newFolder = new ShallowFolderModel
-			{
-				ParentFolderId = ReferenceData.ArtistFolderId,
-				Name = "Belarusian",
-			};
-
-			await target.CreateFolder(newFolder, CancellationToken.None);
+			await target.CreateEmptyFolder(newFolder, CancellationToken.None);
 
 			// Assert
 
-			var expectedShallowFolder = new ShallowFolderModel
+			var expectedFolder = new FolderModel
 			{
 				Id = ReferenceData.NextFolderId,
-				ParentFolderId = ReferenceData.ArtistFolderId,
 				Name = "Belarusian",
+				Subfolders = new List<FolderModel>(),
+				Discs = new List<DiscModel>(),
 			};
 
-			newFolder.Id.Should().Be(ReferenceData.NextFolderId);
-
 			var referenceData = GetReferenceData();
+			referenceData.ArtistFolder.AddSubfolder(expectedFolder);
+
+			newFolder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
+
 			var expectedFolders = new[]
 			{
 				referenceData.RootFolder,
@@ -173,92 +169,19 @@ namespace PandaPlayer.Services.IntegrationTests
 				referenceData.ArtistFolder,
 				referenceData.EmptyFolder,
 				referenceData.DeletedFolder,
-				expectedShallowFolder,
+				expectedFolder,
 			};
 
-			var allFolders = await target.GetAllFolders(CancellationToken.None);
+			var allFolders = await GetAllFolders();
 			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
-			var expectedFolder = new FolderModel
-			{
-				Id = ReferenceData.NextFolderId,
-				ParentFolderId = ReferenceData.ArtistFolderId,
-				ParentFolder = referenceData.ArtistFolder,
-				Name = "Belarusian",
-				Subfolders = new List<ShallowFolderModel>(),
-				Discs = new List<DiscModel>(),
-			};
-
-			var folderFromRepository = await target.GetFolder(ReferenceData.NextFolderId, CancellationToken.None);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
+			var folderFromRepository = await GetFolder(ReferenceData.NextFolderId);
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedFolderPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "Belarusian");
 			Directory.Exists(expectedFolderPath).Should().BeTrue();
 
 			await CheckLibraryConsistency();
-		}
-
-		[TestMethod]
-		public async Task CreateFolder_IfFolderWithSameNameExistsForParent_Throws()
-		{
-			// Arrange
-
-			var target = CreateTestTarget();
-
-			// Act
-
-			var newFolder = new ShallowFolderModel
-			{
-				ParentFolderId = ReferenceData.SubFolderId,
-				Name = "Neuro Dubel",
-			};
-
-			Func<Task> call = () => target.CreateFolder(newFolder, CancellationToken.None);
-
-			// Assert
-
-			await call.Should().ThrowAsync<DbUpdateException>();
-
-			var referenceData = GetReferenceData();
-			var expectedFolders = new[]
-			{
-				referenceData.RootFolder,
-				referenceData.SubFolder,
-				referenceData.ArtistFolder,
-				referenceData.EmptyFolder,
-				referenceData.DeletedFolder,
-			};
-
-			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.WithStrictOrdering().IgnoringCyclicReferences());
-
-			await CheckLibraryConsistency();
-		}
-
-		[TestMethod]
-		public async Task GetAllFolders_ReturnsFoldersCorrectly()
-		{
-			// Arrange
-
-			var target = CreateTestTarget();
-
-			// Act
-
-			var folders = await target.GetAllFolders(CancellationToken.None);
-
-			// Assert
-
-			var referenceData = GetReferenceData();
-			var expectedFolders = new[]
-			{
-				referenceData.RootFolder,
-				referenceData.SubFolder,
-				referenceData.ArtistFolder,
-				referenceData.EmptyFolder,
-				referenceData.DeletedFolder,
-			};
-
-			folders.Should().BeEquivalentTo(expectedFolders, x => x.WithStrictOrdering());
 		}
 
 		[TestMethod]
@@ -279,76 +202,11 @@ namespace PandaPlayer.Services.IntegrationTests
 			{
 				Id = ReferenceData.RootFolderId,
 				Name = "<ROOT>",
-				Subfolders = new List<ShallowFolderModel>
+				Subfolders = new List<FolderModel>
 				{
 					referenceData.SubFolder,
 				},
 				Discs = new List<DiscModel>(),
-			};
-
-			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
-		}
-
-		[TestMethod]
-		public async Task GetFolder_ForRootFolderId_ReturnsFolderCorrectly()
-		{
-			// Arrange
-
-			var target = CreateTestTarget();
-
-			// Act
-
-			var folder = await target.GetFolder(ReferenceData.RootFolderId, CancellationToken.None);
-
-			// Assert
-
-			var referenceData = GetReferenceData();
-			var expectedFolder = new FolderModel
-			{
-				Id = ReferenceData.RootFolderId,
-				Name = "<ROOT>",
-				Subfolders = new List<ShallowFolderModel>
-				{
-					referenceData.SubFolder,
-				},
-				Discs = new List<DiscModel>(),
-			};
-
-			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
-		}
-
-		[TestMethod]
-		public async Task GetFolder_ForNonRootFolderId_ReturnsFolderCorrectly()
-		{
-			// Arrange
-
-			var target = CreateTestTarget();
-
-			// Act
-
-			var folder = await target.GetFolder(ReferenceData.ArtistFolderId, CancellationToken.None);
-
-			// Assert
-
-			var referenceData = GetReferenceData();
-			var expectedFolder = new FolderModel
-			{
-				Id = ReferenceData.ArtistFolderId,
-				ParentFolderId = ReferenceData.SubFolderId,
-				ParentFolder = referenceData.SubFolder,
-				Name = "Neuro Dubel",
-				AdviseGroup = referenceData.FolderAdviseGroup,
-				Subfolders = new List<ShallowFolderModel>
-				{
-					referenceData.EmptyFolder,
-					referenceData.DeletedFolder,
-				},
-				Discs = new List<DiscModel>
-				{
-					referenceData.NormalDisc,
-					referenceData.DiscWithMissingFields,
-					referenceData.DeletedDisc,
-				},
 			};
 
 			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
@@ -359,13 +217,13 @@ namespace PandaPlayer.Services.IntegrationTests
 		{
 			// Arrange
 
-			var target = CreateTestTarget();
+			var folder = await GetFolder(ReferenceData.ArtistFolderId);
 
-			var folder = await target.GetFolder(ReferenceData.ArtistFolderId, CancellationToken.None);
+			var target = CreateTestTarget();
 
 			// Act
 
-			void UpdateFolder(ShallowFolderModel folder)
+			void UpdateFolder(FolderModel folder)
 			{
 				folder.Name = "New Folder Name";
 			}
@@ -378,10 +236,18 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedFolder = referenceData.ArtistFolder;
 			expectedFolder.Name = "New Folder Name";
 
-			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
+			var songs1 = referenceData.NormalDisc.ActiveSongs.ToList();
+			songs1[0].ContentUri = "Belarusian/New Folder Name/2010 - Афтары правды (CD 1)/01 - Про женщин.mp3".ToContentUri(LibraryStorageRoot);
+			songs1[1].ContentUri = "Belarusian/New Folder Name/2010 - Афтары правды (CD 1)/02 - Про жизнь дяди Саши.mp3".ToContentUri(LibraryStorageRoot);
+			referenceData.NormalDisc.Images.Single().ContentUri = "Belarusian/New Folder Name/2010 - Афтары правды (CD 1)/cover.jpg".ToContentUri(LibraryStorageRoot);
+
+			var songs2 = referenceData.DiscWithMissingFields.ActiveSongs.ToList();
+			songs2[0].ContentUri = "Belarusian/New Folder Name/Disc With Missing Fields (CD 1)/Song With Missing Fields.mp3".ToContentUri(LibraryStorageRoot);
+
+			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var folderFromRepository = await GetFolder(ReferenceData.ArtistFolderId);
-			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering());
+			folderFromRepository.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var oldDirectoryPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel");
 			Directory.Exists(oldDirectoryPath).Should().BeFalse();
@@ -393,39 +259,49 @@ namespace PandaPlayer.Services.IntegrationTests
 		}
 
 		[TestMethod]
-		public async Task DeleteFolder_ForEmptyFolder_DeletesFolderSuccessfully()
+		public async Task DeleteEmptyFolder_ForEmptyFolder_DeletesFolderSuccessfully()
 		{
 			// Arrange
-
-			var target = CreateTestTarget(StubClock(new DateTimeOffset(2021, 07, 02, 18, 49, 51, TimeSpan.FromHours(3))));
 
 			var directoryPath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "Empty Folder");
 			Directory.Exists(directoryPath).Should().BeTrue();
 
+			var target = CreateTestTarget(StubClock(new DateTimeOffset(2021, 07, 02, 18, 49, 51, TimeSpan.FromHours(3))));
+
+			var deletedFolder = await GetFolder(ReferenceData.EmptyFolderId);
+
 			// Act
 
-			await target.DeleteFolder(ReferenceData.EmptyFolderId, CancellationToken.None);
+			await target.DeleteEmptyFolder(deletedFolder, CancellationToken.None);
 
 			// Assert
 
 			var referenceData = GetReferenceData();
+			referenceData.EmptyFolder.DeleteDate = new DateTimeOffset(2021, 07, 02, 18, 49, 51, TimeSpan.FromHours(3));
+
+			var expectedFolder = new FolderModel
+			{
+				Id = ReferenceData.EmptyFolderId,
+				ParentFolder = referenceData.ArtistFolder,
+				Name = "Empty Folder",
+				Subfolders = new List<FolderModel>(),
+				Discs = new List<DiscModel>(),
+				DeleteDate = new DateTimeOffset(2021, 07, 02, 18, 49, 51, TimeSpan.FromHours(3)),
+			};
+
+			deletedFolder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
+
 			var expectedFolders = new[]
 			{
 				referenceData.RootFolder,
 				referenceData.SubFolder,
 				referenceData.ArtistFolder,
-				new ShallowFolderModel
-				{
-					Id = ReferenceData.EmptyFolderId,
-					ParentFolderId = ReferenceData.ArtistFolderId,
-					Name = "Empty Folder",
-					DeleteDate = new DateTimeOffset(2021, 07, 02, 18, 49, 51, TimeSpan.FromHours(3)),
-				},
+				expectedFolder,
 				referenceData.DeletedFolder,
 			};
 
-			var allFolders = await target.GetAllFolders(CancellationToken.None);
-			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.WithStrictOrdering());
+			var allFolders = await GetAllFolders();
+			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			Directory.Exists(directoryPath).Should().BeFalse();
 
@@ -433,7 +309,7 @@ namespace PandaPlayer.Services.IntegrationTests
 		}
 
 		[TestMethod]
-		public async Task DeleteFolder_IfFolderIsLastHolderOfAdviseGroup_DeletesAssignedAdviseGroup()
+		public async Task DeleteEmptyFolder_IfFolderIsLastHolderOfAdviseGroup_DeletesAssignedAdviseGroup()
 		{
 			// Arrange
 
@@ -449,15 +325,17 @@ namespace PandaPlayer.Services.IntegrationTests
 			await adviseGroupService.CreateAdviseGroup(adviseGroup, CancellationToken.None);
 			await adviseGroupService.AssignAdviseGroup(holdingFolder, adviseGroup, CancellationToken.None);
 
+			var deletedFolder = await GetFolder(ReferenceData.EmptyFolderId);
+
 			var target = CreateTestTarget();
 
 			// Act
 
-			await target.DeleteFolder(ReferenceData.EmptyFolderId, CancellationToken.None);
+			await target.DeleteEmptyFolder(deletedFolder, CancellationToken.None);
 
 			// Assert
 
-			var folderFromRepository = await target.GetFolder(ReferenceData.EmptyFolderId, CancellationToken.None);
+			var folderFromRepository = await GetFolder(ReferenceData.EmptyFolderId);
 			folderFromRepository.AdviseGroup.Should().BeNull();
 
 			var referenceData = GetReferenceData();
@@ -474,22 +352,24 @@ namespace PandaPlayer.Services.IntegrationTests
 		}
 
 		[TestMethod]
-		public async Task DeleteFolder_IfFolderIsNotLastHolderOfAdviseGroup_DoesNotDeletesAssignedAdviseGroup()
+		public async Task DeleteEmptyFolder_IfFolderIsNotLastHolderOfAdviseGroup_DoesNotDeletesAssignedAdviseGroup()
 		{
 			// Arrange
 
 			// Assigning one more reference to FolderAdviseGroup.
 			await AssignAdviseGroupToFolder(ReferenceData.EmptyFolderId, ReferenceData.FolderAdviseGroupId);
 
+			var deletedFolder = await GetFolder(ReferenceData.EmptyFolderId);
+
 			var target = CreateTestTarget();
 
 			// Act
 
-			await target.DeleteFolder(ReferenceData.EmptyFolderId, CancellationToken.None);
+			await target.DeleteEmptyFolder(deletedFolder, CancellationToken.None);
 
 			// Assert
 
-			var folderFromRepository = await target.GetFolder(ReferenceData.EmptyFolderId, CancellationToken.None);
+			var folderFromRepository = await GetFolder(ReferenceData.EmptyFolderId);
 			folderFromRepository.AdviseGroup.Should().BeNull();
 
 			var referenceData = GetReferenceData();
@@ -506,15 +386,17 @@ namespace PandaPlayer.Services.IntegrationTests
 		}
 
 		[TestMethod]
-		public async Task DeleteFolder_ForNonEmptyFolder_ThrowsInvalidOperationException()
+		public async Task DeleteEmptyFolder_ForNonEmptyFolder_ThrowsInvalidOperationException()
 		{
 			// Arrange
+
+			var deletedFolder = await GetFolder(ReferenceData.ArtistFolderId);
 
 			var target = CreateTestTarget();
 
 			// Act
 
-			Func<Task> call = () => target.DeleteFolder(ReferenceData.ArtistFolderId, CancellationToken.None);
+			var call = () => target.DeleteEmptyFolder(deletedFolder, CancellationToken.None);
 
 			// Assert
 
@@ -530,7 +412,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				referenceData.DeletedFolder,
 			};
 
-			var allFolders = await target.GetAllFolders(CancellationToken.None);
+			var allFolders = await GetAllFolders();
 			allFolders.Should().BeEquivalentTo(expectedFolders, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			await CheckLibraryConsistency();

@@ -4,7 +4,7 @@
 	{
 		public int Id { get; set; }
 
-		public int? DiscId { get; set; }
+		public int DiscId { get; set; }
 
 		public DiscEntity Disc { get; set; }
 

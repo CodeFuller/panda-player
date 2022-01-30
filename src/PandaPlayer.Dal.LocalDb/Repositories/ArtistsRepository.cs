@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -29,18 +27,6 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			await context.SaveChangesAsync(cancellationToken);
 
 			artist.Id = artistEntity.Id.ToItemId();
-		}
-
-		public async Task<IEnumerable<ArtistModel>> GetEmptyArtists(CancellationToken cancellationToken)
-		{
-			await using var context = contextFactory.CreateDbContext();
-
-			var artists = await context.Artists
-				.Include(x => x.Songs)
-				.Where(x => !x.Songs.Any())
-				.ToListAsync(cancellationToken);
-
-			return artists.Select(x => x.ToModel()).ToList();
 		}
 	}
 }

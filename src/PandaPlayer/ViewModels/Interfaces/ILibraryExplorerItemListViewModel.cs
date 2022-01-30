@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -18,7 +17,7 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		IEnumerable<DiscModel> Discs { get; }
 
-		ShallowFolderModel SelectedFolder { get; }
+		FolderModel SelectedFolder { get; }
 
 		DiscModel SelectedDisc { get; }
 
@@ -34,8 +33,8 @@ namespace PandaPlayer.ViewModels.Interfaces
 
 		void SelectDisc(ItemId discId);
 
-		Task OnFolderDeleted(ItemId folderId, Func<ItemId, Task<FolderModel>> folderLoader);
+		Task OnFolderDeleted(ItemId folderId);
 
-		Task OnDiscDeleted(ItemId discId, Func<ItemId, Task<FolderModel>> folderLoader);
+		Task OnDiscDeleted(ItemId discId);
 	}
 }

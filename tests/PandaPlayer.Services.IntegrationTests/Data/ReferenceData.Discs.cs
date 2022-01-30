@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using PandaPlayer.Core.Models;
+﻿using PandaPlayer.Core.Models;
 using PandaPlayer.Services.IntegrationTests.Extensions;
 
 namespace PandaPlayer.Services.IntegrationTests.Data
@@ -30,33 +28,29 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 			NormalDisc = new()
 			{
 				Id = NormalDiscId,
-				Folder = ArtistFolder,
 				AdviseGroup = DiscAdviseGroup,
 				AdviseSetInfo = new AdviseSetInfo(AdviseSet1, 1),
 				Year = 2010,
 				Title = "Афтары правды (CD 1)",
 				TreeTitle = "2010 - Афтары правды (CD 1)",
 				AlbumTitle = "Афтары правды",
-				Images = new List<DiscImageModel>
-				{
-					new()
-					{
-						Id = new ItemId("1"),
-						TreeTitle = "cover.jpg",
-						ImageType = DiscImageType.Cover,
-						Size = 359119,
-						Checksum = 2792704281,
-						ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/cover.jpg".ToContentUri(libraryStorageRoot),
-					},
-				},
 			};
 
-			NormalDisc.Images.Single().Disc = NormalDisc;
+			NormalDisc.AddImage(
+				new()
+				{
+					Id = new ItemId("1"),
+					TreeTitle = "cover.jpg",
+					ImageType = DiscImageType.Cover,
+					Size = 359119,
+					Checksum = 2792704281,
+					ContentUri =
+						"Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/cover.jpg".ToContentUri(libraryStorageRoot),
+				});
 
 			DiscWithMissingFields = new()
 			{
 				Id = DiscWithMissingFieldsId,
-				Folder = ArtistFolder,
 				Title = "Disc With Missing Fields",
 				TreeTitle = "Disc With Missing Fields (CD 1)",
 			};
@@ -64,12 +58,15 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 			DeletedDisc = new()
 			{
 				Id = DeletedDiscId,
-				Folder = ArtistFolder,
 				Year = 2021,
 				Title = "Deleted Disc",
 				TreeTitle = "2021 - Deleted Disc",
 				AlbumTitle = "Deleted Disc",
 			};
+
+			ArtistFolder.AddDisc(NormalDisc);
+			ArtistFolder.AddDisc(DiscWithMissingFields);
+			ArtistFolder.AddDisc(DeletedDisc);
 		}
 	}
 }

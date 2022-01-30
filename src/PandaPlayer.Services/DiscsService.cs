@@ -80,10 +80,8 @@ namespace PandaPlayer.Services
 			await discsRepository.UpdateDisc(disc, cancellationToken);
 		}
 
-		public async Task SetDiscCoverImage(DiscImageModel coverImage, Stream imageContent, CancellationToken cancellationToken)
+		public async Task SetDiscCoverImage(DiscModel disc, DiscImageModel coverImage, Stream imageContent, CancellationToken cancellationToken)
 		{
-			var disc = coverImage.Disc;
-
 			if (disc.CoverImage != null)
 			{
 				await DeleteDiscCoverImage(disc.CoverImage, cancellationToken);

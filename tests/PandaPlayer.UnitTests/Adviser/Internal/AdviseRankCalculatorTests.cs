@@ -394,7 +394,7 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 			return new()
 			{
 				Id = new ItemId(id),
-				Folder = new ShallowFolderModel(),
+				Folder = new FolderModel(),
 				AllSongs = songs.ToList(),
 			};
 		}

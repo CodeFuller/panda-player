@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,18 +34,13 @@ namespace PandaPlayer.Services
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task CreateFolder(ShallowFolderModel folder, CancellationToken cancellationToken)
+		public async Task CreateEmptyFolder(FolderModel folder, CancellationToken cancellationToken)
 		{
 			await storageRepository.CreateFolder(folder, cancellationToken);
 
-			await foldersRepository.CreateFolder(folder, cancellationToken);
+			await foldersRepository.CreateEmptyFolder(folder, cancellationToken);
 
-			DiscLibrary.AddEmptyFolder(folder);
-		}
-
-		public Task<IReadOnlyCollection<ShallowFolderModel>> GetAllFolders(CancellationToken cancellationToken)
-		{
-			return Task.FromResult<IReadOnlyCollection<ShallowFolderModel>>(DiscLibrary.Folders);
+			DiscLibrary.AddFolder(folder);
 		}
 
 		public Task<FolderModel> GetRootFolder(CancellationToken cancellationToken)
@@ -55,12 +49,7 @@ namespace PandaPlayer.Services
 			return Task.FromResult(rootFolder);
 		}
 
-		public Task<FolderModel> GetFolder(ItemId folderId, CancellationToken cancellationToken)
-		{
-			return Task.FromResult(DiscLibrary.GetFolder(folderId));
-		}
-
-		public async Task UpdateFolder(ShallowFolderModel folder, Action<ShallowFolderModel> updateAction, CancellationToken cancellationToken)
+		public async Task UpdateFolder(FolderModel folder, Action<FolderModel> updateAction, CancellationToken cancellationToken)
 		{
 			var currentFolder = folder.CloneShallow();
 
@@ -74,9 +63,8 @@ namespace PandaPlayer.Services
 			await foldersRepository.UpdateFolder(folder, cancellationToken);
 		}
 
-		public async Task DeleteFolder(ItemId folderId, CancellationToken cancellationToken)
+		public async Task DeleteEmptyFolder(FolderModel folder, CancellationToken cancellationToken)
 		{
-			var folder = await GetFolder(folderId, cancellationToken);
 			if (folder.HasContent)
 			{
 				throw new InvalidOperationException($"Can not delete non-empty folder '{folder.Name}'");

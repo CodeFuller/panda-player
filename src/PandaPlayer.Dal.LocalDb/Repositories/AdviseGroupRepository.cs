@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -29,19 +27,6 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			await context.SaveChangesAsync(cancellationToken);
 
 			adviseGroup.Id = adviseGroupEntity.Id.ToItemId();
-		}
-
-		public async Task<IReadOnlyCollection<AdviseGroupModel>> GetEmptyAdviseGroups(CancellationToken cancellationToken)
-		{
-			await using var context = contextFactory.CreateDbContext();
-
-			var adviseGroups = await context.AdviseGroups
-				.Include(x => x.Folders)
-				.Include(x => x.Discs)
-				.Where(x => !x.Folders.Any() && !x.Discs.Any())
-				.ToListAsync(cancellationToken);
-
-			return adviseGroups.Select(x => x.ToModel()).ToList();
 		}
 
 		public async Task UpdateAdviseGroup(AdviseGroupModel adviseGroup, CancellationToken cancellationToken)

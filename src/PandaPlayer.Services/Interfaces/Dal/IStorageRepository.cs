@@ -27,12 +27,12 @@ namespace PandaPlayer.Services.Interfaces.Dal
 
 		Task DeleteDiscImage(DiscImageModel image, CancellationToken cancellationToken);
 
-		Task CreateFolder(ShallowFolderModel folder, CancellationToken cancellationToken);
+		Task CreateFolder(FolderModel folder, CancellationToken cancellationToken);
 
-		Task RenameFolder(ShallowFolderModel oldFolder, ShallowFolderModel newFolder, CancellationToken cancellationToken);
+		Task RenameFolder(FolderModel oldFolder, FolderModel newFolder, CancellationToken cancellationToken);
 
-		Task DeleteFolder(ShallowFolderModel folder, CancellationToken cancellationToken);
+		Task DeleteFolder(FolderModel folder, CancellationToken cancellationToken);
 
-		Task CheckStorage(LibraryCheckFlags checkFlags, IEnumerable<ShallowFolderModel> folders, IEnumerable<DiscModel> discs, IOperationProgress progress, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken);
+		Task CheckStorage(LibraryCheckFlags checkFlags, IEnumerable<FolderModel> folders, IEnumerable<DiscModel> discs, IOperationProgress progress, Action<LibraryInconsistency> inconsistenciesHandler, CancellationToken cancellationToken);
 	}
 }

@@ -15,7 +15,7 @@ namespace PandaPlayer.Services.Interfaces
 
 		Task UpdateDisc(DiscModel disc, Action<DiscModel> updateAction, CancellationToken cancellationToken);
 
-		Task SetDiscCoverImage(DiscImageModel coverImage, Stream imageContent, CancellationToken cancellationToken);
+		Task SetDiscCoverImage(DiscModel disc, DiscImageModel coverImage, Stream imageContent, CancellationToken cancellationToken);
 
 		Task DeleteDisc(ItemId discId, string deleteComment, CancellationToken cancellationToken);
 	}
