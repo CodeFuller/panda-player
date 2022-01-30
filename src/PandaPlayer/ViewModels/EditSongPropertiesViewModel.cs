@@ -155,6 +155,7 @@ namespace PandaPlayer.ViewModels
 			var newArtist = await CreateNewArtistIfNecessary(cancellationToken);
 			var updateSongAction = GetUpdateSongAction(newArtist);
 
+			// TODO: Replace with single call to ISongsService.
 			foreach (var song in songs)
 			{
 				await songsService.UpdateSong(song, updateSongAction, cancellationToken);

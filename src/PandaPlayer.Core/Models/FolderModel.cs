@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using PandaPlayer.Core.Extensions;
 
 namespace PandaPlayer.Core.Models
 {

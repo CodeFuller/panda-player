@@ -23,8 +23,6 @@ namespace PandaPlayer.Dal.LocalDb.Entities
 
 		public int? GenreId { get; set; }
 
-		public GenreEntity Genre { get; set; }
-
 		public double DurationInMilliseconds { get; set; }
 
 		public int? Rating { get; set; }

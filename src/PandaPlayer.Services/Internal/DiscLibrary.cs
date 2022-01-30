@@ -51,16 +51,6 @@ namespace PandaPlayer.Services.Internal
 			folders.Add(folder.Id, folder);
 		}
 
-		public FolderModel GetFolder(ItemId folderId)
-		{
-			if (!folders.TryGetValue(folderId, out var folder))
-			{
-				throw new InvalidOperationException($"Folder '{folderId}' was not found");
-			}
-
-			return folder;
-		}
-
 		public void AddDisc(DiscModel disc)
 		{
 			discs.Add(disc.Id, disc);

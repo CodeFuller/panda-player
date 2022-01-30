@@ -19,8 +19,6 @@ namespace PandaPlayer.Services.Internal
 
 		void AddFolder(FolderModel folder);
 
-		FolderModel GetFolder(ItemId folderId);
-
 		void AddDisc(DiscModel disc);
 
 		DiscModel GetDisc(ItemId discId);

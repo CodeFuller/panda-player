@@ -43,10 +43,6 @@ namespace PandaPlayer.Shared.Images
 			}
 		}
 
-		public ImageFacade()
-		{
-		}
-
 		private ImageFacade(Image image)
 		{
 			this.image = image;

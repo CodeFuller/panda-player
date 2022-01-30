@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using PandaPlayer.Core.Extensions;
 
 namespace PandaPlayer.Core.Models
 {
