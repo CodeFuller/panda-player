@@ -279,24 +279,14 @@ namespace PandaPlayer.Services.IntegrationTests
 			var referenceData = GetReferenceData();
 			referenceData.EmptyFolder.DeleteDate = new DateTimeOffset(2021, 07, 02, 18, 49, 51, TimeSpan.FromHours(3));
 
-			var expectedFolder = new FolderModel
-			{
-				Id = ReferenceData.EmptyFolderId,
-				ParentFolder = referenceData.ArtistFolder,
-				Name = "Empty Folder",
-				Subfolders = new List<FolderModel>(),
-				Discs = new List<DiscModel>(),
-				DeleteDate = new DateTimeOffset(2021, 07, 02, 18, 49, 51, TimeSpan.FromHours(3)),
-			};
-
-			deletedFolder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
+			deletedFolder.Should().BeEquivalentTo(referenceData.EmptyFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedFolders = new[]
 			{
 				referenceData.RootFolder,
 				referenceData.SubFolder,
 				referenceData.ArtistFolder,
-				expectedFolder,
+				referenceData.EmptyFolder,
 				referenceData.DeletedFolder,
 			};
 

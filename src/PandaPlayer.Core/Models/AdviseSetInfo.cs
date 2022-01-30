@@ -4,9 +4,9 @@ namespace PandaPlayer.Core.Models
 {
 	public class AdviseSetInfo
 	{
-		public AdviseSetModel AdviseSet { get; init; }
+		public AdviseSetModel AdviseSet { get; }
 
-		public int Order { get; init; }
+		public int Order { get; }
 
 		public AdviseSetInfo(AdviseSetModel adviseSet, int order)
 		{

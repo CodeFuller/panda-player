@@ -424,9 +424,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var folder = new FolderModel
+			var rootFolder = new FolderModel { Id = new ItemId("Parent Folder") };
+			var nonRootFolder = new FolderModel
 			{
-				ParentFolder = new FolderModel { Id = new ItemId("Parent Folder") },
 				Subfolders = Array.Empty<FolderModel>(),
 				Discs = new[]
 				{
@@ -438,12 +438,14 @@ namespace PandaPlayer.UnitTests.ViewModels
 				},
 			};
 
+			rootFolder.AddSubfolder(nonRootFolder);
+
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
 
 			// Act
 
-			target.LoadFolderItems(folder);
+			target.LoadFolderItems(nonRootFolder);
 
 			// Assert
 
@@ -457,9 +459,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var folder = new FolderModel
+			var rootFolder = new FolderModel
 			{
-				ParentFolder = null,
 				Subfolders = Array.Empty<FolderModel>(),
 				Discs = new[]
 				{
@@ -476,7 +477,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			target.LoadFolderItems(folder);
+			target.LoadFolderItems(rootFolder);
 
 			// Assert
 
@@ -1205,9 +1206,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
+			var parentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") };
+
 			var folder = new FolderModel
 			{
-				ParentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") },
 				Id = new ItemId("Child Folder Id"),
 				Subfolders = Array.Empty<FolderModel>(),
 				Discs = new[]
@@ -1219,6 +1221,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 					},
 				},
 			};
+
+			parentFolder.AddSubfolder(folder);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -1245,11 +1249,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
+			var parentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") };
+
 			var subfolder = new FolderModel { Id = new ItemId("Subfolder Id") };
 
 			var folder = new FolderModel
 			{
-				ParentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") },
 				Id = new ItemId("Child Folder Id"),
 				Subfolders = new[] { subfolder },
 				Discs = new[]
@@ -1261,6 +1266,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 					},
 				},
 			};
+
+			parentFolder.AddSubfolder(folder);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -1287,9 +1294,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
+			var parentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") };
+
 			var folder = new FolderModel
 			{
-				ParentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") },
 				Id = new ItemId("Child Folder Id"),
 				Subfolders = new[]
 				{
@@ -1304,6 +1312,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 					},
 				},
 			};
+
+			parentFolder.AddSubfolder(folder);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -1333,9 +1343,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
+			var parentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") };
+
 			var folder = new FolderModel
 			{
-				ParentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") },
 				Id = new ItemId("Child Folder Id"),
 				Subfolders = new[]
 				{
@@ -1350,6 +1361,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 					},
 				},
 			};
+
+			parentFolder.AddSubfolder(folder);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -1378,9 +1391,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
+			var parentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") };
+
 			var folder = new FolderModel
 			{
-				ParentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") },
 				Id = new ItemId("Child Folder Id"),
 				Subfolders = new[]
 				{
@@ -1395,6 +1409,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 					},
 				},
 			};
+
+			parentFolder.AddSubfolder(folder);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -1416,9 +1432,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
+			var parentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") };
+
 			var folder = new FolderModel
 			{
-				ParentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") },
 				Id = new ItemId("Child Folder Id"),
 				Subfolders = new[]
 				{
@@ -1433,6 +1450,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 					},
 				},
 			};
+
+			parentFolder.AddSubfolder(folder);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();

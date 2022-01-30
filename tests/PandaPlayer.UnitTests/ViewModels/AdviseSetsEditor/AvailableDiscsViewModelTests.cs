@@ -20,9 +20,11 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 
-			var folder1 = new FolderModel { Id = new ItemId("0"), ParentFolder = null, Name = "<ROOT" };
-			var folder2 = new FolderModel { Id = new ItemId("1"), ParentFolder = folder1, Name = "Folder 1" };
-			var folder3 = new FolderModel { Id = new ItemId("2"), ParentFolder = folder2, Name = "Folder 2" };
+			var folder1 = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
+			var folder2 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
+			var folder3 = new FolderModel { Id = new ItemId("2"), Name = "Folder 2" };
+			folder1.AddSubfolder(folder2);
+			folder2.AddSubfolder(folder3);
 
 			var discs = new[]
 			{
@@ -56,9 +58,11 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 
-			var folder1 = new FolderModel { Id = new ItemId("0"), ParentFolder = null, Name = "<ROOT" };
-			var folder2 = new FolderModel { Id = new ItemId("1"), ParentFolder = folder1, Name = "Folder 1" };
-			var folder3 = new FolderModel { Id = new ItemId("2"), ParentFolder = folder2, Name = "Folder 2" };
+			var folder1 = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
+			var folder2 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
+			var folder3 = new FolderModel { Id = new ItemId("2"), Name = "Folder 2" };
+			folder1.AddSubfolder(folder2);
+			folder2.AddSubfolder(folder3);
 
 			var discs = new[]
 			{
@@ -96,9 +100,11 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 
-			var folder1 = new FolderModel { Id = new ItemId("0"), ParentFolder = null, Name = "<ROOT" };
-			var folder2 = new FolderModel { Id = new ItemId("1"), ParentFolder = folder1, Name = "Folder 1" };
-			var folder3 = new FolderModel { Id = new ItemId("2"), ParentFolder = folder2, Name = "Folder 2" };
+			var folder1 = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
+			var folder2 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
+			var folder3 = new FolderModel { Id = new ItemId("2"), Name = "Folder 2" };
+			folder1.AddSubfolder(folder2);
+			folder2.AddSubfolder(folder3);
 
 			var discs = new[]
 			{
@@ -140,8 +146,9 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseGroup1 = new AdviseGroupModel { Id = new ItemId("1") };
 			var adviseGroup2 = new AdviseGroupModel { Id = new ItemId("2") };
 
-			var folder1 = new FolderModel { Id = new ItemId("0"), ParentFolder = null, Name = "<ROOT" };
-			var folder2 = new FolderModel { Id = new ItemId("1"), ParentFolder = folder1, Name = "Folder 1" };
+			var folder1 = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
+			var folder2 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
+			folder1.AddSubfolder(folder2);
 
 			var discs = new[]
 			{
@@ -182,7 +189,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var folders = new[]
 			{
-				new FolderModel { Id = new ItemId("0"), ParentFolder = null, Name = "<ROOT" },
+				new FolderModel { Id = new ItemId("0"), Name = "<ROOT" },
 			};
 
 			var discs = new[]
@@ -215,7 +222,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var folders = new[]
 			{
-				new FolderModel { Id = new ItemId("0"), ParentFolder = null, Name = "<ROOT" },
+				new FolderModel { Id = new ItemId("0"), Name = "<ROOT" },
 			};
 
 			var discs = new[]
@@ -276,7 +283,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var folders = new[]
 			{
-				new FolderModel { Id = new ItemId("0"), ParentFolder = null, Name = "<ROOT" },
+				new FolderModel { Id = new ItemId("0"), Name = "<ROOT" },
 			};
 
 			var discs = new[]

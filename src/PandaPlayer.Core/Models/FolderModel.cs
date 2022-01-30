@@ -14,7 +14,7 @@ namespace PandaPlayer.Core.Models
 
 		public ItemId Id { get; set; }
 
-		public FolderModel ParentFolder { get; set; }
+		public FolderModel ParentFolder { get; private set; }
 
 		private string name;
 
