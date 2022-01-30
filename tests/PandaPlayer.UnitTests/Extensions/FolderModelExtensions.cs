@@ -11,5 +11,13 @@ namespace PandaPlayer.UnitTests.Extensions
 				folder.AddSubfolder(subfolder);
 			}
 		}
+
+		public static void AddDiscs(this FolderModel folder, params DiscModel[] discs)
+		{
+			foreach (var disc in discs)
+			{
+				folder.AddDisc(disc);
+			}
+		}
 	}
 }

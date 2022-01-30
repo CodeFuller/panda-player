@@ -197,11 +197,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var folder = new FolderModel
-			{
-				Id = new ItemId("Some Folder"),
-				Discs = Array.Empty<DiscModel>(),
-			};
+			var folder = new FolderModel { Id = new ItemId("Some Folder") };
 
 			var mocker = new AutoMocker();
 
@@ -228,21 +224,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var folder = new FolderModel
-			{
-				Id = new ItemId("Some Folder"),
-				Discs = new[]
-				{
-					new DiscModel
-					{
-						Id = new ItemId("Some Disc"),
-						AllSongs = new[]
-						{
-							new SongModel { Id = new ItemId("Some Song") },
-						},
-					},
-				},
-			};
+			var folder = new FolderModel { Id = new ItemId("Some Folder") };
+			folder.AddDiscs(new DiscModel { Id = new ItemId("Some Disc"), AllSongs = new[] { new SongModel { Id = new ItemId("Some Song") } } });
 
 			var mocker = new AutoMocker();
 
@@ -273,11 +256,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var folder = new FolderModel
-			{
-				Id = new ItemId("Some Folder"),
-				Discs = Array.Empty<DiscModel>(),
-			};
+			var folder = new FolderModel { Id = new ItemId("Some Folder") };
 
 			var mocker = new AutoMocker();
 
@@ -304,11 +283,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var folder = new FolderModel
-			{
-				Id = new ItemId("Some Folder"),
-				Discs = Array.Empty<DiscModel>(),
-			};
+			var folder = new FolderModel { Id = new ItemId("Some Folder") };
 
 			var mocker = new AutoMocker();
 
@@ -469,7 +444,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
 			var disc = new DiscModel { Id = new ItemId("Some Disc") };
-			discFolder.AddDisc(disc);
+			discFolder.AddDiscs(disc);
 
 			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc };
 			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc };
@@ -498,8 +473,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
 			var disc1 = new DiscModel { Id = new ItemId("Some Disc 1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) };
 			var disc2 = new DiscModel { Id = new ItemId("Some Disc 2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) };
-			discFolder.AddDisc(disc1);
-			discFolder.AddDisc(disc2);
+			discFolder.AddDiscs(disc1);
+			discFolder.AddDiscs(disc2);
 
 			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc1 };
 			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc2 };
@@ -559,7 +534,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
 			var disc = new DiscModel { Id = new ItemId("Some Disc") };
-			discFolder.AddDisc(disc);
+			discFolder.AddDiscs(disc);
 
 			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc };
 			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc };
@@ -588,8 +563,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
 			var disc1 = new DiscModel { Id = new ItemId("Some Disc 1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) };
 			var disc2 = new DiscModel { Id = new ItemId("Some Disc 2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) };
-			discFolder.AddDisc(disc1);
-			discFolder.AddDisc(disc2);
+			discFolder.AddDiscs(disc1);
+			discFolder.AddDiscs(disc2);
 
 			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc1 };
 			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc2 };
@@ -667,7 +642,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
 			var disc = new DiscModel { Id = new ItemId("Some Disc") };
-			discFolder.AddDisc(disc);
+			discFolder.AddDiscs(disc);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();

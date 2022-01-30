@@ -41,7 +41,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			{
 				Id = ReferenceData.NextFolderId,
 				Name = "Ляпис Трубецкой",
-				Discs = new List<DiscModel>(),
 			};
 
 			var referenceData = GetReferenceData();
@@ -96,7 +95,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			{
 				Id = ReferenceData.NextFolderId,
 				Name = "Ляпис Трубецкой",
-				Discs = new List<DiscModel>(),
 			};
 
 			var referenceData = GetReferenceData();
@@ -151,7 +149,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			{
 				Id = ReferenceData.NextFolderId,
 				Name = "Belarusian",
-				Discs = new List<DiscModel>(),
 			};
 
 			var referenceData = GetReferenceData();

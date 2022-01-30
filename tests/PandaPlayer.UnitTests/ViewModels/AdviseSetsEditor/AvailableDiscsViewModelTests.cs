@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
+using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.ViewModels.AdviseSetsEditor;
 
 namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
@@ -23,8 +24,8 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var folder1 = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
 			var folder2 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
 			var folder3 = new FolderModel { Id = new ItemId("2"), Name = "Folder 2" };
-			folder1.AddSubfolder(folder2);
-			folder2.AddSubfolder(folder3);
+			folder1.AddSubfolders(folder2);
+			folder2.AddSubfolders(folder3);
 
 			var discs = new[]
 			{
@@ -61,8 +62,8 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var folder1 = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
 			var folder2 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
 			var folder3 = new FolderModel { Id = new ItemId("2"), Name = "Folder 2" };
-			folder1.AddSubfolder(folder2);
-			folder2.AddSubfolder(folder3);
+			folder1.AddSubfolders(folder2);
+			folder2.AddSubfolders(folder3);
 
 			var discs = new[]
 			{
@@ -103,8 +104,8 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var folder1 = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
 			var folder2 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
 			var folder3 = new FolderModel { Id = new ItemId("2"), Name = "Folder 2" };
-			folder1.AddSubfolder(folder2);
-			folder2.AddSubfolder(folder3);
+			folder1.AddSubfolders(folder2);
+			folder2.AddSubfolders(folder3);
 
 			var discs = new[]
 			{
@@ -148,7 +149,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var folder1 = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
 			var folder2 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
-			folder1.AddSubfolder(folder2);
+			folder1.AddSubfolders(folder2);
 
 			var discs = new[]
 			{
@@ -253,7 +254,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var folder1 = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
 			var folder2 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
-			folder1.AddSubfolder(folder2);
+			folder1.AddSubfolders(folder2);
 
 			var discs = new[]
 			{

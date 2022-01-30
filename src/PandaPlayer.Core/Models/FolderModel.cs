@@ -8,9 +8,9 @@ namespace PandaPlayer.Core.Models
 {
 	public class FolderModel : INotifyPropertyChanged
 	{
-		private List<FolderModel> subfolders = new();
+		private readonly List<FolderModel> subfolders = new();
 
-		private List<DiscModel> discs = new();
+		private readonly List<DiscModel> discs = new();
 
 		public ItemId Id { get; set; }
 
@@ -33,7 +33,7 @@ namespace PandaPlayer.Core.Models
 		public IReadOnlyCollection<DiscModel> Discs
 		{
 			get => discs;
-			set => discs = new List<DiscModel>(value);
+			private init => discs = new List<DiscModel>(value);
 		}
 
 		public bool HasContent => Subfolders.Any(f => !f.IsDeleted) || Discs.Any(d => !d.IsDeleted);
