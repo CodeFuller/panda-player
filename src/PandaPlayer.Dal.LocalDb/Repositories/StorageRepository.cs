@@ -142,7 +142,6 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			var newFolderPath = storageOrganizer.GetFolderPath(newFolder);
 			fileStorage.MoveFolder(oldFolderPath, newFolderPath);
 
-			// TODO: Calculate ContentUri for all models dynamically?
 			UpdateContentUris(newFolder);
 
 			return Task.CompletedTask;

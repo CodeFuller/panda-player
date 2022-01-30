@@ -7,13 +7,11 @@ using PandaPlayer.Core.Extensions;
 
 namespace PandaPlayer.Core.Models
 {
-	public class DiscModel : INotifyPropertyChanged
+	public class DiscModel : BasicModel, INotifyPropertyChanged
 	{
 		private string title;
 		private string treeTitle;
 		private string albumTitle;
-
-		public ItemId Id { get; set; }
 
 		public FolderModel Folder { get; internal set; }
 

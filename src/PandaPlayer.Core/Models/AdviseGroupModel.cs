@@ -1,9 +1,7 @@
 ﻿namespace PandaPlayer.Core.Models
 {
-	public class AdviseGroupModel
+	public class AdviseGroupModel : BasicModel
 	{
-		public ItemId Id { get; set; }
-
 		public string Name { get; set; }
 
 		public bool IsFavorite { get; set; }

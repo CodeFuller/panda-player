@@ -2,10 +2,8 @@
 
 namespace PandaPlayer.Core.Models
 {
-	public class DiscImageModel
+	public class DiscImageModel : BasicModel
 	{
-		public ItemId Id { get; set; }
-
 		public DiscModel Disc { get; internal set; }
 
 		public string TreeTitle { get; set; }

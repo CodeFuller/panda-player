@@ -1,9 +1,7 @@
 ﻿namespace PandaPlayer.Core.Models
 {
-	public class ArtistModel
+	public class ArtistModel : BasicModel
 	{
-		public ItemId Id { get; set; }
-
 		public string Name { get; set; }
 
 		public override string ToString()

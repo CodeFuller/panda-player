@@ -6,13 +6,11 @@ using PandaPlayer.Core.Extensions;
 
 namespace PandaPlayer.Core.Models
 {
-	public class FolderModel : INotifyPropertyChanged
+	public class FolderModel : BasicModel, INotifyPropertyChanged
 	{
 		private readonly List<FolderModel> subfolders = new();
 
 		private readonly List<DiscModel> discs = new();
-
-		public ItemId Id { get; set; }
 
 		public FolderModel ParentFolder { get; private set; }
 

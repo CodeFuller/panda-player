@@ -5,7 +5,7 @@ using PandaPlayer.Core.Extensions;
 
 namespace PandaPlayer.Core.Models
 {
-	public class SongModel : INotifyPropertyChanged
+	public class SongModel : BasicModel, INotifyPropertyChanged
 	{
 		private string title;
 		private string treeTitle;
@@ -17,8 +17,6 @@ namespace PandaPlayer.Core.Models
 		private int playbacksCount;
 		private Uri contentUri;
 		private DateTimeOffset? deleteDate;
-
-		public ItemId Id { get; set; }
 
 		public string Title
 		{

@@ -1,9 +1,7 @@
 ﻿namespace PandaPlayer.Core.Models
 {
-	public class AdviseSetModel
+	public class AdviseSetModel : BasicModel
 	{
-		public ItemId Id { get; set; }
-
 		public string Name { get; set; }
 	}
 }

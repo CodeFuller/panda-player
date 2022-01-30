@@ -2,10 +2,8 @@
 
 namespace PandaPlayer.Core.Models
 {
-	public class PlaybackModel
+	public class PlaybackModel : BasicModel
 	{
-		public ItemId Id { get; set; }
-
 		public DateTimeOffset PlaybackTime { get; set; }
 	}
 }
