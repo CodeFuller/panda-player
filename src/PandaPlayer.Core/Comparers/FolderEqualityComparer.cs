@@ -2,11 +2,7 @@
 
 namespace PandaPlayer.Core.Comparers
 {
-	public class FolderEqualityComparer : ItemWithIdEqualityComparer<FolderModel>
+	public class FolderEqualityComparer : BasicModelEqualityComparer<FolderModel>
 	{
-		protected override ItemId GetItemId(FolderModel item)
-		{
-			return item.Id;
-		}
 	}
 }

@@ -1,13 +1,28 @@
-﻿using PandaPlayer.Core.Comparers;
-using PandaPlayer.Core.Models;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PandaPlayer.Adviser.Grouping
 {
-	internal class AdviseGroupContentEqualityComparer : ItemWithIdEqualityComparer<AdviseGroupContent>
+	internal class AdviseGroupContentEqualityComparer : IEqualityComparer<AdviseGroupContent>
 	{
-		protected override ItemId GetItemId(AdviseGroupContent item)
+		public bool Equals(AdviseGroupContent x, AdviseGroupContent y)
 		{
-			return new(item.Id);
+			if (x is null && y is null)
+			{
+				return true;
+			}
+
+			if (x is null || y is null)
+			{
+				return false;
+			}
+
+			return x.Id == y.Id;
+		}
+
+		public int GetHashCode(AdviseGroupContent obj)
+		{
+			return obj.Id.GetHashCode(StringComparison.Ordinal);
 		}
 	}
 }

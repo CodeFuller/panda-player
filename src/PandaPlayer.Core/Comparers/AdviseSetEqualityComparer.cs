@@ -2,11 +2,7 @@
 
 namespace PandaPlayer.Core.Comparers
 {
-	public class AdviseSetEqualityComparer : ItemWithIdEqualityComparer<AdviseSetModel>
+	public class AdviseSetEqualityComparer : BasicModelEqualityComparer<AdviseSetModel>
 	{
-		protected override ItemId GetItemId(AdviseSetModel item)
-		{
-			return item.Id;
-		}
 	}
 }

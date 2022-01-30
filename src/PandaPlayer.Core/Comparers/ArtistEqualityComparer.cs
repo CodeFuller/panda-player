@@ -2,11 +2,7 @@
 
 namespace PandaPlayer.Core.Comparers
 {
-	public class ArtistEqualityComparer : ItemWithIdEqualityComparer<ArtistModel>
+	public class ArtistEqualityComparer : BasicModelEqualityComparer<ArtistModel>
 	{
-		protected override ItemId GetItemId(ArtistModel item)
-		{
-			return item.Id;
-		}
 	}
 }

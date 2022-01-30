@@ -2,11 +2,7 @@
 
 namespace PandaPlayer.Core.Comparers
 {
-	public class GenreEqualityComparer : ItemWithIdEqualityComparer<GenreModel>
+	public class GenreEqualityComparer : BasicModelEqualityComparer<GenreModel>
 	{
-		protected override ItemId GetItemId(GenreModel item)
-		{
-			return item.Id;
-		}
 	}
 }

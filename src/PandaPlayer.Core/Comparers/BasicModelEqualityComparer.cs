@@ -3,11 +3,10 @@ using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.Core.Comparers
 {
-	public abstract class ItemWithIdEqualityComparer<T> : IEqualityComparer<T>
+	public abstract class BasicModelEqualityComparer<TModel> : IEqualityComparer<TModel>
+		where TModel : BasicModel
 	{
-		protected abstract ItemId GetItemId(T item);
-
-		public bool Equals(T x, T y)
+		public bool Equals(TModel x, TModel y)
 		{
 			if (x is null && y is null)
 			{
@@ -19,12 +18,12 @@ namespace PandaPlayer.Core.Comparers
 				return false;
 			}
 
-			return GetItemId(x) == GetItemId(y);
+			return x.Id == y.Id;
 		}
 
-		public int GetHashCode(T obj)
+		public int GetHashCode(TModel obj)
 		{
-			return GetItemId(obj).GetHashCode();
+			return obj.Id.GetHashCode();
 		}
 	}
 }
