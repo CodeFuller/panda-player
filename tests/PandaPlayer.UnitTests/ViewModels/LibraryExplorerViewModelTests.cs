@@ -427,11 +427,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
-			var disc = new DiscModel { Id = new ItemId("Some Disc") };
-			discFolder.AddDiscs(disc);
+			var disc = new DiscModel { Id = new ItemId("Some Disc") }.AddToFolder(discFolder);
 
-			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc };
-			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc };
+			var song1 = new SongModel { Id = new ItemId("1") }.AddToDisc(disc);
+			var song2 = new SongModel { Id = new ItemId("2") }.AddToDisc(disc);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
@@ -455,13 +454,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("Some Advise Set") };
 			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
-			var disc1 = new DiscModel { Id = new ItemId("Some Disc 1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) };
-			var disc2 = new DiscModel { Id = new ItemId("Some Disc 2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) };
-			discFolder.AddDiscs(disc1);
-			discFolder.AddDiscs(disc2);
+			var disc1 = new DiscModel { Id = new ItemId("Some Disc 1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.AddToFolder(discFolder);
+			var disc2 = new DiscModel { Id = new ItemId("Some Disc 2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) }.AddToFolder(discFolder);
 
-			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc1 };
-			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc2 };
+			var song1 = new SongModel { Id = new ItemId("1") }.AddToDisc(disc1);
+			var song2 = new SongModel { Id = new ItemId("2") }.AddToDisc(disc2);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
@@ -483,17 +480,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var song1 = new SongModel
-			{
-				Id = new ItemId("1"),
-				Disc = new DiscModel { Id = new ItemId("Disc 1") },
-			};
-
-			var song2 = new SongModel
-			{
-				Id = new ItemId("2"),
-				Disc = new DiscModel { Id = new ItemId("Disc 2") },
-			};
+			var song1 = new SongModel { Id = new ItemId("1") }.AddToDisc(new DiscModel { Id = new ItemId("Disc 1") });
+			var song2 = new SongModel { Id = new ItemId("2") }.AddToDisc(new DiscModel { Id = new ItemId("Disc 2") });
 
 			var mocker = new AutoMocker();
 
@@ -520,8 +508,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var disc = new DiscModel { Id = new ItemId("Some Disc") };
 			discFolder.AddDiscs(disc);
 
-			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc };
-			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc };
+			var song1 = new SongModel { Id = new ItemId("1") }.AddToDisc(disc);
+			var song2 = new SongModel { Id = new ItemId("2") }.AddToDisc(disc);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
@@ -545,13 +533,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("Some Advise Set") };
 			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
-			var disc1 = new DiscModel { Id = new ItemId("Some Disc 1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) };
-			var disc2 = new DiscModel { Id = new ItemId("Some Disc 2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) };
-			discFolder.AddDiscs(disc1);
-			discFolder.AddDiscs(disc2);
+			var disc1 = new DiscModel { Id = new ItemId("Some Disc 1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.AddToFolder(discFolder);
+			var disc2 = new DiscModel { Id = new ItemId("Some Disc 2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) }.AddToFolder(discFolder);
 
-			var song1 = new SongModel { Id = new ItemId("1"), Disc = disc1 };
-			var song2 = new SongModel { Id = new ItemId("2"), Disc = disc2 };
+			var song1 = new SongModel { Id = new ItemId("1") }.AddToDisc(disc1);
+			var song2 = new SongModel { Id = new ItemId("2") }.AddToDisc(disc2);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
@@ -575,8 +561,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var rootFolder = new FolderModel();
 
-			var song1 = new SongModel { Id = new ItemId("1"), Disc = new DiscModel { Id = new ItemId("Disc 1") } };
-			var song2 = new SongModel { Id = new ItemId("2"), Disc = new DiscModel { Id = new ItemId("Disc 2") } };
+			var song1 = new SongModel { Id = new ItemId("1") }.AddToDisc(new DiscModel { Id = new ItemId("Disc 1") });
+			var song2 = new SongModel { Id = new ItemId("2") }.AddToDisc(new DiscModel { Id = new ItemId("Disc 2") });
 
 			var mocker = new AutoMocker();
 			mocker.GetMock<IFoldersService>()

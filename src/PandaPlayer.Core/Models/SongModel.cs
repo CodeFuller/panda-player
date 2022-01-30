@@ -40,7 +40,7 @@ namespace PandaPlayer.Core.Models
 
 		public TimeSpan Duration { get; set; }
 
-		public DiscModel Disc { get; set; }
+		public DiscModel Disc { get; internal set; }
 
 		public ArtistModel Artist
 		{

@@ -107,18 +107,22 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 
 		private SongModel CreateSong(AddedSongInfo song)
 		{
-			return new SongModel
+			var songModel = new SongModel
 			{
 				Title = song.Title,
 				TreeTitle = song.TreeTitle,
 				TrackNumber = song.Track,
-				Disc = Disc,
 				Artist = GetSongArtist(song),
 				Genre = Genre,
 				Rating = null,
 				LastPlaybackTime = null,
 				PlaybacksCount = 0,
 			};
+
+			// TODO: If Songs property is enumerated multiple times, then same song is added multiple times to Disc. Postpone creation of models till AddToLibraryViewModel.
+			Disc.AddSong(songModel);
+
+			return songModel;
 		}
 
 		private ArtistModel GetSongArtist(AddedSongInfo song)
