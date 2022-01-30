@@ -41,7 +41,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			{
 				Id = ReferenceData.NextFolderId,
 				Name = "Ляпис Трубецкой",
-				Subfolders = new List<FolderModel>(),
 				Discs = new List<DiscModel>(),
 			};
 
@@ -97,7 +96,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			{
 				Id = ReferenceData.NextFolderId,
 				Name = "Ляпис Трубецкой",
-				Subfolders = new List<FolderModel>(),
 				Discs = new List<DiscModel>(),
 			};
 
@@ -153,7 +151,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			{
 				Id = ReferenceData.NextFolderId,
 				Name = "Belarusian",
-				Subfolders = new List<FolderModel>(),
 				Discs = new List<DiscModel>(),
 			};
 
@@ -198,18 +195,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			// Assert
 
 			var referenceData = GetReferenceData();
-			var expectedFolder = new FolderModel
-			{
-				Id = ReferenceData.RootFolderId,
-				Name = "<ROOT>",
-				Subfolders = new List<FolderModel>
-				{
-					referenceData.SubFolder,
-				},
-				Discs = new List<DiscModel>(),
-			};
-
-			folder.Should().BeEquivalentTo(expectedFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
+			folder.Should().BeEquivalentTo(referenceData.RootFolder, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 		}
 
 		[TestMethod]

@@ -27,34 +27,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var activeDisc1 = new DiscModel
-			{
-				TreeTitle = "Disc 1",
-				AllSongs = new[] { new SongModel() },
-			};
-
-			var activeDisc2 = new DiscModel
-			{
-				TreeTitle = "Disc 2",
-				AllSongs = new[] { new SongModel() },
-			};
-
-			var deletedDisc = new DiscModel
-			{
-				TreeTitle = "Deleted Disc",
-				AllSongs = new[]
-				{
-					new SongModel { DeleteDate = new DateTime(2021, 07, 25) },
-				},
-			};
+			var activeDisc1 = new DiscModel { TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
+			var activeDisc2 = new DiscModel { TreeTitle = "Disc 2", AllSongs = new[] { new SongModel() } };
+			var deletedDisc = new DiscModel { TreeTitle = "Deleted Disc", AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 07, 25) } } };
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[]
-				{
-					new FolderModel(),
-				},
-
 				Discs = new[]
 				{
 					activeDisc1,
@@ -90,13 +68,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[]
-				{
-					new FolderModel { Name = "Folder 1" },
-					new FolderModel { Name = "Folder 2" },
-					new FolderModel { Name = "Folder 3" },
-				},
-
 				Discs = new[]
 				{
 					new DiscModel
@@ -106,6 +77,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 					},
 				},
 			};
+
+			folder.AddSubfolder(new FolderModel { Name = "Folder 1" });
+			folder.AddSubfolder(new FolderModel { Name = "Folder 2" });
+			folder.AddSubfolder(new FolderModel { Name = "Folder 3" });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -131,11 +106,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[]
-				{
-					new FolderModel { Name = "Some Folder" },
-				},
-
 				Discs = new[]
 				{
 					new DiscModel
@@ -145,6 +115,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 					},
 				},
 			};
+
+			folder.AddSubfolder(new FolderModel { Name = "Some Folder" });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -170,13 +142,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[]
-				{
-					new FolderModel { Name = "Some Folder" },
-				},
-
 				Discs = Array.Empty<DiscModel>(),
 			};
+
+			folder.AddSubfolder(new FolderModel { Name = "Some Folder" });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -201,11 +170,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[]
-				{
-					new FolderModel { Name = "Some Folder" },
-				},
-
 				Discs = new[]
 				{
 					new DiscModel
@@ -225,6 +189,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 					},
 				},
 			};
+
+			folder.AddSubfolder(new FolderModel { Name = "Some Folder" });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -250,11 +216,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[]
-				{
-					new FolderModel { Name = "Some Folder" },
-				},
-
 				Discs = new[]
 				{
 					new DiscModel
@@ -264,6 +225,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 					},
 				},
 			};
+
+			folder.AddSubfolder(new FolderModel { Name = "Some Folder" });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -289,7 +252,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = Array.Empty<FolderModel>(),
 				Discs = new[]
 				{
 					new DiscModel
@@ -331,9 +293,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[] { subfolder1, subfolder2, subfolder3 },
 				Discs = new[] { disc1, disc2, disc3 },
 			};
+
+			folder.AddSubfolders(subfolder1, subfolder2, subfolder3);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -365,9 +328,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[] { subfolder1, subfolder2, subfolder3 },
 				Discs = new[] { disc1, disc2, disc3 },
 			};
+
+			folder.AddSubfolders(subfolder1, subfolder2, subfolder3);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -399,9 +363,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[] { subfolder1, subfolder2, subfolder3 },
 				Discs = new[] { disc1, disc2, disc3 },
 			};
+
+			folder.AddSubfolders(subfolder1, subfolder2, subfolder3);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -427,7 +392,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var rootFolder = new FolderModel { Id = new ItemId("Parent Folder") };
 			var nonRootFolder = new FolderModel
 			{
-				Subfolders = Array.Empty<FolderModel>(),
 				Discs = new[]
 				{
 					new DiscModel
@@ -461,7 +425,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var rootFolder = new FolderModel
 			{
-				Subfolders = Array.Empty<FolderModel>(),
 				Discs = new[]
 				{
 					new DiscModel
@@ -513,9 +476,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[] { folder3, folder1, folder2 },
 				Discs = new[] { disc3, disc1, disc2, },
 			};
+
+			folder.AddSubfolders(folder3, folder1, folder2);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -570,9 +534,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[] { folder3, folder1, folder2 },
 				Discs = new[] { disc3, disc1, disc2, },
 			};
+
+			folder.AddSubfolders(folder3, folder1, folder2);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -629,9 +594,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[] { folder3, folder1, folder2 },
 				Discs = new[] { disc3, disc1, disc2, },
 			};
+
+			folder.AddSubfolders(folder3, folder1, folder2);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -672,9 +638,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[] { subfolder1, subfolder2, subfolder3 },
 				Discs = new[] { disc1, disc2, disc3 },
 			};
+
+			folder.AddSubfolders(subfolder1, subfolder2, subfolder3);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -712,9 +679,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[] { subfolder1, subfolder2, subfolder3 },
 				Discs = new[] { disc1, disc2, disc3 },
 			};
+
+			folder.AddSubfolders(subfolder1, subfolder2, subfolder3);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -746,20 +714,18 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var oldFolder = new FolderModel
 			{
-				Subfolders = new[]
-				{
-					new FolderModel { Id = new ItemId("OldSubfolder"), Name = "Old Folder" },
-				},
-
 				Discs = new[]
 				{
 					new DiscModel { Id = new ItemId("OldDisc"), TreeTitle = "Old Disc", AllSongs = new[] { new SongModel { Id = new ItemId("1") } } },
 				},
 			};
 
+			oldFolder.AddSubfolder(new FolderModel { Id = new ItemId("OldSubfolder"), Name = "Old Folder" });
+
 			var newSubfolder = new FolderModel { Id = new ItemId("NewSubfolder"), Name = "New Folder" };
 			var newDisc = new DiscModel { Id = new ItemId("NewSubfolder"), TreeTitle = "New Disc", AllSongs = new[] { new SongModel { Id = new ItemId("2") } } };
-			var newFolder = new FolderModel { Id = new ItemId("NewFolder"), Subfolders = new[] { newSubfolder }, Discs = new[] { newDisc } };
+			var newFolder = new FolderModel { Id = new ItemId("NewFolder"), Discs = new[] { newDisc } };
+			newFolder.AddSubfolder(newSubfolder);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -808,7 +774,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[] { folder1, folder2, folder3 },
 				Discs = new[]
 				{
 					new DiscModel
@@ -820,6 +785,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 					},
 				},
 			};
+
+			folder.AddSubfolders(folder1, folder2, folder3);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -849,7 +816,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[] { subfolder },
 				Discs = new[]
 				{
 					new DiscModel
@@ -861,6 +827,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 					},
 				},
 			};
+
+			folder.AddSubfolder(subfolder);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -905,17 +873,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[]
-				{
-					new FolderModel
-					{
-						// Using the same id as for requested disc, just in case.
-						Id = new ItemId("2"),
-						Name = "Some Subfolder",
-					},
-				},
 				Discs = new[] { disc1, disc2, disc3 },
 			};
+
+			// Using the same id as for requested disc, just in case.
+			folder.AddSubfolder(new FolderModel { Id = new ItemId("2"), Name = "Some Subfolder" });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -946,17 +908,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[]
-				{
-					new FolderModel
-					{
-						// Using the same id as for requested disc, just in case.
-						Id = new ItemId("1"),
-						Name = "Some Subfolder",
-					},
-				},
 				Discs = new[] { disc },
 			};
+
+			// Using the same id as for requested disc, just in case.
+			folder.AddSubfolder(new FolderModel { Id = new ItemId("1"), Name = "Some Subfolder" });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -986,9 +942,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[] { folder1, folder2, folder3 },
 				Discs = new[] { disc },
 			};
+
+			folder.AddSubfolders(folder1, folder2, folder3);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -1022,9 +979,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[] { subfolder },
 				Discs = new[] { disc },
 			};
+
+			folder.AddSubfolder(subfolder);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -1056,9 +1014,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[] { oldSubfolder },
 				Discs = Array.Empty<DiscModel>(),
 			};
+
+			folder.AddSubfolder(oldSubfolder);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -1102,9 +1061,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = new[] { subfolder },
 				Discs = new[] { disc1, disc2, disc3 },
 			};
+
+			folder.AddSubfolder(subfolder);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -1137,7 +1097,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var subfolder = new FolderModel { Id = new ItemId("1"), Name = "Some Subfolder" };
 			var disc = new DiscModel { Id = new ItemId("Disc Id"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
 
-			var folder = new FolderModel { Subfolders = new[] { subfolder }, Discs = new[] { disc } };
+			var folder = new FolderModel { Discs = new[] { disc } };
+			folder.AddSubfolder(subfolder);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -1169,7 +1130,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel
 			{
-				Subfolders = Array.Empty<FolderModel>(),
 				Discs = new[] { oldDisc },
 			};
 
@@ -1211,7 +1171,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder = new FolderModel
 			{
 				Id = new ItemId("Child Folder Id"),
-				Subfolders = Array.Empty<FolderModel>(),
 				Discs = new[]
 				{
 					new DiscModel
@@ -1256,7 +1215,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder = new FolderModel
 			{
 				Id = new ItemId("Child Folder Id"),
-				Subfolders = new[] { subfolder },
 				Discs = new[]
 				{
 					new DiscModel
@@ -1268,6 +1226,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			parentFolder.AddSubfolder(folder);
+			folder.AddSubfolder(subfolder);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -1299,10 +1258,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder = new FolderModel
 			{
 				Id = new ItemId("Child Folder Id"),
-				Subfolders = new[]
-				{
-					new FolderModel { Id = new ItemId("Subfolder Id") },
-				},
 				Discs = new[]
 				{
 					new DiscModel
@@ -1314,6 +1269,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			parentFolder.AddSubfolder(folder);
+			folder.AddSubfolder(new FolderModel { Id = new ItemId("Subfolder Id") });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -1348,10 +1304,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder = new FolderModel
 			{
 				Id = new ItemId("Child Folder Id"),
-				Subfolders = new[]
-				{
-					new FolderModel { Id = new ItemId("Subfolder Id") },
-				},
 				Discs = new[]
 				{
 					new DiscModel
@@ -1363,6 +1315,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			parentFolder.AddSubfolder(folder);
+			folder.AddSubfolder(new FolderModel { Id = new ItemId("Subfolder Id") });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -1396,10 +1349,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder = new FolderModel
 			{
 				Id = new ItemId("Child Folder Id"),
-				Subfolders = new[]
-				{
-					new FolderModel { Id = new ItemId("Subfolder Id") },
-				},
 				Discs = new[]
 				{
 					new DiscModel
@@ -1411,6 +1360,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			parentFolder.AddSubfolder(folder);
+			folder.AddSubfolder(new FolderModel { Id = new ItemId("Subfolder Id") });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -1437,10 +1387,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder = new FolderModel
 			{
 				Id = new ItemId("Child Folder Id"),
-				Subfolders = new[]
-				{
-					new FolderModel { Id = new ItemId("Subfolder Id") },
-				},
 				Discs = new[]
 				{
 					new DiscModel
@@ -1452,6 +1398,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			parentFolder.AddSubfolder(folder);
+			folder.AddSubfolder(new FolderModel { Id = new ItemId("Subfolder Id") });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();

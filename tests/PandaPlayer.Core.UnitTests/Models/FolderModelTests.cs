@@ -13,24 +13,15 @@ namespace PandaPlayer.Core.UnitTests.Models
 		{
 			// Arrange
 
-			var target = new FolderModel
-			{
-				Subfolders = new[]
-				{
-					new FolderModel { Name = "Subfolder 1" },
-					new FolderModel { Name = "Subfolder 2" },
-					new FolderModel { Name = "Subfolder 3" },
-				},
-			};
+			var target = new FolderModel();
 
-			var subfolder = new FolderModel
-			{
-				Name = "Subfolder 2",
-			};
+			target.AddSubfolder(new FolderModel { Name = "Subfolder 1" });
+			target.AddSubfolder(new FolderModel { Name = "Subfolder 2" });
+			target.AddSubfolder(new FolderModel { Name = "Subfolder 3" });
 
 			// Act
 
-			var call = () => target.AddSubfolder(subfolder);
+			var call = () => target.AddSubfolder(new FolderModel { Name = "Subfolder 2" });
 
 			// Assert
 

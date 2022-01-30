@@ -200,7 +200,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder = new FolderModel
 			{
 				Id = new ItemId("Some Folder"),
-				Subfolders = Array.Empty<FolderModel>(),
 				Discs = Array.Empty<DiscModel>(),
 			};
 
@@ -232,7 +231,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder = new FolderModel
 			{
 				Id = new ItemId("Some Folder"),
-				Subfolders = Array.Empty<FolderModel>(),
 				Discs = new[]
 				{
 					new DiscModel
@@ -278,7 +276,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder = new FolderModel
 			{
 				Id = new ItemId("Some Folder"),
-				Subfolders = Array.Empty<FolderModel>(),
 				Discs = Array.Empty<DiscModel>(),
 			};
 
@@ -310,7 +307,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder = new FolderModel
 			{
 				Id = new ItemId("Some Folder"),
-				Subfolders = Array.Empty<FolderModel>(),
 				Discs = Array.Empty<DiscModel>(),
 			};
 

@@ -27,7 +27,7 @@ namespace PandaPlayer.Core.Models
 		public IReadOnlyCollection<FolderModel> Subfolders
 		{
 			get => subfolders;
-			set => subfolders = new List<FolderModel>(value);
+			private init => subfolders = new List<FolderModel>(value);
 		}
 
 		public IReadOnlyCollection<DiscModel> Discs
