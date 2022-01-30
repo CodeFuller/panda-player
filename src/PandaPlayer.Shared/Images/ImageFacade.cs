@@ -43,6 +43,11 @@ namespace PandaPlayer.Shared.Images
 			}
 		}
 
+		// This constructor is required for DI.
+		public ImageFacade()
+		{
+		}
+
 		private ImageFacade(Image image)
 		{
 			this.image = image;
