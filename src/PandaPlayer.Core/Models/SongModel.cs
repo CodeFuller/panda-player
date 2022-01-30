@@ -78,7 +78,7 @@ namespace PandaPlayer.Core.Models
 			set => this.SetField(PropertyChanged, ref playbacksCount, value);
 		}
 
-		public IReadOnlyCollection<PlaybackModel> Playbacks { get; set; }
+		public IReadOnlyCollection<PlaybackModel> Playbacks { get; init; }
 
 		public Uri ContentUri
 		{

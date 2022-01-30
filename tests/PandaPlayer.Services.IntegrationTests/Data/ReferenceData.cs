@@ -6,12 +6,7 @@
 		{
 			FillFolders();
 			FillDiscs(libraryStorageRoot);
-			FillSongs(libraryStorageRoot);
-
-			if (fillSongPlaybacks)
-			{
-				FillPlaybacks();
-			}
+			FillSongs(libraryStorageRoot, fillSongPlaybacks);
 		}
 	}
 }

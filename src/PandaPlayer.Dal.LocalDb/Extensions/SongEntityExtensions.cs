@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Dal.LocalDb.Entities;
 
@@ -21,6 +22,7 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 				Checksum = (uint?)song.Checksum,
 				LastPlaybackTime = song.LastPlaybackTime,
 				PlaybacksCount = song.PlaybacksCount,
+				Playbacks = song.Playbacks?.Select(x => x.ToModel()).ToList(),
 				DeleteDate = song.DeleteDate,
 				DeleteComment = song.DeleteComment,
 			};

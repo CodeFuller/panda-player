@@ -164,8 +164,6 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 				songModel.Artist = songEntity.ArtistId != null ? artists[songEntity.ArtistId.Value.ToItemId()] : null;
 				songModel.Genre = songEntity.GenreId != null ? genres[songEntity.GenreId.Value.ToItemId()] : null;
 
-				songModel.Playbacks = songEntity.Playbacks?.Select(x => x.ToModel()).ToList();
-
 				if (!songModel.IsDeleted)
 				{
 					contentUriProvider.SetSongContentUri(songModel);

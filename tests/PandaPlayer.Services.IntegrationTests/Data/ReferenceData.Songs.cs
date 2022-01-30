@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.IntegrationTests.Extensions;
@@ -26,7 +25,7 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 
 		public SongModel DeletedSong { get; private set; }
 
-		private void FillSongs(string libraryStorageRoot)
+		private void FillSongs(string libraryStorageRoot, bool fillPlaybacks)
 		{
 			SongWithOptionalPropertiesFilled1 = new()
 			{
@@ -43,6 +42,20 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 				Checksum = 721007018,
 				LastPlaybackTime = DateTimeOffset.Parse("2021-04-03 10:33:53.3517221+03:00", CultureInfo.InvariantCulture),
 				PlaybacksCount = 2,
+				Playbacks = fillPlaybacks ? new PlaybackModel[]
+					{
+						new()
+						{
+							Id = new ItemId("1"),
+							PlaybackTime = DateTimeOffset.Parse("2021-03-19 13:35:02.2626013+03:00", CultureInfo.InvariantCulture),
+						},
+						new()
+						{
+							Id = new ItemId("4"),
+							PlaybackTime = DateTimeOffset.Parse("2021-04-03 10:33:53.3517221+03:00", CultureInfo.InvariantCulture),
+						},
+					}
+					: null,
 				ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/01 - Про женщин.mp3".ToContentUri(libraryStorageRoot),
 			};
 
@@ -61,6 +74,20 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 				Checksum = 3829155604,
 				LastPlaybackTime = DateTimeOffset.Parse("2021-04-03 10:37:42.1257252+03:00", CultureInfo.InvariantCulture),
 				PlaybacksCount = 2,
+				Playbacks = fillPlaybacks ? new PlaybackModel[]
+					{
+						new()
+						{
+							Id = new ItemId("2"),
+							PlaybackTime = DateTimeOffset.Parse("2021-03-19 13:39:13.1718232+03:00", CultureInfo.InvariantCulture),
+						},
+						new()
+						{
+							Id = new ItemId("5"),
+							PlaybackTime = DateTimeOffset.Parse("2021-04-03 10:37:42.1257252+03:00", CultureInfo.InvariantCulture),
+						},
+					}
+					: null,
 				ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/02 - Про жизнь дяди Саши.mp3".ToContentUri(libraryStorageRoot),
 			};
 
@@ -73,6 +100,7 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 				BitRate = 320000,
 				Size = 445175,
 				Checksum = 751499818,
+				Playbacks = fillPlaybacks ? Array.Empty<PlaybackModel>() : null,
 				ContentUri = "Belarusian/Neuro Dubel/Disc With Missing Fields (CD 1)/Song With Missing Fields.mp3".ToContentUri(libraryStorageRoot),
 			};
 
@@ -88,6 +116,15 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 				Rating = RatingModel.R4,
 				LastPlaybackTime = DateTimeOffset.Parse("2021-03-28 09:33:39.2582742+03:00", CultureInfo.InvariantCulture),
 				PlaybacksCount = 1,
+				Playbacks = fillPlaybacks ? new PlaybackModel[]
+					{
+						new()
+						{
+							Id = new ItemId("3"),
+							PlaybackTime = DateTimeOffset.Parse("2021-03-28 09:33:39.2582742+03:00", CultureInfo.InvariantCulture),
+						},
+					}
+					: null,
 				DeleteDate = DateTimeOffset.Parse("2021-03-28 14:10:59.3191807+03:00", CultureInfo.InvariantCulture),
 				DeleteComment = "Boring",
 			};
