@@ -325,9 +325,11 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 			var disc = new DiscModel
 			{
 				Id = new ItemId(stringId),
-				Folder = new FolderModel(),
 				AllSongs = new List<SongModel>(),
 			};
+
+			var folder = new FolderModel();
+			folder.AddDiscs(disc);
 
 			return disc.ToAdviseSet();
 		}

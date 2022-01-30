@@ -21,18 +21,22 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 
+			var discs = new[]
+			{
+				new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1" },
+				new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
+				new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3" },
+			};
+
 			var folder1 = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
 			var folder2 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
 			var folder3 = new FolderModel { Id = new ItemId("2"), Name = "Folder 2" };
 			folder1.AddSubfolders(folder2);
 			folder2.AddSubfolders(folder3);
 
-			var discs = new[]
-			{
-				new DiscModel { Id = new ItemId("1"), Folder = folder2, TreeTitle = "Disc 1" },
-				new DiscModel { Id = new ItemId("2"), Folder = folder1, TreeTitle = "Disc 2", AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("3"), Folder = folder3, TreeTitle = "Disc 3" },
-			};
+			folder2.AddDiscs(discs[0]);
+			folder1.AddDiscs(discs[1]);
+			folder3.AddDiscs(discs[2]);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AvailableDiscsViewModel>();
@@ -59,18 +63,21 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 
+			var discs = new[]
+			{
+				new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1" },
+				new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
+				new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3" },
+			};
+
 			var folder1 = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
 			var folder2 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
 			var folder3 = new FolderModel { Id = new ItemId("2"), Name = "Folder 2" };
 			folder1.AddSubfolders(folder2);
 			folder2.AddSubfolders(folder3);
-
-			var discs = new[]
-			{
-				new DiscModel { Id = new ItemId("1"), Folder = folder2, TreeTitle = "Disc 1" },
-				new DiscModel { Id = new ItemId("2"), Folder = folder1, TreeTitle = "Disc 2", AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("3"), Folder = folder3, TreeTitle = "Disc 3" },
-			};
+			folder2.AddDiscs(discs[0]);
+			folder1.AddDiscs(discs[1]);
+			folder3.AddDiscs(discs[2]);
 
 			var adviseSetDiscs = Array.Empty<DiscModel>();
 
@@ -101,18 +108,20 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 
+			var discs = new[]
+			{
+				new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
+				new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2" },
+				new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3" },
+			};
+
 			var folder1 = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
 			var folder2 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
 			var folder3 = new FolderModel { Id = new ItemId("2"), Name = "Folder 2" };
 			folder1.AddSubfolders(folder2);
 			folder2.AddSubfolders(folder3);
-
-			var discs = new[]
-			{
-				new DiscModel { Id = new ItemId("1"), Folder = folder2, TreeTitle = "Disc 1", AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), Folder = folder3, TreeTitle = "Disc 2" },
-				new DiscModel { Id = new ItemId("3"), Folder = folder2, TreeTitle = "Disc 3" },
-			};
+			folder2.AddDiscs(discs[0], discs[2]);
+			folder3.AddDiscs(discs[1]);
 
 			var adviseSetDiscs = new[]
 			{
@@ -147,17 +156,18 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseGroup1 = new AdviseGroupModel { Id = new ItemId("1") };
 			var adviseGroup2 = new AdviseGroupModel { Id = new ItemId("2") };
 
+			var discs = new[]
+			{
+				new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AdviseGroup = adviseGroup1, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
+				new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AdviseGroup = adviseGroup1 },
+				new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3", AdviseGroup = adviseGroup2 },
+				new DiscModel { Id = new ItemId("4"), TreeTitle = "Disc 4" },
+			};
+
 			var folder1 = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
 			var folder2 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
 			folder1.AddSubfolders(folder2);
-
-			var discs = new[]
-			{
-				new DiscModel { Id = new ItemId("1"), Folder = folder2, TreeTitle = "Disc 1", AdviseGroup = adviseGroup1, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), Folder = folder2, TreeTitle = "Disc 2", AdviseGroup = adviseGroup1 },
-				new DiscModel { Id = new ItemId("3"), Folder = folder2, TreeTitle = "Disc 3", AdviseGroup = adviseGroup2 },
-				new DiscModel { Id = new ItemId("4"), Folder = folder2, TreeTitle = "Disc 4" },
-			};
+			folder2.AddDiscs(discs);
 
 			var adviseSetDiscs = new[]
 			{
@@ -188,20 +198,14 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 		{
 			// Arrange
 
-			var folders = new[]
-			{
-				new FolderModel { Id = new ItemId("0"), Name = "<ROOT" },
-			};
-
-			var discs = new[]
-			{
-				new DiscModel { Id = new ItemId("1"), Folder = folders[0], TreeTitle = "Disc 1" },
-			};
+			var disc = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1" };
+			var folder = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
+			folder.AddDiscs(disc);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AvailableDiscsViewModel>();
 
-			await target.LoadDiscs(discs, CancellationToken.None);
+			await target.LoadDiscs(new[] { disc }, CancellationToken.None);
 			target.SelectedItems = new List<AvailableDiscViewModel>();
 
 			// Act
@@ -221,16 +225,14 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseGroup1 = new AdviseGroupModel { Id = new ItemId("1") };
 			var adviseGroup2 = new AdviseGroupModel { Id = new ItemId("2") };
 
-			var folders = new[]
-			{
-				new FolderModel { Id = new ItemId("0"), Name = "<ROOT" },
-			};
-
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), Folder = folders[0], TreeTitle = "Disc 1", AdviseGroup = adviseGroup1 },
-				new DiscModel { Id = new ItemId("2"), Folder = folders[0], TreeTitle = "Disc 2", AdviseGroup = adviseGroup2 },
+				new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AdviseGroup = adviseGroup1 },
+				new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AdviseGroup = adviseGroup2 },
 			};
+
+			var folder = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
+			folder.AddDiscs(discs);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AvailableDiscsViewModel>();
@@ -252,15 +254,17 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 		{
 			// Arrange
 
+			var discs = new[]
+			{
+				new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1" },
+				new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2" },
+			};
+
 			var folder1 = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
 			var folder2 = new FolderModel { Id = new ItemId("1"), Name = "Folder 1" };
 			folder1.AddSubfolders(folder2);
-
-			var discs = new[]
-			{
-				new DiscModel { Id = new ItemId("1"), Folder = folder1, TreeTitle = "Disc 1" },
-				new DiscModel { Id = new ItemId("2"), Folder = folder2, TreeTitle = "Disc 2" },
-			};
+			folder1.AddDiscs(discs[0]);
+			folder2.AddDiscs(discs[1]);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AvailableDiscsViewModel>();
@@ -282,16 +286,14 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 		{
 			// Arrange
 
-			var folders = new[]
-			{
-				new FolderModel { Id = new ItemId("0"), Name = "<ROOT" },
-			};
-
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), Folder = folders[0], TreeTitle = "Disc 1" },
-				new DiscModel { Id = new ItemId("2"), Folder = folders[0], TreeTitle = "Disc 2" },
+				new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1" },
+				new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2" },
 			};
+
+			var folder = new FolderModel { Id = new ItemId("0"), Name = "<ROOT" };
+			folder.AddDiscs(discs);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AvailableDiscsViewModel>();

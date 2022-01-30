@@ -90,8 +90,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
+			var disc = new DiscModel { Id = new ItemId("Some Disc") };
 			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
-			var disc = new DiscModel { Id = new ItemId("Some Disc"), Folder = discFolder };
+			discFolder.AddDiscs(disc);
 
 			var activeSong1 = new SongModel { Id = new ItemId("Active Song 1"), Disc = disc };
 			var activeSong2 = new SongModel { Id = new ItemId("Active Song 2"), Disc = disc };

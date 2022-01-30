@@ -8,6 +8,7 @@ using Moq.AutoMock;
 using PandaPlayer.Adviser.Grouping;
 using PandaPlayer.Adviser.Internal;
 using PandaPlayer.Core.Models;
+using PandaPlayer.UnitTests.Extensions;
 
 namespace PandaPlayer.UnitTests.Adviser.Internal
 {
@@ -391,12 +392,16 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 
 		private static DiscModel CreateTestDisc(string id, IEnumerable<SongModel> songs)
 		{
-			return new()
+			var disc = new DiscModel
 			{
 				Id = new ItemId(id),
-				Folder = new FolderModel(),
 				AllSongs = songs.ToList(),
 			};
+
+			var folder = new FolderModel();
+			folder.AddDiscs(disc);
+
+			return disc;
 		}
 
 		private static SongModel CreateTestSong(int id, RatingModel? rating = null, DateTimeOffset? lastPlaybackTime = null, bool isDeleted = false)

@@ -21,11 +21,6 @@ namespace PandaPlayer.Services.UnitTests
 			var disc = new DiscModel
 			{
 				Id = new ItemId("Disc Id"),
-				Folder = new FolderModel
-				{
-					Id = new ItemId("Folder Id"),
-					Name = "Test Folder",
-				},
 				Title = "Old Disc Title",
 				TreeTitle = "2021 - Some Disc (CD 1)",
 				AllSongs = new[]
@@ -33,6 +28,9 @@ namespace PandaPlayer.Services.UnitTests
 					new SongModel(),
 				},
 			};
+
+			var folder = new FolderModel { Id = new ItemId("Folder Id"), Name = "Test Folder" };
+			folder.AddDisc(disc);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<DiscsService>();
@@ -60,11 +58,6 @@ namespace PandaPlayer.Services.UnitTests
 			var disc = new DiscModel
 			{
 				Id = new ItemId("Disc Id"),
-				Folder = new FolderModel
-				{
-					Id = new ItemId("Folder Id"),
-					Name = "Test Folder",
-				},
 				Year = 2021,
 				Title = "Some Disc (CD 1)",
 				TreeTitle = "2021 - Some Disc (CD 1)",
@@ -80,6 +73,9 @@ namespace PandaPlayer.Services.UnitTests
 					},
 				},
 			};
+
+			var folder = new FolderModel { Id = new ItemId("Folder Id"), Name = "Test Folder" };
+			folder.AddDisc(disc);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<DiscsService>();
@@ -116,11 +112,6 @@ namespace PandaPlayer.Services.UnitTests
 			var disc = new DiscModel
 			{
 				Id = new ItemId("Disc Id"),
-				Folder = new FolderModel
-				{
-					Id = new ItemId("Folder Id"),
-					Name = "Test Folder",
-				},
 				Title = "Some Disc (CD 1)",
 				TreeTitle = "2021 - Some Disc (CD 1)",
 				AlbumTitle = "Some Disc",
@@ -135,6 +126,9 @@ namespace PandaPlayer.Services.UnitTests
 					},
 				},
 			};
+
+			var folder = new FolderModel { Id = new ItemId("Folder Id"), Name = "Test Folder" };
+			folder.AddDisc(disc);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<DiscsService>();
@@ -171,11 +165,6 @@ namespace PandaPlayer.Services.UnitTests
 			var disc = new DiscModel
 			{
 				Id = new ItemId("Disc Id"),
-				Folder = new FolderModel
-				{
-					Id = new ItemId("Folder Id"),
-					Name = "Test Folder",
-				},
 				Title = "Some Disc (CD 1)",
 				TreeTitle = "2021 - Some Disc (CD 1)",
 				AlbumTitle = "Some Disc",
@@ -184,6 +173,9 @@ namespace PandaPlayer.Services.UnitTests
 					new() { Id = new ItemId("1") },
 				},
 			};
+
+			var folder = new FolderModel { Id = new ItemId("Folder Id"), Name = "Test Folder" };
+			folder.AddDisc(disc);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<DiscsService>();

@@ -296,7 +296,11 @@ namespace PandaPlayer.DiscAdder.ViewModels
 
 		private async Task CreateDisc(DiscModel disc, IReadOnlyCollection<string> discFolderPath, CancellationToken cancellationToken)
 		{
-			disc.Folder ??= await CreateFolder(discFolderPath, cancellationToken);
+			if (disc.Folder == null)
+			{
+				var discFolder = await CreateFolder(discFolderPath, cancellationToken);
+				discFolder.AddDisc(disc);
+			}
 
 			ProgressMessages += $"Creating disc '{disc.TreeTitle}' ...\n";
 

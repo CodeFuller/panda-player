@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PandaPlayer.Adviser.Extensions;
 using PandaPlayer.Core.Models;
+using PandaPlayer.UnitTests.Extensions;
 
 namespace PandaPlayer.UnitTests.Adviser.Extensions
 {
@@ -95,12 +96,16 @@ namespace PandaPlayer.UnitTests.Adviser.Extensions
 
 		private static DiscModel CreateTestDisc(int id, IEnumerable<SongModel> songs)
 		{
-			return new()
+			var disc = new DiscModel
 			{
 				Id = new ItemId(id.ToString(CultureInfo.InvariantCulture)),
-				Folder = new FolderModel(),
 				AllSongs = songs.ToList(),
 			};
+
+			var folder = new FolderModel();
+			folder.AddDiscs(disc);
+
+			return disc;
 		}
 	}
 }

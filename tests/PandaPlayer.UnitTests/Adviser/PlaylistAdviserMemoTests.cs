@@ -19,9 +19,8 @@ namespace PandaPlayer.UnitTests.Adviser
 			var disc = new DiscModel
 			{
 				Id = new ItemId("1"),
-				Folder = new FolderModel(),
 				AllSongs = new List<SongModel>(),
-			};
+			}.AddToFolder(new FolderModel());
 
 			var target = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 3, playbacksSinceFavoriteAdviseGroup: 5);
 
@@ -60,9 +59,8 @@ namespace PandaPlayer.UnitTests.Adviser
 			var disc = new DiscModel
 			{
 				Id = new ItemId("1"),
-				Folder = new FolderModel(),
 				AllSongs = new List<SongModel>(),
-			};
+			}.AddToFolder(new FolderModel());
 
 			var target = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 3, playbacksSinceFavoriteAdviseGroup: 5);
 

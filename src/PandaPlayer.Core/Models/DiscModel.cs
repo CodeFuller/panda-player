@@ -15,7 +15,7 @@ namespace PandaPlayer.Core.Models
 
 		public ItemId Id { get; set; }
 
-		public FolderModel Folder { get; set; }
+		public FolderModel Folder { get; internal set; }
 
 		private AdviseGroupModel adviseGroup;
 

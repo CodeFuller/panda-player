@@ -477,12 +477,16 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 		private static DiscModel CreateTestDisc(string id, IEnumerable<SongModel> songs)
 		{
-			return new()
+			var disc = new DiscModel
 			{
 				Id = new ItemId(id),
-				Folder = new FolderModel(),
 				AllSongs = songs.ToList(),
 			};
+
+			var folder = new FolderModel();
+			folder.AddDiscs(disc);
+
+			return disc;
 		}
 
 		private static SongModel CreateTestSong(int id, RatingModel rating, DateTimeOffset? lastPlaybackTime)

@@ -13,6 +13,7 @@ using Moq;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
+using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.ViewModels.AdviseSetsEditor;
 using PandaPlayer.ViewModels.Interfaces;
 
@@ -718,13 +719,14 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 		{
 			// Arrange
 
-			var parentFolder = new FolderModel { Id = new ItemId("1"), Name = "Parent Folder" };
-
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), Folder = parentFolder, AlbumTitle = "Some Album", AllSongs = new[] { new SongModel() } },
-				new DiscModel { Id = new ItemId("2"), Folder = parentFolder, AlbumTitle = "Some Album", AllSongs = new[] { new SongModel() } },
+				new DiscModel { Id = new ItemId("1"), AlbumTitle = "Some Album", AllSongs = new[] { new SongModel() } },
+				new DiscModel { Id = new ItemId("2"), AlbumTitle = "Some Album", AllSongs = new[] { new SongModel() } },
 			};
+
+			var parentFolder = new FolderModel { Id = new ItemId("1"), Name = "Parent Folder" };
+			parentFolder.AddDiscs(discs);
 
 			var availableDiscsViewModelStub = new Mock<IAvailableDiscsViewModel>();
 			availableDiscsViewModelStub.Setup(x => x.SelectedDiscs).Returns(discs);
@@ -753,13 +755,14 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 		{
 			// Arrange
 
-			var parentFolder = new FolderModel { Id = new ItemId("1"), Name = "Parent Folder" };
-
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), Folder = parentFolder, AlbumTitle = "Some Album 1", AllSongs = new[] { new SongModel() } },
-				new DiscModel { Id = new ItemId("2"), Folder = parentFolder, AlbumTitle = "Some Album 2", AllSongs = new[] { new SongModel() } },
+				new DiscModel { Id = new ItemId("1"), AlbumTitle = "Some Album 1", AllSongs = new[] { new SongModel() } },
+				new DiscModel { Id = new ItemId("2"), AlbumTitle = "Some Album 2", AllSongs = new[] { new SongModel() } },
 			};
+
+			var parentFolder = new FolderModel { Id = new ItemId("1"), Name = "Parent Folder" };
+			parentFolder.AddDiscs(discs);
 
 			var availableDiscsViewModelStub = new Mock<IAvailableDiscsViewModel>();
 			availableDiscsViewModelStub.Setup(x => x.SelectedDiscs).Returns(discs);
@@ -794,13 +797,14 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 				new AdviseSetModel { Id = new ItemId("2"), Name = "Parent Folder / New Advise Set (2)" },
 			};
 
-			var parentFolder = new FolderModel { Id = new ItemId("1"), Name = "Parent Folder" };
-
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), Folder = parentFolder, AlbumTitle = "Some Album 1", AllSongs = new[] { new SongModel() } },
-				new DiscModel { Id = new ItemId("2"), Folder = parentFolder, AlbumTitle = "Some Album 2", AllSongs = new[] { new SongModel() } },
+				new DiscModel { Id = new ItemId("1"), AlbumTitle = "Some Album 1", AllSongs = new[] { new SongModel() } },
+				new DiscModel { Id = new ItemId("2"), AlbumTitle = "Some Album 2", AllSongs = new[] { new SongModel() } },
 			};
+
+			var parentFolder = new FolderModel { Id = new ItemId("1"), Name = "Parent Folder" };
+			parentFolder.AddDiscs(discs);
 
 			var availableDiscsViewModelStub = new Mock<IAvailableDiscsViewModel>();
 			availableDiscsViewModelStub.Setup(x => x.SelectedDiscs).Returns(discs);
