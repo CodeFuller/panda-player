@@ -424,12 +424,7 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedDisc = referenceData.NormalDisc;
 			foreach (var song in expectedDisc.ActiveSongs)
 			{
-				song.DeleteDate = deleteDate;
-				song.DeleteComment = "Some Delete Comment";
-				song.BitRate = null;
-				song.Size = null;
-				song.Checksum = null;
-				song.ContentUri = null;
+				song.MarkAsDeleted(deleteDate, "Some Delete Comment");
 			}
 
 			expectedDisc.DeleteImage(expectedDisc.CoverImage);

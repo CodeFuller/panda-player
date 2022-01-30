@@ -520,23 +520,11 @@ namespace PandaPlayer.Services.IntegrationTests
 			// Assert
 
 			var expectedSongWithoutPlaybacks = GetReferenceData(fillSongPlaybacks: false).SongWithOptionalPropertiesFilled2;
-			expectedSongWithoutPlaybacks.DeleteDate = deleteDate;
-			expectedSongWithoutPlaybacks.DeleteComment = "Some Delete Comment";
-			expectedSongWithoutPlaybacks.BitRate = null;
-			expectedSongWithoutPlaybacks.Size = null;
-			expectedSongWithoutPlaybacks.Checksum = null;
-			expectedSongWithoutPlaybacks.ContentUri = null;
-
+			expectedSongWithoutPlaybacks.MarkAsDeleted(deleteDate, "Some Delete Comment");
 			song.Should().BeEquivalentTo(expectedSongWithoutPlaybacks, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var expectedSongWithPlaybacks = GetReferenceData(fillSongPlaybacks: true).SongWithOptionalPropertiesFilled2;
-			expectedSongWithPlaybacks.DeleteDate = deleteDate;
-			expectedSongWithPlaybacks.DeleteComment = "Some Delete Comment";
-			expectedSongWithPlaybacks.BitRate = null;
-			expectedSongWithPlaybacks.Size = null;
-			expectedSongWithPlaybacks.Checksum = null;
-			expectedSongWithPlaybacks.ContentUri = null;
-
+			expectedSongWithPlaybacks.MarkAsDeleted(deleteDate, "Some Delete Comment");
 			var songFromRepository = await GetSongWithPlaybacks(ReferenceData.SongWithOptionalPropertiesFilledId2);
 			songFromRepository.Should().BeEquivalentTo(expectedSongWithPlaybacks, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 

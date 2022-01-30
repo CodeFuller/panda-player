@@ -241,7 +241,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 				{
 					foreach (var song in deletedSongs)
 					{
-						song.DeleteDate = new DateTime(2021, 07, 11);
+						song.MarkAsDeleted(new DateTime(2021, 07, 11), "Test deletion");
 					}
 				})
 				.Returns(true);
@@ -289,7 +289,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 					{
 						// In real life when ShowDeleteDiscSongsView returns false, the songs are not actually deleted.
 						// This is just a convenient way to check that song list is not reloaded.
-						song.DeleteDate = new DateTime(2021, 07, 11);
+						song.MarkAsDeleted(new DateTime(2021, 07, 11), "Test deletion");
 					}
 				})
 				.Returns(false);

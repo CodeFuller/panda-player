@@ -89,7 +89,7 @@ namespace PandaPlayer.Core.Models
 		public DateTimeOffset? DeleteDate
 		{
 			get => deleteDate;
-			set => this.SetField(PropertyChanged, ref deleteDate, value);
+			init => deleteDate = value;
 		}
 
 		public string DeleteComment { get; set; }
@@ -100,11 +100,19 @@ namespace PandaPlayer.Core.Models
 
 		public void AddPlayback(DateTimeOffset playbackTime)
 		{
-			++playbacksCount;
-			lastPlaybackTime = playbackTime;
-
 			this.SetField(PropertyChanged, ref playbacksCount, playbacksCount + 1, propertyName: nameof(PlaybacksCount));
 			this.SetField(PropertyChanged, ref lastPlaybackTime, playbackTime, propertyName: nameof(LastPlaybackTime));
+		}
+
+		public void MarkAsDeleted(DateTimeOffset dateTime, string comment)
+		{
+			this.SetField(PropertyChanged, ref this.deleteDate, dateTime, propertyName: nameof(DeleteDate));
+			DeleteComment = comment;
+
+			BitRate = null;
+			Size = null;
+			Checksum = null;
+			ContentUri = null;
 		}
 
 		public SongModel CloneShallow()

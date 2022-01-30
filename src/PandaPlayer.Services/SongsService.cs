@@ -93,13 +93,7 @@ namespace PandaPlayer.Services
 
 			await storageRepository.DeleteSong(song, cancellationToken);
 
-			song.DeleteDate = deleteTime;
-			song.DeleteComment = deleteComment;
-			song.BitRate = null;
-			song.Size = null;
-			song.Checksum = null;
-			song.ContentUri = null;
-
+			song.MarkAsDeleted(deleteTime, deleteComment);
 			await songsRepository.UpdateSong(song, cancellationToken);
 		}
 	}
