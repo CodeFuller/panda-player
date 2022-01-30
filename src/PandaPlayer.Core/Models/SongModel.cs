@@ -21,19 +21,19 @@ namespace PandaPlayer.Core.Models
 		public string Title
 		{
 			get => title;
-			set => this.SetField(PropertyChanged, ref title, value);
+			set => SetField(PropertyChanged, ref title, value);
 		}
 
 		public string TreeTitle
 		{
 			get => treeTitle;
-			set => this.SetField(PropertyChanged, ref treeTitle, value);
+			set => SetField(PropertyChanged, ref treeTitle, value);
 		}
 
 		public short? TrackNumber
 		{
 			get => trackNumber;
-			set => this.SetField(PropertyChanged, ref trackNumber, value);
+			set => SetField(PropertyChanged, ref trackNumber, value);
 		}
 
 		public TimeSpan Duration { get; set; }
@@ -43,19 +43,19 @@ namespace PandaPlayer.Core.Models
 		public ArtistModel Artist
 		{
 			get => artist;
-			set => this.SetField(PropertyChanged, ref artist, value);
+			set => SetField(PropertyChanged, ref artist, value);
 		}
 
 		public GenreModel Genre
 		{
 			get => genre;
-			set => this.SetField(PropertyChanged, ref genre, value);
+			set => SetField(PropertyChanged, ref genre, value);
 		}
 
 		public RatingModel? Rating
 		{
 			get => rating;
-			set => this.SetField(PropertyChanged, ref rating, value);
+			set => SetField(PropertyChanged, ref rating, value);
 		}
 
 		public int? BitRate { get; set; }
@@ -81,7 +81,7 @@ namespace PandaPlayer.Core.Models
 		public Uri ContentUri
 		{
 			get => contentUri;
-			set => this.SetField(PropertyChanged, ref contentUri, value);
+			set => SetField(PropertyChanged, ref contentUri, value);
 		}
 
 		public DateTimeOffset? DeleteDate
@@ -98,13 +98,13 @@ namespace PandaPlayer.Core.Models
 
 		public void AddPlayback(DateTimeOffset playbackTime)
 		{
-			this.SetField(PropertyChanged, ref playbacksCount, playbacksCount + 1, propertyName: nameof(PlaybacksCount));
-			this.SetField(PropertyChanged, ref lastPlaybackTime, playbackTime, propertyName: nameof(LastPlaybackTime));
+			SetField(PropertyChanged, ref playbacksCount, playbacksCount + 1, propertyName: nameof(PlaybacksCount));
+			SetField(PropertyChanged, ref lastPlaybackTime, playbackTime, propertyName: nameof(LastPlaybackTime));
 		}
 
 		public void MarkAsDeleted(DateTimeOffset dateTime, string comment)
 		{
-			this.SetField(PropertyChanged, ref this.deleteDate, dateTime, propertyName: nameof(DeleteDate));
+			SetField(PropertyChanged, ref deleteDate, dateTime, propertyName: nameof(DeleteDate));
 			DeleteComment = comment;
 
 			BitRate = null;

@@ -20,7 +20,7 @@ namespace PandaPlayer.Core.Models
 		public AdviseGroupModel AdviseGroup
 		{
 			get => adviseGroup;
-			set => this.SetField(PropertyChanged, ref adviseGroup, value);
+			set => SetField(PropertyChanged, ref adviseGroup, value);
 		}
 
 		public AdviseSetInfo AdviseSetInfo { get; set; }
@@ -30,19 +30,19 @@ namespace PandaPlayer.Core.Models
 		public string Title
 		{
 			get => title;
-			set => this.SetField(PropertyChanged, ref title, value);
+			set => SetField(PropertyChanged, ref title, value);
 		}
 
 		public string TreeTitle
 		{
 			get => treeTitle;
-			set => this.SetField(PropertyChanged, ref treeTitle, value);
+			set => SetField(PropertyChanged, ref treeTitle, value);
 		}
 
 		public string AlbumTitle
 		{
 			get => albumTitle;
-			set => this.SetField(PropertyChanged, ref albumTitle, value);
+			set => SetField(PropertyChanged, ref albumTitle, value);
 		}
 
 		public ArtistModel SoloArtist

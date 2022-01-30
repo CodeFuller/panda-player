@@ -8,14 +8,14 @@ namespace PandaPlayer.Core.Models
 
 		public ItemId(string id)
 		{
-			this.Value = id ?? throw new ArgumentNullException(nameof(id));
+			Value = id ?? throw new ArgumentNullException(nameof(id));
 		}
 
 		public static bool operator ==(ItemId v1, ItemId v2)
 		{
-			if (Object.ReferenceEquals(v1, null) || Object.ReferenceEquals(v2, null))
+			if (ReferenceEquals(v1, null) || ReferenceEquals(v2, null))
 			{
-				return Object.ReferenceEquals(v1, null) && Object.ReferenceEquals(v2, null);
+				return ReferenceEquals(v1, null) && ReferenceEquals(v2, null);
 			}
 
 			return v1.Equals(v2);

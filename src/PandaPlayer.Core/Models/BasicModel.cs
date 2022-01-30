@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace PandaPlayer.Core.Models
 {
@@ -18,6 +21,18 @@ namespace PandaPlayer.Core.Models
 
 				id = value;
 			}
+		}
+
+		protected void SetField<T>(PropertyChangedEventHandler handler, ref T field, T newValue, [CallerMemberName] string propertyName = null)
+		{
+			if (EqualityComparer<T>.Default.Equals(field, newValue))
+			{
+				return;
+			}
+
+			field = newValue;
+
+			handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

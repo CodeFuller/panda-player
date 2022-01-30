@@ -19,7 +19,7 @@ namespace PandaPlayer.Core.Models
 		public string Name
 		{
 			get => name;
-			set => this.SetField(PropertyChanged, ref name, value);
+			set => SetField(PropertyChanged, ref name, value);
 		}
 
 		public IReadOnlyCollection<FolderModel> Subfolders
@@ -41,7 +41,7 @@ namespace PandaPlayer.Core.Models
 		public AdviseGroupModel AdviseGroup
 		{
 			get => adviseGroup;
-			set => this.SetField(PropertyChanged, ref adviseGroup, value);
+			set => SetField(PropertyChanged, ref adviseGroup, value);
 		}
 
 		public DateTimeOffset? DeleteDate { get; set; }
