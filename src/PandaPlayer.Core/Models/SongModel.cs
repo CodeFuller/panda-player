@@ -69,13 +69,13 @@ namespace PandaPlayer.Core.Models
 		public DateTimeOffset? LastPlaybackTime
 		{
 			get => lastPlaybackTime;
-			set => this.SetField(PropertyChanged, ref lastPlaybackTime, value);
+			init => lastPlaybackTime = value;
 		}
 
 		public int PlaybacksCount
 		{
 			get => playbacksCount;
-			set => this.SetField(PropertyChanged, ref playbacksCount, value);
+			init => playbacksCount = value;
 		}
 
 		public IReadOnlyCollection<PlaybackModel> Playbacks { get; init; }
@@ -100,8 +100,11 @@ namespace PandaPlayer.Core.Models
 
 		public void AddPlayback(DateTimeOffset playbackTime)
 		{
-			++PlaybacksCount;
-			LastPlaybackTime = playbackTime;
+			++playbacksCount;
+			lastPlaybackTime = playbackTime;
+
+			this.SetField(PropertyChanged, ref playbacksCount, playbacksCount + 1, propertyName: nameof(PlaybacksCount));
+			this.SetField(PropertyChanged, ref lastPlaybackTime, playbackTime, propertyName: nameof(LastPlaybackTime));
 		}
 
 		public SongModel CloneShallow()

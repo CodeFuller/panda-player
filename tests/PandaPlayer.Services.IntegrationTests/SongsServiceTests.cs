@@ -450,8 +450,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var referenceData = GetReferenceData();
 			var expectedSong = referenceData.SongWithOptionalPropertiesMissing;
-			expectedSong.PlaybacksCount = 1;
-			expectedSong.LastPlaybackTime = new DateTimeOffset(2021, 07, 04, 09, 27, 12, TimeSpan.FromHours(3));
+			expectedSong.AddPlayback(new DateTimeOffset(2021, 07, 04, 09, 27, 12, TimeSpan.FromHours(3)));
 
 			song.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
@@ -484,8 +483,7 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var referenceData = GetReferenceData();
 			var expectedSong = referenceData.SongWithOptionalPropertiesFilled1;
-			expectedSong.PlaybacksCount = 3;
-			expectedSong.LastPlaybackTime = new DateTimeOffset(2021, 07, 04, 09, 27, 12, TimeSpan.FromHours(3));
+			expectedSong.AddPlayback(new DateTimeOffset(2021, 07, 04, 09, 27, 12, TimeSpan.FromHours(3)));
 
 			song.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 

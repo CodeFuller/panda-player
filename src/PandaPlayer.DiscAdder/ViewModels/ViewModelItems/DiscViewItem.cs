@@ -115,8 +115,6 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 				Artist = GetSongArtist(song),
 				Genre = Genre,
 				Rating = null,
-				LastPlaybackTime = null,
-				PlaybacksCount = 0,
 			};
 
 			// TODO: If Songs property is enumerated multiple times, then same song is added multiple times to Disc. Postpone creation of models till AddToLibraryViewModel.
