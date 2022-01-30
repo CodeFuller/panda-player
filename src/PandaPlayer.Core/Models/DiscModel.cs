@@ -75,12 +75,12 @@ namespace PandaPlayer.Core.Models
 
 		public IEnumerable<SongModel> ActiveSongs => AllSongsSorted.Where(song => !song.IsDeleted);
 
-		private List<DiscImageModel> images = new();
+		private readonly List<DiscImageModel> images = new();
 
 		public IReadOnlyCollection<DiscImageModel> Images
 		{
 			get => images;
-			set => images = new List<DiscImageModel>(value);
+			private init => images = new List<DiscImageModel>(value);
 		}
 
 		public DiscImageModel CoverImage => Images.SingleOrDefault(image => image.ImageType == DiscImageType.Cover);

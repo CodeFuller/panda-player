@@ -436,7 +436,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				song.ContentUri = null;
 			}
 
-			expectedDisc.Images = new List<DiscImageModel>();
+			expectedDisc.DeleteImage(expectedDisc.CoverImage);
 			expectedDisc.AdviseGroup = null;
 			expectedDisc.AdviseSetInfo = null;
 

@@ -48,7 +48,6 @@ namespace PandaPlayer.UnitTests.ViewModels.DiscImages
 			var disc = new DiscModel
 			{
 				AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 10, 23) } },
-				Images = Array.Empty<DiscImageModel>(),
 			};
 
 			var mocker = new AutoMocker();
@@ -73,7 +72,6 @@ namespace PandaPlayer.UnitTests.ViewModels.DiscImages
 			var disc = new DiscModel
 			{
 				AllSongs = new[] { new SongModel() },
-				Images = Array.Empty<DiscImageModel>(),
 			};
 
 			var mocker = new AutoMocker();
@@ -95,14 +93,8 @@ namespace PandaPlayer.UnitTests.ViewModels.DiscImages
 		{
 			// Arrange
 
-			var disc = new DiscModel
-			{
-				AllSongs = new[] { new SongModel() },
-				Images = new[]
-				{
-					new DiscImageModel { ImageType = DiscImageType.Cover, ContentUri = new Uri("file://Some-Missing-Image.jpg") },
-				},
-			};
+			var disc = new DiscModel { AllSongs = new[] { new SongModel() } };
+			disc.AddImage(new DiscImageModel { ImageType = DiscImageType.Cover, ContentUri = new Uri("file://Some-Missing-Image.jpg") });
 
 			var fileSystemFacade = new Mock<IFileSystemFacade>();
 			fileSystemFacade.Setup(x => x.FileExists("file://Some-Missing-Image.jpg")).Returns(false);
@@ -128,14 +120,8 @@ namespace PandaPlayer.UnitTests.ViewModels.DiscImages
 		{
 			// Arrange
 
-			var disc = new DiscModel
-			{
-				AllSongs = new[] { new SongModel() },
-				Images = new[]
-				{
-					new DiscImageModel { ImageType = DiscImageType.Cover, ContentUri = new Uri("file://Some-Existing-Image.jpg") },
-				},
-			};
+			var disc = new DiscModel { AllSongs = new[] { new SongModel() } };
+			disc.AddImage(new DiscImageModel { ImageType = DiscImageType.Cover, ContentUri = new Uri("file://Some-Existing-Image.jpg") });
 
 			var fileSystemFacade = new Mock<IFileSystemFacade>();
 			fileSystemFacade.Setup(x => x.FileExists("file://Some-Existing-Image.jpg")).Returns(true);
@@ -161,23 +147,11 @@ namespace PandaPlayer.UnitTests.ViewModels.DiscImages
 		{
 			// Arrange
 
-			var disc1 = new DiscModel
-			{
-				AllSongs = new[] { new SongModel() },
-				Images = new[]
-				{
-					new DiscImageModel { ImageType = DiscImageType.Cover, ContentUri = new Uri("file://image1.jpg") },
-				},
-			};
+			var disc1 = new DiscModel { AllSongs = new[] { new SongModel() } };
+			disc1.AddImage(new DiscImageModel { ImageType = DiscImageType.Cover, ContentUri = new Uri("file://image1.jpg") });
 
-			var disc2 = new DiscModel
-			{
-				AllSongs = new[] { new SongModel() },
-				Images = new[]
-				{
-					new DiscImageModel { ImageType = DiscImageType.Cover, ContentUri = new Uri("file://image2.jpg") },
-				},
-			};
+			var disc2 = new DiscModel { AllSongs = new[] { new SongModel() } };
+			disc2.AddImage(new DiscImageModel { ImageType = DiscImageType.Cover, ContentUri = new Uri("file://image2.jpg") });
 
 			var fileSystemFacade = new Mock<IFileSystemFacade>();
 			fileSystemFacade.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
@@ -207,15 +181,8 @@ namespace PandaPlayer.UnitTests.ViewModels.DiscImages
 		{
 			// Arrange
 
-			var disc = new DiscModel
-			{
-				Id = new ItemId("1"),
-				AllSongs = new[] { new SongModel() },
-				Images = new[]
-				{
-					new DiscImageModel { ImageType = DiscImageType.Cover, ContentUri = new Uri("file://image.jpg") },
-				},
-			};
+			var disc = new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() } };
+			disc.AddImage(new DiscImageModel { ImageType = DiscImageType.Cover, ContentUri = new Uri("file://image.jpg") });
 
 			var fileSystemFacade = new Mock<IFileSystemFacade>();
 			fileSystemFacade.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
