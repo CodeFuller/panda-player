@@ -283,7 +283,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedDiscCoverImage = new DiscImageModel
 			{
 				Id = ReferenceData.NextDiscCoverImageId,
-				Disc = referenceData.DiscWithMissingFields,
 				TreeTitle = "cover.jpg",
 				ImageType = DiscImageType.Cover,
 				Size = 119957,
@@ -291,8 +290,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				ContentUri = "Belarusian/Neuro Dubel/Disc With Missing Fields (CD 1)/cover.jpg".ToContentUri(LibraryStorageRoot),
 			};
 
-			referenceData.DiscWithMissingFields.Images = new[] { expectedDiscCoverImage };
-
+			referenceData.DiscWithMissingFields.AddImage(expectedDiscCoverImage);
 			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var discFromRepository = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
@@ -334,7 +332,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedDiscCoverImage = new DiscImageModel
 			{
 				Id = ReferenceData.DiscCoverImageId,
-				Disc = referenceData.NormalDisc,
 				TreeTitle = "cover.jpg",
 				ImageType = DiscImageType.Cover,
 				Size = 119957,
@@ -342,8 +339,8 @@ namespace PandaPlayer.Services.IntegrationTests
 				ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/cover.jpg".ToContentUri(LibraryStorageRoot),
 			};
 
-			referenceData.NormalDisc.Images = new[] { expectedDiscCoverImage };
-
+			referenceData.NormalDisc.DeleteImage(referenceData.NormalDisc.CoverImage);
+			referenceData.NormalDisc.AddImage(expectedDiscCoverImage);
 			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
@@ -385,7 +382,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedDiscCoverImage = new DiscImageModel
 			{
 				Id = ReferenceData.DiscCoverImageId,
-				Disc = referenceData.NormalDisc,
 				TreeTitle = "cover.png",
 				ImageType = DiscImageType.Cover,
 				Size = 184257,
@@ -393,7 +389,8 @@ namespace PandaPlayer.Services.IntegrationTests
 				ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/cover.png".ToContentUri(LibraryStorageRoot),
 			};
 
-			referenceData.NormalDisc.Images = new[] { expectedDiscCoverImage };
+			referenceData.NormalDisc.DeleteImage(referenceData.NormalDisc.CoverImage);
+			referenceData.NormalDisc.AddImage(expectedDiscCoverImage);
 
 			discCoverImage.Should().BeEquivalentTo(expectedDiscCoverImage, x => x.WithStrictOrdering().IgnoringCyclicReferences());
 

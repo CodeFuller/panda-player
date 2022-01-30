@@ -6,7 +6,7 @@ namespace PandaPlayer.Core.Models
 	{
 		public ItemId Id { get; set; }
 
-		public DiscModel Disc { get; set; }
+		public DiscModel Disc { get; internal set; }
 
 		public string TreeTitle { get; set; }
 
