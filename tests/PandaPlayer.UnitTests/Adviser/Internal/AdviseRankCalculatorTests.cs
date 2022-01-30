@@ -392,16 +392,9 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 
 		private static DiscModel CreateTestDisc(string id, IEnumerable<SongModel> songs)
 		{
-			var disc = new DiscModel
-			{
-				Id = new ItemId(id),
-				AllSongs = songs.ToList(),
-			};
-
-			var folder = new FolderModel();
-			folder.AddDiscs(disc);
-
-			return disc;
+			return new DiscModel { Id = new ItemId(id) }
+				.AddSongs(songs.ToArray())
+				.AddToFolder(new FolderModel());
 		}
 
 		private static SongModel CreateTestSong(int id, RatingModel? rating = null, DateTimeOffset? lastPlaybackTime = null, bool isDeleted = false)

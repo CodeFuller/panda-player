@@ -16,11 +16,8 @@ namespace PandaPlayer.UnitTests.Adviser
 		{
 			// Arrange
 
-			var disc = new DiscModel
-			{
-				Id = new ItemId("1"),
-				AllSongs = new List<SongModel>(),
-			}.AddToFolder(new FolderModel());
+			var disc = new DiscModel { Id = new ItemId("1") }
+				.AddToFolder(new FolderModel());
 
 			var target = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 3, playbacksSinceFavoriteAdviseGroup: 5);
 
@@ -56,11 +53,8 @@ namespace PandaPlayer.UnitTests.Adviser
 		{
 			// Arrange
 
-			var disc = new DiscModel
-			{
-				Id = new ItemId("1"),
-				AllSongs = new List<SongModel>(),
-			}.AddToFolder(new FolderModel());
+			var disc = new DiscModel { Id = new ItemId("1") }
+				.AddToFolder(new FolderModel());
 
 			var target = new PlaylistAdviserMemo(playbacksSinceHighlyRatedSongsPlaylist: 3, playbacksSinceFavoriteAdviseGroup: 5);
 

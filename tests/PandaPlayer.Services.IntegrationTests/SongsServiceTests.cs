@@ -55,7 +55,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedSong = new SongModel
 			{
 				Id = ReferenceData.NextSongId,
-				Disc = expectedDisc,
 				Title = "Дети Галактики",
 				TreeTitle = "03 - Дети Галактики.mp3",
 				TrackNumber = 3,
@@ -69,7 +68,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/03 - Дети Галактики.mp3".ToContentUri(LibraryStorageRoot),
 			};
 
-			expectedDisc.AllSongs = expectedDisc.AllSongs.Concat(new[] { expectedSong }).ToList();
+			expectedDisc.AddSong(expectedSong);
 
 			var discFromRepository = await GetDisc(ReferenceData.NormalDiscId);
 			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());
@@ -128,7 +127,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			var expectedSong = new SongModel
 			{
 				Id = ReferenceData.NextSongId,
-				Disc = expectedDisc,
 				Title = "Дети Галактики",
 				TreeTitle = "03 - Дети Галактики.mp3",
 				Duration = TimeSpan.FromMilliseconds(12345),
@@ -138,7 +136,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				ContentUri = "Belarusian/Neuro Dubel/Disc With Missing Fields (CD 1)/03 - Дети Галактики.mp3".ToContentUri(LibraryStorageRoot),
 			};
 
-			expectedDisc.AllSongs = expectedDisc.AllSongs.Concat(new[] { expectedSong }).ToList();
+			expectedDisc.AddSong(expectedSong);
 
 			var discFromRepository = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
 			discFromRepository.Should().BeEquivalentTo(expectedDisc, x => x.WithStrictOrdering().IgnoringCyclicReferences());

@@ -34,9 +34,9 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			folder1.AddSubfolders(folder11);
 			folder2.AddSubfolders(folder21);
 
-			var disc11 = new DiscModel { AdviseGroup = discAdviseGroup1, AllSongs = Array.Empty<SongModel>() };
-			var disc12 = new DiscModel { AdviseGroup = discAdviseGroup1, AllSongs = Array.Empty<SongModel>() };
-			var disc21 = new DiscModel { AdviseGroup = discAdviseGroup2, AllSongs = Array.Empty<SongModel>() };
+			var disc11 = new DiscModel { AdviseGroup = discAdviseGroup1 };
+			var disc12 = new DiscModel { AdviseGroup = discAdviseGroup1 };
+			var disc21 = new DiscModel { AdviseGroup = discAdviseGroup2 };
 			folder11.AddDiscs(disc11, disc12);
 			folder21.AddDiscs(disc21);
 
@@ -87,9 +87,9 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			folder1.AddSubfolders(folder11);
 			folder2.AddSubfolders(folder21);
 
-			var disc11 = new DiscModel { AllSongs = Array.Empty<SongModel>() };
-			var disc12 = new DiscModel { AllSongs = Array.Empty<SongModel>() };
-			var disc21 = new DiscModel { AllSongs = Array.Empty<SongModel>() };
+			var disc11 = new DiscModel();
+			var disc12 = new DiscModel();
+			var disc21 = new DiscModel();
 			folder11.AddDiscs(disc11, disc12);
 			folder21.AddDiscs(disc21);
 
@@ -138,9 +138,9 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			folder1.AddSubfolders(folder11);
 			folder2.AddSubfolders(folder21);
 
-			var disc11 = new DiscModel { AllSongs = Array.Empty<SongModel>() };
-			var disc12 = new DiscModel { AllSongs = Array.Empty<SongModel>() };
-			var disc21 = new DiscModel { AllSongs = Array.Empty<SongModel>() };
+			var disc11 = new DiscModel();
+			var disc12 = new DiscModel();
+			var disc21 = new DiscModel();
 			folder11.AddDiscs(disc11, disc12);
 			folder21.AddDiscs(disc21);
 
@@ -185,9 +185,9 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			folder1.AddSubfolders(folder11);
 			folder2.AddSubfolders(folder21);
 
-			var disc11 = new DiscModel { AllSongs = Array.Empty<SongModel>() };
-			var disc12 = new DiscModel { AllSongs = Array.Empty<SongModel>() };
-			var disc21 = new DiscModel { AllSongs = Array.Empty<SongModel>() };
+			var disc11 = new DiscModel();
+			var disc12 = new DiscModel();
+			var disc21 = new DiscModel();
 			folder11.AddDiscs(disc11, disc12);
 			folder21.AddDiscs(disc21);
 
@@ -224,9 +224,9 @@ namespace PandaPlayer.UnitTests.Adviser.Grouping
 			var adviseSet1 = new AdviseSetModel { Id = new ItemId("Advise Set 1") };
 			var adviseSet2 = new AdviseSetModel { Id = new ItemId("Advise Set 2") };
 
-			var disc11 = new DiscModel { AdviseSetInfo = new AdviseSetInfo(adviseSet1, 1), AllSongs = Array.Empty<SongModel>() };
-			var disc12 = new DiscModel { AdviseSetInfo = new AdviseSetInfo(adviseSet1, 2), AllSongs = Array.Empty<SongModel>() };
-			var disc21 = new DiscModel { AdviseSetInfo = new AdviseSetInfo(adviseSet2, 1), AllSongs = Array.Empty<SongModel>() };
+			var disc11 = new DiscModel { AdviseSetInfo = new AdviseSetInfo(adviseSet1, 1) };
+			var disc12 = new DiscModel { AdviseSetInfo = new AdviseSetInfo(adviseSet1, 2) };
+			var disc21 = new DiscModel { AdviseSetInfo = new AdviseSetInfo(adviseSet2, 1) };
 
 			var rootFolder = new FolderModel { Id = new ItemId("Root Folder") };
 			rootFolder.AddDiscs(disc11, disc12, disc21);

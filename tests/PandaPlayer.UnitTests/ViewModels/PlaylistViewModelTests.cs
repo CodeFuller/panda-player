@@ -55,26 +55,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var songs = new[]
 			{
-				new SongModel
-				{
-					Id = new ItemId("0"),
-					Disc = disc1,
-				},
-				new SongModel
-				{
-					Id = new ItemId("1"),
-					Disc = disc2,
-				},
-				new SongModel
-				{
-					Id = new ItemId("2"),
-					Disc = disc3,
-				},
+				new SongModel { Id = new ItemId("0") }.AddToDisc(disc1),
+				new SongModel { Id = new ItemId("1") }.AddToDisc(disc2),
+				new SongModel { Id = new ItemId("2") }.AddToDisc(disc3),
 			};
-
-			disc1.AllSongs = new[] { songs[0] };
-			disc2.AllSongs = new[] { songs[1] };
-			disc3.AllSongs = new[] { songs[2] };
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<PlaylistViewModel>();
@@ -101,19 +85,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var songs = new[]
 			{
-				new SongModel
-				{
-					Id = new ItemId("0"),
-					Disc = disc,
-				},
-				new SongModel
-				{
-					Id = new ItemId("1"),
-					Disc = disc,
-				},
+				new SongModel { Id = new ItemId("0") }.AddToDisc(disc),
+				new SongModel { Id = new ItemId("1") }.AddToDisc(disc),
 			};
-
-			disc.AllSongs = songs;
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<PlaylistViewModel>();
@@ -121,8 +95,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 			await target.SwitchToNextSong(CancellationToken.None);
 			await target.SwitchToNextSong(CancellationToken.None);
-			target.CurrentSong.Should().BeNull();
-
 			target.CurrentSong.Should().BeNull();
 
 			// Act
@@ -139,25 +111,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var disc1 = new DiscModel { Id = new ItemId("1") };
-			var disc2 = new DiscModel { Id = new ItemId("2") };
-
 			var songs = new[]
 			{
-				new SongModel
-				{
-					Id = new ItemId("0"),
-					Disc = disc1,
-				},
-				new SongModel
-				{
-					Id = new ItemId("1"),
-					Disc = disc2,
-				},
+				new SongModel { Id = new ItemId("0") }.AddToDisc(new DiscModel { Id = new ItemId("1") }),
+				new SongModel { Id = new ItemId("1") }.AddToDisc(new DiscModel { Id = new ItemId("2") }),
 			};
-
-			disc1.AllSongs = new[] { songs[0] };
-			disc2.AllSongs = new[] { songs[1] };
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<PlaylistViewModel>();

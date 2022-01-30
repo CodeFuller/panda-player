@@ -31,8 +31,8 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), AllSongs = new[] { new SongModel() } },
+				new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive(),
+				new DiscModel { Id = new ItemId("2") }.MakeActive(),
 			};
 
 			var availableDiscsViewModelMock = new Mock<IAvailableDiscsViewModel>();
@@ -85,15 +85,15 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseSetServiceStub = new Mock<IAdviseSetService>();
 			adviseSetServiceStub.Setup(x => x.GetAllAdviseSets(It.IsAny<CancellationToken>())).ReturnsAsync(new[] { adviseSet1, adviseSet2 });
 
-			var disc1 = new DiscModel { Id = new ItemId("2_1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet2, 1) };
-			var disc2 = new DiscModel { Id = new ItemId("2_2"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet2, 2) };
+			var disc1 = new DiscModel { Id = new ItemId("2_1"), AdviseSetInfo = new AdviseSetInfo(adviseSet2, 1) }.MakeActive();
+			var disc2 = new DiscModel { Id = new ItemId("2_2"), AdviseSetInfo = new AdviseSetInfo(adviseSet2, 2) }.MakeActive();
 
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1_1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet1, 1) },
+				new DiscModel { Id = new ItemId("1_1"), AdviseSetInfo = new AdviseSetInfo(adviseSet1, 1) }.MakeActive(),
 				disc1,
 				disc2,
-				new DiscModel { Id = new ItemId("3_1"), AllSongs = new[] { new SongModel() } },
+				new DiscModel { Id = new ItemId("3_1") }.MakeActive(),
 			};
 
 			var availableDiscsViewModelMock = new Mock<IAvailableDiscsViewModel>();
@@ -223,7 +223,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			// Arrange
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
-			var discs = new[] { new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }, };
+			var discs = new[] { new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive() };
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
 			var target = mocker.CreateInstance<AdviseSetsEditorViewModel>();
@@ -246,7 +246,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			// Arrange
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
-			var discs = new[] { new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }, };
+			var discs = new[] { new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive() };
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
 			var target = mocker.CreateInstance<AdviseSetsEditorViewModel>();
@@ -269,7 +269,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			// Arrange
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
-			var discs = new[] { new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }, };
+			var discs = new[] { new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive() };
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
 			var target = mocker.CreateInstance<AdviseSetsEditorViewModel>();
@@ -305,7 +305,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			// Arrange
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
-			var discs = new[] { new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }, };
+			var discs = new[] { new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive() };
 
 			var availableDiscsViewModelStub = new Mock<IAvailableDiscsViewModel>();
 			availableDiscsViewModelStub.Setup(x => x.SelectedDiscsCanBeAddedToAdviseSet(It.IsAny<IReadOnlyCollection<DiscModel>>())).Returns(true);
@@ -333,7 +333,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			// Arrange
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
-			var discs = new[] { new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }, };
+			var discs = new[] { new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive() };
 
 			var availableDiscsViewModelStub = new Mock<IAvailableDiscsViewModel>();
 			availableDiscsViewModelStub.Setup(x => x.SelectedDiscsCanBeAddedToAdviseSet(discs)).Returns(false);
@@ -361,7 +361,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			// Arrange
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
-			var discs = new[] { new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }, };
+			var discs = new[] { new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive() };
 
 			var availableDiscsViewModelStub = new Mock<IAvailableDiscsViewModel>();
 			availableDiscsViewModelStub.Setup(x => x.SelectedDiscsCanBeAddedToAdviseSet(discs)).Returns(true);
@@ -389,7 +389,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			// Arrange
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
-			var discs = new[] { new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }, };
+			var discs = new[] { new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive() };
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
 			var target = mocker.CreateInstance<AdviseSetsEditorViewModel>();
@@ -413,7 +413,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			// Arrange
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
-			var discs = new[] { new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }, };
+			var discs = new[] { new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive() };
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
 			var target = mocker.CreateInstance<AdviseSetsEditorViewModel>();
@@ -437,7 +437,7 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			// Arrange
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
-			var discs = new[] { new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }, };
+			var discs = new[] { new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive() };
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
 			var target = mocker.CreateInstance<AdviseSetsEditorViewModel>();
@@ -463,9 +463,9 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) },
-				new DiscModel { Id = new ItemId("3"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) },
+				new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive(),
+				new DiscModel { Id = new ItemId("2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) }.MakeActive(),
+				new DiscModel { Id = new ItemId("3"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) }.MakeActive(),
 			};
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
@@ -492,9 +492,9 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) },
-				new DiscModel { Id = new ItemId("3"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) },
+				new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive(),
+				new DiscModel { Id = new ItemId("2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) }.MakeActive(),
+				new DiscModel { Id = new ItemId("3"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) }.MakeActive(),
 			};
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
@@ -521,9 +521,9 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) },
-				new DiscModel { Id = new ItemId("3"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) },
+				new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive(),
+				new DiscModel { Id = new ItemId("2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) }.MakeActive(),
+				new DiscModel { Id = new ItemId("3"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) }.MakeActive(),
 			};
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
@@ -550,9 +550,9 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) },
-				new DiscModel { Id = new ItemId("3"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) },
+				new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive(),
+				new DiscModel { Id = new ItemId("2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) }.MakeActive(),
+				new DiscModel { Id = new ItemId("3"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) }.MakeActive(),
 			};
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
@@ -579,9 +579,9 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) },
-				new DiscModel { Id = new ItemId("3"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) },
+				new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive(),
+				new DiscModel { Id = new ItemId("2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) }.MakeActive(),
+				new DiscModel { Id = new ItemId("3"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) }.MakeActive(),
 			};
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
@@ -608,9 +608,9 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) },
-				new DiscModel { Id = new ItemId("3"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) },
+				new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive(),
+				new DiscModel { Id = new ItemId("2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) }.MakeActive(),
+				new DiscModel { Id = new ItemId("3"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) }.MakeActive(),
 			};
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
@@ -637,9 +637,9 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) },
-				new DiscModel { Id = new ItemId("3"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) },
+				new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive(),
+				new DiscModel { Id = new ItemId("2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) }.MakeActive(),
+				new DiscModel { Id = new ItemId("3"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) }.MakeActive(),
 			};
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
@@ -666,9 +666,9 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) },
-				new DiscModel { Id = new ItemId("3"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) },
+				new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive(),
+				new DiscModel { Id = new ItemId("2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) }.MakeActive(),
+				new DiscModel { Id = new ItemId("3"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) }.MakeActive(),
 			};
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
@@ -695,9 +695,9 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), AllSongs = new[] { new SongModel { DeleteDate = DateTimeOffset.Now } }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) },
-				new DiscModel { Id = new ItemId("3"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) },
+				new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive(),
+				new DiscModel { Id = new ItemId("2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) }.MakeDeleted(),
+				new DiscModel { Id = new ItemId("3"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) }.MakeActive(),
 			};
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
@@ -721,8 +721,8 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AlbumTitle = "Some Album", AllSongs = new[] { new SongModel() } },
-				new DiscModel { Id = new ItemId("2"), AlbumTitle = "Some Album", AllSongs = new[] { new SongModel() } },
+				new DiscModel { Id = new ItemId("1"), AlbumTitle = "Some Album" }.MakeActive(),
+				new DiscModel { Id = new ItemId("2"), AlbumTitle = "Some Album" }.MakeActive(),
 			};
 
 			var parentFolder = new FolderModel { Id = new ItemId("1"), Name = "Parent Folder" };
@@ -757,8 +757,8 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AlbumTitle = "Some Album 1", AllSongs = new[] { new SongModel() } },
-				new DiscModel { Id = new ItemId("2"), AlbumTitle = "Some Album 2", AllSongs = new[] { new SongModel() } },
+				new DiscModel { Id = new ItemId("1"), AlbumTitle = "Some Album 1" }.MakeActive(),
+				new DiscModel { Id = new ItemId("2"), AlbumTitle = "Some Album 2" }.MakeActive(),
 			};
 
 			var parentFolder = new FolderModel { Id = new ItemId("1"), Name = "Parent Folder" };
@@ -799,8 +799,8 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AlbumTitle = "Some Album 1", AllSongs = new[] { new SongModel() } },
-				new DiscModel { Id = new ItemId("2"), AlbumTitle = "Some Album 2", AllSongs = new[] { new SongModel() } },
+				new DiscModel { Id = new ItemId("1"), AlbumTitle = "Some Album 1" }.MakeActive(),
+				new DiscModel { Id = new ItemId("2"), AlbumTitle = "Some Album 2" }.MakeActive(),
 			};
 
 			var parentFolder = new FolderModel { Id = new ItemId("1"), Name = "Parent Folder" };
@@ -835,8 +835,8 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() } },
-				new DiscModel { Id = new ItemId("2"), AllSongs = new[] { new SongModel() } },
+				new DiscModel { Id = new ItemId("1") }.MakeActive(),
+				new DiscModel { Id = new ItemId("2") }.MakeActive(),
 			};
 
 			var availableDiscsViewModelStub = new Mock<IAvailableDiscsViewModel>();
@@ -866,8 +866,8 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() } },
-				new DiscModel { Id = new ItemId("2"), AllSongs = new[] { new SongModel() } },
+				new DiscModel { Id = new ItemId("1") }.MakeActive(),
+				new DiscModel { Id = new ItemId("2") }.MakeActive(),
 			};
 
 			var availableDiscsViewModelStub = new Mock<IAvailableDiscsViewModel>();
@@ -954,9 +954,9 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseSet1 = new AdviseSetModel { Id = new ItemId("1") };
 			var adviseSet2 = new AdviseSetModel { Id = new ItemId("2") };
 
-			var disc11 = new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet1, 1) };
-			var disc12 = new DiscModel { Id = new ItemId("2"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet1, 2) };
-			var disc21 = new DiscModel { Id = new ItemId("3"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet2, 1) };
+			var disc11 = new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet1, 1) }.MakeActive();
+			var disc12 = new DiscModel { Id = new ItemId("2"), AdviseSetInfo = new AdviseSetInfo(adviseSet1, 2) }.MakeActive();
+			var disc21 = new DiscModel { Id = new ItemId("3"), AdviseSetInfo = new AdviseSetInfo(adviseSet2, 1) }.MakeActive();
 
 			var discs = new[] { disc11, disc12, disc21 };
 
@@ -990,9 +990,9 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) },
-				new DiscModel { Id = new ItemId("3"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) },
+				new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive(),
+				new DiscModel { Id = new ItemId("2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) }.MakeActive(),
+				new DiscModel { Id = new ItemId("3"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) }.MakeActive(),
 			};
 
 			var mocker = StubServices(new[] { adviseSet }, discs);
@@ -1034,9 +1034,9 @@ namespace PandaPlayer.UnitTests.ViewModels.AdviseSetsEditor
 			var adviseSet = new AdviseSetModel { Id = new ItemId("1") };
 			var discs = new[]
 			{
-				new DiscModel { Id = new ItemId("1"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) },
-				new DiscModel { Id = new ItemId("2"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) },
-				new DiscModel { Id = new ItemId("3"), AllSongs = new[] { new SongModel() }, AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) },
+				new DiscModel { Id = new ItemId("1"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 1) }.MakeActive(),
+				new DiscModel { Id = new ItemId("2"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 2) }.MakeActive(),
+				new DiscModel { Id = new ItemId("3"), AdviseSetInfo = new AdviseSetInfo(adviseSet, 3) }.MakeActive(),
 			};
 
 			var mocker = StubServices(new[] { adviseSet }, discs);

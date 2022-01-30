@@ -27,9 +27,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var activeDisc1 = new DiscModel { TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
-			var activeDisc2 = new DiscModel { TreeTitle = "Disc 2", AllSongs = new[] { new SongModel() } };
-			var deletedDisc = new DiscModel { TreeTitle = "Deleted Disc", AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 07, 25) } } };
+			var activeDisc1 = new DiscModel { TreeTitle = "Disc 1" }.MakeActive();
+			var activeDisc2 = new DiscModel { TreeTitle = "Disc 2" }.MakeActive();
+			var deletedDisc = new DiscModel { TreeTitle = "Deleted Disc" }.MakeDeleted();
 
 			var folder = new FolderModel();
 			folder.AddDiscs(activeDisc1, deletedDisc, activeDisc2);
@@ -63,7 +63,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			folder.AddSubfolders(new FolderModel { Name = "Folder 1" });
 			folder.AddSubfolders(new FolderModel { Name = "Folder 2" });
 			folder.AddSubfolders(new FolderModel { Name = "Folder 3" });
-			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } });
+			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc" }.MakeActive());
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -89,7 +89,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(new FolderModel { Name = "Some Folder" });
-			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } });
+			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc" }.MakeActive());
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -139,9 +139,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(new FolderModel { Name = "Some Folder" });
-			folder.AddDiscs(new DiscModel { TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } });
-			folder.AddDiscs(new DiscModel { TreeTitle = "Disc 2", AllSongs = new[] { new SongModel() } });
-			folder.AddDiscs(new DiscModel { TreeTitle = "Disc 3", AllSongs = new[] { new SongModel() } });
+			folder.AddDiscs(new DiscModel { TreeTitle = "Disc 1" }.MakeActive());
+			folder.AddDiscs(new DiscModel { TreeTitle = "Disc 2" }.MakeActive());
+			folder.AddDiscs(new DiscModel { TreeTitle = "Disc 3" }.MakeActive());
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -167,7 +167,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(new FolderModel { Name = "Some Folder" });
-			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } });
+			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc" }.MakeActive());
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -192,7 +192,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var folder = new FolderModel();
-			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } });
+			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc" }.MakeActive());
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -219,9 +219,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var subfolder2 = new FolderModel { Id = new ItemId("2"), Name = "Subfolder 2" };
 			var subfolder3 = new FolderModel { Id = new ItemId("3"), Name = "Subfolder 3" };
 
-			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
-			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AllSongs = new[] { new SongModel() } };
-			var disc3 = new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3", AllSongs = new[] { new SongModel() } };
+			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1" }.MakeActive();
+			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2" }.MakeActive();
+			var disc3 = new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3" }.MakeActive();
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(subfolder1, subfolder2, subfolder3);
@@ -251,9 +251,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var subfolder2 = new FolderModel { Id = new ItemId("2"), Name = "Subfolder 2" };
 			var subfolder3 = new FolderModel { Id = new ItemId("3"), Name = "Subfolder 3" };
 
-			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
-			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AllSongs = new[] { new SongModel() } };
-			var disc3 = new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3", AllSongs = new[] { new SongModel() } };
+			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1" }.MakeActive();
+			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2" }.MakeActive();
+			var disc3 = new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3" }.MakeActive();
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(subfolder1, subfolder2, subfolder3);
@@ -283,9 +283,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var subfolder2 = new FolderModel { Id = new ItemId("2"), Name = "Subfolder 2", DeleteDate = new DateTime(2021, 07, 25) };
 			var subfolder3 = new FolderModel { Id = new ItemId("3"), Name = "Subfolder 3" };
 
-			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
-			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 07, 25) } } };
-			var disc3 = new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3", AllSongs = new[] { new SongModel() } };
+			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1" }.MakeActive();
+			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2" }.MakeDeleted();
+			var disc3 = new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3" }.MakeActive();
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(subfolder1, subfolder2, subfolder3);
@@ -313,7 +313,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var nonRootFolder = new FolderModel();
-			nonRootFolder.AddDiscs(new DiscModel { TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } });
+			nonRootFolder.AddDiscs(new DiscModel { TreeTitle = "Some Disc" }.MakeActive());
 
 			var rootFolder = new FolderModel { Id = new ItemId("Parent Folder") };
 			rootFolder.AddSubfolders(nonRootFolder);
@@ -338,7 +338,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var rootFolder = new FolderModel();
-			rootFolder.AddDiscs(new DiscModel { TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } });
+			rootFolder.AddDiscs(new DiscModel { TreeTitle = "Some Disc" }.MakeActive());
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -361,9 +361,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder2 = new FolderModel { Name = "22 - Folder 2" };
 			var folder3 = new FolderModel { Name = "23 - Folder 3" };
 
-			var disc1 = new DiscModel { TreeTitle = "11 - Disc 1", AllSongs = new[] { new SongModel() } };
-			var disc2 = new DiscModel { TreeTitle = "12 - Disc 2", AllSongs = new[] { new SongModel() } };
-			var disc3 = new DiscModel { TreeTitle = "13 - Disc 3", AllSongs = new[] { new SongModel() } };
+			var disc1 = new DiscModel { TreeTitle = "11 - Disc 1" }.MakeActive();
+			var disc2 = new DiscModel { TreeTitle = "12 - Disc 2" }.MakeActive();
+			var disc3 = new DiscModel { TreeTitle = "13 - Disc 3" }.MakeActive();
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(folder3, folder1, folder2);
@@ -402,9 +402,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder2 = new FolderModel { Name = "b Folder" };
 			var folder3 = new FolderModel { Name = "C Folder" };
 
-			var disc1 = new DiscModel { TreeTitle = "A Disc", AllSongs = new[] { new SongModel() } };
-			var disc2 = new DiscModel { TreeTitle = "b Disc", AllSongs = new[] { new SongModel() } };
-			var disc3 = new DiscModel { TreeTitle = "C Disc", AllSongs = new[] { new SongModel() } };
+			var disc1 = new DiscModel { TreeTitle = "A Disc" }.MakeActive();
+			var disc2 = new DiscModel { TreeTitle = "b Disc" }.MakeActive();
+			var disc3 = new DiscModel { TreeTitle = "C Disc" }.MakeActive();
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(folder3, folder1, folder2);
@@ -445,9 +445,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder2 = new FolderModel { Name = "Ёлка" };
 			var folder3 = new FolderModel { Name = "Жанна Агузарова" };
 
-			var disc1 = new DiscModel { TreeTitle = "Елена Никитаева", AllSongs = new[] { new SongModel() } };
-			var disc2 = new DiscModel { TreeTitle = "Ёлка", AllSongs = new[] { new SongModel() } };
-			var disc3 = new DiscModel { TreeTitle = "Жанна Агузарова", AllSongs = new[] { new SongModel() } };
+			var disc1 = new DiscModel { TreeTitle = "Елена Никитаева" }.MakeActive();
+			var disc2 = new DiscModel { TreeTitle = "Ёлка" }.MakeActive();
+			var disc3 = new DiscModel { TreeTitle = "Жанна Агузарова" }.MakeActive();
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(folder3, folder1, folder2);
@@ -486,9 +486,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var subfolder2 = new FolderModel { Name = "Subfolder 2", DeleteDate = new DateTime(2021, 07, 25) };
 			var subfolder3 = new FolderModel { Name = "Subfolder 3" };
 
-			var disc1 = new DiscModel { TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
-			var disc2 = new DiscModel { TreeTitle = "Disc 2", AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 07, 25) } } };
-			var disc3 = new DiscModel { TreeTitle = "Disc 3", AllSongs = new[] { new SongModel() } };
+			var disc1 = new DiscModel { TreeTitle = "Disc 1" }.MakeActive();
+			var disc2 = new DiscModel { TreeTitle = "Disc 2" }.MakeDeleted();
+			var disc3 = new DiscModel { TreeTitle = "Disc 3" }.MakeActive();
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(subfolder1, subfolder2, subfolder3);
@@ -524,9 +524,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var subfolder2 = new FolderModel { Name = "Subfolder 2", DeleteDate = new DateTime(2021, 07, 25) };
 			var subfolder3 = new FolderModel { Name = "Subfolder 3" };
 
-			var disc1 = new DiscModel { TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
-			var disc2 = new DiscModel { TreeTitle = "Disc 2", AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 07, 25) } } };
-			var disc3 = new DiscModel { TreeTitle = "Disc 3", AllSongs = new[] { new SongModel() } };
+			var disc1 = new DiscModel { TreeTitle = "Disc 1" }.MakeActive();
+			var disc2 = new DiscModel { TreeTitle = "Disc 2" }.MakeDeleted();
+			var disc3 = new DiscModel { TreeTitle = "Disc 3" }.MakeActive();
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(subfolder1, subfolder2, subfolder3);
@@ -562,10 +562,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var oldFolder = new FolderModel();
 			oldFolder.AddSubfolders(new FolderModel { Id = new ItemId("OldSubfolder"), Name = "Old Folder" });
-			oldFolder.AddDiscs(new DiscModel { Id = new ItemId("OldDisc"), TreeTitle = "Old Disc", AllSongs = new[] { new SongModel { Id = new ItemId("1") } } });
+			oldFolder.AddDiscs(new DiscModel { Id = new ItemId("OldDisc"), TreeTitle = "Old Disc" }.AddSongs(new SongModel { Id = new ItemId("1") }));
 
 			var newSubfolder = new FolderModel { Id = new ItemId("NewSubfolder"), Name = "New Folder" };
-			var newDisc = new DiscModel { Id = new ItemId("NewSubfolder"), TreeTitle = "New Disc", AllSongs = new[] { new SongModel { Id = new ItemId("2") } } };
+			var newDisc = new DiscModel { Id = new ItemId("NewSubfolder"), TreeTitle = "New Disc" }.AddSongs(new SongModel { Id = new ItemId("2") });
 			var newFolder = new FolderModel { Id = new ItemId("NewFolder") };
 			newFolder.AddSubfolders(newSubfolder);
 			newFolder.AddDiscs(newDisc);
@@ -603,7 +603,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			folder.AddSubfolders(new FolderModel { Id = new ItemId("3"), Name = "Folder 3" });
 
 			// Using the same id as for requested folder, just in case.
-			folder.AddDiscs(new DiscModel { Id = new ItemId("2"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } });
+			folder.AddDiscs(new DiscModel { Id = new ItemId("2"), TreeTitle = "Some Disc" }.MakeActive());
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -629,7 +629,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			folder.AddSubfolders(new FolderModel { Id = new ItemId("Subfolder Id"), Name = "Some Subfolder" });
 
 			// Using the same id as for requested folder, just in case.
-			folder.AddDiscs(new DiscModel { Id = new ItemId("1"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } });
+			folder.AddDiscs(new DiscModel { Id = new ItemId("1"), TreeTitle = "Some Disc" }.MakeActive());
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -655,9 +655,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Using the same id as for requested disc, just in case.
 			folder.AddSubfolders(new FolderModel { Id = new ItemId("2"), Name = "Some Subfolder" });
-			folder.AddDiscs(new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } });
-			folder.AddDiscs(new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AllSongs = new[] { new SongModel() } });
-			folder.AddDiscs(new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3", AllSongs = new[] { new SongModel() } });
+			folder.AddDiscs(new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1" }.MakeActive());
+			folder.AddDiscs(new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2" }.MakeActive());
+			folder.AddDiscs(new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3" }.MakeActive());
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -683,7 +683,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Using the same id as for requested disc, just in case.
 			folder.AddSubfolders(new FolderModel { Id = new ItemId("1"), Name = "Some Subfolder" });
-			folder.AddDiscs(new DiscModel { Id = new ItemId("Disc Id"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } });
+			folder.AddDiscs(new DiscModel { Id = new ItemId("Disc Id"), TreeTitle = "Some Disc" }.MakeActive());
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
@@ -709,7 +709,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var folder3 = new FolderModel { Id = new ItemId("3"), Name = "Folder 3" };
 
 			// Using the same id as for requested folder, just in case.
-			var disc = new DiscModel { Id = new ItemId("2"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
+			var disc = new DiscModel { Id = new ItemId("2"), TreeTitle = "Some Disc" }.MakeActive();
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(folder1, folder2, folder3);
@@ -743,7 +743,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var subfolder = new FolderModel { Id = new ItemId("Subfolder Id"), Name = "Some Subfolder" };
-			var disc = new DiscModel { Id = new ItemId("1"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
+			var disc = new DiscModel { Id = new ItemId("1"), TreeTitle = "Some Disc" }.MakeActive();
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(subfolder);
@@ -788,7 +788,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// We add new items to the current folder for checking that LoadFolderItems() was called once again for the current folder.
 			var newSubfolder = new FolderModel { Id = new ItemId("New Subfolder Id"), Name = "New Subfolder" };
-			var newDisc = new DiscModel { Id = new ItemId("New Disc Id"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
+			var newDisc = new DiscModel { Id = new ItemId("New Disc Id"), TreeTitle = "Some Disc" }.MakeActive();
 			folder.AddSubfolders(newSubfolder);
 			folder.AddDiscs(newDisc);
 
@@ -816,9 +816,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Using the same id as for requested disc, just in case.
 			var subfolder = new FolderModel { Id = new ItemId("2"), Name = "Some Subfolder" };
 
-			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1", AllSongs = new[] { new SongModel() } };
-			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2", AllSongs = new[] { new SongModel() } };
-			var disc3 = new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3", AllSongs = new[] { new SongModel() } };
+			var disc1 = new DiscModel { Id = new ItemId("1"), TreeTitle = "Disc 1" }.MakeActive();
+			var disc2 = new DiscModel { Id = new ItemId("2"), TreeTitle = "Disc 2" }.MakeActive();
+			var disc3 = new DiscModel { Id = new ItemId("3"), TreeTitle = "Disc 3" }.MakeActive();
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(subfolder);
@@ -853,7 +853,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Using the same id as for requested disc, just in case.
 			var subfolder = new FolderModel { Id = new ItemId("1"), Name = "Some Subfolder" };
-			var disc = new DiscModel { Id = new ItemId("Disc Id"), TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } };
+			var disc = new DiscModel { Id = new ItemId("Disc Id"), TreeTitle = "Some Disc" }.MakeActive();
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(subfolder);
@@ -885,7 +885,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var oldDisc = new DiscModel { Id = new ItemId("Old Disc Id"), TreeTitle = "Old Disc", AllSongs = new[] { new SongModel { Id = new ItemId("1") } } };
+			var oldDisc = new DiscModel { Id = new ItemId("Old Disc Id"), TreeTitle = "Old Disc" }.AddSongs(new SongModel { Id = new ItemId("1") });
 
 			var folder = new FolderModel();
 			folder.AddDiscs(oldDisc);
@@ -898,7 +898,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// We add new items to the current folder for checking that LoadFolderItems() was called once again for the current folder.
 			var newSubfolder = new FolderModel { Id = new ItemId("New Subfolder Id"), Name = "New Subfolder" };
-			var newDisc = new DiscModel { Id = new ItemId("New Disc Id"), TreeTitle = "New Disc", AllSongs = new[] { new SongModel { Id = new ItemId("2") } } };
+			var newDisc = new DiscModel { Id = new ItemId("New Disc Id"), TreeTitle = "New Disc" }.AddSongs(new SongModel { Id = new ItemId("2") });
 			folder.AddSubfolders(newSubfolder);
 			folder.AddDiscs(newDisc);
 
@@ -926,7 +926,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var parentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") };
 
 			var folder = new FolderModel { Id = new ItemId("Child Folder Id") };
-			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } });
+			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc" }.MakeActive());
 
 			parentFolder.AddSubfolders(folder);
 
@@ -959,7 +959,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(subfolder);
-			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } });
+			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc" }.MakeActive());
 
 			var parentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") };
 			parentFolder.AddSubfolders(folder);
@@ -991,7 +991,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(new FolderModel { Id = new ItemId("Subfolder Id") });
-			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } });
+			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc" }.MakeActive());
 
 			var parentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") };
 			parentFolder.AddSubfolders(folder);
@@ -1026,7 +1026,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(new FolderModel { Id = new ItemId("Subfolder Id") });
-			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } });
+			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc" }.MakeActive());
 
 			var parentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") };
 			parentFolder.AddSubfolders(folder);
@@ -1060,7 +1060,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(new FolderModel { Id = new ItemId("Subfolder Id") });
-			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } });
+			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc" }.MakeActive());
 
 			var parentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") };
 			parentFolder.AddSubfolders(folder);
@@ -1087,7 +1087,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var folder = new FolderModel();
 			folder.AddSubfolders(new FolderModel { Id = new ItemId("Subfolder Id") });
-			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc", AllSongs = new[] { new SongModel() } });
+			folder.AddDiscs(new DiscModel { TreeTitle = "Some Disc" }.MakeActive());
 
 			var parentFolder = new FolderModel { Id = new ItemId("Parent Folder Id") };
 			parentFolder.AddSubfolders(folder);

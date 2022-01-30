@@ -97,22 +97,9 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 
 		private static DiscModel CreateTestDisc(string id)
 		{
-			var disc = new DiscModel
-			{
-				Id = new ItemId(id),
-				AllSongs = new List<SongModel>
-				{
-					new()
-					{
-						Id = new ItemId(id),
-					},
-				},
-			};
-
-			var folder = new FolderModel();
-			folder.AddDiscs(disc);
-
-			return disc;
+			return new DiscModel { Id = new ItemId(id) }
+				.MakeActive()
+				.AddToFolder(new FolderModel());
 		}
 	}
 }

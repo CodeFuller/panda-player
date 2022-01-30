@@ -94,16 +94,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var discFolder = new FolderModel { Id = new ItemId("Some Folder") };
 			discFolder.AddDiscs(disc);
 
-			var activeSong1 = new SongModel { Id = new ItemId("Active Song 1"), Disc = disc };
-			var activeSong2 = new SongModel { Id = new ItemId("Active Song 2"), Disc = disc };
-			var deletedSong = new SongModel { Id = new ItemId("Deleted Songs"), Disc = disc, DeleteDate = new DateTime(2021, 07, 25) };
+			var activeSong1 = new SongModel { Id = new ItemId("Active Song 1") };
+			var activeSong2 = new SongModel { Id = new ItemId("Active Song 2") };
+			var deletedSong = new SongModel { Id = new ItemId("Deleted Songs"), DeleteDate = new DateTime(2021, 07, 25) };
 
-			disc.AllSongs = new[]
-			{
-				activeSong1,
-				deletedSong,
-				activeSong2,
-			};
+			disc.AddSongs(activeSong1, deletedSong, activeSong2);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
@@ -134,22 +129,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var activeSong1 = new SongModel { Id = new ItemId("Active Song 1") };
 			var activeSong2 = new SongModel { Id = new ItemId("Active Song 2") };
-			var deletedSong = new SongModel
-			{
-				Id = new ItemId("Deleted Songs"),
-				DeleteDate = new DateTime(2021, 07, 25),
-			};
+			var deletedSong = new SongModel { Id = new ItemId("Deleted Songs"), DeleteDate = new DateTime(2021, 07, 25) };
 
-			var disc = new DiscModel
-			{
-				Id = new ItemId("Some Disc"),
-				AllSongs = new[]
-				{
-					activeSong1,
-					deletedSong,
-					activeSong2,
-				},
-			};
+			var disc = new DiscModel { Id = new ItemId("Some Disc") };
+			disc.AddSongs(activeSong1, deletedSong, activeSong2);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
@@ -226,7 +209,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var folder = new FolderModel { Id = new ItemId("Some Folder") };
-			folder.AddDiscs(new DiscModel { Id = new ItemId("Some Disc"), AllSongs = new[] { new SongModel { Id = new ItemId("Some Song") } } });
+			folder.AddDiscs(new DiscModel { Id = new ItemId("Some Disc") }.MakeActive());
 
 			var mocker = new AutoMocker();
 

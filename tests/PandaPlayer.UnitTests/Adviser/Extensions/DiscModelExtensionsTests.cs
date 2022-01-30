@@ -96,16 +96,9 @@ namespace PandaPlayer.UnitTests.Adviser.Extensions
 
 		private static DiscModel CreateTestDisc(int id, IEnumerable<SongModel> songs)
 		{
-			var disc = new DiscModel
-			{
-				Id = new ItemId(id.ToString(CultureInfo.InvariantCulture)),
-				AllSongs = songs.ToList(),
-			};
-
-			var folder = new FolderModel();
-			folder.AddDiscs(disc);
-
-			return disc;
+			return new DiscModel { Id = new ItemId(id.ToString(CultureInfo.InvariantCulture)) }
+				.AddSongs(songs.ToArray())
+				.AddToFolder(new FolderModel());
 		}
 	}
 }

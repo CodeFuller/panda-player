@@ -18,16 +18,8 @@ namespace PandaPlayer.Services.UnitTests
 		{
 			// Arrange
 
-			var disc = new DiscModel
-			{
-				Id = new ItemId("Disc Id"),
-				Title = "Old Disc Title",
-				TreeTitle = "2021 - Some Disc (CD 1)",
-				AllSongs = new[]
-				{
-					new SongModel(),
-				},
-			};
+			var disc = new DiscModel { Id = new ItemId("Disc Id"), Title = "Old Disc Title", TreeTitle = "2021 - Some Disc (CD 1)" };
+			disc.AddSong(new SongModel());
 
 			var folder = new FolderModel { Id = new ItemId("Folder Id"), Name = "Test Folder" };
 			folder.AddDisc(disc);
@@ -62,17 +54,11 @@ namespace PandaPlayer.Services.UnitTests
 				Title = "Some Disc (CD 1)",
 				TreeTitle = "2021 - Some Disc (CD 1)",
 				AlbumTitle = "Some Disc",
-				AllSongs = new SongModel[]
-				{
-					new() { Id = new ItemId("1") },
-					new() { Id = new ItemId("2") },
-					new()
-					{
-						Id = new ItemId("3"),
-						DeleteDate = new DateTime(2021, 07, 03),
-					},
-				},
 			};
+
+			disc.AddSong(new() { Id = new ItemId("1") });
+			disc.AddSong(new() { Id = new ItemId("2") });
+			disc.AddSong(new() { Id = new ItemId("3"), DeleteDate = new DateTime(2021, 07, 03) });
 
 			var folder = new FolderModel { Id = new ItemId("Folder Id"), Name = "Test Folder" };
 			folder.AddDisc(disc);
@@ -115,17 +101,11 @@ namespace PandaPlayer.Services.UnitTests
 				Title = "Some Disc (CD 1)",
 				TreeTitle = "2021 - Some Disc (CD 1)",
 				AlbumTitle = "Some Disc",
-				AllSongs = new SongModel[]
-				{
-					new() { Id = new ItemId("1") },
-					new() { Id = new ItemId("2") },
-					new()
-					{
-						Id = new ItemId("3"),
-						DeleteDate = new DateTime(2021, 07, 03),
-					},
-				},
 			};
+
+			disc.AddSong(new() { Id = new ItemId("1") });
+			disc.AddSong(new() { Id = new ItemId("2") });
+			disc.AddSong(new() { Id = new ItemId("3"), DeleteDate = new DateTime(2021, 07, 03) });
 
 			var folder = new FolderModel { Id = new ItemId("Folder Id"), Name = "Test Folder" };
 			folder.AddDisc(disc);
@@ -168,11 +148,9 @@ namespace PandaPlayer.Services.UnitTests
 				Title = "Some Disc (CD 1)",
 				TreeTitle = "2021 - Some Disc (CD 1)",
 				AlbumTitle = "Some Disc",
-				AllSongs = new SongModel[]
-				{
-					new() { Id = new ItemId("1") },
-				},
 			};
+
+			disc.AddSong(new() { Id = new ItemId("1") });
 
 			var folder = new FolderModel { Id = new ItemId("Folder Id"), Name = "Test Folder" };
 			folder.AddDisc(disc);

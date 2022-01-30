@@ -8,6 +8,7 @@ using MaterialDesignThemes.Wpf;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using PandaPlayer.Core.Models;
+using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.ViewModels.AdviseGroups;
 using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.ViewModels.LibraryExplorerItems;
@@ -114,7 +115,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var disc = new DiscModel { AllSongs = new[] { new SongModel() } };
+			var disc = new DiscModel().MakeActive();
 
 			var target = new DiscExplorerItem(disc);
 
@@ -132,7 +133,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var disc = new DiscModel { AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 10, 24) } } };
+			var disc = new DiscModel().MakeDeleted();
 
 			var target = new DiscExplorerItem(disc);
 
@@ -150,7 +151,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var disc = new DiscModel { AllSongs = new[] { new SongModel() } };
+			var disc = new DiscModel().MakeActive();
 
 			var target = new DiscExplorerItem(disc);
 
@@ -168,14 +169,9 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var disc = new DiscModel
-			{
-				AllSongs = new[]
-				{
-					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring" },
-					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring" },
-				},
-			};
+			var disc = new DiscModel();
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring" });
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring" });
 
 			var target = new DiscExplorerItem(disc);
 
@@ -193,14 +189,9 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var disc = new DiscModel
-			{
-				AllSongs = new[]
-				{
-					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = null },
-					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = null },
-				},
-			};
+			var disc = new DiscModel();
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = null });
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = null });
 
 			var target = new DiscExplorerItem(disc);
 
@@ -218,14 +209,9 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var disc = new DiscModel
-			{
-				AllSongs = new[]
-				{
-					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring 1" },
-					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring 2" },
-				},
-			};
+			var disc = new DiscModel();
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring 1" });
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring 2" });
 
 			var target = new DiscExplorerItem(disc);
 
@@ -243,14 +229,9 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var disc = new DiscModel
-			{
-				AllSongs = new[]
-				{
-					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring" },
-					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring" },
-				},
-			};
+			var disc = new DiscModel();
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring" });
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring" });
 
 			var target = new DiscExplorerItem(disc);
 
@@ -268,14 +249,9 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var disc = new DiscModel
-			{
-				AllSongs = new[]
-				{
-					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = null },
-					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = null },
-				},
-			};
+			var disc = new DiscModel();
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = null });
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = null });
 
 			var target = new DiscExplorerItem(disc);
 
@@ -293,14 +269,9 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var disc = new DiscModel
-			{
-				AllSongs = new[]
-				{
-					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring 1" },
-					new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring 2" },
-				},
-			};
+			var disc = new DiscModel();
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring 1" });
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 26), DeleteComment = "Boring 2" });
 
 			var target = new DiscExplorerItem(disc);
 
@@ -376,7 +347,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var disc = new DiscModel { AllSongs = new[] { new SongModel() } };
+			var disc = new DiscModel().MakeActive();
 
 			var adviseGroupHelperStub = new Mock<IAdviseGroupHelper>();
 			adviseGroupHelperStub.Setup(x => x.AdviseGroups).Returns(Array.Empty<AdviseGroupModel>());
@@ -413,7 +384,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 		{
 			// Arrange
 
-			var disc = new DiscModel { AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 10, 24) } } };
+			var disc = new DiscModel().MakeDeleted();
 
 			var target = new DiscExplorerItem(disc);
 

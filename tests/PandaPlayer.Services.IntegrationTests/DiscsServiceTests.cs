@@ -28,7 +28,6 @@ namespace PandaPlayer.Services.IntegrationTests
 				Title = "Титаник Live (CD 1)",
 				TreeTitle = "1994 - Титаник Live (CD 1)",
 				AlbumTitle = "Титаник",
-				AllSongs = new List<SongModel>(),
 			};
 
 			await TestCaseForCreateDisc(ReferenceData.ArtistFolderId, newDisc, Path.Combine("Belarusian", "Neuro Dubel", "1994 - Титаник Live (CD 1)"));
@@ -41,7 +40,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			{
 				Title = "Титаник Live (CD 1)",
 				TreeTitle = "1994 - Титаник Live (CD 1)",
-				AllSongs = new List<SongModel>(),
 			};
 
 			await TestCaseForCreateDisc(ReferenceData.ArtistFolderId, newDisc, Path.Combine("Belarusian", "Neuro Dubel", "1994 - Титаник Live (CD 1)"));
@@ -54,7 +52,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			{
 				Title = "Титаник Live (CD 1)",
 				TreeTitle = "1994 - Титаник Live (CD 1)",
-				AllSongs = new List<SongModel>(),
 			};
 
 			await TestCaseForCreateDisc(ReferenceData.EmptyFolderId, newDisc, Path.Combine("Belarusian", "Neuro Dubel", "Empty Folder", "1994 - Титаник Live (CD 1)"));

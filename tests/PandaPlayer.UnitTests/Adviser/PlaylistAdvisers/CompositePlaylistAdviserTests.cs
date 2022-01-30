@@ -320,18 +320,9 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 		private static AdviseSetContent CreateTestAdviseSet(int id)
 		{
-			var stringId = id.ToString(CultureInfo.InvariantCulture);
-
-			var disc = new DiscModel
-			{
-				Id = new ItemId(stringId),
-				AllSongs = new List<SongModel>(),
-			};
-
-			var folder = new FolderModel();
-			folder.AddDiscs(disc);
-
-			return disc.ToAdviseSet();
+			return new DiscModel { Id = new ItemId(id.ToString(CultureInfo.InvariantCulture)) }
+				.AddToFolder(new FolderModel())
+				.ToAdviseSet();
 		}
 	}
 }

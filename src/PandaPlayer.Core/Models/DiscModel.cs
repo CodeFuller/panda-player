@@ -57,12 +57,12 @@ namespace PandaPlayer.Core.Models
 			}
 		}
 
-		private List<SongModel> allSongs = new();
+		private readonly List<SongModel> allSongs = new();
 
 		public IReadOnlyCollection<SongModel> AllSongs
 		{
 			get => allSongs;
-			set => allSongs = new List<SongModel>(value);
+			private init => allSongs = new List<SongModel>(value);
 		}
 
 		public IEnumerable<SongModel> AllSongsSorted => AllSongs

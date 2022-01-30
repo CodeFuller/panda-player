@@ -7,6 +7,7 @@ using Moq;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
+using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.ViewModels;
 
 namespace PandaPlayer.UnitTests.ViewModels
@@ -25,12 +26,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 				TreeTitle = "Some Tree Title",
 				AlbumTitle = "Some Album Title",
 				Year = 2021,
-				AllSongs = new[]
-				{
-					new SongModel(),
-					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring" },
-				},
 			};
+
+			disc.AddSongs(new SongModel());
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring" });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<EditDiscPropertiesViewModel>();
@@ -60,12 +59,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 				TreeTitle = "Some Tree Title",
 				AlbumTitle = "Some Album Title",
 				Year = 2021,
-				AllSongs = new[]
-				{
-					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring" },
-					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring" },
-				},
 			};
+
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring" });
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring" });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<EditDiscPropertiesViewModel>();
@@ -93,12 +90,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				Title = "Some Title",
 				TreeTitle = "Some Tree Title",
-				AllSongs = new[]
-				{
-					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring" },
-					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring too" },
-				},
 			};
+
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring" });
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring too" });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<EditDiscPropertiesViewModel>();
@@ -124,12 +119,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 				TreeTitle = "Old Tree Title",
 				AlbumTitle = "Old Album Title",
 				Year = 2020,
-				AllSongs = new[]
-				{
-					new SongModel(),
-					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring" },
-				},
 			};
+
+			disc.AddSongs(new SongModel());
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Boring" });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<EditDiscPropertiesViewModel>();
@@ -171,12 +164,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 				TreeTitle = "Old Tree Title",
 				AlbumTitle = "Old Album Title",
 				Year = 2021,
-				AllSongs = new[]
-				{
-					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Some Delete Comment" },
-					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Some Delete Comment" },
-				},
 			};
+
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Some Delete Comment" });
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Some Delete Comment" });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<EditDiscPropertiesViewModel>();
@@ -224,8 +215,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 				TreeTitle = "Old Tree Title",
 				AlbumTitle = "Old Album Title",
 				Year = 2021,
-				AllSongs = songs,
 			};
+
+			disc.AddSongs(songs);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<EditDiscPropertiesViewModel>();
@@ -276,12 +268,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 				TreeTitle = "Old Tree Title",
 				AlbumTitle = "Old Album Title",
 				Year = 2021,
-				AllSongs = new[]
-				{
-					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Some Delete Comment 1" },
-					new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Some Delete Comment 2" },
-				},
 			};
+
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Some Delete Comment 1" });
+			disc.AddSongs(new SongModel { DeleteDate = new DateTime(2021, 10, 25), DeleteComment = "Some Delete Comment 2" });
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<EditDiscPropertiesViewModel>();
@@ -329,8 +319,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 				TreeTitle = "Old Tree Title",
 				AlbumTitle = "Old Album Title",
 				Year = 2021,
-				AllSongs = songs,
 			};
+
+			disc.AddSongs(songs);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<EditDiscPropertiesViewModel>();

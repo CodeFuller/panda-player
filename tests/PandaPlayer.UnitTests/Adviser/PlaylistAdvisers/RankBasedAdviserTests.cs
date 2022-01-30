@@ -187,23 +187,13 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 		private static DiscModel CreateTestDisc(string id, bool isDeleted = false)
 		{
-			var disc = new DiscModel
-			{
-				Id = new ItemId(id),
-				AllSongs = new List<SongModel>
+			return new DiscModel { Id = new ItemId(id) }
+				.AddSongs(new SongModel
 				{
-					new()
-					{
-						Id = new ItemId(id),
-						DeleteDate = isDeleted ? new DateTime(2021, 06, 27) : null,
-					},
-				},
-			};
-
-			var folder = new FolderModel();
-			folder.AddDiscs(disc);
-
-			return disc;
+					Id = new ItemId(id),
+					DeleteDate = isDeleted ? new DateTime(2021, 06, 27) : null,
+				})
+				.AddToFolder(new FolderModel());
 		}
 	}
 }

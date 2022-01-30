@@ -31,7 +31,6 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 			SongWithOptionalPropertiesFilled1 = new()
 			{
 				Id = SongWithOptionalPropertiesFilledId1,
-				Disc = NormalDisc,
 				Title = "Про женщин",
 				TreeTitle = "01 - Про женщин.mp3",
 				TrackNumber = 1,
@@ -50,7 +49,6 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 			SongWithOptionalPropertiesFilled2 = new()
 			{
 				Id = SongWithOptionalPropertiesFilledId2,
-				Disc = NormalDisc,
 				Title = "Про жизнь дяди Саши",
 				TreeTitle = "02 - Про жизнь дяди Саши.mp3",
 				TrackNumber = 2,
@@ -69,7 +67,6 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 			SongWithOptionalPropertiesMissing = new()
 			{
 				Id = SongWithOptionalPropertiesMissingId,
-				Disc = DiscWithMissingFields,
 				Title = "Song With Missing Fields",
 				TreeTitle = "Song With Missing Fields.mp3",
 				Duration = TimeSpan.FromMilliseconds(11618),
@@ -82,7 +79,6 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 			DeletedSong = new()
 			{
 				Id = DeletedSongId,
-				Disc = DeletedDisc,
 				Title = "Deleted Song",
 				TreeTitle = "01 - Deleted Song.mp3",
 				TrackNumber = 1,
@@ -96,9 +92,10 @@ namespace PandaPlayer.Services.IntegrationTests.Data
 				DeleteComment = "Boring",
 			};
 
-			NormalDisc.AllSongs = new List<SongModel> { SongWithOptionalPropertiesFilled1, SongWithOptionalPropertiesFilled2, };
-			DiscWithMissingFields.AllSongs = new List<SongModel> { SongWithOptionalPropertiesMissing, };
-			DeletedDisc.AllSongs = new List<SongModel> { DeletedSong, };
+			NormalDisc.AddSong(SongWithOptionalPropertiesFilled1);
+			NormalDisc.AddSong(SongWithOptionalPropertiesFilled2);
+			DiscWithMissingFields.AddSong(SongWithOptionalPropertiesMissing);
+			DeletedDisc.AddSong(DeletedSong);
 		}
 	}
 }

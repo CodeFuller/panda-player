@@ -82,33 +82,36 @@ namespace PandaPlayer.UnitTests.Adviser
 
 			var adviseSet = new AdviseSetModel { Id = new ItemId("Advise Set Id"), Name = "Some Advise Set" };
 
-			var song11 = new SongModel { Id = new ItemId("Song 1.1") };
-			var song12 = new SongModel { Id = new ItemId("Song 1.2") };
 			var disc1 = new DiscModel
 			{
 				Id = new ItemId("1"),
 				TreeTitle = "Disc 1",
 				AdviseSetInfo = new AdviseSetInfo(adviseSet, 2),
-				AllSongs = new[] { song11, song12 },
 			};
 
-			var song2 = new SongModel { Id = new ItemId("Song 2.1") };
+			var song11 = new SongModel { Id = new ItemId("Song 1.1") };
+			var song12 = new SongModel { Id = new ItemId("Song 1.2") };
+			disc1.AddSongs(song11, song12);
+
 			var disc2 = new DiscModel
 			{
 				Id = new ItemId("2"),
 				TreeTitle = "Disc 2",
 				AdviseSetInfo = new AdviseSetInfo(adviseSet, 1),
-				AllSongs = new[] { song2 },
 			};
 
-			var song3 = new SongModel { Id = new ItemId("Song 3.1") };
+			var song2 = new SongModel { Id = new ItemId("Song 2.1") };
+			disc2.AddSongs(song2);
+
 			var disc3 = new DiscModel
 			{
 				Id = new ItemId("3"),
 				TreeTitle = "Disc 3",
 				AdviseSetInfo = new AdviseSetInfo(adviseSet, 3),
-				AllSongs = new[] { song3 },
 			};
+
+			var song3 = new SongModel { Id = new ItemId("Song 3.1") };
+			disc3.AddSongs(song3);
 
 			var adviseSetContent = new AdviseSetContent("AdviseSetContent Id");
 
@@ -142,7 +145,8 @@ namespace PandaPlayer.UnitTests.Adviser
 			var activeSong1 = new SongModel { Id = new ItemId("2") };
 			var activeSong2 = new SongModel { Id = new ItemId("3") };
 
-			var adviseSetContent = new DiscModel { Id = new ItemId("1"), AllSongs = new[] { deletedSong, activeSong1, activeSong2 } }
+			var adviseSetContent = new DiscModel { Id = new ItemId("1") }
+				.AddSongs(deletedSong, activeSong1, activeSong2)
 				.AddToFolder(new FolderModel { Name = "Some Artist" })
 				.ToAdviseSet();
 
@@ -200,15 +204,8 @@ namespace PandaPlayer.UnitTests.Adviser
 				{
 					Id = new ItemId("1"),
 					Title = "Some Disc",
-					AllSongs = new[]
-					{
-						new SongModel
-						{
-							Id = new ItemId("12345"),
-							Artist = new ArtistModel { Name = "Another Artist" },
-						},
-					},
 				}
+				.AddSongs(new SongModel { Id = new ItemId("12345"), Artist = new ArtistModel { Name = "Another Artist" } })
 				.AddToFolder(new FolderModel { Name = "Some Artist" })
 				.ToAdviseSet();
 
@@ -233,8 +230,8 @@ namespace PandaPlayer.UnitTests.Adviser
 			var adviseSetContent = new DiscModel
 				{
 					Id = new ItemId("1"),
-					AllSongs = new[] { deletedSong, activeSong1, activeSong2 },
 				}
+				.AddSongs(deletedSong, activeSong1, activeSong2)
 				.AddToFolder(new FolderModel { Name = "Some Artist" })
 				.ToAdviseSet();
 
@@ -252,11 +249,7 @@ namespace PandaPlayer.UnitTests.Adviser
 		{
 			// Arrange
 
-			var adviseSetContent = new DiscModel
-				{
-					Id = new ItemId("1"),
-					AllSongs = new List<SongModel>(),
-				}
+			var adviseSetContent = new DiscModel { Id = new ItemId("1") }
 				.AddToFolder(new FolderModel { Name = "Some Artist" })
 				.ToAdviseSet();
 

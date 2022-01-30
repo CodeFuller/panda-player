@@ -5,6 +5,7 @@ using Moq;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
+using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.ViewModels.DiscImages;
 
 namespace PandaPlayer.UnitTests.ViewModels
@@ -41,10 +42,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var disc = new DiscModel
-			{
-				AllSongs = new[] { new SongModel() },
-			};
+			var disc = new DiscModel().MakeActive();
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<DiscImageViewModel>();
@@ -66,10 +64,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		{
 			// Arrange
 
-			var disc = new DiscModel
-			{
-				AllSongs = new[] { new SongModel { DeleteDate = new DateTime(2021, 07, 26) } },
-			};
+			var disc = new DiscModel().MakeDeleted();
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<DiscImageViewModel>();

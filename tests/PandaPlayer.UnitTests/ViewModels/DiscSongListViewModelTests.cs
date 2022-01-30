@@ -9,6 +9,7 @@ using Moq;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
+using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.ViewModels;
 using PandaPlayer.ViewModels.MenuItems;
 
@@ -229,10 +230,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 				new SongModel { Id = new ItemId("3") },
 			};
 
-			var disc = new DiscModel
-			{
-				AllSongs = songs,
-			};
+			var disc = new DiscModel();
+			disc.AddSongs(songs);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<DiscSongListViewModel>();
@@ -277,10 +276,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 				new SongModel { Id = new ItemId("3") },
 			};
 
-			var disc = new DiscModel
-			{
-				AllSongs = songs,
-			};
+			var disc = new DiscModel();
+			disc.AddSongs(songs);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<DiscSongListViewModel>();
@@ -326,10 +323,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 				new SongModel { Id = new ItemId("New 2") },
 			};
 
-			var newDisc = new DiscModel
-			{
-				AllSongs = newSongs,
-			};
+			var newDisc = new DiscModel();
+			newDisc.AddSongs(newSongs);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<DiscSongListViewModel>();
@@ -369,10 +364,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 				new SongModel { Id = new ItemId("New 2") },
 			};
 
-			var newDisc = new DiscModel
-			{
-				AllSongs = newSongs,
-			};
+			var newDisc = new DiscModel();
+			newDisc.AddSongs(newSongs);
 
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<DiscSongListViewModel>();

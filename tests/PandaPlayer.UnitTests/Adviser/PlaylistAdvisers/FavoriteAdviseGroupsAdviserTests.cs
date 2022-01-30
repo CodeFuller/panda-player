@@ -123,16 +123,10 @@ namespace PandaPlayer.UnitTests.Adviser.PlaylistAdvisers
 
 		private static AdviseSetContent CreateTestAdviseSet(string id, IEnumerable<SongModel> songs)
 		{
-			var disc = new DiscModel
-			{
-				Id = new ItemId(id),
-				AllSongs = songs.ToList(),
-			};
-
-			var folder = new FolderModel();
-			folder.AddDiscs(disc);
-
-			return disc.ToAdviseSet();
+			return new DiscModel { Id = new ItemId(id) }
+				.AddSongs(songs.ToArray())
+				.AddToFolder(new FolderModel())
+				.ToAdviseSet();
 		}
 
 		private static SongModel CreateTestSong(int id, DateTimeOffset? lastPlaybackTime = null, DateTimeOffset? deleteDate = null)
