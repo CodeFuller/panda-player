@@ -1,0 +1,15 @@
+classDiagram
+
+AdviseGroup *-- ShallowFolder
+AdviseGroup *-- Disc
+
+ShallowFolder *-- ShallowFolder
+ShallowFolder *-- Disc
+
+Disc *-- Song
+Disc o-- AdviseSetModel
+Disc *-- DiscImage
+
+Song o-- Artist
+Song o-- Genre
+Song *-- Playback
