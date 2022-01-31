@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <PropertyGroup>
+    <!-- https://github.com/mono/taglib-sharp/issues/138 -->
     <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
 

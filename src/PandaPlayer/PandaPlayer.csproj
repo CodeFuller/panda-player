@@ -13,9 +13,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" />
-    <PackageReference Include="MaterialDesignThemes" Version="3.1.3" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,9 +42,5 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-  <PropertyGroup>
-    <NoWarn>NU1701</NoWarn>
-  </PropertyGroup>
 
 </Project>
