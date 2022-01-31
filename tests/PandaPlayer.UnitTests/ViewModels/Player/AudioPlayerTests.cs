@@ -498,7 +498,7 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 				.GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)
 				.Single();
 
-			return (ElapsedEventArgs)constructor.Invoke(new object[] { 123 });
+			return (ElapsedEventArgs)constructor.Invoke(new object[] { new DateTime(123) });
 		}
 	}
 }

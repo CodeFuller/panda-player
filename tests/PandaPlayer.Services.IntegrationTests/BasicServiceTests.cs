@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -202,6 +203,10 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			ServiceProvider.Dispose();
 			ServiceProvider = null;
+
+			// Clearing all connection pools, so that DB file is released and can be removed.
+			// https://docs.microsoft.com/en-us/ef/core/what-is-new/ef-core-6.0/breaking-changes#sqlite-connections-are-pooled
+			SqliteConnection.ClearAllPools();
 		}
 
 		protected async Task<IReadOnlyCollection<FolderModel>> GetAllFolders()

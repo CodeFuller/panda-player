@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -111,7 +112,7 @@ namespace PandaPlayer.ViewModels.PersistentPlaylist
 			var sb = new StringBuilder();
 			if (song.TrackNumber.HasValue)
 			{
-				sb.Append($"{song.TrackNumber.Value:D2} - ");
+				sb.Append(CultureInfo.InvariantCulture, $"{song.TrackNumber.Value:D2} - ");
 			}
 
 			sb.Append(song.Title);

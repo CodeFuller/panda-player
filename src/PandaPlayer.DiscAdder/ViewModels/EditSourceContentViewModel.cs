@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -85,7 +86,9 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			var contentBuilder = new StringBuilder();
 			foreach (var disc in CurrentDiscs.Discs)
 			{
-				contentBuilder.Append($"# {disc.DiscDirectory}\n\n");
+				contentBuilder.Append(CultureInfo.InvariantCulture, $"# {disc.DiscDirectory}");
+				contentBuilder.AppendLine();
+				contentBuilder.AppendLine();
 			}
 
 			RawReferenceDiscs.Content = contentBuilder.ToString();
