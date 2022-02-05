@@ -22,7 +22,7 @@
         
         <HierarchicalDataTemplate DataType="{x:Type sourceContent:DiscTreeViewItem}" ItemsSource="{Binding SongItems}">
             <Grid>
-                <TextBlock Text="{Binding DiscDirectory}">
+                <TextBlock Text="{Binding DiscDirectory}" x:Name="TextBlock">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
@@ -36,7 +36,7 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox Text="{Binding DiscDirectory, UpdateSourceTrigger=Explicit}" Visibility="Collapsed" x:Name="TextBox"/>
+                <TextBox Text="{Binding DiscDirectory, UpdateSourceTrigger=Explicit}" Visibility="Collapsed" x:Name="TextBox" />
             </Grid>
             <HierarchicalDataTemplate.Triggers>
                 <MultiDataTrigger>
@@ -44,6 +44,7 @@
                         <Condition Binding="{Binding IsSelected}" Value="True"/>
                         <Condition Binding="{Binding Path=(behaviors:TreeViewInPlaceEditBehavior.IsEditing), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}}" Value="True"/>
                     </MultiDataTrigger.Conditions>
+                    <Setter TargetName="TextBlock" Property="Visibility" Value="Collapsed"/>
                     <Setter TargetName="TextBox" Property="Visibility" Value="Visible"/>
                     <Setter TargetName="TextBox" Property="behaviors:TreeViewInPlaceEditBoxBehavior.IsEditing">
                         <Setter.Value>
@@ -66,7 +67,7 @@
 
         <HierarchicalDataTemplate DataType="{x:Type sourceContent:SongTreeViewItem}">
             <Grid>
-                <TextBlock Text="{Binding Title}">
+                <TextBlock Text="{Binding Title}" x:Name="TextBlock">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
@@ -80,7 +81,7 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox Text="{Binding Title, UpdateSourceTrigger=Explicit}" Visibility="Collapsed" x:Name="TextBox"/>
+                <TextBox Text="{Binding Title, UpdateSourceTrigger=Explicit}" Visibility="Collapsed" x:Name="TextBox" />
             </Grid>
             <HierarchicalDataTemplate.Triggers>
                 <MultiDataTrigger>
@@ -88,6 +89,7 @@
                         <Condition Binding="{Binding IsSelected}" Value="True"/>
                         <Condition Binding="{Binding Path=(behaviors:TreeViewInPlaceEditBehavior.IsEditing), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}}" Value="True"/>
                     </MultiDataTrigger.Conditions>
+                    <Setter TargetName="TextBlock" Property="Visibility" Value="Collapsed"/>
                     <Setter TargetName="TextBox" Property="Visibility" Value="Visible"/>
                     <Setter TargetName="TextBox" Property="behaviors:TreeViewInPlaceEditBoxBehavior.IsEditing">
                         <Setter.Value>
