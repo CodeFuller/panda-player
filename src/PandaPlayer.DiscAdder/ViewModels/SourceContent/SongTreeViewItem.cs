@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using GalaSoft.MvvmLight.Messaging;
 using PandaPlayer.DiscAdder.Events;
 
@@ -10,7 +11,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 	{
 		private readonly DiscTreeViewItem discItem;
 
-		public override IReadOnlyCollection<BasicDiscTreeViewItem> ChildItems => Array.Empty<BasicDiscTreeViewItem>();
+		public override IEnumerable<BasicDiscTreeViewItem> ChildItems => Enumerable.Empty<BasicDiscTreeViewItem>();
 
 		private string title;
 

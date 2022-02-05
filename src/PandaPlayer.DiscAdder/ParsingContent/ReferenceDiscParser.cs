@@ -19,7 +19,7 @@ namespace PandaPlayer.DiscAdder.ParsingContent
 			var content = discContent.ToList();
 
 			// Disc content should contain at least disc directory
-			if (content.Count < 1)
+			if (!content.Any())
 			{
 				throw new InvalidOperationException($"Invalid reference disc content: {String.Join("\n", content)}");
 			}

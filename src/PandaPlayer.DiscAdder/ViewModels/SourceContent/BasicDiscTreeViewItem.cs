@@ -5,7 +5,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
 	internal abstract class BasicDiscTreeViewItem : ViewModelBase
 	{
-		public abstract IReadOnlyCollection<BasicDiscTreeViewItem> ChildItems { get; }
+		public abstract IEnumerable<BasicDiscTreeViewItem> ChildItems { get; }
 
 		public abstract string Title { get; set; }
 
