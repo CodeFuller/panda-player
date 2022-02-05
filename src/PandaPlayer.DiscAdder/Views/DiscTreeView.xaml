@@ -9,12 +9,6 @@
              d:DesignHeight="300" d:DesignWidth="300"
              HorizontalAlignment="Left" VerticalAlignment="Top">
 
-    <TreeView.Style>
-        <Style TargetType="{x:Type TreeView}" BasedOn="{StaticResource MaterialDesignTreeView}">
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
-        </Style>
-    </TreeView.Style>
-
     <TreeView.ItemContainerStyle>
         <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
             <Setter Property="IsExpanded" Value="True" />
