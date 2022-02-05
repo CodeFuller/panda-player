@@ -9,7 +9,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
 	internal class DiscTreeViewModel : ViewModelBase, IEnumerable<DiscTreeViewItem>
 	{
-		public ObservableCollection<DiscTreeViewItem> Discs { get; } = new ObservableCollection<DiscTreeViewItem>();
+		public ObservableCollection<DiscTreeViewItem> Discs { get; } = new();
 
 		public bool ContentIsIncorrect => Discs.Any(s => s.ContentIsIncorrect);
 

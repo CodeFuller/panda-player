@@ -1,22 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using PandaPlayer.DiscAdder.Events;
 
 namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
-	internal class SongTreeViewItem : EditableTreeViewItem
+	internal class SongTreeViewItem : BasicDiscTreeViewItem
 	{
+		// TODO: Avoid SongTitleChanging & SongTitleChanged events?
 		public event EventHandler<SongTitleChangingEventArgs> SongTitleChanging;
 
 		public event EventHandler<SongTitleChangedEventArgs> SongTitleChanged;
 
+		public override IReadOnlyCollection<BasicDiscTreeViewItem> ChildItems => Array.Empty<BasicDiscTreeViewItem>();
+
 		private string title;
 
-		public string Title
+		public override string Title
 		{
 			get => title;
 			set
 			{
-				string prevValue = title;
+				var prevValue = title;
 
 				// Exception, thrown during file renaming, won't blow up,
 				// because exceptions thrown from binding properties are treated as validation failures.
@@ -39,12 +43,9 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 		public SongTreeViewItem(SongContent song)
 		{
-			if (song == null)
-			{
-				throw new ArgumentNullException(nameof(song));
-			}
+			_ = song ?? throw new ArgumentNullException(nameof(song));
 
-			Title = song.Title;
+			title = song.Title;
 		}
 	}
 }

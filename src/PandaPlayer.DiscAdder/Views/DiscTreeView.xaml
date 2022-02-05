@@ -25,56 +25,7 @@
     </TreeView.ItemContainerStyle>
 
     <TreeView.Resources>
-
-        <!-- TODO: Remove this code duplication after learning WPF -->
-
-        <HierarchicalDataTemplate DataType="{x:Type sourceContent:DiscTreeViewItem}" ItemsSource="{Binding SongItems}">
-            <Grid>
-                <TextBlock Text="{Binding DiscDirectory}" x:Name="TextBlock">
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MaterialDesignTextBlock}">
-                            <Setter Property="Padding" Value="0"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding ContentIsIncorrect}" Value="True">
-                                    <Setter Property="Foreground" Value="Red"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding ContentIsIncorrect}" Value="False">
-                                    <Setter Property="Foreground" Value="LimeGreen"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <TextBox Text="{Binding DiscDirectory, UpdateSourceTrigger=Explicit}" Visibility="Collapsed" x:Name="TextBox" />
-            </Grid>
-            <HierarchicalDataTemplate.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding IsSelected}" Value="True"/>
-                        <Condition Binding="{Binding Path=(behaviors:TreeViewInPlaceEditBehavior.IsEditing), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}}" Value="True"/>
-                    </MultiDataTrigger.Conditions>
-                    <Setter TargetName="TextBlock" Property="Visibility" Value="Collapsed"/>
-                    <Setter TargetName="TextBox" Property="Visibility" Value="Visible"/>
-                    <Setter TargetName="TextBox" Property="behaviors:TreeViewInPlaceEditBoxBehavior.IsEditing">
-                        <Setter.Value>
-                            <Binding Path="(behaviors:TreeViewInPlaceEditBehavior.IsEditing)" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}"/>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter TargetName="TextBox" Property="behaviors:TreeViewInPlaceEditBoxBehavior.IsEditConfirmed">
-                        <Setter.Value>
-                            <Binding Path="(behaviors:TreeViewInPlaceEditBehavior.IsEditConfirmed)" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}"/>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter TargetName="TextBox" Property="behaviors:TreeViewInPlaceEditBoxBehavior.IsEditCanceled">
-                        <Setter.Value>
-                            <Binding Path="(behaviors:TreeViewInPlaceEditBehavior.IsEditCanceled)" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}"/>
-                        </Setter.Value>
-                    </Setter>
-                </MultiDataTrigger>
-            </HierarchicalDataTemplate.Triggers>
-        </HierarchicalDataTemplate>
-
-        <HierarchicalDataTemplate DataType="{x:Type sourceContent:SongTreeViewItem}">
+        <HierarchicalDataTemplate DataType="{x:Type sourceContent:BasicDiscTreeViewItem}" ItemsSource="{Binding ChildItems}">
             <Grid>
                 <TextBlock Text="{Binding Title}" x:Name="TextBlock">
                     <TextBlock.Style>

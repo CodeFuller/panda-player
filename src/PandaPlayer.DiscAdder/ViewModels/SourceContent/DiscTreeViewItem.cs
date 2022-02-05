@@ -8,11 +8,23 @@ using PandaPlayer.DiscAdder.Events;
 
 namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
-	internal class DiscTreeViewItem : EditableTreeViewItem
+	internal class DiscTreeViewItem : BasicDiscTreeViewItem
 	{
-		public ReadOnlyCollection<SongTreeViewItem> SongItems { get; }
+		private readonly IReadOnlyCollection<SongTreeViewItem> songItems;
 
-		public IEnumerable<SongTreeViewItem> Songs => SongItems.Take(SongItems.Count - 1);
+		public override IReadOnlyCollection<BasicDiscTreeViewItem> ChildItems => songItems;
+
+		public override string Title
+		{
+			get => DiscDirectory;
+			set
+			{
+				DiscDirectory = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public IEnumerable<SongTreeViewItem> Songs => songItems.Take(songItems.Count - 1);
 
 		public IEnumerable<string> SongFileNames => Songs.Select(s => GetSongFileName(s.Title));
 
@@ -24,7 +36,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			set
 			{
 				// Value has changed or just initialized?
-				bool valueChanged = discDirectory != null;
+				var valueChanged = discDirectory != null;
 
 				if (valueChanged)
 				{
@@ -68,7 +80,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			DiscDirectory = disc.DiscDirectory;
 
 			var songSeparator = new SongTreeViewItem(new SongContent(String.Empty));
-			SongItems = new ReadOnlyCollection<SongTreeViewItem>(disc.Songs.Select(CreateSongItem).Concat(Enumerable.Repeat(songSeparator, 1)).ToList());
+			songItems = new ReadOnlyCollection<SongTreeViewItem>(disc.Songs.Select(CreateSongItem).Concat(Enumerable.Repeat(songSeparator, 1)).ToList());
 		}
 
 		private SongTreeViewItem CreateSongItem(SongContent songContent)
