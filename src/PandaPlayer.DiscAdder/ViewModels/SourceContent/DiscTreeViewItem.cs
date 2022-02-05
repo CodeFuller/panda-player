@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using GalaSoft.MvvmLight.Messaging;
@@ -26,7 +25,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 		public IEnumerable<SongTreeViewItem> Songs => songItems.Take(songItems.Count - 1);
 
-		public IEnumerable<string> SongFileNames => Songs.Select(s => GetSongFileName(s.Title));
+		public IEnumerable<string> SongFileNames => Songs.Select(s => s.FilePath);
 
 		private string discDirectory;
 
@@ -79,38 +78,10 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 			DiscDirectory = disc.DiscDirectory;
 
-			var songSeparator = new SongTreeViewItem(new SongContent(String.Empty));
-			songItems = new ReadOnlyCollection<SongTreeViewItem>(disc.Songs.Select(CreateSongItem).Concat(Enumerable.Repeat(songSeparator, 1)).ToList());
-		}
-
-		private SongTreeViewItem CreateSongItem(SongContent songContent)
-		{
-			var songItem = new SongTreeViewItem(songContent);
-			songItem.SongTitleChanging += SongTitle_Changing;
-			songItem.SongTitleChanged += SongTitle_Changed;
-
-			return songItem;
-		}
-
-		private void SongTitle_Changing(object sender, SongTitleChangingEventArgs e)
-		{
-			if (e.OldTitle != null)
-			{
-				File.Move(GetSongFileName(e.OldTitle), GetSongFileName(e.NewTitle));
-			}
-		}
-
-		private static void SongTitle_Changed(object sender, SongTitleChangedEventArgs e)
-		{
-			if (e.OldTitle != null)
-			{
-				OnDiscContentChanged();
-			}
-		}
-
-		private string GetSongFileName(string songTitle)
-		{
-			return Path.Combine(DiscDirectory, songTitle);
+			var songSeparator = new SongTreeViewItem(this, new SongContent(String.Empty));
+			songItems = disc.Songs
+				.Select(x => new SongTreeViewItem(this, x))
+				.Concat(Enumerable.Repeat(songSeparator, 1)).ToList();
 		}
 	}
 }
