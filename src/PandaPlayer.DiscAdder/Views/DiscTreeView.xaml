@@ -10,21 +10,24 @@
              HorizontalAlignment="Left" VerticalAlignment="Top">
 
     <TreeView.ItemContainerStyle>
-        <Style TargetType="{x:Type TreeViewItem}">
+        <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
             <Setter Property="IsExpanded" Value="True" />
             <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
         </Style>
     </TreeView.ItemContainerStyle>
 
     <TreeView.Resources>
 
         <!-- TODO: Remove this code duplication after learning WPF -->
-        
+
         <HierarchicalDataTemplate DataType="{x:Type sourceContent:DiscTreeViewItem}" ItemsSource="{Binding SongItems}">
             <Grid>
                 <TextBlock Text="{Binding DiscDirectory}" x:Name="TextBlock">
                     <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MaterialDesignTextBlock}">
+                            <Setter Property="Padding" Value="0"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ContentIsIncorrect}" Value="True">
                                     <Setter Property="Foreground" Value="Red"/>
@@ -69,7 +72,8 @@
             <Grid>
                 <TextBlock Text="{Binding Title}" x:Name="TextBlock">
                     <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MaterialDesignTextBlock}">
+                            <Setter Property="Padding" Value="0"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ContentIsIncorrect}" Value="True">
                                     <Setter Property="Foreground" Value="Red"/>
