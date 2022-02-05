@@ -15,5 +15,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			{
 			}
 		}
+
+		public override bool IsEditable => false;
 	}
 }

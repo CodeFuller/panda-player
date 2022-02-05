@@ -24,6 +24,8 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			}
 		}
 
+		public override bool IsEditable => true;
+
 		public IEnumerable<SongTreeViewItem> Songs => songItems;
 
 		public IEnumerable<string> SongFileNames => Songs.Select(s => s.FilePath);

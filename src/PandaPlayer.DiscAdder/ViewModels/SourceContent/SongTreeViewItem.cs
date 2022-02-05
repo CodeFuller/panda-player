@@ -42,6 +42,8 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			}
 		}
 
+		public override bool IsEditable => true;
+
 		public string FilePath => GetFilePath(Title);
 
 		private bool contentIsIncorrect;

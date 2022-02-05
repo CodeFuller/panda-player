@@ -9,6 +9,8 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 		public abstract string Title { get; set; }
 
+		public abstract bool IsEditable { get; }
+
 		private bool isSelected;
 
 		public bool IsSelected

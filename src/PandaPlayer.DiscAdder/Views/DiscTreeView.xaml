@@ -47,6 +47,7 @@
             <HierarchicalDataTemplate.Triggers>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsEditable}" Value="True"/>
                         <Condition Binding="{Binding IsSelected}" Value="True"/>
                         <Condition Binding="{Binding Path=(behaviors:TreeViewInPlaceEditBehavior.IsEditing), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}}" Value="True"/>
                     </MultiDataTrigger.Conditions>
