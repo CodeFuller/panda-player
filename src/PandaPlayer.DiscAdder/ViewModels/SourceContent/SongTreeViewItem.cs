@@ -37,7 +37,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 				if (valueChanged)
 				{
-					Messenger.Default.Send(new DiscContentChangedEventArgs());
+					Messenger.Default.Send(new DiskContentChangedEventArgs());
 				}
 			}
 		}

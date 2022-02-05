@@ -33,13 +33,17 @@ namespace PandaPlayer.DiscAdder.ViewModels
 
 		public IReferenceContentViewModel RawReferenceDiscs { get; }
 
-		public DiscTreeViewModel ReferenceDiscs { get; }
+		public DiscTreeViewModel ReferenceContent { get; }
 
-		public DiscTreeViewModel CurrentDiscs { get; }
+		public DiscTreeViewModel DiskContent { get; }
 
-		public IEnumerable<AddedDiscInfo> AddedDiscs => CurrentDiscs.Select(d => workshopMusicStorage.GetAddedDiscInfo(d.DiscDirectory, d.SongFileNames));
+		public IEnumerable<AddedDiscInfo> AddedDiscs => DiskContent.Select(d => workshopMusicStorage.GetAddedDiscInfo(d.DiscDirectory, d.SongFileNames));
 
-		public ICommand ReloadRawContentCommand { get; }
+		public ICommand ReloadReferenceContentCommand { get; }
+
+		public ICommand ReloadDiskContentCommand { get; }
+
+		public ICommand ReloadAllContentCommand { get; }
 
 		private bool dataIsReady;
 
@@ -59,54 +63,63 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			RawReferenceDiscs = rawReferenceDiscs ?? throw new ArgumentNullException(nameof(rawReferenceDiscs));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
-			ReferenceDiscs = new DiscTreeViewModel();
-			CurrentDiscs = new DiscTreeViewModel();
+			ReferenceContent = new DiscTreeViewModel();
+			DiskContent = new DiscTreeViewModel();
 
 			RawReferenceDiscs.PropertyChanged += OnRawReferenceDiscsPropertyChanged;
 
-			ReloadRawContentCommand = new RelayCommand(ReloadRawContent);
+			ReloadReferenceContentCommand = new RelayCommand(ReloadReferenceContent);
+			ReloadDiskContentCommand = new RelayCommand(ReloadDiskContent);
+			ReloadAllContentCommand = new RelayCommand(ReloadAllContent);
 
-			Messenger.Default.Register<DiscContentChangedEventArgs>(this, OnDiscContentChanged);
+			Messenger.Default.Register<DiskContentChangedEventArgs>(this, OnDiskContentChanged);
 		}
 
 		public async Task LoadDefaultContent(CancellationToken cancellationToken)
 		{
 			await RawReferenceDiscs.LoadRawReferenceDiscsContent(cancellationToken);
 
-			LoadCurrentDiscs();
+			ReloadDiskContent();
 		}
 
-		private void OnDiscContentChanged(DiscContentChangedEventArgs message)
+		private void OnDiskContentChanged(DiskContentChangedEventArgs message)
 		{
 			UpdateContentCorrectness();
 		}
 
-		public void ReloadRawContent()
+		private void ReloadReferenceContent()
 		{
 			var contentBuilder = new StringBuilder();
-			foreach (var disc in CurrentDiscs.Discs)
+			foreach (var disc in DiskContent.Discs)
 			{
-				contentBuilder.Append(CultureInfo.InvariantCulture, $"# {disc.DiscDirectory}");
-				contentBuilder.AppendLine();
+				contentBuilder.AppendLine(CultureInfo.InvariantCulture, $"# {disc.DiscDirectory}");
 				contentBuilder.AppendLine();
 			}
 
 			RawReferenceDiscs.Content = contentBuilder.ToString();
 		}
 
+		private void ReloadDiskContent()
+		{
+			var discs = contentCrawler.LoadDiscs(settings.WorkshopStoragePath);
+
+			UpdateDiscTree(DiskContent, discs);
+		}
+
+		private void ReloadAllContent()
+		{
+			// Disk content should be reloaded first, because reference content is initialized based on disk content.
+			ReloadDiskContent();
+
+			ReloadReferenceContent();
+		}
+
 		private void OnRawReferenceDiscsPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			UpdateDiscs(ReferenceDiscs, discContentParser.Parse(RawReferenceDiscs.Content));
+			UpdateDiscTree(ReferenceContent, discContentParser.Parse(RawReferenceDiscs.Content));
 		}
 
-		public void LoadCurrentDiscs()
-		{
-			var discs = contentCrawler.LoadDiscs(settings.WorkshopStoragePath).ToList();
-
-			UpdateDiscs(CurrentDiscs, discs);
-		}
-
-		private void UpdateDiscs(DiscTreeViewModel discs, IEnumerable<DiscContent> newDiscs)
+		private void UpdateDiscTree(DiscTreeViewModel discs, IEnumerable<DiscContent> newDiscs)
 		{
 			discs.SetDiscs(newDiscs);
 			UpdateContentCorrectness();
@@ -114,13 +127,13 @@ namespace PandaPlayer.DiscAdder.ViewModels
 
 		private void SetContentCorrectness()
 		{
-			discContentComparer.SetDiscsCorrectness(ReferenceDiscs, CurrentDiscs);
+			discContentComparer.SetDiscsCorrectness(ReferenceContent, DiskContent);
 		}
 
 		private void UpdateContentCorrectness()
 		{
 			SetContentCorrectness();
-			DataIsReady = !ReferenceDiscs.ContentIsIncorrect && !CurrentDiscs.ContentIsIncorrect;
+			DataIsReady = !ReferenceContent.ContentIsIncorrect && !DiskContent.ContentIsIncorrect;
 		}
 	}
 }

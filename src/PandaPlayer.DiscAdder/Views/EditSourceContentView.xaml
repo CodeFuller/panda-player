@@ -14,7 +14,13 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button Grid.Row="0" x:Name="ButtonReloadRawContent" Content="Reload" Command="{Binding ReloadRawContentCommand}" HorizontalAlignment="Left" />
+
+        <UniformGrid Grid.Row="0" Rows="1" Columns="3" HorizontalAlignment="Left">
+            <Button Margin="0,0,10,0" Content="Reload Reference Data" Command="{Binding ReloadReferenceContentCommand}" />
+            <Button Margin="0,0,10,0" Content="Reload Disk Data" Command="{Binding ReloadDiskContentCommand}" />
+            <Button Margin="0,0,10,0" Content="Reload All Data" Command="{Binding ReloadAllContentCommand}" />
+        </UniformGrid>
+
         <Border Grid.Row="1" Margin="0,10,0,0" BorderThickness="2" BorderBrush="{DynamicResource MaterialDesignDivider}" >
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -29,10 +35,10 @@
                          Text="{Binding RawReferenceDiscs.Content, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.ScrollChanged="ScrollChanged" />
                 <GridSplitter Grid.Column="1" ResizeDirection="Columns" HorizontalAlignment="Stretch" />
                 <views:DiscTreeView Grid.Column="2" x:Name="TreeViewReferenceDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                    ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding ReferenceDiscs.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="False" />
+                                    ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding ReferenceContent.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="False" />
                 <GridSplitter Grid.Column="3" ResizeDirection="Columns" HorizontalAlignment="Stretch" />
                 <views:DiscTreeView Grid.Column="4" x:Name="TreeViewCurrentDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                    ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding CurrentDiscs.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="True" />
+                                    ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding DiskContent.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="True" />
             </Grid>
         </Border>
     </Grid>

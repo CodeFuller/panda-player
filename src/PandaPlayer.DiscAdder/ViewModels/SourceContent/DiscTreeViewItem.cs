@@ -61,7 +61,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 		private static void OnDiscContentChanged()
 		{
-			Messenger.Default.Send(new DiscContentChangedEventArgs());
+			Messenger.Default.Send(new DiskContentChangedEventArgs());
 		}
 
 		private bool contentIsIncorrect;

@@ -2,7 +2,7 @@
 
 namespace PandaPlayer.DiscAdder.Events
 {
-	internal class DiscContentChangedEventArgs : EventArgs
+	internal class DiskContentChangedEventArgs : EventArgs
 	{
 	}
 }

@@ -11,13 +11,17 @@ namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
 	{
 		IReferenceContentViewModel RawReferenceDiscs { get; }
 
-		DiscTreeViewModel ReferenceDiscs { get; }
+		DiscTreeViewModel ReferenceContent { get; }
 
-		DiscTreeViewModel CurrentDiscs { get; }
+		DiscTreeViewModel DiskContent { get; }
 
 		IEnumerable<AddedDiscInfo> AddedDiscs { get; }
 
-		ICommand ReloadRawContentCommand { get; }
+		ICommand ReloadReferenceContentCommand { get; }
+
+		ICommand ReloadDiskContentCommand { get; }
+
+		ICommand ReloadAllContentCommand { get; }
 
 		Task LoadDefaultContent(CancellationToken cancellationToken);
 	}
