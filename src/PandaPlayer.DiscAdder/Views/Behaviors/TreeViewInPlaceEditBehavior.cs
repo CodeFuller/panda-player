@@ -6,103 +6,79 @@ using PandaPlayer.DiscAdder.Views.Extensions;
 
 namespace PandaPlayer.DiscAdder.Views.Behaviors
 {
-	// Copy/paste from https://treeviewinplaceedit.codeplex.com
+	// https://treeviewinplaceedit.codeplex.com
 	internal static class TreeViewInPlaceEditBehavior
 	{
 		public static readonly DependencyProperty IsEditableProperty = DependencyProperty.RegisterAttached(
-		  "IsEditable", typeof(bool), typeof(TreeViewInPlaceEditBehavior), new PropertyMetadata(OnIsEditableChanged));
+			"IsEditable", typeof(bool), typeof(TreeViewInPlaceEditBehavior), new PropertyMetadata(OnIsEditableChanged));
 
 		public static bool GetIsEditable(DependencyObject item)
 		{
-			if (item == null)
-			{
-				throw new ArgumentNullException(nameof(item));
-			}
+			_ = item ?? throw new ArgumentNullException(nameof(item));
 
 			return (bool)item.GetValue(IsEditableProperty);
 		}
 
 		public static void SetIsEditable(DependencyObject item, bool value)
 		{
-			if (item == null)
-			{
-				throw new ArgumentNullException(nameof(item));
-			}
+			_ = item ?? throw new ArgumentNullException(nameof(item));
 
 			item.SetValue(IsEditableProperty, value);
 		}
 
 		public static readonly DependencyProperty IsEditingProperty = DependencyProperty.RegisterAttached(
-		  "IsEditing", typeof(bool), typeof(TreeViewInPlaceEditBehavior));
+			"IsEditing", typeof(bool), typeof(TreeViewInPlaceEditBehavior));
 
 		public static bool GetIsEditing(DependencyObject item)
 		{
-			if (item == null)
-			{
-				throw new ArgumentNullException(nameof(item));
-			}
+			_ = item ?? throw new ArgumentNullException(nameof(item));
 
 			return (bool)item.GetValue(IsEditingProperty);
 		}
 
 		public static void SetIsEditing(DependencyObject item, bool value)
 		{
-			if (item == null)
-			{
-				throw new ArgumentNullException(nameof(item));
-			}
+			_ = item ?? throw new ArgumentNullException(nameof(item));
 
 			item.SetValue(IsEditingProperty, value);
 		}
 
 		public static readonly DependencyProperty IsEditConfirmedProperty = DependencyProperty.RegisterAttached(
-		  "IsEditConfirmed", typeof(bool), typeof(TreeViewInPlaceEditBehavior));
+			"IsEditConfirmed", typeof(bool), typeof(TreeViewInPlaceEditBehavior));
 
 		public static bool GetIsEditConfirmed(DependencyObject item)
 		{
-			if (item == null)
-			{
-				throw new ArgumentNullException(nameof(item));
-			}
+			_ = item ?? throw new ArgumentNullException(nameof(item));
 
 			return (bool)item.GetValue(IsEditConfirmedProperty);
 		}
 
 		public static void SetIsEditConfirmed(DependencyObject item, bool value)
 		{
-			if (item == null)
-			{
-				throw new ArgumentNullException(nameof(item));
-			}
+			_ = item ?? throw new ArgumentNullException(nameof(item));
 
 			item.SetValue(IsEditConfirmedProperty, value);
 		}
 
 		public static readonly DependencyProperty IsEditCanceledProperty = DependencyProperty.RegisterAttached(
-		  "IsEditCanceled", typeof(bool), typeof(TreeViewInPlaceEditBehavior));
+			"IsEditCanceled", typeof(bool), typeof(TreeViewInPlaceEditBehavior));
 
 		public static bool GetIsEditCanceled(DependencyObject item)
 		{
-			if (item == null)
-			{
-				throw new ArgumentNullException(nameof(item));
-			}
+			_ = item ?? throw new ArgumentNullException(nameof(item));
 
 			return (bool)item.GetValue(IsEditCanceledProperty);
 		}
 
 		public static void SetIsEditCanceled(DependencyObject item, bool value)
 		{
-			if (item == null)
-			{
-				throw new ArgumentNullException(nameof(item));
-			}
+			_ = item ?? throw new ArgumentNullException(nameof(item));
 
 			item.SetValue(IsEditCanceledProperty, value);
 		}
 
 		private static readonly DependencyProperty LastSelectedItemProperty = DependencyProperty.RegisterAttached(
-		  "LastSelectedItem", typeof(object), typeof(TreeViewInPlaceEditBehavior));
+			"LastSelectedItem", typeof(object), typeof(TreeViewInPlaceEditBehavior));
 
 		private static object GetLastSelectedItem(DependencyObject item)
 		{
@@ -115,7 +91,7 @@ namespace PandaPlayer.DiscAdder.Views.Behaviors
 		}
 
 		private static readonly DependencyProperty LastSelectedTimeProperty = DependencyProperty.RegisterAttached(
-		  "LastSelectedTime", typeof(DateTime), typeof(TreeViewInPlaceEditBehavior));
+			"LastSelectedTime", typeof(DateTime), typeof(TreeViewInPlaceEditBehavior));
 
 		private static DateTime GetLastSelectedTime(DependencyObject item)
 		{
@@ -129,10 +105,9 @@ namespace PandaPlayer.DiscAdder.Views.Behaviors
 
 		private static void OnIsEditableChanged(DependencyObject item, DependencyPropertyChangedEventArgs args)
 		{
-			var treeView = item as TreeView;
-			if (treeView == null)
+			if (item is not TreeView treeView)
 			{
-				throw new ArgumentException("obj is not a TreeView");
+				throw new ArgumentException("TreeView object expected", nameof(item));
 			}
 
 			treeView.PreviewKeyDown -= TreeViewPreviewKeyDown;
@@ -205,9 +180,9 @@ namespace PandaPlayer.DiscAdder.Views.Behaviors
 				return;
 			}
 
-			var lastSelctedTime = GetLastSelectedTime(treeView);
-			var interval = DateTime.Now.Subtract(lastSelctedTime).TotalMilliseconds;
-			if (interval >= 400 && interval <= 1200)
+			var lastSelectedTime = GetLastSelectedTime(treeView);
+			var interval = DateTime.Now.Subtract(lastSelectedTime).TotalMilliseconds;
+			if (interval is >= 400 and <= 1200)
 			{
 				// It's long double click, consider it as a edit sign.
 				treeView.BeginEdit();

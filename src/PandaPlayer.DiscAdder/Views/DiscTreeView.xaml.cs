@@ -13,7 +13,7 @@ namespace PandaPlayer.DiscAdder.Views
 		{
 			InitializeComponent();
 
-			scrollViewer = new Lazy<ScrollViewer>(() => FindScroller(this));
+			scrollViewer = new Lazy<ScrollViewer>(() => FindScrollViewer(this));
 		}
 
 		public void ScrollTo(double offset)
@@ -21,20 +21,17 @@ namespace PandaPlayer.DiscAdder.Views
 			scrollViewer.Value?.ScrollToVerticalOffset(offset);
 		}
 
-		private ScrollViewer FindScroller(DependencyObject item)
+		private static ScrollViewer FindScrollViewer(DependencyObject item)
 		{
-			var scroller = item as ScrollViewer;
+			var scrollViewer = item as ScrollViewer;
 
-			for (var i = 0; scroller == null && i < VisualTreeHelper.GetChildrenCount(item); ++i)
+			for (var i = 0; scrollViewer == null && i < VisualTreeHelper.GetChildrenCount(item); ++i)
 			{
 				var child = VisualTreeHelper.GetChild(item, i);
-				if (child != null)
-				{
-					scroller = FindScroller(child);
-				}
+				scrollViewer = FindScrollViewer(child);
 			}
 
-			return scroller;
+			return scrollViewer;
 		}
 	}
 }

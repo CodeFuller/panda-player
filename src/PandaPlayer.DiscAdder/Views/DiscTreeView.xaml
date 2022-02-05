@@ -18,7 +18,7 @@
 
     <TreeView.Resources>
 
-        <!-- Remove this code duplication after learning WPF -->
+        <!-- TODO: Remove this code duplication after learning WPF -->
         
         <HierarchicalDataTemplate DataType="{x:Type sourceContent:DiscTreeViewItem}" ItemsSource="{Binding SongItems}">
             <Grid>
