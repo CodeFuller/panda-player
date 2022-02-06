@@ -1,36 +1,36 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace PandaPlayer.DiscAdder.ParsingSong
 {
 	internal class SongTitlePattern
 	{
-		private string pattern;
-		private Regex regex;
+		private readonly string pattern;
+		private readonly Regex regex;
 
-		public string Description { get; set; }
+		public string Description { get; init; }
 
-		public string Source { get; set; }
+		public string Source { get; init; }
 
 		public string Pattern
 		{
 			get => pattern;
-			set
+			init
 			{
 				pattern = value;
 				regex = new Regex(pattern, RegexOptions.Compiled);
 			}
 		}
 
-		public Collection<SongParsingTest> Tests { get; set; }
+		public IReadOnlyCollection<SongParsingTestCase> TestCases { get; init; }
 
 		public SongTitleMatch Match(string rawTitle, Func<string, string> parsePayload)
 		{
 			var match = regex.Match(rawTitle);
 			if (match.Success)
 			{
-				string matchedTitle = match.Groups[1].Value;
+				var matchedTitle = match.Groups[1].Value;
 				return match.Groups.Count > 2 && !String.IsNullOrEmpty(match.Groups[2].Value)
 					? new SongTitleMatch(matchedTitle, parsePayload(match.Groups[2].Value))
 					: new SongTitleMatch(matchedTitle);
