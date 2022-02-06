@@ -30,7 +30,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			get => fileName;
 			set
 			{
-				if (fileName == value)
+				if (value == fileName)
 				{
 					return;
 				}

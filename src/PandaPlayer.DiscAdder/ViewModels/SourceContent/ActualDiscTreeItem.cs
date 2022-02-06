@@ -35,10 +35,14 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			get => discDirectory;
 			set
 			{
-				// Value has changed or just initialized?
-				var valueChanged = discDirectory != null;
+				if (value == discDirectory)
+				{
+					return;
+				}
 
-				if (valueChanged)
+				var directoryMoved = false;
+
+				if (discDirectory != null)
 				{
 					// Exception, thrown at this point, won't blow up,
 					// because exceptions thrown from binding properties are treated as validation failures.
@@ -46,11 +50,12 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 					// http://stackoverflow.com/questions/1488472/best-practices-throwing-exceptions-from-properties
 					// It's not a big problem because directory title will not be updated and still will be marked as incorrect.
 					Directory.Move(discDirectory, value);
+					directoryMoved = true;
 				}
 
-				Set(ref discDirectory, value);
+				discDirectory = value;
 
-				if (valueChanged)
+				if (directoryMoved)
 				{
 					OnDiscContentChanged();
 				}
