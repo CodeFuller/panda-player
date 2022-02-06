@@ -8,15 +8,14 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
 	internal class ReferenceContentViewModel : IReferenceContentViewModel
 	{
-		public ObservableCollection<ReferenceDiscTreeItem> Discs { get; } = new();
+		public ObservableCollection<ReferenceDiscTreeItem> ExpectedDiscs { get; } = new();
 
-		// TODO: Remove duplication with ActualContentViewModel.
-		public bool ContentIsIncorrect => Discs.Any(x => x.ContentIsIncorrect);
+		public bool ContentIsIncorrect => ExpectedDiscs.Any(x => x.ContentIsIncorrect);
 
-		public void SetContent(IEnumerable<DiscContent> discs)
+		public void SetExpectedDiscs(IEnumerable<ReferenceDiscContent> expectedDiscs)
 		{
-			Discs.Clear();
-			Discs.AddRange(discs.Select(x => new ReferenceDiscTreeItem(x)));
+			ExpectedDiscs.Clear();
+			ExpectedDiscs.AddRange(expectedDiscs.Select(x => new ReferenceDiscTreeItem(x)));
 		}
 	}
 }

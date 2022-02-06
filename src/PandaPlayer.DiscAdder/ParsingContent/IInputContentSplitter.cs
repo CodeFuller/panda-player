@@ -7,6 +7,6 @@ namespace PandaPlayer.DiscAdder.ParsingContent
 	/// </summary>
 	internal interface IInputContentSplitter
 	{
-		IEnumerable<IEnumerable<string>> Split(IEnumerable<string> content);
+		IEnumerable<IReadOnlyCollection<string>> Split(IEnumerable<string> content);
 	}
 }

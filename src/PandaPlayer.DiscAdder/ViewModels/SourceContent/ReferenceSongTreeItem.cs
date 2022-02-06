@@ -6,13 +6,17 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
 	internal class ReferenceSongTreeItem : ReferenceBasicTreeItem
 	{
-		private readonly SongContent song;
+		private readonly ReferenceSongContent song;
+
+		public string ExpectedTitle => song.ExpectedTitle;
+
+		public string ExpectedTitleWithTrackNumber => song.ExpectedTitleWithTrackNumber;
 
 		public override IEnumerable<ReferenceBasicTreeItem> ChildItems => Enumerable.Empty<ReferenceBasicTreeItem>();
 
-		public override string Title => song.Title;
+		public override string Title => ExpectedTitle;
 
-		public ReferenceSongTreeItem(SongContent song)
+		public ReferenceSongTreeItem(ReferenceSongContent song)
 		{
 			this.song = song ?? throw new ArgumentNullException(nameof(song));
 		}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using PandaPlayer.DiscAdder.Interfaces;
 using PandaPlayer.DiscAdder.ViewModels.Interfaces;
@@ -13,7 +14,7 @@ namespace PandaPlayer.DiscAdder.Internal
 			_ = referenceContent ?? throw new ArgumentNullException(nameof(referenceContent));
 			_ = actualContent ?? throw new ArgumentNullException(nameof(actualContent));
 
-			foreach (var (referenceDisc, actualDisc) in referenceContent.Discs.OuterZip(actualContent.Discs))
+			foreach (var (referenceDisc, actualDisc) in referenceContent.ExpectedDiscs.OuterZip(actualContent.Discs))
 			{
 				SetDiscsCorrectness(referenceDisc, actualDisc);
 			}
@@ -33,15 +34,15 @@ namespace PandaPlayer.DiscAdder.Internal
 				return;
 			}
 
-			var referenceSongs = referenceDisc.Songs;
+			var referenceSongs = referenceDisc.ExpectedSongs;
 			var actualSongs = actualDisc.Songs;
 
-			foreach (var (referenceSong, currentSong, songNumber) in referenceSongs.OuterZip(actualSongs).Select((pair, i) => (pair.First, pair.Second, i + 1)))
+			foreach (var (referenceSong, currentSong) in referenceSongs.OuterZip(actualSongs))
 			{
-				SetSongsCorrectness(songNumber, referenceSong, currentSong);
+				SetSongsCorrectness(referenceSong, currentSong);
 			}
 
-			if (referenceSongs.Count != actualSongs.Count || referenceDisc.DiscDirectory != actualDisc.DiscDirectory)
+			if (referenceSongs.Count != actualSongs.Count || referenceDisc.ExpectedDirectoryPath != actualDisc.DiscDirectory)
 			{
 				referenceDisc.ContentIsIncorrect = actualDisc.ContentIsIncorrect = true;
 			}
@@ -52,7 +53,7 @@ namespace PandaPlayer.DiscAdder.Internal
 			}
 		}
 
-		private static void SetSongsCorrectness(int songNumber, ReferenceSongTreeItem referenceSong, ActualSongTreeItem actualSong)
+		private static void SetSongsCorrectness(ReferenceSongTreeItem referenceSong, ActualSongTreeItem actualSong)
 		{
 			if (referenceSong == null)
 			{
@@ -64,8 +65,8 @@ namespace PandaPlayer.DiscAdder.Internal
 			}
 			else
 			{
-				var matchesTitleWithTrack = actualSong.Title == $"{songNumber:D2} - {referenceSong.Title}.mp3";
-				var matchesTitleWithoutTrack = actualSong.Title == $"{referenceSong.Title}.mp3";
+				var matchesTitleWithTrack = actualSong.FileName == Path.ChangeExtension(referenceSong.ExpectedTitleWithTrackNumber, "mp3");
+				var matchesTitleWithoutTrack = actualSong.FileName == Path.ChangeExtension(referenceSong.ExpectedTitle, "mp3");
 				actualSong.ContentIsIncorrect = referenceSong.ContentIsIncorrect = !(matchesTitleWithTrack || matchesTitleWithoutTrack);
 			}
 		}

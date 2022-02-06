@@ -10,10 +10,9 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 	{
 		public ObservableCollection<ActualDiscTreeItem> Discs { get; } = new();
 
-		// TODO: Remove duplication with ReferenceContentViewModel.
 		public bool ContentIsIncorrect => Discs.Any(x => x.ContentIsIncorrect);
 
-		public void SetContent(IEnumerable<DiscContent> discs)
+		public void SetContent(IEnumerable<ActualDiscContent> discs)
 		{
 			Discs.Clear();
 			Discs.AddRange(discs.Select(x => new ActualDiscTreeItem(x)));

@@ -35,7 +35,7 @@
                          Text="{Binding RawReferenceContent.Content, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.ScrollChanged="ScrollChanged" />
                 <GridSplitter Grid.Column="1" ResizeDirection="Columns" HorizontalAlignment="Stretch" />
                 <views:ReferenceContentView Grid.Column="2" x:Name="TreeViewReferenceDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                            ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding ReferenceContent.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="False" />
+                                            ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding ReferenceContent.ExpectedDiscs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="False" />
                 <GridSplitter Grid.Column="3" ResizeDirection="Columns" HorizontalAlignment="Stretch" />
                 <views:ActualContentView Grid.Column="4" x:Name="TreeViewCurrentDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                          ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding ActualContent.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="True" />

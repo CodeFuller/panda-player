@@ -10,6 +10,6 @@ namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
 
 		bool ContentIsIncorrect { get; }
 
-		void SetContent(IEnumerable<DiscContent> discs);
+		void SetContent(IEnumerable<ActualDiscContent> discs);
 	}
 }

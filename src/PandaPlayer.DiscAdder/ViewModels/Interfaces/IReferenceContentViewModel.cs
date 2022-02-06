@@ -6,10 +6,10 @@ namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
 {
 	internal interface IReferenceContentViewModel
 	{
-		ObservableCollection<ReferenceDiscTreeItem> Discs { get; }
+		ObservableCollection<ReferenceDiscTreeItem> ExpectedDiscs { get; }
 
 		bool ContentIsIncorrect { get; }
 
-		void SetContent(IEnumerable<DiscContent> discs);
+		void SetExpectedDiscs(IEnumerable<ReferenceDiscContent> expectedDiscs);
 	}
 }

@@ -70,19 +70,15 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			set => Set(ref contentIsIncorrect, value);
 		}
 
-		public ActualDiscTreeItem(DiscContent disc)
+		public ActualDiscTreeItem(ActualDiscContent disc)
 		{
-			if (disc == null)
-			{
-				throw new ArgumentNullException(nameof(disc));
-			}
+			_ = disc ?? throw new ArgumentNullException(nameof(disc));
 
 			DiscDirectory = disc.DiscDirectory;
 
 			Songs = disc.Songs.Select(x => new ActualSongTreeItem(this, x)).ToList();
 		}
 
-		// TODO: Remove duplication with ReferenceDiscTreeItem.
 		public void MarkWholeDiscAsIncorrect()
 		{
 			foreach (var song in Songs)

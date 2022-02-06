@@ -13,15 +13,25 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 		public override IEnumerable<ActualBasicContentTreeItem> ChildItems => Enumerable.Empty<ActualBasicContentTreeItem>();
 
-		private string title;
-
 		public override string Title
 		{
-			get => title;
+			get => FileName;
+			set
+			{
+				FileName = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		private string fileName;
+
+		public string FileName
+		{
+			get => fileName;
 			set
 			{
 				// Value has changed or just initialized?
-				var valueChanged = title != null;
+				var valueChanged = fileName != null;
 
 				if (valueChanged)
 				{
@@ -29,11 +39,11 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 					// because exceptions thrown from binding properties are treated as validation failures.
 					// http://stackoverflow.com/questions/12658220/exceptions-thrown-during-a-set-operation-in-a-property-are-not-being-caught
 					// http://stackoverflow.com/questions/1488472/best-practices-throwing-exceptions-from-properties
-					// It's not a big problem because song title will not be updated and still will be marked as incorrect.
-					File.Move(GetFilePath(title), GetFilePath(value));
+					// It's not a big problem because song file name will not be updated and still will be marked as incorrect.
+					File.Move(GetFilePath(fileName), GetFilePath(value));
 				}
 
-				Set(ref title, value);
+				Set(ref fileName, value);
 
 				if (valueChanged)
 				{
@@ -44,7 +54,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 		public override bool IsEditable => true;
 
-		public string FilePath => GetFilePath(Title);
+		public string FilePath => GetFilePath(FileName);
 
 		private bool contentIsIncorrect;
 
@@ -54,17 +64,17 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			set => Set(ref contentIsIncorrect, value);
 		}
 
-		public ActualSongTreeItem(ActualDiscTreeItem discItem, SongContent song)
+		public ActualSongTreeItem(ActualDiscTreeItem discItem, ActualSongContent song)
 		{
 			_ = song ?? throw new ArgumentNullException(nameof(song));
 
 			this.discItem = discItem;
-			title = song.Title;
+			this.fileName = song.FileName;
 		}
 
-		private string GetFilePath(string fileName)
+		private string GetFilePath(string songFileName)
 		{
-			return Path.Combine(discItem.DiscDirectory, fileName);
+			return Path.Combine(discItem.DiscDirectory, songFileName);
 		}
 	}
 }

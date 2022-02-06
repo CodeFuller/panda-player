@@ -5,12 +5,12 @@ namespace PandaPlayer.DiscAdder.ParsingContent
 {
 	internal class InputContentSplitter : IInputContentSplitter
 	{
-		public IEnumerable<IEnumerable<string>> Split(IEnumerable<string> content)
+		public IEnumerable<IReadOnlyCollection<string>> Split(IEnumerable<string> content)
 		{
 			var currentBlockContent = new List<string>();
-			foreach (var str in content)
+			foreach (var line in content)
 			{
-				if (str.Length == 0)
+				if (line.Length == 0)
 				{
 					if (currentBlockContent.Any())
 					{
@@ -20,7 +20,7 @@ namespace PandaPlayer.DiscAdder.ParsingContent
 				}
 				else
 				{
-					currentBlockContent.Add(str);
+					currentBlockContent.Add(line);
 				}
 			}
 

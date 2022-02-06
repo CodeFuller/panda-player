@@ -6,30 +6,27 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
 	internal class ReferenceDiscTreeItem : ReferenceBasicTreeItem
 	{
-		private readonly DiscContent disc;
+		private readonly ReferenceDiscContent disc;
 
-		public IReadOnlyCollection<ReferenceSongTreeItem> Songs { get; }
+		public string ExpectedDirectoryPath => disc.ExpectedDirectoryPath;
 
-		public override IEnumerable<ReferenceBasicTreeItem> ChildItems => Songs
+		public IReadOnlyCollection<ReferenceSongTreeItem> ExpectedSongs { get; }
+
+		public override IEnumerable<ReferenceBasicTreeItem> ChildItems => ExpectedSongs
 			.Concat<ReferenceBasicTreeItem>(Enumerable.Repeat(new ReferenceDiscSeparatorTreeItem(), 1));
 
-		public override string Title => disc.DiscDirectory;
+		public override string Title => ExpectedDirectoryPath;
 
-		public string DiscDirectory { get; }
-
-		public ReferenceDiscTreeItem(DiscContent disc)
+		public ReferenceDiscTreeItem(ReferenceDiscContent disc)
 		{
 			this.disc = disc ?? throw new ArgumentNullException(nameof(disc));
 
-			DiscDirectory = disc.DiscDirectory;
-
-			Songs = disc.Songs.Select(x => new ReferenceSongTreeItem(x)).ToList();
+			ExpectedSongs = disc.ExpectedSongs.Select(x => new ReferenceSongTreeItem(x)).ToList();
 		}
 
-		// TODO: Remove duplication with ActualDiscTreeItem.
 		public void MarkWholeDiscAsIncorrect()
 		{
-			foreach (var song in Songs)
+			foreach (var song in ExpectedSongs)
 			{
 				song.ContentIsIncorrect = true;
 			}

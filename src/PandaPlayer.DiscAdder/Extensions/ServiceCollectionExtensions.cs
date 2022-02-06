@@ -27,9 +27,9 @@ namespace PandaPlayer.DiscAdder.Extensions
 
 			services.AddSingleton<IWorkshopMusicStorage, WorkshopMusicStorage>();
 
-			services.AddSingleton<IReferenceSongParser, ReferenceSongParser>();
-			services.AddSingleton<IReferenceDiscParser, ReferenceDiscParser>();
-			services.AddSingleton<IDiscContentParser, DiscContentParser>();
+			services.AddSingleton<IReferenceSongContentParser, ReferenceSongContentParser>();
+			services.AddSingleton<IReferenceDiscContentParser, ReferenceDiscContentParser>();
+			services.AddSingleton<IReferenceContentParser, ReferenceContentParser>();
 			services.AddSingleton<IInputContentSplitter, InputContentSplitter>();
 			services.AddSingleton<ISourceContentChecker, SourceContentChecker>();
 			services.AddSingleton<ISongMediaInfoProvider, SongMediaInfoProvider>();

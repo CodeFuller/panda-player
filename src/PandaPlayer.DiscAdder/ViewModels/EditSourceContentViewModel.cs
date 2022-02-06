@@ -24,7 +24,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		public string Name => "Edit Source Content";
 
 		private readonly IContentCrawler contentCrawler;
-		private readonly IDiscContentParser discContentParser;
+		private readonly IReferenceContentParser referenceContentParser;
 		private readonly ISourceContentChecker sourceContentChecker;
 		private readonly IWorkshopMusicStorage workshopMusicStorage;
 
@@ -52,12 +52,12 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			set => Set(ref dataIsReady, value);
 		}
 
-		public EditSourceContentViewModel(IContentCrawler contentCrawler, IDiscContentParser discContentParser,
+		public EditSourceContentViewModel(IContentCrawler contentCrawler, IReferenceContentParser referenceContentParser,
 			ISourceContentChecker sourceContentChecker, IWorkshopMusicStorage workshopMusicStorage, IRawReferenceContentViewModel rawReferenceContent,
 			IReferenceContentViewModel referenceContentViewModel, IActualContentViewModel actualContentViewModel, IOptions<DiscAdderSettings> options)
 		{
 			this.contentCrawler = contentCrawler ?? throw new ArgumentNullException(nameof(contentCrawler));
-			this.discContentParser = discContentParser ?? throw new ArgumentNullException(nameof(discContentParser));
+			this.referenceContentParser = referenceContentParser ?? throw new ArgumentNullException(nameof(referenceContentParser));
 			this.sourceContentChecker = sourceContentChecker ?? throw new ArgumentNullException(nameof(sourceContentChecker));
 			this.workshopMusicStorage = workshopMusicStorage ?? throw new ArgumentNullException(nameof(workshopMusicStorage));
 			RawReferenceContent = rawReferenceContent ?? throw new ArgumentNullException(nameof(rawReferenceContent));
@@ -116,9 +116,9 @@ namespace PandaPlayer.DiscAdder.ViewModels
 
 		private void OnRawReferenceDiscsPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			var discs = discContentParser.Parse(RawReferenceContent.Content);
+			var discs = referenceContentParser.Parse(RawReferenceContent.Content);
 
-			ReferenceContent.SetContent(discs);
+			ReferenceContent.SetExpectedDiscs(discs);
 			UpdateContentCorrectness();
 		}
 

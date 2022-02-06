@@ -15,19 +15,19 @@ namespace PandaPlayer.DiscAdder.Internal
 			this.sourceFileTypeResolver = sourceFileTypeResolver ?? throw new ArgumentNullException(nameof(sourceFileTypeResolver));
 		}
 
-		public IEnumerable<DiscContent> LoadDiscs(string discsDirectory)
+		public IEnumerable<ActualDiscContent> LoadDiscs(string discsDirectory)
 		{
 			return LoadDiscs(new DirectoryInfo(discsDirectory));
 		}
 
-		private IEnumerable<DiscContent> LoadDiscs(DirectoryInfo directoryInfo)
+		private IEnumerable<ActualDiscContent> LoadDiscs(DirectoryInfo directoryInfo)
 		{
 			var files = directoryInfo.GetFiles()
 				.OrderBy(f => f.Name)
 				.Select(f => f.FullName)
 				.ToList();
 
-			var nestedDiscs = new List<DiscContent>();
+			var nestedDiscs = new List<ActualDiscContent>();
 			foreach (var subDirectory in directoryInfo.GetDirectories().OrderBy(x => x.Name))
 			{
 				nestedDiscs.AddRange(LoadDiscs(subDirectory));
@@ -40,8 +40,12 @@ namespace PandaPlayer.DiscAdder.Internal
 
 			if (files.Any())
 			{
-				var songFiles = files.Where(f => sourceFileTypeResolver.GetSourceFileType(f) == SourceFileType.Song).Select(Path.GetFileName);
-				return new[] { new DiscContent(directoryInfo.FullName, songFiles) };
+				var songs = files
+					.Where(f => sourceFileTypeResolver.GetSourceFileType(f) == SourceFileType.Song)
+					.Select(Path.GetFileName)
+					.Select(x => new ActualSongContent(x));
+
+				return new[] { new ActualDiscContent(directoryInfo.FullName, songs) };
 			}
 
 			return nestedDiscs;
@@ -53,12 +57,11 @@ namespace PandaPlayer.DiscAdder.Internal
 				.Where(f => sourceFileTypeResolver.GetSourceFileType(f) == SourceFileType.Image);
 		}
 
-		private static List<string> GetDirectoryFiles(DirectoryInfo directoryInfo)
+		private static IEnumerable<string> GetDirectoryFiles(DirectoryInfo directoryInfo)
 		{
 			return directoryInfo.GetFiles().
 				OrderBy(f => f.Name).
-				Select(f => f.FullName).
-				ToList();
+				Select(f => f.FullName);
 		}
 	}
 }
