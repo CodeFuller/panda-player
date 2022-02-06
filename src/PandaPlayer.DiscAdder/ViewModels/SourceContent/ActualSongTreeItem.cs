@@ -30,10 +30,14 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			get => fileName;
 			set
 			{
-				// Value has changed or just initialized?
-				var valueChanged = fileName != null;
+				if (fileName == value)
+				{
+					return;
+				}
 
-				if (valueChanged)
+				var fileMoved = false;
+
+				if (fileName != null)
 				{
 					// Exception, thrown during file renaming, won't blow up,
 					// because exceptions thrown from binding properties are treated as validation failures.
@@ -41,11 +45,12 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 					// http://stackoverflow.com/questions/1488472/best-practices-throwing-exceptions-from-properties
 					// It's not a big problem because song file name will not be updated and still will be marked as incorrect.
 					File.Move(GetFilePath(fileName), GetFilePath(value));
+					fileMoved = true;
 				}
 
-				Set(ref fileName, value);
+				fileName = value;
 
-				if (valueChanged)
+				if (fileMoved)
 				{
 					Messenger.Default.Send(new ActualContentChangedEventArgs());
 				}
@@ -74,6 +79,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 		private string GetFilePath(string songFileName)
 		{
+			// TODO: This will not work if DiscDirectory was updated during renaming.
 			return Path.Combine(discItem.DiscDirectory, songFileName);
 		}
 	}
