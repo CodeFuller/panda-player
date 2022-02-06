@@ -65,7 +65,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			ActualContent = actualContentViewModel ?? throw new ArgumentNullException(nameof(actualContentViewModel));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
-			RawReferenceContent.PropertyChanged += OnRawReferenceDiscsPropertyChanged;
+			RawReferenceContent.PropertyChanged += OnRawReferenceContentChanged;
 
 			ReloadReferenceContentCommand = new RelayCommand(ReloadReferenceContent);
 			ReloadActualContentCommand = new RelayCommand(ReloadActualContent);
@@ -76,7 +76,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 
 		public async Task LoadDefaultContent(CancellationToken cancellationToken)
 		{
-			await RawReferenceContent.LoadRawReferenceDiscsContent(cancellationToken);
+			await RawReferenceContent.LoadRawReferenceContent(cancellationToken);
 
 			ReloadActualContent();
 		}
@@ -114,7 +114,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			ReloadReferenceContent();
 		}
 
-		private void OnRawReferenceDiscsPropertyChanged(object sender, PropertyChangedEventArgs e)
+		private void OnRawReferenceContentChanged(object sender, PropertyChangedEventArgs e)
 		{
 			var discs = referenceContentParser.Parse(RawReferenceContent.Content);
 

@@ -9,7 +9,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
 	internal sealed class RawReferenceContentViewModel : ViewModelBase, IRawReferenceContentViewModel, IDisposable
 	{
-		private const string RawReferenceDiscsDataKey = "RawReferenceDiscsData";
+		private const string RawReferenceContentDataKey = "RawReferenceContentData";
 
 		private readonly ISessionDataService sessionDataService;
 
@@ -28,19 +28,19 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			saveContentTimer.Elapsed += (s, e) => OnSaveContentTimerElapsed(CancellationToken.None);
 		}
 
-		private string rawReferenceDiscsContent;
+		private string rawReferenceContent;
 
 		public string Content
 		{
-			get => rawReferenceDiscsContent;
-			set => Set(ref rawReferenceDiscsContent, value);
+			get => rawReferenceContent;
+			set => Set(ref rawReferenceContent, value);
 		}
 
 		private string LastSavedContent { get; set; }
 
-		public async Task LoadRawReferenceDiscsContent(CancellationToken cancellationToken)
+		public async Task LoadRawReferenceContent(CancellationToken cancellationToken)
 		{
-			Content = LastSavedContent = await sessionDataService.GetData<string>(RawReferenceDiscsDataKey, cancellationToken);
+			Content = LastSavedContent = await sessionDataService.GetData<string>(RawReferenceContentDataKey, cancellationToken);
 		}
 
 		private async void OnSaveContentTimerElapsed(CancellationToken cancellationToken)
@@ -51,7 +51,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			}
 
 			LastSavedContent = Content;
-			await sessionDataService.SaveData(RawReferenceDiscsDataKey, LastSavedContent, cancellationToken);
+			await sessionDataService.SaveData(RawReferenceContentDataKey, LastSavedContent, cancellationToken);
 		}
 
 		public void Dispose()

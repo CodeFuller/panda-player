@@ -14,9 +14,9 @@ namespace PandaPlayer.DiscAdder.Views
 		{
 			var scrolledControls = new List<IScrollable>
 			{
-				new ScrollableTextBox(TextBoxRawReferenceDiscs),
-				TreeViewReferenceDiscsContent,
-				TreeViewCurrentDiscsContent,
+				new ScrollableTextBox(RawReferenceContentTextBox),
+				ReferenceContentTreeView,
+				ActualContentTreeView,
 			};
 
 			scrolledControls.RemoveAll(x => x == sender);

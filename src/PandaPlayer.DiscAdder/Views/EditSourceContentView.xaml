@@ -31,13 +31,13 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <TextBox Grid.Column="0" Padding="1" BorderThickness="0" x:Name="TextBoxRawReferenceDiscs" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="NoWrap" AcceptsReturn="True"
+                <TextBox Grid.Column="0" Padding="1" BorderThickness="0" x:Name="RawReferenceContentTextBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="NoWrap" AcceptsReturn="True"
                          Text="{Binding RawReferenceContent.Content, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.ScrollChanged="ScrollChanged" />
                 <GridSplitter Grid.Column="1" ResizeDirection="Columns" HorizontalAlignment="Stretch" />
-                <views:ReferenceContentView Grid.Column="2" x:Name="TreeViewReferenceDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                <views:ReferenceContentView Grid.Column="2" x:Name="ReferenceContentTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                             ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding ReferenceContent.ExpectedDiscs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="False" />
                 <GridSplitter Grid.Column="3" ResizeDirection="Columns" HorizontalAlignment="Stretch" />
-                <views:ActualContentView Grid.Column="4" x:Name="TreeViewCurrentDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                <views:ActualContentView Grid.Column="4" x:Name="ActualContentTreeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                          ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding ActualContent.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="True" />
             </Grid>
         </Border>

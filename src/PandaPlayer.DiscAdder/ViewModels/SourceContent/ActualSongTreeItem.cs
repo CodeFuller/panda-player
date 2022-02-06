@@ -79,7 +79,6 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 		private string GetFilePath(string songFileName)
 		{
-			// TODO: This will not work if DiscDirectory was updated during renaming.
 			return Path.Combine(discItem.DiscDirectory, songFileName);
 		}
 	}

@@ -8,6 +8,6 @@ namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
 	{
 		string Content { get; set; }
 
-		Task LoadRawReferenceDiscsContent(CancellationToken cancellationToken);
+		Task LoadRawReferenceContent(CancellationToken cancellationToken);
 	}
 }
