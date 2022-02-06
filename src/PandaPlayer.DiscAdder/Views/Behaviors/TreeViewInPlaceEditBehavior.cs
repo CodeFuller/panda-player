@@ -90,19 +90,6 @@ namespace PandaPlayer.DiscAdder.Views.Behaviors
 			item.SetValue(LastSelectedItemProperty, value);
 		}
 
-		private static readonly DependencyProperty LastSelectedTimeProperty = DependencyProperty.RegisterAttached(
-			"LastSelectedTime", typeof(DateTime), typeof(TreeViewInPlaceEditBehavior));
-
-		private static DateTime GetLastSelectedTime(DependencyObject item)
-		{
-			return (DateTime)item.GetValue(LastSelectedTimeProperty);
-		}
-
-		private static void SetLastSelectedTime(DependencyObject item, DateTime value)
-		{
-			item.SetValue(LastSelectedTimeProperty, value);
-		}
-
 		private static void OnIsEditableChanged(DependencyObject item, DependencyPropertyChangedEventArgs args)
 		{
 			if (item is not TreeView treeView)
@@ -143,12 +130,10 @@ namespace PandaPlayer.DiscAdder.Views.Behaviors
 		private static void TreeViewSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{
 			var treeView = (TreeView)sender;
-			var lastSelectedItem = GetLastSelectedItem(treeView);
-			if (lastSelectedItem != treeView.SelectedItem)
+
+			if (treeView.SelectedItem != GetLastSelectedItem(treeView))
 			{
-				// Selection changed, let's save the selected item and the selected time.
 				SetLastSelectedItem(treeView, treeView.SelectedItem);
-				SetLastSelectedTime(treeView, DateTime.Now);
 				treeView.EndEdit(cancel: true);
 			}
 		}
@@ -161,23 +146,8 @@ namespace PandaPlayer.DiscAdder.Views.Behaviors
 			var selectedItem = element.ParentOfType<TreeViewItem>();
 			if (selectedItem == null)
 			{
-				// We're clicking on nowhere, let's cancel the editing
+				// Cancelling edit due to click on nowhere.
 				treeView.EndEdit(cancel: true);
-				return;
-			}
-
-			var lastSelectedItem = GetLastSelectedItem(treeView);
-			if (lastSelectedItem == null || lastSelectedItem != treeView.SelectedItem)
-			{
-				return;
-			}
-
-			var lastSelectedTime = GetLastSelectedTime(treeView);
-			var interval = DateTime.Now.Subtract(lastSelectedTime).TotalMilliseconds;
-			if (interval is >= 400 and <= 1200)
-			{
-				// It's long double click, consider it as a edit sign.
-				treeView.BeginEdit();
 			}
 		}
 	}
