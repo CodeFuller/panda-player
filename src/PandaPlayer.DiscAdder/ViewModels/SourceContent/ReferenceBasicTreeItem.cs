@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 
 namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
 	internal abstract class ReferenceBasicTreeItem : ViewModelBase
 	{
-		public abstract IEnumerable<ReferenceBasicTreeItem> ChildItems { get; }
+		public ObservableCollection<ReferenceBasicTreeItem> ChildItems { get; } = new();
 
 		public abstract string Title { get; }
 

@@ -1,27 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using PandaPlayer.Shared.Extensions;
 
 namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
 	internal class ReferenceDiscTreeItem : ReferenceBasicTreeItem
 	{
-		private readonly ReferenceDiscContent disc;
+		private string expectedDirectoryPath;
 
-		public string ExpectedDirectoryPath => disc.ExpectedDirectoryPath;
+		public string ExpectedDirectoryPath
+		{
+			get => expectedDirectoryPath;
+			set
+			{
+				Set(ref expectedDirectoryPath, value);
+				RaisePropertyChanged(nameof(Title));
+			}
+		}
 
-		public IReadOnlyCollection<ReferenceSongTreeItem> ExpectedSongs { get; }
-
-		public override IEnumerable<ReferenceBasicTreeItem> ChildItems => ExpectedSongs
-			.Concat<ReferenceBasicTreeItem>(Enumerable.Repeat(new ReferenceDiscSeparatorTreeItem(), 1));
+		public IReadOnlyCollection<ReferenceSongTreeItem> ExpectedSongs { get; private set; }
 
 		public override string Title => ExpectedDirectoryPath;
 
 		public ReferenceDiscTreeItem(ReferenceDiscContent disc)
 		{
-			this.disc = disc ?? throw new ArgumentNullException(nameof(disc));
+			ExpectedDirectoryPath = disc.ExpectedDirectoryPath;
 
+			InitializeExpectedSongs(disc);
+		}
+
+		public void Update(ReferenceDiscContent newDiscContent)
+		{
+			ExpectedDirectoryPath = newDiscContent.ExpectedDirectoryPath;
+
+			if (ExpectedSongs.Count != newDiscContent.ExpectedSongs.Count)
+			{
+				InitializeExpectedSongs(newDiscContent);
+				return;
+			}
+
+			foreach (var (songTreeItem, newSongContent) in ExpectedSongs.Zip(newDiscContent.ExpectedSongs))
+			{
+				songTreeItem.Update(newSongContent);
+			}
+		}
+
+		private void InitializeExpectedSongs(ReferenceDiscContent disc)
+		{
 			ExpectedSongs = disc.ExpectedSongs.Select(x => new ReferenceSongTreeItem(x)).ToList();
+
+			ChildItems.Clear();
+			ChildItems.AddRange(ExpectedSongs);
+			ChildItems.Add(new ReferenceDiscSeparatorTreeItem());
 		}
 
 		public void MarkWholeDiscAsIncorrect()

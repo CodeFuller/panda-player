@@ -14,8 +14,22 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 		public void SetExpectedDiscs(IEnumerable<ReferenceDiscContent> expectedDiscs)
 		{
-			ExpectedDiscs.Clear();
-			ExpectedDiscs.AddRange(expectedDiscs.Select(x => new ReferenceDiscTreeItem(x)));
+			var newExpectedDiscs = expectedDiscs.ToList();
+
+			// We reload full ExpectedDiscs collection only when items count changes.
+			// This operation causes visible UI delay and reload of control content.
+			// Fortunately, most often this happens when reference content is reloaded.
+			if (ExpectedDiscs.Count != newExpectedDiscs.Count)
+			{
+				ExpectedDiscs.Clear();
+				ExpectedDiscs.AddRange(newExpectedDiscs.Select(x => new ReferenceDiscTreeItem(x)));
+				return;
+			}
+
+			foreach (var (discTreeItem, newDiscContent) in ExpectedDiscs.Zip(newExpectedDiscs))
+			{
+				discTreeItem.Update(newDiscContent);
+			}
 		}
 	}
 }

@@ -1,24 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
 	internal class ReferenceSongTreeItem : ReferenceBasicTreeItem
 	{
-		private readonly ReferenceSongContent song;
+		private ReferenceSongContent song;
 
-		public string ExpectedTitle => song.ExpectedTitle;
+		private ReferenceSongContent Song
+		{
+			get => song;
+			set
+			{
+				song = value;
+				RaisePropertyChanged(nameof(Title));
+			}
+		}
 
-		public string ExpectedTitleWithTrackNumber => song.ExpectedTitleWithTrackNumber;
+		public string ExpectedTitle => Song.ExpectedTitle;
 
-		public override IEnumerable<ReferenceBasicTreeItem> ChildItems => Enumerable.Empty<ReferenceBasicTreeItem>();
+		public string ExpectedTitleWithTrackNumber => Song.ExpectedTitleWithTrackNumber;
 
 		public override string Title => ExpectedTitle;
 
 		public ReferenceSongTreeItem(ReferenceSongContent song)
 		{
-			this.song = song ?? throw new ArgumentNullException(nameof(song));
+			Song = song ?? throw new ArgumentNullException(nameof(song));
+		}
+
+		public void Update(ReferenceSongContent newSongContent)
+		{
+			Song = newSongContent;
 		}
 	}
 }
