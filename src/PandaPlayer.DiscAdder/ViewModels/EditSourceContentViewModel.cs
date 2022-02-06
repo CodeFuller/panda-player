@@ -16,7 +16,6 @@ using PandaPlayer.DiscAdder.Interfaces;
 using PandaPlayer.DiscAdder.MusicStorage;
 using PandaPlayer.DiscAdder.ParsingContent;
 using PandaPlayer.DiscAdder.ViewModels.Interfaces;
-using PandaPlayer.DiscAdder.ViewModels.SourceContent;
 
 namespace PandaPlayer.DiscAdder.ViewModels
 {
@@ -26,22 +25,22 @@ namespace PandaPlayer.DiscAdder.ViewModels
 
 		private readonly IContentCrawler contentCrawler;
 		private readonly IDiscContentParser discContentParser;
-		private readonly IDiscContentComparer discContentComparer;
+		private readonly ISourceContentChecker sourceContentChecker;
 		private readonly IWorkshopMusicStorage workshopMusicStorage;
 
 		private readonly DiscAdderSettings settings;
 
-		public IReferenceContentViewModel RawReferenceDiscs { get; }
+		public IRawReferenceContentViewModel RawReferenceContent { get; }
 
-		public DiscTreeViewModel ReferenceContent { get; }
+		public IReferenceContentViewModel ReferenceContent { get; }
 
-		public DiscTreeViewModel DiskContent { get; }
+		public IActualContentViewModel ActualContent { get; }
 
-		public IEnumerable<AddedDiscInfo> AddedDiscs => DiskContent.Select(d => workshopMusicStorage.GetAddedDiscInfo(d.DiscDirectory, d.SongFileNames));
+		public IEnumerable<AddedDiscInfo> AddedDiscs => ActualContent.Discs.Select(d => workshopMusicStorage.GetAddedDiscInfo(d.DiscDirectory, d.SongFileNames));
 
 		public ICommand ReloadReferenceContentCommand { get; }
 
-		public ICommand ReloadDiskContentCommand { get; }
+		public ICommand ReloadActualContentCommand { get; }
 
 		public ICommand ReloadAllContentCommand { get; }
 
@@ -53,36 +52,36 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			set => Set(ref dataIsReady, value);
 		}
 
-		public EditSourceContentViewModel(IContentCrawler contentCrawler, IDiscContentParser discContentParser, IDiscContentComparer discContentComparer,
-			IWorkshopMusicStorage workshopMusicStorage, IReferenceContentViewModel rawReferenceDiscs, IOptions<DiscAdderSettings> options)
+		public EditSourceContentViewModel(IContentCrawler contentCrawler, IDiscContentParser discContentParser,
+			ISourceContentChecker sourceContentChecker, IWorkshopMusicStorage workshopMusicStorage, IRawReferenceContentViewModel rawReferenceContent,
+			IReferenceContentViewModel referenceContentViewModel, IActualContentViewModel actualContentViewModel, IOptions<DiscAdderSettings> options)
 		{
 			this.contentCrawler = contentCrawler ?? throw new ArgumentNullException(nameof(contentCrawler));
 			this.discContentParser = discContentParser ?? throw new ArgumentNullException(nameof(discContentParser));
-			this.discContentComparer = discContentComparer ?? throw new ArgumentNullException(nameof(discContentComparer));
+			this.sourceContentChecker = sourceContentChecker ?? throw new ArgumentNullException(nameof(sourceContentChecker));
 			this.workshopMusicStorage = workshopMusicStorage ?? throw new ArgumentNullException(nameof(workshopMusicStorage));
-			RawReferenceDiscs = rawReferenceDiscs ?? throw new ArgumentNullException(nameof(rawReferenceDiscs));
+			RawReferenceContent = rawReferenceContent ?? throw new ArgumentNullException(nameof(rawReferenceContent));
+			ReferenceContent = referenceContentViewModel ?? throw new ArgumentNullException(nameof(referenceContentViewModel));
+			ActualContent = actualContentViewModel ?? throw new ArgumentNullException(nameof(actualContentViewModel));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
-			ReferenceContent = new DiscTreeViewModel();
-			DiskContent = new DiscTreeViewModel();
-
-			RawReferenceDiscs.PropertyChanged += OnRawReferenceDiscsPropertyChanged;
+			RawReferenceContent.PropertyChanged += OnRawReferenceDiscsPropertyChanged;
 
 			ReloadReferenceContentCommand = new RelayCommand(ReloadReferenceContent);
-			ReloadDiskContentCommand = new RelayCommand(ReloadDiskContent);
+			ReloadActualContentCommand = new RelayCommand(ReloadActualContent);
 			ReloadAllContentCommand = new RelayCommand(ReloadAllContent);
 
-			Messenger.Default.Register<DiskContentChangedEventArgs>(this, OnDiskContentChanged);
+			Messenger.Default.Register<ActualContentChangedEventArgs>(this, OnActualContentChanged);
 		}
 
 		public async Task LoadDefaultContent(CancellationToken cancellationToken)
 		{
-			await RawReferenceDiscs.LoadRawReferenceDiscsContent(cancellationToken);
+			await RawReferenceContent.LoadRawReferenceDiscsContent(cancellationToken);
 
-			ReloadDiskContent();
+			ReloadActualContent();
 		}
 
-		private void OnDiskContentChanged(DiskContentChangedEventArgs message)
+		private void OnActualContentChanged(ActualContentChangedEventArgs message)
 		{
 			UpdateContentCorrectness();
 		}
@@ -90,50 +89,48 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		private void ReloadReferenceContent()
 		{
 			var contentBuilder = new StringBuilder();
-			foreach (var disc in DiskContent.Discs)
+			foreach (var disc in ActualContent.Discs)
 			{
 				contentBuilder.AppendLine(CultureInfo.InvariantCulture, $"# {disc.DiscDirectory}");
 				contentBuilder.AppendLine();
 			}
 
-			RawReferenceDiscs.Content = contentBuilder.ToString();
+			RawReferenceContent.Content = contentBuilder.ToString();
 		}
 
-		private void ReloadDiskContent()
+		private void ReloadActualContent()
 		{
 			var discs = contentCrawler.LoadDiscs(settings.WorkshopStoragePath);
 
-			UpdateDiscTree(DiskContent, discs);
+			ActualContent.SetContent(discs);
+			UpdateContentCorrectness();
 		}
 
 		private void ReloadAllContent()
 		{
-			// Disk content should be reloaded first, because reference content is initialized based on disk content.
-			ReloadDiskContent();
+			// Actual content should be reloaded first, because reference content is initialized based on actual content.
+			ReloadActualContent();
 
 			ReloadReferenceContent();
 		}
 
 		private void OnRawReferenceDiscsPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			UpdateDiscTree(ReferenceContent, discContentParser.Parse(RawReferenceDiscs.Content));
-		}
+			var discs = discContentParser.Parse(RawReferenceContent.Content);
 
-		private void UpdateDiscTree(DiscTreeViewModel discs, IEnumerable<DiscContent> newDiscs)
-		{
-			discs.SetDiscs(newDiscs);
+			ReferenceContent.SetContent(discs);
 			UpdateContentCorrectness();
 		}
 
 		private void SetContentCorrectness()
 		{
-			discContentComparer.SetDiscsCorrectness(ReferenceContent, DiskContent);
+			sourceContentChecker.SetContentCorrectness(ReferenceContent, ActualContent);
 		}
 
 		private void UpdateContentCorrectness()
 		{
 			SetContentCorrectness();
-			DataIsReady = !ReferenceContent.ContentIsIncorrect && !DiskContent.ContentIsIncorrect;
+			DataIsReady = !ReferenceContent.ContentIsIncorrect && !ActualContent.ContentIsIncorrect;
 		}
 	}
 }

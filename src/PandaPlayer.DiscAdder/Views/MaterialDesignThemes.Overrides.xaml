@@ -13,8 +13,6 @@
         <Setter Property="TextOptions.TextRenderingMode" Value="Auto" />
     </Style>
 
-    <Style TargetType="{x:Type views:DiscTreeView}" BasedOn="{StaticResource MaterialDesignTreeView}" />
-
     <Style x:Key="DiscAdderDataGridStyle" TargetType="{x:Type DataGrid}" BasedOn="{StaticResource MaterialDesignDataGrid}">
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignDivider}" />

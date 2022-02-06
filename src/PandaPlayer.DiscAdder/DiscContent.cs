@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace PandaPlayer.DiscAdder
 {
+	// TODO: Split DiscContent to ReferenceDiscContent & ActualDiscContent.
 	internal class DiscContent
 	{
 		public string DiscDirectory { get; set; }

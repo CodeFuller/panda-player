@@ -6,17 +6,17 @@ using PandaPlayer.Shared.Extensions;
 
 namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
-	internal class ReferenceContentViewModel : IReferenceContentViewModel
+	internal class ActualContentViewModel : IActualContentViewModel
 	{
-		public ObservableCollection<ReferenceDiscTreeItem> Discs { get; } = new();
+		public ObservableCollection<ActualDiscTreeItem> Discs { get; } = new();
 
-		// TODO: Remove duplication with ActualContentViewModel.
+		// TODO: Remove duplication with ReferenceContentViewModel.
 		public bool ContentIsIncorrect => Discs.Any(x => x.ContentIsIncorrect);
 
 		public void SetContent(IEnumerable<DiscContent> discs)
 		{
 			Discs.Clear();
-			Discs.AddRange(discs.Select(x => new ReferenceDiscTreeItem(x)));
+			Discs.AddRange(discs.Select(x => new ActualDiscTreeItem(x)));
 		}
 	}
 }

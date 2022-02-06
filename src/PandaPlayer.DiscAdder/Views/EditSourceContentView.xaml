@@ -16,9 +16,9 @@
         </Grid.RowDefinitions>
 
         <UniformGrid Grid.Row="0" Rows="1" Columns="3" HorizontalAlignment="Left">
-            <Button Margin="0,0,10,0" Content="Reload Reference Data" Command="{Binding ReloadReferenceContentCommand}" />
-            <Button Margin="0,0,10,0" Content="Reload Disk Data" Command="{Binding ReloadDiskContentCommand}" />
-            <Button Margin="0,0,10,0" Content="Reload All Data" Command="{Binding ReloadAllContentCommand}" />
+            <Button Margin="0,0,10,0" Content="Reload Reference Content" Command="{Binding ReloadReferenceContentCommand}" />
+            <Button Margin="0,0,10,0" Content="Reload Actual Content" Command="{Binding ReloadActualContentCommand}" />
+            <Button Margin="0,0,10,0" Content="Reload All Content" Command="{Binding ReloadAllContentCommand}" />
         </UniformGrid>
 
         <Border Grid.Row="1" Margin="0,10,0,0" BorderThickness="2" BorderBrush="{DynamicResource MaterialDesignDivider}" >
@@ -32,13 +32,13 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBox Grid.Column="0" Padding="1" BorderThickness="0" x:Name="TextBoxRawReferenceDiscs" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="NoWrap" AcceptsReturn="True"
-                         Text="{Binding RawReferenceDiscs.Content, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.ScrollChanged="ScrollChanged" />
+                         Text="{Binding RawReferenceContent.Content, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.ScrollChanged="ScrollChanged" />
                 <GridSplitter Grid.Column="1" ResizeDirection="Columns" HorizontalAlignment="Stretch" />
-                <views:DiscTreeView Grid.Column="2" x:Name="TreeViewReferenceDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                    ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding ReferenceContent.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="False" />
+                <views:ReferenceContentView Grid.Column="2" x:Name="TreeViewReferenceDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                            ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding ReferenceContent.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="False" />
                 <GridSplitter Grid.Column="3" ResizeDirection="Columns" HorizontalAlignment="Stretch" />
-                <views:DiscTreeView Grid.Column="4" x:Name="TreeViewCurrentDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                    ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding DiskContent.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="True" />
+                <views:ActualContentView Grid.Column="4" x:Name="TreeViewCurrentDiscsContent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                         ScrollViewer.ScrollChanged="ScrollChanged" ItemsSource="{Binding ActualContent.Discs}" behaviors:TreeViewInPlaceEditBehavior.IsEditable="True" />
             </Grid>
         </Border>
     </Grid>

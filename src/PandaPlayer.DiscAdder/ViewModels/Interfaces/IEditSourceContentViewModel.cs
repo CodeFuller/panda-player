@@ -3,23 +3,22 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using PandaPlayer.DiscAdder.MusicStorage;
-using PandaPlayer.DiscAdder.ViewModels.SourceContent;
 
 namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
 {
 	internal interface IEditSourceContentViewModel : IPageViewModel
 	{
-		IReferenceContentViewModel RawReferenceDiscs { get; }
+		IRawReferenceContentViewModel RawReferenceContent { get; }
 
-		DiscTreeViewModel ReferenceContent { get; }
+		IReferenceContentViewModel ReferenceContent { get; }
 
-		DiscTreeViewModel DiskContent { get; }
+		IActualContentViewModel ActualContent { get; }
 
 		IEnumerable<AddedDiscInfo> AddedDiscs { get; }
 
 		ICommand ReloadReferenceContentCommand { get; }
 
-		ICommand ReloadDiskContentCommand { get; }
+		ICommand ReloadActualContentCommand { get; }
 
 		ICommand ReloadAllContentCommand { get; }
 

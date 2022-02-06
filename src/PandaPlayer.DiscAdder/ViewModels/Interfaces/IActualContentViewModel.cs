@@ -4,9 +4,9 @@ using PandaPlayer.DiscAdder.ViewModels.SourceContent;
 
 namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
 {
-	internal interface IReferenceContentViewModel
+	internal interface IActualContentViewModel
 	{
-		ObservableCollection<ReferenceDiscTreeItem> Discs { get; }
+		ObservableCollection<ActualDiscTreeItem> Discs { get; }
 
 		bool ContentIsIncorrect { get; }
 

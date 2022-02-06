@@ -3,9 +3,9 @@ using GalaSoft.MvvmLight;
 
 namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
-	internal abstract class BasicDiscTreeViewItem : ViewModelBase
+	internal abstract class ActualBasicContentTreeItem : ViewModelBase
 	{
-		public abstract IEnumerable<BasicDiscTreeViewItem> ChildItems { get; }
+		public abstract IEnumerable<ActualBasicContentTreeItem> ChildItems { get; }
 
 		public abstract string Title { get; set; }
 

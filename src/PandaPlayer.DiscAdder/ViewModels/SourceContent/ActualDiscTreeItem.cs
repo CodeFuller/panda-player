@@ -7,12 +7,10 @@ using PandaPlayer.DiscAdder.Events;
 
 namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
-	internal class DiscTreeViewItem : BasicDiscTreeViewItem
+	internal class ActualDiscTreeItem : ActualBasicContentTreeItem
 	{
-		private readonly IReadOnlyCollection<SongTreeViewItem> songItems;
-
-		public override IEnumerable<BasicDiscTreeViewItem> ChildItems => songItems
-			.Concat<BasicDiscTreeViewItem>(Enumerable.Repeat(new SeparatorLineViewItem(), 1));
+		public override IEnumerable<ActualBasicContentTreeItem> ChildItems => Songs
+			.Concat<ActualBasicContentTreeItem>(Enumerable.Repeat(new ActualDiscSeparatorTreeItem(), 1));
 
 		public override string Title
 		{
@@ -26,7 +24,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 		public override bool IsEditable => true;
 
-		public IEnumerable<SongTreeViewItem> Songs => songItems;
+		public IReadOnlyCollection<ActualSongTreeItem> Songs { get; }
 
 		public IEnumerable<string> SongFileNames => Songs.Select(s => s.FilePath);
 
@@ -61,7 +59,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 		private static void OnDiscContentChanged()
 		{
-			Messenger.Default.Send(new DiskContentChangedEventArgs());
+			Messenger.Default.Send(new ActualContentChangedEventArgs());
 		}
 
 		private bool contentIsIncorrect;
@@ -72,7 +70,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			set => Set(ref contentIsIncorrect, value);
 		}
 
-		public DiscTreeViewItem(DiscContent disc)
+		public ActualDiscTreeItem(DiscContent disc)
 		{
 			if (disc == null)
 			{
@@ -81,7 +79,18 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 			DiscDirectory = disc.DiscDirectory;
 
-			songItems = disc.Songs.Select(x => new SongTreeViewItem(this, x)).ToList();
+			Songs = disc.Songs.Select(x => new ActualSongTreeItem(this, x)).ToList();
+		}
+
+		// TODO: Remove duplication with ReferenceDiscTreeItem.
+		public void MarkWholeDiscAsIncorrect()
+		{
+			foreach (var song in Songs)
+			{
+				song.ContentIsIncorrect = true;
+			}
+
+			ContentIsIncorrect = true;
 		}
 	}
 }

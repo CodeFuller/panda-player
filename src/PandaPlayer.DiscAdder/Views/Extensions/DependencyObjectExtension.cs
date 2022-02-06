@@ -1,45 +1,29 @@
-using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using PandaPlayer.DiscAdder.Views.Behaviors;
 
 namespace PandaPlayer.DiscAdder.Views.Extensions
 {
-	// Copy/paste from https://treeviewinplaceedit.codeplex.com
+	// https://treeviewinplaceedit.codeplex.com
 	internal static class DependencyObjectExtension
 	{
-		/// <summary>
-		/// Find a sequence of children of type T.
-		/// </summary>
-		/// <typeparam name="T">Type of control to search.</typeparam>
-		/// <param name="control">Child control.</param>
-		/// <returns>
-		/// First parent control of type T.
-		/// </returns>
 		public static T ParentOfType<T>(this DependencyObject control)
 			where T : DependencyObject
 		{
-			return ParentOfType<T>(control, null);
-		}
+			while (control != null)
+			{
+				var parent = VisualTreeHelper.GetParent(control);
 
-		/// <summary>
-		/// Find a sequence of children of type T and apply filter if applicable.
-		/// </summary>
-		/// <typeparam name="T">Type of control to search.</typeparam>
-		/// <param name="control">Child control.</param>
-		/// <param name="filter">Filter that should be met.</param>
-		/// <returns>
-		/// First parent control of type T that satisfies given filter.
-		/// </returns>
-		public static T ParentOfType<T>(this DependencyObject control, Predicate<T> filter)
-			where T : DependencyObject
-		{
-			var parent = VisualTreeHelper.GetParent(control);
+				if (parent is T typedParent)
+				{
+					return typedParent;
+				}
 
-			var t = parent as T;
-			return t != null && (filter == null || filter(t))
-					 ? t
-					 : (parent != null ? parent.ParentOfType(filter) : null);
+				control = parent;
+			}
+
+			return null;
 		}
 
 		public static bool IsEditing(this DependencyObject item)
@@ -57,6 +41,19 @@ namespace PandaPlayer.DiscAdder.Views.Extensions
 			TreeViewInPlaceEditBehavior.SetIsEditCanceled(item, cancel);
 			TreeViewInPlaceEditBehavior.SetIsEditConfirmed(item, !cancel);
 			TreeViewInPlaceEditBehavior.SetIsEditing(item, false);
+		}
+
+		public static ScrollViewer FindScrollViewer(this DependencyObject control)
+		{
+			var scrollViewer = control as ScrollViewer;
+
+			for (var i = 0; scrollViewer == null && i < VisualTreeHelper.GetChildrenCount(control); ++i)
+			{
+				var child = VisualTreeHelper.GetChild(control, i);
+				scrollViewer = FindScrollViewer(child);
+			}
+
+			return scrollViewer;
 		}
 	}
 }

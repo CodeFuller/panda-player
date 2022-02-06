@@ -7,11 +7,11 @@ using PandaPlayer.DiscAdder.Events;
 
 namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
-	internal class SongTreeViewItem : BasicDiscTreeViewItem
+	internal class ActualSongTreeItem : ActualBasicContentTreeItem
 	{
-		private readonly DiscTreeViewItem discItem;
+		private readonly ActualDiscTreeItem discItem;
 
-		public override IEnumerable<BasicDiscTreeViewItem> ChildItems => Enumerable.Empty<BasicDiscTreeViewItem>();
+		public override IEnumerable<ActualBasicContentTreeItem> ChildItems => Enumerable.Empty<ActualBasicContentTreeItem>();
 
 		private string title;
 
@@ -37,7 +37,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 				if (valueChanged)
 				{
-					Messenger.Default.Send(new DiskContentChangedEventArgs());
+					Messenger.Default.Send(new ActualContentChangedEventArgs());
 				}
 			}
 		}
@@ -54,7 +54,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			set => Set(ref contentIsIncorrect, value);
 		}
 
-		public SongTreeViewItem(DiscTreeViewItem discItem, SongContent song)
+		public ActualSongTreeItem(ActualDiscTreeItem discItem, SongContent song)
 		{
 			_ = song ?? throw new ArgumentNullException(nameof(song));
 

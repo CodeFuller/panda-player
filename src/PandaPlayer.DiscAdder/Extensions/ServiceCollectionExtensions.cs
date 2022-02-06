@@ -31,7 +31,7 @@ namespace PandaPlayer.DiscAdder.Extensions
 			services.AddSingleton<IReferenceDiscParser, ReferenceDiscParser>();
 			services.AddSingleton<IDiscContentParser, DiscContentParser>();
 			services.AddSingleton<IInputContentSplitter, InputContentSplitter>();
-			services.AddSingleton<IDiscContentComparer, DiscContentComparer>();
+			services.AddSingleton<ISourceContentChecker, SourceContentChecker>();
 			services.AddSingleton<ISongMediaInfoProvider, SongMediaInfoProvider>();
 			services.AddSingleton<IContentCrawler, ContentCrawler>();
 			services.AddSingleton<ISourceFileTypeResolver, SourceFileTypeResolver>();
@@ -42,7 +42,9 @@ namespace PandaPlayer.DiscAdder.Extensions
 
 		private static void RegisterViewModels(IServiceCollection services)
 		{
+			services.AddSingleton<IRawReferenceContentViewModel, RawReferenceContentViewModel>();
 			services.AddSingleton<IReferenceContentViewModel, ReferenceContentViewModel>();
+			services.AddSingleton<IActualContentViewModel, ActualContentViewModel>();
 			services.AddSingleton<IEditSourceContentViewModel, EditSourceContentViewModel>();
 			services.AddSingleton<IEditDiscsDetailsViewModel, EditDiscsDetailsViewModel>();
 			services.AddSingleton<IEditSourceDiscImagesViewModel, EditSourceDiscImagesViewModel>();
