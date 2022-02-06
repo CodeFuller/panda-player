@@ -131,19 +131,11 @@ namespace PandaPlayer.DiscAdder.Views.Behaviors
 					break;
 
 				case Key.Escape:
-					if (treeView.IsEditing())
-					{
-						treeView.EndEdit(true);
-					}
-
+					treeView.EndEdit(cancel: true);
 					break;
 
 				case Key.Return:
-					if (treeView.IsEditing())
-					{
-						treeView.EndEdit(false);
-					}
-
+					treeView.EndEdit(cancel: false);
 					break;
 			}
 		}
@@ -154,10 +146,10 @@ namespace PandaPlayer.DiscAdder.Views.Behaviors
 			var lastSelectedItem = GetLastSelectedItem(treeView);
 			if (lastSelectedItem != treeView.SelectedItem)
 			{
-				// Selection changed, let's save the selected item and the selected time
+				// Selection changed, let's save the selected item and the selected time.
 				SetLastSelectedItem(treeView, treeView.SelectedItem);
 				SetLastSelectedTime(treeView, DateTime.Now);
-				treeView.EndEdit(true);
+				treeView.EndEdit(cancel: true);
 			}
 		}
 
@@ -170,7 +162,7 @@ namespace PandaPlayer.DiscAdder.Views.Behaviors
 			if (selectedItem == null)
 			{
 				// We're clicking on nowhere, let's cancel the editing
-				treeView.EndEdit(true);
+				treeView.EndEdit(cancel: true);
 				return;
 			}
 

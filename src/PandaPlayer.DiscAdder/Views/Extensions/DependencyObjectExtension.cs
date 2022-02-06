@@ -33,11 +33,19 @@ namespace PandaPlayer.DiscAdder.Views.Extensions
 
 		public static void BeginEdit(this DependencyObject item)
 		{
+			// Resetting the property values otherwise PropertyChangedCallback will not be called correctly.
+			TreeViewInPlaceEditBehavior.SetIsEditCanceled(item, false);
+			TreeViewInPlaceEditBehavior.SetIsEditConfirmed(item, false);
 			TreeViewInPlaceEditBehavior.SetIsEditing(item, true);
 		}
 
 		public static void EndEdit(this DependencyObject item, bool cancel)
 		{
+			if (!item.IsEditing())
+			{
+				return;
+			}
+
 			TreeViewInPlaceEditBehavior.SetIsEditCanceled(item, cancel);
 			TreeViewInPlaceEditBehavior.SetIsEditConfirmed(item, !cancel);
 			TreeViewInPlaceEditBehavior.SetIsEditing(item, false);
