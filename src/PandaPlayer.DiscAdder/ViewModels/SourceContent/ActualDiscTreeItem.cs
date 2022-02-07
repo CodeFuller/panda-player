@@ -12,7 +12,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 		public override IEnumerable<ActualBasicContentTreeItem> ChildItems => Songs
 			.Concat<ActualBasicContentTreeItem>(Enumerable.Repeat(new ActualDiscSeparatorTreeItem(), 1));
 
-		public override string Title
+		public override string ViewTitle
 		{
 			get => DiscDirectory;
 			set

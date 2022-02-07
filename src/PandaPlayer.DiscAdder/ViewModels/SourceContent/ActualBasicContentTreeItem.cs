@@ -7,7 +7,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 	{
 		public abstract IEnumerable<ActualBasicContentTreeItem> ChildItems { get; }
 
-		public abstract string Title { get; set; }
+		public abstract string ViewTitle { get; set; }
 
 		public abstract bool IsEditable { get; }
 

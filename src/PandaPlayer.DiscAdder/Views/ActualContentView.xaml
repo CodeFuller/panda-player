@@ -25,7 +25,7 @@
     <TreeView.Resources>
         <HierarchicalDataTemplate DataType="{x:Type sourceContent:ActualBasicContentTreeItem}" ItemsSource="{Binding ChildItems}">
             <Grid>
-                <TextBlock Text="{Binding Title}" x:Name="TextBlock">
+                <TextBlock Text="{Binding ViewTitle}" x:Name="TextBlock">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MaterialDesignTextBlock}">
                             <Setter Property="Padding" Value="0"/>
@@ -40,7 +40,7 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox Text="{Binding Title, UpdateSourceTrigger=Explicit}" Visibility="Collapsed" x:Name="TextBox" />
+                <TextBox Text="{Binding ViewTitle, UpdateSourceTrigger=Explicit}" Visibility="Collapsed" x:Name="TextBox" />
             </Grid>
             <HierarchicalDataTemplate.Triggers>
                 <MultiDataTrigger>

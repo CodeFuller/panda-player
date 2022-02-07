@@ -4,6 +4,6 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
 	internal class ReferenceDiscSeparatorTreeItem : ReferenceBasicTreeItem
 	{
-		public override string Title => String.Empty;
+		public override string ViewTitle => String.Empty;
 	}
 }

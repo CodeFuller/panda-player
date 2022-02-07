@@ -13,7 +13,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 		public override IEnumerable<ActualBasicContentTreeItem> ChildItems => Enumerable.Empty<ActualBasicContentTreeItem>();
 
-		public override string Title
+		public override string ViewTitle
 		{
 			get => FileName;
 			set

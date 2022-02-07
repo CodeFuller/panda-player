@@ -7,7 +7,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 	{
 		public ObservableCollection<ReferenceBasicTreeItem> ChildItems { get; } = new();
 
-		public abstract string Title { get; }
+		public abstract string ViewTitle { get; }
 
 		private bool contentIsIncorrect;
 

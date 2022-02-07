@@ -14,13 +14,13 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			set
 			{
 				Set(ref expectedDirectoryPath, value);
-				RaisePropertyChanged(nameof(Title));
+				RaisePropertyChanged(nameof(ViewTitle));
 			}
 		}
 
 		public IReadOnlyCollection<ReferenceSongTreeItem> ExpectedSongs { get; private set; }
 
-		public override string Title => ExpectedDirectoryPath;
+		public override string ViewTitle => ExpectedDirectoryPath;
 
 		public ReferenceDiscTreeItem(ReferenceDiscContent disc)
 		{

@@ -12,7 +12,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			set
 			{
 				song = value;
-				RaisePropertyChanged(nameof(Title));
+				RaisePropertyChanged(nameof(ViewTitle));
 			}
 		}
 
@@ -20,7 +20,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 		public string ExpectedTitleWithTrackNumber => Song.ExpectedTitleWithTrackNumber;
 
-		public override string Title => ExpectedTitle;
+		public override string ViewTitle => ExpectedTitle;
 
 		public ReferenceSongTreeItem(ReferenceSongContent song)
 		{
