@@ -159,13 +159,13 @@ namespace PandaPlayer.DiscAdder.ViewModels
 					{
 						Title = "Close",
 						NextPage = editSourceContentViewModel,
-						NextPageAction = _ =>
+						NextPageAction = async cancellationToken =>
 						{
+							await editSourceContentViewModel.ResetContent(cancellationToken);
+
 							OnRequestClose?.Invoke(this, EventArgs.Empty);
 
 							IsLoaded = false;
-
-							return Task.CompletedTask;
 						},
 					};
 				}
@@ -201,7 +201,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 				return;
 			}
 
-			await editSourceContentViewModel.LoadDefaultContent(cancellationToken);
+			await editSourceContentViewModel.Load(cancellationToken);
 
 			IsLoaded = true;
 		}

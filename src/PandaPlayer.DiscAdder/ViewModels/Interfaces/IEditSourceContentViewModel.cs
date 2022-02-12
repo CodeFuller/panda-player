@@ -22,6 +22,8 @@ namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
 
 		ICommand ReloadAllContentCommand { get; }
 
-		Task LoadDefaultContent(CancellationToken cancellationToken);
+		Task Load(CancellationToken cancellationToken);
+
+		Task ResetContent(CancellationToken cancellationToken);
 	}
 }

@@ -38,20 +38,31 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 		private string LastSavedContent { get; set; }
 
-		public async Task LoadRawReferenceContent(CancellationToken cancellationToken)
+		public async Task LoadContent(CancellationToken cancellationToken)
 		{
 			Content = LastSavedContent = await sessionDataService.GetData<string>(RawReferenceContentDataKey, cancellationToken);
 		}
 
+		public Task ClearContent(CancellationToken cancellationToken)
+		{
+			return SaveContent(String.Empty, cancellationToken);
+		}
+
 		private async void OnSaveContentTimerElapsed(CancellationToken cancellationToken)
 		{
-			if (String.Equals(Content, LastSavedContent, StringComparison.Ordinal))
+			await SaveContent(Content, cancellationToken);
+		}
+
+		private async Task SaveContent(string newContent, CancellationToken cancellationToken)
+		{
+			if (LastSavedContent == newContent)
 			{
 				return;
 			}
 
-			LastSavedContent = Content;
-			await sessionDataService.SaveData(RawReferenceContentDataKey, LastSavedContent, cancellationToken);
+			await sessionDataService.SaveData(RawReferenceContentDataKey, newContent, cancellationToken);
+
+			LastSavedContent = newContent;
 		}
 
 		public void Dispose()

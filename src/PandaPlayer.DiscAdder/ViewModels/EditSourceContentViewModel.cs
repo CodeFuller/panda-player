@@ -74,11 +74,16 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			Messenger.Default.Register<ActualContentChangedEventArgs>(this, OnActualContentChanged);
 		}
 
-		public async Task LoadDefaultContent(CancellationToken cancellationToken)
+		public async Task Load(CancellationToken cancellationToken)
 		{
-			await RawReferenceContent.LoadRawReferenceContent(cancellationToken);
+			await RawReferenceContent.LoadContent(cancellationToken);
 
 			ReloadActualContent();
+		}
+
+		public Task ResetContent(CancellationToken cancellationToken)
+		{
+			return RawReferenceContent.ClearContent(cancellationToken);
 		}
 
 		private void OnActualContentChanged(ActualContentChangedEventArgs message)
