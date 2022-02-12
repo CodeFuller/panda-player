@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PandaPlayer.DiscAdder.Internal
+namespace PandaPlayer.DiscAdder.Extensions
 {
 	internal static class EnumerableExtensions
 	{

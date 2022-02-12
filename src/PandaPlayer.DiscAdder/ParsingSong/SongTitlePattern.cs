@@ -35,10 +35,8 @@ namespace PandaPlayer.DiscAdder.ParsingSong
 					? new SongTitleMatch(matchedTitle, parsePayload(match.Groups[2].Value))
 					: new SongTitleMatch(matchedTitle);
 			}
-			else
-			{
-				return SongTitleMatch.FailedMatch;
-			}
+
+			return SongTitleMatch.FailedMatch;
 		}
 	}
 }

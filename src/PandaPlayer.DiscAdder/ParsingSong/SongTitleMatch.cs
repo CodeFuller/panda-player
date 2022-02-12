@@ -32,7 +32,7 @@ namespace PandaPlayer.DiscAdder.ParsingSong
 		{
 		}
 
-		public static SongTitleMatch FailedMatch => new SongTitleMatch();
+		public static SongTitleMatch FailedMatch { get; } = new();
 
 		private static string AdjustTitle(string title)
 		{
@@ -69,11 +69,9 @@ namespace PandaPlayer.DiscAdder.ParsingSong
 		private static IEnumerable<string> SplitTitle(string title)
 		{
 			var regex = new Regex("(\\S+\\s*)");
-			MatchCollection matches = regex.Matches(title);
-			for (var i = 0; i < matches.Count; ++i)
-			{
-				yield return matches[i].Value;
-			}
+
+			var matches = regex.Matches(title);
+			return matches.Select(x => x.Value);
 		}
 
 		private static string CapitalizeFirstLetter(string str)
@@ -83,7 +81,7 @@ namespace PandaPlayer.DiscAdder.ParsingSong
 				return str;
 			}
 
-			return str.Length > 1 ? Char.ToUpper(str[0], CultureInfo.InvariantCulture) + str.Substring(1) : str.ToUpper(CultureInfo.InvariantCulture);
+			return str.Length > 1 ? Char.ToUpper(str[0], CultureInfo.InvariantCulture) + str[1..] : str.ToUpper(CultureInfo.InvariantCulture);
 		}
 	}
 }

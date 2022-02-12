@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using PandaPlayer.DiscAdder.Extensions;
 using PandaPlayer.DiscAdder.Interfaces;
 using PandaPlayer.DiscAdder.ViewModels.Interfaces;
 using PandaPlayer.DiscAdder.ViewModels.SourceContent;

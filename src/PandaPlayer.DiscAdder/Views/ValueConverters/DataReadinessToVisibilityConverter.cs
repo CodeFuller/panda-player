@@ -9,7 +9,7 @@ namespace PandaPlayer.DiscAdder.Views.ValueConverters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (!(value is bool boolValue) || targetType != typeof(Visibility))
+			if (value is not bool boolValue || targetType != typeof(Visibility))
 			{
 				return null;
 			}

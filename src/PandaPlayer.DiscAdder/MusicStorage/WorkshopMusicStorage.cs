@@ -10,15 +10,12 @@ using PandaPlayer.Services.Interfaces;
 
 namespace PandaPlayer.DiscAdder.MusicStorage
 {
-	/// <summary>
-	/// Class for music storage that keeps discs for adding to library.
-	/// </summary>
 	internal class WorkshopMusicStorage : IWorkshopMusicStorage
 	{
-		private static readonly Regex DiscDataRegex = new Regex(@"^(\d{4}) - (.+)$", RegexOptions.Compiled);
-		private static readonly Regex SongWithTrackAndArtistRegex = new Regex(@"^(\d{2}) - ((.+) - (.+))$", RegexOptions.Compiled);
-		private static readonly Regex SongWithTrackRegex = new Regex(@"^(\d{2}) - (.+)$", RegexOptions.Compiled);
-		private static readonly Regex SongWithArtistRegex = new Regex(@"^((.+) - (.+))$", RegexOptions.Compiled);
+		private static readonly Regex DiscDataRegex = new(@"^(\d{4}) - (.+)$", RegexOptions.Compiled);
+		private static readonly Regex SongWithTrackAndArtistRegex = new(@"^(\d{2}) - ((.+) - (.+))$", RegexOptions.Compiled);
+		private static readonly Regex SongWithTrackRegex = new(@"^(\d{2}) - (.+)$", RegexOptions.Compiled);
+		private static readonly Regex SongWithArtistRegex = new(@"^((.+) - (.+))$", RegexOptions.Compiled);
 
 		private readonly IDiscTitleToAlbumMapper discTitleToAlbumMapper;
 		private readonly IFileSystemFacade fileSystemFacade;
@@ -175,10 +172,7 @@ namespace PandaPlayer.DiscAdder.MusicStorage
 				FindDirectoryFiles(subDirectory, files);
 			}
 
-			foreach (var file in fileSystemFacade.EnumerateFiles(directoryPath))
-			{
-				files.Add(file);
-			}
+			files.AddRange(fileSystemFacade.EnumerateFiles(directoryPath));
 		}
 	}
 }
