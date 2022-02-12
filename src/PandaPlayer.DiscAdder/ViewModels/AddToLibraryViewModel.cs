@@ -44,6 +44,14 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			set => Set(ref dataIsReady, value);
 		}
 
+		private bool canAddContent;
+
+		public bool CanAddContent
+		{
+			get => canAddContent;
+			private set => Set(ref canAddContent, value);
+		}
+
 		private bool deleteSourceContent;
 
 		public bool DeleteSourceContent
@@ -105,12 +113,15 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		{
 			SongsForAdding = songs.ToList();
 			DiscImagesForAdding = images.ToList();
+
+			DataIsReady = false;
+			CanAddContent = true;
 			DeleteSourceContent = true;
 		}
 
 		private async Task AddContentToLibrary(CancellationToken cancellationToken)
 		{
-			DataIsReady = false;
+			CanAddContent = false;
 
 			// Wrapping call with Task.Run() so that progress and logging messages in UI are updated during adding.
 			await Task.Run(() => AddContentToLibraryInternal(cancellationToken), cancellationToken);

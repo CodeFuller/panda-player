@@ -6,6 +6,8 @@ namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
 {
 	internal interface IAddToLibraryViewModel : IPageViewModel
 	{
+		bool CanAddContent { get; }
+
 		bool DeleteSourceContent { get; set; }
 
 		public int CurrentProgress { get; set; }
