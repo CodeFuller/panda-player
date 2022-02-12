@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -53,7 +54,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 
 		public event EventHandler OnRequestClose;
 
-		public bool CanSwitchToPrevPage => PrevPage != null;
+		public bool CanSwitchToPrevPage => PrevPage != null && (CurrentPage is not IAddToLibraryViewModel || addToLibraryViewModel.CanAddContent);
 
 		public bool CanSwitchToNextPage => CurrentPage.DataIsReady;
 
@@ -95,6 +96,11 @@ namespace PandaPlayer.DiscAdder.ViewModels
 				if (CurrentPage == editSongsDetailsViewModel)
 				{
 					return editSourceDiscImagesViewModel;
+				}
+
+				if (CurrentPage == addToLibraryViewModel)
+				{
+					return editSongsDetailsViewModel;
 				}
 
 				return null;
@@ -220,11 +226,16 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			CurrentPage = PrevPage ?? throw new InvalidOperationException($"Could not switch back from the page {CurrentPage.Name}");
 		}
 
-		private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == nameof(IPageViewModel.DataIsReady))
 			{
 				RaisePropertyChanged(nameof(CanSwitchToNextPage));
+			}
+
+			if (sender is IAddToLibraryViewModel && e.PropertyName == nameof(IAddToLibraryViewModel.CanAddContent))
+			{
+				RaisePropertyChanged(nameof(CanSwitchToPrevPage));
 			}
 		}
 	}
