@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 4.1.0 - 2022-02-12
+Fixes and improvements in disc adder:
+- Fixed in-place edit of actual content.
+- Applied Material Design styles for tree views.
+- Added separate reload of different content types - reference, actual and all.
+- Fixed re-editing of items in actual content tree.
+- Removed broken double-click in actual content tree.
+- Fixed submit of unchanged disc directory path.
+- Improved performance of reference content update.
+- Added Close button after content was added to the library.
+- Added clearing of reference content after adding to the library.
+- Prevented re-adding of the same content.
+- Allowed navigating back from adding to library page.
+- Prevented adding of empty discs.
+
 ## 4.0.0 - 2022-01-31
 - Updated to .NET 6.0.
 - Switched to fully loaded library with single model instances.
