@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
-using PandaPlayer.DiscAdder.AddedContent;
 using PandaPlayer.DiscAdder.ViewModels.Interfaces;
 using PandaPlayer.DiscAdder.ViewModels.ViewModelItems;
 
@@ -16,9 +15,10 @@ namespace PandaPlayer.DiscAdder.ViewModels
 
 		public ObservableCollection<SongViewItem> Songs { get; private set; }
 
-		public void SetSongs(IEnumerable<AddedSong> songs)
+		public void Load(IEnumerable<DiscViewItem> discs)
 		{
-			Songs = new ObservableCollection<SongViewItem>(songs.Select(s => new SongViewItem(s)));
+			var songs = discs.SelectMany(disc => disc.AddedSongs.Select(song => new SongViewItem(disc, song)));
+			Songs = new ObservableCollection<SongViewItem>(songs);
 		}
 	}
 }

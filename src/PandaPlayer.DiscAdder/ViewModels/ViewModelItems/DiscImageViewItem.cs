@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using GalaSoft.MvvmLight;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Shared.Images;
 
@@ -8,7 +9,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 	{
 		private readonly IImageFile imageFile;
 
-		public DiscModel Disc { get; }
+		public string DiscSourcePath { get; }
 
 		public string SourceImageFilePath => ImageInfo?.FileName;
 
@@ -20,9 +21,9 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 
 		public ImageInfo ImageInfo => imageFile.ImageInfo;
 
-		public DiscImageViewItem(DiscModel disc, DiscImageType imageType, IImageFile imageFile)
+		public DiscImageViewItem(DiscViewItem discItem, DiscImageType imageType, IImageFile imageFile)
 		{
-			Disc = disc;
+			DiscSourcePath = discItem?.SourcePath ?? throw new ArgumentNullException(nameof(discItem));
 			ImageType = imageType;
 			this.imageFile = imageFile;
 		}

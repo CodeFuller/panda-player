@@ -9,7 +9,8 @@ namespace PandaPlayer.DiscAdder.Extensions
 	{
 		public static GenreModel GetGenre(this DiscModel disc)
 		{
-			return (disc.IsDeleted ? disc.AllSongs : disc.ActiveSongs).Select(s => s.Genre)
+			return (disc.IsDeleted ? disc.AllSongs : disc.ActiveSongs)
+				.Select(s => s.Genre)
 				.UniqueOrDefault(new GenreEqualityComparer());
 		}
 	}

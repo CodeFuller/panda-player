@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using PandaPlayer.Core.Models;
-using PandaPlayer.DiscAdder.AddedContent;
 using PandaPlayer.DiscAdder.Extensions;
 using PandaPlayer.DiscAdder.Interfaces;
 using PandaPlayer.DiscAdder.MusicStorage;
@@ -33,12 +32,6 @@ namespace PandaPlayer.DiscAdder.ViewModels
 
 		public ObservableCollection<DiscViewItem> Discs { get; }
 
-		private IEnumerable<(DiscViewItem DiscItem, AddedDisc AddedDisc)> DiscPairs => Discs.Select(d => (d, new AddedDisc(d.Disc, d is NewDiscViewItem, d.SourcePath, d.DestinationFolderPath)));
-
-		public IEnumerable<AddedDisc> AddedDiscs => DiscPairs.Select(p => p.AddedDisc);
-
-		public IEnumerable<AddedSong> AddedSongs => DiscPairs.SelectMany(p => p.DiscItem.Songs.Select(s => new AddedSong(p.AddedDisc, s.Song, s.SourcePath)));
-
 		public EditDiscsDetailsViewModel(IFolderProvider folderProvider, IDiscsService discService, IArtistsService artistService, IGenresService genreService)
 		{
 			this.folderProvider = folderProvider ?? throw new ArgumentNullException(nameof(folderProvider));
@@ -50,6 +43,8 @@ namespace PandaPlayer.DiscAdder.ViewModels
 
 		public async Task SetDiscs(IEnumerable<AddedDiscInfo> discs, CancellationToken cancellationToken)
 		{
+			ClearDiscItems();
+
 			var discsList = discs.ToList();
 			var libraryArtists = await artistService.GetAllArtists(cancellationToken);
 			var availableGenres = await genreService.GetAllGenres(cancellationToken);
@@ -57,7 +52,6 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			// For genre guessing we use all discs, including deleted.
 			var allDiscs = await discService.GetAllDiscs(cancellationToken);
 
-			Discs.Clear();
 			foreach (var addedDiscInfo in discsList)
 			{
 				var parentFolder = await folderProvider.GetFolder(addedDiscInfo.DestinationFolderPath, cancellationToken);
@@ -67,28 +61,39 @@ namespace PandaPlayer.DiscAdder.ViewModels
 
 				var availableArtists = BuildAvailableArtistsList(addedDiscInfo, libraryArtists);
 
-				var addedDisc = existingDisc != null ?
-					new ExistingDiscViewItem(existingDisc, addedDiscInfo, availableArtists, availableGenres) as DiscViewItem :
+				DiscViewItem discViewItem = existingDisc != null ?
+					new ExistingDiscViewItem(existingDisc, addedDiscInfo, availableArtists, availableGenres) :
 					new NewDiscViewItem(addedDiscInfo, folderExists, availableArtists, availableGenres, GuessArtistGenre(allDiscs, addedDiscInfo.Artist));
 
-				addedDisc.PropertyChanged += Property_Changed;
-				Discs.Add(addedDisc);
+				discViewItem.PropertyChanged += DiscItem_PropertyChanged;
+				Discs.Add(discViewItem);
 			}
 		}
 
-		private static IEnumerable<ArtistViewItem> BuildAvailableArtistsList(AddedDiscInfo disc, IEnumerable<ArtistModel> libraryArtists)
+		private void ClearDiscItems()
 		{
-			var artists = new List<ArtistViewItem>
+			foreach (var discItem in Discs)
 			{
-				new EmptyArtistViewItem(),
+				discItem.PropertyChanged -= DiscItem_PropertyChanged;
+			}
+
+			Discs.Clear();
+		}
+
+		private static IEnumerable<BasicInputArtistItem> BuildAvailableArtistsList(AddedDiscInfo disc, IEnumerable<ArtistModel> libraryArtists)
+		{
+			var artists = new List<BasicInputArtistItem>
+			{
+				new EmptyInputArtistItem(),
 			};
 
 			if (disc.HasVariousArtists)
 			{
-				artists.Add(new VariousArtistViewItem());
+				artists.Add(new VariousInputArtistItem());
 			}
 
-			var specificArtists = new List<ArtistModel>(libraryArtists);
+			var specificArtists = libraryArtists
+				.ToDictionary(x => x.Name, x => new SpecificInputArtistItem(x.Name, isNewArtist: false), StringComparer.OrdinalIgnoreCase);
 
 			var newDiscArtistNames = new[] { disc.Artist }
 				.Concat(disc.Songs.Select(s => s.Artist))
@@ -97,36 +102,26 @@ namespace PandaPlayer.DiscAdder.ViewModels
 
 			foreach (var songArtistName in newDiscArtistNames)
 			{
-				var matchedArtist = specificArtists.SingleOrDefault(a => String.Equals(a.Name, songArtistName, StringComparison.Ordinal));
-				if (matchedArtist != null)
+				if (specificArtists.TryGetValue(songArtistName, out var existingArtist))
 				{
+					if (existingArtist.ArtistName != songArtistName)
+					{
+						throw new InvalidOperationException($"Artist name differs only by case: '{songArtistName}'");
+					}
+
 					continue;
 				}
 
-				var matchedArtistCaseInsensitive = specificArtists.SingleOrDefault(a => String.Equals(a.Name, songArtistName, StringComparison.OrdinalIgnoreCase));
-				if (matchedArtistCaseInsensitive != null)
-				{
-					throw new InvalidOperationException($"Artist name differs only by case: '{songArtistName}'");
-				}
-
-				var newArtist = new ArtistModel
-				{
-					Name = songArtistName,
-				};
-
-				specificArtists.Add(newArtist);
+				var newArtist = new SpecificInputArtistItem(songArtistName, isNewArtist: true);
+				specificArtists.Add(songArtistName, newArtist);
 			}
 
-			var specificArtistItems = specificArtists
-				.OrderBy(a => a.Name)
-				.Select(a => new SpecificArtistViewItem(a));
-
-			artists.AddRange(specificArtistItems);
+			artists.AddRange(specificArtists.Values.OrderBy(a => a.ArtistName));
 
 			return artists;
 		}
 
-		private void Property_Changed(object sender, PropertyChangedEventArgs e)
+		private void DiscItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == nameof(DiscViewItem.RequiredDataIsFilled))
 			{
@@ -134,11 +129,12 @@ namespace PandaPlayer.DiscAdder.ViewModels
 				return;
 			}
 
-			if (sender is NewDiscViewItem changedDisc && e.PropertyName == nameof(DiscViewItem.Genre) && changedDisc.Artist is SpecificArtistViewItem specificArtist1)
+			if (sender is NewDiscViewItem changedDisc && e.PropertyName == nameof(DiscViewItem.Genre) && changedDisc.Artist is SpecificInputArtistItem specificArtist1)
 			{
-				foreach (var disc in Discs.Where(d => d != changedDisc && d.Artist is SpecificArtistViewItem specificArtist2 && specificArtist1.Equals(specificArtist2)))
+				// Updating genre for all other discs of the same artist.
+				foreach (var disc in Discs.Where(d => d != changedDisc && d.Artist is SpecificInputArtistItem specificArtist2 && specificArtist1.Equals(specificArtist2)))
 				{
-					if (disc is NewDiscViewItem sameArtistDisc && sameArtistDisc.Genre == null)
+					if (disc is NewDiscViewItem { Genre: null } sameArtistDisc)
 					{
 						sameArtistDisc.Genre = changedDisc.Genre;
 					}

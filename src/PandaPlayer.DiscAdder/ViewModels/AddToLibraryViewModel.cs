@@ -8,9 +8,9 @@ using System.Windows.Input;
 using CodeFuller.Library.Wpf;
 using GalaSoft.MvvmLight;
 using PandaPlayer.Core.Models;
-using PandaPlayer.DiscAdder.AddedContent;
 using PandaPlayer.DiscAdder.MusicStorage;
 using PandaPlayer.DiscAdder.ViewModels.Interfaces;
+using PandaPlayer.DiscAdder.ViewModels.ViewModelItems;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.Services.Media;
 using PandaPlayer.Shared.Extensions;
@@ -19,6 +19,9 @@ namespace PandaPlayer.DiscAdder.ViewModels
 {
 	internal class AddToLibraryViewModel : ViewModelBase, IAddToLibraryViewModel
 	{
+		private const int AddSongProgressStep = 5;
+		private const int AddDiscImageProgressStep = 1;
+
 		private readonly ISongMediaInfoProvider songMediaInfoProvider;
 		private readonly IWorkshopMusicStorage workshopMusicStorage;
 
@@ -27,8 +30,9 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		private readonly ISongsService songService;
 		private readonly IArtistsService artistService;
 
-		private List<AddedSong> addedSongs;
-		private List<AddedDiscImage> addedDiscImages;
+		private IReadOnlyCollection<SongViewItem> SongsForAdding { get; set; }
+
+		private IReadOnlyCollection<DiscImageViewItem> DiscImagesForAdding { get; set; }
 
 		public string Name => "Add To Library";
 
@@ -97,27 +101,18 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			AddToLibraryCommand = new AsyncRelayCommand(() => AddContentToLibrary(CancellationToken.None));
 		}
 
-		public void SetSongs(IEnumerable<AddedSong> songs)
+		public void Load(IEnumerable<SongViewItem> songs, IEnumerable<DiscImageViewItem> images)
 		{
-			addedSongs = songs.ToList();
-
+			SongsForAdding = songs.ToList();
+			DiscImagesForAdding = images.ToList();
 			deleteSourceContent = false;
-		}
-
-		public void SetDiscsImages(IEnumerable<AddedDiscImage> images)
-		{
-			addedDiscImages = images.ToList();
 		}
 
 		private async Task AddContentToLibrary(CancellationToken cancellationToken)
 		{
-			if (addedSongs == null)
-			{
-				throw new InvalidOperationException("No songs for adding to the library");
-			}
-
 			DataIsReady = false;
 
+			// Wrapping call with Task.Run() so that progress and logging messages in UI are updated during adding.
 			await Task.Run(() => AddContentToLibraryInternal(cancellationToken), cancellationToken);
 
 			DataIsReady = true;
@@ -126,157 +121,162 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		private async Task AddContentToLibraryInternal(CancellationToken cancellationToken)
 		{
 			CurrentProgress = 0;
-			ProgressMaximum = 0;
-			ProgressMaximum += await FillSongsMediaData(true);
-			ProgressMaximum += await AddSongsToLibrary(true, cancellationToken);
-			ProgressMaximum += await AddDiscCoverImages(true, cancellationToken);
+			ProgressMaximum = CountProgressMaximum();
 
-			await FillSongsMediaData(false);
-			await AddSongsToLibrary(false, cancellationToken);
-			await AddDiscCoverImages(false, cancellationToken);
+			var createdDiscs = new Dictionary<string, DiscModel>();
+			await AddSongsToLibrary(createdDiscs, cancellationToken);
+			await AddDiscCoverImages(createdDiscs, cancellationToken);
 
 			if (DeleteSourceContent)
 			{
 				ProgressMessages += "Deleting source content...\n";
-				workshopMusicStorage.DeleteSourceContent(addedSongs.Select(s => s.SourceFileName).Concat(addedDiscImages.Select(im => im.ImageInfo.FileName)));
+				workshopMusicStorage.DeleteSourceContent(SongsForAdding.Select(s => s.SourceFilePath).Concat(DiscImagesForAdding.Select(im => im.ImageInfo.FileName)));
 				ProgressMessages += "Source content was deleted successfully\n";
 			}
 		}
 
-		private async Task<int> FillSongsMediaData(bool onlyCountProgressSize)
+		private int CountProgressMaximum()
 		{
-			const int progressIncrement = 1;
-			var taskProgressSize = addedSongs.Count * progressIncrement;
-
-			if (onlyCountProgressSize)
-			{
-				return taskProgressSize;
-			}
-
-			foreach (var addedSong in addedSongs)
-			{
-				ProgressMessages += $"Getting media info for '{addedSong.SourceFileName}'...\n";
-				var mediaInfo = await songMediaInfoProvider.GetSongMediaInfo(addedSong.SourceFileName);
-
-				addedSong.Song.BitRate = mediaInfo.Bitrate;
-				addedSong.Song.Duration = mediaInfo.Duration;
-
-				CurrentProgress += progressIncrement;
-			}
-
-			return taskProgressSize;
+			return (SongsForAdding.Count * AddSongProgressStep) + (DiscImagesForAdding.Count * AddDiscImageProgressStep);
 		}
 
-		private async Task<int> AddSongsToLibrary(bool onlyCountProgressSize, CancellationToken cancellationToken)
+		private async Task AddSongsToLibrary(IDictionary<string, DiscModel> createdDiscs, CancellationToken cancellationToken)
 		{
-			const int progressIncrement = 5;
-			var taskProgressSize = 0;
+			var allArtists = await artistService.GetAllArtists(cancellationToken);
+			var existingArtists = allArtists.ToDictionary(x => x.Name, x => x);
 
-			// If new folder or disc is added, then same instance will be shared across all songs.
-			// That is why we need no additional checks for created objects.
-			// However, for artists there could be different instances of ArtistModel for the same new artist.
-			// That is why we remember artists, which were created.
-			var createdArtists = new Dictionary<string, ArtistModel>();
-
-			foreach (var addedSong in addedSongs)
+			foreach (var addedSong in SongsForAdding)
 			{
-				if (!onlyCountProgressSize)
+				var songDisc = await ProvideSongDisc(addedSong, createdDiscs, cancellationToken);
+				var songArtist = await ProvideSongArtist(addedSong.ArtistName, existingArtists, cancellationToken);
+
+				var songMediaInfo = await songMediaInfoProvider.GetSongMediaInfo(addedSong.SourceFilePath);
+
+				var newSong = new SongModel
 				{
-					var song = addedSong.Song;
+					Title = addedSong.Title,
+					TreeTitle = addedSong.TreeTitle,
+					TrackNumber = addedSong.Track,
+					Artist = songArtist,
+					Genre = addedSong.Genre,
+					BitRate = songMediaInfo.Bitrate,
+					Duration = songMediaInfo.Duration,
+					Rating = null,
+				};
 
-					await ProvideSongArtist(song, createdArtists, cancellationToken);
+				songDisc.AddSong(newSong);
 
-					var songDisc = song.Disc;
-					if (songDisc.Id == null)
-					{
-						await CreateDisc(songDisc, addedSong.Disc.FolderPath, cancellationToken);
-					}
+				ProgressMessages += $"Adding song '{addedSong.SourceFilePath}'...\n";
+				await using var songContent = File.OpenRead(addedSong.SourceFilePath);
+				await songService.CreateSong(newSong, songContent, cancellationToken);
 
-					ProgressMessages += $"Adding song '{addedSong.SourceFileName}'...\n";
+				CurrentProgress += AddSongProgressStep;
+			}
+		}
 
-					await using var songContent = File.OpenRead(addedSong.SourceFileName);
-					await songService.CreateSong(song, songContent, cancellationToken);
+		private async Task<DiscModel> ProvideSongDisc(SongViewItem songItem, IDictionary<string, DiscModel> createdDiscs, CancellationToken cancellationToken)
+		{
+			if (songItem.ExistingDisc != null)
+			{
+				return songItem.ExistingDisc;
+			}
 
-					CurrentProgress += progressIncrement;
+			var discSourcePath = songItem.DiscSourcePath;
+
+			if (createdDiscs.TryGetValue(discSourcePath, out var createdDisc))
+			{
+				return createdDisc;
+			}
+
+			createdDisc = await CreateDisc(songItem.DiscItem, cancellationToken);
+			createdDiscs.Add(discSourcePath, createdDisc);
+
+			return createdDisc;
+		}
+
+		private async Task<DiscModel> CreateDisc(DiscViewItem discItem, CancellationToken cancellationToken)
+		{
+			var discFolder = await ProvideDiscFolder(discItem.DestinationFolderPath, cancellationToken);
+
+			var newDisc = new DiscModel
+			{
+				Year = discItem.Year,
+				Title = discItem.DiscTitle,
+				TreeTitle = discItem.TreeTitle,
+				AlbumTitle = discItem.AlbumTitle,
+			};
+
+			discFolder.AddDisc(newDisc);
+
+			ProgressMessages += $"Creating disc '{newDisc.TreeTitle}' ...\n";
+			await discService.CreateDisc(newDisc, cancellationToken);
+
+			return newDisc;
+		}
+
+		private async Task<ArtistModel> ProvideSongArtist(string artistName, IDictionary<string, ArtistModel> existingArtists, CancellationToken cancellationToken)
+		{
+			if (artistName == null)
+			{
+				return null;
+			}
+
+			if (existingArtists.TryGetValue(artistName, out var existingArtist))
+			{
+				return existingArtist;
+			}
+
+			var newArtist = new ArtistModel
+			{
+				Name = artistName,
+			};
+
+			ProgressMessages += $"Creating artist '{artistName}' ...\n";
+			await artistService.CreateArtist(newArtist, cancellationToken);
+
+			existingArtists.Add(artistName, newArtist);
+
+			return newArtist;
+		}
+
+		private async Task AddDiscCoverImages(IReadOnlyDictionary<string, DiscModel> discs, CancellationToken cancellationToken)
+		{
+			foreach (var addedDiscImage in DiscImagesForAdding)
+			{
+				ProgressMessages += $"Adding disc image '{addedDiscImage.ImageInfo.FileName}'...\n";
+
+				if (!discs.TryGetValue(addedDiscImage.DiscSourcePath, out var disc))
+				{
+					throw new InvalidOperationException($"Can not find disc with source path '{addedDiscImage.DiscSourcePath}'");
 				}
 
-				taskProgressSize += progressIncrement;
-			}
-
-			return taskProgressSize;
-		}
-
-		private async Task<int> AddDiscCoverImages(bool onlyCountProgressSize, CancellationToken cancellationToken)
-		{
-			const int progressIncrement = 1;
-			var taskProgressSize = 0;
-
-			if (addedDiscImages == null)
-			{
-				return taskProgressSize;
-			}
-
-			foreach (var addedDiscImage in addedDiscImages)
-			{
-				if (!onlyCountProgressSize)
+				var newDiscImage = new DiscImageModel
 				{
-					ProgressMessages += $"Adding disc image '{addedDiscImage.ImageInfo.FileName}'...\n";
+					TreeTitle = addedDiscImage.ImageInfo.GetDiscCoverImageTreeTitle(),
+					ImageType = DiscImageType.Cover,
+				};
 
-					var discImage = new DiscImageModel
-					{
-						TreeTitle = addedDiscImage.ImageInfo.GetDiscCoverImageTreeTitle(),
-						ImageType = DiscImageType.Cover,
-					};
+				await using var imageContent = File.OpenRead(addedDiscImage.ImageInfo.FileName);
+				await discService.SetDiscCoverImage(disc, newDiscImage, imageContent, cancellationToken);
 
-					await using var imageContent = File.OpenRead(addedDiscImage.ImageInfo.FileName);
-					await discService.SetDiscCoverImage(addedDiscImage.Disc, discImage, imageContent, cancellationToken);
-
-					CurrentProgress += progressIncrement;
-				}
-
-				taskProgressSize += progressIncrement;
+				CurrentProgress += AddDiscImageProgressStep;
 			}
-
-			return taskProgressSize;
 		}
 
-		private async Task ProvideSongArtist(SongModel song, IDictionary<string, ArtistModel> createdArtists, CancellationToken cancellationToken)
+		private async Task<FolderModel> ProvideDiscFolder(IEnumerable<string> discFolderPath, CancellationToken cancellationToken)
 		{
-			var artist = song.Artist;
-
-			if (artist == null || artist.Id != null)
-			{
-				return;
-			}
-
-			if (createdArtists.TryGetValue(artist.Name, out var createdArtist))
-			{
-				song.Artist = createdArtist;
-				return;
-			}
-
-			ProgressMessages += $"Creating artist '{artist.Name}' ...\n";
-			await artistService.CreateArtist(artist, cancellationToken);
-
-			createdArtists.Add(artist.Name, artist);
-		}
-
-		private async Task<FolderModel> CreateFolder(IReadOnlyCollection<string> discFolderPath, CancellationToken cancellationToken)
-		{
-			const char pathSeparator = '/';
-
 			var currentFolder = await foldersService.GetRootFolder(cancellationToken);
 
-			var currentFolderFullPath = String.Empty;
+			var currentFolderDisplayFullPath = String.Empty;
 
 			foreach (var currentSubfolderName in discFolderPath)
 			{
-				currentFolderFullPath += $"{pathSeparator}{currentSubfolderName}";
+				currentFolderDisplayFullPath += $"/{currentSubfolderName}";
 
 				var currentSubfolder = currentFolder.Subfolders.SingleOrDefault(sf => String.Equals(sf.Name, currentSubfolderName, StringComparison.Ordinal));
 				if (currentSubfolder == null)
 				{
-					ProgressMessages += $"Creating folder '{currentFolderFullPath}' ...\n";
+					ProgressMessages += $"Creating folder '{currentFolderDisplayFullPath}' ...\n";
 
 					currentSubfolder = new FolderModel
 					{
@@ -292,19 +292,6 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			}
 
 			return currentFolder;
-		}
-
-		private async Task CreateDisc(DiscModel disc, IReadOnlyCollection<string> discFolderPath, CancellationToken cancellationToken)
-		{
-			if (disc.Folder == null)
-			{
-				var discFolder = await CreateFolder(discFolderPath, cancellationToken);
-				discFolder.AddDisc(disc);
-			}
-
-			ProgressMessages += $"Creating disc '{disc.TreeTitle}' ...\n";
-
-			await discService.CreateDisc(disc, cancellationToken);
 		}
 	}
 }

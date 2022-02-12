@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using PandaPlayer.DiscAdder.AddedContent;
 using PandaPlayer.DiscAdder.ViewModels.ViewModelItems;
 
 namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
@@ -9,6 +8,6 @@ namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
 	{
 		ObservableCollection<SongViewItem> Songs { get; }
 
-		void SetSongs(IEnumerable<AddedSong> songs);
+		void Load(IEnumerable<DiscViewItem> discs);
 	}
 }

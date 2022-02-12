@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using PandaPlayer.DiscAdder.AddedContent;
 using PandaPlayer.DiscAdder.ViewModels.ViewModelItems;
 
 namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
@@ -10,10 +9,8 @@ namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
 	{
 		ObservableCollection<DiscImageViewItem> ImageItems { get; }
 
-		IEnumerable<AddedDiscImage> AddedImages { get; }
-
 		ICommand RefreshContentCommand { get; }
 
-		void LoadImages(IEnumerable<AddedDisc> discs);
+		void Load(IEnumerable<DiscViewItem> discs);
 	}
 }

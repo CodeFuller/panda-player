@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -176,17 +175,15 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			}
 			else if (nextPage == editSourceDiscImagesViewModel)
 			{
-				editSourceDiscImagesViewModel.LoadImages(editDiscsDetailsViewModel.AddedDiscs);
+				editSourceDiscImagesViewModel.Load(editDiscsDetailsViewModel.Discs);
 			}
 			else if (nextPage == editSongsDetailsViewModel)
 			{
-				editSongsDetailsViewModel.SetSongs(editDiscsDetailsViewModel.AddedSongs);
+				editSongsDetailsViewModel.Load(editDiscsDetailsViewModel.Discs);
 			}
 			else if (nextPage == addToLibraryViewModel)
 			{
-				var addedSongs = editSongsDetailsViewModel.Songs.Select(s => s.AddedSong).ToList();
-				addToLibraryViewModel.SetSongs(addedSongs);
-				addToLibraryViewModel.SetDiscsImages(editSourceDiscImagesViewModel.AddedImages);
+				addToLibraryViewModel.Load(editSongsDetailsViewModel.Songs, editSourceDiscImagesViewModel.ImageItems);
 			}
 			else if (nextPage == editSourceContentViewModel)
 			{

@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PandaPlayer.DiscAdder.MusicStorage
 {
 	internal class AddedDiscInfo
 	{
-		public short? Year { get; set; }
+		public int? Year { get; set; }
 
 		public string DiscTitle { get; set; }
 
@@ -17,6 +18,7 @@ namespace PandaPlayer.DiscAdder.MusicStorage
 
 		public string SourcePath { get; set; }
 
+		// TODO: Replace collection with custom Path type?
 		public IReadOnlyCollection<string> DestinationFolderPath { get; set; }
 
 		public IReadOnlyCollection<AddedSongInfo> Songs { get; }
@@ -25,7 +27,7 @@ namespace PandaPlayer.DiscAdder.MusicStorage
 
 		public AddedDiscInfo(IEnumerable<AddedSongInfo> songs)
 		{
-			Songs = songs.ToList();
+			Songs = songs?.ToList() ?? throw new ArgumentNullException(nameof(songs));
 		}
 	}
 }

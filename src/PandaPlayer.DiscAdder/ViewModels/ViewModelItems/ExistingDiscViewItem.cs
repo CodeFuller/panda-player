@@ -8,6 +8,8 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 {
 	internal class ExistingDiscViewItem : DiscViewItem
 	{
+		public override DiscModel ExistingDisc { get; }
+
 		public override string DiscTypeTitle => "Existing Disc";
 
 		public override bool WarnAboutDiscType => true;
@@ -16,8 +18,8 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 
 		public override string AlbumTitle
 		{
-			get => Disc.AlbumTitle;
-			set => throw new InvalidOperationException($"Album title could not be changed for '{DiscTitle}' disc");
+			get => AddedDiscInfo.AlbumTitle;
+			set => throw new InvalidOperationException($"Album title could not be changed for disc '{DiscTitle}'");
 		}
 
 		public override bool AlbumTitleIsEditable => false;
@@ -26,10 +28,10 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 
 		public override bool RequiredDataIsFilled => true;
 
-		public ExistingDiscViewItem(DiscModel existingDisc, AddedDiscInfo disc, IEnumerable<ArtistViewItem> availableArtists, IEnumerable<GenreModel> availableGenres)
+		public ExistingDiscViewItem(DiscModel existingDisc, AddedDiscInfo disc, IEnumerable<BasicInputArtistItem> availableArtists, IEnumerable<GenreModel> availableGenres)
 			: base(disc, availableArtists, availableGenres)
 		{
-			Disc = existingDisc;
+			ExistingDisc = existingDisc ?? throw new ArgumentNullException(nameof(existingDisc));
 			Artist = LookupArtist(existingDisc.SoloArtist?.Name);
 			Genre = existingDisc.GetGenre();
 		}

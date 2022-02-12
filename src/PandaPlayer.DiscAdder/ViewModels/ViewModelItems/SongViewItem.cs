@@ -1,93 +1,70 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
 using PandaPlayer.Core.Models;
-using PandaPlayer.DiscAdder.AddedContent;
+using PandaPlayer.DiscAdder.MusicStorage;
 
 namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 {
 	internal class SongViewItem : ViewModelBase
 	{
-		public AddedSong AddedSong { get; }
+		private readonly AddedSongInfo addedSongInfo;
 
-		private SongModel Song => AddedSong.Song;
+		public DiscViewItem DiscItem { get; }
 
-		public string SourceFilePath => AddedSong.SourceFileName;
+		public DiscModel ExistingDisc => DiscItem.ExistingDisc;
+
+		public string DiscSourcePath => DiscItem.SourcePath;
+
+		public string SourceFilePath => addedSongInfo.SourcePath;
+
+		private string artistName;
 
 		public string ArtistName
 		{
-			get => Song.Artist?.Name;
-			set
-			{
-				if (Song.Artist == null)
-				{
-					// TODO: Change property type to ArtistModel so that we don't create new model here?
-					Song.Artist = new ArtistModel
-					{
-						Name = value,
-					};
-
-					RaisePropertyChanged();
-				}
-				else if (Song.Artist.Id == null)
-				{
-					Song.Artist.Name = value;
-					RaisePropertyChanged();
-				}
-				else
-				{
-					// Changing artist name for one song will affect all other songs of this artist (because Artist object is shared).
-					// Moreover, existing Artist object in the database will also be updated.
-					// This is probably not a desired behavior.
-					throw new InvalidOperationException("Name could not be changed for the existing artist");
-				}
-			}
+			get => artistName;
+			set => Set(ref artistName, value);
 		}
 
-		public string AlbumTitle => Song.Disc.AlbumTitle;
+		public string AlbumTitle => DiscItem.AlbumTitle;
 
-		public GenreModel Genre
-		{
-			get => Song.Genre;
-			set
-			{
-				Song.Genre = value;
-				RaisePropertyChanged();
-			}
-		}
+		public GenreModel Genre => DiscItem.Genre;
 
 		public short? Track
 		{
-			get => Song.TrackNumber;
+			get => addedSongInfo.Track;
 			set
 			{
-				Song.TrackNumber = value;
+				addedSongInfo.Track = value;
 				RaisePropertyChanged();
 			}
 		}
 
 		public string Title
 		{
-			get => Song.Title;
+			get => addedSongInfo.Title;
 			set
 			{
-				Song.Title = value;
+				addedSongInfo.Title = value;
 				RaisePropertyChanged();
 			}
 		}
 
 		public string TreeTitle
 		{
-			get => Song.TreeTitle;
+			get => addedSongInfo.TreeTitle;
 			set
 			{
-				Song.TreeTitle = value;
+				addedSongInfo.TreeTitle = value;
 				RaisePropertyChanged();
 			}
 		}
 
-		public SongViewItem(AddedSong addedSong)
+		public SongViewItem(DiscViewItem discItem, AddedSongInfo addedSongInfo)
 		{
-			AddedSong = addedSong;
+			DiscItem = discItem ?? throw new ArgumentNullException(nameof(discItem));
+			this.addedSongInfo = addedSongInfo ?? throw new ArgumentNullException(nameof(addedSongInfo));
+
+			ArtistName = discItem.Artist.ArtistName ?? addedSongInfo.Artist;
 		}
 	}
 }

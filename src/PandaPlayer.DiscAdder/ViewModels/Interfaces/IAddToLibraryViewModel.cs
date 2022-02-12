@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
-using PandaPlayer.DiscAdder.AddedContent;
+using PandaPlayer.DiscAdder.ViewModels.ViewModelItems;
 
 namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
 {
@@ -18,8 +18,6 @@ namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
 
 		public ICommand AddToLibraryCommand { get; }
 
-		void SetSongs(IEnumerable<AddedSong> songs);
-
-		void SetDiscsImages(IEnumerable<AddedDiscImage> images);
+		void Load(IEnumerable<SongViewItem> songs, IEnumerable<DiscImageViewItem> images);
 	}
 }

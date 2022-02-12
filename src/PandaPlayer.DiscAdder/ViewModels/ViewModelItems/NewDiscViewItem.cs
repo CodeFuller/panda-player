@@ -9,6 +9,8 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 {
 	internal class NewDiscViewItem : DiscViewItem
 	{
+		public override DiscModel ExistingDisc => null;
+
 		public override string DiscTypeTitle => "New Disc";
 
 		public override bool WarnAboutDiscType => false;
@@ -17,10 +19,10 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 
 		public override string AlbumTitle
 		{
-			get => Disc.AlbumTitle;
+			get => AddedDiscInfo.AlbumTitle;
 			set
 			{
-				Disc.AlbumTitle = value;
+				AddedDiscInfo.AlbumTitle = value;
 				RaisePropertyChanged();
 				RaisePropertyChanged(nameof(WarnAboutAlbumTitle));
 			}
@@ -30,10 +32,10 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 
 		public override int? Year
 		{
-			get => Disc.Year;
+			get => AddedDiscInfo.Year;
 			set
 			{
-				Disc.Year = value;
+				AddedDiscInfo.Year = value;
 				RaisePropertyChanged();
 				RaisePropertyChanged(nameof(WarnAboutYear));
 			}
@@ -43,7 +45,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 
 		public override bool RequiredDataIsFilled => !GenreIsNotFilled;
 
-		public NewDiscViewItem(AddedDiscInfo disc, bool folderExists, IEnumerable<ArtistViewItem> availableArtists, IEnumerable<GenreModel> availableGenres, GenreModel genre)
+		public NewDiscViewItem(AddedDiscInfo disc, bool folderExists, IEnumerable<BasicInputArtistItem> availableArtists, IEnumerable<GenreModel> availableGenres, GenreModel genre)
 			: base(disc, availableArtists, availableGenres)
 		{
 			if (String.IsNullOrWhiteSpace(disc.DiscTitle))
@@ -55,19 +57,11 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 
 			Artist = LookupNewDiscArtist(disc);
 			Genre = LookupGenre(AvailableGenres, genre);
-
-			Disc = new DiscModel
-			{
-				Year = disc.Year,
-				Title = disc.DiscTitle,
-				TreeTitle = disc.TreeTitle,
-				AlbumTitle = disc.AlbumTitle,
-			};
 		}
 
-		private ArtistViewItem LookupNewDiscArtist(AddedDiscInfo disc)
+		private BasicInputArtistItem LookupNewDiscArtist(AddedDiscInfo disc)
 		{
-			return disc.HasVariousArtists ? AvailableArtists.OfType<VariousArtistViewItem>().Single() : LookupArtist(disc.Artist);
+			return disc.HasVariousArtists ? AvailableArtists.OfType<VariousInputArtistItem>().Single() : LookupArtist(disc.Artist);
 		}
 
 		private static GenreModel LookupGenre(IEnumerable<GenreModel> availableGenres, GenreModel genreModel)
