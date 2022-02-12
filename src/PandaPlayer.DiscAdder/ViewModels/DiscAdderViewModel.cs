@@ -12,6 +12,21 @@ namespace PandaPlayer.DiscAdder.ViewModels
 {
 	internal class DiscAdderViewModel : ViewModelBase, IDiscAdderViewModel
 	{
+		private class NextPageInfo
+		{
+			private readonly string title;
+
+			public string Title
+			{
+				get => title ?? NextPage.Name;
+				init => title = value;
+			}
+
+			public IPageViewModel NextPage { get; init; }
+
+			public Func<CancellationToken, Task> NextPageAction { get; init; }
+		}
+
 		private readonly IEditSourceContentViewModel editSourceContentViewModel;
 		private readonly IEditDiscsDetailsViewModel editDiscsDetailsViewModel;
 		private readonly IEditSourceDiscImagesViewModel editSourceDiscImagesViewModel;
@@ -36,24 +51,15 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			}
 		}
 
+		public event EventHandler OnRequestClose;
+
 		public bool CanSwitchToPrevPage => PrevPage != null;
 
-		public bool CanSwitchToNextPage => NextPage != null && CurrentPage.DataIsReady;
+		public bool CanSwitchToNextPage => CurrentPage.DataIsReady;
 
 		public string PrevPageName => PrevPage?.Name ?? "N/A";
 
-		public string NextPageName
-		{
-			get
-			{
-				if (NextPage == editSourceContentViewModel)
-				{
-					return "Add More Discs";
-				}
-
-				return NextPage?.Name ?? "N/A";
-			}
-		}
+		public string NextPageName => NextPage.Title;
 
 		private IPageViewModel currentPage;
 
@@ -72,7 +78,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			}
 		}
 
-		protected IPageViewModel PrevPage
+		private IPageViewModel PrevPage
 		{
 			get
 			{
@@ -95,36 +101,76 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			}
 		}
 
-		protected IPageViewModel NextPage
+		private NextPageInfo NextPage
 		{
 			get
 			{
 				if (CurrentPage == editSourceContentViewModel)
 				{
-					return editDiscsDetailsViewModel;
+					return new NextPageInfo
+					{
+						NextPage = editDiscsDetailsViewModel,
+						NextPageAction = cancellationToken => editDiscsDetailsViewModel.SetDiscs(editSourceContentViewModel.AddedDiscs, cancellationToken),
+					};
 				}
 
 				if (CurrentPage == editDiscsDetailsViewModel)
 				{
-					return editSourceDiscImagesViewModel;
+					return new NextPageInfo
+					{
+						NextPage = editSourceDiscImagesViewModel,
+						NextPageAction = _ =>
+						{
+							editSourceDiscImagesViewModel.Load(editDiscsDetailsViewModel.Discs);
+							return Task.CompletedTask;
+						},
+					};
 				}
 
 				if (CurrentPage == editSourceDiscImagesViewModel)
 				{
-					return editSongsDetailsViewModel;
+					return new NextPageInfo
+					{
+						NextPage = editSongsDetailsViewModel,
+						NextPageAction = _ =>
+						{
+							editSongsDetailsViewModel.Load(editDiscsDetailsViewModel.Discs);
+							return Task.CompletedTask;
+						},
+					};
 				}
 
 				if (CurrentPage == editSongsDetailsViewModel)
 				{
-					return addToLibraryViewModel;
+					return new NextPageInfo
+					{
+						NextPage = addToLibraryViewModel,
+						NextPageAction = _ =>
+						{
+							addToLibraryViewModel.Load(editSongsDetailsViewModel.Songs, editSourceDiscImagesViewModel.ImageItems);
+							return Task.CompletedTask;
+						},
+					};
 				}
 
 				if (CurrentPage == addToLibraryViewModel)
 				{
-					return editSourceContentViewModel;
+					return new NextPageInfo
+					{
+						Title = "Close",
+						NextPage = editSourceContentViewModel,
+						NextPageAction = _ =>
+						{
+							OnRequestClose?.Invoke(this, EventArgs.Empty);
+
+							IsLoaded = false;
+
+							return Task.CompletedTask;
+						},
+					};
 				}
 
-				return null;
+				throw new InvalidOperationException("The type of current page is unknown");
 			}
 		}
 
@@ -164,33 +210,9 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		{
 			var nextPage = NextPage;
 
-			if (nextPage == null)
-			{
-				throw new InvalidOperationException($"Could not switch forward from the page {CurrentPage.Name}");
-			}
+			await nextPage.NextPageAction(cancellationToken);
 
-			if (nextPage == editDiscsDetailsViewModel)
-			{
-				await editDiscsDetailsViewModel.SetDiscs(editSourceContentViewModel.AddedDiscs, cancellationToken);
-			}
-			else if (nextPage == editSourceDiscImagesViewModel)
-			{
-				editSourceDiscImagesViewModel.Load(editDiscsDetailsViewModel.Discs);
-			}
-			else if (nextPage == editSongsDetailsViewModel)
-			{
-				editSongsDetailsViewModel.Load(editDiscsDetailsViewModel.Discs);
-			}
-			else if (nextPage == addToLibraryViewModel)
-			{
-				addToLibraryViewModel.Load(editSongsDetailsViewModel.Songs, editSourceDiscImagesViewModel.ImageItems);
-			}
-			else if (nextPage == editSourceContentViewModel)
-			{
-				await Load(cancellationToken);
-			}
-
-			CurrentPage = nextPage;
+			CurrentPage = nextPage.NextPage;
 		}
 
 		private void SwitchToPrevPage()

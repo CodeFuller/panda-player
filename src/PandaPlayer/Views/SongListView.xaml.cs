@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using CodeFuller.Library.Wpf.Extensions;
 using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.Views.Extensions;
 

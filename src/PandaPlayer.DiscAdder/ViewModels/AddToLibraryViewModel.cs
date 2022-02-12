@@ -105,7 +105,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		{
 			SongsForAdding = songs.ToList();
 			DiscImagesForAdding = images.ToList();
-			deleteSourceContent = false;
+			DeleteSourceContent = true;
 		}
 
 		private async Task AddContentToLibrary(CancellationToken cancellationToken)

@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using CodeFuller.Library.Wpf.Extensions;
 using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.Views.ClipboardAccess;
 

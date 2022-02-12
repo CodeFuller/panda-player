@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -6,6 +7,8 @@ namespace PandaPlayer.DiscAdder.ViewModels.Interfaces
 {
 	public interface IDiscAdderViewModel
 	{
+		event EventHandler OnRequestClose;
+
 		bool CanSwitchToPrevPage { get; }
 
 		bool CanSwitchToNextPage { get; }
