@@ -10,7 +10,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 	{
 		public ObservableCollection<ActualDiscTreeItem> Discs { get; } = new();
 
-		public bool ContentIsIncorrect => Discs.Any(x => x.ContentIsIncorrect);
+		public bool ContentIsIncorrect => !Discs.Any() || Discs.Any(x => x.ContentIsIncorrect);
 
 		public void SetContent(IEnumerable<ActualDiscContent> discs)
 		{
