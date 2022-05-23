@@ -6,6 +6,7 @@
 
   <PropertyGroup>
     <TargetFramework>$(WpfTargetFramework)</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>

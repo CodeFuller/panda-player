@@ -1,0 +1,117 @@
+trigger: none
+
+pool:
+  name: Azure Pipelines
+  vmImage: windows-2022
+
+variables:
+  - name: ReleaseBranchName
+    value: master
+    readonly: true
+  - name: TargetFramework
+    value: net6.0-windows
+    readonly: true
+  - name: PublishRuntimeIdentifier
+    value: win-x64
+    readonly: true
+
+stages:
+- stage: BuildStage
+  displayName: Build
+  jobs:
+  - job: BuildJob
+    displayName: Build
+    workspace:
+      clean: all
+    variables:
+      disable.coverage.autogenerate: true
+    steps:
+    - powershell: |
+        $appVersion = ([xml](Get-Content 'src/PandaPlayer/PandaPlayer.csproj')).Project.PropertyGroup.Version
+        if ($appVersion -eq $null) {
+            throw 'The application version is missing in cpsroj file'
+        }
+
+        if ('$(Build.SourceBranchName)' -ine '$(ReleaseBranchName)') {
+            $buildVersionSuffix = '-preview'
+        }
+
+        $buildVersion = "$appVersion.$(Build.BuildId)$buildVersionSuffix"
+
+        Write-Host "##vso[build.updatebuildnumber]$buildVersion"
+        Write-Host "##vso[task.setvariable variable=BuildVersion]$buildVersion"
+      displayName: Define Build Version
+
+    - task: DotNetCoreCLI@2
+      displayName: Restore NuGet Packages
+      inputs:
+        command: restore
+        projects: PandaPlayer.sln
+        feedsToUse: select
+        verbosityRestore: Minimal
+
+    - task: DotNetCoreCLI@2
+      displayName: Build Solution
+      inputs:
+        command: build
+        projects: PandaPlayer.sln
+        arguments: --no-restore --configuration Release
+
+    - task: DotNetCoreCLI@2
+      displayName: Run Tests
+      inputs:
+        command: test
+        projects: PandaPlayer.sln
+        arguments: --no-build --configuration Release --logger "trx" --collect:"XPlat Code Coverage"
+
+    # TODO: Remove
+    - powershell: |
+        Get-ChildItem $(Build.ArtifactStagingDirectory) -Recurse
+      displayName: List Artifact Staging Directory
+
+    # TODO: Remove
+    - powershell: |
+        Get-ChildItem $(Agent.TempDirectory) -Recurse
+      displayName: List Temp Directory
+
+    - task: reportgenerator@5
+      displayName: Merge Code Coverage Reports
+      inputs:
+        reports: $(Agent.TempDirectory)/**/coverage.cobertura.xml
+        sourcedirs: $(Build.SourcesDirectory)
+        targetdir: $(Build.ArtifactStagingDirectory)/TestResults/merged
+        reporttypes: HtmlInline_AzurePipelines;Cobertura
+        verbosity: Verbose
+
+    - task: PublishCodeCoverageResults@1
+      displayName: Publish Code Coverage
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: $(Build.ArtifactStagingDirectory)/TestResults/merged/Cobertura.xml
+        reportDirectory: $(Build.ArtifactStagingDirectory)/TestResults/merged
+        failIfCoverageEmpty: true
+
+    - task: DotNetCoreCLI@2
+      displayName: Publish PandaPlayer
+      inputs:
+        command: publish
+        projects: src/PandaPlayer/PandaPlayer.csproj
+        arguments: --no-build --configuration Release --self-contained
+        publishWebProjects: false
+        zipAfterPublish: false
+        modifyOutputPath: false
+
+    - task: ArchiveFiles@2
+      displayName: Archive PandaPlayer
+      inputs:
+        rootFolderOrFile: src/PandaPlayer/bin/Release/$(TargetFramework)/$(PublishRuntimeIdentifier)/publish
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/PandaPlayer.zip
+        replaceExistingArchive: true
+
+    - task: PublishPipelineArtifact@1
+      displayName: Publish PandaPlayer Artifacts
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)/PandaPlayer.zip
+        artifact: PandaPlayer

@@ -8,6 +8,7 @@
     <Version>4.1.0</Version>
     <OutputType>WinExe</OutputType>
     <TargetFramework>$(WpfTargetFramework)</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Views\Icons\PandaPlayer.ico</ApplicationIcon>
   </PropertyGroup>
