@@ -12,7 +12,7 @@ INSERT INTO [Folders] ([Id], [ParentFolder_Id], [AdviseGroup_Id], [Name], [Delet
 (2, 1, NULL, 'Belarusian', NULL),
 (3, 2, 1, 'Neuro Dubel', NULL),
 (4, 3, NULL, 'Empty Folder', NULL),
-(5, 3, NULL, 'Deleted Folder', '2021-06-30 18:08:10');
+(5, 3, NULL, 'Deleted Folder', '2021-06-30 18:08:10+03:00');
 
 INSERT INTO [Discs] ([Id], [Folder_Id], [AdviseGroup_Id], [AdviseSet_Id], [AdviseSetOrder], [Year], [Title], [TreeTitle], [AlbumTitle]) VALUES
 (1, 3, 2, 1, 1, 2010, 'Афтары правды (CD 1)', '2010 - Афтары правды (CD 1)', 'Афтары правды'),
