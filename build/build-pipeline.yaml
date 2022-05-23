@@ -64,16 +64,6 @@ stages:
         projects: PandaPlayer.sln
         arguments: --no-build --configuration Release --logger "trx" --collect:"XPlat Code Coverage"
 
-    # TODO: Remove
-    - powershell: |
-        Get-ChildItem $(Build.ArtifactStagingDirectory) -Recurse
-      displayName: List Artifact Staging Directory
-
-    # TODO: Remove
-    - powershell: |
-        Get-ChildItem $(Agent.TempDirectory) -Recurse
-      displayName: List Temp Directory
-
     - task: reportgenerator@5
       displayName: Merge Code Coverage Reports
       inputs:
