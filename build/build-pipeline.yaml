@@ -62,7 +62,7 @@ stages:
       inputs:
         command: test
         projects: PandaPlayer.sln
-        arguments: --no-build --configuration Release --logger "trx" --collect:"XPlat Code Coverage"
+        arguments: --no-build --configuration Release --collect:"XPlat Code Coverage"
 
     - task: reportgenerator@5
       displayName: Merge Code Coverage Reports
