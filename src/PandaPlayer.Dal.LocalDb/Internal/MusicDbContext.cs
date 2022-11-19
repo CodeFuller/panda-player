@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PandaPlayer.Dal.LocalDb.Entities;
 
 namespace PandaPlayer.Dal.LocalDb.Internal

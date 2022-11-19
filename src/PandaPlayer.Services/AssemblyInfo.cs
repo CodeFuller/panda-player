@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("PandaPlayer.Services.IntegrationTests")]
 [assembly: InternalsVisibleTo("PandaPlayer.Services.UnitTests")]

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Force.Crc32;
 using PandaPlayer.Core.Facades;
 using PandaPlayer.Dal.LocalDb.Interfaces;

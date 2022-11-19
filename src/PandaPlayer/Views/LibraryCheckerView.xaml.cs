@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Input;
 using PandaPlayer.ViewModels;
 using PandaPlayer.Views.Extensions;

@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.DiscAdder.Interfaces
+namespace PandaPlayer.DiscAdder.Interfaces
 {
 	internal interface ISourceFileTypeResolver
 	{

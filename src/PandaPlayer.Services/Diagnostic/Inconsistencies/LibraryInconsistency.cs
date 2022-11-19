@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.Services.Diagnostic.Inconsistencies
+namespace PandaPlayer.Services.Diagnostic.Inconsistencies
 {
 	public abstract class LibraryInconsistency
 	{

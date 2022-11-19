@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.Adviser
+namespace PandaPlayer.Adviser
 {
 	internal enum AdvisedPlaylistType
 	{

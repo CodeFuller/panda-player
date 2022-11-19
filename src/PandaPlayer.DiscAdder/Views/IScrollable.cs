@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.DiscAdder.Views
+namespace PandaPlayer.DiscAdder.Views
 {
 	internal interface IScrollable
 	{

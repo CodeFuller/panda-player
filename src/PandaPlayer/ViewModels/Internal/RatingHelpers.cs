@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.ViewModels.Internal

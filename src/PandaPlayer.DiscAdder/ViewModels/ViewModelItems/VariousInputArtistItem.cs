@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
+namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 {
 	internal class VariousInputArtistItem : BasicInputArtistItem
 	{

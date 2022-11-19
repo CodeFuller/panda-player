@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.DiscAdder
+namespace PandaPlayer.DiscAdder
 {
 	public class DiscAdderSettings
 	{

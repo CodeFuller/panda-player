@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.Shared.Images
+namespace PandaPlayer.Shared.Images
 {
 	internal interface IImageInfoProvider
 	{

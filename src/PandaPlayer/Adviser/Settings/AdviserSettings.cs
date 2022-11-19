@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.Adviser.Settings
+namespace PandaPlayer.Adviser.Settings
 {
 	internal class AdviserSettings
 	{

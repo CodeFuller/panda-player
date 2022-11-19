@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.ViewModels.Interfaces
+namespace PandaPlayer.ViewModels.Interfaces
 {
 	public interface IDiscSongListViewModel : ISongListViewModel
 	{

@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using MaterialDesignThemes.Wpf;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PandaPlayer.ViewModels.LibraryExplorerItems;

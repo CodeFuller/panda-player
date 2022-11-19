@@ -1,4 +1,4 @@
-﻿using PandaPlayer.DiscAdder.ViewModels.Interfaces;
+using PandaPlayer.DiscAdder.ViewModels.Interfaces;
 
 namespace PandaPlayer.DiscAdder.Interfaces
 {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using CodeFuller.Library.Wpf;
 using PandaPlayer.ViewModels;
 

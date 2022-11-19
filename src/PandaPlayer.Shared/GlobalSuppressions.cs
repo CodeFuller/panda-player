@@ -1,1 +1,1 @@
-﻿[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.CodeAnalysis.FxCopAnalyzers", "CA1716:Identifiers should not match keywords", Justification = "We do not plan to consume namespace in other languages")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.CodeAnalysis.FxCopAnalyzers", "CA1716:Identifiers should not match keywords", Justification = "We do not plan to consume namespace in other languages")]

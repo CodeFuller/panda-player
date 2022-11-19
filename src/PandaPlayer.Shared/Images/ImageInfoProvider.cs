@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using PandaPlayer.Core.Facades;
 
 namespace PandaPlayer.Shared.Images

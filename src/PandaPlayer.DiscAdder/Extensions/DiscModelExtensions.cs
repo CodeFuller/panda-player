@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using PandaPlayer.Core.Comparers;
 using PandaPlayer.Core.Extensions;
 using PandaPlayer.Core.Models;

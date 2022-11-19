@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Dal.LocalDb.Entities;
 using DiscImageType = PandaPlayer.Core.Models.DiscImageType;

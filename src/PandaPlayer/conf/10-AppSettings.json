@@ -1,34 +1,34 @@
-﻿{
-	"connectionStrings": {
-		"pandaPlayerDb": "Data Source=d:\\PandaPlayer\\PandaPlayer.db;Foreign Keys=True;"
-	},
+{
+  "connectionStrings": {
+    "pandaPlayerDb": "Data Source=d:\\PandaPlayer\\PandaPlayer.db;Foreign Keys=True;"
+  },
 
-	"localDb": {
-		"dataStorage": {
-			"root": "d:\\music",
-			"excludePaths": [
-			] 
-		}
-	},
+  "localDb": {
+    "dataStorage": {
+      "root": "d:\\music",
+      "excludePaths": [
+      ]
+    }
+  },
 
-	"discCoverImageLookupPages": [
-		"https://www.google.com/search?q=\"{DiscArtist}\" \"{DiscTitle}\"&dcr=0&tbm=isch&source=lnt&tbs=isz:lt,islt:qsvga&sa=X&ved=0ahUKEwiW54Tn7r3WAhUkJJoKHUCwA9IQpwUIHg&biw=1920&bih=982&dpr=1",
-		"https://www.discogs.com/search/?q={DiscArtist}+{DiscTitle}&type=release"
-	],
+  "discCoverImageLookupPages": [
+    "https://www.google.com/search?q=\"{DiscArtist}\" \"{DiscTitle}\"&dcr=0&tbm=isch&source=lnt&tbs=isz:lt,islt:qsvga&sa=X&ved=0ahUKEwiW54Tn7r3WAhUkJJoKHUCwA9IQpwUIHg&biw=1920&bih=982&dpr=1",
+    "https://www.discogs.com/search/?q={DiscArtist}+{DiscTitle}&type=release"
+  ],
 
-	"lastFmClient": {
-		"apiBaseUri": "https://ws.audioscrobbler.com/2.0/",
-		"apiKey": "f2831f831bb20050711a078ea7e4f372",
-		"sharedSecret": "<Fill LastFM Shared Secret here>",
-		"sessionKey": "<Fill LastFM Session Key here>"
-	},
+  "lastFmClient": {
+    "apiBaseUri": "https://ws.audioscrobbler.com/2.0/",
+    "apiKey": "f2831f831bb20050711a078ea7e4f372",
+    "sharedSecret": "<Fill LastFM Shared Secret here>",
+    "sessionKey": "<Fill LastFM Session Key here>"
+  },
 
-	"discAdder": {
-		"workshopStoragePath": "d:\\music.workshop\\Gateway"
-	},
+  "discAdder": {
+    "workshopStoragePath": "d:\\music.workshop\\Gateway"
+  },
 
-	"logging": {
-		"logLevel": "Information",
-		"databaseOperationsLogLevel": "Warning"
-	} 
+  "logging": {
+    "logLevel": "Information",
+    "databaseOperationsLogLevel": "Warning"
+  }
 }

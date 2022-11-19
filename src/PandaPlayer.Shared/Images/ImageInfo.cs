@@ -1,4 +1,4 @@
-﻿using PandaPlayer.Shared.Extensions;
+using PandaPlayer.Shared.Extensions;
 
 namespace PandaPlayer.Shared.Images
 {

@@ -1,4 +1,4 @@
-﻿using System.Windows.Controls;
+using System.Windows.Controls;
 using System.Windows.Input;
 using CodeFuller.Library.Wpf.Extensions;
 using PandaPlayer.ViewModels.Interfaces;

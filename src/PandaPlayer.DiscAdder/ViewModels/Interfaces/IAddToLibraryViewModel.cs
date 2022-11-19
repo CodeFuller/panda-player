@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Windows.Input;
 using PandaPlayer.DiscAdder.ViewModels.ViewModelItems;
 

@@ -1,4 +1,4 @@
-﻿using PandaPlayer.Core.Models;
+using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.Dal.LocalDb.Inconsistencies.TagsInconsistencies
 {

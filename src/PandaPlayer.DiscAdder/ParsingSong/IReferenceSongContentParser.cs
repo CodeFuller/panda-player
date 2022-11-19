@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.DiscAdder.ParsingSong
+namespace PandaPlayer.DiscAdder.ParsingSong
 {
 	internal interface IReferenceSongContentParser
 	{

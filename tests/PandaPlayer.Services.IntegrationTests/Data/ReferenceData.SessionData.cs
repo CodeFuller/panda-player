@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.Services.IntegrationTests.Data
+namespace PandaPlayer.Services.IntegrationTests.Data
 {
 	public partial class ReferenceData
 	{

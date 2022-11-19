@@ -1,4 +1,4 @@
-﻿using PandaPlayer.Adviser.Internal;
+using PandaPlayer.Adviser.Internal;
 using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.Adviser.Extensions

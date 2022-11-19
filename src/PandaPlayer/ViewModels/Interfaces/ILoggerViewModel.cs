@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using PandaPlayer.ViewModels.Logging;
 
 namespace PandaPlayer.ViewModels.Interfaces

@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer
+namespace PandaPlayer
 {
 	public interface IWebBrowser
 	{

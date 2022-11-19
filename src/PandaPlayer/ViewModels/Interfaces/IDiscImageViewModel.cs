@@ -1,4 +1,4 @@
-﻿using System.Windows.Input;
+using System.Windows.Input;
 using PandaPlayer.ViewModels.DiscImages;
 
 namespace PandaPlayer.ViewModels.Interfaces

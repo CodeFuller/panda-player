@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.Services.Interfaces
+namespace PandaPlayer.Services.Interfaces
 {
 	public interface IDiscTitleToAlbumMapper
 	{

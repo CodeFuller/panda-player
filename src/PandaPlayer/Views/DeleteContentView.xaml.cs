@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Windows;
 using CodeFuller.Library.Wpf.Extensions;
 using PandaPlayer.ViewModels.Interfaces;

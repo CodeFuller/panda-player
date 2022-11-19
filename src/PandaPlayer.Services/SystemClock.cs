@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using PandaPlayer.Services.Interfaces;
 
 namespace PandaPlayer.Services

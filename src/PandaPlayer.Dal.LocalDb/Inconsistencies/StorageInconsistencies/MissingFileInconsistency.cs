@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using PandaPlayer.Services.Diagnostic.Inconsistencies;
 
 namespace PandaPlayer.Dal.LocalDb.Inconsistencies.StorageInconsistencies

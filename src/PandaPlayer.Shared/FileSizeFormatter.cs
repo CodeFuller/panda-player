@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.Shared
+namespace PandaPlayer.Shared
 {
 	public static class FileSizeFormatter
 	{

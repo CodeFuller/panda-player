@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.Services.Tagging
+namespace PandaPlayer.Services.Tagging
 {
 	public enum SongTagType
 	{

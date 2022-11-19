@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.Dal.LocalDb.Interfaces
+namespace PandaPlayer.Dal.LocalDb.Interfaces
 {
 	internal interface IChecksumCalculator
 	{

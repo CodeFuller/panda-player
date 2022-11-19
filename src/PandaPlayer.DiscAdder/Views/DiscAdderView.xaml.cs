@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using CodeFuller.Library.Wpf.Extensions;
 using PandaPlayer.DiscAdder.ViewModels.Interfaces;

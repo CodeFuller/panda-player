@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using PandaPlayer.Core.Models;
 
 namespace PandaPlayer.ViewModels.AdviseSetsEditor

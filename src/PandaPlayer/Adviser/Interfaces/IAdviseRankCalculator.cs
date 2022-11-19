@@ -1,4 +1,4 @@
-﻿using PandaPlayer.Adviser.Grouping;
+using PandaPlayer.Adviser.Grouping;
 using PandaPlayer.Adviser.Internal;
 using PandaPlayer.Core.Models;
 

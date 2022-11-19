@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using PandaPlayer.Adviser.Grouping;
 using PandaPlayer.Adviser.Interfaces;

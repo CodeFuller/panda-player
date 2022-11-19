@@ -1,4 +1,4 @@
-﻿-- Read tests\PandaPlayer.Services.IntegrationTests\README.md
+-- Read tests\PandaPlayer.Services.IntegrationTests\README.md
 
 INSERT INTO [AdviseGroups] ([Id], [Name], [IsFavorite]) VALUES
 (1, 'Folder Advise Group', 0),

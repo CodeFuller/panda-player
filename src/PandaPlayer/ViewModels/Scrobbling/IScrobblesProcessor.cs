@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 using PandaPlayer.LastFM.Interfaces;
 using PandaPlayer.LastFM.Objects;

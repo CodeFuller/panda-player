@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.DiscAdder.MusicStorage
+namespace PandaPlayer.DiscAdder.MusicStorage
 {
 	internal class AddedSongInfo
 	{

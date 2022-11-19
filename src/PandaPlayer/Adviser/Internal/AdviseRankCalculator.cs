@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using PandaPlayer.Adviser.Extensions;
 using PandaPlayer.Adviser.Grouping;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using PandaPlayer.Services.Diagnostic.Checkers;
 using PandaPlayer.Services.Diagnostic.Interfaces;

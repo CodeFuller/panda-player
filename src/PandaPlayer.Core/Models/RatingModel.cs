@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.Core.Models
+namespace PandaPlayer.Core.Models
 {
 	public enum RatingModel
 	{

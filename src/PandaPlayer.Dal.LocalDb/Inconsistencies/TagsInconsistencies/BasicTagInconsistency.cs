@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Diagnostic.Inconsistencies;
 

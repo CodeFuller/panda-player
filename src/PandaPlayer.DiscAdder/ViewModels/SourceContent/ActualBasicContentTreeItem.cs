@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 
 namespace PandaPlayer.DiscAdder.ViewModels.SourceContent

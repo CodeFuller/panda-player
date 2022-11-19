@@ -1,4 +1,4 @@
-﻿using PandaPlayer.Core.Models;
+using PandaPlayer.Core.Models;
 using PandaPlayer.Services.IntegrationTests.Extensions;
 
 namespace PandaPlayer.Services.IntegrationTests.Data

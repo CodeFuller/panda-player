@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.Dal.LocalDb.Entities
+namespace PandaPlayer.Dal.LocalDb.Entities
 {
 	internal class ArtistEntity
 	{

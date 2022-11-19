@@ -1,4 +1,4 @@
-﻿using PandaPlayer.Core.Models;
+using PandaPlayer.Core.Models;
 using PandaPlayer.Dal.LocalDb.Interfaces;
 
 namespace PandaPlayer.Dal.LocalDb.Internal

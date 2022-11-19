@@ -1,4 +1,4 @@
-﻿namespace PandaPlayer.Services.Internal
+namespace PandaPlayer.Services.Internal
 {
 	internal static class DiscLibraryHolder
 	{
