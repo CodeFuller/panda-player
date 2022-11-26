@@ -20,4 +20,8 @@
     <ProjectReference Include="..\PandaPlayer.Shared\PandaPlayer.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
 </Project>

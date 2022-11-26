@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Linq;
 using PandaPlayer.DiscAdder.Extensions;
 using PandaPlayer.DiscAdder.Interfaces;
@@ -66,8 +65,10 @@ namespace PandaPlayer.DiscAdder.Internal
 			}
 			else
 			{
-				var matchesTitleWithTrack = actualSong.FileName == Path.ChangeExtension(referenceSong.ExpectedTitleWithTrackNumber, "mp3");
-				var matchesTitleWithoutTrack = actualSong.FileName == Path.ChangeExtension(referenceSong.ExpectedTitle, "mp3");
+				// Do not use Path.ChangeExtension() for setting extension.
+				// This approach will fail for songs with '.' in title, e.g. "Guilty All The Same (feat. Rakim)"
+				var matchesTitleWithTrack = actualSong.FileName == $"{referenceSong.ExpectedTitleWithTrackNumber}.mp3";
+				var matchesTitleWithoutTrack = actualSong.FileName == $"{referenceSong.ExpectedTitle}.mp3";
 				actualSong.ContentIsIncorrect = referenceSong.ContentIsIncorrect = !(matchesTitleWithTrack || matchesTitleWithoutTrack);
 			}
 		}
