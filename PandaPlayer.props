@@ -2,6 +2,8 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <WpfTargetFramework>net6.0-windows</WpfTargetFramework>
+    <!-- We specify runtime identifier in project file, because dotnet build does not support runtime switch for solution (we build whole solution from build pipeline). -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
