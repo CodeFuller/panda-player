@@ -6,10 +6,25 @@ namespace PandaPlayer.DiscAdder.ParsingSong
 {
 	internal class ReferenceSongContentParser : IReferenceSongContentParser
 	{
-		// It is important to reuse created instances of SongTitlePattern (with compiled inner exception).
+		// It is important to reuse created instances of SongTitlePattern (with compiled inner regular expression).
 		// Otherwise performance will degrade.
 		internal static IEnumerable<SongTitlePattern> TitlePatterns { get; } = new[]
 		{
+			new SongTitlePattern
+			{
+				// This pattern is used for polish discs, were titles in latin should not be capitalized.
+				Description = "Verbatim title",
+				Source = String.Empty,
+				Pattern = @"^@""(.+)""$",
+				IsVerbatimPattern = true,
+				TestCases = new SongParsingTestCase[]
+				{
+					new("@\"Pila tango\"", "Pila tango"),
+					new("\"Pila Tango\"", "Pila Tango"),
+					new("Pila Tango", "Pila Tango"),
+				},
+			},
+
 			new SongTitlePattern
 			{
 				Description = "Wikipedia: track, title, payload, length",

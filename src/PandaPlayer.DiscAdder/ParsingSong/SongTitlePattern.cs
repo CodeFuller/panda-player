@@ -25,12 +25,25 @@ namespace PandaPlayer.DiscAdder.ParsingSong
 
 		public IReadOnlyCollection<SongParsingTestCase> TestCases { get; init; }
 
+		public bool IsVerbatimPattern { get; init; }
+
 		public SongTitleMatch Match(string rawTitle, Func<string, string> parsePayload)
 		{
 			var match = regex.Match(rawTitle);
 			if (match.Success)
 			{
 				var matchedTitle = match.Groups[1].Value;
+
+				if (IsVerbatimPattern)
+				{
+					if (match.Groups.Count > 2)
+					{
+						throw new InvalidOperationException("Verbatim pattern must have single capture");
+					}
+
+					return SongTitleMatch.VerbatimMatch(matchedTitle);
+				}
+
 				return match.Groups.Count > 2 && !String.IsNullOrEmpty(match.Groups[2].Value)
 					? new SongTitleMatch(matchedTitle, parsePayload(match.Groups[2].Value))
 					: new SongTitleMatch(matchedTitle);

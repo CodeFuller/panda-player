@@ -8,13 +8,12 @@ namespace PandaPlayer.DiscAdder.ParsingSong
 {
 	internal class SongTitleMatch
 	{
-		public bool Success { get; }
+		public bool Success { get; private init; }
 
-		public string SongTitle { get; }
+		public string SongTitle { get; private init; }
 
 		private SongTitleMatch()
 		{
-			Success = false;
 		}
 
 		public SongTitleMatch(string rawTitle, string payload)
@@ -32,7 +31,19 @@ namespace PandaPlayer.DiscAdder.ParsingSong
 		{
 		}
 
-		public static SongTitleMatch FailedMatch { get; } = new();
+		public static SongTitleMatch VerbatimMatch(string title)
+		{
+			return new SongTitleMatch
+			{
+				Success = true,
+				SongTitle = title,
+			};
+		}
+
+		public static SongTitleMatch FailedMatch { get; } = new()
+		{
+			Success = false,
+		};
 
 		private static string AdjustTitle(string title)
 		{
