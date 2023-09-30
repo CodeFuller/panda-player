@@ -4,7 +4,7 @@ using PandaPlayer.Core.Facades;
 
 namespace PandaPlayer.Shared.Images
 {
-	internal class ImageFile : ViewModelBase, IImageFile
+	internal sealed class ImageFile : ViewModelBase, IImageFile
 	{
 		private readonly IDiscImageValidator discImageValidator;
 		private readonly IImageInfoProvider imageInfoProvider;

@@ -3,7 +3,7 @@ using PandaPlayer.Core.Facades;
 
 namespace PandaPlayer.Shared.Images
 {
-	internal class ImageInfoProvider : IImageInfoProvider
+	internal sealed class ImageInfoProvider : IImageInfoProvider
 	{
 		private readonly IImageFacade imageFacade;
 		private readonly IFileSystemFacade fileSystemFacade;

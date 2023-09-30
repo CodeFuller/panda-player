@@ -6,7 +6,7 @@ using PandaPlayer.Shared.Extensions;
 
 namespace PandaPlayer.Shared.Images
 {
-	internal class DiscImageValidator : IDiscImageValidator
+	internal sealed class DiscImageValidator : IDiscImageValidator
 	{
 		private const int MinWidthAndHeight = 300;
 
@@ -14,7 +14,7 @@ namespace PandaPlayer.Shared.Images
 
 		private const long MaxFileSize = 10 * 1024 * 1024;
 
-		private class SupportedImageFormat
+		private sealed class SupportedImageFormat
 		{
 			public ImageFormatType ImageFormat { get; }
 

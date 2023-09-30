@@ -253,12 +253,11 @@ namespace PandaPlayer.LastFM.Internal
 
 		private static string CalcMD5(string data)
 		{
-#pragma warning disable CA5351 // Do Not Use Broken Cryptographic Algorithms - We are clients of 3rd party API and use algorithm required by the server.
-			using var md5 = MD5.Create();
-#pragma warning restore CA5351 // Do Not Use Broken Cryptographic Algorithms
-
 			var dataToHash = new UTF8Encoding().GetBytes(data);
-			var hashBytes = md5.ComputeHash(dataToHash);
+
+#pragma warning disable CA5351 // Do Not Use Broken Cryptographic Algorithms - We are clients of 3rd party API and use algorithm required by the server.
+			var hashBytes = MD5.HashData(dataToHash);
+#pragma warning restore CA5351 // Do Not Use Broken Cryptographic Algorithms
 
 #pragma warning disable CA1308 // Normalize strings to uppercase - Using of lower case is an external requirement.
 			return BitConverter.ToString(hashBytes)

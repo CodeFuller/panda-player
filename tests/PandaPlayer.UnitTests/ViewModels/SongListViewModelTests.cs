@@ -20,7 +20,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 	[TestClass]
 	public class SongListViewModelTests
 	{
-		private class TestSongListViewModel : SongListViewModel
+		private sealed class TestSongListViewModel : SongListViewModel
 		{
 			public override bool DisplayTrackNumbers => false;
 
