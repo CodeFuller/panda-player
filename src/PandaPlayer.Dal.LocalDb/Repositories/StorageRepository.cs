@@ -97,7 +97,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 			var mediaInfo = await songMediaInfoProvider.GetSongMediaInfo(songFileName);
 
-			song.BitRate = mediaInfo.Bitrate;
+			song.BitRate = mediaInfo.BitRate;
 			song.Duration = mediaInfo.Duration;
 		}
 

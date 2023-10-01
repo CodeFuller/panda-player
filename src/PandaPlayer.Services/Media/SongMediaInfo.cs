@@ -4,7 +4,7 @@ namespace PandaPlayer.Services.Media
 {
 	public class SongMediaInfo
 	{
-		public int Bitrate { get; set; }
+		public int BitRate { get; set; }
 
 		public TimeSpan Duration { get; set; }
 	}
