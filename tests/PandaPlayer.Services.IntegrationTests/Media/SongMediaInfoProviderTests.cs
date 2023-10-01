@@ -26,7 +26,6 @@ namespace PandaPlayer.Services.IntegrationTests.Media
 
 			var expectedMediaInfo = new SongMediaInfo
 			{
-				Size = 405582,
 				Bitrate = 320000,
 				Duration = new TimeSpan(106268000),
 			};

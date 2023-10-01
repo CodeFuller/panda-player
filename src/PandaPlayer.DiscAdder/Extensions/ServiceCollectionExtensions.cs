@@ -8,7 +8,6 @@ using PandaPlayer.DiscAdder.ParsingSong;
 using PandaPlayer.DiscAdder.ViewModels;
 using PandaPlayer.DiscAdder.ViewModels.Interfaces;
 using PandaPlayer.DiscAdder.ViewModels.SourceContent;
-using PandaPlayer.Services.Media;
 using PandaPlayer.Shared;
 using PandaPlayer.Shared.Images;
 
@@ -32,7 +31,6 @@ namespace PandaPlayer.DiscAdder.Extensions
 			services.AddSingleton<IReferenceContentParser, ReferenceContentParser>();
 			services.AddSingleton<IInputContentSplitter, InputContentSplitter>();
 			services.AddSingleton<ISourceContentChecker, SourceContentChecker>();
-			services.AddSingleton<ISongMediaInfoProvider, SongMediaInfoProvider>();
 			services.AddSingleton<IContentCrawler, ContentCrawler>();
 			services.AddSingleton<ISourceFileTypeResolver, SourceFileTypeResolver>();
 			services.AddSingleton<IFolderProvider, FolderProvider>();

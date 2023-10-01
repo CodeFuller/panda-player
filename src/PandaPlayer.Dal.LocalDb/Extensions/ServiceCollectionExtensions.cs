@@ -30,6 +30,7 @@ namespace PandaPlayer.Dal.LocalDb.Extensions
 			services.AddSingleton<IFileStorageOrganizer, FileStorageOrganizer>();
 
 			services.AddSongTagger();
+			services.AddSongMediaInfoProvider();
 			services.AddSingleton<IChecksumCalculator, Crc32Calculator>();
 			services.TryAddSingleton<IFileSystemFacade, FileSystemFacade>();
 			services.AddSingleton<IFileStorage, FileSystemStorage>();

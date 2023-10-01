@@ -21,6 +21,8 @@ namespace PandaPlayer.Services.Interfaces.Dal
 
 		Task UpdateSong(SongModel song, CancellationToken cancellationToken);
 
+		Task UpdateSongContent(SongModel song, CancellationToken cancellationToken);
+
 		Task DeleteSong(SongModel song, CancellationToken cancellationToken);
 
 		Task AddDiscImage(DiscImageModel image, Stream imageContent, CancellationToken cancellationToken);

@@ -31,9 +31,7 @@ namespace PandaPlayer.Services.IntegrationTests
 				TrackNumber = 3,
 				Artist = await GetArtist(ReferenceData.Artist2Id),
 				Genre = await GetGenre(ReferenceData.Genre1Id),
-				Duration = TimeSpan.FromMilliseconds(12345),
 				Rating = RatingModel.R7,
-				BitRate = 54321,
 			};
 
 			var disc = await GetDisc(ReferenceData.NormalDiscId);
@@ -60,9 +58,9 @@ namespace PandaPlayer.Services.IntegrationTests
 				TrackNumber = 3,
 				Artist = referenceData.Artist2,
 				Genre = referenceData.Genre1,
-				Duration = TimeSpan.FromMilliseconds(12345),
+				Duration = TimeSpan.Parse("00:00:10.887800", CultureInfo.InvariantCulture),
 				Rating = RatingModel.R7,
-				BitRate = 54321,
+				BitRate = 320000,
 				Size = 416039,
 				Checksum = 2259945390,
 				ContentUri = "Belarusian/Neuro Dubel/2010 - Афтары правды (CD 1)/03 - Дети Галактики.mp3".ToContentUri(LibraryStorageRoot),
@@ -104,8 +102,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			{
 				Title = "Дети Галактики",
 				TreeTitle = "03 - Дети Галактики.mp3",
-				Duration = TimeSpan.FromMilliseconds(12345),
-				BitRate = 54321,
 			};
 
 			var disc = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
@@ -129,8 +125,8 @@ namespace PandaPlayer.Services.IntegrationTests
 				Id = ReferenceData.NextSongId,
 				Title = "Дети Галактики",
 				TreeTitle = "03 - Дети Галактики.mp3",
-				Duration = TimeSpan.FromMilliseconds(12345),
-				BitRate = 54321,
+				Duration = TimeSpan.Parse("00:00:10.887800", CultureInfo.InvariantCulture),
+				BitRate = 320000,
 				Size = 415898,
 				Checksum = 3771089602,
 				ContentUri = "Belarusian/Neuro Dubel/Disc With Missing Fields (CD 1)/03 - Дети Галактики.mp3".ToContentUri(LibraryStorageRoot),
@@ -167,8 +163,6 @@ namespace PandaPlayer.Services.IntegrationTests
 			{
 				Title = "Дети Галактики",
 				TreeTitle = "03 - Дети Галактики.mp3",
-				Duration = TimeSpan.FromMilliseconds(12345),
-				BitRate = 54321,
 			};
 
 			var disc = await GetDisc(ReferenceData.DiscWithMissingFieldsId);
@@ -428,6 +422,57 @@ namespace PandaPlayer.Services.IntegrationTests
 
 			var songFromRepository = await GetSong(ReferenceData.DeletedSongId);
 			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
+
+			await CheckLibraryConsistency(typeof(BadTrackNumbersInconsistency), typeof(MultipleDiscGenresInconsistency));
+		}
+
+		[TestMethod]
+		public async Task UpdateSongContent_UpdatesSongDataCorrectly()
+		{
+			// Arrange
+
+			var updatedSong = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId1);
+
+			var target = CreateTestTarget();
+
+			// Act
+
+			var songFilePath = Path.Combine(LibraryStorageRoot, "Belarusian", "Neuro Dubel", "2010 - Афтары правды (CD 1)", "01 - Про женщин.mp3");
+			new FileInfo(songFilePath).IsReadOnly = false;
+			File.Copy("ContentForAdding/Song For Content Update.mp3", songFilePath, overwrite: true);
+
+			await target.UpdateSongContent(updatedSong, CancellationToken.None);
+
+			// Assert
+
+			var referenceData = GetReferenceData();
+			var expectedSong = referenceData.SongWithOptionalPropertiesFilled1;
+			expectedSong.Size = 166718;
+			expectedSong.Checksum = 1328325694;
+			expectedSong.BitRate = 128000;
+			expectedSong.Duration = TimeSpan.Parse("00:00:10.8468125", CultureInfo.InvariantCulture);
+
+			updatedSong.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
+
+			var songFromRepository = await GetSong(ReferenceData.SongWithOptionalPropertiesFilledId1);
+			songFromRepository.Should().BeEquivalentTo(expectedSong, x => x.WithStrictOrdering().IgnoringCyclicReferences());
+
+			var fileInfo = new FileInfo(songFilePath);
+			fileInfo.Length.Should().Be(166718);
+
+			var expectedTagData = new SongTagData
+			{
+				Artist = "Neuro Dubel",
+				Album = "Афтары правды",
+				Year = 2010,
+				Genre = "Punk Rock",
+				Track = 1,
+				Title = "Про женщин",
+			};
+
+			var songTagger = GetService<ISongTagger>();
+			var tagData = songTagger.GetTagData(songFilePath);
+			tagData.Should().BeEquivalentTo(expectedTagData, x => x.WithStrictOrdering());
 
 			await CheckLibraryConsistency(typeof(BadTrackNumbersInconsistency), typeof(MultipleDiscGenresInconsistency));
 		}

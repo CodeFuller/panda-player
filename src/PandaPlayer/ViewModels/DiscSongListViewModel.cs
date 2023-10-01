@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Messaging;
 using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Models;
@@ -58,6 +59,14 @@ namespace PandaPlayer.ViewModels
 			}
 		}
 
+		internal async Task UpdateSongsContent(IReadOnlyCollection<SongModel> songs, CancellationToken cancellationToken)
+		{
+			foreach (var song in songs)
+			{
+				await SongsService.UpdateSongContent(song, cancellationToken);
+			}
+		}
+
 		private void OnExplorerDiscChanged(DiscModel newDisc, bool deletedContentIsShown)
 		{
 			CurrentDisc = newDisc;
@@ -100,6 +109,12 @@ namespace PandaPlayer.ViewModels
 			};
 
 			yield return GetSetRatingContextMenuItem(songs);
+
+			yield return new CommandMenuItem(() => UpdateSongsContent(songs, CancellationToken.None))
+			{
+				Header = "Update Content",
+				IconKind = PackIconKind.Refresh,
+			};
 
 			yield return new CommandMenuItem(() => DeleteSongsFromDisc(songs), keepTargetAlive: true)
 			{

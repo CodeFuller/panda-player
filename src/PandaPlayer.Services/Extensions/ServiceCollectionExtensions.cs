@@ -4,6 +4,7 @@ using PandaPlayer.Services.Diagnostic.Checkers;
 using PandaPlayer.Services.Diagnostic.Interfaces;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.Services.Internal;
+using PandaPlayer.Services.Media;
 using PandaPlayer.Services.Settings;
 using PandaPlayer.Services.Tagging;
 
@@ -45,6 +46,13 @@ namespace PandaPlayer.Services.Extensions
 		public static IServiceCollection AddSongTagger(this IServiceCollection services)
 		{
 			services.AddSingleton<ISongTagger, SongTagger>();
+
+			return services;
+		}
+
+		public static IServiceCollection AddSongMediaInfoProvider(this IServiceCollection services)
+		{
+			services.AddSingleton<ISongMediaInfoProvider, SongMediaInfoProvider>();
 
 			return services;
 		}

@@ -41,6 +41,20 @@ namespace PandaPlayer.ViewModels
 		public SongListItem(SongModel song)
 		{
 			Song = song ?? throw new ArgumentNullException(nameof(song));
+
+			Song.PropertyChanged += (_, args) =>
+			{
+				switch (args.PropertyName)
+				{
+					case nameof(Song.BitRate):
+						RaisePropertyChanged(nameof(BitRate));
+						break;
+
+					case nameof(Song.Size):
+						RaisePropertyChanged(nameof(FileSize));
+						break;
+				}
+			};
 		}
 	}
 }

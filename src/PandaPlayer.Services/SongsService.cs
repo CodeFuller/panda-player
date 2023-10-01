@@ -40,7 +40,7 @@ namespace PandaPlayer.Services
 		{
 			await storageRepository.AddSong(song, songContent, cancellationToken);
 
-			// Adding to repository should be performed after adding to the storage, because later updates song checksum and size.
+			// Adding to repository should be performed after adding to the storage, because later updates song properties (Duration, BitRate, Size, Checksum).
 			await songsRepository.CreateSong(song, cancellationToken);
 
 			DiscLibrary.AddSong(song);
@@ -73,6 +73,15 @@ namespace PandaPlayer.Services
 			}
 
 			// Update in repository should be performed after update in the storage, because later updates song checksum.
+			await songsRepository.UpdateSong(song, cancellationToken);
+		}
+
+		public async Task UpdateSongContent(SongModel song, CancellationToken cancellationToken)
+		{
+			logger.LogInformation($"Updating content for song '{song.TreeTitle}' ...");
+
+			await storageRepository.UpdateSongContent(song, cancellationToken);
+
 			await songsRepository.UpdateSong(song, cancellationToken);
 		}
 

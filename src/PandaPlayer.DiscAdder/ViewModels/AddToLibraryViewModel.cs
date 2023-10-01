@@ -12,7 +12,6 @@ using PandaPlayer.DiscAdder.MusicStorage;
 using PandaPlayer.DiscAdder.ViewModels.Interfaces;
 using PandaPlayer.DiscAdder.ViewModels.ViewModelItems;
 using PandaPlayer.Services.Interfaces;
-using PandaPlayer.Services.Media;
 using PandaPlayer.Shared.Extensions;
 
 namespace PandaPlayer.DiscAdder.ViewModels
@@ -22,7 +21,6 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		private const int AddSongProgressStep = 5;
 		private const int AddDiscImageProgressStep = 1;
 
-		private readonly ISongMediaInfoProvider songMediaInfoProvider;
 		private readonly IWorkshopMusicStorage workshopMusicStorage;
 
 		private readonly IFoldersService foldersService;
@@ -96,10 +94,9 @@ namespace PandaPlayer.DiscAdder.ViewModels
 
 		public ICommand AddToLibraryCommand { get; }
 
-		public AddToLibraryViewModel(ISongMediaInfoProvider songMediaInfoProvider, IWorkshopMusicStorage workshopMusicStorage,
-			IFoldersService foldersService, IDiscsService discService, ISongsService songService, IArtistsService artistService)
+		public AddToLibraryViewModel(IWorkshopMusicStorage workshopMusicStorage, IFoldersService foldersService,
+			IDiscsService discService, ISongsService songService, IArtistsService artistService)
 		{
-			this.songMediaInfoProvider = songMediaInfoProvider ?? throw new ArgumentNullException(nameof(songMediaInfoProvider));
 			this.workshopMusicStorage = workshopMusicStorage ?? throw new ArgumentNullException(nameof(workshopMusicStorage));
 			this.foldersService = foldersService ?? throw new ArgumentNullException(nameof(foldersService));
 			this.discService = discService ?? throw new ArgumentNullException(nameof(discService));
@@ -161,8 +158,6 @@ namespace PandaPlayer.DiscAdder.ViewModels
 				var songDisc = await ProvideSongDisc(addedSong, createdDiscs, cancellationToken);
 				var songArtist = await ProvideSongArtist(addedSong.ArtistName, existingArtists, cancellationToken);
 
-				var songMediaInfo = await songMediaInfoProvider.GetSongMediaInfo(addedSong.SourceFilePath);
-
 				var newSong = new SongModel
 				{
 					Title = addedSong.Title,
@@ -170,8 +165,6 @@ namespace PandaPlayer.DiscAdder.ViewModels
 					TrackNumber = addedSong.Track,
 					Artist = songArtist,
 					Genre = addedSong.Genre,
-					BitRate = songMediaInfo.Bitrate,
-					Duration = songMediaInfo.Duration,
 					Rating = null,
 				};
 

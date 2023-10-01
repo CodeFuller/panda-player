@@ -15,6 +15,8 @@ namespace PandaPlayer.Services.Interfaces
 
 		Task UpdateSong(SongModel song, Action<SongModel> updateAction, CancellationToken cancellationToken);
 
+		Task UpdateSongContent(SongModel song, CancellationToken cancellationToken);
+
 		Task AddSongPlayback(SongModel song, DateTimeOffset playbackTime, CancellationToken cancellationToken);
 
 		Task DeleteSong(SongModel song, string deleteComment, CancellationToken cancellationToken);

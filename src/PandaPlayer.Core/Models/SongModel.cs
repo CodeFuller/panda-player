@@ -9,9 +9,12 @@ namespace PandaPlayer.Core.Models
 		private string title;
 		private string treeTitle;
 		private short? trackNumber;
+		private TimeSpan duration;
 		private ArtistModel artist;
 		private GenreModel genre;
 		private RatingModel? rating;
+		private int? bitRate;
+		private long? size;
 		private DateTimeOffset? lastPlaybackTime;
 		private int playbacksCount;
 		private Uri contentUri;
@@ -35,7 +38,11 @@ namespace PandaPlayer.Core.Models
 			set => SetField(PropertyChanged, ref trackNumber, value);
 		}
 
-		public TimeSpan Duration { get; set; }
+		public TimeSpan Duration
+		{
+			get => duration;
+			set => SetField(PropertyChanged, ref duration, value);
+		}
 
 		public DiscModel Disc { get; internal set; }
 
@@ -57,9 +64,17 @@ namespace PandaPlayer.Core.Models
 			set => SetField(PropertyChanged, ref rating, value);
 		}
 
-		public int? BitRate { get; set; }
+		public int? BitRate
+		{
+			get => bitRate;
+			set => SetField(PropertyChanged, ref bitRate, value);
+		}
 
-		public long? Size { get; set; }
+		public long? Size
+		{
+			get => size;
+			set => SetField(PropertyChanged, ref size, value);
+		}
 
 		public uint? Checksum { get; set; }
 

@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PandaPlayer.Core.Models;
@@ -155,6 +158,64 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Assert
 
 			toolTip.Should().Be("The song was deleted on 2021.10.26 without comment");
+		}
+
+		[TestMethod]
+		public void SongListItem_WhenSongBitRateIsChanged_SendsPropertyChangedEventForBitRate()
+		{
+			// Arrange
+
+			var song = new SongModel
+			{
+				BitRate = 128000,
+			};
+
+			var target = new SongListItem(song);
+
+			var propertyChangedEvents = new List<PropertyChangedEventArgs>();
+			target.PropertyChanged += (_, e) => propertyChangedEvents.Add(e);
+
+			// Act
+
+			song.BitRate = 320000;
+
+			// Assert
+
+			var expectedProperties = new[]
+			{
+				nameof(SongListItem.BitRate),
+			};
+
+			propertyChangedEvents.Select(e => e.PropertyName).Should().BeEquivalentTo(expectedProperties);
+		}
+
+		[TestMethod]
+		public void SongListItem_WhenSongSizeIsChanged_SendsPropertyChangedEventForFileSize()
+		{
+			// Arrange
+
+			var song = new SongModel
+			{
+				Size = 12345,
+			};
+
+			var target = new SongListItem(song);
+
+			var propertyChangedEvents = new List<PropertyChangedEventArgs>();
+			target.PropertyChanged += (_, e) => propertyChangedEvents.Add(e);
+
+			// Act
+
+			song.Size = 54321;
+
+			// Assert
+
+			var expectedProperties = new[]
+			{
+				nameof(SongListItem.FileSize),
+			};
+
+			propertyChangedEvents.Select(e => e.PropertyName).Should().BeEquivalentTo(expectedProperties);
 		}
 	}
 }

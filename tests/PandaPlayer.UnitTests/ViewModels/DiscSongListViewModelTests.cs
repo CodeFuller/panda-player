@@ -148,6 +148,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 						new SetRatingMenuItem(RatingModel.R1, () => Task.CompletedTask),
 					},
 				},
+				new CommandMenuItem(() => { }, false) { Header = "Update Content", IconKind = PackIconKind.Refresh },
 				new CommandMenuItem(() => { }, false) { Header = "Delete From Disc", IconKind = PackIconKind.DeleteForever },
 				new CommandMenuItem(() => { }, false) { Header = "Properties", IconKind = PackIconKind.Pencil },
 			};

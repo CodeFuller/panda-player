@@ -7,6 +7,7 @@ using PandaPlayer.Core.Models;
 using PandaPlayer.Dal.LocalDb.Interfaces;
 using PandaPlayer.Dal.LocalDb.Internal;
 using PandaPlayer.Services.Interfaces.Dal;
+using PandaPlayer.Services.Media;
 using PandaPlayer.Services.Tagging;
 
 namespace PandaPlayer.Dal.LocalDb.Repositories
@@ -21,12 +22,16 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 		private readonly IChecksumCalculator checksumCalculator;
 
-		public StorageRepository(IFileStorageOrganizer storageOrganizer, IFileStorage fileStorage, ISongTagger songTagger, IChecksumCalculator checksumCalculator)
+		private readonly ISongMediaInfoProvider songMediaInfoProvider;
+
+		public StorageRepository(IFileStorageOrganizer storageOrganizer, IFileStorage fileStorage, ISongTagger songTagger,
+			IChecksumCalculator checksumCalculator, ISongMediaInfoProvider songMediaInfoProvider)
 		{
 			this.storageOrganizer = storageOrganizer ?? throw new ArgumentNullException(nameof(storageOrganizer));
 			this.fileStorage = fileStorage ?? throw new ArgumentNullException(nameof(fileStorage));
 			this.songTagger = songTagger ?? throw new ArgumentNullException(nameof(songTagger));
 			this.checksumCalculator = checksumCalculator ?? throw new ArgumentNullException(nameof(checksumCalculator));
+			this.songMediaInfoProvider = songMediaInfoProvider ?? throw new ArgumentNullException(nameof(songMediaInfoProvider));
 		}
 
 		public Task CreateDisc(DiscModel disc, CancellationToken cancellationToken)
@@ -48,16 +53,16 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			return Task.CompletedTask;
 		}
 
-		public Task AddSong(SongModel song, Stream songContent, CancellationToken cancellationToken)
+		public async Task AddSong(SongModel song, Stream songContent, CancellationToken cancellationToken)
 		{
 			var songPath = storageOrganizer.GetSongFilePath(song);
 			fileStorage.SaveFile(songPath, songContent);
 
+			await UpdateSongPropertiesFromMediaInfo(song, cancellationToken);
+
 			UpdateSongTags(song);
 
 			SetSongContentUri(song);
-
-			return Task.CompletedTask;
 		}
 
 		public Task UpdateSongTreeTitle(SongModel oldSong, SongModel newSong, CancellationToken cancellationToken)
@@ -76,6 +81,24 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			UpdateSongTags(song);
 
 			return Task.CompletedTask;
+		}
+
+		public async Task UpdateSongContent(SongModel song, CancellationToken cancellationToken)
+		{
+			await UpdateSongPropertiesFromMediaInfo(song, cancellationToken);
+
+			UpdateSongTags(song);
+		}
+
+		private async Task UpdateSongPropertiesFromMediaInfo(SongModel song, CancellationToken cancellationToken)
+		{
+			var songPath = storageOrganizer.GetSongFilePath(song);
+			var songFileName = fileStorage.GetFullPath(songPath);
+
+			var mediaInfo = await songMediaInfoProvider.GetSongMediaInfo(songFileName);
+
+			song.BitRate = mediaInfo.Bitrate;
+			song.Duration = mediaInfo.Duration;
 		}
 
 		private void UpdateSongTags(SongModel song)
