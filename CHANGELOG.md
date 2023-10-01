@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 4.3.0 - 2023-10-01
+- Implemented update of songs content.
+- Upgraded to .NET 7.0.
+
 ## 4.2.0 - 2023-05-09
 - Added support of verbatim titles in reference content.
 
@@ -27,7 +31,7 @@ Fixes and improvements in disc adder:
 - Prevented adding of empty discs.
 
 ## 4.0.0 - 2022-01-31
-- Updated to .NET 6.0.
+- Upgraded to .NET 6.0.
 - Switched to fully loaded library with single model instances.
 - Fixed playbacks discrepancy error for songs from different sources (e.g. library explorer and adviser).
 
@@ -121,7 +125,7 @@ Fixes and improvements in disc adder:
 - Switched API URL for Last.FM scrobbler from http to https.
 
 ## 3.8.0 - 2021-01-24
-- Re-targeted to .NET 5.0.
+- Upgraded to .NET 5.0.
 - Updated CodeFuller.Library to version 7.2.0.
 - Added MIT license.
 
@@ -231,4 +235,4 @@ Fixes and improvements in disc adder:
 - Switched from in-memory DiscLibrary to service operations.
 
 ## 2.0.0 - 2020-04-18
-- Re-targeted to .NET Core 3.1.
+- Upgraded to .NET Core 3.1.
