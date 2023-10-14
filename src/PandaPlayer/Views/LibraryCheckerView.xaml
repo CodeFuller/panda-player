@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:valueConverters="clr-namespace:PandaPlayer.Views.ValueConverters"
+        xmlns:valueConverters1="clr-namespace:PandaPlayer.Views.ValueConverters"
         xmlns:interfaces="clr-namespace:PandaPlayer.ViewModels.Interfaces"
+        xmlns:valueConverters2="clr-namespace:CodeFuller.Library.Wpf.ValueConverters;assembly=CodeFuller.Library.Wpf"
         mc:Ignorable="d"
         Loaded="View_Loaded"
         Title="Library Checker"
@@ -17,8 +18,8 @@
     </Window.Style>
 
     <Window.Resources>
-        <valueConverters:InconsistencySeverityLevelConverter x:Key="InconsistencySeverityLevelConverter"></valueConverters:InconsistencySeverityLevelConverter>
-        <valueConverters:InverseBooleanConverter x:Key="InverseBooleanConverter"></valueConverters:InverseBooleanConverter>
+        <valueConverters1:InconsistencySeverityLevelConverter x:Key="InconsistencySeverityLevelConverter"></valueConverters1:InconsistencySeverityLevelConverter>
+        <valueConverters2:InverseBooleanValueConverter x:Key="InverseBooleanConverter"></valueConverters2:InverseBooleanValueConverter>
     </Window.Resources>
 
     <Grid Margin="10">

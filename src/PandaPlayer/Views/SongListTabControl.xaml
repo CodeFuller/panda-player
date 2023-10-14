@@ -20,7 +20,7 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <!-- We wrap each SongListView with Grid, because otherwise setting visibility does not work -->
-        <Grid Grid.Row="0"  Visibility="{Binding IsDiscSongListSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Grid Grid.Row="0" Visibility="{Binding IsDiscSongListSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
             <views:SongListView DataContext="{Binding DiscSongListViewModel}" />
         </Grid>
         <Grid Grid.Row="0" Visibility="{Binding IsPlaylistSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
