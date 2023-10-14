@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace PandaPlayer.ViewModels
 {
-	public class EditedSongProperty<T> : ViewModelBase
+	public class EditedSongProperty<T> : ObservableObject
 	{
 		private bool hasValue;
 
 		public bool HasValue
 		{
 			get => hasValue;
-			private set => Set(ref hasValue, value);
+			private set => SetProperty(ref hasValue, value);
 		}
 
 		public bool HasBlankValue => HasValue && Value == null;
@@ -32,7 +32,7 @@ namespace PandaPlayer.ViewModels
 
 			set
 			{
-				Set(ref propertyValue, value);
+				SetProperty(ref propertyValue, value);
 				HasValue = true;
 			}
 		}

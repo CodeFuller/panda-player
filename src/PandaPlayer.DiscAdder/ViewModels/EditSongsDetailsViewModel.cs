@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.DiscAdder.ViewModels.Interfaces;
 using PandaPlayer.DiscAdder.ViewModels.ViewModelItems;
 
 namespace PandaPlayer.DiscAdder.ViewModels
 {
-	internal class EditSongsDetailsViewModel : ViewModelBase, IEditSongsDetailsViewModel
+	internal class EditSongsDetailsViewModel : ObservableObject, IEditSongsDetailsViewModel
 	{
 		public string Name => "Edit Songs Details";
 

@@ -1,14 +1,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels
 {
-	public class LibraryStatisticsViewModel : ViewModelBase, ILibraryStatisticsViewModel
+	public class LibraryStatisticsViewModel : ObservableObject, ILibraryStatisticsViewModel
 	{
 		private readonly IStatisticsService statisticsService;
 

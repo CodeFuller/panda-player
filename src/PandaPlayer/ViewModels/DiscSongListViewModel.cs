@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
@@ -15,6 +16,8 @@ namespace PandaPlayer.ViewModels
 {
 	public class DiscSongListViewModel : SongListViewModel, IDiscSongListViewModel
 	{
+		private readonly IMessenger messenger;
+
 		private DiscModel CurrentDisc { get; set; }
 
 		private bool DeletedContentIsShown { get; set; }
@@ -45,10 +48,11 @@ namespace PandaPlayer.ViewModels
 			}
 		}
 
-		public DiscSongListViewModel(ISongsService songsService, IViewNavigator viewNavigator)
+		public DiscSongListViewModel(ISongsService songsService, IViewNavigator viewNavigator, IMessenger messenger)
 			: base(songsService, viewNavigator)
 		{
-			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => OnExplorerDiscChanged(e.Disc, e.DeletedContentIsShown));
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+			messenger.Register<LibraryExplorerDiscChangedEventArgs>(this, (_, e) => OnExplorerDiscChanged(e.Disc, e.DeletedContentIsShown));
 		}
 
 		internal void DeleteSongsFromDisc(IReadOnlyCollection<SongModel> songs)
@@ -96,13 +100,13 @@ namespace PandaPlayer.ViewModels
 
 		private IEnumerable<BasicMenuItem> GetContextMenuItemsForActiveSongs(IReadOnlyCollection<SongModel> songs)
 		{
-			yield return new CommandMenuItem(() => Messenger.Default.Send(new AddingSongsToPlaylistNextEventArgs(songs)), keepTargetAlive: true)
+			yield return new CommandMenuItem(() => messenger.Send(new AddingSongsToPlaylistNextEventArgs(songs)))
 			{
 				Header = "Play Next",
 				IconKind = PackIconKind.PlaylistAdd,
 			};
 
-			yield return new CommandMenuItem(() => Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(songs)), keepTargetAlive: true)
+			yield return new CommandMenuItem(() => messenger.Send(new AddingSongsToPlaylistLastEventArgs(songs)))
 			{
 				Header = "Play Last",
 				IconKind = PackIconKind.PlaylistAdd,
@@ -116,7 +120,7 @@ namespace PandaPlayer.ViewModels
 				IconKind = PackIconKind.Refresh,
 			};
 
-			yield return new CommandMenuItem(() => DeleteSongsFromDisc(songs), keepTargetAlive: true)
+			yield return new CommandMenuItem(() => DeleteSongsFromDisc(songs))
 			{
 				Header = "Delete From Disc",
 				IconKind = PackIconKind.DeleteForever,

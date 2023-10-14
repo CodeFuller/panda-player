@@ -1,18 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels
 {
-	public class CreateAdviseGroupViewModel : ViewModelBase, ICreateAdviseGroupViewModel
+	public class CreateAdviseGroupViewModel : ObservableObject, ICreateAdviseGroupViewModel
 	{
 		private string adviseGroupName;
 
 		public string AdviseGroupName
 		{
 			get => adviseGroupName;
-			set => Set(ref adviseGroupName, value);
+			set => SetProperty(ref adviseGroupName, value);
 		}
 
 		public IReadOnlyCollection<string> ExistingAdviseGroupNames { get; private set; }

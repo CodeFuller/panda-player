@@ -5,19 +5,16 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.Core.Comparers;
 using PandaPlayer.Core.Models;
-using PandaPlayer.Services.Interfaces;
 using PandaPlayer.Shared.Extensions;
 using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels.AdviseSetsEditor
 {
-	public class AvailableDiscsViewModel : ViewModelBase, IAvailableDiscsViewModel
+	public class AvailableDiscsViewModel : ObservableObject, IAvailableDiscsViewModel
 	{
-		private readonly IFoldersService folderService;
-
 		private IReadOnlyCollection<AvailableDiscViewModel> AllAvailableDiscs { get; set; }
 
 		public ObservableCollection<AvailableDiscViewModel> AvailableDiscs { get; } = new();
@@ -36,16 +33,11 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 				// We do not use Set() helper and raise PropertyChanged manually.
 				// On subsequent calls, selectedItems and value will reference the same collection.
 				// ViewModelBase.Set() method does not raise PropertyChanged in such case.
-				RaisePropertyChanged(nameof(SelectedItems));
+				OnPropertyChanged(nameof(SelectedItems));
 			}
 		}
 
 		public IEnumerable<DiscModel> SelectedDiscs => SelectedItems?.Cast<AvailableDiscViewModel>().Select(x => x.Disc) ?? Enumerable.Empty<DiscModel>();
-
-		public AvailableDiscsViewModel(IFoldersService folderService)
-		{
-			this.folderService = folderService ?? throw new ArgumentNullException(nameof(folderService));
-		}
 
 		public Task LoadDiscs(IEnumerable<DiscModel> activeLibraryDiscs, CancellationToken cancellationToken)
 		{

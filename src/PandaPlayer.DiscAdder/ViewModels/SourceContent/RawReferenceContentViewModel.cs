@@ -1,13 +1,13 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.DiscAdder.ViewModels.Interfaces;
 using PandaPlayer.Services.Interfaces;
 
 namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
-	internal sealed class RawReferenceContentViewModel : ViewModelBase, IRawReferenceContentViewModel, IDisposable
+	internal sealed class RawReferenceContentViewModel : ObservableObject, IRawReferenceContentViewModel, IDisposable
 	{
 		private const string RawReferenceContentDataKey = "RawReferenceContentData";
 
@@ -33,7 +33,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 		public string Content
 		{
 			get => rawReferenceContent;
-			set => Set(ref rawReferenceContent, value);
+			set => SetProperty(ref rawReferenceContent, value);
 		}
 
 		private string LastSavedContent { get; set; }

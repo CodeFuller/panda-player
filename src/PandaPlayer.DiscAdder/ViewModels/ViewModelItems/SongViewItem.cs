@@ -1,11 +1,11 @@
 using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.Core.Models;
 using PandaPlayer.DiscAdder.MusicStorage;
 
 namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 {
-	internal class SongViewItem : ViewModelBase
+	internal class SongViewItem : ObservableObject
 	{
 		private readonly AddedSongInfo addedSongInfo;
 
@@ -22,7 +22,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 		public string ArtistName
 		{
 			get => artistName;
-			set => Set(ref artistName, value);
+			set => SetProperty(ref artistName, value);
 		}
 
 		public string AlbumTitle => DiscItem.AlbumTitle;
@@ -35,7 +35,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 			set
 			{
 				addedSongInfo.Track = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -45,7 +45,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 			set
 			{
 				addedSongInfo.Title = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -55,7 +55,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 			set
 			{
 				addedSongInfo.TreeTitle = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 

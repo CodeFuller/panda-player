@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using CodeFuller.Library.Bootstrap;
 using CodeFuller.Library.Wpf;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -62,6 +63,8 @@ namespace PandaPlayer
 				configuration.Bind("adviser", settings);
 				configuration.Bind("adviser:highlyRatedSongsAdviser", settings.HighlyRatedSongsAdviser);
 			});
+
+			services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 		}
 
 		private static void RegisterViewModels(IServiceCollection services)

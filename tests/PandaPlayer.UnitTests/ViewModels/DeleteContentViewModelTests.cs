@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using FluentAssertions;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
@@ -9,6 +9,7 @@ using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels;
 
 namespace PandaPlayer.UnitTests.ViewModels
@@ -16,12 +17,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 	[TestClass]
 	public class DeleteContentViewModelTests
 	{
-		[TestInitialize]
-		public void Initialize()
-		{
-			Messenger.Reset();
-		}
-
 		[TestMethod]
 		public void LoadForSongs_SetsCorrectConfirmationMessage()
 		{
@@ -162,12 +157,13 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<DeleteContentViewModel>();
 
 			target.LoadForDisc(disc);
 
 			LibraryExplorerDiscChangedEventArgs libraryExplorerDiscChangedEvent = null;
-			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, e => e.RegisterEvent(ref libraryExplorerDiscChangedEvent));
+			mocker.Get<IMessenger>().Register<LibraryExplorerDiscChangedEventArgs>(this, (_, e) => e.RegisterEvent(ref libraryExplorerDiscChangedEvent));
 
 			// Act
 

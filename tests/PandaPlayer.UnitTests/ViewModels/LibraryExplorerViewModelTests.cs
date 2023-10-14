@@ -4,8 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using CodeFuller.Library.Wpf;
 using CodeFuller.Library.Wpf.Interfaces;
+using CommunityToolkit.Mvvm.Messaging;
 using FluentAssertions;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
@@ -16,6 +16,7 @@ using PandaPlayer.Events.LibraryExplorerEvents;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels;
 using PandaPlayer.ViewModels.AdviseGroups;
 using PandaPlayer.ViewModels.Interfaces;
@@ -25,12 +26,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 	[TestClass]
 	public class LibraryExplorerViewModelTests
 	{
-		[TestInitialize]
-		public void Initialize()
-		{
-			Messenger.Reset();
-		}
-
 		[TestMethod]
 		public async Task CreateAdviseGroup_IfShowCreateAdviseGroupViewReturnsNull_DoesNotCreateAdviseGroup()
 		{
@@ -101,10 +96,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 			disc.AddSongs(activeSong1, deletedSong, activeSong2);
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			PlaySongsListEventArgs playSongsListEvent = null;
-			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => e.RegisterEvent(ref playSongsListEvent));
+			mocker.Get<IMessenger>().Register<PlaySongsListEventArgs>(this, (_, e) => e.RegisterEvent(ref playSongsListEvent));
 
 			// Act
 
@@ -135,10 +131,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 			disc.AddSongs(activeSong1, deletedSong, activeSong2);
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			AddingSongsToPlaylistLastEventArgs addingSongsToPlaylistLastEvent = null;
-			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => e.RegisterEvent(ref addingSongsToPlaylistLastEvent));
+			mocker.Get<IMessenger>().Register<AddingSongsToPlaylistLastEventArgs>(this, (_, e) => e.RegisterEvent(ref addingSongsToPlaylistLastEvent));
 
 			// Act
 
@@ -363,11 +360,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(new ApplicationLoadedEventArgs());
+			mocker.SendMessage(new ApplicationLoadedEventArgs());
 
 			// Assert
 
@@ -384,11 +382,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var loadParentFolderEvent = new LoadParentFolderEventArgs(parentFolder, new ItemId("Child Folder Id"));
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(loadParentFolderEvent);
+			mocker.Get<IMessenger>().Send(loadParentFolderEvent);
 
 			// Assert
 
@@ -407,11 +406,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var loadFolderEvent = new LoadFolderEventArgs(folder);
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(loadFolderEvent);
+			mocker.Get<IMessenger>().Send(loadFolderEvent);
 
 			// Assert
 
@@ -433,11 +433,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var song2 = new SongModel { Id = new ItemId("2") }.AddToDisc(disc);
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(new PlaySongsListEventArgs(new[] { song1, song2 }));
+			mocker.Get<IMessenger>().Send(new PlaySongsListEventArgs(new[] { song1, song2 }));
 
 			// Assert
 
@@ -461,11 +462,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var song2 = new SongModel { Id = new ItemId("2") }.AddToDisc(disc2);
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(new PlaySongsListEventArgs(new[] { song1, song2 }));
+			mocker.Get<IMessenger>().Send(new PlaySongsListEventArgs(new[] { song1, song2 }));
 
 			// Assert
 
@@ -484,12 +486,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var song2 = new SongModel { Id = new ItemId("2") }.AddToDisc(new DiscModel { Id = new ItemId("Disc 2") });
 
 			var mocker = new AutoMocker();
-
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(new PlaySongsListEventArgs(new[] { song1, song2 }));
+			mocker.Get<IMessenger>().Send(new PlaySongsListEventArgs(new[] { song1, song2 }));
 
 			// Assert
 
@@ -512,11 +514,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var song2 = new SongModel { Id = new ItemId("2") }.AddToDisc(disc);
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(new PlaylistLoadedEventArgs(new[] { song1, song2 }, song2, 1));
+			mocker.Get<IMessenger>().Send(new PlaylistLoadedEventArgs(new[] { song1, song2 }, song2, 1));
 
 			// Assert
 
@@ -540,11 +543,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var song2 = new SongModel { Id = new ItemId("2") }.AddToDisc(disc2);
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(new PlaylistLoadedEventArgs(new[] { song1, song2 }, song2, 1));
+			mocker.Get<IMessenger>().Send(new PlaylistLoadedEventArgs(new[] { song1, song2 }, song2, 1));
 
 			// Assert
 
@@ -568,11 +572,13 @@ namespace PandaPlayer.UnitTests.ViewModels
 			mocker.GetMock<IFoldersService>()
 				.Setup(x => x.GetRootFolder(It.IsAny<CancellationToken>())).ReturnsAsync(rootFolder);
 
+			mocker.StubMessenger();
+
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(new PlaylistLoadedEventArgs(new[] { song1, song2 }, song2, 1));
+			mocker.Get<IMessenger>().Send(new PlaylistLoadedEventArgs(new[] { song1, song2 }, song2, 1));
 
 			// Assert
 
@@ -593,11 +599,13 @@ namespace PandaPlayer.UnitTests.ViewModels
 			mocker.GetMock<IFoldersService>()
 				.Setup(x => x.GetRootFolder(It.IsAny<CancellationToken>())).ReturnsAsync(rootFolder);
 
+			mocker.StubMessenger();
+
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(new NoPlaylistLoadedEventArgs());
+			mocker.Get<IMessenger>().Send(new NoPlaylistLoadedEventArgs());
 
 			// Assert
 
@@ -615,11 +623,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 			discFolder.AddDiscs(disc);
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<LibraryExplorerViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(disc));
+			mocker.Get<IMessenger>().Send(new NavigateLibraryExplorerToDiscEventArgs(disc));
 
 			// Assert
 

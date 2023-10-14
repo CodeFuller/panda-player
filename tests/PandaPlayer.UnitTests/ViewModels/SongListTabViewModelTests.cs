@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using CommunityToolkit.Mvvm.Messaging;
 using FluentAssertions;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
@@ -10,6 +10,7 @@ using PandaPlayer.Events;
 using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels;
 using PandaPlayer.ViewModels.Interfaces;
 
@@ -18,12 +19,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 	[TestClass]
 	public class SongListTabViewModelTests
 	{
-		[TestInitialize]
-		public void Initialize()
-		{
-			Messenger.Reset();
-		}
-
 		[TestMethod]
 		public void Constructor_SetsDiscSongListAsDefaultView()
 		{
@@ -72,12 +67,14 @@ namespace PandaPlayer.UnitTests.ViewModels
 			mocker.GetMock<ILibraryExplorerViewModel>()
 				.Setup(x => x.SelectedDisc).Returns(selectedDisc);
 
+			mocker.StubMessenger();
+
 			var target = mocker.CreateInstance<SongListTabViewModel>();
 
 			target.SwitchToPlaylistCommand.Execute(null);
 
 			ActiveDiscChangedEventArgs activeDiscChangedEventArgs = null;
-			Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => e.RegisterEvent(ref activeDiscChangedEventArgs));
+			mocker.Get<IMessenger>().Register<ActiveDiscChangedEventArgs>(this, (_, e) => e.RegisterEvent(ref activeDiscChangedEventArgs));
 
 			// Act
 
@@ -149,12 +146,14 @@ namespace PandaPlayer.UnitTests.ViewModels
 			mocker.GetMock<IPlaylistViewModel>()
 				.Setup(x => x.CurrentDisc).Returns(currentDisc);
 
+			mocker.StubMessenger();
+
 			var target = mocker.CreateInstance<SongListTabViewModel>();
 
 			target.SwitchToDiscSongListCommand.Execute(null);
 
 			ActiveDiscChangedEventArgs activeDiscChangedEventArgs = null;
-			Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => e.RegisterEvent(ref activeDiscChangedEventArgs));
+			mocker.Get<IMessenger>().Register<ActiveDiscChangedEventArgs>(this, (_, e) => e.RegisterEvent(ref activeDiscChangedEventArgs));
 
 			// Act
 
@@ -178,15 +177,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<IPlaylistViewModel>()
-				.Setup(x => x.Songs).Returns(songs);
+			mocker.GetMock<IPlaylistViewModel>().Setup(x => x.Songs).Returns(songs);
+			mocker.StubMessenger();
 
 			var target = mocker.CreateInstance<SongListTabViewModel>();
 			target.IsPlaylistSelected.Should().BeFalse();
 
 			// Act
 
-			Messenger.Default.Send(new ApplicationLoadedEventArgs());
+			mocker.SendMessage(new ApplicationLoadedEventArgs());
 
 			// Assert
 
@@ -200,14 +199,14 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var mocker = new AutoMocker();
-			mocker.GetMock<IPlaylistViewModel>()
-				.Setup(x => x.Songs).Returns(Enumerable.Empty<SongModel>());
+			mocker.GetMock<IPlaylistViewModel>().Setup(x => x.Songs).Returns(Enumerable.Empty<SongModel>());
+			mocker.StubMessenger();
 
 			var target = mocker.CreateInstance<SongListTabViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(new ApplicationLoadedEventArgs());
+			mocker.SendMessage(new ApplicationLoadedEventArgs());
 
 			// Assert
 
@@ -221,13 +220,14 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<SongListTabViewModel>();
 
 			target.SwitchToPlaylistCommand.Execute(null);
 
 			// Act
 
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(new DiscModel(), deletedContentIsShown: false));
+			mocker.SendMessage(new LibraryExplorerDiscChangedEventArgs(new DiscModel(), deletedContentIsShown: false));
 
 			// Assert
 
@@ -241,13 +241,14 @@ namespace PandaPlayer.UnitTests.ViewModels
 			// Arrange
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<SongListTabViewModel>();
 
 			target.SwitchToDiscSongListCommand.Execute(null);
 
 			// Act
 
-			Messenger.Default.Send(new PlaySongsListEventArgs(Enumerable.Empty<SongModel>()));
+			mocker.SendMessage(new PlaySongsListEventArgs(Enumerable.Empty<SongModel>()));
 
 			// Assert
 
@@ -263,6 +264,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var currentDisc = new DiscModel();
 
 			var mocker = new AutoMocker();
+			var messenger = mocker.StubMessenger();
+
 			var target = mocker.CreateInstance<SongListTabViewModel>();
 
 			target.SwitchToPlaylistCommand.Execute(null);
@@ -273,11 +276,11 @@ namespace PandaPlayer.UnitTests.ViewModels
 				.Setup(x => x.CurrentDisc).Returns(currentDisc);
 
 			ActiveDiscChangedEventArgs activeDiscChangedEventArgs = null;
-			Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => e.RegisterEvent(ref activeDiscChangedEventArgs));
+			messenger.Register<ActiveDiscChangedEventArgs>(this, (_, e) => e.RegisterEvent(ref activeDiscChangedEventArgs));
 
 			// Act
 
-			Messenger.Default.Send(new PlaylistLoadedEventArgs(Enumerable.Empty<SongModel>(), null, null));
+			messenger.Send(new PlaylistLoadedEventArgs(Enumerable.Empty<SongModel>(), null, null));
 
 			// Assert
 
@@ -293,19 +296,20 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var mocker = new AutoMocker();
 
 			// Mocking SelectedDisc for LibraryExplorer so that we could catch mistaken set of ActiveDisc to different value.
-			mocker.GetMock<ILibraryExplorerViewModel>()
-				.Setup(x => x.SelectedDisc).Returns(new DiscModel());
+			mocker.GetMock<ILibraryExplorerViewModel>().Setup(x => x.SelectedDisc).Returns(new DiscModel());
+
+			var messenger = mocker.StubMessenger();
 
 			var target = mocker.CreateInstance<SongListTabViewModel>();
 
 			target.SwitchToDiscSongListCommand.Execute(null);
 
 			ActiveDiscChangedEventArgs activeDiscChangedEventArgs = null;
-			Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => e.RegisterEvent(ref activeDiscChangedEventArgs));
+			messenger.Register<ActiveDiscChangedEventArgs>(this, (_, e) => e.RegisterEvent(ref activeDiscChangedEventArgs));
 
 			// Act
 
-			Messenger.Default.Send(new PlaylistLoadedEventArgs(Enumerable.Empty<SongModel>(), null, null));
+			messenger.Send(new PlaylistLoadedEventArgs(Enumerable.Empty<SongModel>(), null, null));
 
 			// Assert
 
@@ -320,21 +324,22 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var currentDisc = new DiscModel();
 
 			var mocker = new AutoMocker();
+			var messenger = mocker.StubMessenger();
+
 			var target = mocker.CreateInstance<SongListTabViewModel>();
 
 			target.SwitchToPlaylistCommand.Execute(null);
 
 			// We mock CurrentDisc property after switching to Playlist.
 			// Otherwise value of ActiveDisc will be the same and no event will be sent.
-			mocker.GetMock<IPlaylistViewModel>()
-				.Setup(x => x.CurrentDisc).Returns(currentDisc);
+			mocker.GetMock<IPlaylistViewModel>().Setup(x => x.CurrentDisc).Returns(currentDisc);
 
 			ActiveDiscChangedEventArgs activeDiscChangedEventArgs = null;
-			Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => e.RegisterEvent(ref activeDiscChangedEventArgs));
+			messenger.Register<ActiveDiscChangedEventArgs>(this, (_, e) => e.RegisterEvent(ref activeDiscChangedEventArgs));
 
 			// Act
 
-			Messenger.Default.Send(new PlaylistChangedEventArgs(Enumerable.Empty<SongModel>(), null, null));
+			messenger.Send(new PlaylistChangedEventArgs(Enumerable.Empty<SongModel>(), null, null));
 
 			// Assert
 
@@ -350,19 +355,20 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var mocker = new AutoMocker();
 
 			// Mocking SelectedDisc for LibraryExplorer so that we could catch mistaken set of ActiveDisc to different value.
-			mocker.GetMock<ILibraryExplorerViewModel>()
-				.Setup(x => x.SelectedDisc).Returns(new DiscModel());
+			mocker.GetMock<ILibraryExplorerViewModel>().Setup(x => x.SelectedDisc).Returns(new DiscModel());
+
+			var messenger = mocker.StubMessenger();
 
 			var target = mocker.CreateInstance<SongListTabViewModel>();
 
 			target.SwitchToDiscSongListCommand.Execute(null);
 
 			ActiveDiscChangedEventArgs activeDiscChangedEventArgs = null;
-			Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => e.RegisterEvent(ref activeDiscChangedEventArgs));
+			messenger.Register<ActiveDiscChangedEventArgs>(this, (_, e) => e.RegisterEvent(ref activeDiscChangedEventArgs));
 
 			// Act
 
-			Messenger.Default.Send(new PlaylistChangedEventArgs(Enumerable.Empty<SongModel>(), null, null));
+			messenger.Send(new PlaylistChangedEventArgs(Enumerable.Empty<SongModel>(), null, null));
 
 			// Assert
 

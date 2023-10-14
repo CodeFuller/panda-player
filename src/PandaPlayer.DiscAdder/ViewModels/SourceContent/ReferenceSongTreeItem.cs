@@ -12,7 +12,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			set
 			{
 				song = value;
-				RaisePropertyChanged(nameof(ViewTitle));
+				OnPropertyChanged(nameof(ViewTitle));
 			}
 		}
 

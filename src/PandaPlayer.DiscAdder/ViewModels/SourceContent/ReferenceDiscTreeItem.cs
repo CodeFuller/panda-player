@@ -13,8 +13,8 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			get => expectedDirectoryPath;
 			set
 			{
-				Set(ref expectedDirectoryPath, value);
-				RaisePropertyChanged(nameof(ViewTitle));
+				SetProperty(ref expectedDirectoryPath, value);
+				OnPropertyChanged(nameof(ViewTitle));
 			}
 		}
 

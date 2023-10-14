@@ -1,13 +1,15 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using FluentAssertions;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.LibraryExplorerEvents;
 using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels;
 using PandaPlayer.ViewModels.LibraryExplorerItems;
 
@@ -16,12 +18,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 	[TestClass]
 	public class LibraryExplorerItemListViewModelTests
 	{
-		[TestInitialize]
-		public void Initialize()
-		{
-			Messenger.Reset();
-		}
-
 		[TestMethod]
 		public void DiscsGetter_ReturnsActiveDiscs()
 		{
@@ -931,13 +927,14 @@ namespace PandaPlayer.UnitTests.ViewModels
 			parentFolder.AddSubfolders(folder);
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
 
 			target.LoadFolderItems(folder);
 			target.SelectedItem.Should().BeOfType<ParentFolderExplorerItem>();
 
 			LoadParentFolderEventArgs loadParentFolderEvent = null;
-			Messenger.Default.Register<LoadParentFolderEventArgs>(this, e => e.RegisterEvent(ref loadParentFolderEvent));
+			mocker.Get<IMessenger>().Register<LoadParentFolderEventArgs>(this, (_, e) => e.RegisterEvent(ref loadParentFolderEvent));
 
 			// Act
 
@@ -965,6 +962,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			parentFolder.AddSubfolders(folder);
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<LibraryExplorerItemListViewModel>();
 
 			target.LoadFolderItems(folder);
@@ -972,7 +970,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			target.SelectedItem.Should().BeOfType<FolderExplorerItem>();
 
 			LoadFolderEventArgs loadFolderEvent = null;
-			Messenger.Default.Register<LoadFolderEventArgs>(this, e => e.RegisterEvent(ref loadFolderEvent));
+			mocker.Get<IMessenger>().Register<LoadFolderEventArgs>(this, (_, e) => e.RegisterEvent(ref loadFolderEvent));
 
 			// Act
 
@@ -1003,20 +1001,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 			target.SelectedItem = target.Items[2];
 			target.SelectedItem.Should().BeOfType<DiscExplorerItem>();
 
-			LoadParentFolderEventArgs loadParentFolderEvent = null;
-			Messenger.Default.Register<LoadParentFolderEventArgs>(this, e => e.RegisterEvent(ref loadParentFolderEvent));
-
-			LoadFolderEventArgs loadFolderEvent = null;
-			Messenger.Default.Register<LoadFolderEventArgs>(this, e => e.RegisterEvent(ref loadFolderEvent));
-
 			// Act
 
 			target.ChangeFolderCommand.Execute(null);
 
 			// Assert
 
-			loadParentFolderEvent.Should().BeNull();
-			loadFolderEvent.Should().BeNull();
+			var messengerMock = mocker.GetMock<IMessenger>();
+			messengerMock.Verify(x => x.Send(It.IsAny<LoadParentFolderEventArgs>(), It.IsAny<IsAnyToken>()), Times.Never);
+			messengerMock.Verify(x => x.Send(It.IsAny<LoadFolderEventArgs>(), It.IsAny<IsAnyToken>()), Times.Never);
 		}
 
 		[TestMethod]
@@ -1037,20 +1030,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 			target.LoadFolderItems(folder);
 			target.SelectedItem = null;
 
-			LoadParentFolderEventArgs loadParentFolderEvent = null;
-			Messenger.Default.Register<LoadParentFolderEventArgs>(this, e => e.RegisterEvent(ref loadParentFolderEvent));
-
-			LoadFolderEventArgs loadFolderEvent = null;
-			Messenger.Default.Register<LoadFolderEventArgs>(this, e => e.RegisterEvent(ref loadFolderEvent));
-
 			// Act
 
 			target.ChangeFolderCommand.Execute(null);
 
 			// Assert
 
-			loadParentFolderEvent.Should().BeNull();
-			loadFolderEvent.Should().BeNull();
+			var messengerMock = mocker.GetMock<IMessenger>();
+			messengerMock.Verify(x => x.Send(It.IsAny<LoadParentFolderEventArgs>(), It.IsAny<IsAnyToken>()), Times.Never);
+			messengerMock.Verify(x => x.Send(It.IsAny<LoadFolderEventArgs>(), It.IsAny<IsAnyToken>()), Times.Never);
 		}
 
 		[TestMethod]

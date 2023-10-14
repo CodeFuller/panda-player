@@ -4,7 +4,7 @@ using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using PandaPlayer.ViewModels.AdviseSetsEditor;
 using PandaPlayer.ViewModels.Interfaces;
 
@@ -18,7 +18,7 @@ namespace PandaPlayer.Views
 
 		public AdviseSetsDataGrid()
 		{
-			Messenger.Default.Register<AdviseSetCreatedEventArgs>(this, OnAdviseSetCreated);
+			WeakReferenceMessenger.Default.Register<AdviseSetCreatedEventArgs>(this, (_, e) => OnAdviseSetCreated(e));
 		}
 
 		private void OnAdviseSetCreated(AdviseSetCreatedEventArgs e)

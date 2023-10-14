@@ -4,8 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using FluentAssertions;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
@@ -14,6 +14,7 @@ using PandaPlayer.Events;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels.PersistentPlaylist;
 
 namespace PandaPlayer.UnitTests.ViewModels.PersistentPlaylist
@@ -21,12 +22,6 @@ namespace PandaPlayer.UnitTests.ViewModels.PersistentPlaylist
 	[TestClass]
 	public class PersistentPlaylistViewModelTests
 	{
-		[TestInitialize]
-		public void Initialize()
-		{
-			Messenger.Reset();
-		}
-
 		[TestMethod]
 		public void ApplicationLoadedEventHandler_IfNoPlaylistSessionDataExist_DoesNotLoadAnySongs()
 		{
@@ -38,17 +33,19 @@ namespace PandaPlayer.UnitTests.ViewModels.PersistentPlaylist
 			var mocker = new AutoMocker();
 			mocker.Use(sessionServiceStub);
 
+			var messenger = mocker.StubMessenger();
+
 			var target = mocker.CreateInstance<PersistentPlaylistViewModel>();
 
 			PlaylistLoadedEventArgs playlistLoadedEvent = null;
-			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => e.RegisterEvent(ref playlistLoadedEvent));
+			messenger.Register<PlaylistLoadedEventArgs>(this, (_, e) => e.RegisterEvent(ref playlistLoadedEvent));
 
 			NoPlaylistLoadedEventArgs noPlaylistLoadedEvent = null;
-			Messenger.Default.Register<NoPlaylistLoadedEventArgs>(this, e => e.RegisterEvent(ref noPlaylistLoadedEvent));
+			messenger.Register<NoPlaylistLoadedEventArgs>(this, (_, e) => e.RegisterEvent(ref noPlaylistLoadedEvent));
 
 			// Act
 
-			Messenger.Default.Send(new ApplicationLoadedEventArgs());
+			messenger.Send(new ApplicationLoadedEventArgs());
 
 			// Assert
 
@@ -104,23 +101,25 @@ namespace PandaPlayer.UnitTests.ViewModels.PersistentPlaylist
 			mocker.Use(sessionServiceStub);
 			mocker.Use(songServiceStub);
 
+			var messenger = mocker.StubMessenger();
+
 			var target = mocker.CreateInstance<PersistentPlaylistViewModel>();
 
 			PlaylistLoadedEventArgs playlistLoadedEvent = null;
-			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => e.RegisterEvent(ref playlistLoadedEvent));
+			messenger.Register<PlaylistLoadedEventArgs>(this, (_, e) => e.RegisterEvent(ref playlistLoadedEvent));
 
 			NoPlaylistLoadedEventArgs noPlaylistLoadedEvent = null;
-			Messenger.Default.Register<NoPlaylistLoadedEventArgs>(this, e => e.RegisterEvent(ref noPlaylistLoadedEvent));
+			messenger.Register<NoPlaylistLoadedEventArgs>(this, (_, e) => e.RegisterEvent(ref noPlaylistLoadedEvent));
 
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
+			messenger.Register<PlaylistChangedEventArgs>(this, (_, e) => e.RegisterEvent(ref playlistChangedEventArgs));
 
 			var propertyChangedEvents = new List<PropertyChangedEventArgs>();
 			target.PropertyChanged += (_, e) => propertyChangedEvents.Add(e);
 
 			// Act
 
-			Messenger.Default.Send(new ApplicationLoadedEventArgs());
+			messenger.Send(new ApplicationLoadedEventArgs());
 
 			// Assert
 
@@ -165,17 +164,19 @@ namespace PandaPlayer.UnitTests.ViewModels.PersistentPlaylist
 			mocker.Use(sessionServiceStub);
 			mocker.Use(songServiceStub);
 
+			var messenger = mocker.StubMessenger();
+
 			var target = mocker.CreateInstance<PersistentPlaylistViewModel>();
 
 			PlaylistLoadedEventArgs playlistLoadedEvent = null;
-			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => e.RegisterEvent(ref playlistLoadedEvent));
+			messenger.Register<PlaylistLoadedEventArgs>(this, (_, e) => e.RegisterEvent(ref playlistLoadedEvent));
 
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
+			messenger.Register<PlaylistChangedEventArgs>(this, (_, e) => e.RegisterEvent(ref playlistChangedEventArgs));
 
 			// Act
 
-			Messenger.Default.Send(new ApplicationLoadedEventArgs());
+			messenger.Send(new ApplicationLoadedEventArgs());
 
 			// Assert
 
@@ -223,17 +224,19 @@ namespace PandaPlayer.UnitTests.ViewModels.PersistentPlaylist
 			mocker.Use(sessionServiceStub);
 			mocker.Use(songServiceStub);
 
+			var messenger = mocker.StubMessenger();
+
 			var target = mocker.CreateInstance<PersistentPlaylistViewModel>();
 
 			PlaylistLoadedEventArgs playlistLoadedEvent = null;
-			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => e.RegisterEvent(ref playlistLoadedEvent));
+			messenger.Register<PlaylistLoadedEventArgs>(this, (_, e) => e.RegisterEvent(ref playlistLoadedEvent));
 
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
+			messenger.Register<PlaylistChangedEventArgs>(this, (_, e) => e.RegisterEvent(ref playlistChangedEventArgs));
 
 			// Act
 
-			Messenger.Default.Send(new ApplicationLoadedEventArgs());
+			messenger.Send(new ApplicationLoadedEventArgs());
 
 			// Assert
 
@@ -278,17 +281,19 @@ namespace PandaPlayer.UnitTests.ViewModels.PersistentPlaylist
 			mocker.Use(sessionServiceStub);
 			mocker.Use(songServiceStub);
 
+			var messenger = mocker.StubMessenger();
+
 			var target = mocker.CreateInstance<PersistentPlaylistViewModel>();
 
 			PlaylistLoadedEventArgs playlistLoadedEvent = null;
-			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => e.RegisterEvent(ref playlistLoadedEvent));
+			messenger.Register<PlaylistLoadedEventArgs>(this, (_, e) => e.RegisterEvent(ref playlistLoadedEvent));
 
 			NoPlaylistLoadedEventArgs noPlaylistLoadedEvent = null;
-			Messenger.Default.Register<NoPlaylistLoadedEventArgs>(this, e => e.RegisterEvent(ref noPlaylistLoadedEvent));
+			messenger.Register<NoPlaylistLoadedEventArgs>(this, (_, e) => e.RegisterEvent(ref noPlaylistLoadedEvent));
 
 			// Act
 
-			Messenger.Default.Send(new ApplicationLoadedEventArgs());
+			messenger.Send(new ApplicationLoadedEventArgs());
 
 			// Assert
 
@@ -347,17 +352,19 @@ namespace PandaPlayer.UnitTests.ViewModels.PersistentPlaylist
 			mocker.Use(sessionServiceStub);
 			mocker.Use(songServiceStub);
 
+			var messenger = mocker.StubMessenger();
+
 			var target = mocker.CreateInstance<PersistentPlaylistViewModel>();
 
 			PlaylistLoadedEventArgs playlistLoadedEvent = null;
-			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => e.RegisterEvent(ref playlistLoadedEvent));
+			messenger.Register<PlaylistLoadedEventArgs>(this, (_, e) => e.RegisterEvent(ref playlistLoadedEvent));
 
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
+			messenger.Register<PlaylistChangedEventArgs>(this, (_, e) => e.RegisterEvent(ref playlistChangedEventArgs));
 
 			// Act
 
-			Messenger.Default.Send(new ApplicationLoadedEventArgs());
+			messenger.Send(new ApplicationLoadedEventArgs());
 
 			// Assert
 
@@ -405,17 +412,19 @@ namespace PandaPlayer.UnitTests.ViewModels.PersistentPlaylist
 			mocker.Use(sessionServiceStub);
 			mocker.Use(songServiceStub);
 
+			var messenger = mocker.StubMessenger();
+
 			var target = mocker.CreateInstance<PersistentPlaylistViewModel>();
 
 			PlaylistLoadedEventArgs playlistLoadedEvent = null;
-			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => e.RegisterEvent(ref playlistLoadedEvent));
+			messenger.Register<PlaylistLoadedEventArgs>(this, (_, e) => e.RegisterEvent(ref playlistLoadedEvent));
 
 			NoPlaylistLoadedEventArgs noPlaylistLoadedEvent = null;
-			Messenger.Default.Register<NoPlaylistLoadedEventArgs>(this, e => e.RegisterEvent(ref noPlaylistLoadedEvent));
+			messenger.Register<NoPlaylistLoadedEventArgs>(this, (_, e) => e.RegisterEvent(ref noPlaylistLoadedEvent));
 
 			// Act
 
-			Messenger.Default.Send(new ApplicationLoadedEventArgs());
+			messenger.Send(new ApplicationLoadedEventArgs());
 
 			// Assert
 
@@ -431,11 +440,12 @@ namespace PandaPlayer.UnitTests.ViewModels.PersistentPlaylist
 			// Arrange
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<PersistentPlaylistViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(new PlaylistFinishedEventArgs(Enumerable.Empty<SongModel>()));
+			mocker.SendMessage(new PlaylistFinishedEventArgs(Enumerable.Empty<SongModel>()));
 
 			// Assert
 
@@ -505,13 +515,14 @@ namespace PandaPlayer.UnitTests.ViewModels.PersistentPlaylist
 			};
 
 			var mocker = new AutoMocker();
+			var messenger = mocker.StubMessenger();
 			var target = mocker.CreateInstance<PersistentPlaylistViewModel>();
 
 			await target.SetPlaylistSongs(songs, CancellationToken.None);
 			await target.SwitchToNextSong(CancellationToken.None);
 
 			PlaylistChangedEventArgs playlistChangedEventArgs = null;
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, e => e.RegisterEvent(ref playlistChangedEventArgs));
+			messenger.Register<PlaylistChangedEventArgs>(this, (_, e) => e.RegisterEvent(ref playlistChangedEventArgs));
 
 			// Act
 

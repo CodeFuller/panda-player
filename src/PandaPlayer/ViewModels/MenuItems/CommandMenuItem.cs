@@ -2,8 +2,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
-using CodeFuller.Library.Wpf;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
 
 namespace PandaPlayer.ViewModels.MenuItems
 {
@@ -11,9 +10,9 @@ namespace PandaPlayer.ViewModels.MenuItems
 	{
 		private readonly ICommand command;
 
-		public CommandMenuItem(Action commandAction, bool keepTargetAlive)
+		public CommandMenuItem(Action commandAction)
 		{
-			command = new RelayCommand(commandAction, keepTargetAlive);
+			command = new RelayCommand(commandAction);
 		}
 
 		public CommandMenuItem(Func<Task> commandAction)

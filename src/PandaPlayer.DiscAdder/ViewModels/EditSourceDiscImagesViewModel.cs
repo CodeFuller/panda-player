@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using PandaPlayer.Core.Models;
 using PandaPlayer.DiscAdder.Interfaces;
 using PandaPlayer.DiscAdder.ViewModels.Interfaces;
@@ -13,7 +13,7 @@ using PandaPlayer.Shared.Images;
 
 namespace PandaPlayer.DiscAdder.ViewModels
 {
-	internal class EditSourceDiscImagesViewModel : ViewModelBase, IEditSourceDiscImagesViewModel
+	internal class EditSourceDiscImagesViewModel : ObservableObject, IEditSourceDiscImagesViewModel
 	{
 		private readonly IContentCrawler contentCrawler;
 		private readonly IObjectFactory<IImageFile> imageFileFactory;
@@ -48,7 +48,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		internal void RefreshContent()
 		{
 			LoadImages();
-			RaisePropertyChanged(nameof(DataIsReady));
+			OnPropertyChanged(nameof(DataIsReady));
 		}
 
 		private void LoadImages()

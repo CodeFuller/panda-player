@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using CodeFuller.Library.Wpf;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.Services.Diagnostic;
 using PandaPlayer.Services.Diagnostic.Inconsistencies;
 using PandaPlayer.Services.Interfaces;
@@ -14,7 +14,7 @@ using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels
 {
-	internal class LibraryCheckerViewModel : ViewModelBase, ILibraryCheckerViewModel, IOperationProgress
+	internal class LibraryCheckerViewModel : ObservableObject, ILibraryCheckerViewModel, IOperationProgress
 	{
 		private readonly IDiagnosticService diagnosticService;
 
@@ -97,10 +97,10 @@ namespace PandaPlayer.ViewModels
 			{
 				checkFlags = value;
 
-				RaisePropertyChanged(nameof(CheckDiscsConsistency));
-				RaisePropertyChanged(nameof(CheckStorageConsistency));
-				RaisePropertyChanged(nameof(CheckContentConsistency));
-				RaisePropertyChanged(nameof(CheckTagsConsistency));
+				OnPropertyChanged(nameof(CheckDiscsConsistency));
+				OnPropertyChanged(nameof(CheckStorageConsistency));
+				OnPropertyChanged(nameof(CheckContentConsistency));
+				OnPropertyChanged(nameof(CheckTagsConsistency));
 			}
 		}
 
@@ -109,7 +109,7 @@ namespace PandaPlayer.ViewModels
 		public bool IsRunning
 		{
 			get => isRunning;
-			set => Set(ref isRunning, value);
+			set => SetProperty(ref isRunning, value);
 		}
 
 		private double checkProgressMaximum = 100;
@@ -119,8 +119,8 @@ namespace PandaPlayer.ViewModels
 			get => checkProgressMaximum;
 			set
 			{
-				Set(ref checkProgressMaximum, value);
-				RaisePropertyChanged(nameof(CheckProgressPercentage));
+				SetProperty(ref checkProgressMaximum, value);
+				OnPropertyChanged(nameof(CheckProgressPercentage));
 			}
 		}
 
@@ -131,8 +131,8 @@ namespace PandaPlayer.ViewModels
 			get => checkProgressValue;
 			set
 			{
-				Set(ref checkProgressValue, value);
-				RaisePropertyChanged(nameof(CheckProgressPercentage));
+				SetProperty(ref checkProgressValue, value);
+				OnPropertyChanged(nameof(CheckProgressPercentage));
 			}
 		}
 

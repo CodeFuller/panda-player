@@ -40,12 +40,12 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 			{
 				if (args.PropertyName == nameof(Folder.Name))
 				{
-					RaisePropertyChanged(nameof(Title));
+					OnPropertyChanged(nameof(Title));
 				}
 
 				if (args.PropertyName == nameof(Folder.AdviseGroup))
 				{
-					RaisePropertyChanged(nameof(IconKind));
+					OnPropertyChanged(nameof(IconKind));
 				}
 			};
 		}
@@ -64,7 +64,7 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 				Items = GetAdviseGroupMenuItems(new FolderAdviseGroupHolder(Folder), libraryExplorerViewModel, adviseGroupHelper),
 			};
 
-			yield return new CommandMenuItem(() => libraryExplorerViewModel.RenameFolder(Folder), keepTargetAlive: true)
+			yield return new CommandMenuItem(() => libraryExplorerViewModel.RenameFolder(Folder))
 			{
 				Header = "Rename Folder",
 				IconKind = PackIconKind.Pencil,

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using FluentAssertions;
-using GalaSoft.MvvmLight.Messaging;
 using MaterialDesignThemes.Wpf;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -19,12 +18,6 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 	[TestClass]
 	public class DiscExplorerItemTests
 	{
-		[TestInitialize]
-		public void Initialize()
-		{
-			Messenger.Reset();
-		}
-
 		[TestMethod]
 		public void TitleGetter_ReturnsDiscTreeTitle()
 		{
@@ -368,10 +361,10 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 
 			var expectedMenuItems = new[]
 			{
-				new CommandMenuItem(() => { }, false) { Header = "Play Disc", IconKind = PackIconKind.Play },
-				new CommandMenuItem(() => { }, false) { Header = "Add To Playlist", IconKind = PackIconKind.PlaylistPlus },
-				new CommandMenuItem(() => { }, false) { Header = "Delete Disc", IconKind = PackIconKind.DeleteForever },
-				new CommandMenuItem(() => { }, false) { Header = "Properties", IconKind = PackIconKind.Pencil },
+				new CommandMenuItem(() => { }) { Header = "Play Disc", IconKind = PackIconKind.Play },
+				new CommandMenuItem(() => { }) { Header = "Add To Playlist", IconKind = PackIconKind.PlaylistPlus },
+				new CommandMenuItem(() => { }) { Header = "Delete Disc", IconKind = PackIconKind.DeleteForever },
+				new CommandMenuItem(() => { }) { Header = "Properties", IconKind = PackIconKind.Pencil },
 			};
 
 			// Nested items for advise group are covered by UT for BasicExplorerItem.
@@ -396,7 +389,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 
 			var expectedMenuItems = new[]
 			{
-				new CommandMenuItem(() => { }, false) { Header = "Properties", IconKind = PackIconKind.Pencil },
+				new CommandMenuItem(() => { }) { Header = "Properties", IconKind = PackIconKind.Pencil },
 			};
 
 			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering());

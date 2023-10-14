@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CodeFuller.Library.Wpf;
 using CodeFuller.Library.Wpf.Interfaces;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using PandaPlayer.Core.Comparers;
 using PandaPlayer.Core.Extensions;
 using PandaPlayer.Core.Models;
@@ -19,13 +19,15 @@ using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels.AdviseSetsEditor
 {
-	internal class AdviseSetsEditorViewModel : ViewModelBase, IAdviseSetsEditorViewModel
+	internal class AdviseSetsEditorViewModel : ObservableObject, IAdviseSetsEditorViewModel
 	{
 		private readonly IAdviseSetService adviseSetService;
 
 		private readonly IDiscsService discService;
 
 		private readonly IWindowService windowService;
+
+		private readonly IMessenger messenger;
 
 		public ObservableCollection<AdviseSetModel> AdviseSets { get; } = new();
 
@@ -36,7 +38,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			get => selectedAdviseSet;
 			set
 			{
-				Set(ref selectedAdviseSet, value);
+				SetProperty(ref selectedAdviseSet, value);
 
 				CurrentAdviseSetDiscs.Clear();
 				if (selectedAdviseSet != null)
@@ -67,7 +69,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			get => selectedAdviseSetDisc;
 			set
 			{
-				Set(ref selectedAdviseSetDisc, value);
+				SetProperty(ref selectedAdviseSetDisc, value);
 				RaisePropertyChangedForAdviseSetButtons();
 			}
 		}
@@ -98,12 +100,14 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 		public ICommand MoveDiscDownCommand { get; }
 
-		public AdviseSetsEditorViewModel(IAvailableDiscsViewModel availableDiscsViewModel, IAdviseSetService adviseSetService, IDiscsService discService, IWindowService windowService)
+		public AdviseSetsEditorViewModel(IAvailableDiscsViewModel availableDiscsViewModel, IAdviseSetService adviseSetService,
+			IDiscsService discService, IWindowService windowService, IMessenger messenger)
 		{
 			this.AvailableDiscsViewModel = availableDiscsViewModel ?? throw new ArgumentNullException(nameof(availableDiscsViewModel));
 			this.adviseSetService = adviseSetService ?? throw new ArgumentNullException(nameof(adviseSetService));
 			this.discService = discService ?? throw new ArgumentNullException(nameof(discService));
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			this.CreateAdviseSetCommand = new AsyncRelayCommand(() => CreateAdviseSet(CancellationToken.None));
 			this.DeleteAdviseSetCommand = new AsyncRelayCommand(() => DeleteAdviseSet(CancellationToken.None));
@@ -178,7 +182,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 			if (SelectedAdviseSet != null)
 			{
-				Messenger.Default.Send(new AdviseSetCreatedEventArgs(SelectedAdviseSet));
+				messenger.Send(new AdviseSetCreatedEventArgs(SelectedAdviseSet));
 			}
 		}
 
@@ -304,19 +308,19 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 		private void RaisePropertyChangedForAdviseSetButtons()
 		{
-			RaisePropertyChanged(nameof(CanDeleteAdviseSet));
-			RaisePropertyChanged(nameof(CanAddDiscs));
-			RaisePropertyChanged(nameof(CanRemoveDisc));
-			RaisePropertyChanged(nameof(CanMoveDiscUp));
-			RaisePropertyChanged(nameof(CanMoveDiscDown));
+			OnPropertyChanged(nameof(CanDeleteAdviseSet));
+			OnPropertyChanged(nameof(CanAddDiscs));
+			OnPropertyChanged(nameof(CanRemoveDisc));
+			OnPropertyChanged(nameof(CanMoveDiscUp));
+			OnPropertyChanged(nameof(CanMoveDiscDown));
 		}
 
 		private void AvailableDiscsViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == nameof(AvailableDiscsViewModel.SelectedItems))
 			{
-				RaisePropertyChanged(nameof(CanCreateAdviseSet));
-				RaisePropertyChanged(nameof(CanAddDiscs));
+				OnPropertyChanged(nameof(CanCreateAdviseSet));
+				OnPropertyChanged(nameof(CanAddDiscs));
 			}
 		}
 	}

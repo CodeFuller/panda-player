@@ -1,3 +1,5 @@
+using CommunityToolkit.Mvvm.Messaging;
+using Moq;
 using PandaPlayer.DiscAdder.ViewModels.SourceContent;
 
 namespace PandaPlayer.DiscAdder.UnitTests.TestHelpers
@@ -11,7 +13,7 @@ namespace PandaPlayer.DiscAdder.UnitTests.TestHelpers
 
 		public static ActualDiscTreeItem ToActualDiscTreeItem(this ActualDiscContent disc)
 		{
-			return new ActualDiscTreeItem(disc);
+			return new ActualDiscTreeItem(disc, Mock.Of<IMessenger>());
 		}
 	}
 }

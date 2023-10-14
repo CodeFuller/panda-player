@@ -1,7 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PandaPlayer.Settings;
@@ -10,7 +10,7 @@ using PandaPlayer.ViewModels.Logging;
 
 namespace PandaPlayer.ViewModels
 {
-	internal class LoggerViewModel : ViewModelBase, ILoggerViewModel, ILogger
+	internal class LoggerViewModel : ObservableObject, ILoggerViewModel, ILogger
 	{
 		private sealed class EmptyDisposable : IDisposable
 		{

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Comparers;
 using PandaPlayer.Core.Extensions;
@@ -19,6 +19,8 @@ namespace PandaPlayer.ViewModels
 {
 	public class PlaylistViewModel : SongListViewModel, IPlaylistViewModel
 	{
+		private readonly IMessenger messenger;
+
 		// CurrentSongIndex and CurrentItem are kept in-sync via method SetCurrentSong.
 		// Neither CurrentSongIndex nor CurrentItem should be set directly.
 		protected int? CurrentSongIndex { get; private set; }
@@ -106,7 +108,7 @@ namespace PandaPlayer.ViewModels
 
 				if (selectedSong != null)
 				{
-					yield return new CommandMenuItem(() => Messenger.Default.Send(new NavigateLibraryExplorerToDiscEventArgs(selectedSong.Disc)), keepTargetAlive: true)
+					yield return new CommandMenuItem(() => messenger.Send(new NavigateLibraryExplorerToDiscEventArgs(selectedSong.Disc)))
 					{
 						Header = "Go To Disc",
 						IconKind = PackIconKind.Album,
@@ -126,9 +128,11 @@ namespace PandaPlayer.ViewModels
 			}
 		}
 
-		public PlaylistViewModel(ISongsService songsService, IViewNavigator viewNavigator)
+		public PlaylistViewModel(ISongsService songsService, IViewNavigator viewNavigator, IMessenger messenger)
 			: base(songsService, viewNavigator)
 		{
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+
 			// There are 2 use cases of adding songs (Play Next & Play Last) to PlaylistViewModel:
 			//   1. Action is invoked from context menu in DiscSongListViewModel.
 			//      In this case DiscSongListViewModel sends AddingSongsToPlaylistNextEventArgs or AddingSongsToPlaylistLastEventArgs.
@@ -138,8 +142,8 @@ namespace PandaPlayer.ViewModels
 			//      In ths case songs are added to PlaylistViewModel directly by calling AddSongsNext() & AddSongsLast() methods.
 			//
 			//   This is done to prevent anti-pattern when object sends event to itself.
-			Messenger.Default.Register<AddingSongsToPlaylistNextEventArgs>(this, e => OnAddingNextSongs(e.Songs, CancellationToken.None));
-			Messenger.Default.Register<AddingSongsToPlaylistLastEventArgs>(this, e => OnAddingLastSongs(e.Songs, CancellationToken.None));
+			messenger.Register<AddingSongsToPlaylistNextEventArgs>(this, (_, e) => OnAddingNextSongs(e.Songs, CancellationToken.None));
+			messenger.Register<AddingSongsToPlaylistLastEventArgs>(this, (_, e) => OnAddingLastSongs(e.Songs, CancellationToken.None));
 		}
 
 		protected void SetCurrentSong(int? songIndex)
@@ -150,7 +154,7 @@ namespace PandaPlayer.ViewModels
 
 		protected virtual Task OnPlaylistChanged(CancellationToken cancellationToken)
 		{
-			Messenger.Default.Send(new PlaylistChangedEventArgs(Songs, CurrentSong, CurrentSongIndex));
+			messenger.Send(new PlaylistChangedEventArgs(Songs, CurrentSong, CurrentSongIndex));
 
 			return Task.CompletedTask;
 		}
@@ -232,7 +236,7 @@ namespace PandaPlayer.ViewModels
 
 			await OnPlaylistChanged(cancellationToken);
 
-			Messenger.Default.Send(new PlayPlaylistStartingFromSongEventArgs());
+			messenger.Send(new PlayPlaylistStartingFromSongEventArgs());
 		}
 
 		internal async Task RemoveSongsFromPlaylist(IReadOnlyCollection<SongListItem> songItems, CancellationToken cancellationToken)

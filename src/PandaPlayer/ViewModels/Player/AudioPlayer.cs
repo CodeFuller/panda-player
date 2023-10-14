@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Timers;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using PandaPlayer.Facades;
 
 namespace PandaPlayer.ViewModels.Player
@@ -21,6 +21,8 @@ namespace PandaPlayer.ViewModels.Player
 		private readonly IMediaPlayerFacade mediaPlayer;
 
 		private readonly ITimerFacade timer;
+
+		private readonly IMessenger messenger;
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -78,10 +80,11 @@ namespace PandaPlayer.ViewModels.Player
 			set => mediaPlayer.Volume = value;
 		}
 
-		public AudioPlayer(IMediaPlayerFacade mediaPlayer, ITimerFacade timer)
+		public AudioPlayer(IMediaPlayerFacade mediaPlayer, ITimerFacade timer, IMessenger messenger)
 		{
 			this.mediaPlayer = mediaPlayer ?? throw new ArgumentNullException(nameof(mediaPlayer));
 			this.timer = timer ?? throw new ArgumentNullException(nameof(timer));
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			this.mediaPlayer.MediaOpened += MediaPlayerOnMediaOpened;
 			this.mediaPlayer.MediaEnded += MediaPlayerOnMediaEnded;
@@ -138,7 +141,7 @@ namespace PandaPlayer.ViewModels.Player
 
 			SongLength = TimeSpan.Zero;
 
-			Messenger.Default.Send(new SongMediaFinishedEventArgs());
+			messenger.Send(new SongMediaFinishedEventArgs());
 		}
 
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

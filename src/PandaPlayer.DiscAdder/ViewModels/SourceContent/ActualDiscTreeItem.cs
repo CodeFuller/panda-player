@@ -2,13 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using PandaPlayer.DiscAdder.Events;
 
 namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
 	internal class ActualDiscTreeItem : ActualBasicContentTreeItem
 	{
+		private readonly IMessenger messenger;
+
 		public override IEnumerable<ActualBasicContentTreeItem> ChildItems => Songs
 			.Concat<ActualBasicContentTreeItem>(Enumerable.Repeat(new ActualDiscSeparatorTreeItem(), 1));
 
@@ -18,7 +20,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			set
 			{
 				DiscDirectory = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -62,9 +64,9 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			}
 		}
 
-		private static void OnDiscContentChanged()
+		private void OnDiscContentChanged()
 		{
-			Messenger.Default.Send(new ActualContentChangedEventArgs());
+			messenger.Send(new ActualContentChangedEventArgs());
 		}
 
 		private bool contentIsIncorrect;
@@ -72,16 +74,17 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 		public bool ContentIsIncorrect
 		{
 			get => contentIsIncorrect;
-			set => Set(ref contentIsIncorrect, value);
+			set => SetProperty(ref contentIsIncorrect, value);
 		}
 
-		public ActualDiscTreeItem(ActualDiscContent disc)
+		public ActualDiscTreeItem(ActualDiscContent disc, IMessenger messenger)
 		{
 			_ = disc ?? throw new ArgumentNullException(nameof(disc));
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			DiscDirectory = disc.DiscDirectory;
 
-			Songs = disc.Songs.Select(x => new ActualSongTreeItem(this, x)).ToList();
+			Songs = disc.Songs.Select(x => new ActualSongTreeItem(this, x, messenger)).ToList();
 		}
 
 		public void MarkWholeDiscAsIncorrect()

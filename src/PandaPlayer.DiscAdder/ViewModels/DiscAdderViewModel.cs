@@ -4,14 +4,14 @@ using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CodeFuller.Library.Wpf;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using PandaPlayer.DiscAdder.ViewModels.Interfaces;
+using AsyncRelayCommand = CodeFuller.Library.Wpf.AsyncRelayCommand;
 
 namespace PandaPlayer.DiscAdder.ViewModels
 {
-	internal class DiscAdderViewModel : ViewModelBase, IDiscAdderViewModel
+	internal class DiscAdderViewModel : ObservableObject, IDiscAdderViewModel
 	{
 		private class NextPageInfo
 		{
@@ -69,13 +69,13 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			get => currentPage;
 			set
 			{
-				Set(ref currentPage, value);
+				SetProperty(ref currentPage, value);
 
-				RaisePropertyChanged(nameof(CanSwitchToPrevPage));
-				RaisePropertyChanged(nameof(CanSwitchToNextPage));
+				OnPropertyChanged(nameof(CanSwitchToPrevPage));
+				OnPropertyChanged(nameof(CanSwitchToNextPage));
 
-				RaisePropertyChanged(nameof(PrevPageName));
-				RaisePropertyChanged(nameof(NextPageName));
+				OnPropertyChanged(nameof(PrevPageName));
+				OnPropertyChanged(nameof(NextPageName));
 			}
 		}
 
@@ -230,12 +230,12 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		{
 			if (e.PropertyName == nameof(IPageViewModel.DataIsReady))
 			{
-				RaisePropertyChanged(nameof(CanSwitchToNextPage));
+				OnPropertyChanged(nameof(CanSwitchToNextPage));
 			}
 
 			if (sender is IAddToLibraryViewModel && e.PropertyName == nameof(IAddToLibraryViewModel.CanAddContent))
 			{
-				RaisePropertyChanged(nameof(CanSwitchToPrevPage));
+				OnPropertyChanged(nameof(CanSwitchToPrevPage));
 			}
 		}
 	}

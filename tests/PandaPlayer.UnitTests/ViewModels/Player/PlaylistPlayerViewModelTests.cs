@@ -1,8 +1,8 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using FluentAssertions;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
@@ -10,6 +10,7 @@ using PandaPlayer.Core.Models;
 using PandaPlayer.Events.SongEvents;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.ViewModels.Player;
 
@@ -18,12 +19,6 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 	[TestClass]
 	public class PlaylistPlayerViewModelTests
 	{
-		[TestInitialize]
-		public void Initialize()
-		{
-			Messenger.Reset();
-		}
-
 		[TestMethod]
 		public async Task ReversePlaying_IfNoSongIsPlaying_StartsPlayingCurrentPlaylistSong()
 		{
@@ -112,12 +107,13 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 
 			var mocker = new AutoMocker();
 			mocker.Use(playlistMock);
+			mocker.StubMessenger();
 
 			var target = mocker.CreateInstance<PlaylistPlayerViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(new PlaySongsListEventArgs(songs));
+			mocker.SendMessage(new PlaySongsListEventArgs(songs));
 
 			// Assert
 
@@ -148,6 +144,7 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 			var mocker = new AutoMocker();
 			mocker.Use(playlistMock);
 			mocker.Use(songPlayerMock);
+			mocker.StubMessenger();
 
 			var target = mocker.CreateInstance<PlaylistPlayerViewModel>();
 
@@ -157,7 +154,7 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 
 			// Act
 
-			Messenger.Default.Send(new PlaySongsListEventArgs(songs));
+			mocker.SendMessage(new PlaySongsListEventArgs(songs));
 
 			// Assert
 
@@ -178,12 +175,13 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 
 			var mocker = new AutoMocker();
 			mocker.Use(playlistMock);
+			mocker.StubMessenger();
 
 			var target = mocker.CreateInstance<PlaylistPlayerViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(new PlayPlaylistStartingFromSongEventArgs());
+			mocker.SendMessage(new PlayPlaylistStartingFromSongEventArgs());
 
 			// Assert
 
@@ -208,6 +206,7 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 			var mocker = new AutoMocker();
 			mocker.Use(playlistMock);
 			mocker.Use(songPlayerMock);
+			mocker.StubMessenger();
 
 			var target = mocker.CreateInstance<PlaylistPlayerViewModel>();
 
@@ -217,7 +216,7 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 
 			// Act
 
-			Messenger.Default.Send(new PlayPlaylistStartingFromSongEventArgs());
+			mocker.SendMessage(new PlayPlaylistStartingFromSongEventArgs());
 
 			// Assert
 
@@ -248,6 +247,7 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 			var mocker = new AutoMocker();
 			mocker.Use(playlistStub);
 			mocker.Use(songPlayerMock);
+			var messenger = mocker.StubMessenger();
 
 			var target = mocker.CreateInstance<PlaylistPlayerViewModel>();
 
@@ -256,11 +256,11 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 			songPlayerMock.Invocations.Clear();
 
 			PlaylistFinishedEventArgs playlistFinishedEvent = null;
-			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => e.RegisterEvent(ref playlistFinishedEvent));
+			messenger.Register<PlaylistFinishedEventArgs>(this, (_, e) => e.RegisterEvent(ref playlistFinishedEvent));
 
 			// Act
 
-			Messenger.Default.Send(new SongPlaybackFinishedEventArgs());
+			mocker.SendMessage(new SongPlaybackFinishedEventArgs());
 
 			// Assert
 
@@ -289,17 +289,18 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 
 			var mocker = new AutoMocker();
 			mocker.Use(playlistStub);
+			var messenger = mocker.StubMessenger();
 
 			var target = mocker.CreateInstance<PlaylistPlayerViewModel>();
 
 			await target.ReversePlaying(CancellationToken.None);
 
 			PlaylistFinishedEventArgs playlistFinishedEvent = null;
-			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => e.RegisterEvent(ref playlistFinishedEvent));
+			messenger.Register<PlaylistFinishedEventArgs>(this, (_, e) => e.RegisterEvent(ref playlistFinishedEvent));
 
 			// Act
 
-			Messenger.Default.Send(new SongPlaybackFinishedEventArgs());
+			messenger.Send(new SongPlaybackFinishedEventArgs());
 
 			// Assert
 

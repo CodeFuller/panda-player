@@ -1,8 +1,8 @@
 using System;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using PandaPlayer.Core.Facades;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
@@ -10,7 +10,7 @@ using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels.DiscImages
 {
-	public class DiscImageViewModel : ViewModelBase, IDiscImageViewModel
+	public class DiscImageViewModel : ObservableObject, IDiscImageViewModel
 	{
 		private readonly IViewNavigator viewNavigator;
 
@@ -23,8 +23,8 @@ namespace PandaPlayer.ViewModels.DiscImages
 			get => currentDisc;
 			set
 			{
-				Set(ref currentDisc, value);
-				RaisePropertyChanged(nameof(CoverImageSource));
+				SetProperty(ref currentDisc, value);
+				OnPropertyChanged(nameof(CoverImageSource));
 			}
 		}
 
@@ -59,15 +59,16 @@ namespace PandaPlayer.ViewModels.DiscImages
 
 		public ICommand EditDiscImageCommand { get; }
 
-		public DiscImageViewModel(IViewNavigator viewNavigator, IFileSystemFacade fileSystemFacade)
+		public DiscImageViewModel(IViewNavigator viewNavigator, IFileSystemFacade fileSystemFacade, IMessenger messenger)
 		{
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
 
 			EditDiscImageCommand = new RelayCommand(EditDiscImage);
 
-			Messenger.Default.Register<ActiveDiscChangedEventArgs>(this, e => CurrentDisc = e.Disc);
-			Messenger.Default.Register<DiscImageChangedEventArgs>(this, e => OnDiscImageChanged(e.Disc));
+			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
+			messenger.Register<ActiveDiscChangedEventArgs>(this, (_, e) => CurrentDisc = e.Disc);
+			messenger.Register<DiscImageChangedEventArgs>(this, (_, e) => OnDiscImageChanged(e.Disc));
 		}
 
 		private void EditDiscImage()
@@ -85,7 +86,7 @@ namespace PandaPlayer.ViewModels.DiscImages
 		{
 			if (disc.Id == CurrentDisc?.Id)
 			{
-				RaisePropertyChanged(nameof(CoverImageSource));
+				OnPropertyChanged(nameof(CoverImageSource));
 			}
 		}
 	}

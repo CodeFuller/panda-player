@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using PandaPlayer.DiscAdder.Events;
 
 namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
@@ -10,6 +10,8 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 	internal class ActualSongTreeItem : ActualBasicContentTreeItem
 	{
 		private readonly ActualDiscTreeItem discItem;
+
+		private readonly IMessenger messenger;
 
 		public override IEnumerable<ActualBasicContentTreeItem> ChildItems => Enumerable.Empty<ActualBasicContentTreeItem>();
 
@@ -19,7 +21,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 			set
 			{
 				FileName = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -52,7 +54,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 
 				if (fileMoved)
 				{
-					Messenger.Default.Send(new ActualContentChangedEventArgs());
+					messenger.Send(new ActualContentChangedEventArgs());
 				}
 			}
 		}
@@ -66,12 +68,13 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 		public bool ContentIsIncorrect
 		{
 			get => contentIsIncorrect;
-			set => Set(ref contentIsIncorrect, value);
+			set => SetProperty(ref contentIsIncorrect, value);
 		}
 
-		public ActualSongTreeItem(ActualDiscTreeItem discItem, ActualSongContent song)
+		public ActualSongTreeItem(ActualDiscTreeItem discItem, ActualSongContent song, IMessenger messenger)
 		{
 			_ = song ?? throw new ArgumentNullException(nameof(song));
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			this.discItem = discItem;
 			this.fileName = song.FileName;

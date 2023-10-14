@@ -4,9 +4,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Options;
 using PandaPlayer.Core.Facades;
 using PandaPlayer.Core.Models;
@@ -19,13 +19,14 @@ using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels.DiscImages
 {
-	public class EditDiscImageViewModel : ViewModelBase, IEditDiscImageViewModel
+	public class EditDiscImageViewModel : ObservableObject, IEditDiscImageViewModel
 	{
 		private readonly IDiscsService discsService;
 		private readonly IDocumentDownloader documentDownloader;
 		private readonly IImageFile imageFile;
 		private readonly IFileSystemFacade fileSystemFacade;
 		private readonly IWebBrowser webBrowser;
+		private readonly IMessenger messenger;
 		private readonly PandaPlayerSettings settings;
 
 		public DiscModel Disc { get; private set; }
@@ -39,7 +40,7 @@ namespace PandaPlayer.ViewModels.DiscImages
 		public bool ImageWasChanged
 		{
 			get => imageWasChanged;
-			set => Set(ref imageWasChanged, value);
+			set => SetProperty(ref imageWasChanged, value);
 		}
 
 		public string ImageProperties => imageFile.ImageProperties;
@@ -49,13 +50,14 @@ namespace PandaPlayer.ViewModels.DiscImages
 		public ICommand LaunchSearchForDiscImageCommand { get; }
 
 		public EditDiscImageViewModel(IDiscsService discsService, IDocumentDownloader documentDownloader, IImageFile imageFile,
-			IFileSystemFacade fileSystemFacade, IWebBrowser webBrowser, IOptions<PandaPlayerSettings> options)
+			IFileSystemFacade fileSystemFacade, IWebBrowser webBrowser, IMessenger messenger, IOptions<PandaPlayerSettings> options)
 		{
 			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
 			this.documentDownloader = documentDownloader ?? throw new ArgumentNullException(nameof(documentDownloader));
 			this.imageFile = imageFile ?? throw new ArgumentNullException(nameof(imageFile));
 			this.fileSystemFacade = fileSystemFacade ?? throw new ArgumentNullException(nameof(fileSystemFacade));
 			this.webBrowser = webBrowser ?? throw new ArgumentNullException(nameof(webBrowser));
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
 			imageFile.PropertyChanged += ImageFile_PropertyChanged;
@@ -113,7 +115,7 @@ namespace PandaPlayer.ViewModels.DiscImages
 			await using var imageContent = File.OpenRead(imageFile.ImageFileName);
 			await discsService.SetDiscCoverImage(Disc, coverImage, imageContent, cancellationToken);
 
-			Messenger.Default.Send(new DiscImageChangedEventArgs(Disc));
+			messenger.Send(new DiscImageChangedEventArgs(Disc));
 		}
 
 		public async Task SetImage(Uri imageUri)
@@ -144,7 +146,7 @@ namespace PandaPlayer.ViewModels.DiscImages
 
 		private void ImageFile_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			RaisePropertyChanged(e.PropertyName);
+			OnPropertyChanged(e.PropertyName);
 		}
 
 		internal void LaunchSearchForDiscCoverImage()

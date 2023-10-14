@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
-using GalaSoft.MvvmLight.Messaging;
 using MaterialDesignThemes.Wpf;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -10,6 +9,7 @@ using Moq.AutoMock;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels;
 using PandaPlayer.ViewModels.MenuItems;
 
@@ -18,12 +18,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 	[TestClass]
 	public class DiscSongListViewModelTests
 	{
-		[TestInitialize]
-		public void Initialize()
-		{
-			Messenger.Reset();
-		}
-
 		[TestMethod]
 		public void DisplayTrackNumbersGetter_ReturnsTrue()
 		{
@@ -128,8 +122,8 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var expectedMenuItems = new BasicMenuItem[]
 			{
-				new CommandMenuItem(() => { }, false) { Header = "Play Next", IconKind = PackIconKind.PlaylistAdd },
-				new CommandMenuItem(() => { }, false) { Header = "Play Last", IconKind = PackIconKind.PlaylistAdd },
+				new CommandMenuItem(() => { }) { Header = "Play Next", IconKind = PackIconKind.PlaylistAdd },
+				new CommandMenuItem(() => { }) { Header = "Play Last", IconKind = PackIconKind.PlaylistAdd },
 				new ExpandableMenuItem
 				{
 					Header = "Set Rating",
@@ -148,9 +142,9 @@ namespace PandaPlayer.UnitTests.ViewModels
 						new SetRatingMenuItem(RatingModel.R1, () => Task.CompletedTask),
 					},
 				},
-				new CommandMenuItem(() => { }, false) { Header = "Update Content", IconKind = PackIconKind.Refresh },
-				new CommandMenuItem(() => { }, false) { Header = "Delete From Disc", IconKind = PackIconKind.DeleteForever },
-				new CommandMenuItem(() => { }, false) { Header = "Properties", IconKind = PackIconKind.Pencil },
+				new CommandMenuItem(() => { }) { Header = "Update Content", IconKind = PackIconKind.Refresh },
+				new CommandMenuItem(() => { }) { Header = "Delete From Disc", IconKind = PackIconKind.DeleteForever },
+				new CommandMenuItem(() => { }) { Header = "Properties", IconKind = PackIconKind.Pencil },
 			};
 
 			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
@@ -186,7 +180,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var expectedMenuItems = new[]
 			{
-				new CommandMenuItem(() => { }, false) { Header = "Properties", IconKind = PackIconKind.Pencil },
+				new CommandMenuItem(() => { }) { Header = "Properties", IconKind = PackIconKind.Pencil },
 			};
 
 			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering());
@@ -235,6 +229,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			disc.AddSongs(songs);
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<DiscSongListViewModel>();
 
 			mocker.GetMock<IViewNavigator>().Setup(x => x.ShowDeleteDiscSongsView(It.IsAny<IReadOnlyCollection<SongModel>>()))
@@ -247,7 +242,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 				})
 				.Returns(true);
 
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(disc, deletedContentIsShown: false));
+			mocker.SendMessage(new LibraryExplorerDiscChangedEventArgs(disc, deletedContentIsShown: false));
 
 			// Act
 
@@ -281,6 +276,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 			disc.AddSongs(songs);
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<DiscSongListViewModel>();
 
 			mocker.GetMock<IViewNavigator>().Setup(x => x.ShowDeleteDiscSongsView(It.IsAny<IReadOnlyCollection<SongModel>>()))
@@ -295,7 +291,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 				})
 				.Returns(false);
 
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(disc, deletedContentIsShown: false));
+			mocker.SendMessage(new LibraryExplorerDiscChangedEventArgs(disc, deletedContentIsShown: false));
 
 			// Act
 
@@ -328,13 +324,14 @@ namespace PandaPlayer.UnitTests.ViewModels
 			newDisc.AddSongs(newSongs);
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<DiscSongListViewModel>();
 
 			target.SetSongs(oldSongs);
 
 			// Act
 
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(newDisc, deletedContentIsShown: false));
+			mocker.SendMessage(new LibraryExplorerDiscChangedEventArgs(newDisc, deletedContentIsShown: false));
 
 			// Assert
 
@@ -369,13 +366,14 @@ namespace PandaPlayer.UnitTests.ViewModels
 			newDisc.AddSongs(newSongs);
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<DiscSongListViewModel>();
 
 			target.SetSongs(oldSongs);
 
 			// Act
 
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(newDisc, deletedContentIsShown: true));
+			mocker.SendMessage(new LibraryExplorerDiscChangedEventArgs(newDisc, deletedContentIsShown: true));
 
 			// Assert
 
@@ -394,13 +392,14 @@ namespace PandaPlayer.UnitTests.ViewModels
 			};
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<DiscSongListViewModel>();
 
 			target.SetSongs(oldSongs);
 
 			// Act
 
-			Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(null, deletedContentIsShown: false));
+			mocker.SendMessage(new LibraryExplorerDiscChangedEventArgs(null, deletedContentIsShown: false));
 
 			// Assert
 

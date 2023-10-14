@@ -2,18 +2,20 @@ using System;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.SongEvents;
 
 namespace PandaPlayer.ViewModels.Player
 {
-	public class SongPlayerViewModel : ViewModelBase, ISongPlayerViewModel
+	public class SongPlayerViewModel : ObservableObject, ISongPlayerViewModel
 	{
 		private readonly IAudioPlayer audioPlayer;
 
 		private readonly ISongPlaybacksRegistrar playbacksRegistrar;
+
+		private readonly IMessenger messenger;
 
 		private SongModel CurrentSong { get; set; }
 
@@ -25,7 +27,7 @@ namespace PandaPlayer.ViewModels.Player
 			private set
 			{
 				audioPlayer.SongPosition = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -47,7 +49,7 @@ namespace PandaPlayer.ViewModels.Player
 			set
 			{
 				SongPosition = TimeSpan.FromMilliseconds(SongLength.TotalMilliseconds * value);
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -57,7 +59,7 @@ namespace PandaPlayer.ViewModels.Player
 			set
 			{
 				audioPlayer.Volume = value;
-				RaisePropertyChanged();
+				OnPropertyChanged();
 			}
 		}
 
@@ -68,19 +70,20 @@ namespace PandaPlayer.ViewModels.Player
 			get => isPlaying;
 			set
 			{
-				Set(ref isPlaying, value);
-				RaisePropertyChanged(nameof(ReversePlayingKind));
+				SetProperty(ref isPlaying, value);
+				OnPropertyChanged(nameof(ReversePlayingKind));
 			}
 		}
 
 		public string ReversePlayingKind => IsPlaying ? "Pause" : "Play";
 
-		public SongPlayerViewModel(IAudioPlayer audioPlayer, ISongPlaybacksRegistrar playbacksRegistrar)
+		public SongPlayerViewModel(IAudioPlayer audioPlayer, ISongPlaybacksRegistrar playbacksRegistrar, IMessenger messenger)
 		{
 			this.audioPlayer = audioPlayer ?? throw new ArgumentNullException(nameof(audioPlayer));
 			this.playbacksRegistrar = playbacksRegistrar ?? throw new ArgumentNullException(nameof(playbacksRegistrar));
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
-			Messenger.Default.Register<SongMediaFinishedEventArgs>(this, _ => OnSongFinished(CancellationToken.None));
+			messenger.Register<SongMediaFinishedEventArgs>(this, (_, _) => OnSongFinished(CancellationToken.None));
 			this.audioPlayer.PropertyChanged += AudioPlayer_PropertyChanged;
 		}
 
@@ -131,7 +134,7 @@ namespace PandaPlayer.ViewModels.Player
 
 			// We cannot use the same event SongMediaFinishedEventArgs both for SongPlayerViewModel and PlaylistPlayerViewModel because order of handling matters.
 			// SongPlayerViewModel should handle playback finish first, because PlaylistPlayerViewModel will change current song and register playback start.
-			Messenger.Default.Send(new SongPlaybackFinishedEventArgs());
+			messenger.Send(new SongPlaybackFinishedEventArgs());
 		}
 
 		private void AudioPlayer_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -139,13 +142,13 @@ namespace PandaPlayer.ViewModels.Player
 			switch (e.PropertyName)
 			{
 				case nameof(IAudioPlayer.SongLength):
-					RaisePropertyChanged(nameof(SongLength));
-					RaisePropertyChanged(nameof(SongProgress));
+					OnPropertyChanged(nameof(SongLength));
+					OnPropertyChanged(nameof(SongProgress));
 					return;
 
 				case nameof(IAudioPlayer.SongPosition):
-					RaisePropertyChanged(nameof(SongPosition));
-					RaisePropertyChanged(nameof(SongProgress));
+					OnPropertyChanged(nameof(SongPosition));
+					OnPropertyChanged(nameof(SongProgress));
 					return;
 			}
 		}

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
 using PandaPlayer.ViewModels.Interfaces;
@@ -11,7 +11,7 @@ using PandaPlayer.ViewModels.Internal;
 
 namespace PandaPlayer.ViewModels
 {
-	public class RateSongsViewModel : ViewModelBase, IRateSongsViewModel
+	public class RateSongsViewModel : ObservableObject, IRateSongsViewModel
 	{
 		private readonly ISongsService songsService;
 
@@ -24,7 +24,7 @@ namespace PandaPlayer.ViewModels
 		public RatingModel SelectedRating
 		{
 			get => selectedRating;
-			set => Set(ref selectedRating, value);
+			set => SetProperty(ref selectedRating, value);
 		}
 
 		public RateSongsViewModel(ISongsService songsService)

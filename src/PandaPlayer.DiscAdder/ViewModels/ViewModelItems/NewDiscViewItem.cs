@@ -23,8 +23,8 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 			set
 			{
 				AddedDiscInfo.AlbumTitle = value;
-				RaisePropertyChanged();
-				RaisePropertyChanged(nameof(WarnAboutAlbumTitle));
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(WarnAboutAlbumTitle));
 			}
 		}
 
@@ -36,8 +36,8 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 			set
 			{
 				AddedDiscInfo.Year = value;
-				RaisePropertyChanged();
-				RaisePropertyChanged(nameof(WarnAboutYear));
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(WarnAboutYear));
 			}
 		}
 

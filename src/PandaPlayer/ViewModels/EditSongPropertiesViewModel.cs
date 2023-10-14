@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.Core.Comparers;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Extensions;
@@ -12,7 +12,7 @@ using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels
 {
-	public class EditSongPropertiesViewModel : ViewModelBase, IEditSongPropertiesViewModel
+	public class EditSongPropertiesViewModel : ObservableObject, IEditSongPropertiesViewModel
 	{
 		private const string ValueForVariousDeleteComments = "<Songs have various delete comments>";
 
@@ -54,7 +54,7 @@ namespace PandaPlayer.ViewModels
 					throw new InvalidOperationException("Value of song tree title could not be empty");
 				}
 
-				Set(ref treeTitle, value);
+				SetProperty(ref treeTitle, value);
 			}
 		}
 
@@ -75,7 +75,7 @@ namespace PandaPlayer.ViewModels
 					throw new InvalidOperationException("Value of song title could not be empty");
 				}
 
-				Set(ref title, value);
+				SetProperty(ref title, value);
 			}
 		}
 
@@ -91,7 +91,7 @@ namespace PandaPlayer.ViewModels
 					throw new InvalidOperationException("Track number could not be edited in multi-song mode");
 				}
 
-				Set(ref trackNumber, value);
+				SetProperty(ref trackNumber, value);
 			}
 		}
 

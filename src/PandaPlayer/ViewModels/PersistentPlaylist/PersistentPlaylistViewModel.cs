@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events;
@@ -20,18 +20,20 @@ namespace PandaPlayer.ViewModels.PersistentPlaylist
 
 		private readonly ISongsService songsService;
 		private readonly ISessionDataService sessionDataService;
+		private readonly IMessenger messenger;
 		private readonly ILogger<PersistentPlaylistViewModel> logger;
 
 		public PersistentPlaylistViewModel(ISongsService songsService, IViewNavigator viewNavigator,
-			ISessionDataService sessionDataService, ILogger<PersistentPlaylistViewModel> logger)
-			: base(songsService, viewNavigator)
+			ISessionDataService sessionDataService, IMessenger messenger, ILogger<PersistentPlaylistViewModel> logger)
+			: base(songsService, viewNavigator, messenger)
 		{
 			this.songsService = songsService ?? throw new ArgumentNullException(nameof(songsService));
 			this.sessionDataService = sessionDataService ?? throw new ArgumentNullException(nameof(sessionDataService));
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, _ => Load(CancellationToken.None));
-			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, _ => OnPlaylistFinished(CancellationToken.None));
+			messenger.Register<ApplicationLoadedEventArgs>(this, (_, _) => Load(CancellationToken.None));
+			messenger.Register<PlaylistFinishedEventArgs>(this, (_, _) => OnPlaylistFinished(CancellationToken.None));
 		}
 
 		private async void Load(CancellationToken cancellationToken)
@@ -42,11 +44,11 @@ namespace PandaPlayer.ViewModels.PersistentPlaylist
 				SetSongs(songs);
 				SetCurrentSong(songIndex);
 
-				Messenger.Default.Send(new PlaylistLoadedEventArgs(Songs, CurrentSong, CurrentSongIndex));
+				messenger.Send(new PlaylistLoadedEventArgs(Songs, CurrentSong, CurrentSongIndex));
 			}
 			else
 			{
-				Messenger.Default.Send(new NoPlaylistLoadedEventArgs());
+				messenger.Send(new NoPlaylistLoadedEventArgs());
 			}
 		}
 

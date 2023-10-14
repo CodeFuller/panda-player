@@ -1,10 +1,10 @@
 using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.Core.Facades;
 
 namespace PandaPlayer.Shared.Images
 {
-	internal sealed class ImageFile : ViewModelBase, IImageFile
+	internal sealed class ImageFile : ObservableObject, IImageFile
 	{
 		private readonly IDiscImageValidator discImageValidator;
 		private readonly IImageInfoProvider imageInfoProvider;
@@ -21,11 +21,11 @@ namespace PandaPlayer.Shared.Images
 			get => imageInfo;
 			private set
 			{
-				Set(ref imageInfo, value);
-				RaisePropertyChanged(nameof(ImageFileName));
-				RaisePropertyChanged(nameof(ImageIsValid));
-				RaisePropertyChanged(nameof(ImageProperties));
-				RaisePropertyChanged(nameof(ImageStatus));
+				SetProperty(ref imageInfo, value);
+				OnPropertyChanged(nameof(ImageFileName));
+				OnPropertyChanged(nameof(ImageIsValid));
+				OnPropertyChanged(nameof(ImageProperties));
+				OnPropertyChanged(nameof(ImageStatus));
 			}
 		}
 

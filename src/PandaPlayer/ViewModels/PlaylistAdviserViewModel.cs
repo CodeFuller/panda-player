@@ -5,8 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CodeFuller.Library.Wpf;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
 using PandaPlayer.Adviser;
 using PandaPlayer.Adviser.Interfaces;
@@ -18,13 +18,15 @@ using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels
 {
-	internal class PlaylistAdviserViewModel : ViewModelBase, IPlaylistAdviserViewModel
+	internal class PlaylistAdviserViewModel : ObservableObject, IPlaylistAdviserViewModel
 	{
 		private const int AdvisedPlaylistsNumber = 30;
 
 		private readonly IDiscsService discsService;
 
 		private readonly ICompositePlaylistAdviser playlistAdviser;
+
+		private readonly IMessenger messenger;
 
 		private readonly ILogger<PlaylistAdviserViewModel> logger;
 
@@ -50,17 +52,18 @@ namespace PandaPlayer.ViewModels
 
 		public ICommand SwitchToNextAdviseCommand { get; }
 
-		public PlaylistAdviserViewModel(IDiscsService discsService, ICompositePlaylistAdviser playlistAdviser, ILogger<PlaylistAdviserViewModel> logger)
+		public PlaylistAdviserViewModel(IDiscsService discsService, ICompositePlaylistAdviser playlistAdviser, IMessenger messenger, ILogger<PlaylistAdviserViewModel> logger)
 		{
-			this.playlistAdviser = playlistAdviser ?? throw new ArgumentNullException(nameof(playlistAdviser));
-			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			this.discsService = discsService ?? throw new ArgumentNullException(nameof(discsService));
+			this.playlistAdviser = playlistAdviser ?? throw new ArgumentNullException(nameof(playlistAdviser));
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
 			PlayCurrentAdviseCommand = new AsyncRelayCommand(() => PlayCurrentAdvise(CancellationToken.None));
 			SwitchToNextAdviseCommand = new AsyncRelayCommand(() => SwitchToNextAdvise(CancellationToken.None));
 
-			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, e => OnPlaylistFinished(e.Songs, CancellationToken.None));
-			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => Load(CancellationToken.None));
+			messenger.Register<PlaylistFinishedEventArgs>(this, (_, e) => OnPlaylistFinished(e.Songs, CancellationToken.None));
+			messenger.Register<ApplicationLoadedEventArgs>(this, (_, _) => Load(CancellationToken.None));
 		}
 
 		private async void Load(CancellationToken cancellationToken)
@@ -74,7 +77,7 @@ namespace PandaPlayer.ViewModels
 			if (advise != null)
 			{
 				await playlistAdviser.RegisterAdvicePlayback(advise, cancellationToken);
-				Messenger.Default.Send(new PlaySongsListEventArgs(advise.Songs));
+				messenger.Send(new PlaySongsListEventArgs(advise.Songs));
 			}
 		}
 
@@ -133,7 +136,7 @@ namespace PandaPlayer.ViewModels
 
 		protected void OnCurrentAdvisedChanged()
 		{
-			RaisePropertyChanged(nameof(CurrentAdviseAnnouncement));
+			OnPropertyChanged(nameof(CurrentAdviseAnnouncement));
 		}
 
 		private static bool SongListCoversAdvise(List<SongModel> songs, AdvisedPlaylist advise)

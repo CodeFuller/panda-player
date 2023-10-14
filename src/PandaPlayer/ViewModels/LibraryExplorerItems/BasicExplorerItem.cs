@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Models;
 using PandaPlayer.ViewModels.AdviseGroups;
@@ -10,7 +10,7 @@ using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.ViewModels.LibraryExplorerItems
 {
-	public abstract class BasicExplorerItem : ViewModelBase
+	public abstract class BasicExplorerItem : ObservableObject
 	{
 		public abstract string Title { get; }
 

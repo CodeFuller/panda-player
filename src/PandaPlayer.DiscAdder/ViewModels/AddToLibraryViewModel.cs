@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CodeFuller.Library.Wpf;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.Core.Models;
 using PandaPlayer.DiscAdder.MusicStorage;
 using PandaPlayer.DiscAdder.ViewModels.Interfaces;
@@ -16,7 +16,7 @@ using PandaPlayer.Shared.Extensions;
 
 namespace PandaPlayer.DiscAdder.ViewModels
 {
-	internal class AddToLibraryViewModel : ViewModelBase, IAddToLibraryViewModel
+	internal class AddToLibraryViewModel : ObservableObject, IAddToLibraryViewModel
 	{
 		private const int AddSongProgressStep = 5;
 		private const int AddDiscImageProgressStep = 1;
@@ -39,7 +39,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		public bool DataIsReady
 		{
 			get => dataIsReady;
-			set => Set(ref dataIsReady, value);
+			set => SetProperty(ref dataIsReady, value);
 		}
 
 		private bool canAddContent;
@@ -47,7 +47,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		public bool CanAddContent
 		{
 			get => canAddContent;
-			private set => Set(ref canAddContent, value);
+			private set => SetProperty(ref canAddContent, value);
 		}
 
 		private bool deleteSourceContent;
@@ -55,7 +55,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		public bool DeleteSourceContent
 		{
 			get => deleteSourceContent;
-			set => Set(ref deleteSourceContent, value);
+			set => SetProperty(ref deleteSourceContent, value);
 		}
 
 		private int currentProgress;
@@ -65,8 +65,8 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			get => currentProgress;
 			set
 			{
-				Set(ref currentProgress, value);
-				RaisePropertyChanged(nameof(CurrentProgressPercentage));
+				SetProperty(ref currentProgress, value);
+				OnPropertyChanged(nameof(CurrentProgressPercentage));
 			}
 		}
 
@@ -77,8 +77,8 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			get => progressMaximum;
 			set
 			{
-				Set(ref progressMaximum, value);
-				RaisePropertyChanged(nameof(CurrentProgressPercentage));
+				SetProperty(ref progressMaximum, value);
+				OnPropertyChanged(nameof(CurrentProgressPercentage));
 			}
 		}
 
@@ -89,7 +89,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		public string ProgressMessages
 		{
 			get => progressMessages;
-			set => Set(ref progressMessages, value);
+			set => SetProperty(ref progressMessages, value);
 		}
 
 		public ICommand AddToLibraryCommand { get; }

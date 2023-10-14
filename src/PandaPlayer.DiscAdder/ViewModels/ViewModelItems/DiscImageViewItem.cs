@@ -1,11 +1,11 @@
 using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Shared.Images;
 
 namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 {
-	internal class DiscImageViewItem : ViewModelBase
+	internal class DiscImageViewItem : ObservableObject
 	{
 		private readonly IImageFile imageFile;
 

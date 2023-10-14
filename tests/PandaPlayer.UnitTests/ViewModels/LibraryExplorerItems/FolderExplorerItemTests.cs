@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using FluentAssertions;
-using GalaSoft.MvvmLight.Messaging;
 using MaterialDesignThemes.Wpf;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -18,12 +17,6 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 	[TestClass]
 	public class FolderExplorerItemTests
 	{
-		[TestInitialize]
-		public void Initialize()
-		{
-			Messenger.Reset();
-		}
-
 		[TestMethod]
 		public void TitleGetter_ReturnsFolderName()
 		{
@@ -238,8 +231,8 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 
 			var expectedMenuItems = new[]
 			{
-				new CommandMenuItem(() => { }, false) { Header = "Rename Folder", IconKind = PackIconKind.Pencil },
-				new CommandMenuItem(() => { }, false) { Header = "Delete Folder", IconKind = PackIconKind.DeleteForever },
+				new CommandMenuItem(() => { }) { Header = "Rename Folder", IconKind = PackIconKind.Pencil },
+				new CommandMenuItem(() => { }) { Header = "Delete Folder", IconKind = PackIconKind.DeleteForever },
 			};
 
 			// Nested items for advise group are covered by UT for BasicExplorerItem.

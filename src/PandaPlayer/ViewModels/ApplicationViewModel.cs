@@ -5,8 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CodeFuller.Library.Wpf;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events;
 using PandaPlayer.Events.SongListEvents;
@@ -15,7 +15,7 @@ using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels
 {
-	internal class ApplicationViewModel : ViewModelBase
+	internal class ApplicationViewModel : ObservableObject
 	{
 		private const string DefaultTitle = "Panda Player";
 
@@ -23,12 +23,14 @@ namespace PandaPlayer.ViewModels
 
 		private readonly IReadOnlyCollection<IApplicationInitializer> applicationInitializers;
 
+		private readonly IMessenger messenger;
+
 		private string title = DefaultTitle;
 
 		public string Title
 		{
 			get => title;
-			private set => Set(ref title, value);
+			private set => SetProperty(ref title, value);
 		}
 
 		public ILibraryExplorerViewModel LibraryExplorerViewModel { get; }
@@ -57,7 +59,7 @@ namespace PandaPlayer.ViewModels
 
 		public ApplicationViewModel(ILibraryExplorerViewModel libraryExplorerViewModel, ISongListTabViewModel songListTabViewModel,
 			IPlaylistAdviserViewModel playlistAdviserViewModel, IDiscImageViewModel discImageViewModel, IPlaylistPlayerViewModel playlistPlayerViewModel,
-			IViewNavigator viewNavigator, IEnumerable<IApplicationInitializer> applicationInitializers, ILoggerViewModel loggerViewModel)
+			IViewNavigator viewNavigator, IEnumerable<IApplicationInitializer> applicationInitializers, ILoggerViewModel loggerViewModel, IMessenger messenger)
 		{
 			LibraryExplorerViewModel = libraryExplorerViewModel ?? throw new ArgumentNullException(nameof(libraryExplorerViewModel));
 			SongListTabViewModel = songListTabViewModel ?? throw new ArgumentNullException(nameof(songListTabViewModel));
@@ -67,6 +69,7 @@ namespace PandaPlayer.ViewModels
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 			this.applicationInitializers = applicationInitializers?.ToList() ?? throw new ArgumentNullException(nameof(applicationInitializers));
 			LoggerViewModel = loggerViewModel ?? throw new ArgumentNullException(nameof(loggerViewModel));
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			LoadCommand = new AsyncRelayCommand(() => Load(CancellationToken.None));
 			ReversePlayingCommand = new AsyncRelayCommand(() => ReversePlaying(CancellationToken.None));
@@ -75,9 +78,9 @@ namespace PandaPlayer.ViewModels
 			ShowLibraryCheckerCommand = new AsyncRelayCommand(() => ShowLibraryChecker(CancellationToken.None));
 			ShowLibraryStatisticsCommand = new AsyncRelayCommand(() => ShowLibraryStatistics(CancellationToken.None));
 
-			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, OnPlaylistSongChanged);
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, OnPlaylistSongChanged);
-			Messenger.Default.Register<PlaylistFinishedEventArgs>(this, OnPlaylistFinished);
+			messenger.Register<PlaylistLoadedEventArgs>(this, (_, e) => OnPlaylistSongChanged(e));
+			messenger.Register<PlaylistChangedEventArgs>(this, (_, e) => OnPlaylistSongChanged(e));
+			messenger.Register<PlaylistFinishedEventArgs>(this, (_, e) => OnPlaylistFinished(e));
 		}
 
 		private async Task Load(CancellationToken cancellationToken)
@@ -87,7 +90,7 @@ namespace PandaPlayer.ViewModels
 				await applicationInitializer.Initialize(cancellationToken);
 			}
 
-			Messenger.Default.Send(new ApplicationLoadedEventArgs());
+			messenger.Send(new ApplicationLoadedEventArgs());
 		}
 
 		private Task ReversePlaying(CancellationToken cancellationToken)

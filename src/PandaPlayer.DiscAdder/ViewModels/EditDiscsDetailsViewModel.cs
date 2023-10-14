@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.Core.Models;
 using PandaPlayer.DiscAdder.Extensions;
 using PandaPlayer.DiscAdder.Interfaces;
@@ -16,7 +16,7 @@ using PandaPlayer.Services.Interfaces;
 
 namespace PandaPlayer.DiscAdder.ViewModels
 {
-	internal class EditDiscsDetailsViewModel : ViewModelBase, IEditDiscsDetailsViewModel
+	internal class EditDiscsDetailsViewModel : ObservableObject, IEditDiscsDetailsViewModel
 	{
 		private readonly IFolderProvider folderProvider;
 
@@ -125,7 +125,7 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		{
 			if (e.PropertyName == nameof(DiscViewItem.RequiredDataIsFilled))
 			{
-				RaisePropertyChanged(nameof(DataIsReady));
+				OnPropertyChanged(nameof(DataIsReady));
 				return;
 			}
 

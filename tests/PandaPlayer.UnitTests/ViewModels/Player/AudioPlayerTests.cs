@@ -5,13 +5,13 @@ using System.Linq;
 using System.Reflection;
 using System.Timers;
 using System.Windows;
+using CommunityToolkit.Mvvm.Messaging;
 using FluentAssertions;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
 using PandaPlayer.Facades;
-using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels.Player;
 
 namespace PandaPlayer.UnitTests.ViewModels.Player
@@ -19,12 +19,6 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 	[TestClass]
 	public class AudioPlayerTests
 	{
-		[TestInitialize]
-		public void Initialize()
-		{
-			Messenger.Reset();
-		}
-
 		[TestMethod]
 		public void SongPositionGetter_ReturnsCurrentMediaPosition()
 		{
@@ -208,16 +202,13 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 			var mocker = new AutoMocker();
 			var target = mocker.CreateInstance<AudioPlayer>();
 
-			SongMediaFinishedEventArgs songMediaFinishedEvent = null;
-			Messenger.Default.Register<SongMediaFinishedEventArgs>(this, e => e.RegisterEvent(ref songMediaFinishedEvent));
-
 			// Act
 
 			mocker.GetMock<IMediaPlayerFacade>().Raise(x => x.MediaEnded += null, new EventArgs());
 
 			// Assert
 
-			songMediaFinishedEvent.Should().NotBeNull();
+			mocker.GetMock<IMessenger>().Verify(x => x.Send(It.IsAny<SongMediaFinishedEventArgs>(), It.IsAny<IsAnyToken>()), Times.Once);
 		}
 
 		[TestMethod]

@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using MaterialDesignThemes.Wpf;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
@@ -17,7 +17,7 @@ using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.ViewModels
 {
-	public abstract class SongListViewModel : ViewModelBase, ISongListViewModel
+	public abstract class SongListViewModel : ObservableObject, ISongListViewModel
 	{
 		protected ISongsService SongsService { get; }
 
@@ -36,7 +36,7 @@ namespace PandaPlayer.ViewModels
 		public SongListItem SelectedSongItem
 		{
 			get => selectedSongItem;
-			set => Set(ref selectedSongItem, value);
+			set => SetProperty(ref selectedSongItem, value);
 		}
 
 		private IList selectedSongItems;
@@ -46,7 +46,7 @@ namespace PandaPlayer.ViewModels
 #pragma warning restore CA2227 // Collection properties should be read only
 		{
 			get => selectedSongItems;
-			set => Set(ref selectedSongItems, value);
+			set => SetProperty(ref selectedSongItems, value);
 		}
 
 		protected IEnumerable<SongModel> SelectedSongs => SelectedSongItems?.OfType<SongListItem>().Select(it => it.Song) ?? Enumerable.Empty<SongModel>();
@@ -130,10 +130,10 @@ namespace PandaPlayer.ViewModels
 
 		private void OnSongItemsChanged()
 		{
-			RaisePropertyChanged(nameof(HasSongs));
-			RaisePropertyChanged(nameof(SongsNumber));
-			RaisePropertyChanged(nameof(TotalSongsFileSize));
-			RaisePropertyChanged(nameof(TotalSongsDuration));
+			OnPropertyChanged(nameof(HasSongs));
+			OnPropertyChanged(nameof(SongsNumber));
+			OnPropertyChanged(nameof(TotalSongsFileSize));
+			OnPropertyChanged(nameof(TotalSongsDuration));
 		}
 	}
 }

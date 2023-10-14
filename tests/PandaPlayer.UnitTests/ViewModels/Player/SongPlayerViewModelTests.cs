@@ -4,14 +4,15 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using FluentAssertions;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.SongEvents;
 using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels.Player;
 
 namespace PandaPlayer.UnitTests.ViewModels.Player
@@ -19,12 +20,6 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 	[TestClass]
 	public class SongPlayerViewModelTests
 	{
-		[TestInitialize]
-		public void Initialize()
-		{
-			Messenger.Reset();
-		}
-
 		[TestMethod]
 		public void SongLengthGetter_ReturnsCurrentSongLengthFromAudioPlayer()
 		{
@@ -352,13 +347,14 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 			var song = new SongModel();
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<SongPlayerViewModel>();
 
 			await target.Play(song, CancellationToken.None);
 
 			// Act
 
-			Messenger.Default.Send(new SongMediaFinishedEventArgs());
+			mocker.SendMessage(new SongMediaFinishedEventArgs());
 
 			// Assert
 
@@ -372,13 +368,14 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 			// Arrange
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<SongPlayerViewModel>();
 
 			await target.Play(new SongModel(), CancellationToken.None);
 
 			// Act
 
-			Messenger.Default.Send(new SongMediaFinishedEventArgs());
+			mocker.SendMessage(new SongMediaFinishedEventArgs());
 
 			// Assert
 
@@ -391,16 +388,17 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 			// Arrange
 
 			var mocker = new AutoMocker();
+			var messenger = mocker.StubMessenger();
 			var target = mocker.CreateInstance<SongPlayerViewModel>();
 
 			SongPlaybackFinishedEventArgs songPlaybackFinishedEvent = null;
-			Messenger.Default.Register<SongPlaybackFinishedEventArgs>(this, e => e.RegisterEvent(ref songPlaybackFinishedEvent));
+			messenger.Register<SongPlaybackFinishedEventArgs>(this, (_, e) => e.RegisterEvent(ref songPlaybackFinishedEvent));
 
 			await target.Play(new SongModel(), CancellationToken.None);
 
 			// Act
 
-			Messenger.Default.Send(new SongMediaFinishedEventArgs());
+			messenger.Send(new SongMediaFinishedEventArgs());
 
 			// Assert
 

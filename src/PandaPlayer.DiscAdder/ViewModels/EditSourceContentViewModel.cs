@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Options;
 using PandaPlayer.DiscAdder.Events;
 using PandaPlayer.DiscAdder.Interfaces;
@@ -19,7 +19,7 @@ using PandaPlayer.DiscAdder.ViewModels.Interfaces;
 
 namespace PandaPlayer.DiscAdder.ViewModels
 {
-	internal class EditSourceContentViewModel : ViewModelBase, IEditSourceContentViewModel
+	internal class EditSourceContentViewModel : ObservableObject, IEditSourceContentViewModel
 	{
 		public string Name => "Edit Source Content";
 
@@ -49,12 +49,12 @@ namespace PandaPlayer.DiscAdder.ViewModels
 		public bool DataIsReady
 		{
 			get => dataIsReady;
-			set => Set(ref dataIsReady, value);
+			set => SetProperty(ref dataIsReady, value);
 		}
 
 		public EditSourceContentViewModel(IContentCrawler contentCrawler, IReferenceContentParser referenceContentParser,
 			ISourceContentChecker sourceContentChecker, IWorkshopMusicStorage workshopMusicStorage, IRawReferenceContentViewModel rawReferenceContent,
-			IReferenceContentViewModel referenceContentViewModel, IActualContentViewModel actualContentViewModel, IOptions<DiscAdderSettings> options)
+			IReferenceContentViewModel referenceContentViewModel, IActualContentViewModel actualContentViewModel, IMessenger messenger, IOptions<DiscAdderSettings> options)
 		{
 			this.contentCrawler = contentCrawler ?? throw new ArgumentNullException(nameof(contentCrawler));
 			this.referenceContentParser = referenceContentParser ?? throw new ArgumentNullException(nameof(referenceContentParser));
@@ -71,7 +71,8 @@ namespace PandaPlayer.DiscAdder.ViewModels
 			ReloadActualContentCommand = new RelayCommand(ReloadActualContent);
 			ReloadAllContentCommand = new RelayCommand(ReloadAllContent);
 
-			Messenger.Default.Register<ActualContentChangedEventArgs>(this, OnActualContentChanged);
+			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
+			messenger.Register<ActualContentChangedEventArgs>(this, (_, e) => OnActualContentChanged(e));
 		}
 
 		public async Task Load(CancellationToken cancellationToken)

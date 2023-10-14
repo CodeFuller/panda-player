@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
-	internal abstract class ActualBasicContentTreeItem : ViewModelBase
+	internal abstract class ActualBasicContentTreeItem : ObservableObject
 	{
 		public abstract IEnumerable<ActualBasicContentTreeItem> ChildItems { get; }
 
@@ -16,7 +16,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 		public bool IsSelected
 		{
 			get => isSelected;
-			set => Set(ref isSelected, value);
+			set => SetProperty(ref isSelected, value);
 		}
 	}
 }

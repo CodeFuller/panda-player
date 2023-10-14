@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.Events.LibraryExplorerEvents;
@@ -16,8 +16,10 @@ using PandaPlayer.ViewModels.LibraryExplorerItems;
 
 namespace PandaPlayer.ViewModels
 {
-	public class LibraryExplorerItemListViewModel : ViewModelBase, ILibraryExplorerItemListViewModel
+	public class LibraryExplorerItemListViewModel : ObservableObject, ILibraryExplorerItemListViewModel
 	{
+		private readonly IMessenger messenger;
+
 		public ObservableCollection<BasicExplorerItem> Items { get; } = new();
 
 		private bool showDeletedContent;
@@ -27,7 +29,7 @@ namespace PandaPlayer.ViewModels
 			get => showDeletedContent;
 			set
 			{
-				if (Set(ref showDeletedContent, value))
+				if (SetProperty(ref showDeletedContent, value))
 				{
 					ReloadCurrentFolder();
 				}
@@ -53,9 +55,9 @@ namespace PandaPlayer.ViewModels
 			get => selectedItem;
 			set
 			{
-				if (Set(ref selectedItem, value))
+				if (SetProperty(ref selectedItem, value))
 				{
-					Messenger.Default.Send(new LibraryExplorerDiscChangedEventArgs(SelectedDisc, deletedContentIsShown: ShowDeletedContent));
+					messenger.Send(new LibraryExplorerDiscChangedEventArgs(SelectedDisc, deletedContentIsShown: ShowDeletedContent));
 				}
 			}
 		}
@@ -66,8 +68,10 @@ namespace PandaPlayer.ViewModels
 
 		public ICommand JumpToLastItemCommand { get; }
 
-		public LibraryExplorerItemListViewModel()
+		public LibraryExplorerItemListViewModel(IMessenger messenger)
 		{
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+
 			ChangeFolderCommand = new RelayCommand(ChangeToCurrentlySelectedFolder);
 			JumpToFirstItemCommand = new RelayCommand(() => SelectedItem = Items.FirstOrDefault());
 			JumpToLastItemCommand = new RelayCommand(() => SelectedItem = Items.LastOrDefault());
@@ -173,11 +177,11 @@ namespace PandaPlayer.ViewModels
 			switch (SelectedItem)
 			{
 				case ParentFolderExplorerItem:
-					Messenger.Default.Send(new LoadParentFolderEventArgs(LoadedFolder.ParentFolder, LoadedFolder.Id));
+					messenger.Send(new LoadParentFolderEventArgs(LoadedFolder.ParentFolder, LoadedFolder.Id));
 					break;
 
 				case FolderExplorerItem folderItem:
-					Messenger.Default.Send(new LoadFolderEventArgs(folderItem.Folder));
+					messenger.Send(new LoadFolderEventArgs(folderItem.Folder));
 					break;
 			}
 		}

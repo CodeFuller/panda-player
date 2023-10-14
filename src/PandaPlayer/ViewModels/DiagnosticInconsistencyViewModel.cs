@@ -1,10 +1,10 @@
 using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.Services.Diagnostic.Inconsistencies;
 
 namespace PandaPlayer.ViewModels
 {
-	public class DiagnosticInconsistencyViewModel : ViewModelBase
+	public class DiagnosticInconsistencyViewModel : ObservableObject
 	{
 		private readonly LibraryInconsistency inconsistency;
 

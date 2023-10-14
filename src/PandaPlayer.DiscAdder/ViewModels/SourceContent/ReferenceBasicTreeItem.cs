@@ -1,9 +1,9 @@
 using System.Collections.ObjectModel;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 {
-	internal abstract class ReferenceBasicTreeItem : ViewModelBase
+	internal abstract class ReferenceBasicTreeItem : ObservableObject
 	{
 		public ObservableCollection<ReferenceBasicTreeItem> ChildItems { get; } = new();
 
@@ -14,7 +14,7 @@ namespace PandaPlayer.DiscAdder.ViewModels.SourceContent
 		public bool ContentIsIncorrect
 		{
 			get => contentIsIncorrect;
-			set => Set(ref contentIsIncorrect, value);
+			set => SetProperty(ref contentIsIncorrect, value);
 		}
 	}
 }

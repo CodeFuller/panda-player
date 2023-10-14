@@ -3,8 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CodeFuller.Library.Wpf;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.SongEvents;
 using PandaPlayer.Events.SongListEvents;
@@ -12,9 +12,11 @@ using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels.Player
 {
-	public class PlaylistPlayerViewModel : ViewModelBase, IPlaylistPlayerViewModel
+	public class PlaylistPlayerViewModel : ObservableObject, IPlaylistPlayerViewModel
 	{
 		private readonly IPlaylistViewModel playlist;
+
+		private readonly IMessenger messenger;
 
 		private SongModel CurrentSong { get; set; }
 
@@ -22,16 +24,17 @@ namespace PandaPlayer.ViewModels.Player
 
 		public ICommand ReversePlayingCommand { get; }
 
-		public PlaylistPlayerViewModel(IPlaylistViewModel playlist, ISongPlayerViewModel songPlayerViewModel)
+		public PlaylistPlayerViewModel(IPlaylistViewModel playlist, ISongPlayerViewModel songPlayerViewModel, IMessenger messenger)
 		{
 			this.playlist = playlist ?? throw new ArgumentNullException(nameof(playlist));
 			SongPlayerViewModel = songPlayerViewModel ?? throw new ArgumentNullException(nameof(songPlayerViewModel));
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			ReversePlayingCommand = new AsyncRelayCommand(() => ReversePlaying(CancellationToken.None));
 
-			Messenger.Default.Register<PlaySongsListEventArgs>(this, e => OnPlaySongList(e, CancellationToken.None));
-			Messenger.Default.Register<PlayPlaylistStartingFromSongEventArgs>(this, _ => OnPlayPlaylistStartingFromSong(CancellationToken.None));
-			Messenger.Default.Register<SongPlaybackFinishedEventArgs>(this, _ => OnSongPlaybackFinished(CancellationToken.None));
+			messenger.Register<PlaySongsListEventArgs>(this, (_, e) => OnPlaySongList(e, CancellationToken.None));
+			messenger.Register<PlayPlaylistStartingFromSongEventArgs>(this, (_, _) => OnPlayPlaylistStartingFromSong(CancellationToken.None));
+			messenger.Register<SongPlaybackFinishedEventArgs>(this, (_, _) => OnSongPlaybackFinished(CancellationToken.None));
 		}
 
 		public async Task ReversePlaying(CancellationToken cancellationToken)
@@ -93,7 +96,7 @@ namespace PandaPlayer.ViewModels.Player
 			if (playlist.CurrentSong == null)
 			{
 				// We have reached the end of playlist.
-				Messenger.Default.Send(new PlaylistFinishedEventArgs(playlist.Songs));
+				messenger.Send(new PlaylistFinishedEventArgs(playlist.Songs));
 			}
 			else
 			{

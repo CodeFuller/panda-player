@@ -1,10 +1,10 @@
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels.DiscImages;
 
 namespace PandaPlayer.UnitTests.ViewModels
@@ -12,12 +12,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 	[TestClass]
 	public class DiscImageViewModelTests
 	{
-		[TestInitialize]
-		public void Initialize()
-		{
-			Messenger.Reset();
-		}
-
 		[TestMethod]
 		public void EditDiscImageCommand_IfNoDiscIsSet_DoesNothing()
 		{
@@ -44,9 +38,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var disc = new DiscModel().MakeActive();
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<DiscImageViewModel>();
 
-			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc));
+			mocker.SendMessage(new ActiveDiscChangedEventArgs(disc));
 
 			// Act
 
@@ -66,9 +61,10 @@ namespace PandaPlayer.UnitTests.ViewModels
 			var disc = new DiscModel().MakeDeleted();
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<DiscImageViewModel>();
 
-			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc));
+			mocker.SendMessage(new ActiveDiscChangedEventArgs(disc));
 
 			// Act
 

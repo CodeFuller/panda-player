@@ -1,11 +1,11 @@
 using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Shared;
 
 namespace PandaPlayer.ViewModels
 {
-	public class SongListItem : ViewModelBase
+	public class SongListItem : ObservableObject
 	{
 		// We bind to properties of SongModel directly, without intermediate properties in current class.
 		// Otherwise, we must handle Song.PropertyChanged and raise PropertyChanged for intermediate properties.
@@ -20,7 +20,7 @@ namespace PandaPlayer.ViewModels
 		public bool IsCurrentlyPlayed
 		{
 			get => isCurrentlyPlayed;
-			set => Set(ref isCurrentlyPlayed, value);
+			set => SetProperty(ref isCurrentlyPlayed, value);
 		}
 
 		public string ToolTip
@@ -47,11 +47,11 @@ namespace PandaPlayer.ViewModels
 				switch (args.PropertyName)
 				{
 					case nameof(Song.BitRate):
-						RaisePropertyChanged(nameof(BitRate));
+						OnPropertyChanged(nameof(BitRate));
 						break;
 
 					case nameof(Song.Size):
-						RaisePropertyChanged(nameof(FileSize));
+						OnPropertyChanged(nameof(FileSize));
 						break;
 				}
 			};

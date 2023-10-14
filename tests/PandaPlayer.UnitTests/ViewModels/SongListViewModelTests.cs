@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
@@ -35,12 +34,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 			{
 				return EditSongsProperties(songs, cancellationToken);
 			}
-		}
-
-		[TestInitialize]
-		public void Initialize()
-		{
-			Messenger.Reset();
 		}
 
 		[TestMethod]

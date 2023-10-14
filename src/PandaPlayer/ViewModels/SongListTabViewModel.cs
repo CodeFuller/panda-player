@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events;
 using PandaPlayer.Events.DiscEvents;
@@ -12,13 +12,15 @@ using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels
 {
-	public class SongListTabViewModel : ViewModelBase, ISongListTabViewModel
+	public class SongListTabViewModel : ObservableObject, ISongListTabViewModel
 	{
+		private readonly ILibraryExplorerViewModel libraryExplorerViewModel;
+
+		private readonly IMessenger messenger;
+
 		public IDiscSongListViewModel DiscSongListViewModel { get; }
 
 		public IPlaylistViewModel PlaylistViewModel { get; }
-
-		private readonly ILibraryExplorerViewModel libraryExplorerViewModel;
 
 		private ISongListViewModel currentSongListViewModel;
 
@@ -27,9 +29,9 @@ namespace PandaPlayer.ViewModels
 			get => currentSongListViewModel;
 			set
 			{
-				Set(ref currentSongListViewModel, value);
-				RaisePropertyChanged(nameof(IsDiscSongListSelected));
-				RaisePropertyChanged(nameof(IsPlaylistSelected));
+				SetProperty(ref currentSongListViewModel, value);
+				OnPropertyChanged(nameof(IsDiscSongListSelected));
+				OnPropertyChanged(nameof(IsPlaylistSelected));
 
 				ActiveDisc = IsDiscSongListSelected ? libraryExplorerViewModel.SelectedDisc : PlaylistCurrentDisc;
 			}
@@ -50,7 +52,7 @@ namespace PandaPlayer.ViewModels
 				if (activeDisc != value)
 				{
 					activeDisc = value;
-					Messenger.Default.Send(new ActiveDiscChangedEventArgs(activeDisc));
+					messenger.Send(new ActiveDiscChangedEventArgs(activeDisc));
 				}
 			}
 		}
@@ -59,20 +61,21 @@ namespace PandaPlayer.ViewModels
 
 		public ICommand SwitchToPlaylistCommand { get; }
 
-		public SongListTabViewModel(IDiscSongListViewModel discSongListViewModel, IPlaylistViewModel playlistViewModel, ILibraryExplorerViewModel libraryExplorerViewModel)
+		public SongListTabViewModel(IDiscSongListViewModel discSongListViewModel, IPlaylistViewModel playlistViewModel, ILibraryExplorerViewModel libraryExplorerViewModel, IMessenger messenger)
 		{
 			DiscSongListViewModel = discSongListViewModel ?? throw new ArgumentNullException(nameof(discSongListViewModel));
 			PlaylistViewModel = playlistViewModel ?? throw new ArgumentNullException(nameof(playlistViewModel));
 			this.libraryExplorerViewModel = libraryExplorerViewModel ?? throw new ArgumentNullException(nameof(libraryExplorerViewModel));
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			SwitchToDiscSongListCommand = new RelayCommand(SwitchToDiscSongList);
 			SwitchToPlaylistCommand = new RelayCommand(SwitchToPlaylist);
 
-			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, _ => Load());
-			Messenger.Default.Register<LibraryExplorerDiscChangedEventArgs>(this, _ => SwitchToDiscSongList());
-			Messenger.Default.Register<PlaySongsListEventArgs>(this, _ => SwitchToPlaylist());
-			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, _ => OnPlaylistSongChanged());
-			Messenger.Default.Register<PlaylistChangedEventArgs>(this, _ => OnPlaylistSongChanged());
+			messenger.Register<ApplicationLoadedEventArgs>(this, (_, _) => Load());
+			messenger.Register<LibraryExplorerDiscChangedEventArgs>(this, (_, _) => SwitchToDiscSongList());
+			messenger.Register<PlaySongsListEventArgs>(this, (_, _) => SwitchToPlaylist());
+			messenger.Register<PlaylistLoadedEventArgs>(this, (_, _) => OnPlaylistSongChanged());
+			messenger.Register<PlaylistChangedEventArgs>(this, (_, _) => OnPlaylistSongChanged());
 
 			// Showing DiscSongList by default
 			CurrentSongListViewModel = DiscSongListViewModel;

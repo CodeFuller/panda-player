@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using FluentAssertions;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
@@ -11,6 +10,7 @@ using PandaPlayer.Core.Facades;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels.DiscImages;
 
 namespace PandaPlayer.UnitTests.ViewModels.DiscImages
@@ -18,12 +18,6 @@ namespace PandaPlayer.UnitTests.ViewModels.DiscImages
 	[TestClass]
 	public class DiscImageViewModelTests
 	{
-		[TestInitialize]
-		public void Initialize()
-		{
-			Messenger.Reset();
-		}
-
 		[TestMethod]
 		public void CoverImageSourceGetter_IfNoDiscIsSet_ReturnsNull()
 		{
@@ -49,9 +43,10 @@ namespace PandaPlayer.UnitTests.ViewModels.DiscImages
 			var disc = new DiscModel().MakeDeleted();
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<DiscImageViewModel>();
 
-			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc));
+			mocker.SendMessage(new ActiveDiscChangedEventArgs(disc));
 
 			// Act
 
@@ -70,9 +65,10 @@ namespace PandaPlayer.UnitTests.ViewModels.DiscImages
 			var disc = new DiscModel().MakeActive();
 
 			var mocker = new AutoMocker();
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<DiscImageViewModel>();
 
-			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc));
+			mocker.SendMessage(new ActiveDiscChangedEventArgs(disc));
 
 			// Act
 
@@ -96,10 +92,11 @@ namespace PandaPlayer.UnitTests.ViewModels.DiscImages
 
 			var mocker = new AutoMocker();
 			mocker.Use(fileSystemFacade);
+			mocker.StubMessenger();
 
 			var target = mocker.CreateInstance<DiscImageViewModel>();
 
-			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc));
+			mocker.SendMessage(new ActiveDiscChangedEventArgs(disc));
 
 			// Act
 
@@ -123,10 +120,11 @@ namespace PandaPlayer.UnitTests.ViewModels.DiscImages
 
 			var mocker = new AutoMocker();
 			mocker.Use(fileSystemFacade);
+			mocker.StubMessenger();
 
 			var target = mocker.CreateInstance<DiscImageViewModel>();
 
-			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc));
+			mocker.SendMessage(new ActiveDiscChangedEventArgs(disc));
 
 			// Act
 
@@ -153,17 +151,18 @@ namespace PandaPlayer.UnitTests.ViewModels.DiscImages
 
 			var mocker = new AutoMocker();
 			mocker.Use(fileSystemFacade);
+			mocker.StubMessenger();
 
 			var target = mocker.CreateInstance<DiscImageViewModel>();
 
-			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc1));
+			mocker.SendMessage(new ActiveDiscChangedEventArgs(disc1));
 
 			var propertyChangedEvents = new List<PropertyChangedEventArgs>();
 			target.PropertyChanged += (_, e) => propertyChangedEvents.Add(e);
 
 			// Act
 
-			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc2));
+			mocker.SendMessage(new ActiveDiscChangedEventArgs(disc2));
 
 			// Assert
 
@@ -184,17 +183,18 @@ namespace PandaPlayer.UnitTests.ViewModels.DiscImages
 
 			var mocker = new AutoMocker();
 			mocker.Use(fileSystemFacade);
+			mocker.StubMessenger();
 
 			var target = mocker.CreateInstance<DiscImageViewModel>();
 
-			Messenger.Default.Send(new ActiveDiscChangedEventArgs(disc));
+			mocker.SendMessage(new ActiveDiscChangedEventArgs(disc));
 
 			var propertyChangedEvents = new List<PropertyChangedEventArgs>();
 			target.PropertyChanged += (_, e) => propertyChangedEvents.Add(e);
 
 			// Act
 
-			Messenger.Default.Send(new DiscImageChangedEventArgs(new DiscModel { Id = new ItemId("1") }));
+			mocker.SendMessage(new DiscImageChangedEventArgs(new DiscModel { Id = new ItemId("1") }));
 
 			// Assert
 

@@ -69,12 +69,12 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 			{
 				if (args.PropertyName == nameof(Disc.TreeTitle))
 				{
-					RaisePropertyChanged(nameof(Title));
+					OnPropertyChanged(nameof(Title));
 				}
 
 				if (args.PropertyName == nameof(Disc.AdviseGroup))
 				{
-					RaisePropertyChanged(nameof(IconKind));
+					OnPropertyChanged(nameof(IconKind));
 				}
 			};
 		}
@@ -95,13 +95,13 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 				Items = GetAdviseGroupMenuItems(new DiscAdviseGroupHolder(Disc), libraryExplorerViewModel, adviseGroupHelper),
 			};
 
-			yield return new CommandMenuItem(() => libraryExplorerViewModel.PlayDisc(Disc), keepTargetAlive: true)
+			yield return new CommandMenuItem(() => libraryExplorerViewModel.PlayDisc(Disc))
 			{
 				Header = "Play Disc",
 				IconKind = PackIconKind.Play,
 			};
 
-			yield return new CommandMenuItem(() => libraryExplorerViewModel.AddDiscToPlaylist(Disc), keepTargetAlive: true)
+			yield return new CommandMenuItem(() => libraryExplorerViewModel.AddDiscToPlaylist(Disc))
 			{
 				Header = "Add To Playlist",
 				IconKind = PackIconKind.PlaylistPlus,
@@ -113,7 +113,7 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 				IconKind = PackIconKind.DeleteForever,
 			};
 
-			yield return new CommandMenuItem(() => libraryExplorerViewModel.EditDiscProperties(Disc), keepTargetAlive: true)
+			yield return new CommandMenuItem(() => libraryExplorerViewModel.EditDiscProperties(Disc))
 			{
 				Header = "Properties",
 				IconKind = PackIconKind.Pencil,
@@ -122,7 +122,7 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 
 		private IEnumerable<BasicMenuItem> GetContextMenuItemsForDeletedDisc(ILibraryExplorerViewModel libraryExplorerViewModel)
 		{
-			yield return new CommandMenuItem(() => libraryExplorerViewModel.EditDiscProperties(Disc), keepTargetAlive: true)
+			yield return new CommandMenuItem(() => libraryExplorerViewModel.EditDiscProperties(Disc))
 			{
 				Header = "Properties",
 				IconKind = PackIconKind.Pencil,

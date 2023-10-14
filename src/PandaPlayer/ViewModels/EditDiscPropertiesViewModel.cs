@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Extensions;
 using PandaPlayer.Services.Interfaces;
@@ -9,7 +9,7 @@ using PandaPlayer.ViewModels.Interfaces;
 
 namespace PandaPlayer.ViewModels
 {
-	public class EditDiscPropertiesViewModel : ViewModelBase, IEditDiscPropertiesViewModel
+	public class EditDiscPropertiesViewModel : ObservableObject, IEditDiscPropertiesViewModel
 	{
 		private const string ValueForVariousDeleteComments = "<Songs have various delete comments>";
 
@@ -33,7 +33,7 @@ namespace PandaPlayer.ViewModels
 					throw new InvalidOperationException("Value of disc title could not be empty");
 				}
 
-				Set(ref title, value);
+				SetProperty(ref title, value);
 			}
 		}
 
@@ -49,7 +49,7 @@ namespace PandaPlayer.ViewModels
 					throw new InvalidOperationException("Value of disc tree title could not be empty");
 				}
 
-				Set(ref treeTitle, value);
+				SetProperty(ref treeTitle, value);
 			}
 		}
 
@@ -65,7 +65,7 @@ namespace PandaPlayer.ViewModels
 					value = null;
 				}
 
-				Set(ref albumTitle, value);
+				SetProperty(ref albumTitle, value);
 			}
 		}
 
@@ -74,7 +74,7 @@ namespace PandaPlayer.ViewModels
 		public int? Year
 		{
 			get => year;
-			set => Set(ref year, value);
+			set => SetProperty(ref year, value);
 		}
 
 		private string OriginalDeleteComment { get; set; }
@@ -91,7 +91,7 @@ namespace PandaPlayer.ViewModels
 					value = null;
 				}
 
-				Set(ref deleteComment, value);
+				SetProperty(ref deleteComment, value);
 			}
 		}
 

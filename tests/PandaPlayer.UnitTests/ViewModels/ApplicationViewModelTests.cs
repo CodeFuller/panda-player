@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
+using CommunityToolkit.Mvvm.Messaging;
 using FluentAssertions;
-using GalaSoft.MvvmLight.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
@@ -11,7 +11,7 @@ using PandaPlayer.Core.Models;
 using PandaPlayer.Events;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.Services.Interfaces;
-using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels;
 using PandaPlayer.ViewModels.Interfaces;
 
@@ -20,12 +20,6 @@ namespace PandaPlayer.UnitTests.ViewModels
 	[TestClass]
 	public class ApplicationViewModelTests
 	{
-		[TestInitialize]
-		public void Initialize()
-		{
-			Messenger.Reset();
-		}
-
 		[TestMethod]
 		public void Load_SendsApplicationLoadedEvent()
 		{
@@ -35,16 +29,13 @@ namespace PandaPlayer.UnitTests.ViewModels
 			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
-			ApplicationLoadedEventArgs applicationLoadedEvent = null;
-			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => e.RegisterEvent(ref applicationLoadedEvent));
-
 			// Act
 
 			target.LoadCommand.Execute(null);
 
 			// Assert
 
-			applicationLoadedEvent.Should().NotBeNull();
+			mocker.GetMock<IMessenger>().Verify(x => x.Send(It.IsAny<ApplicationLoadedEventArgs>(), It.IsAny<IsAnyToken>()), Times.Once);
 		}
 
 		[TestMethod]
@@ -141,11 +132,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var mocker = new AutoMocker();
 			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(playlistLoadedEvent);
+			mocker.SendMessage(playlistLoadedEvent);
 
 			// Assert
 
@@ -162,6 +154,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var mocker = new AutoMocker();
 			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			var propertyChangedEvents = new List<PropertyChangedEventArgs>();
@@ -169,7 +162,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			// Act
 
-			Messenger.Default.Send(playlistChangedEvent);
+			mocker.SendMessage(playlistChangedEvent);
 
 			// Assert
 
@@ -192,14 +185,15 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var mocker = new AutoMocker();
 			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
-			Messenger.Default.Send(playlistChangedEventWithCurrentSong);
+			mocker.SendMessage(playlistChangedEventWithCurrentSong);
 			target.Title.Should().NotBe("Panda Player");
 
 			// Act
 
-			Messenger.Default.Send(playlistChangedEventWithNoCurrentSong);
+			mocker.SendMessage(playlistChangedEventWithNoCurrentSong);
 
 			// Assert
 
@@ -216,11 +210,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var mocker = new AutoMocker();
 			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(playlistChangedEvent);
+			mocker.SendMessage(playlistChangedEvent);
 
 			// Assert
 
@@ -245,11 +240,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var mocker = new AutoMocker();
 			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(playlistChangedEvent);
+			mocker.SendMessage(playlistChangedEvent);
 
 			// Assert
 
@@ -272,11 +268,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var mocker = new AutoMocker();
 			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(playlistChangedEvent);
+			mocker.SendMessage(playlistChangedEvent);
 
 			// Assert
 
@@ -299,11 +296,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var mocker = new AutoMocker();
 			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(playlistFinishedEvent);
+			mocker.SendMessage(playlistFinishedEvent);
 
 			// Assert
 
@@ -325,11 +323,12 @@ namespace PandaPlayer.UnitTests.ViewModels
 
 			var mocker = new AutoMocker();
 			mocker.Use(Enumerable.Empty<IApplicationInitializer>());
+			mocker.StubMessenger();
 			var target = mocker.CreateInstance<ApplicationViewModel>();
 
 			// Act
 
-			Messenger.Default.Send(playlistFinishedEvent);
+			mocker.SendMessage(playlistFinishedEvent);
 
 			// Assert
 

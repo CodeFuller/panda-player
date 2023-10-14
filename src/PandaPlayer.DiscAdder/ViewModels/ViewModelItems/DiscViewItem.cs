@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PandaPlayer.Core.Models;
 using PandaPlayer.DiscAdder.MusicStorage;
 using PandaPlayer.Shared.Extensions;
 
 namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 {
-	internal abstract class DiscViewItem : ViewModelBase
+	internal abstract class DiscViewItem : ObservableObject
 	{
 		public string SourcePath => AddedDiscInfo.SourcePath;
 
@@ -31,8 +31,8 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 			get => artist;
 			set
 			{
-				Set(ref artist, value);
-				RaisePropertyChanged(nameof(WarnAboutArtist));
+				SetProperty(ref artist, value);
+				OnPropertyChanged(nameof(WarnAboutArtist));
 			}
 		}
 
@@ -63,9 +63,9 @@ namespace PandaPlayer.DiscAdder.ViewModels.ViewModelItems
 			get => genre;
 			set
 			{
-				Set(ref genre, value);
-				RaisePropertyChanged(nameof(GenreIsNotFilled));
-				RaisePropertyChanged(nameof(RequiredDataIsFilled));
+				SetProperty(ref genre, value);
+				OnPropertyChanged(nameof(GenreIsNotFilled));
+				OnPropertyChanged(nameof(RequiredDataIsFilled));
 			}
 		}
 

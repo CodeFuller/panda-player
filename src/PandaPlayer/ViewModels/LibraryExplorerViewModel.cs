@@ -5,8 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using CodeFuller.Library.Wpf;
 using CodeFuller.Library.Wpf.Interfaces;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events;
 using PandaPlayer.Events.DiscEvents;
@@ -19,7 +19,7 @@ using PandaPlayer.ViewModels.MenuItems;
 
 namespace PandaPlayer.ViewModels
 {
-	public class LibraryExplorerViewModel : ViewModelBase, ILibraryExplorerViewModel
+	public class LibraryExplorerViewModel : ObservableObject, ILibraryExplorerViewModel
 	{
 		private readonly IFoldersService foldersService;
 
@@ -29,6 +29,8 @@ namespace PandaPlayer.ViewModels
 
 		private readonly IWindowService windowService;
 
+		private readonly IMessenger messenger;
+
 		public ILibraryExplorerItemListViewModel ItemListViewModel { get; }
 
 		public DiscModel SelectedDisc => ItemListViewModel.SelectedDisc;
@@ -36,21 +38,22 @@ namespace PandaPlayer.ViewModels
 		public IEnumerable<BasicMenuItem> ContextMenuItemsForSelectedItem => ItemListViewModel.SelectedItem?.GetContextMenuItems(this, adviseGroupHelper) ?? Enumerable.Empty<BasicMenuItem>();
 
 		public LibraryExplorerViewModel(ILibraryExplorerItemListViewModel itemListViewModel, IFoldersService foldersService,
-			IAdviseGroupHelper adviseGroupHelper, IViewNavigator viewNavigator, IWindowService windowService)
+			IAdviseGroupHelper adviseGroupHelper, IViewNavigator viewNavigator, IWindowService windowService, IMessenger messenger)
 		{
 			ItemListViewModel = itemListViewModel ?? throw new ArgumentNullException(nameof(itemListViewModel));
 			this.foldersService = foldersService ?? throw new ArgumentNullException(nameof(foldersService));
 			this.adviseGroupHelper = adviseGroupHelper ?? throw new ArgumentNullException(nameof(adviseGroupHelper));
 			this.viewNavigator = viewNavigator ?? throw new ArgumentNullException(nameof(viewNavigator));
 			this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
-			Messenger.Default.Register<ApplicationLoadedEventArgs>(this, e => OnApplicationLoaded(CancellationToken.None));
-			Messenger.Default.Register<LoadParentFolderEventArgs>(this, OnLoadParentFolder);
-			Messenger.Default.Register<LoadFolderEventArgs>(this, e => OnLoadFolder(e.Folder));
-			Messenger.Default.Register<PlaySongsListEventArgs>(this, OnPlaySongsList);
-			Messenger.Default.Register<PlaylistLoadedEventArgs>(this, e => OnPlaylistLoaded(e, CancellationToken.None));
-			Messenger.Default.Register<NoPlaylistLoadedEventArgs>(this, _ => OnNoPlaylistLoaded(CancellationToken.None));
-			Messenger.Default.Register<NavigateLibraryExplorerToDiscEventArgs>(this, e => OnSwitchToDisc(e.Disc));
+			messenger.Register<ApplicationLoadedEventArgs>(this, (_, _) => OnApplicationLoaded(CancellationToken.None));
+			messenger.Register<LoadParentFolderEventArgs>(this, (_, e) => OnLoadParentFolder(e));
+			messenger.Register<LoadFolderEventArgs>(this, (_, e) => OnLoadFolder(e.Folder));
+			messenger.Register<PlaySongsListEventArgs>(this, (_, e) => OnPlaySongsList(e));
+			messenger.Register<PlaylistLoadedEventArgs>(this, (_, e) => OnPlaylistLoaded(e, CancellationToken.None));
+			messenger.Register<NoPlaylistLoadedEventArgs>(this, (_, _) => OnNoPlaylistLoaded(CancellationToken.None));
+			messenger.Register<NavigateLibraryExplorerToDiscEventArgs>(this, (_, e) => OnSwitchToDisc(e.Disc));
 		}
 
 		private async void OnApplicationLoaded(CancellationToken cancellationToken)
@@ -71,12 +74,12 @@ namespace PandaPlayer.ViewModels
 
 		public void PlayDisc(DiscModel disc)
 		{
-			Messenger.Default.Send(new PlaySongsListEventArgs(disc));
+			messenger.Send(new PlaySongsListEventArgs(disc));
 		}
 
 		public void AddDiscToPlaylist(DiscModel disc)
 		{
-			Messenger.Default.Send(new AddingSongsToPlaylistLastEventArgs(disc.ActiveSongs));
+			messenger.Send(new AddingSongsToPlaylistLastEventArgs(disc.ActiveSongs));
 		}
 
 		public void EditDiscProperties(DiscModel disc)
