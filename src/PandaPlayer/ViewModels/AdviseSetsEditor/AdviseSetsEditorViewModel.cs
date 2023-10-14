@@ -9,6 +9,7 @@ using System.Windows.Input;
 using CodeFuller.Library.Wpf;
 using CodeFuller.Library.Wpf.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using PandaPlayer.Core.Comparers;
 using PandaPlayer.Core.Extensions;

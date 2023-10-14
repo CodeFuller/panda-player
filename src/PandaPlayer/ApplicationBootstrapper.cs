@@ -58,11 +58,7 @@ namespace PandaPlayer
 			services.AddSingleton<IScrobblesProcessor, PersistentScrobblesProcessor>();
 			services.AddTransient(typeof(Queue<>));
 
-			services.AddPlaylistAdviser(settings =>
-			{
-				configuration.Bind("adviser", settings);
-				configuration.Bind("adviser:highlyRatedSongsAdviser", settings.HighlyRatedSongsAdviser);
-			});
+			services.AddPlaylistAdviser(settings => configuration.Bind("adviser", settings));
 
 			services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 		}
