@@ -9,7 +9,6 @@ using Moq.AutoMock;
 using PandaPlayer.Core.Facades;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.DiscEvents;
-using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels.DiscImages;
 

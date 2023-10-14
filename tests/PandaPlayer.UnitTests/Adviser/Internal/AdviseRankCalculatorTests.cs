@@ -8,7 +8,7 @@ using Moq.AutoMock;
 using PandaPlayer.Adviser.Grouping;
 using PandaPlayer.Adviser.Internal;
 using PandaPlayer.Core.Models;
-using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 
 namespace PandaPlayer.UnitTests.Adviser.Internal
 {

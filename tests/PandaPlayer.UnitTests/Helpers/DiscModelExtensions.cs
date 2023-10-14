@@ -1,7 +1,7 @@
 using System;
 using PandaPlayer.Core.Models;
 
-namespace PandaPlayer.UnitTests.Extensions
+namespace PandaPlayer.UnitTests.Helpers
 {
 	internal static class DiscModelExtensions
 	{

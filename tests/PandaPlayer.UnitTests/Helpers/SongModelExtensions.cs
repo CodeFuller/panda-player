@@ -1,6 +1,6 @@
 using PandaPlayer.Core.Models;
 
-namespace PandaPlayer.UnitTests.Extensions
+namespace PandaPlayer.UnitTests.Helpers
 {
 	internal static class SongModelExtensions
 	{

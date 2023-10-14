@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq.AutoMock;
 using PandaPlayer.Adviser.Grouping;
 using PandaPlayer.Core.Models;
-using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 
 namespace PandaPlayer.UnitTests.Adviser.Grouping
 {

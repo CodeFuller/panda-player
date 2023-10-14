@@ -9,7 +9,6 @@ using Moq.AutoMock;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Events.SongEvents;
 using PandaPlayer.Events.SongListEvents;
-using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels.Interfaces;
 using PandaPlayer.ViewModels.Player;

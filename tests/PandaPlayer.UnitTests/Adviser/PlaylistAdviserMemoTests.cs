@@ -3,7 +3,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PandaPlayer.Adviser;
 using PandaPlayer.Core.Models;
-using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 
 namespace PandaPlayer.UnitTests.Adviser
 {

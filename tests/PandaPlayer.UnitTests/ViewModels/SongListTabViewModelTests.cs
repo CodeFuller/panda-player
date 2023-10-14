@@ -9,7 +9,6 @@ using PandaPlayer.Core.Models;
 using PandaPlayer.Events;
 using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.Events.SongListEvents;
-using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels;
 using PandaPlayer.ViewModels.Interfaces;

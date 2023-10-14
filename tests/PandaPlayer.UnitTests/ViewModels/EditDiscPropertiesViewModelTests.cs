@@ -7,7 +7,7 @@ using Moq;
 using Moq.AutoMock;
 using PandaPlayer.Core.Models;
 using PandaPlayer.Services.Interfaces;
-using PandaPlayer.UnitTests.Extensions;
+using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels;
 
 namespace PandaPlayer.UnitTests.ViewModels

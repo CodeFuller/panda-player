@@ -7,9 +7,9 @@ using PandaPlayer.Core.Models;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.ViewModels;
 
-namespace PandaPlayer.UnitTests.Extensions
+namespace PandaPlayer.UnitTests.Helpers
 {
-	public static class EventArgsExtensions
+	internal static class EventArgsExtensions
 	{
 		public static void RegisterEvent<TEventArgs>(this TEventArgs inputEvent, ref TEventArgs outputEvent)
 			where TEventArgs : EventArgs

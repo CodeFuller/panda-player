@@ -15,7 +15,6 @@ using PandaPlayer.Events.DiscEvents;
 using PandaPlayer.Events.LibraryExplorerEvents;
 using PandaPlayer.Events.SongListEvents;
 using PandaPlayer.Services.Interfaces;
-using PandaPlayer.UnitTests.Extensions;
 using PandaPlayer.UnitTests.Helpers;
 using PandaPlayer.ViewModels;
 using PandaPlayer.ViewModels.AdviseGroups;
