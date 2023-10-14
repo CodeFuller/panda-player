@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ImportGroup Label="Properties">
     <Import Project="..\..\PandaPlayer.src.props" />
@@ -13,6 +13,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PandaPlayer.Core\PandaPlayer.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="PandaPlayer.Services.IntegrationTests" />
+    <InternalsVisibleTo Include="PandaPlayer.Services.UnitTests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 
   <PropertyGroup>

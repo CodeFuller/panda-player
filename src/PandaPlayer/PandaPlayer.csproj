@@ -26,6 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="PandaPlayer.UnitTests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Views\Icons\*.*" />
     <Resource Include="Views\Icons\Ratings\*.*" />
   </ItemGroup>

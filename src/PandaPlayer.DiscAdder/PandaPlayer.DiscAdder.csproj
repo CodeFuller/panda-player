@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="PandaPlayer.DiscAdder.UnitTests" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 
