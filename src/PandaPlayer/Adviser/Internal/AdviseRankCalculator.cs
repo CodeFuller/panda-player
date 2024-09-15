@@ -50,7 +50,7 @@ namespace PandaPlayer.Adviser.Internal
 
 		private static double GetFactorForAdviseGroupSize(int adviseGroupSize)
 		{
-			return Math.Sqrt(adviseGroupSize);
+			return Math.Min(Math.Sqrt(adviseGroupSize), 3);
 		}
 
 		private static double GetFactorForRating(RatingModel rating)

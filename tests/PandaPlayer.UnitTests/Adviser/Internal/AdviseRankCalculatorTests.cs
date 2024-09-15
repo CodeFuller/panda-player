@@ -327,6 +327,34 @@ namespace PandaPlayer.UnitTests.Adviser.Internal
 		}
 
 		[TestMethod]
+		public void CalculateAdviseGroupRank_ForAdviseGroupWithLotsOfAdviseSets_LimitsFactorForAdviseGroupSize()
+		{
+			// Arrange
+
+			var adviseGroupContent1 = new AdviseGroupContent("1", isFavorite: false);
+			foreach (var id in Enumerable.Range(1, 100))
+			{
+				adviseGroupContent1.AddDisc(CreateTestDisc(id.ToString(CultureInfo.InvariantCulture), new[] { CreateTestSong(id, RatingModel.R5, new DateTime(2024, 09, 14)) }));
+			}
+
+			var adviseGroupContent2 = CreateTestAdviseGroupContent("101", new[] { CreateTestSong(101, RatingModel.R5, new DateTime(2024, 09, 15)) });
+
+			var playbacksInfo = new PlaybacksInfo(new[] { adviseGroupContent1, adviseGroupContent2 });
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<AdviseRankCalculator>();
+
+			// Act
+
+			var rank = target.CalculateAdviseGroupRank(adviseGroupContent1, playbacksInfo);
+
+			// Assert
+
+			// (limited discs number: 3) * (rating: 1.5 ^ 5) * (playbacks age: 1)
+			rank.Should().BeApproximately(22.78125, 0.000001);
+		}
+
+		[TestMethod]
 		public void CalculateAdviseGroupRank_IfAdviseGroupContainsDeletedAdviseSets_SkipsDeletedAdviseSetsWhenCountingSetsNumberAndAverageRating()
 		{
 			// Arrange
