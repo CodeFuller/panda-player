@@ -23,7 +23,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 		{
 			var adviseSetEntity = adviseSet.ToEntity();
 
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 			await context.AdviseSets.AddAsync(adviseSetEntity, cancellationToken);
 			await context.SaveChangesAsync(cancellationToken);
 
@@ -32,7 +32,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 		public async Task UpdateAdviseSet(AdviseSetModel adviseSet, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 
 			var currentEntity = await FindAdviseSet(context, adviseSet.Id, cancellationToken);
 
@@ -44,7 +44,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 		public async Task DeleteAdviseSet(AdviseSetModel adviseSet, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 
 			var entity = await FindAdviseSet(context, adviseSet.Id, cancellationToken);
 			context.AdviseSets.Remove(entity);

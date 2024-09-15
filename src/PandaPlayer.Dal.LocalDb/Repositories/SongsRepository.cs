@@ -24,7 +24,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 		{
 			var songEntity = song.ToEntity();
 
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 			await context.Songs.AddAsync(songEntity, cancellationToken);
 			await context.SaveChangesAsync(cancellationToken);
 
@@ -33,7 +33,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 		public async Task UpdateSong(SongModel song, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 			var songEntity = await FindSong(context, song.Id, cancellationToken);
 
 			var updatedEntity = song.ToEntity();
@@ -43,7 +43,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 		public async Task UpdateSongLastPlayback(SongModel song, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 			var songEntity = await FindSong(context, song.Id, cancellationToken, includePlaybacks: true);
 
 			SyncSongPlaybacks(song, songEntity);

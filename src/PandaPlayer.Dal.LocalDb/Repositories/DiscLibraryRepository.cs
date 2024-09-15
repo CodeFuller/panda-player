@@ -38,7 +38,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 		private async Task<DiscLibrary> ReadDiscLibrary(bool readPlaybacks, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 
 			var adviseGroupEntities = await context.AdviseGroups.ToListAsync(cancellationToken);
 			var folderEntities = await context.Folders.ToListAsync(cancellationToken);

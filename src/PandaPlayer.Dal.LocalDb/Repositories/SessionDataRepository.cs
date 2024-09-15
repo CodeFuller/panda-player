@@ -20,7 +20,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 		public async Task SaveData<TData>(string key, TData data, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 			var dataEntity = await FindSessionData(context, key, cancellationToken);
 
 			var serializedData = SerializeData(data);
@@ -47,7 +47,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 		public async Task<TData> GetData<TData>(string key, CancellationToken cancellationToken)
 			where TData : class
 		{
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 			var dataEntity = await FindSessionData(context, key, cancellationToken);
 
 			return DeserializeData<TData>(dataEntity?.Data);
@@ -55,7 +55,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 		public async Task DeleteData(string key, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 			var dataEntity = await context.SessionData.SingleOrDefaultAsync(sd => sd.Key == key, cancellationToken);
 
 			if (dataEntity == null)

@@ -22,7 +22,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 		{
 			var artistEntity = artist.ToEntity();
 
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 			await context.Artists.AddAsync(artistEntity, cancellationToken);
 			await context.SaveChangesAsync(cancellationToken);
 

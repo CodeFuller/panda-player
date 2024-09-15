@@ -23,7 +23,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 		{
 			var folderEntity = folder.ToEntity();
 
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 			await context.Folders.AddAsync(folderEntity, cancellationToken);
 			await context.SaveChangesAsync(cancellationToken);
 
@@ -32,7 +32,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 		public async Task UpdateFolder(FolderModel folder, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 			var folderEntity = await FindFolder(context, folder.Id, cancellationToken);
 
 			var updatedEntity = folder.ToEntity();

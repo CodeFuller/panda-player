@@ -22,7 +22,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 		{
 			var discEntity = disc.ToEntity();
 
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 			await context.Discs.AddAsync(discEntity, cancellationToken);
 			await context.SaveChangesAsync(cancellationToken);
 
@@ -31,7 +31,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 		public async Task UpdateDisc(DiscModel disc, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 
 			var discEntity = await context.Discs
 				.SingleAsync(d => d.Id == disc.Id.ToInt32(), cancellationToken);
@@ -43,7 +43,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 		public async Task AddDiscImage(DiscImageModel image, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 
 			var discEntity = await context.Discs
 				.Include(x => x.Images)
@@ -59,7 +59,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 		public async Task DeleteDiscImage(DiscImageModel image, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 
 			var imageEntity = await context.DiscImages.FindAsync(new object[] { image.Id.ToInt32() }, cancellationToken);
 			context.DiscImages.Remove(imageEntity);

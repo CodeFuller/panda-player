@@ -22,7 +22,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 		{
 			var adviseGroupEntity = adviseGroup.ToEntity();
 
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 			await context.AdviseGroups.AddAsync(adviseGroupEntity, cancellationToken);
 			await context.SaveChangesAsync(cancellationToken);
 
@@ -31,7 +31,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 		public async Task UpdateAdviseGroup(AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 
 			var currentEntity = await context.AdviseGroups
 				.SingleAsync(x => x.Id == adviseGroup.Id.ToInt32(), cancellationToken);
@@ -44,7 +44,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 
 		public async Task DeleteAdviseGroup(AdviseGroupModel adviseGroup, CancellationToken cancellationToken)
 		{
-			await using var context = contextFactory.CreateDbContext();
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 
 			var currentEntity = await context.AdviseGroups
 				.SingleAsync(x => x.Id == adviseGroup.Id.ToInt32(), cancellationToken);
