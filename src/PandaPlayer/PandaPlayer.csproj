@@ -8,6 +8,11 @@
     <Version>4.3.2</Version>
     <OutputType>WinExe</OutputType>
     <TargetFramework>$(WpfTargetFramework)</TargetFramework>
+    <!--
+    SelfContained property is required because publish is executed with no-build switch.
+    For more details see https://stackoverflow.com/a/78708163/5740031
+    -->
+    <SelfContained>true</SelfContained>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Views\Icons\PandaPlayer.ico</ApplicationIcon>
   </PropertyGroup>
