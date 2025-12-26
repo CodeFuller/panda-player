@@ -474,7 +474,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		[DataRow(null)]
 		[DataRow("")]
 		[DataRow(" ")]
-		[DataTestMethod]
+		[TestMethod]
 		public async Task TreeTitleSetter_ForMissingValue_ThrowsInvalidOperationException(string newTreeTitle)
 		{
 			// Arrange
@@ -515,7 +515,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 		[DataRow(null)]
 		[DataRow("")]
 		[DataRow(" ")]
-		[DataTestMethod]
+		[TestMethod]
 		public async Task TitleSetter_ForMissingValue_ThrowsInvalidOperationException(string newTitle)
 		{
 			// Arrange

@@ -192,7 +192,7 @@ namespace PandaPlayer.Dal.LocalDb.Repositories
 			var tagTypes = songTagger.GetTagTypes(songFilePath);
 			var unexpectedTagTypes = tagTypes.Except(new[] { SongTagType.Id3V1, SongTagType.Id3V2 }).ToList();
 
-			if (unexpectedTagTypes.Any())
+			if (unexpectedTagTypes.Count > 0)
 			{
 				inconsistenciesHandler(new UnexpectedTagTypesInconsistency(song, unexpectedTagTypes));
 			}

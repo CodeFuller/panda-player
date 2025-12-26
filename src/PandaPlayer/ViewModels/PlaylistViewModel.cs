@@ -76,7 +76,7 @@ namespace PandaPlayer.ViewModels
 					};
 				}
 
-				if (selectedSongItems.Any())
+				if (selectedSongItems.Count > 0)
 				{
 					yield return new CommandMenuItem(() => AddSongsNext(SelectedSongs.ToList(), CancellationToken.None))
 					{
@@ -115,7 +115,7 @@ namespace PandaPlayer.ViewModels
 					};
 				}
 
-				if (selectedSongs.Any())
+				if (selectedSongs.Count > 0)
 				{
 					yield return GetSetRatingContextMenuItem(selectedSongs);
 
@@ -164,7 +164,7 @@ namespace PandaPlayer.ViewModels
 			var songList = songs.ToList();
 
 			SetSongs(songList);
-			SetCurrentSong(songList.Any() ? 0 : null);
+			SetCurrentSong(songList.Count > 0 ? 0 : null);
 
 			await OnPlaylistChanged(cancellationToken);
 		}
@@ -209,7 +209,7 @@ namespace PandaPlayer.ViewModels
 
 		private async Task InsertSongs(IReadOnlyCollection<SongModel> songs, int insertIndex, CancellationToken cancellationToken)
 		{
-			if (!songs.Any())
+			if (songs.Count == 0)
 			{
 				return;
 			}

@@ -4,8 +4,12 @@
     <Rule Id="CA1014" Action="None" /> <!-- Mark assemblies with CLSCompliantAttribute -->
     <Rule Id="CA1062" Action="None" /> <!-- Validate arguments of public methods -->
     <Rule Id="CA1303" Action="None" /> <!-- Do not pass literals as localized parameters -->
+    <Rule Id="CA1515" Action="None" /> <!-- Consider making public types internal -->
     <Rule Id="CA1812" Action="None" /> <!-- Avoid uninstantiated internal classes -->
     <Rule Id="CA1848" Action="None" /> <!-- For improved performance, use the LoggerMessage delegates -->
+    <Rule Id="CA1859" Action="None" /> <!-- Use concrete types when possible for improved performance -->
+    <Rule Id="CA1861" Action="None" /> <!-- Avoid constant arrays as arguments -->
+    <Rule Id="CA1873" Action="None" /> <!-- Avoid potentially expensive logging -->
     <Rule Id="CA2007" Action="None" /> <!-- Do not directly await a Task -->
     <Rule Id="CA2254" Action="None" /> <!-- The logging message template should not vary between calls -->
   </Rules>

@@ -18,11 +18,11 @@ namespace PandaPlayer.Shared.Extensions
 
 			// Tries to find a DescriptionAttribute for a potential friendly name for the enum
 			var memberInfo = type.GetMember(enumerationValue.ToString());
-			if (memberInfo.Any())
+			if (memberInfo.Length > 0)
 			{
 				var attrs = memberInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
 
-				if (attrs.Any())
+				if (attrs.Length > 0)
 				{
 					// Pull out the description value
 					return ((DescriptionAttribute)attrs.First()).Description;

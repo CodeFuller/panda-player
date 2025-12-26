@@ -29,7 +29,7 @@ namespace PandaPlayer.ViewModels
 			get
 			{
 				var selectedSongs = SelectedSongs.ToList();
-				if (!selectedSongs.Any())
+				if (selectedSongs.Count == 0)
 				{
 					return Enumerable.Empty<BasicMenuItem>();
 				}

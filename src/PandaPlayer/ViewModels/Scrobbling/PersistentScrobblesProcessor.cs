@@ -33,7 +33,7 @@ namespace PandaPlayer.ViewModels.Scrobbling
 			scrobblesQueue.Enqueue(scrobble);
 			await SaveScrobblesQueue(cancellationToken);
 
-			while (scrobblesQueue.Any())
+			while (scrobblesQueue.Count > 0)
 			{
 				var currentScrobble = scrobblesQueue.Peek();
 
@@ -73,7 +73,7 @@ namespace PandaPlayer.ViewModels.Scrobbling
 
 		private async Task SaveScrobblesQueue(CancellationToken cancellationToken)
 		{
-			if (scrobblesQueue.Any())
+			if (scrobblesQueue.Count > 0)
 			{
 				var scrobbles = scrobblesQueue.ToArray();
 				await sessionDataService.SaveData(ScrobblesDataKey, scrobbles, cancellationToken);

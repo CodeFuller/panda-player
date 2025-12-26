@@ -259,11 +259,7 @@ namespace PandaPlayer.LastFM.Internal
 			var hashBytes = MD5.HashData(dataToHash);
 #pragma warning restore CA5351 // Do Not Use Broken Cryptographic Algorithms
 
-#pragma warning disable CA1308 // Normalize strings to uppercase - Using of lower case is an external requirement.
-			return BitConverter.ToString(hashBytes)
-				.Replace("-", string.Empty, StringComparison.Ordinal)
-				.ToLower(CultureInfo.InvariantCulture);
-#pragma warning restore CA1308 // Normalize strings to uppercase
+			return Convert.ToHexStringLower(hashBytes);
 		}
 	}
 }

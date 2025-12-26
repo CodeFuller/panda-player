@@ -174,7 +174,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 
 			await adviseSetService.CreateAdviseSet(newAdviseSet, cancellationToken);
 
-			if (discs.Any())
+			if (discs.Count > 0)
 			{
 				await adviseSetService.AddDiscs(newAdviseSet, discs, cancellationToken);
 			}

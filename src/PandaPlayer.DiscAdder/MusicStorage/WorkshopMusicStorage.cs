@@ -156,7 +156,7 @@ namespace PandaPlayer.DiscAdder.MusicStorage
 				var files = new List<string>();
 				FindDirectoryFiles(subDirectory, files);
 
-				if (files.Any())
+				if (files.Count > 0)
 				{
 					return;
 				}

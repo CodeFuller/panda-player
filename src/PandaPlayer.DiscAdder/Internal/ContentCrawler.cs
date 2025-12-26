@@ -32,13 +32,13 @@ namespace PandaPlayer.DiscAdder.Internal
 			{
 				nestedDiscs.AddRange(LoadDiscs(subDirectory));
 
-				if (files.Any() && nestedDiscs.Any())
+				if (files.Count > 0 && nestedDiscs.Count > 0)
 				{
 					throw new InvalidOperationException($"Directory '{directoryInfo.FullName}' contains both directories and files. It is an invalid disc structure.");
 				}
 			}
 
-			if (files.Any())
+			if (files.Count > 0)
 			{
 				var songs = files
 					.Where(f => sourceFileTypeResolver.GetSourceFileType(f) == SourceFileType.Song)

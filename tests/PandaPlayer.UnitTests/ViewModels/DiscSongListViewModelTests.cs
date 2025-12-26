@@ -146,7 +146,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 				new CommandMenuItem(() => { }) { Header = "Properties", IconKind = PackIconKind.Pencil },
 			};
 
-			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
+			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().PreferringRuntimeMemberTypes());
 		}
 
 		[TestMethod]

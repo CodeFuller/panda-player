@@ -12,10 +12,7 @@ namespace PandaPlayer.LastFM.Internal
 
 		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
 		{
-			if (reader == null)
-			{
-				throw new ArgumentNullException(nameof(reader));
-			}
+			ArgumentNullException.ThrowIfNull(reader);
 
 			switch (reader.Value.ToString().Trim())
 			{

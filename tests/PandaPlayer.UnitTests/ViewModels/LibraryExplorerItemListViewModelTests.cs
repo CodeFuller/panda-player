@@ -507,7 +507,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 				new DiscExplorerItem(disc3),
 			};
 
-			target.Items.Should().BeEquivalentTo(expectedItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
+			target.Items.Should().BeEquivalentTo(expectedItems, x => x.WithStrictOrdering().PreferringRuntimeMemberTypes());
 		}
 
 		[TestMethod]
@@ -547,7 +547,7 @@ namespace PandaPlayer.UnitTests.ViewModels
 				new DiscExplorerItem(disc3),
 			};
 
-			target.Items.Should().BeEquivalentTo(expectedItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
+			target.Items.Should().BeEquivalentTo(expectedItems, x => x.WithStrictOrdering().PreferringRuntimeMemberTypes());
 		}
 
 		[TestMethod]

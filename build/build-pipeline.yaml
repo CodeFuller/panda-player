@@ -9,7 +9,7 @@ variables:
     value: master
     readonly: true
   - name: TargetFramework
-    value: net7.0-windows
+    value: net10.0-windows
     readonly: true
   - name: PublishRuntimeIdentifier
     value: win-x64

@@ -9,10 +9,7 @@ namespace PandaPlayer.Shared.Extensions
 	{
 		public static Collection<T> ToCollection<T>(this IEnumerable<T> source)
 		{
-			if (source == null)
-			{
-				throw new ArgumentNullException(nameof(source));
-			}
+			ArgumentNullException.ThrowIfNull(source);
 
 			return new Collection<T>(source.ToList());
 		}

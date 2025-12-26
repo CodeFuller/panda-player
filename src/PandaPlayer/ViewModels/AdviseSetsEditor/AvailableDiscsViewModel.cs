@@ -63,7 +63,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 		{
 			var selectedDiscs = SelectedDiscs.ToList();
 
-			if (!selectedDiscs.Any())
+			if (selectedDiscs.Count == 0)
 			{
 				return false;
 			}
@@ -80,7 +80,7 @@ namespace PandaPlayer.ViewModels.AdviseSetsEditor
 			}
 
 			// Disc is available for advise set if this advise set is empty.
-			if (!adviseSetDiscs.Any())
+			if (adviseSetDiscs.Count == 0)
 			{
 				return true;
 			}

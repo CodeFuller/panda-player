@@ -85,7 +85,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 				new CommandMenuItem(() => Task.CompletedTask) { Header = "Advise Group 2", IconKind = null },
 			};
 
-			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
+			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().PreferringRuntimeMemberTypes());
 		}
 
 		[TestMethod]
@@ -125,7 +125,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 				new CommandMenuItem(() => Task.CompletedTask) { Header = "Advise Group 3", IconKind = null },
 			};
 
-			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
+			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().PreferringRuntimeMemberTypes());
 		}
 
 		[TestMethod]
@@ -165,7 +165,7 @@ namespace PandaPlayer.UnitTests.ViewModels.LibraryExplorerItems
 				new CommandMenuItem(() => Task.CompletedTask) { Header = "Advise Group 3", IconKind = null },
 			};
 
-			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().RespectingRuntimeTypes());
+			menuItems.Should().BeEquivalentTo(expectedMenuItems, x => x.WithStrictOrdering().PreferringRuntimeMemberTypes());
 		}
 	}
 }

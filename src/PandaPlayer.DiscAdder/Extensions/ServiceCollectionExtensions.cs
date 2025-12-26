@@ -22,7 +22,7 @@ namespace PandaPlayer.DiscAdder.Extensions
 			RegisterViewModels(services);
 
 			services.AddImages();
-			services.AddSingleton<IObjectFactory<IImageFile>, ObjectFactory<IImageFile>>();
+			services.AddSingleton<IObjectFactory<IImageFile>, Internal.ObjectFactory<IImageFile>>();
 
 			services.AddSingleton<IWorkshopMusicStorage, WorkshopMusicStorage>();
 

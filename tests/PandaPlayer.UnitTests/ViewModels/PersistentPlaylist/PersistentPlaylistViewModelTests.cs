@@ -247,7 +247,7 @@ namespace PandaPlayer.UnitTests.ViewModels.PersistentPlaylist
 
 		[DataRow(-1)]
 		[DataRow(3)]
-		[DataTestMethod]
+		[TestMethod]
 		public void ApplicationLoadedEventHandler_IfCurrentSongIsInvalid_DoesNotLoadPlaylist(int currentSongIndex)
 		{
 			// Arrange

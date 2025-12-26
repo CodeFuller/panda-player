@@ -272,7 +272,7 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 
 			// Act
 
-			mocker.GetMock<ITimerFacade>().Raise(x => x.Elapsed += null, CreateElapsedEvent());
+			mocker.GetMock<ITimerFacade>().Raise(x => x.Elapsed += null, new ElapsedEventArgs(new DateTime(123)));
 
 			// Assert
 
@@ -480,16 +480,6 @@ namespace PandaPlayer.UnitTests.ViewModels.Player
 			};
 
 			propertyChangedEvents.Select(e => e.PropertyName).Should().BeEquivalentTo(expectedProperties);
-		}
-
-		// https://github.com/dotnet/runtime/issues/31204
-		private static ElapsedEventArgs CreateElapsedEvent()
-		{
-			var constructor = typeof(ElapsedEventArgs)
-				.GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)
-				.Single();
-
-			return (ElapsedEventArgs)constructor.Invoke(new object[] { new DateTime(123) });
 		}
 	}
 }

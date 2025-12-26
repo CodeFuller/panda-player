@@ -57,7 +57,7 @@ namespace PandaPlayer.Views.ClipboardAccess
 
 			BITMAPINFOHEADER infoHeader = BinaryStructConverter.FromByteArray<BITMAPINFOHEADER>(dibBuffer);
 
-			int fileHeaderSize = Marshal.SizeOf(typeof(BITMAPFILEHEADER));
+			int fileHeaderSize = Marshal.SizeOf<BITMAPFILEHEADER>();
 			int infoHeaderSize = infoHeader.biSize;
 			int fileSize = fileHeaderSize + infoHeader.biSize + infoHeader.biSizeImage;
 

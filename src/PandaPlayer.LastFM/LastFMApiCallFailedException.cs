@@ -25,10 +25,5 @@ namespace PandaPlayer.LastFM
 			: base(message, innerException)
 		{
 		}
-
-		protected LastFMApiCallFailedException(SerializationInfo info, StreamingContext context)
-			: base(info, context)
-		{
-		}
 	}
 }

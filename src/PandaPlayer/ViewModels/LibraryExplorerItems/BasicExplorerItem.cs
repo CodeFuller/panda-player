@@ -46,7 +46,7 @@ namespace PandaPlayer.ViewModels.LibraryExplorerItems
 			}
 
 			var adviseGroups = adviseGroupHelper.AdviseGroups;
-			if (adviseGroups.Any())
+			if (adviseGroups.Count > 0)
 			{
 				menuItems.Add(new SeparatorMenuItem());
 

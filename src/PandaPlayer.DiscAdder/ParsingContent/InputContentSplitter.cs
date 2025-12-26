@@ -12,7 +12,7 @@ namespace PandaPlayer.DiscAdder.ParsingContent
 			{
 				if (line.Length == 0)
 				{
-					if (currentBlockContent.Any())
+					if (currentBlockContent.Count > 0)
 					{
 						yield return currentBlockContent;
 						currentBlockContent = new List<string>();
@@ -24,7 +24,7 @@ namespace PandaPlayer.DiscAdder.ParsingContent
 				}
 			}
 
-			if (currentBlockContent.Any())
+			if (currentBlockContent.Count > 0)
 			{
 				yield return currentBlockContent;
 			}

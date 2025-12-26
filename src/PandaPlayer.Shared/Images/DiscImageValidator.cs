@@ -62,7 +62,7 @@ namespace PandaPlayer.Shared.Images
 
 		public IEnumerable<string> GetValidationResultsHints(ImageValidationResults results)
 		{
-			foreach (var enumValue in Enum.GetValues(typeof(ImageValidationResults)).Cast<ImageValidationResults>())
+			foreach (var enumValue in Enum.GetValues<ImageValidationResults>())
 			{
 				if ((results & enumValue) != 0)
 				{

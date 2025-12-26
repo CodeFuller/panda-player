@@ -19,10 +19,5 @@ namespace PandaPlayer.ViewModels.DiscImages
 			: base(message, innerException)
 		{
 		}
-
-		protected DocumentDownloadFailedException(SerializationInfo info, StreamingContext context)
-			: base(info, context)
-		{
-		}
 	}
 }

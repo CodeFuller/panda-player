@@ -25,7 +25,7 @@ namespace PandaPlayer.DiscAdder.UnitTests.ParsingSong
 			}
 		}
 
-		[DataTestMethod]
+		[TestMethod]
 		[DataRow("Test Title	live", "Test Title (Live)")]
 		[DataRow("Test Title	featuring George Oosthoek", "Test Title (feat. George Oosthoek)")]
 		[DataRow("Test Title	live, featuring Marco Hietala", "Test Title (feat. Marco Hietala) (Live)")]
@@ -64,7 +64,7 @@ namespace PandaPlayer.DiscAdder.UnitTests.ParsingSong
 			resultContent.Should().BeEquivalentTo(expectedContent);
 		}
 
-		[DataTestMethod]
+		[TestMethod]
 		[DataRow("RockStar")]
 		[DataRow("Rock'n'Roll")]
 		public void Parse_ForTitleInLatin_DoesNotChangeCaseForInsideLetters(string rawContent)
@@ -84,7 +84,7 @@ namespace PandaPlayer.DiscAdder.UnitTests.ParsingSong
 			resultContent.Should().BeEquivalentTo(expectedContent);
 		}
 
-		[DataTestMethod]
+		[TestMethod]
 		[DataRow("The 12th Hour", "The 12th Hour")]
 		public void Parse_ForOrdinalNumber_SetsCorrectCase(string rawContent, string expectedTitle)
 		{
@@ -121,7 +121,7 @@ namespace PandaPlayer.DiscAdder.UnitTests.ParsingSong
 			resultContent.Should().BeEquivalentTo(expectedContent);
 		}
 
-		[DataTestMethod]
+		[TestMethod]
 		[DataRow("Don’t Say A Word", "Don't Say A Word")]
 		public void Parse_ForTitleWithApostropheCharacters_UnifiesApostropheCharacters(string rawContent, string expectedTitle)
 		{

@@ -41,7 +41,7 @@ namespace PandaPlayer.LastFM.UnitTests.Internal
 
 		[DataRow(null)]
 		[DataRow("")]
-		[DataTestMethod]
+		[TestMethod]
 		public async Task UpdateNowPlaying_WhenTrackDoesNotHaveTitle_DoesNotCallLastFMApi(string title)
 		{
 			// Arrange
@@ -69,7 +69,7 @@ namespace PandaPlayer.LastFM.UnitTests.Internal
 
 		[DataRow(null)]
 		[DataRow("")]
-		[DataTestMethod]
+		[TestMethod]
 		public async Task UpdateNowPlaying_WhenTrackDoesNotHaveArtist_DoesNotCallLastFMApi(string artist)
 		{
 			// Arrange
@@ -154,7 +154,7 @@ namespace PandaPlayer.LastFM.UnitTests.Internal
 
 		[DataRow(null)]
 		[DataRow("")]
-		[DataTestMethod]
+		[TestMethod]
 		public async Task Scrobble_WhenTrackDoesNotHaveTitle_DoesNotCallLastFMApi(string title)
 		{
 			// Arrange
@@ -187,7 +187,7 @@ namespace PandaPlayer.LastFM.UnitTests.Internal
 
 		[DataRow(null)]
 		[DataRow("")]
-		[DataTestMethod]
+		[TestMethod]
 		public async Task Scrobble_WhenTrackDoesNotHaveArtist_DoesNotCallLastFMApi(string artist)
 		{
 			// Arrange

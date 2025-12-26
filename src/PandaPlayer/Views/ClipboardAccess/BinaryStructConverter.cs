@@ -11,10 +11,10 @@ namespace PandaPlayer.Views.ClipboardAccess
 			IntPtr ptr = IntPtr.Zero;
 			try
 			{
-				int size = Marshal.SizeOf(typeof(T));
+				int size = Marshal.SizeOf<T>();
 				ptr = Marshal.AllocHGlobal(size);
 				Marshal.Copy(data, 0, ptr, size);
-				object obj = Marshal.PtrToStructure(ptr, typeof(T));
+				object obj = Marshal.PtrToStructure<T>(ptr);
 				return (T)obj;
 			}
 			finally
@@ -32,7 +32,7 @@ namespace PandaPlayer.Views.ClipboardAccess
 			IntPtr ptr = IntPtr.Zero;
 			try
 			{
-				int size = Marshal.SizeOf(typeof(T));
+				int size = Marshal.SizeOf<T>();
 				ptr = Marshal.AllocHGlobal(size);
 				Marshal.StructureToPtr(data, ptr, true);
 				byte[] bytes = new byte[size];
