@@ -39,14 +39,14 @@
                 LeftClickCommand="{Binding ReversePlayingCommand}">
 
                 <tb:TaskbarIcon.TrayToolTip>
-                    <!-- Setting Placement to Mouse. Otherwise ToolTip is placed at the left upper corner of screen by Material Design style (logic in ToolTipAssist.CustomPopupPlacementCallback) -->
+                    <!-- Setting Placement to Mouse. Otherwise, ToolTip is placed at the left upper corner of screen by Material Design style (logic in ToolTipAssist.CustomPopupPlacementCallback) -->
                     <ToolTip Placement="Mouse" Content="{Binding Title}" />
                 </tb:TaskbarIcon.TrayToolTip>
 
             </tb:TaskbarIcon>
         </Grid>
 
-        <ToolBar Grid.Row="1" ToolBarTray.IsLocked="True" Background="{DynamicResource PrimaryHueDarkBackgroundBrush}">
+        <ToolBar Grid.Row="1" ToolBarTray.IsLocked="True" Background="{DynamicResource MaterialDesign.Brush.Background}">
             <Button VerticalAlignment="Center" Padding="3" ToolTip="Edit advise sets" Content="{materialDesign:PackIcon Kind=CircleEditOutline}" Style="{DynamicResource MaterialDesignToolButton}" Command="{Binding ShowAdviseSetsEditorCommand}" />
             <Button VerticalAlignment="Center" Padding="3" ToolTip="Add new discs" Content="{materialDesign:PackIcon Kind=PlusCircle}" Style="{DynamicResource MaterialDesignToolButton}" Command="{Binding ShowDiscAdderCommand}" />
             <Button VerticalAlignment="Center" Padding="3" ToolTip="Check library" Content="{materialDesign:PackIcon Kind=FileFind}" Style="{DynamicResource MaterialDesignToolButton}" Command="{Binding ShowLibraryCheckerCommand}" />

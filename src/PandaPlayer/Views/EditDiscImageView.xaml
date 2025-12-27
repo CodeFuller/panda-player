@@ -29,7 +29,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" Width="400" Height="400" BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+            <Border Grid.Row="0" Width="400" Height="400" BorderThickness="1" BorderBrush="{DynamicResource MaterialDesign.Brush.Primary.Light}">
                 <Image Name="DiscImage" Source="{Binding ImageFileName, Converter={StaticResource ImageSourceValueConverter}}" />
             </Border>
             <Label Grid.Row="1" Margin="0,10,0,0" Content="{Binding ImageProperties}" ContentStringFormat="Properties: {0}" />

@@ -10,7 +10,7 @@
              d:DesignWidth="800" d:DesignHeight="450">
 
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
     <Grid>
@@ -39,7 +39,7 @@
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsDiscSongListSelected}" Value="True">
-                                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource MaterialDesign.Brush.Primary.Dark.Foreground}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -51,7 +51,7 @@
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsPlaylistSelected}" Value="True">
-                                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource MaterialDesign.Brush.Primary.Dark.Foreground}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

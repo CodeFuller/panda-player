@@ -32,7 +32,7 @@
 
         <Label Grid.Column="0" Grid.Row="0" Margin="0,0,5,0" Content="Advise Sets:" />
         <!-- We use DataGrid, not ListBox as for other lists, for built-in capability of in-place edit. -->
-        <views:AdviseSetsDataGrid x:Name="AdviseSetsDataGrid" Grid.Column="0" Grid.Row="1" Margin="0,0,5,0" BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}"
+        <views:AdviseSetsDataGrid x:Name="AdviseSetsDataGrid" Grid.Column="0" Grid.Row="1" Margin="0,0,5,0" BorderThickness="1" BorderBrush="{DynamicResource MaterialDesign.Brush.Primary.Light}"
                                 Style="{StaticResource MaterialDesignDataGrid}" CellStyle="{StaticResource InvisibleFocusDataGridCell}" GridLinesVisibility="None"
                                 AutoGenerateColumns="False" IsReadOnly="False" HeadersVisibility="None"
                                 CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="False"
@@ -52,7 +52,7 @@
         </StackPanel>
 
         <Label Grid.Column="2" Grid.Row="0" Margin="5,0,5,0" Content="Included Discs:" />
-        <ListBox Grid.Column="2" Grid.Row="1" Margin="5,0,5,0" BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}"
+        <ListBox Grid.Column="2" Grid.Row="1" Margin="5,0,5,0" BorderThickness="1" BorderBrush="{DynamicResource MaterialDesign.Brush.Primary.Light}"
                  ItemsSource="{Binding CurrentAdviseSetDiscs}" SelectedItem="{Binding Path=SelectedAdviseSetDisc, Mode=TwoWay}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -77,7 +77,7 @@
         </StackPanel>
 
         <Label Grid.Column="4" Grid.Row="0" Margin="5,0,0,0" Content="Available Discs:" />
-        <controls:MultiSelectionListBox Grid.Column="4" Grid.Row="1" Margin="5,0,0,0" BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}"
+        <controls:MultiSelectionListBox Grid.Column="4" Grid.Row="1" Margin="5,0,0,0" BorderThickness="1" BorderBrush="{DynamicResource MaterialDesign.Brush.Primary.Light}"
                                      Style="{StaticResource MaterialDesignListBox}" ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectionMode="Extended"
                                      ItemsSource="{Binding AvailableDiscsViewModel.AvailableDiscs}" SelectedItemsList="{Binding AvailableDiscsViewModel.SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <ListBox.ItemContainerStyle>
