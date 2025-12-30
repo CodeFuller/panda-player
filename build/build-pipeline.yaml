@@ -27,7 +27,7 @@ stages:
       disable.coverage.autogenerate: true
     steps:
     - powershell: |
-        $appVersion = ([xml](Get-Content 'src/PandaPlayer/PandaPlayer.csproj')).Project.PropertyGroup.Version
+        $appVersion = ([xml](Get-Content 'src/PandaPlayer/PandaPlayer.csproj')).Project.PropertyGroup | ForEach-Object { $_.Version } |  Where-Object { $_ }
         if ($appVersion -eq $null) {
             throw 'The application version is missing in cpsroj file'
         }
