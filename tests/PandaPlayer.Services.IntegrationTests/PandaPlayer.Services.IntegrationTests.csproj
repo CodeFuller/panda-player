@@ -13,9 +13,6 @@
     <None Update="TestDatabase.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Content\**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
