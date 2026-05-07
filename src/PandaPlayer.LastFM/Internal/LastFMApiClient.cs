@@ -163,13 +163,17 @@ namespace PandaPlayer.LastFM.Internal
 			using var clientHandler = new HttpClientHandler
 			{
 				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-				CheckCertificateRevocationList = true,
+
+				// Certificate revocation list check fails when ControlUp's GlobalProtect is connected.
+				CheckCertificateRevocationList = false,
 			};
 
+#pragma warning disable CA5399 // Enable HttpClient certificate revocation list check
 			using var client = new HttpClient(clientHandler, true)
 			{
 				BaseAddress = settings.ApiBaseUri,
 			};
+#pragma warning restore CA5399 // Enable HttpClient certificate revocation list check
 
 			client.DefaultRequestHeaders.Accept.Clear();
 			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
